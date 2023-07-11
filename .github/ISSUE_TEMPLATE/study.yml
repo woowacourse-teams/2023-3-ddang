@@ -1,0 +1,35 @@
+name: "🤓 Study"
+description: "팀원들과 같이 스터디 할 내용이 있나요?"
+labels: "🤓 Study"
+body:
+  - type: textarea
+    attributes:
+      label: 🙋🏻 참가 인원
+    validations:
+      required: true
+      description: 회의에 참여할 인원을 작성해 주세요.
+  - type: textarea
+    attributes:
+      label: ⏰ 스터디 일정
+    validations:
+      required: true
+      description: 스터디 일정을 입력해 주세요.
+  - type: textarea
+    attributes:
+      label: 📝 설명
+      description: 스터디 주제에 대한 설명을 작성해 주세요.
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ⏰ 추정 시간
+      description: 스터디를 진행하기 위해 필요한 추정 시간에 대해 작성해주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ⏰ 소요 시간
+      description: 스터디 소요 시간에 대해 작성해주세요.
+    validations:
+      required: true

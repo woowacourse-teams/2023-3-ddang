@@ -1,0 +1,34 @@
+name: "\U0001F30F Deploy"
+description: "배포 관련된 작업이 필요한가요?"
+labels: "\U0001F30F Deploy"
+body:
+  - type: textarea
+    attributes:
+      label: 🤔 설명
+      description: 왜 해당 작업이 필요한지 설명해 주세요.
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ✅ 작업할 내용
+      description: 작업할 내용에 대해 작성해 주세요.
+      placeholder: 최대한 세분화 해서 적어주세요!
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 🙋🏻 참고 자료
+      description: 추가적인 환경설정에 대한 참고 자료가 있다면 작성해 주세요.
+  - type: textarea
+    attributes:
+      label: ⏰ 추정 시간
+      description: 환경설정을 추가하기 위한 추정 시간에 대해 작성해주세요.
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: ⏰ 소요 시간
+      description: 환경설정 추가 소요 시간에 대해 작성해주세요.
+    validations:
+      required: true
