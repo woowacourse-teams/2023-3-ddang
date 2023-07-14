@@ -1,1 +1,10 @@
-
+spring:
+  profiles:
+    default: local
+    group:
+      local:
+        - console-logging
+      dev:
+        - file-warn-logging
+        - file-error-logging
+        - slack-error-logging

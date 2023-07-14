@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test;MODE=MYSQL
+    username: sa
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL57Dialect
+        dialect.storage_engine: innodb
+
+  flyway:
+    enabled: false
+
+logging:
+  level:
+    org.hibernate.sql: debug
+
+
