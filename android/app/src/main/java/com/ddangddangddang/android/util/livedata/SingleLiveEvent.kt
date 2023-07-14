@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.common
+package com.ddangddangddang.android.util.livedata
 
 import android.util.Log
 import androidx.annotation.MainThread
@@ -18,12 +18,11 @@ class SingleLiveEvent<T> : MutableLiveData<T>() {
         // Observe the internal MutableLiveData
         super.observe(
             owner,
-            Observer { t ->
-                if (pending.compareAndSet(true, false)) {
-                    observer.onChanged(t)
-                }
-            },
-        )
+        ) { t ->
+            if (pending.compareAndSet(true, false)) {
+                observer.onChanged(t)
+            }
+        }
     }
 
     @MainThread

@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.common
+package com.ddangddangddang.android.util.binding
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
