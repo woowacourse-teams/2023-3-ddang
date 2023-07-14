@@ -7,3 +7,4 @@ spring:
       dev:
         - file-warn-logging
         - file-error-logging
+        - slack-error-logging
