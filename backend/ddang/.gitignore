@@ -7,6 +7,7 @@
 
 .gradle/
 .idea/
+build/
 HELP.md
 
 # User-specific stuff
