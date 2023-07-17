@@ -16,7 +16,7 @@
         tools:context=".feature.detail.AuctionDetailActivity">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/tb_register_auction"
+            android:id="@+id/tb_detail_auction"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,6 +41,39 @@
                 android:textStyle="bold"
                 tools:text="M1 맥북 에어" />
         </androidx.appcompat.widget.Toolbar>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_begin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/margin_side_layout" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/margin_side_layout" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/tb_detail_auction">
+
+
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btn_submit_auction"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_submit_button"
+            android:gravity="center"
+            android:text="@string/detail_auction_submit"
+            android:textSize="@dimen/textsize_submit_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_begin" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

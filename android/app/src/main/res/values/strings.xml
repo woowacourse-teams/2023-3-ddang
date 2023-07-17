@@ -6,4 +6,5 @@
     <string name="bottom_navigation_message">쪽지</string>
     <string name="bottom_navigation_my_page">마이페이지</string>
     <string name="all_app_bar_back_key_description">뒤로가기 버튼입니다</string>
+    <string name="detail_auction_submit">입찰하기</string>
 </resources>
