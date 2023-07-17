@@ -1,6 +1,6 @@
 package com.ddang.ddang.category.domain;
 
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
 class CategoryTest {
