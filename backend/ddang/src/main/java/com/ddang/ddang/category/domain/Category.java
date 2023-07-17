@@ -13,6 +13,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = {"subCategories", "mainCategory"})
+@Table(name = "categories")
 public class Category {
 
     @Id
