@@ -32,7 +32,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{mainId}")
-    public ResponseEntity<ReadCategoriesResponse> readAllSub(@PathVariable Long mainId) {
+    public ResponseEntity<ReadCategoriesResponse> readAllSub(@PathVariable final Long mainId) {
         final List<ReadCategoryDto> readCategoryDtos = categoryService.readAllSubByMainId(mainId);
         final List<ReadCategoryResponse> readCategoryResponses = readCategoryDtos.stream()
                                                                                  .map(ReadCategoryResponse::from)
