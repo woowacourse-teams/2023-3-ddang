@@ -1,0 +1,49 @@
+= 땅땅땅 API 문서
+:toc: left
+:source-highlighter: highlightjs
+:sectlinks:
+
+[[overview-http-status-codes]]
+=== HTTP status codes
+
+|===
+| 상태 코드 | 설명
+| `200 OK`
+| 성공
+| `201 Created`
+| 리소스 생성
+| `400 Bad Request`
+| 잘못된 요청
+| `401 Unauthorized`
+| 비인증 상태
+| `403 Forbidden`
+| 권한 거부
+| `404 Not Found`
+| 존재하지 않는 리소스에 대한 요청
+| `500 Internal Server Error`
+| 서버 에러
+|===
+
+== 카테고리 API
+
+=== 메인 카테고리 조회
+
+==== 요청
+
+include::{snippets}/category-controller-test/모든_메인_카테고리를_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/category-controller-test/모든_메인_카테고리를_조회한다/response-body.adoc[]
+include::{snippets}/category-controller-test/모든_메인_카테고리를_조회한다/response-fields.adoc[]
+
+=== 서브 카테고리 조회
+
+==== 요청
+
+include::{snippets}/category-controller-test/메인_카테고리에_해당하는_모든_서브_카테고리를_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/category-controller-test/메인_카테고리에_해당하는_모든_서브_카테고리를_조회한다/response-body.adoc[]
+include::{snippets}/category-controller-test/메인_카테고리에_해당하는_모든_서브_카테고리를_조회한다/response-fields.adoc[]

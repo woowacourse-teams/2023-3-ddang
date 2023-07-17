@@ -3,15 +3,22 @@ package com.ddang.ddang.category.presentation;
 import com.ddang.ddang.category.application.CategoryService;
 import com.ddang.ddang.category.application.dto.ReadCategoryDto;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -19,11 +26,16 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {CategoryController.class})
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class CategoryControllerTest {
@@ -34,12 +46,18 @@ class CategoryControllerTest {
     @Autowired
     CategoryController categoryController;
 
+    @Autowired
+    RestDocumentationResultHandler restDocs;
+
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
+                                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
+                                 .alwaysDo(print())
+                                 .alwaysDo(restDocs)
                                  .build();
     }
 
@@ -60,6 +78,16 @@ class CategoryControllerTest {
                        jsonPath("$.categories.[0].name", is(main1.name())),
                        jsonPath("$.categories.[1].id", is(main2.id()), Long.class),
                        jsonPath("$.categories.[1].name", is(main2.name()))
+               )
+               .andDo(
+                       restDocs.document(
+                               responseFields(
+                                       fieldWithPath("categories.[].id").type(JsonFieldType.NUMBER)
+                                                                        .description("메인 카테고리 ID"),
+                                       fieldWithPath("categories.[].name").type(JsonFieldType.STRING)
+                                                                          .description("메인 카테고리 이름")
+                               )
+                       )
                );
     }
 
@@ -96,6 +124,16 @@ class CategoryControllerTest {
                        jsonPath("$.categories.[0].name", is(sub1.name())),
                        jsonPath("$.categories.[1].id", is(sub2.id()), Long.class),
                        jsonPath("$.categories.[1].name", is(sub2.name()))
+               )
+               .andDo(
+                       restDocs.document(
+                               responseFields(
+                                       fieldWithPath("categories.[].id").type(JsonFieldType.NUMBER)
+                                                                        .description("서브 카테고리 ID"),
+                                       fieldWithPath("categories.[].name").type(JsonFieldType.STRING)
+                                                                          .description("서브 카테고리 이름")
+                               )
+                       )
                );
     }
 
