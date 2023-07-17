@@ -94,7 +94,7 @@ class CategoryControllerTest {
     @Test
     void 메인_카테고리가_없는_경우_메인_카테고리_조회시_404를_반환한다() throws Exception {
         // given
-        CategoryNotFoundException categoryNotFoundException = new CategoryNotFoundException("등록된 메인 카테고리가 없습니다.");
+        final CategoryNotFoundException categoryNotFoundException = new CategoryNotFoundException("등록된 메인 카테고리가 없습니다.");
         given(categoryService.readAllMain()).willThrow(categoryNotFoundException);
 
         // when & then
@@ -142,7 +142,7 @@ class CategoryControllerTest {
         // given
         final ReadCategoryDto main = new ReadCategoryDto(1L, "main");
 
-        CategoryNotFoundException categoryNotFoundException =
+        final CategoryNotFoundException categoryNotFoundException =
                 new CategoryNotFoundException("지정한 메인 카테고리에 해당 서브 카테고리가 없습니다.");
 
         given(categoryService.readAllSubByMainId(main.id())).willThrow(categoryNotFoundException);

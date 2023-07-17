@@ -18,7 +18,7 @@ public class CategoryService {
     private final JpaCategoryRepository categoryRepository;
 
     public List<ReadCategoryDto> readAllMain() {
-        List<Category> mainCategories = categoryRepository.findMainAllByMainCategoryIsNull();
+        final List<Category> mainCategories = categoryRepository.findMainAllByMainCategoryIsNull();
 
         if (mainCategories.isEmpty()) {
             throw new CategoryNotFoundException("등록된 메인 카테고리가 없습니다.");
@@ -29,8 +29,8 @@ public class CategoryService {
                              .toList();
     }
 
-    public List<ReadCategoryDto> readAllSubByMainId(Long mainId) {
-        List<Category> subCategories = categoryRepository.findSubAllByMainCategoryId(mainId);
+    public List<ReadCategoryDto> readAllSubByMainId(final Long mainId) {
+        final List<Category> subCategories = categoryRepository.findSubAllByMainCategoryId(mainId);
 
         if (subCategories.isEmpty()) {
             throw new CategoryNotFoundException("지정한 메인 카테고리에 해당 서브 카테고리가 없습니다.");
