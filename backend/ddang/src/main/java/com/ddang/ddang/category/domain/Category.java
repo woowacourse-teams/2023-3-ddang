@@ -40,7 +40,7 @@ public class Category {
     private List<Category> subCategories = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "main_category_id", foreignKey = @ForeignKey(name = "fk_main_sub"))
+    @JoinColumn(name = "main_category_id", foreignKey = @ForeignKey(name = "fk_category_main_sub"))
     private Category mainCategory;
 
     public Category(final String name) {
