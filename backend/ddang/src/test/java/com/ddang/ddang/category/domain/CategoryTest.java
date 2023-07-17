@@ -12,7 +12,7 @@ class CategoryTest {
         Category sub = new Category("sub");
 
         // when
-        main.initCategory(sub);
+        main.addSubCategory(sub);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

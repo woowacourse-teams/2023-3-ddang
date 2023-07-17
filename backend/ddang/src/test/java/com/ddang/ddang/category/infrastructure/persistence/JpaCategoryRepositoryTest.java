@@ -31,7 +31,7 @@ class JpaCategoryRepositoryTest {
         final Category main2 = new Category("main2");
         final Category sub = new Category("sub");
 
-        main1.initCategory(sub);
+        main1.addSubCategory(sub);
 
         categoryRepository.save(main1);
         categoryRepository.save(main2);
@@ -53,8 +53,8 @@ class JpaCategoryRepositoryTest {
         final Category sub1 = new Category("sub1");
         final Category sub2 = new Category("sub2");
 
-        main.initCategory(sub1);
-        main.initCategory(sub2);
+        main.addSubCategory(sub1);
+        main.addSubCategory(sub2);
 
         categoryRepository.save(main);
 

@@ -47,7 +47,7 @@ public class Category {
         this.name = name;
     }
 
-    public void initCategory(final Category subCategory) {
+    public void addSubCategory(final Category subCategory) {
         subCategories.add(subCategory);
         subCategory.mainCategory = this;
     }
