@@ -10,4 +10,5 @@
     <color name="black_900">#2C2C2C</color>
     <color name="black_600">#202529</color>
     <color name="black_400">#98989E</color>
+    <color name="gray_default_dot">#D9D9D9</color>
 </resources>
