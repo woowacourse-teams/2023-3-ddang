@@ -1,6 +1,6 @@
-package com.ddang.ddang.actuion.domain;
+package com.ddang.ddang.auction.domain;
 
-import com.ddang.ddang.actuion.domain.exception.InvalidPriceValueException;
+import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;

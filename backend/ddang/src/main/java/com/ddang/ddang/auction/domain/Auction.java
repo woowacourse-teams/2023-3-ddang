@@ -1,4 +1,4 @@
-package com.ddang.ddang.actuion.domain;
+package com.ddang.ddang.auction.domain;
 
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import jakarta.persistence.AttributeOverride;
