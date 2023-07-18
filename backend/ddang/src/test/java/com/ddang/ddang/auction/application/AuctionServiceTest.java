@@ -59,15 +59,45 @@ class AuctionServiceTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.id()).isPositive();
-            softAssertions.assertThat(actual.title()).isEqualTo(createAuctionDto.title());
-            softAssertions.assertThat(actual.description()).isEqualTo(createAuctionDto.description());
-            softAssertions.assertThat(actual.bidUnit()).isEqualTo(createAuctionDto.bidUnit());
-            softAssertions.assertThat(actual.startBidPrice()).isEqualTo(createAuctionDto.startBidPrice());
-            softAssertions.assertThat(actual.lastBidPrice()).isNull();
-            softAssertions.assertThat(actual.winningBidPrice()).isNull();
-            softAssertions.assertThat(actual.deleted()).isFalse();
-            softAssertions.assertThat(actual.closingTime()).isEqualTo(createAuctionDto.closingTime());
+            softAssertions.assertThat(actual.id())
+                          .isPositive();
+            softAssertions.assertThat(actual.title())
+                          .isEqualTo(createAuctionDto.title());
+            softAssertions.assertThat(actual.description())
+                          .isEqualTo(createAuctionDto.description());
+            softAssertions.assertThat(actual.bidUnit())
+                          .isEqualTo(createAuctionDto.bidUnit());
+            softAssertions.assertThat(actual.startBidPrice())
+                          .isEqualTo(createAuctionDto.startBidPrice());
+            softAssertions.assertThat(actual.lastBidPrice())
+                          .isNull();
+            softAssertions.assertThat(actual.winningBidPrice())
+                          .isNull();
+            softAssertions.assertThat(actual.deleted())
+                          .isFalse();
+            softAssertions.assertThat(actual.closingTime())
+                          .isEqualTo(createAuctionDto.closingTime());
         });
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_경매를_삭제한다() {
+        // given
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now()
+        );
+
+        final Long savedAuctionId = auctionService.create(createAuctionDto);
+
+        // when
+        auctionService.deleteByAuctionId(savedAuctionId);
+
+        // then
+        final ReadAuctionDto actual = auctionService.readByAuctionId(savedAuctionId);
+        assertThat(actual.deleted()).isTrue();
     }
 }
