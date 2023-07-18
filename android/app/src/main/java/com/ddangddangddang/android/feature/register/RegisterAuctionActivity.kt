@@ -18,10 +18,10 @@ class RegisterAuctionActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        setObserveEvent()
+        setupObserveEvent()
     }
 
-    private fun setObserveEvent() {
+    private fun setupObserveEvent() {
         viewModel.event.observe(
             this,
         ) {
