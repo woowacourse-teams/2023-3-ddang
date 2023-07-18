@@ -2,6 +2,7 @@ package com.ddangddangddang.android.feature.detail
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -20,17 +21,7 @@ class AuctionDetailActivity :
         binding.viewModel = viewModel
         val auctionId = intent.getLongExtra(AUCTION_ID_KEY, -1L)
         setupViewModel(auctionId)
-
-        binding.vpImageList.apply {
-            clipToPadding = false
-            clipChildren = false
-            offscreenPageLimit = 1
-            adapter = AuctionImageAdapter(viewModel.images)
-            setPageTransformer(MarginPageTransformer(100))
-            setPadding(200, 0, 200, 0)
-        }
-
-        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { tab, position -> }.attach()
+        setupViewPager()
     }
 
     private fun setupViewModel(auctionId: Long) {
@@ -39,6 +30,24 @@ class AuctionDetailActivity :
         viewModel.event.observe(this) {
             finish()
         }
+    }
+
+    private fun setupViewPager() {
+        binding.vpImageList.apply {
+            clipToPadding = false
+            clipChildren = false
+            offscreenPageLimit = 1
+            adapter = AuctionImageAdapter(viewModel.images)
+            setPageTransformer(MarginPageTransformer(convertDpToPx(20f)))
+            setPadding(200, 0, 200, 0)
+        }
+
+        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { tab, position -> }.attach()
+    }
+
+    private fun convertDpToPx(dp: Float): Int {
+        val density = Resources.getSystem().displayMetrics.density
+        return (dp * density + 0.5f).toInt()
     }
 
     companion object {
