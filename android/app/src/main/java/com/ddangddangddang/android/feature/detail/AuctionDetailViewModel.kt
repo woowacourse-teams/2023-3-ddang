@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 
 class AuctionDetailViewModel : ViewModel() {
-    private val _event: SingleLiveEvent<MainScreenEvent> = SingleLiveEvent()
-    val event: LiveData<MainScreenEvent>
+    private val _event: SingleLiveEvent<AuctionDetailEvent> = SingleLiveEvent()
+    val event: LiveData<AuctionDetailEvent>
         get() = _event
 
     val images = listOf(
@@ -18,10 +18,10 @@ class AuctionDetailViewModel : ViewModel() {
     )
 
     fun exit() {
-        _event.value = MainScreenEvent.Exit
+        _event.value = AuctionDetailEvent.Exit
     }
 
-    sealed class MainScreenEvent {
-        object Exit : MainScreenEvent()
+    sealed class AuctionDetailEvent {
+        object Exit : AuctionDetailEvent()
     }
 }
