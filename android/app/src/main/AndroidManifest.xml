@@ -23,6 +23,9 @@
         android:theme="@style/Theme.DdangDdangDdang"
         tools:targetApi="31">
         <activity
+            android:name=".feature.detail.AuctionDetailActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.register.RegisterAuctionActivity"
             android:exported="false" />
         <activity
