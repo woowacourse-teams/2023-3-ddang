@@ -12,7 +12,6 @@ class RegisterAuctionActivity : BindingActivity<ActivityRegisterAuctionBinding>(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_register_auction)
         binding.viewModel = viewModel
     }
 }
