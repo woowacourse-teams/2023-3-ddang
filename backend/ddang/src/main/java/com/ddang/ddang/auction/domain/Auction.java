@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 @ToString
 public class Auction extends BaseTimeEntity {
 
+    private static final boolean DELETED_STATUS = true;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -69,5 +71,9 @@ public class Auction extends BaseTimeEntity {
         this.bidUnit = bidUnit;
         this.startBidPrice = startBidPrice;
         this.closingTime = closingTime;
+    }
+
+    public void delete() {
+        deleted = DELETED_STATUS;
     }
 }
