@@ -9,6 +9,7 @@ import com.ddang.ddang.auction.presentation.dto.ReadAuctionResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,5 +39,13 @@ public class AuctionController {
         final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
 
         return ResponseEntity.ok(ReadAuctionResponse.from(readAuctionDto));
+    }
+
+    @DeleteMapping("/{auctionId}")
+    public ResponseEntity<Void> delete(@PathVariable final Long auctionId) {
+        auctionService.deleteByAuctionId(auctionId);
+
+        return ResponseEntity.noContent()
+                             .build();
     }
 }
