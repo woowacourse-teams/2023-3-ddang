@@ -45,7 +45,6 @@ class JpaAuctionRepositoryTest {
         em.flush();
         em.clear();
 
-        assertThat(auction.getId())
-                .isPositive();
+        assertThat(auction.getId()).isPositive();
     }
 }
