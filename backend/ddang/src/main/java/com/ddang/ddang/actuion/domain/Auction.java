@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -47,7 +48,20 @@ public class Auction extends BaseTimeEntity {
     private Price winningBidPrice;
 
     @Column(name = "is_deleted")
-    private boolean deleted;
+    private boolean deleted = false;
 
     private LocalDateTime closingTime;
+
+    @Builder
+    private Auction(
+            final String title,
+            final String description,
+            final Price startBidPrice,
+            final LocalDateTime closingTime
+    ) {
+        this.title = title;
+        this.description = description;
+        this.startBidPrice = startBidPrice;
+        this.closingTime = closingTime;
+    }
 }
