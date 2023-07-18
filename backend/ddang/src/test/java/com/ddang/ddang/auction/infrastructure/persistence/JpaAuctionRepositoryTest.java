@@ -1,5 +1,6 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
+import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.configuration.JpaConfiguration;
@@ -34,7 +35,8 @@ class JpaAuctionRepositoryTest {
         final Auction auction = Auction.builder()
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
-                                       .startBidPrice(new Price(1000))
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startBidPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
 
