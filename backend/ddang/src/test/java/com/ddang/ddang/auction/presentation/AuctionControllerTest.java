@@ -2,6 +2,7 @@ package com.ddang.ddang.auction.presentation;
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.presentation.dto.CreateAuctionRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,8 +22,10 @@ import java.time.LocalDateTime;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -74,6 +77,39 @@ class AuctionControllerTest {
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/auctions/1")),
                        jsonPath("$.id", is(1L), Long.class)
+               );
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_경매를_조회한다() throws Exception {
+        // given
+        final ReadAuctionDto auction = new ReadAuctionDto(
+                1L,
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                null,
+                null,
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+
+        given(auctionService.readByAuctionId(anyLong())).willReturn(auction);
+
+        // when & then
+        mockMvc.perform(get("/auctions/{auctionId}", auction.id()).contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.auction.id", is(auction.id()), Long.class),
+                       jsonPath("$.auction.title", is(auction.title())),
+                       jsonPath("$.auction.description", is(auction.description())),
+                       jsonPath("$.auction.bidUnit", is(auction.bidUnit())),
+                       jsonPath("$.auction.startBidPrice", is(auction.startBidPrice())),
+                       jsonPath("$.auction.deleted", is(auction.deleted())),
+                       jsonPath("$.auction.registerTime").exists(),
+                       jsonPath("$.auction.closingTime").exists()
                );
     }
 }

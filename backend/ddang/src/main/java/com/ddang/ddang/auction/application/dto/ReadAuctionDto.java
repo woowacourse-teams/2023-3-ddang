@@ -14,6 +14,7 @@ public record ReadAuctionDto(
         Integer lastBidPrice,
         Integer winningBidPrice,
         boolean deleted,
+        LocalDateTime registerTime,
         LocalDateTime closingTime
 ) {
 
@@ -28,6 +29,7 @@ public record ReadAuctionDto(
                 convertPrice(auction.getLastBidPrice()),
                 convertPrice(auction.getWinningBidPrice()),
                 auction.isDeleted(),
+                auction.getCreatedTime(),
                 auction.getClosingTime()
         );
     }
