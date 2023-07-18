@@ -59,24 +59,15 @@ class AuctionServiceTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.id())
-                          .isPositive();
-            softAssertions.assertThat(actual.title())
-                          .isEqualTo(createAuctionDto.title());
-            softAssertions.assertThat(actual.description())
-                          .isEqualTo(createAuctionDto.description());
-            softAssertions.assertThat(actual.bidUnit())
-                          .isEqualTo(createAuctionDto.bidUnit());
-            softAssertions.assertThat(actual.startBidPrice())
-                          .isEqualTo(createAuctionDto.startBidPrice());
-            softAssertions.assertThat(actual.lastBidPrice())
-                          .isNull();
-            softAssertions.assertThat(actual.winningBidPrice())
-                          .isNull();
-            softAssertions.assertThat(actual.deleted())
-                          .isFalse();
-            softAssertions.assertThat(actual.closingTime())
-                          .isEqualTo(createAuctionDto.closingTime());
+            softAssertions.assertThat(actual.id()).isPositive();
+            softAssertions.assertThat(actual.title()).isEqualTo(createAuctionDto.title());
+            softAssertions.assertThat(actual.description()).isEqualTo(createAuctionDto.description());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(createAuctionDto.bidUnit());
+            softAssertions.assertThat(actual.startBidPrice()).isEqualTo(createAuctionDto.startBidPrice());
+            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.winningBidPrice()).isNull();
+            softAssertions.assertThat(actual.deleted()).isFalse();
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(createAuctionDto.closingTime());
         });
     }
 
