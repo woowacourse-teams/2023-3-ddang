@@ -29,4 +29,13 @@ public class AuctionService {
 
         return ReadAuctionDto.from(auction);
     }
+
+    public void deleteByAuctionId(final Long auctionId) {
+        final Auction auction = auctionRepository.findById(auctionId)
+                                                 .orElseThrow(() -> new AuctionNotFoundException(
+                                                         "지정한 아이디에 대한 경매를 찾을 수 없습니다."
+                                                 ));
+
+        auction.delete();
+    }
 }
