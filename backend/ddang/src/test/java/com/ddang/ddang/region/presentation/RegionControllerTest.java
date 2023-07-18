@@ -1,0 +1,167 @@
+package com.ddang.ddang.region.presentation;
+
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.region.application.RegionService;
+import com.ddang.ddang.region.application.dto.ReadRegionDto;
+import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.List;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(controllers = {RegionController.class})
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
+class RegionControllerTest {
+
+    @MockBean
+    RegionService regionService;
+
+    @Autowired
+    RegionController regionController;
+
+    MockMvc mockMvc;
+
+    @BeforeEach
+    void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(regionController)
+                                 .setControllerAdvice(new GlobalExceptionHandler())
+                                 .alwaysDo(print())
+                                 .build();
+    }
+
+    @Test
+    void 모든_첫번째_지역을_조회한다() throws Exception {
+        // given
+
+        final ReadRegionDto first1 = new ReadRegionDto(1L, "first1");
+        final ReadRegionDto first2 = new ReadRegionDto(2L, "first2");
+
+        given(regionService.readAllFirst()).willReturn(List.of(first1, first2));
+
+        // when & then
+        mockMvc.perform(get("/regions")
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.regions.[0].id", is(first1.id()), Long.class),
+                       jsonPath("$.regions.[0].name", is(first1.name())),
+                       jsonPath("$.regions.[1].id", is(first2.id()), Long.class),
+                       jsonPath("$.regions.[1].name", is(first2.name()))
+               );
+    }
+
+    @Test
+    void 첫번째_지역이_없는_경우_첫번째_지역_조회시_404를_반환한다() throws Exception {
+        // given
+        final RegionNotFoundException regionNotFoundException = new RegionNotFoundException("등록된 지역이 없습니다.");
+        given(regionService.readAllFirst()).willThrow(regionNotFoundException);
+
+        // when & then
+        mockMvc.perform(get("/regions")
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(regionNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 첫번째_지역에_해당하는_모든_두번째_지역을_조회한다() throws Exception {
+        // given
+        final ReadRegionDto first = new ReadRegionDto(1L, "first");
+        final ReadRegionDto second1 = new ReadRegionDto(2L, "second1");
+        final ReadRegionDto second2 = new ReadRegionDto(3L, "second2");
+
+        given(regionService.readAllSecondByFirstRegionId(first.id())).willReturn(List.of(second1, second2));
+
+        // when & then
+        mockMvc.perform(get("/regions/{firstId}", first.id())
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.regions.[0].id", is(second1.id()), Long.class),
+                       jsonPath("$.regions.[0].name", is(second1.name())),
+                       jsonPath("$.regions.[1].id", is(second2.id()), Long.class),
+                       jsonPath("$.regions.[1].name", is(second2.name()))
+               );
+    }
+
+    @Test
+    void 지정한_첫번째_지역에_해당하는_두번째_지역이_없는_경우_두번째_지역_조회시_404를_반환한다() throws Exception {
+        // given
+        final ReadRegionDto first = new ReadRegionDto(1L, "first");
+
+        final RegionNotFoundException regionNotFoundException =
+                new RegionNotFoundException("지정한 첫 번째 지역에 해당하는 두 번째 지역이 없습니다.");
+
+        given(regionService.readAllSecondByFirstRegionId(first.id())).willThrow(regionNotFoundException);
+
+        // when & then
+        mockMvc.perform(get("/regions/{firstId}", first.id())
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(regionNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 두번째_지역에_해당하는_모든_세번째_지역을_조회한다() throws Exception {
+        // given
+        final ReadRegionDto first = new ReadRegionDto(1L, "first");
+        final ReadRegionDto second = new ReadRegionDto(2L, "second");
+        final ReadRegionDto third1 = new ReadRegionDto(3L, "third1");
+        final ReadRegionDto third2 = new ReadRegionDto(3L, "third2");
+
+        given(regionService.readAllThirdByFirstAndSecondRegionId(first.id(), second.id()))
+                .willReturn(List.of(third1, third2));
+
+        // when & then
+        mockMvc.perform(get("/regions/{firstId}/{secondId}", first.id(), second.id())
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.regions.[0].id", is(third1.id()), Long.class),
+                       jsonPath("$.regions.[0].name", is(third1.name())),
+                       jsonPath("$.regions.[1].id", is(third2.id()), Long.class),
+                       jsonPath("$.regions.[1].name", is(third2.name()))
+               );
+    }
+
+    @Test
+    void 지정한_첫번째와_두번째_지역에_해당하는_세번째_지역이_없는_경우_세번째_지역_조회시_404를_반환한다() throws Exception {
+        // given
+        final ReadRegionDto first = new ReadRegionDto(1L, "first");
+        final ReadRegionDto second = new ReadRegionDto(2L, "second");
+
+        final RegionNotFoundException regionNotFoundException =
+                new RegionNotFoundException("지정한 첫 번째와 두 번째 지역에 해당하는 세 번째 지역이 없습니다.");
+
+        given(regionService.readAllThirdByFirstAndSecondRegionId(first.id(), second.id()))
+                .willThrow(regionNotFoundException);
+
+        // when & then
+        mockMvc.perform(get("/regions/{firstId}/{secondId}", first.id(), second.id())
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(regionNotFoundException.getMessage()))
+               );
+    }
+}

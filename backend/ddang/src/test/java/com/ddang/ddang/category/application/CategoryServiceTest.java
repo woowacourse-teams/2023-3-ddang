@@ -75,7 +75,7 @@ class CategoryServiceTest {
     }
 
     @Test
-    void 지정한_메인_카테고리에_해당_서브_카테고리가_없는_경우_서브_카테고리_조회시_예외가_발생한다() {
+    void 지정한_메인_카테고리에_해당하는_서브_카테고리가_없는_경우_서브_카테고리_조회시_예외가_발생한다() {
         // given
         final Category main = new Category("main");
 
@@ -84,6 +84,6 @@ class CategoryServiceTest {
         // when & then
         assertThatThrownBy(() -> categoryService.readAllSubByMainId(main.getId()))
                 .isInstanceOf(CategoryNotFoundException.class)
-                .hasMessage("지정한 메인 카테고리에 해당 서브 카테고리가 없습니다.");
+                .hasMessage("지정한 메인 카테고리에 해당하는 서브 카테고리가 없습니다.");
     }
 }

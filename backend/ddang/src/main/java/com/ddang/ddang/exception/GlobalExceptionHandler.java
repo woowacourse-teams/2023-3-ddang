@@ -2,6 +2,7 @@ package com.ddang.ddang.exception;
 
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
+import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -33,6 +34,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleCategoryNotFoundException(final CategoryNotFoundException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, CategoryNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(RegionNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleRegionNotFoundException(final RegionNotFoundException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, RegionNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
