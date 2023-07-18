@@ -1,4 +1,4 @@
-package com.ddang.ddang.actuion.domain;
+package com.ddang.ddang.auction.domain;
 
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import jakarta.persistence.AttributeOverride;
@@ -36,6 +36,10 @@ public class Auction extends BaseTimeEntity {
     private String description;
 
     @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "bid_unit"))
+    private BidUnit bidUnit;
+
+    @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "start_bid_price"))
     private Price startBidPrice;
 
@@ -56,11 +60,13 @@ public class Auction extends BaseTimeEntity {
     private Auction(
             final String title,
             final String description,
+            final BidUnit bidUnit,
             final Price startBidPrice,
             final LocalDateTime closingTime
     ) {
         this.title = title;
         this.description = description;
+        this.bidUnit = bidUnit;
         this.startBidPrice = startBidPrice;
         this.closingTime = closingTime;
     }

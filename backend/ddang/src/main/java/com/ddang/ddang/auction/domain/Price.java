@@ -1,6 +1,6 @@
-package com.ddang.ddang.actuion.domain;
+package com.ddang.ddang.auction.domain;
 
-import com.ddang.ddang.actuion.domain.exception.InvalidPriceValueException;
+import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import lombok.ToString;
 public class Price {
 
     private static final int MINIMUM_PRICE = 0;
-    private static final int MAXIMUM_PRICE = 2100000000;
+    private static final int MAXIMUM_PRICE = 2_100_000_000;
 
     private int value;
 
