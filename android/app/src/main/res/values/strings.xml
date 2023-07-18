@@ -7,4 +7,8 @@
     <string name="bottom_navigation_my_page">마이페이지</string>
 
     <string name="home_title">경매 상품 목록</string>
+    <string name="home_filter_new">최신순</string>
+    <string name="home_filter_auctioneer">참여 인원순</string>
+    <string name="home_filter_closing_time">마감 임박순</string>
+    <string name="home_filter_reliability">신뢰도순</string>
 </resources>

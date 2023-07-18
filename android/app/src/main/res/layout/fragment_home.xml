@@ -25,16 +25,50 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_filter"
+        <HorizontalScrollView
+            android:id="@+id/sv_filter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:paddingVertical="10dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_home" />
+            app:layout_constraintTop_toBottomOf="@id/tb_home">
+
+            <com.google.android.material.chip.ChipGroup
+                android:paddingHorizontal="20dp"
+                app:chipSpacingHorizontal="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                app:selectionRequired="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:text="@string/home_filter_new"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:text="@string/home_filter_auctioneer"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:text="@string/home_filter_closing_time"
+                    android:layout_height="wrap_content" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:text="@string/home_filter_reliability"
+                    android:layout_height="wrap_content" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_auction"
@@ -44,7 +78,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_filter"
+            app:layout_constraintTop_toBottomOf="@id/sv_filter"
             app:spanCount="2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
