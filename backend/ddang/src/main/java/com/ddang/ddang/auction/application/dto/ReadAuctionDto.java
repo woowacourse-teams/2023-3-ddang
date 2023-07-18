@@ -19,7 +19,6 @@ public record ReadAuctionDto(
 ) {
 
     public static ReadAuctionDto from(final Auction auction) {
-
         return new ReadAuctionDto(
                 auction.getId(),
                 auction.getTitle(),
