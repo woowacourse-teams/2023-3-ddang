@@ -26,6 +26,9 @@
             android:name=".feature.detail.AuctionDetailActivity"
             android:exported="false" />
         <activity
+            android:name=".feature.register.RegisterAuctionActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.main.MainActivity"
             android:exported="true">
             <intent-filter>

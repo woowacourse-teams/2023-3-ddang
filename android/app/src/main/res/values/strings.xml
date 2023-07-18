@@ -16,4 +16,15 @@
     <string name="detail_seller_profile_description">유저 프로필</string>
     <string name="detail_reliability_icon_description">판매자 신뢰성</string>
     <string name="detail_auction_submit">입찰하기</string>
+
+    <!-- register -->
+    <string name="register_auction">경매 상품 등록</string>
+    <string name="register_auction_default_image_count">(%d/%d)</string>
+
+    <string name="register_auction_title">제목</string>
+    <string name="register_auction_category">카테고리</string>
+    <string name="register_auction_description">상품 설명</string>
+    <string name="register_auction_start_price">경매 시작가</string>
+    <string name="register_auction_closing_time">경매 마감 시간</string>
+    <string name="register_auction_enable_direct_region">직거래 가능 지역</string>
 </resources>
