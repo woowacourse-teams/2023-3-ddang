@@ -30,6 +30,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginStart="@dimen/margin_side_layout"
+                android:onClick="@{() -> viewModel.setExitEvent()}"
                 android:src="@drawable/ic_left_24"
                 app:tint="@color/black_900" />
 
@@ -67,10 +68,9 @@
                     android:padding="16dp"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
 
                 <LinearLayout

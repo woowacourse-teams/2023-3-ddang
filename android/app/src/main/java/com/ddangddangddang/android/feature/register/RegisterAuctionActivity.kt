@@ -29,10 +29,14 @@ class RegisterAuctionActivity :
         }
     }
 
-    private fun handleEvent(event: RegisterAuctionViewModel.Event) {
+    private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
         when (event) {
-            is RegisterAuctionViewModel.Event.ClosingTimePicker -> {
+            is RegisterAuctionViewModel.RegisterAuctionEvent.ClosingTimePicker -> {
                 showDateTimePicker(event.dateTime)
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.Exit -> {
+                backActivity()
             }
         }
     }
@@ -60,5 +64,9 @@ class RegisterAuctionActivity :
             selectedTime.minute,
             false,
         ).show()
+    }
+
+    private fun backActivity() {
+        finish()
     }
 }

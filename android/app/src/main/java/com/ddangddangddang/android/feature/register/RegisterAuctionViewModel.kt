@@ -14,12 +14,16 @@ class RegisterAuctionViewModel : ViewModel() {
     val closingTime: LiveData<LocalDateTime>
         get() = _closingTime
 
-    private val _event: SingleLiveEvent<Event> = SingleLiveEvent()
-    val event: LiveData<Event>
+    private val _event: SingleLiveEvent<RegisterAuctionEvent> = SingleLiveEvent()
+    val event: LiveData<RegisterAuctionEvent>
         get() = _event
 
     fun setClosingTimeEvent() {
-        _event.value = Event.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+        _event.value = RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+    }
+
+    fun setExitEvent() {
+        _event.value = RegisterAuctionEvent.Exit
     }
 
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
@@ -37,7 +41,8 @@ class RegisterAuctionViewModel : ViewModel() {
         )
     }
 
-    sealed class Event {
-        class ClosingTimePicker(val dateTime: LocalDateTime) : Event()
+    sealed class RegisterAuctionEvent {
+        object Exit : RegisterAuctionEvent()
+        class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
     }
 }
