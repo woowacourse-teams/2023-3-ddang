@@ -52,10 +52,10 @@ class AuctionServiceTest {
                 LocalDateTime.now()
         );
 
-        final Long saveAuctionId = auctionService.create(createAuctionDto);
+        final Long savedAuctionId = auctionService.create(createAuctionDto);
 
         // when
-        final ReadAuctionDto actual = auctionService.readByAuctionId(saveAuctionId);
+        final ReadAuctionDto actual = auctionService.readByAuctionId(savedAuctionId);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
