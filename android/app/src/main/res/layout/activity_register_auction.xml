@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.register.RegisterAuctionViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.register.RegisterAuctionActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_register_auction"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:src="@drawable/ic_left_24"
+                app:tint="@color/black_900" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/register_auction"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/textsize_main_header"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <ScrollView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_register_auction">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/ll_register_image"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:scaleType="center"
+                        android:src="@drawable/ic_camera_24"
+                        app:tint="@color/black_900" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/register_auction_default_image_count"
+                        android:textColor="@color/black_900"
+                        android:textSize="12sp"
+                        tools:text="(0/10)" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginTop="22dp"
+                    android:text="@string/register_auction_title"
+                    android:textColor="@color/black_900"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/ll_register_image" />
+
+                <EditText
+                    android:id="@+id/et_title"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:hint="@string/register_auction_title"
+                    android:inputType="text"
+                    android:padding="16dp"
+                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
+                    android:textSize="@dimen/textsize_body"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_title" />
+
+                <TextView
+                    android:id="@+id/tv_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginTop="22dp"
+                    android:text="@string/register_auction_category"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_title" />
+
+                <EditText
+                    android:id="@+id/et_category"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:hint="@string/register_auction_category"
+                    android:inputType="text"
+                    android:padding="16dp"
+                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
+                    android:textSize="@dimen/textsize_body"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_category" />
+
+                <TextView
+                    android:id="@+id/tv_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginTop="22dp"
+                    android:text="@string/register_auction_description"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_category" />
+
+                <EditText
+                    android:id="@+id/et_description"
+                    android:layout_width="0dp"
+                    android:layout_height="190dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:gravity="top"
+                    android:hint="@string/register_auction_description"
+                    android:inputType="textMultiLine"
+                    android:padding="16dp"
+                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
+                    android:textSize="@dimen/textsize_body"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_description" />
+
+                <TextView
+                    android:id="@+id/tv_start_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginTop="22dp"
+                    android:text="@string/register_auction_start_price"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_description" />
+
+                <EditText
+                    android:id="@+id/et_start_price"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:hint="@string/register_auction_start_price"
+                    android:inputType="numberDecimal"
+                    android:padding="16dp"
+                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
+                    android:textSize="@dimen/textsize_body"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_start_price" />
+
+                <TextView
+                    android:id="@+id/tv_closing_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginTop="22dp"
+                    android:text="@string/register_auction_closing_time"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_start_price" />
+
+                <EditText
+                    android:id="@+id/et_closing_time"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:hint="@string/register_auction_closing_time"
+                    android:inputType="text"
+                    android:padding="16dp"
+                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
+                    android:textSize="@dimen/textsize_body"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_closing_time" />
+
+                <TextView
+                    android:id="@+id/tv_direct_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginTop="22dp"
+                    android:text="@string/register_auction_enable_direct_region"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_closing_time" />
+
+                <EditText
+                    android:id="@+id/et_direct_region"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:hint="@string/register_auction_enable_direct_region"
+                    android:inputType="text"
+                    android:padding="16dp"
+                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
+                    android:textSize="@dimen/textsize_body"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_direct_region" />
+
+                <Button
+                    android:id="@+id/btn_register"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginVertical="22dp"
+                    android:padding="0dp"
+                    android:text="@string/register_auction"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/et_direct_region" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
