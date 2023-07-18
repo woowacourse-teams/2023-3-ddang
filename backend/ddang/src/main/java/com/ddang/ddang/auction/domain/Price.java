@@ -3,6 +3,7 @@ package com.ddang.ddang.auction.domain;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -10,6 +11,7 @@ import lombok.ToString;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@EqualsAndHashCode
 @ToString
 public class Price {
 
