@@ -50,7 +50,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="24dp">
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/gl_begin"
@@ -82,6 +83,155 @@
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp" />
 
+                <TextView
+                    android:id="@+id/tv_auction_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_400"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tl_indicator"
+                    tools:text="가전 > 노트북" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_400"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_auction_category"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintTop_toTopOf="@id/tv_auction_category"
+                    tools:text="2023-07-11" />
+
+                <TextView
+                    android:id="@+id/tv_auction_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:background="@color/red_100"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_category"
+                    tools:text="경매중" />
+
+                <TextView
+                    android:id="@+id/tv_auction_closingTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:textColor="@color/black_900"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_auction_status"
+                    app:layout_constraintStart_toEndOf="@id/tv_auction_status"
+                    app:layout_constraintTop_toTopOf="@id/tv_auction_status"
+                    tools:text="~ 2023.07.13 오후 12:00" />
+
+                <TextView
+                    android:id="@+id/tv_last_bid_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_main_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_status"
+                    tools:text="현재가 400,000원" />
+
+                <TextView
+                    android:id="@+id/tv_remain_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/red_100"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_last_bid_price"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintTop_toTopOf="@id/tv_last_bid_price"
+                    tools:text="마감까지 1시간 35분" />
+
+                <TextView
+                    android:id="@+id/tv_start_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black_400"
+                    android:textSize="@dimen/textsize_sub_header"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_last_bid_price"
+                    tools:text="시작가 100,000원" />
+
+                <ImageView
+                    android:id="@+id/iv_auctioneer_count_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_people_alt_24"
+                    android:contentDescription="@string/detail_auctioneer_count_icon_description"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_start_price" />
+
+                <TextView
+                    android:id="@+id/tv_auctioneer_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:textColor="@color/black_900"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_auctioneer_count_icon"
+                    app:layout_constraintStart_toEndOf="@id/iv_auctioneer_count_icon"
+                    app:layout_constraintTop_toTopOf="@id/iv_auctioneer_count_icon"
+                    tools:text="26명 경매 참여중" />
+
+                <TextView
+                    android:id="@+id/tv_auction_explain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/detail_auction_description"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/iv_auctioneer_count_icon" />
+
+                <TextView
+                    android:id="@+id/tv_auction_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_explain"
+                    tools:text="잠깐 쓰고 구석에 짱박아둔 맥북 에어 올려봅니다.\n상태 S급이고 사이클 50 이하입니다." />
+
+                <TextView
+                    android:id="@+id/tv_direct_exchange_regions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/detail_direct_exchange_regions_description"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_description" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_direct_exchange_regions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_direct_exchange_regions"
+                    tools:itemCount="3" />
+
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -97,7 +247,8 @@
             android:textSize="@dimen/textsize_submit_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            android:padding="0dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

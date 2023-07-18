@@ -38,8 +38,7 @@ class AuctionDetailActivity :
             setPadding(200, 0, 200, 0)
         }
 
-        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { tab, position ->
-        }.attach()
+        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { tab, position -> }.attach()
     }
 
     private fun setupViewModel(auctionId: Long) {

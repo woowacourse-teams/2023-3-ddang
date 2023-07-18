@@ -5,6 +5,9 @@
     <string name="bottom_navigation_search">검색</string>
     <string name="bottom_navigation_message">쪽지</string>
     <string name="bottom_navigation_my_page">마이페이지</string>
-    <string name="all_app_bar_back_key_description">뒤로가기 버튼입니다</string>
+    <string name="all_app_bar_back_key_description">뒤로가기 버튼</string>
     <string name="detail_auction_submit">입찰하기</string>
+    <string name="detail_auction_description">상품 설명</string>
+    <string name="detail_direct_exchange_regions_description">직거래 가능 지역</string>
+    <string name="detail_auctioneer_count_icon_description">경매 참여자 수</string>
 </resources>
