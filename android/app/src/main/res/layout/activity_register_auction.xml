@@ -55,6 +55,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <EditText
+                    android:id="@+id/et_image_url"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="@dimen/margin_side_layout"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:hint="@string/register_auction_image_url"
+                    android:inputType="textUri"
+                    android:padding="16dp"
+                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
+                    android:textSize="@dimen/textsize_body"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+
+
                 <LinearLayout
                     android:id="@+id/ll_register_image"
                     android:layout_width="78dp"
@@ -64,6 +82,8 @@
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:gravity="center"
                     android:orientation="vertical"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -94,7 +114,7 @@
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ll_register_image" />
+                    app:layout_constraintTop_toBottomOf="@id/et_image_url" />
 
                 <EditText
                     android:id="@+id/et_title"
