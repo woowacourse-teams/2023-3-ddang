@@ -108,7 +108,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:background="@color/red_100"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
                     android:textColor="@color/white"
@@ -116,6 +115,7 @@
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_auction_category"
+                    tools:background="@color/red_100"
                     tools:text="경매중" />
 
                 <TextView
@@ -168,8 +168,8 @@
                     android:id="@+id/iv_auctioneer_count_icon"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:src="@drawable/ic_people_alt_24"
                     android:contentDescription="@string/detail_auctioneer_count_icon_description"
+                    android:src="@drawable/ic_people_alt_24"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_start_price" />
 
@@ -271,7 +271,8 @@
                     android:contentDescription="@string/detail_reliability_icon_description"
                     android:src="@drawable/ic_star_24"
                     app:layout_constraintStart_toStartOf="@id/tv_seller_nickname"
-                    app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname"
+                    app:tint="@color/yellow" />
 
                 <TextView
                     android:id="@+id/tv_seller_reliability_score"
