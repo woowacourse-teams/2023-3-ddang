@@ -14,7 +14,7 @@ import lombok.ToString;
 public class Price {
 
     private static final int MINIMUM_PRICE = 0;
-    private static final int MAXIMUM_PRICE = 2100000000;
+    private static final int MAXIMUM_PRICE = 2_100_000_000;
 
     private int value;
 
