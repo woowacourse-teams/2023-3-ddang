@@ -9,6 +9,9 @@
             name="viewModel"
             type="com.ddangddangddang.android.feature.register.RegisterAuctionViewModel" />
 
+        <import type="java.time.format.DateTimeFormatter" />
+
+        <import type="java.time.format.FormatStyle" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -213,9 +216,13 @@
                     android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
                     android:hint="@string/register_auction_closing_time"
                     android:inputType="text"
+                    android:onClick="@{() -> viewModel.setClosingTimeEvent()}"
                     android:padding="16dp"
+                    android:text="@{viewModel.closingTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
                     app:layout_constraintEnd_toEndOf="parent"
