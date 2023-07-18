@@ -232,6 +232,55 @@
                     app:layout_constraintTop_toBottomOf="@id/tv_direct_exchange_regions"
                     tools:itemCount="3" />
 
+                <TextView
+                    android:id="@+id/tv_seller_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/detail_seller_info"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/rv_direct_exchange_regions" />
+
+                <ImageView
+                    android:id="@+id/iv_seller_profile"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="8dp"
+                    android:contentDescription="@string/detail_seller_profile_description"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_info" />
+
+                <TextView
+                    android:id="@+id/tv_seller_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toEndOf="@id/iv_seller_profile"
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_info"
+                    tools:text="카붕이" />
+
+                <ImageView
+                    android:id="@+id/iv_reliability_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/detail_reliability_icon_description"
+                    android:src="@drawable/ic_star_24"
+                    app:layout_constraintStart_toStartOf="@id/tv_seller_nickname"
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname" />
+
+                <TextView
+                    android:id="@+id/tv_seller_reliability_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
+                    app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
+                    app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"
+                    tools:text="(9.7)" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -243,12 +292,12 @@
             android:layout_height="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
             android:gravity="center"
+            android:padding="0dp"
             android:text="@string/detail_auction_submit"
             android:textSize="@dimen/textsize_submit_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:padding="0dp"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
