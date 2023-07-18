@@ -24,6 +24,7 @@ public class AuctionController {
     @PostMapping
     public ResponseEntity<CreateAuctionResponse> create(@RequestBody @Valid final CreateAuctionRequest request) {
         final Long auctionId = auctionService.create(CreateAuctionDto.from(request));
+
         return ResponseEntity.created(URI.create("/auctions/" + auctionId))
                              .body(new CreateAuctionResponse(auctionId));
     }
