@@ -19,11 +19,16 @@ class RegisterAuctionViewModel : ViewModel() {
         get() = _event
 
     fun setClosingTimeEvent() {
-        _event.value = RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+        _event.value =
+            RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
     }
 
     fun setExitEvent() {
         _event.value = RegisterAuctionEvent.Exit
+    }
+
+    fun setSubmitEvent() {
+        _event.value = RegisterAuctionEvent.Submit
     }
 
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
@@ -44,5 +49,6 @@ class RegisterAuctionViewModel : ViewModel() {
     sealed class RegisterAuctionEvent {
         object Exit : RegisterAuctionEvent()
         class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
+        object Submit : RegisterAuctionEvent()
     }
 }

@@ -38,6 +38,11 @@ class RegisterAuctionActivity :
             is RegisterAuctionViewModel.RegisterAuctionEvent.Exit -> {
                 backActivity()
             }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.Submit -> {
+                // 값을 모두 가져와서 서버에게 주는 함수를 ViewModel에 작성하여 함수 실행
+                finish()
+            }
         }
     }
 
