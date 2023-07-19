@@ -1,6 +1,6 @@
 package com.ddangddangddang.data
 
-data class AuctionRequestParam(
+data class AuctionRequest(
     val imageUrl: List<String>,
     val title: String,
     val category: Category,
