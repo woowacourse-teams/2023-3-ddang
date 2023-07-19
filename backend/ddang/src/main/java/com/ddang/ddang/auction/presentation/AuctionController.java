@@ -5,7 +5,7 @@ import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.presentation.dto.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.CreateAuctionResponse;
-import com.ddang.ddang.auction.presentation.dto.ReadAuctionResponse;
+import com.ddang.ddang.auction.presentation.dto.ReadAuctionDetailResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,10 +35,10 @@ public class AuctionController {
     }
 
     @GetMapping("/{auctionId}")
-    public ResponseEntity<ReadAuctionResponse> read(@PathVariable final Long auctionId) {
+    public ResponseEntity<ReadAuctionDetailResponse> read(@PathVariable final Long auctionId) {
         final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
 
-        return ResponseEntity.ok(ReadAuctionResponse.from(readAuctionDto));
+        return ResponseEntity.ok(ReadAuctionDetailResponse.from(readAuctionDto));
     }
 
     @DeleteMapping("/{auctionId}")
