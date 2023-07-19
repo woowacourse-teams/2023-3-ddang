@@ -15,10 +15,7 @@ class AuctionSpaceItemDecoration(private val spanCount: Int, private val space: 
         val position = parent.getChildAdapterPosition(view)
         val column = position % spanCount // 1부터 시작
 
-        if (position < spanCount) {
-            outRect.top = space
-        }
-
+        if (position < spanCount) outRect.top = space
         if (column == 0) {
             outRect.left = space
             outRect.right = space / 2
