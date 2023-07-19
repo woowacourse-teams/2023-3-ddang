@@ -7,6 +7,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentHomeBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -14,6 +15,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
         setupViewModel()
         setupAuctionRecyclerView()
     }
@@ -27,7 +29,21 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             is HomeViewModel.HomeEvent.NavigateToAuctionDetail -> {
                 navigateToAuctionDetail(event.auctionId)
             }
+
+            is HomeViewModel.HomeEvent.NavigateToRegisterAuction -> {
+                navigateToRegisterAuction()
+            }
         }
+    }
+
+    private fun navigateToAuctionDetail(auctionId: Long) {
+        val intent = AuctionDetailActivity.getIntent(requireContext(), auctionId)
+        startActivity(intent)
+    }
+
+    private fun navigateToRegisterAuction() {
+        val intent = RegisterAuctionActivity.getIntent(requireContext())
+        startActivity(intent)
     }
 
     private fun setupAuctionRecyclerView() {
@@ -37,10 +53,5 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             }.apply { setAuctions(viewModel.auctions) }
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = 20))
         }
-    }
-
-    private fun navigateToAuctionDetail(auctionId: Long) {
-        val intent = AuctionDetailActivity.getIntent(requireContext(), auctionId)
-        startActivity(intent)
     }
 }
