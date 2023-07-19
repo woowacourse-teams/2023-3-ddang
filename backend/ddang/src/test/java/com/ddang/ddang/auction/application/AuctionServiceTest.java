@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,7 +32,14 @@ class AuctionServiceTest {
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         // when
@@ -49,7 +57,14 @@ class AuctionServiceTest {
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);
@@ -72,6 +87,51 @@ class AuctionServiceTest {
     }
 
     @Test
+    void 첫번째_페이지의_경매_목록을_조회한다() {
+        // given
+        final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+        );
+        final CreateAuctionDto createAuctionDto2 = new CreateAuctionDto(
+                "경매 상품 2",
+                "이것은 경매 상품 2 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+        );
+
+        auctionService.create(createAuctionDto1);
+        auctionService.create(createAuctionDto2);
+
+        // when
+        final List<ReadAuctionDto> actual = auctionService.readAllByLastAuctionId(null, 1);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(1);
+            softAssertions.assertThat(actual.get(0).title()).isEqualTo(createAuctionDto2.title());
+        });
+    }
+
+    @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
         // given
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
@@ -79,7 +139,14 @@ class AuctionServiceTest {
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);

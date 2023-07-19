@@ -19,9 +19,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -66,7 +68,14 @@ class AuctionControllerTest {
                 1_000,
                 1_000,
                 LocalDateTime.now()
-                             .plusDays(3L)
+                             .plusDays(3L),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         given(auctionService.create(any(CreateAuctionDto.class))).willReturn(1L);
@@ -95,7 +104,14 @@ class AuctionControllerTest {
                 null,
                 false,
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         given(auctionService.readByAuctionId(anyLong())).willReturn(auction);
@@ -112,6 +128,69 @@ class AuctionControllerTest {
                        jsonPath("$.auction.deleted", is(auction.deleted())),
                        jsonPath("$.auction.registerTime").exists(),
                        jsonPath("$.auction.closingTime").exists()
+               );
+    }
+
+    @Test
+    void 첫번째_페이지의_경매_목록을_조회한다() throws Exception {
+        // given
+        final ReadAuctionDto auction1 = new ReadAuctionDto(
+                1L,
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                null,
+                null,
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "image1",
+                "first1",
+                "second1",
+                "third1",
+                "main1",
+                "sub1"
+        );
+        final ReadAuctionDto auction2 = new ReadAuctionDto(
+                2L,
+                "경매 상품 2",
+                "이것은 경매 상품 2 입니다.",
+                1_000,
+                1_000,
+                null,
+                null,
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "image2",
+                "first2",
+                "second2",
+                "third2",
+                "main2",
+                "sub2"
+        );
+
+        given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(List.of(auction2, auction1));
+
+        // when & then
+        mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.auctions.[0].id", is(auction2.id()), Long.class),
+                       jsonPath("$.auctions.[0].title", is(auction2.title())),
+                       jsonPath("$.auctions.[0].image", is(auction2.image())),
+                       jsonPath("$.auctions.[0].auctionPrice", is(auction2.startBidPrice())),
+                       jsonPath("$.auctions.[0].status").exists(),
+                       jsonPath("$.auctions.[0].auctioneerCount").exists(),
+                       jsonPath("$.auctions.[1].id", is(auction1.id()), Long.class),
+                       jsonPath("$.auctions.[1].title", is(auction1.title())),
+                       jsonPath("$.auctions.[1].image", is(auction1.image())),
+                       jsonPath("$.auctions.[1].auctionPrice", is(auction1.startBidPrice())),
+                       jsonPath("$.auctions.[1].status").exists(),
+                       jsonPath("$.auctions.[1].auctioneerCount").exists()
                );
     }
 

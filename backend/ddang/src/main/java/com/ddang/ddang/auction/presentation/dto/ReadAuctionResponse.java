@@ -2,17 +2,24 @@ package com.ddang.ddang.auction.presentation.dto;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 
-public record ReadAuctionResponse(AuctionResponse auction, SellerResponse seller) {
+// TODO 2차 데모데이 이후 리팩토링 예정
+public record ReadAuctionResponse(
+        Long id,
+        String title,
+        String image,
+        int auctionPrice,
+        String status,
+        int auctioneerCount
+) {
 
     public static ReadAuctionResponse from(final ReadAuctionDto dto) {
-        final AuctionResponse auctionResponse = AuctionResponse.from(dto);
-        final SellerResponse sellerResponse = new SellerResponse(
-                1L,
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                "닉네임",
-                5.0d
+        return new ReadAuctionResponse(
+                dto.id(),
+                dto.title(),
+                dto.image(),
+                dto.startBidPrice(),
+                "unbidden",
+                0
         );
-
-        return new ReadAuctionResponse(auctionResponse, sellerResponse);
     }
 }

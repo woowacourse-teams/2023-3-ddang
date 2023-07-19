@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public record AuctionResponse(
+public record AuctionDetailResponse(
         Long id,
 
         String images,
@@ -39,9 +39,9 @@ public record AuctionResponse(
         boolean deleted
 ) {
 
-    public static AuctionResponse from(final ReadAuctionDto dto) {
+    public static AuctionDetailResponse from(final ReadAuctionDto dto) {
         // TODO 2차 데모데이 이후 리펙터링 예정
-        return new AuctionResponse(
+        return new AuctionDetailResponse(
                 dto.id(),
                 dto.image(),
                 dto.title(),
