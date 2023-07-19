@@ -3,12 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
-
-    id 'org.jetbrains.kotlin.plugin.serialization' version "1.8.22"
 }
-
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
 android {
     namespace 'com.ddangddangddang.android'
@@ -22,8 +17,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", "BASE_URL", properties['url.ddangddangddang']
     }
 
     buildTypes {
@@ -64,13 +57,6 @@ dependencies {
 
     // 이미지 처리
     implementation 'com.github.bumptech.glide:glide:4.15.1'
-
-    // 네트워크
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
-
-    implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1'
 
     // 테스트
     testImplementation 'junit:junit:4.13.2'
