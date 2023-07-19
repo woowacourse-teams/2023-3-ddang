@@ -24,6 +24,19 @@ public record CreateAuctionRequest(
 
         @NotNull(message = "마감 시간이 입력되지 않았습니다.")
         @FutureOrPresent(message = "마감 시간은 과거를 입력할 수 없습니다.")
-        LocalDateTime closingTime
+        LocalDateTime closingTime,
+
+        // TODO 2차 데모데이 이후 리펙터링 예정
+        String image,
+
+        String firstRegion,
+
+        String secondRegion,
+
+        String thirdRegion,
+
+        String mainCategory,
+
+        String subCategory
 ) {
 }
