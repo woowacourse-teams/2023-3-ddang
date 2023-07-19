@@ -1,6 +1,5 @@
 package com.ddangddangddang.android.feature.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.AuctionHomeStatusModel
@@ -56,8 +55,4 @@ class HomeViewModel : ViewModel() {
             2000,
         ),
     )
-
-    init {
-        Log.d("glo", "view model created!!")
-    }
 }
