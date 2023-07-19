@@ -18,7 +18,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
                 android:text="@string/home"
                 android:textColor="@color/black_900"
                 android:textSize="@dimen/textsize_main_header"
@@ -29,14 +29,14 @@
             android:id="@+id/sv_filter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:paddingVertical="10dp"
+            android:paddingVertical="2dp"
             android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_home">
 
             <com.google.android.material.chip.ChipGroup
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="@dimen/margin_side_layout"
                 app:chipSpacingHorizontal="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -11,4 +11,8 @@
     <string name="home_filter_auctioneer">참여 인원순</string>
     <string name="home_filter_closing_time">마감 임박순</string>
     <string name="home_filter_reliability">신뢰도순</string>
+    <string name="home_auction_image_description">경매 상품 대표 이미지</string>
+    <string name="home_auction_price">%,d원</string>
+    <string name="home_auctioneer_count">(%d)</string>
+    <string name="home_auctioneer_count_description">경매 참여 인원수</string>
 </resources>
