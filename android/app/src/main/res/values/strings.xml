@@ -15,4 +15,11 @@
     <string name="home_auction_price">%,d원</string>
     <string name="home_auctioneer_count">(%d)</string>
     <string name="home_auctioneer_count_description">경매 참여 인원수</string>
+    
+    <string name="all_current_price">현재가</string>
+    <string name="all_start_price">시작가</string>
+    <string name="all_winning_bid_price">낙찰가</string>
+    <string name="all_auction_ongoing">경매중</string>
+    <string name="all_auction_success">낙찰 완료</string>
+    <string name="all_auction_failure">경매 유찰</string>
 </resources>
