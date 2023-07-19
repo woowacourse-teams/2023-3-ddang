@@ -5,7 +5,17 @@
     <string name="bottom_navigation_search">검색</string>
     <string name="bottom_navigation_message">쪽지</string>
     <string name="bottom_navigation_my_page">마이페이지</string>
-
+    
+    <!-- all -->
+    <string name="all_current_price">현재가</string>
+    <string name="all_start_price">시작가</string>
+    <string name="all_winning_bid_price">낙찰가</string>
+    <string name="all_auction_ongoing">경매중</string>
+    <string name="all_auction_success">낙찰 완료</string>
+    <string name="all_auction_failure">경매 유찰</string>
+    <string name="all_app_bar_back_key_description">뒤로가기 버튼</string>
+  
+    <!-- home -->
     <string name="home">경매 상품 목록</string>
     <string name="home_filter_new">최신순</string>
     <string name="home_filter_auctioneer">참여 인원순</string>
@@ -15,11 +25,23 @@
     <string name="home_auction_price">%,d원</string>
     <string name="home_auctioneer_count">(%d)</string>
     <string name="home_auctioneer_count_description">경매 참여 인원수</string>
-    
-    <string name="all_current_price">현재가</string>
-    <string name="all_start_price">시작가</string>
-    <string name="all_winning_bid_price">낙찰가</string>
-    <string name="all_auction_ongoing">경매중</string>
-    <string name="all_auction_success">낙찰 완료</string>
-    <string name="all_auction_failure">경매 유찰</string>
+
+    <!-- detail -->
+    <string name="detail_auction_description">상품 설명</string>
+    <string name="detail_auctioneer_count_icon_description">경매 참여자 수</string>
+    <string name="detail_direct_exchange_regions_description">직거래 가능 지역</string>
+    <string name="detail_seller_info">판매자 정보</string>
+    <string name="detail_seller_profile_description">유저 프로필</string>
+    <string name="detail_reliability_icon_description">판매자 신뢰성</string>
+    <string name="detail_auction_submit">입찰하기</string>
+
+    <!-- register -->
+    <string name="register_auction">경매 상품 등록</string>
+    <string name="register_auction_default_image_count">(%d/%d)</string>
+    <string name="register_auction_title">제목</string>
+    <string name="register_auction_category">카테고리</string>
+    <string name="register_auction_description">상품 설명</string>
+    <string name="register_auction_start_price">경매 시작가</string>
+    <string name="register_auction_closing_time">경매 마감 시간</string>
+    <string name="register_auction_enable_direct_region">직거래 가능 지역</string>
 </resources>
