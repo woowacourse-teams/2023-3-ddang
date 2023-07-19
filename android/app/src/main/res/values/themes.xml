@@ -40,4 +40,13 @@
         <item name="android:textColor">@color/red_100</item>
     </style>
 
+    <style name="App.Custom.HomeFilterChip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">@color/cc_white_to_red_100</item>
+        <item name="android:textColor">@color/tc_black_to_white</item>
+        <item name="chipStrokeColor">@color/oc_black_400_to_red_100</item>
+        <item name="android:textSize">@dimen/textsize_filter_chips</item>
+        <item name="android:textStyle">bold</item>
+        <item name="checkedIcon">@null</item>
+    </style>
 </resources>
+
