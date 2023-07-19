@@ -9,10 +9,17 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class RegisterAuctionViewModel : ViewModel() {
+    val imageUrl: MutableLiveData<String> = MutableLiveData("")
+    val title: MutableLiveData<String> = MutableLiveData("")
+    val category: MutableLiveData<String> = MutableLiveData("전자기기 > 노트북")
+    val description: MutableLiveData<String> = MutableLiveData("")
+    val startPrice: MutableLiveData<String> = MutableLiveData("0")
+    val bidUnit: MutableLiveData<String> = MutableLiveData("0")
     private var _closingTime: MutableLiveData<LocalDateTime> =
         MutableLiveData<LocalDateTime>(LocalDateTime.now())
     val closingTime: LiveData<LocalDateTime>
         get() = _closingTime
+    val directRegion: MutableLiveData<String> = MutableLiveData("경기도 부천시")
 
     private val _event: SingleLiveEvent<RegisterAuctionEvent> = SingleLiveEvent()
     val event: LiveData<RegisterAuctionEvent>
