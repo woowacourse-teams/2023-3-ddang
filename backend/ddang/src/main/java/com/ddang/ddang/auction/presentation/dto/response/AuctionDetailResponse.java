@@ -49,7 +49,7 @@ public record AuctionDetailResponse(
                 dto.description(),
                 dto.startBidPrice(),
                 dto.lastBidPrice(),
-                "unbidden",
+                "UNBIDDEN",
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),

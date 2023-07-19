@@ -18,7 +18,7 @@ public record ReadAuctionResponse(
                 dto.title(),
                 dto.image(),
                 dto.startBidPrice(),
-                "unbidden",
+                "UNBIDDEN",
                 0
         );
     }

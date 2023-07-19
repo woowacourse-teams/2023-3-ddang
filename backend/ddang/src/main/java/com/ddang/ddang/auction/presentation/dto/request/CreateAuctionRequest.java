@@ -29,14 +29,8 @@ public record CreateAuctionRequest(
         // TODO 2차 데모데이 이후 리펙터링 예정
         String image,
 
-        String firstRegion,
-
-        String secondRegion,
-
-        String thirdRegion,
-
-        String mainCategory,
-
-        String subCategory
+        CreateDirectRegionRequest directRegions,
+        
+        CreateAuctionCategoryRequest category
 ) {
 }
