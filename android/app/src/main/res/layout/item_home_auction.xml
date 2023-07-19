@@ -5,13 +5,16 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="com.ddangddangddang.android.model.AuctionHomeStatusModel" />
+
         <variable
             name="auction"
             type="com.ddangddangddang.android.model.AuctionHomeModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_auction_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
