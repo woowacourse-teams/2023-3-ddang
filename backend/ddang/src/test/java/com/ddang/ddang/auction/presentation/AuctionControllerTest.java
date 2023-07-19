@@ -3,7 +3,9 @@ package com.ddang.ddang.auction.presentation;
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionCategoryRequest;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
+import com.ddang.ddang.auction.presentation.dto.request.CreateDirectRegionRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,11 +73,8 @@ class AuctionControllerTest {
                              .plusDays(3L),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                "",
-                "",
-                "",
-                ""
+                new CreateDirectRegionRequest("", "", ""),
+                new CreateAuctionCategoryRequest("", "")
         );
 
         given(auctionService.create(any(CreateAuctionDto.class))).willReturn(1L);
