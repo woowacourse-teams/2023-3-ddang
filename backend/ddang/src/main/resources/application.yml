@@ -5,6 +5,7 @@ spring:
       local:
         - console-logging
       dev:
+        - console-logging
         - file-warn-logging
         - file-error-logging
         - slack-error-logging
