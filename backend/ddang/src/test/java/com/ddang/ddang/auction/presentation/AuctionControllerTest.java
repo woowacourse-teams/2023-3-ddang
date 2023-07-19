@@ -66,7 +66,14 @@ class AuctionControllerTest {
                 1_000,
                 1_000,
                 LocalDateTime.now()
-                             .plusDays(3L)
+                             .plusDays(3L),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         given(auctionService.create(any(CreateAuctionDto.class))).willReturn(1L);
@@ -95,7 +102,14 @@ class AuctionControllerTest {
                 null,
                 false,
                 LocalDateTime.now(),
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         given(auctionService.readByAuctionId(anyLong())).willReturn(auction);

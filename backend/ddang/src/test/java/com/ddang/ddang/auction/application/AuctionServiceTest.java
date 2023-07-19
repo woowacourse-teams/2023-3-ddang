@@ -31,7 +31,14 @@ class AuctionServiceTest {
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         // when
@@ -49,7 +56,14 @@ class AuctionServiceTest {
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);
@@ -79,7 +93,14 @@ class AuctionServiceTest {
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);
