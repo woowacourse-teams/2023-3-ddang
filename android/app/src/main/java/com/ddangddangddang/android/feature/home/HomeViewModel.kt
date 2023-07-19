@@ -66,7 +66,12 @@ class HomeViewModel : ViewModel() {
         _event.value = HomeEvent.NavigateToAuctionDetail(auctionId)
     }
 
+    fun navigateToRegisterAuction() {
+        _event.value = HomeEvent.NavigateToRegisterAuction
+    }
+
     sealed class HomeEvent {
         data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
+        object NavigateToRegisterAuction : HomeEvent()
     }
 }
