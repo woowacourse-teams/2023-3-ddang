@@ -4,6 +4,7 @@ import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.configuration.JpaConfiguration;
+import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.SoftAssertions;
@@ -22,7 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import(JpaConfiguration.class)
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class JpaAuctionRepositoryTest {
 
     @PersistenceContext
