@@ -1,4 +1,4 @@
-package com.ddang.ddang.category.presentation.dto;
+package com.ddang.ddang.category.presentation.dto.response;
 
 import com.ddang.ddang.category.application.dto.ReadCategoryDto;
 

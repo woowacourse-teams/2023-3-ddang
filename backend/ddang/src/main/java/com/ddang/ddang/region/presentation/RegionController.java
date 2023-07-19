@@ -2,8 +2,8 @@ package com.ddang.ddang.region.presentation;
 
 import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.application.dto.ReadRegionDto;
-import com.ddang.ddang.region.presentation.dto.ReadRegionResponse;
-import com.ddang.ddang.region.presentation.dto.ReadRegionsResponse;
+import com.ddang.ddang.region.presentation.dto.response.ReadRegionResponse;
+import com.ddang.ddang.region.presentation.dto.response.ReadRegionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
