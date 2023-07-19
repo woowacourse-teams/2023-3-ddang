@@ -1,8 +1,10 @@
 package com.ddangddangddang.android.feature.home
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.AuctionHomeStatusModel
+import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 
 class HomeViewModel : ViewModel() {
     val auctions: List<AuctionHomeModel> = listOf(
@@ -55,4 +57,16 @@ class HomeViewModel : ViewModel() {
             2000,
         ),
     )
+
+    private val _event: SingleLiveEvent<HomeEvent> = SingleLiveEvent()
+    val event: LiveData<HomeEvent>
+        get() = _event
+
+    fun navigateToAuctionDetail(auctionId: Long) {
+        _event.value = HomeEvent.NavigateToAuctionDetail(auctionId)
+    }
+
+    sealed class HomeEvent {
+        data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
+    }
 }

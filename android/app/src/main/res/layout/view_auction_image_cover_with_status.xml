@@ -43,7 +43,7 @@
             app:layout_constraintStart_toStartOf="@id/v_auction_status"
             app:layout_constraintEnd_toEndOf="@id/v_auction_status"
             tools:text="낙찰 완료"
-            android:text="@{context.getString(auctionStatus.progressStatus)}"
+            android:text="@{context.getString(auctionStatus.progressStatusId)}"
             android:textColor="@color/white"
             android:textSize="14sp" />
 

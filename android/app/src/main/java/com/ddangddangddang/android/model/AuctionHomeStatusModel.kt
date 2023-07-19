@@ -5,8 +5,8 @@ import androidx.annotation.StringRes
 import com.ddangddangddang.android.R
 
 enum class AuctionHomeStatusModel(
-    @StringRes val priceStatus: Int,
-    @StringRes val progressStatus: Int,
+    @StringRes val priceStatusId: Int,
+    @StringRes val progressStatusId: Int,
     @ColorRes val colorId: Int,
 ) {
     ONGOING(R.string.all_current_price, R.string.all_auction_ongoing, R.color.red_100),

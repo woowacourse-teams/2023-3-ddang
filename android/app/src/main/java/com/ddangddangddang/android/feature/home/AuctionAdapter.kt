@@ -5,9 +5,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.ddangddangddang.android.model.AuctionHomeModel
 
-class AuctionAdapter : ListAdapter<AuctionHomeModel, AuctionViewHolder>(AuctionDiffUtil) {
+class AuctionAdapter(private val onItemClick: (Long) -> Unit) :
+    ListAdapter<AuctionHomeModel, AuctionViewHolder>(AuctionDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuctionViewHolder {
-        return AuctionViewHolder.create(parent)
+        return AuctionViewHolder.create(parent, onItemClick)
     }
 
     override fun onBindViewHolder(holder: AuctionViewHolder, position: Int) {
