@@ -56,11 +56,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/margin_side_layout" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/margin_side_layout" />
+
                 <EditText
                     android:id="@+id/et_image_url"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:hint="@string/register_auction_image_url"
@@ -69,8 +82,8 @@
                     android:text="@={viewModel.imageUrl}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -108,20 +121,18 @@
                     android:id="@+id/tv_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_title"
                     android:textColor="@color/black_900"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_image_url" />
 
                 <EditText
                     android:id="@+id/et_title"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:hint="@string/register_auction_title"
@@ -130,27 +141,25 @@
                     android:text="@={viewModel.title}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
                 <TextView
                     android:id="@+id/tv_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_category"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_title" />
 
                 <EditText
                     android:id="@+id/et_category"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:clickable="false"
@@ -161,27 +170,25 @@
                     android:text="@={viewModel.category}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_category" />
 
                 <TextView
                     android:id="@+id/tv_description"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_description"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_category" />
 
                 <EditText
                     android:id="@+id/et_description"
                     android:layout_width="0dp"
                     android:layout_height="190dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:gravity="top"
@@ -191,27 +198,25 @@
                     android:text="@={viewModel.description}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_description" />
 
                 <TextView
                     android:id="@+id/tv_start_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_start_price"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_description" />
 
                 <EditText
                     android:id="@+id/et_start_price"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:hint="@string/register_auction_start_price"
@@ -220,27 +225,25 @@
                     android:text="@={viewModel.startPrice}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_start_price" />
 
                 <TextView
                     android:id="@+id/tv_bid_unit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_bid_unit"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_start_price" />
 
                 <EditText
                     android:id="@+id/et_bid_unit"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:hint="@string/register_auction_bid_unit"
@@ -249,27 +252,25 @@
                     android:text="@={viewModel.bidUnit}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_bid_unit" />
 
                 <TextView
                     android:id="@+id/tv_closing_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_closing_time"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_bid_unit" />
 
                 <EditText
                     android:id="@+id/et_closing_time"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:cursorVisible="false"
@@ -281,27 +282,25 @@
                     android:text="@{viewModel.closingTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_closing_time" />
 
                 <TextView
                     android:id="@+id/tv_direct_region"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_enable_direct_region"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_closing_time" />
 
                 <EditText
                     android:id="@+id/et_direct_region"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:clickable="false"
@@ -312,15 +311,14 @@
                     android:text="@={viewModel.directRegion}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
                     android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_direct_region" />
 
                 <Button
                     android:id="@+id/btn_register"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
-                    android:layout_marginHorizontal="@dimen/margin_side_layout"
                     android:layout_marginVertical="22dp"
                     android:onClick="@{() -> viewModel.setSubmitEvent()}"
                     android:padding="0dp"
@@ -329,7 +327,8 @@
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/gl_start"
+                    app:layout_constraintEnd_toStartOf="@id/gl_end"
                     app:layout_constraintTop_toBottomOf="@id/et_direct_region" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
