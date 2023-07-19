@@ -2,6 +2,8 @@ package com.ddangddangddang.android.feature.register
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
@@ -73,5 +75,10 @@ class RegisterAuctionActivity :
 
     private fun backActivity() {
         finish()
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent =
+            Intent(context, RegisterAuctionActivity::class.java)
     }
 }
