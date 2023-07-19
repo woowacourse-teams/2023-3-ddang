@@ -1,0 +1,4 @@
+[submodule "backend/ddang/3-ddang-submodule"]
+	path = backend/ddang/3-ddang-submodule
+	url = https://github.com/apptie/3-ddang-submodule
+	branch = main
