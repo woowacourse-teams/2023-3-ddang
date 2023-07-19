@@ -1,4 +1,4 @@
-package com.ddang.ddang.region.presentation.dto;
+package com.ddang.ddang.region.presentation.dto.response;
 
 import java.util.List;
 

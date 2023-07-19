@@ -3,7 +3,7 @@ package com.ddang.ddang.auction.application.dto;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.presentation.dto.CreateAuctionRequest;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 
 import java.time.LocalDateTime;
 

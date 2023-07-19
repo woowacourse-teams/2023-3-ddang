@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.presentation.dto;
+package com.ddang.ddang.auction.presentation.dto.request;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;

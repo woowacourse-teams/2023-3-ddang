@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.presentation.dto;
+package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.fasterxml.jackson.annotation.JsonFormat;

@@ -3,7 +3,7 @@ package com.ddang.ddang.auction.presentation;
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.presentation.dto.CreateAuctionRequest;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;

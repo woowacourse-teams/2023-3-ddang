@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.presentation.dto;
+package com.ddang.ddang.auction.presentation.dto.response;
 
 import java.util.List;
 

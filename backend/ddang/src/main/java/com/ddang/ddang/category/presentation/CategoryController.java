@@ -2,8 +2,8 @@ package com.ddang.ddang.category.presentation;
 
 import com.ddang.ddang.category.application.CategoryService;
 import com.ddang.ddang.category.application.dto.ReadCategoryDto;
-import com.ddang.ddang.category.presentation.dto.ReadCategoriesResponse;
-import com.ddang.ddang.category.presentation.dto.ReadCategoryResponse;
+import com.ddang.ddang.category.presentation.dto.response.ReadCategoriesResponse;
+import com.ddang.ddang.category.presentation.dto.response.ReadCategoryResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
