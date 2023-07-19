@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ public class AuctionService {
 
     private final JpaAuctionRepository auctionRepository;
 
+    @Transactional
     public Long create(final CreateAuctionDto dto) {
         return auctionRepository.save(dto.toEntity())
                                 .getId();
@@ -30,6 +33,15 @@ public class AuctionService {
         return ReadAuctionDto.from(auction);
     }
 
+    public List<ReadAuctionDto> readAllByLastAuctionId(final Long lastAuctionId, final int size) {
+        final List<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(lastAuctionId, size);
+
+        return auctions.stream()
+                       .map(ReadAuctionDto::from)
+                       .toList();
+    }
+
+    @Transactional
     public void deleteByAuctionId(final Long auctionId) {
         final Auction auction = auctionRepository.findById(auctionId)
                                                  .orElseThrow(() -> new AuctionNotFoundException(
