@@ -49,27 +49,32 @@
                 android:layout_height="wrap_content"
                 app:singleLine="true"
                 app:selectionRequired="true"
-                app:singleSelection="true">
+                app:singleSelection="true"
+                app:checkedChip="@id/chip_home_filter_new">
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_new"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
                     android:text="@string/home_filter_new"
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_auctioneer"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
                     android:text="@string/home_filter_auctioneer"
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_closing_time"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
                     android:text="@string/home_filter_closing_time"
                     android:layout_height="wrap_content" />
 
                 <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_reliability"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
                     android:text="@string/home_filter_reliability"
