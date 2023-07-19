@@ -2,6 +2,8 @@ package com.ddangddangddang.android.feature.register
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
@@ -18,10 +20,10 @@ class RegisterAuctionActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        setupObserveEvent()
+        setupViewModel()
     }
 
-    private fun setupObserveEvent() {
+    private fun setupViewModel() {
         viewModel.event.observe(
             this,
         ) {
@@ -29,10 +31,19 @@ class RegisterAuctionActivity :
         }
     }
 
-    private fun handleEvent(event: RegisterAuctionViewModel.Event) {
+    private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
         when (event) {
-            is RegisterAuctionViewModel.Event.ClosingTimePicker -> {
+            is RegisterAuctionViewModel.RegisterAuctionEvent.ClosingTimePicker -> {
                 showDateTimePicker(event.dateTime)
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.Exit -> {
+                backActivity()
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.Submit -> {
+                // 값을 모두 가져와서 서버에게 주는 함수를 ViewModel에 작성하여 함수 실행
+                finish()
             }
         }
     }
@@ -60,5 +71,14 @@ class RegisterAuctionActivity :
             selectedTime.minute,
             false,
         ).show()
+    }
+
+    private fun backActivity() {
+        finish()
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent =
+            Intent(context, RegisterAuctionActivity::class.java)
     }
 }

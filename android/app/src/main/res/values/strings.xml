@@ -44,4 +44,6 @@
     <string name="register_auction_start_price">경매 시작가</string>
     <string name="register_auction_closing_time">경매 마감 시간</string>
     <string name="register_auction_enable_direct_region">직거래 가능 지역</string>
+    <string name="register_auction_image_url">이미지 주소</string>
+    <string name="register_auction_bid_unit">경매 입찰 단위</string>
 </resources>

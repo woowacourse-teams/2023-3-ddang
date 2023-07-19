@@ -9,17 +9,33 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class RegisterAuctionViewModel : ViewModel() {
+    val imageUrl: MutableLiveData<String> = MutableLiveData("")
+    val title: MutableLiveData<String> = MutableLiveData("")
+    val category: MutableLiveData<String> = MutableLiveData("전자기기 > 노트북")
+    val description: MutableLiveData<String> = MutableLiveData("")
+    val startPrice: MutableLiveData<String> = MutableLiveData("0")
+    val bidUnit: MutableLiveData<String> = MutableLiveData("0")
     private var _closingTime: MutableLiveData<LocalDateTime> =
         MutableLiveData<LocalDateTime>(LocalDateTime.now())
     val closingTime: LiveData<LocalDateTime>
         get() = _closingTime
+    val directRegion: MutableLiveData<String> = MutableLiveData("경기도 부천시")
 
-    private val _event: SingleLiveEvent<Event> = SingleLiveEvent()
-    val event: LiveData<Event>
+    private val _event: SingleLiveEvent<RegisterAuctionEvent> = SingleLiveEvent()
+    val event: LiveData<RegisterAuctionEvent>
         get() = _event
 
     fun setClosingTimeEvent() {
-        _event.value = Event.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+        _event.value =
+            RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+    }
+
+    fun setExitEvent() {
+        _event.value = RegisterAuctionEvent.Exit
+    }
+
+    fun setSubmitEvent() {
+        _event.value = RegisterAuctionEvent.Submit
     }
 
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
@@ -37,7 +53,9 @@ class RegisterAuctionViewModel : ViewModel() {
         )
     }
 
-    sealed class Event {
-        class ClosingTimePicker(val dateTime: LocalDateTime) : Event()
+    sealed class RegisterAuctionEvent {
+        object Exit : RegisterAuctionEvent()
+        class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
+        object Submit : RegisterAuctionEvent()
     }
 }
