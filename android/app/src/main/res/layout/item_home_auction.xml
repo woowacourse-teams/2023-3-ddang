@@ -72,7 +72,7 @@
             tools:backgroundTint="@color/red_100"
             android:textSize="12sp"
             android:layout_marginTop="4dp"
-            android:text="@{context.getString(auction.status.priceStatus)}"
+            android:text="@{context.getString(auction.status.priceStatusId)}"
             android:backgroundTint="@{context.getColor(auction.status.colorId)}" />
 
         <TextView
