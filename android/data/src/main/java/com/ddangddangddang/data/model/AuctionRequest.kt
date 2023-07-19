@@ -1,4 +1,4 @@
-package com.ddangddangddang.data
+package com.ddangddangddang.data.model
 
 data class AuctionRequest(
     val imageUrl: List<String>,
