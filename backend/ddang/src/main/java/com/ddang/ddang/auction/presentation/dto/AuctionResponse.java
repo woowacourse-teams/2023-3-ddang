@@ -14,7 +14,7 @@ public record AuctionResponse(
 
         String title,
 
-        String category,
+        CategoryResponse category,
 
         String description,
 
@@ -32,7 +32,7 @@ public record AuctionResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime closingTime,
 
-        String directRegions,
+        DirectRegionResponse directRegions,
 
         int auctioneerCount,
 
@@ -40,11 +40,12 @@ public record AuctionResponse(
 ) {
 
     public static AuctionResponse from(final ReadAuctionDto dto) {
+        // TODO 2차 데모데이 이후 리펙터링 예정
         return new AuctionResponse(
                 dto.id(),
-                "https://img.danawa.com/prod_img/500000/139/918/img/19918139_1.jpg?_v=20230605093237",
+                dto.image(),
                 dto.title(),
-                "전자기기",
+                new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
                 dto.startBidPrice(),
                 dto.lastBidPrice(),
@@ -52,7 +53,7 @@ public record AuctionResponse(
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
-                "서울특별시 송파구 가락1동",
+                new DirectRegionResponse(dto.firstRegion(), dto.secondRegion(), dto.thirdRegion()),
                 0,
                 dto.deleted()
         );

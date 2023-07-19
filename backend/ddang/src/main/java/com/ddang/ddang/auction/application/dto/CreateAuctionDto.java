@@ -12,7 +12,15 @@ public record CreateAuctionDto(
         String description,
         int bidUnit,
         int startBidPrice,
-        LocalDateTime closingTime
+        LocalDateTime closingTime,
+
+        // TODO 2차 데모데이 이후 리펙터링 예정
+        String image,
+        String firstRegion,
+        String secondRegion,
+        String thirdRegion,
+        String mainCategory,
+        String subCategory
 ) {
 
     public static CreateAuctionDto from(final CreateAuctionRequest request) {
@@ -21,7 +29,14 @@ public record CreateAuctionDto(
                 request.description(),
                 request.bidUnit(),
                 request.startBidPrice(),
-                request.closingTime()
+                request.closingTime(),
+                // TODO 2차 데모데이 이후 리펙터링 예정
+                request.image(),
+                request.firstRegion(),
+                request.secondRegion(),
+                request.thirdRegion(),
+                request.mainCategory(),
+                request.subCategory()
         );
     }
 
@@ -32,6 +47,13 @@ public record CreateAuctionDto(
                       .bidUnit(new BidUnit(bidUnit))
                       .startBidPrice(new Price(startBidPrice))
                       .closingTime(closingTime)
+                      // TODO 2차 데모데이 이후 리펙터링 예정
+                      .image(image)
+                      .firstRegion(firstRegion)
+                      .secondRegion(secondRegion)
+                      .thirdRegion(thirdRegion)
+                      .mainCategory(mainCategory)
+                      .subCategory(subCategory)
                       .build();
     }
 }

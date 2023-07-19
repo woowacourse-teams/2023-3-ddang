@@ -15,7 +15,14 @@ public record ReadAuctionDto(
         Integer winningBidPrice,
         boolean deleted,
         LocalDateTime registerTime,
-        LocalDateTime closingTime
+        LocalDateTime closingTime,
+        // TODO 2차 데모데이 이후 리펙터링 예정
+        String image,
+        String firstRegion,
+        String secondRegion,
+        String thirdRegion,
+        String mainCategory,
+        String subCategory
 ) {
 
     public static ReadAuctionDto from(final Auction auction) {
@@ -29,7 +36,14 @@ public record ReadAuctionDto(
                 convertPrice(auction.getWinningBidPrice()),
                 auction.isDeleted(),
                 auction.getCreatedTime(),
-                auction.getClosingTime()
+                auction.getClosingTime(),
+                // TODO 2차 데모데이 이후 리펙터링 예정
+                auction.getImage(),
+                auction.getFirstRegion(),
+                auction.getSecondRegion(),
+                auction.getThirdRegion(),
+                auction.getMainCategory(),
+                auction.getSubCategory()
         );
     }
 

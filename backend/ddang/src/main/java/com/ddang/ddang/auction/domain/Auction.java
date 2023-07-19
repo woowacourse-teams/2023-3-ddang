@@ -58,19 +58,44 @@ public class Auction extends BaseTimeEntity {
 
     private LocalDateTime closingTime;
 
+    // TODO 2차 데모데이 이후 리펙터링 예정
+    private String image;
+
+    private String firstRegion;
+
+    private String secondRegion;
+
+    private String thirdRegion;
+
+    private String mainCategory;
+
+    private String subCategory;
+
     @Builder
     private Auction(
             final String title,
             final String description,
             final BidUnit bidUnit,
             final Price startBidPrice,
-            final LocalDateTime closingTime
+            final LocalDateTime closingTime,
+            final String image,
+            final String firstRegion,
+            final String secondRegion,
+            final String thirdRegion,
+            final String mainCategory,
+            final String subCategory
     ) {
         this.title = title;
         this.description = description;
         this.bidUnit = bidUnit;
         this.startBidPrice = startBidPrice;
         this.closingTime = closingTime;
+        this.image = image;
+        this.firstRegion = firstRegion;
+        this.secondRegion = secondRegion;
+        this.thirdRegion = thirdRegion;
+        this.mainCategory = mainCategory;
+        this.subCategory = subCategory;
     }
 
     public void delete() {
