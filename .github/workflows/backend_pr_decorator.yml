@@ -109,7 +109,7 @@ jobs:
               REVIEWERS_SLACK_ID+="<@${{ secrets.apptie_slack_id }}> "
             elif [ "$reviewer" == "swonny" ]; then
               REVIEWERS_SLACK_ID+="<@${{ secrets.swonny_slack_id }}> "
-            elif [ "$reviewer" == "jj503" ]; then
+            elif [ "$reviewer" == "JJ503" ]; then
               REVIEWERS_SLACK_ID+="<@${{ secrets.jj503_slack_id }}> "
             elif [ "$reviewer" == "kwonyj1022" ]; then
               REVIEWERS_SLACK_ID+="<@${{ secrets.kwonyj1022_slack_id }}> "
