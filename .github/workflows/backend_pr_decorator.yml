@@ -31,10 +31,10 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: chmod gradle
-        run: chmod +x /backend/ddang/gradlew
+        run: chmod +x backend/ddang/gradlew
 
       - name: run jacocoTestCoverage
-        run: /backend/ddang/gradlew jacocoTestCoverage
+        run: ./backend/ddang/gradlew jacocoTestCoverage
 
       - name: set author slack id
         if: always()
