@@ -34,7 +34,7 @@ jobs:
         run: chmod +x backend/ddang/gradlew
 
       - name: run jacocoTestCoverage
-        run: ./backend/ddang/gradlew jacocoTestCoverage
+        run: /backend/ddang/gradlew jacocoTestCoverage
 
       - name: set author slack id
         if: always()
