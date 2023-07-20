@@ -4,12 +4,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RegisterAuctionRequest(
-    val imageUrl: List<String>,
+    val images: List<String>,
     val title: String,
     val category: CategoryRequest,
     val description: String,
     val startPrice: Int,
     val bidUnit: Int,
     val closingTime: String,
-    val directRegion: List<DirectRegionRequest>,
+    val directRegions: List<DirectRegionRequest>,
 )
