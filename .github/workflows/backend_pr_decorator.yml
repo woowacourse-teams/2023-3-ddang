@@ -78,7 +78,7 @@ jobs:
             -Dsonar.exclusions=**/*Dto*.java,**/*Application*.java,**/*Exception*.java,**/*Response*.java,**/*Request*.java,**/*Configuration*.java,**/*Appender*.java
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.java.coveragePlugin=jacoco
-            -Dsonar.coverage.jacoco.xmlReportPaths=backend/ddang/build/reports/jacoco/jacocoTestReport.xml
+            -Dsonar.coverage.jacoco.xmlReportPaths=backend/ddang/build/reports/jacoco/test/jacocoTestReport.xml
 
       - name: SonarQube Quality Check
         id: sonar-quality
