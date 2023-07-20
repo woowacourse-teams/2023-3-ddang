@@ -17,6 +17,13 @@ object MockServer {
                         .setResponseCode(200)
                         .setBody(auctionPreviewsResponse)
                 }
+
+                path == "/auctions" && request.method == "POST" -> {
+                    MockResponse()
+                        .setHeader("Content-Type", "application/json")
+                        .setResponseCode(200)
+                        .setBody(registerAuctionResponse)
+                }
                 else -> {
                     MockResponse().setResponseCode(404)
                 }
@@ -38,6 +45,13 @@ object MockServer {
                     }
                 ],
                 "lastAuctionId" : 1
+            }
+        """.trimIndent()
+
+    private val registerAuctionResponse: String =
+        """
+            {
+                "id": 2
             }
         """.trimIndent()
 
