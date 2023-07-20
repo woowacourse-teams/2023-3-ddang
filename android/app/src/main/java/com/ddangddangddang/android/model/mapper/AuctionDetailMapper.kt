@@ -24,7 +24,13 @@ fun AuctionDetailResponse.toPresentation(): AuctionDetailModel {
         auction.bidUnit,
         LocalDateTime.parse(auction.registerTime, formatter),
         LocalDateTime.parse(auction.closingTime, formatter),
-        auction.directRegions.map { RegionModel(it.first, it.second, it.third) },
+        auction.directRegions.map {
+            RegionModel(
+                it.first,
+                it.second.ifEmpty { null },
+                it.third.ifEmpty { null },
+            )
+        },
         auction.auctioneerCount,
         SellerModel(seller.id, seller.image, seller.nickname, seller.reliability),
     )

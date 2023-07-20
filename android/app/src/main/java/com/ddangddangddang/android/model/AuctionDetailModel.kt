@@ -22,22 +22,22 @@ data class AuctionDetailModel(
 ) {
     val remainTime: String
         get() {
-            val registerCalendar = registerTime.toCalendar()
-            val registerDT = registerCalendar.time
+            val nowCalendar = LocalDateTime.now().toCalendar()
+            val nowDT = nowCalendar.time
 
             val closingCalendar = closingTime.toCalendar()
             val closingDT = closingCalendar.time
 
-            val differenceInMills = closingDT.time - registerDT.time
+            val differenceInMills = closingDT.time - nowDT.time
 
             val days = (differenceInMills / (24 * 60 * 60 * 1000L)) % 365
             val hours = (differenceInMills / (60 * 60 * 1000L)) % 24
             val minutes = (differenceInMills / (60 * 1000L)) % 60
 
             return buildString {
-                if (days != 0L) append("${days}일")
-                if (hours != 0L) append("${hours}시간")
-                if (minutes != 0L) append("${minutes}분")
+                if (days > 0L) append("${days}일")
+                if (hours > 0L) append(" ${hours}시간")
+                if (minutes > 0L) append(" ${minutes}분")
             }.trim()
         }
 

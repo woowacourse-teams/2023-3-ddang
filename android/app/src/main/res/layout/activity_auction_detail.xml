@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.ddangddangddang.android.feature.detail.AuctionDetailDateTimeFormatter" />
+
         <variable
             name="viewModel"
             type="com.ddangddangddang.android.feature.detail.AuctionDetailViewModel" />
@@ -36,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
+                android:text="@{viewModel.auctionDetailModel.title}"
                 android:textColor="@color/black_900"
                 android:textSize="@dimen/textsize_main_header"
                 android:textStyle="bold"
@@ -87,6 +90,7 @@
                     android:id="@+id/tv_auction_category"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{@string/detail_auction_category(viewModel.auctionDetailModel.mainCategory,viewModel.auctionDetailModel.subCategory)}"
                     android:textColor="@color/black_400"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
@@ -96,6 +100,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{viewModel.auctionDetailModel.registerTime.toLocalDate().toString()}"
                     android:textColor="@color/black_400"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_auction_category"
@@ -108,8 +113,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
+                    android:background="@{context.getColor(viewModel.auctionDetailModel.auctionDetailStatusModel.colorId)}"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
+                    android:text="@{viewModel.auctionDetailModel.auctionDetailStatusModel.progressStatus}"
                     android:textColor="@color/white"
                     android:textSize="14sp"
                     android:textStyle="bold"
@@ -123,6 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
+                    android:text="@{AuctionDetailDateTimeFormatter.INSTANCE.convertToClosingTimeFormatter(viewModel.auctionDetailModel.closingTime)}"
                     android:textColor="@color/black_900"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_auction_status"
@@ -135,6 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:text="@{@string/detail_auction_price_status(viewModel.auctionDetailModel.auctionDetailStatusModel.priceStatus, viewModel.auctionDetailModel.lastBidPrice)}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_main_header"
                     android:textStyle="bold"
@@ -146,6 +155,7 @@
                     android:id="@+id/tv_remain_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{viewModel.auctionDetailModel.remainTime.isEmpty() ? @string/detail_auction_remain_time_finish : @string/detail_auction_remain_time(viewModel.auctionDetailModel.remainTime)}"
                     android:textColor="@color/red_100"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
@@ -158,6 +168,7 @@
                     android:id="@+id/tv_start_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{@string/detail_auction_start_price(viewModel.auctionDetailModel.startPrice)}"
                     android:textColor="@color/black_400"
                     android:textSize="@dimen/textsize_sub_header"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
@@ -178,6 +189,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
+                    android:text="@{@string/detail_auction_auctioneer_count(viewModel.auctionDetailModel.auctioneerCount)}"
                     android:textColor="@color/black_900"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/iv_auctioneer_count_icon"
@@ -202,6 +214,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:text="@{viewModel.auctionDetailModel.description}"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
@@ -246,6 +259,7 @@
 
                 <ImageView
                     android:id="@+id/iv_seller_profile"
+                    imageUrl="@{viewModel.auctionDetailModel.sellerModel.profileUrl}"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginTop="8dp"
@@ -260,6 +274,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
+                    android:text="@{viewModel.auctionDetailModel.sellerModel.nickname}"
                     app:layout_constraintStart_toEndOf="@id/iv_seller_profile"
                     app:layout_constraintTop_toBottomOf="@id/tv_seller_info"
                     tools:text="카붕이" />
@@ -278,6 +293,7 @@
                     android:id="@+id/tv_seller_reliability_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="@{@string/detail_auction_seller_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
                     app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
                     app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
                     app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"

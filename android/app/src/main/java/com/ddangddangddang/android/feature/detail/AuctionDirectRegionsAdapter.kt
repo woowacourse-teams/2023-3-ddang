@@ -4,8 +4,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.model.RegionModel
 
-class AuctionDirectRegionsAdapter : RecyclerView.Adapter<AuctionDirectRegionViewHolder>() {
-    private var regions: List<RegionModel> = listOf()
+class AuctionDirectRegionsAdapter(private val regions: List<RegionModel> = listOf()) :
+    RecyclerView.Adapter<AuctionDirectRegionViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
@@ -17,9 +17,5 @@ class AuctionDirectRegionsAdapter : RecyclerView.Adapter<AuctionDirectRegionView
 
     override fun onBindViewHolder(holder: AuctionDirectRegionViewHolder, position: Int) {
         holder.bind(regions[position])
-    }
-
-    fun setRegions(regions: List<RegionModel>) {
-        this.regions = regions
     }
 }
