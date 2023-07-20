@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record CreateAuctionRequest(
         @NotEmpty(message = "제목이 입력되지 않았습니다.")
@@ -27,9 +28,9 @@ public record CreateAuctionRequest(
         LocalDateTime closingTime,
 
         // TODO 2차 데모데이 이후 리펙터링 예정
-        String image,
+        List<String> images,
 
-        CreateDirectRegionRequest directRegions,
+        List<CreateDirectRegionRequest> directRegions,
         
         CreateAuctionCategoryRequest category
 ) {

@@ -31,10 +31,10 @@ public record CreateAuctionDto(
                 request.startPrice(),
                 request.closingTime(),
                 // TODO 2차 데모데이 이후 리펙터링 예정
-                request.image(),
-                request.directRegions().first(),
-                request.directRegions().second(),
-                request.directRegions().third(),
+                request.images().get(0),
+                request.directRegions().get(0).first(),
+                request.directRegions().get(0).second(),
+                request.directRegions().get(0).third(),
                 request.category().main(),
                 request.category().sub()
         );

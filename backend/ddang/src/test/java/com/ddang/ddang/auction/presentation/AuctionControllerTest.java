@@ -72,8 +72,8 @@ class AuctionControllerTest {
                 LocalDateTime.now()
                              .plusDays(3L),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                new CreateDirectRegionRequest("", "", ""),
+                List.of(""),
+                List.of(new CreateDirectRegionRequest("", "", "")),
                 new CreateAuctionCategoryRequest("", "")
         );
 

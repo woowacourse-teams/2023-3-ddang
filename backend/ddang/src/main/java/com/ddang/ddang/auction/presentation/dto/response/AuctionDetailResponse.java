@@ -9,7 +9,7 @@ import java.util.List;
 public record AuctionDetailResponse(
         Long id,
 
-        String images,
+        List<String> images,
 
         String title,
 
@@ -40,7 +40,7 @@ public record AuctionDetailResponse(
         // TODO 2차 데모데이 이후 리펙터링 예정
         return new AuctionDetailResponse(
                 dto.id(),
-                dto.image(),
+                List.of(dto.image()),
                 dto.title(),
                 new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
