@@ -2,7 +2,7 @@ name: PR 코드 분석
 
 on:
   pull_request:
-    types: [opened, reopened]
+    types: [opened, reopened, push]
     branches: [ main, develop, develop-be ]
 
 permissions: write-all
@@ -34,7 +34,9 @@ jobs:
         run: chmod +x backend/ddang/gradlew
 
       - name: run jacocoTestCoverage
-        run: /backend/ddang/gradlew jacocoTestCoverage
+        run: |
+          ls -al 
+          /backend/ddang/gradlew jacocoTestCoverage
 
       - name: set author slack id
         if: always()
