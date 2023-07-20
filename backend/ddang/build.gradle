@@ -82,7 +82,8 @@ jacocoTestReport {
                             '**/*Response*',
                             '**/*Request*',
                             '**/*Dto*',
-                            '**/*Configuration*'
+                            '**/*Configuration*',
+                            '**/*Appender*'
                     ] + Qdomains)
         }))
     }
@@ -117,7 +118,8 @@ jacocoTestCoverageVerification {
                     '*.*Request*',
                     '*.*Application*',
                     '*.*Dto*',
-                    '*.*Configuration*'
+                    '*.*Configuration*',
+                    '*.*Appender*'
             ] + Qdomains
         }
     }
