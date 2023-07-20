@@ -35,8 +35,8 @@ jobs:
 
       - name: run jacocoTestCoverage
         run: |
-          ls -al 
-          /backend/ddang/gradlew jacocoTestCoverage
+          cd backend/ddang
+          ./gradlew jacocoTestCoverage
 
       - name: set author slack id
         if: always()
