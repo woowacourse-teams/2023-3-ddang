@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RegisterAuctionRequest(
-    val imageUrl: List<String>,
+    val images: List<String>,
     val title: String,
     val category: CategoryRequest,
     val description: String,

@@ -5,10 +5,12 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -42,8 +44,19 @@ class RegisterAuctionActivity :
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.Submit -> {
-                // 값을 모두 가져와서 서버에게 주는 함수를 ViewModel에 작성하여 함수 실행
-                finish()
+                viewModel.submitAuction()
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitResult -> {
+                navigationToDetail(event.id)
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.InputErrorEvent.InvalidValueInputEvent -> {
+                showInvalidInputMessage()
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.InputErrorEvent.BlankExistEvent -> {
+                showBlankExistMessage()
             }
         }
     }
@@ -73,8 +86,20 @@ class RegisterAuctionActivity :
         ).show()
     }
 
+    private fun showBlankExistMessage() {
+        Toast.makeText(this, "채우지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showInvalidInputMessage() {
+        Toast.makeText(this, "필드에 유효하지 않은 값이 존재합니다.", Toast.LENGTH_SHORT).show()
+    }
+
     private fun backActivity() {
         finish()
+    }
+
+    private fun navigationToDetail(id: Long) {
+        startActivity(AuctionDetailActivity.getIntent(this, id))
     }
 
     companion object {
