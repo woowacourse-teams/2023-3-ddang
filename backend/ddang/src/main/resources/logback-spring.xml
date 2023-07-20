@@ -4,6 +4,7 @@
 
     <springProperty scope="context" name="LOG_DIR" source="log.directory"/>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
+    <property name="LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"/>
 
     <springProfile name="console-logging">
         <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
@@ -17,13 +18,11 @@
     <springProfile name="file-warn-logging">
         <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_DIR}/warn/warn-${BY_DATE}.log</file>
-            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                 <level>WARN</level>
-                <onMatch>ACCEPT</onMatch>
-                <onMismatch>DENY</onMismatch>
             </filter>
             <encoder>
-                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <pattern>${LOG_PATTERN}</pattern>
                 <charset>utf8</charset>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
@@ -48,7 +47,7 @@
                 <onMismatch>DENY</onMismatch>
             </filter>
             <encoder>
-                <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+                <pattern>${LOG_PATTERN}</pattern>
                 <charset>utf8</charset>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
