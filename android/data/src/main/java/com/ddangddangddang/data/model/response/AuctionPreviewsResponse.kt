@@ -1,3 +1,9 @@
 package com.ddangddangddang.data.model.response
 
-data class AuctionPreviewsResponse(val auctions: List<AuctionPreviewResponse>)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class AuctionPreviewsResponse(
+    val auctions: List<AuctionPreviewResponse>,
+    val lastAuctionId: Long? = null,
+)

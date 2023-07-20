@@ -8,6 +8,7 @@ import com.ddangddangddang.android.databinding.FragmentHomeBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
+import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
@@ -17,10 +18,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         setupViewModel()
-        setupAuctionRecyclerView()
+        viewModel.loadAuctions()
     }
 
     private fun setupViewModel() {
+        viewModel.auctions.observe(viewLifecycleOwner) { setupAuctionRecyclerView(it) }
         viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
     }
 
@@ -29,7 +31,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             is HomeViewModel.HomeEvent.NavigateToAuctionDetail -> {
                 navigateToAuctionDetail(event.auctionId)
             }
-
             is HomeViewModel.HomeEvent.NavigateToRegisterAuction -> {
                 navigateToRegisterAuction()
             }
@@ -46,11 +47,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         startActivity(intent)
     }
 
-    private fun setupAuctionRecyclerView() {
+    private fun setupAuctionRecyclerView(auctions: List<AuctionHomeModel>) {
         with(binding.rvAuction) {
             adapter = AuctionAdapter { auctionId ->
                 viewModel.navigateToAuctionDetail(auctionId)
-            }.apply { setAuctions(viewModel.auctions) }
+            }.apply { setAuctions(auctions) }
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = 20))
         }
     }
