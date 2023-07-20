@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record AuctionDetailResponse(
@@ -32,7 +33,7 @@ public record AuctionDetailResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime closingTime,
 
-        DirectRegionResponse directRegions,
+        List<DirectRegionResponse> directRegions,
 
         int auctioneerCount
 ) {
@@ -51,7 +52,7 @@ public record AuctionDetailResponse(
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
-                new DirectRegionResponse(dto.firstRegion(), dto.secondRegion(), dto.thirdRegion()),
+                List.of(new DirectRegionResponse(dto.firstRegion(), dto.secondRegion(), dto.thirdRegion())),
                 0
         );
     }
