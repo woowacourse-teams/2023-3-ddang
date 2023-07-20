@@ -1,0 +1,164 @@
+name: PR 코드 분석
+
+on:
+  pull_request:
+    types: [opened, reopened]
+    branches: [ main, develop, develop-be ]
+
+permissions: write-all
+
+jobs:
+  build:
+    if: contains(github.event.pull_request.labels.*.name, 'backend')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: settings java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: cache gradle
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: chmod gradle
+        run: chmod +x gradlew
+
+      - name: run jacocoTestCoverage
+        run: ./gradlew jacocoTestCoverage
+
+      - name: set author slack id
+        if: always()
+        id: author-slack
+        run: |
+          GIT_ID=${{ github.event.pull_request.user.login }}
+          
+          if [ "$GIT_ID" == "apptie" ]; then
+            AUTHOR_NAME="${{ secrets.apptie_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.apptie_slack_id }}"
+          elif [ "$GIT_ID" == "swonny" ]; then
+            AUTHOR_NAME="${{ secrets.swonny_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.swonny_slack_id }}"
+          elif [ "$GIT_ID" == "jj503" ]; then
+            AUTHOR_NAME="${{ secrets.jj503_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.jj503_slack_id }}"
+          elif [ "$GIT_ID" == "kwonyj1022" ]; then
+            AUTHOR_NAME="${{ secrets.kwonyj1022_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.kwonyj1022_slack_id }}"
+          fi
+          
+          echo "AUTHOR_NAME=${AUTHOR_NAME}" >> $GITHUB_OUTPUT
+          echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
+
+      - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
+        uses: sonarsource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
+        with:
+          args: >
+            -Dsonar.issuesReport.console.enable=true
+            -Dsonar.projectKey=develop-be-project
+            -Dsonar.java.libraries=
+            -Dsonar.java.libraries.empty=true
+            -Dsonar.java.binaries=build/classes
+            -Dsonar.sources=src/main/java
+            -Dsonar.tests=src/test/java
+            -Dsonar.exclusions=**/*Dto*.java,**/*Application*.java,**/*Exception*.java,**/*Response*.java,**/*Request*.java,**/*Configuration*.java,**/*Appender*.java
+            -Dsonar.sourceEncoding=UTF-8
+            -Dsonar.java.coveragePlugin=jacoco
+            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/jacocoTestReport.xml
+
+      - name: SonarQube Quality Check
+        id: sonar-quality
+        run: |
+          SONAR_PROJECT_KEY="sonarqube-test"
+          SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
+
+          RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
+          STATUS=$(echo "$RESULT" | jq -r '.projectStatus.status')
+          ERROR_METRIC_KEYS=$(echo "$RESULT" | jq -r '.projectStatus.conditions[] | select(.status == "ERROR").metricKey')
+
+          echo "STATUS=${STATUS}" >> $GITHUB_OUTPUT
+          echo "ERROR_METRIC_KEYS=${ERROR_METRIC_KEYS}" >> $GITHUB_OUTPUT
+
+      - name: set variables
+        id: variables
+        run: |
+          SONAR_SCANNER_URL="${{ secrets.SONAR_URL }}/dashboard?id=sonarqube-test&pullRequest=${{github.event.number}}"
+          
+          REVIEWERS_GIT_ID='${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}'
+          reviewers=$(echo "$REVIEWERS_GIT_ID" | jq -r '.[]')
+          
+          REVIEWERS_SLACK_ID=""
+          
+          for reviewer in $reviewers; do
+            echo "Reviewer: $reviewer"
+            if [ "$reviewer" == "apptie" ]; then
+              REVIEWERS_SLACK_ID+="<@${{ secrets.apptie_slack_id }}> "
+            elif [ "$reviewer" == "swonny" ]; then
+              REVIEWERS_SLACK_ID+="<@${{ secrets.swonny_slack_id }}> "
+            elif [ "$reviewer" == "jj503" ]; then
+              REVIEWERS_SLACK_ID+="<@${{ secrets.jj503_slack_id }}> "
+            elif [ "$reviewer" == "kwonyj1022" ]; then
+              REVIEWERS_SLACK_ID+="<@${{ secrets.kwonyj1022_slack_id }}> "
+            fi
+          done
+          
+          echo "AUTHOR=${AUTHOR}" >> $GITHUB_OUTPUT
+          echo "SONAR_SCANNER_URL=${SONAR_SCANNER_URL}" >> $GITHUB_OUTPUT
+          echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
+          echo "REVIEWERS_SLACK_ID=${REVIEWERS_SLACK_ID}" >> $GITHUB_OUTPUT
+
+      - name: slack test
+        run: |
+          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
+          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
+          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
+          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
+          SLACK_MESSAGE+=":white_check_mark:"
+          SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"
+          SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS_SLACK_ID }}"
+          SLACK_MESSAGE+='"}}]}'
+
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
+
+      - name: slack failed test
+        if: failure()
+        run: |
+          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
+          SLACK_MESSAGE+="<@"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
+          SLACK_MESSAGE+=">"
+          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
+          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
+          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
+          SLACK_MESSAGE+=":x:"
+          SLACK_MESSAGE+='"}}]}'
+          
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
+
+      - name: slack cancelled test
+        if: cancelled()
+        run: |
+          SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
+          SLACK_MESSAGE+="<@"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
+          SLACK_MESSAGE+=">"
+          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
+          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
+          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
+          SLACK_MESSAGE+=":black_square_for_stop:"
+          SLACK_MESSAGE+='"}}]}'
+          
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
