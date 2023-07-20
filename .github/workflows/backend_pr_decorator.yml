@@ -83,7 +83,7 @@ jobs:
       - name: SonarQube Quality Check
         id: sonar-quality
         run: |
-          SONAR_PROJECT_KEY="sonarqube-test"
+          SONAR_PROJECT_KEY="develop-be-project"
           SONAR_TOKEN="${{ secrets.SONAR_TOKEN }}"
 
           RESULT=$(curl -s -u "admin:root" "${{ secrets.SONAR_URL }}/api/qualitygates/project_status?projectKey=${SONAR_PROJECT_KEY}&pullRequest=${{github.event.number}}")
