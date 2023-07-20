@@ -3,10 +3,16 @@ package com.ddangddangddang.android.feature.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.AuctionDetailModel
+import com.ddangddangddang.android.model.mapper.AuctionDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.repository.AuctionRepository
+import kotlinx.coroutines.launch
 
-class AuctionDetailViewModel : ViewModel() {
+class AuctionDetailViewModel(
+    private val repository: AuctionRepository,
+) : ViewModel() {
     private val _event: SingleLiveEvent<AuctionDetailEvent> = SingleLiveEvent()
     val event: LiveData<AuctionDetailEvent>
         get() = _event
@@ -14,6 +20,13 @@ class AuctionDetailViewModel : ViewModel() {
     private val _auctionDetailModel: MutableLiveData<AuctionDetailModel> = MutableLiveData()
     val auctionDetailModel: LiveData<AuctionDetailModel>
         get() = _auctionDetailModel
+
+    fun loadAuctionDetail(auctionId: Long) {
+        viewModelScope.launch {
+            val auctionDetailModel = repository.getAuctionDetail(auctionId).toPresentation()
+            _auctionDetailModel.value = auctionDetailModel
+        }
+    }
 
     fun exit() {
         _event.value = AuctionDetailEvent.Exit

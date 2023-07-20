@@ -22,6 +22,7 @@ class AuctionDetailActivity :
         binding.viewModel = viewModel
         val auctionId = intent.getLongExtra(AUCTION_ID_KEY, -1L)
         setupViewModel()
+        viewModel.loadAuctionDetail(auctionId)
     }
 
     private fun setupViewModel() {

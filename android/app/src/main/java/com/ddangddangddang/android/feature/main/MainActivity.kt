@@ -7,7 +7,6 @@ import androidx.fragment.app.commit
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMainBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
-import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.HomeFragment
 import com.ddangddangddang.android.feature.message.MessageFragment
 import com.ddangddangddang.android.feature.mypage.MyPageFragment
@@ -21,8 +20,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         binding.viewModel = viewModel
 
         setupViewModel()
-
-        startActivity(AuctionDetailActivity.getIntent(this, 1L))
     }
 
     fun setupViewModel() {

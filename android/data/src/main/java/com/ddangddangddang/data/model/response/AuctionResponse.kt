@@ -10,7 +10,7 @@ data class AuctionResponse(
     val category: CategoryResponse,
     val description: String,
     val startPrice: Int,
-    val lastBidPrice: Int,
+    val lastBidPrice: Int? = null,
     val status: String,
     val bidUnit: Int,
     val registerTime: String,
