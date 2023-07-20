@@ -9,7 +9,9 @@ import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.showSnackbar
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -41,9 +43,17 @@ class RegisterAuctionActivity :
                 backActivity()
             }
 
-            is RegisterAuctionViewModel.RegisterAuctionEvent.Submit -> {
-                // 값을 모두 가져와서 서버에게 주는 함수를 ViewModel에 작성하여 함수 실행
+            is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitResult -> {
+                navigationToDetail(event.id)
                 finish()
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.InputErrorEvent.InvalidValueInputEvent -> {
+                showInvalidInputMessage()
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.InputErrorEvent.BlankExistEvent -> {
+                showBlankExistMessage()
             }
         }
     }
@@ -73,8 +83,26 @@ class RegisterAuctionActivity :
         ).show()
     }
 
+    private fun showBlankExistMessage() {
+        binding.root.showSnackbar(
+            R.string.register_auction_blank_exist_error,
+            R.string.register_auction_ok,
+        )
+    }
+
+    private fun showInvalidInputMessage() {
+        binding.root.showSnackbar(
+            R.string.register_auction_invalid_input_error,
+            R.string.register_auction_ok,
+        )
+    }
+
     private fun backActivity() {
         finish()
+    }
+
+    private fun navigationToDetail(id: Long) {
+        startActivity(AuctionDetailActivity.getIntent(this, id))
     }
 
     companion object {
