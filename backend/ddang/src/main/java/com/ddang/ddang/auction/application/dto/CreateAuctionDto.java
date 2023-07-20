@@ -1,7 +1,7 @@
 package com.ddang.ddang.auction.application.dto;
 
-import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 
@@ -11,7 +11,7 @@ public record CreateAuctionDto(
         String title,
         String description,
         int bidUnit,
-        int startBidPrice,
+        int startPrice,
         LocalDateTime closingTime,
 
         // TODO 2차 데모데이 이후 리펙터링 예정
@@ -28,7 +28,7 @@ public record CreateAuctionDto(
                 request.title(),
                 request.description(),
                 request.bidUnit(),
-                request.startBidPrice(),
+                request.startPrice(),
                 request.closingTime(),
                 // TODO 2차 데모데이 이후 리펙터링 예정
                 request.image(),
@@ -45,7 +45,7 @@ public record CreateAuctionDto(
                       .title(title)
                       .description(description)
                       .bidUnit(new BidUnit(bidUnit))
-                      .startBidPrice(new Price(startBidPrice))
+                      .startPrice(new Price(startPrice))
                       .closingTime(closingTime)
                       // TODO 2차 데모데이 이후 리펙터링 예정
                       .image(image)

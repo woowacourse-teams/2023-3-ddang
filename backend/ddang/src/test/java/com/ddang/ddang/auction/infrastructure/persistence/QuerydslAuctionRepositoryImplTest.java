@@ -8,7 +8,7 @@ import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -46,21 +46,21 @@ class QuerydslAuctionRepositoryImplTest {
                                         .title("경매 상품 1")
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
         final Auction auction2 = Auction.builder()
                                         .title("경매 상품 2")
                                         .description("이것은 경매 상품 2 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
         final Auction auction3 = Auction.builder()
                                         .title("경매 상품 3")
                                         .description("이것은 경매 상품 3 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
 
@@ -88,21 +88,21 @@ class QuerydslAuctionRepositoryImplTest {
                                         .title("경매 상품 1")
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
         final Auction auction2 = Auction.builder()
                                         .title("경매 상품 2")
                                         .description("이것은 경매 상품 2 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
         final Auction auction3 = Auction.builder()
                                         .title("경매 상품 3")
                                         .description("이것은 경매 상품 3 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
 
@@ -130,21 +130,21 @@ class QuerydslAuctionRepositoryImplTest {
                                         .title("경매 상품 1")
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
         final Auction auction2 = Auction.builder()
                                         .title("경매 상품 2")
                                         .description("이것은 경매 상품 2 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
         final Auction auction3 = Auction.builder()
                                         .title("경매 상품 3")
                                         .description("이것은 경매 상품 3 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
 

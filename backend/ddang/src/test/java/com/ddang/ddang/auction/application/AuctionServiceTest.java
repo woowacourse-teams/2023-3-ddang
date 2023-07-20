@@ -2,7 +2,7 @@ package com.ddang.ddang.auction.application;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,7 @@ class AuctionServiceTest {
             softAssertions.assertThat(actual.title()).isEqualTo(createAuctionDto.title());
             softAssertions.assertThat(actual.description()).isEqualTo(createAuctionDto.description());
             softAssertions.assertThat(actual.bidUnit()).isEqualTo(createAuctionDto.bidUnit());
-            softAssertions.assertThat(actual.startBidPrice()).isEqualTo(createAuctionDto.startBidPrice());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(createAuctionDto.startPrice());
             softAssertions.assertThat(actual.lastBidPrice()).isNull();
             softAssertions.assertThat(actual.winningBidPrice()).isNull();
             softAssertions.assertThat(actual.deleted()).isFalse();

@@ -1,13 +1,13 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
-import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ class JpaAuctionRepositoryTest {
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
-                                       .startBidPrice(new Price(1_000))
+                                       .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
 
@@ -60,7 +60,7 @@ class JpaAuctionRepositoryTest {
                                         .title("경매 상품 1")
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
-                                        .startBidPrice(new Price(1_000))
+                                        .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
 
@@ -79,7 +79,7 @@ class JpaAuctionRepositoryTest {
             softAssertions.assertThat(actual.get().getTitle()).isEqualTo(expected.getTitle());
             softAssertions.assertThat(actual.get().getDescription()).isEqualTo(expected.getDescription());
             softAssertions.assertThat(actual.get().getBidUnit()).isEqualTo(expected.getBidUnit());
-            softAssertions.assertThat(actual.get().getStartBidPrice()).isEqualTo(expected.getStartBidPrice());
+            softAssertions.assertThat(actual.get().getStartPrice()).isEqualTo(expected.getStartPrice());
             softAssertions.assertThat(actual.get().getClosingTime()).isEqualTo(expected.getClosingTime());
         });
     }

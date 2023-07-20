@@ -30,8 +30,8 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -123,8 +123,7 @@ class AuctionControllerTest {
                        jsonPath("$.auction.title", is(auction.title())),
                        jsonPath("$.auction.description", is(auction.description())),
                        jsonPath("$.auction.bidUnit", is(auction.bidUnit())),
-                       jsonPath("$.auction.startBidPrice", is(auction.startBidPrice())),
-                       jsonPath("$.auction.deleted", is(auction.deleted())),
+                       jsonPath("$.auction.startPrice", is(auction.startPrice())),
                        jsonPath("$.auction.registerTime").exists(),
                        jsonPath("$.auction.closingTime").exists()
                );
@@ -181,13 +180,13 @@ class AuctionControllerTest {
                        jsonPath("$.auctions.[0].id", is(auction2.id()), Long.class),
                        jsonPath("$.auctions.[0].title", is(auction2.title())),
                        jsonPath("$.auctions.[0].image", is(auction2.image())),
-                       jsonPath("$.auctions.[0].auctionPrice", is(auction2.startBidPrice())),
+                       jsonPath("$.auctions.[0].auctionPrice", is(auction2.startPrice())),
                        jsonPath("$.auctions.[0].status").exists(),
                        jsonPath("$.auctions.[0].auctioneerCount").exists(),
                        jsonPath("$.auctions.[1].id", is(auction1.id()), Long.class),
                        jsonPath("$.auctions.[1].title", is(auction1.title())),
                        jsonPath("$.auctions.[1].image", is(auction1.image())),
-                       jsonPath("$.auctions.[1].auctionPrice", is(auction1.startBidPrice())),
+                       jsonPath("$.auctions.[1].auctionPrice", is(auction1.startPrice())),
                        jsonPath("$.auctions.[1].status").exists(),
                        jsonPath("$.auctions.[1].auctioneerCount").exists()
                );

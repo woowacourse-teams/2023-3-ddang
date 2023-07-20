@@ -19,15 +19,15 @@ public record ReadAuctionResponse(
                 dto.id(),
                 dto.title(),
                 dto.image(),
-                processAuctionPrice(dto.startBidPrice(), dto.lastBidPrice()),
+                processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                 processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
                 0
         );
     }
 
-    private static int processAuctionPrice(final Integer startBidPrice, final Integer lastBidPrice) {
+    private static int processAuctionPrice(final Integer startPrice, final Integer lastBidPrice) {
         if (lastBidPrice == null) {
-            return startBidPrice;
+            return startPrice;
         }
 
         return lastBidPrice;
