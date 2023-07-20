@@ -20,7 +20,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     public List<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
         return queryFactory
                 .selectFrom(auction)
-                .where(lessThanLastAuctionId(lastAuctionId))
+                .where(auction.deleted.isFalse().and(lessThanLastAuctionId(lastAuctionId)))
                 .orderBy(auction.id.desc())
                 .limit(size)
                 .fetch();

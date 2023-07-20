@@ -122,4 +122,48 @@ class QuerydslAuctionRepositoryImplTest {
             softAssertions.assertThat(actual.get(0).getTitle()).isEqualTo(auction2.getTitle());
         });
     }
+
+    @Test
+    void 두번째_페이지의_삭제된_경매를_제외한_목록을_조회한다() {
+        // given
+        final Auction auction1 = Auction.builder()
+                                        .title("경매 상품 1")
+                                        .description("이것은 경매 상품 1 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startBidPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+        final Auction auction2 = Auction.builder()
+                                        .title("경매 상품 2")
+                                        .description("이것은 경매 상품 2 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startBidPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+        final Auction auction3 = Auction.builder()
+                                        .title("경매 상품 3")
+                                        .description("이것은 경매 상품 3 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startBidPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+
+        auctionRepository.save(auction1);
+        auctionRepository.save(auction2);
+        auctionRepository.save(auction3);
+
+        auction2.delete();
+
+        em.flush();
+        em.clear();
+
+        // when
+        final List<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(1);
+            softAssertions.assertThat(actual.get(0).getTitle()).isEqualTo(auction1.getTitle());
+        });
+    }
 }
