@@ -45,4 +45,17 @@ class AuctionRepositoryImplTest {
         val expected = createRegisterAuctionResponse()
         assertEquals(expected, actual)
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun getAuctionDetail() = runTest {
+        // given
+
+        // when
+        val actual = repository.getAuctionDetail(2)
+
+        // then
+        val expected = createAuctionDetailResponse()
+        assertEquals(expected, actual)
+    }
 }

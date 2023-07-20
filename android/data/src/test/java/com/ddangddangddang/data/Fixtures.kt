@@ -3,9 +3,14 @@ package com.ddangddangddang.data
 import com.ddangddangddang.data.model.request.CategoryRequest
 import com.ddangddangddang.data.model.request.DirectRegionRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.AuctionResponse
+import com.ddangddangddang.data.model.response.CategoryResponse
+import com.ddangddangddang.data.model.response.DirectRegionResponse
 import com.ddangddangddang.data.model.response.RegisterAuctionResponse
+import com.ddangddangddang.data.model.response.SellerResponse
 
 private fun createAuctionPreviewResponse(
     id: Long = 1,
@@ -33,3 +38,26 @@ fun createRegisterAuctionRequest() = RegisterAuctionRequest(
 )
 
 fun createRegisterAuctionResponse() = RegisterAuctionResponse(2)
+fun createAuctionDetailResponse() = AuctionDetailResponse(
+    AuctionResponse(
+        2,
+        listOf("https://www.apple.com/newsroom/images/product/mac/standard/Apple_MacBook-Pro_14-16-inch_10182021_big.jpg.large.jpg"),
+        "맥북 16인치",
+        CategoryResponse("전자기기", "노트북"),
+        "맥북 2019 16인치 팝니다. 급전이 필요해요...",
+        900000,
+        100000,
+        "UNBIDDEN",
+        3000,
+        "2023-07-20T16:38:28",
+        "2023-07-25T16:38:28",
+        listOf(DirectRegionResponse("서울특별시", "관악구", "성현동")),
+        0,
+    ),
+    SellerResponse(
+        1,
+        "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+        "닉네임",
+        5.0,
+    ),
+)
