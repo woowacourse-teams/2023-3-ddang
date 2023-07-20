@@ -47,4 +47,7 @@
     <string name="register_auction_enable_direct_region">직거래 가능 지역</string>
     <string name="register_auction_image_url">이미지 주소</string>
     <string name="register_auction_bid_unit">경매 입찰 단위</string>
+    <string name="register_auction_blank_exist_error">채우지 않은 필드가 존재합니다.</string>
+    <string name="register_auction_invalid_input_error">필드에 유효하지 않은 값이 존재합니다.</string>
+    <string name="register_auction_ok">확인</string>
 </resources>

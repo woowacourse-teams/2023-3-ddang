@@ -5,13 +5,13 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.showSnackbar
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -88,11 +88,17 @@ class RegisterAuctionActivity :
     }
 
     private fun showBlankExistMessage() {
-        Toast.makeText(this, "채우지 않은 필드가 존재합니다.", Toast.LENGTH_SHORT).show()
+        binding.root.showSnackbar(
+            R.string.register_auction_blank_exist_error,
+            R.string.register_auction_ok,
+        )
     }
 
     private fun showInvalidInputMessage() {
-        Toast.makeText(this, "필드에 유효하지 않은 값이 존재합니다.", Toast.LENGTH_SHORT).show()
+        binding.root.showSnackbar(
+            R.string.register_auction_invalid_input_error,
+            R.string.register_auction_ok,
+        )
     }
 
     private fun backActivity() {
