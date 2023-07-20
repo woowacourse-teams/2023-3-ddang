@@ -1,7 +1,13 @@
 package com.ddang.ddang.auction.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -9,11 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
@@ -87,6 +88,17 @@ class AuctionServiceTest {
     }
 
     @Test
+    void 지정한_아이디에_해당하는_경매가_없는_경매를_조회시_예외가_발생한다() {
+        // given
+        final Long invalidAuctionId = -999L;
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.readByAuctionId(invalidAuctionId))
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
+    }
+
+    @Test
     void 첫번째_페이지의_경매_목록을_조회한다() {
         // given
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
@@ -157,5 +169,16 @@ class AuctionServiceTest {
         // then
         final ReadAuctionDto actual = auctionService.readByAuctionId(savedAuctionId);
         assertThat(actual.deleted()).isTrue();
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_경매가_없는_경매를_삭제시_예외가_발생한다() {
+        // given
+        final Long invalidAuctionId = -999L;
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.deleteByAuctionId(invalidAuctionId))
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
     }
 }
