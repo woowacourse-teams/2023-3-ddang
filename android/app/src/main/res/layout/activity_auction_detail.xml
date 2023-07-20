@@ -5,7 +5,7 @@
 
     <data>
 
-        <import type="com.ddangddangddang.android.feature.detail.AuctionDetailDateTimeFormatter" />
+        <import type="com.ddangddangddang.android.feature.detail.AuctionDetailFormatter" />
 
         <variable
             name="viewModel"
@@ -130,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
-                    android:text="@{viewModel.auctionDetailModel.closingTime==null ? null :AuctionDetailDateTimeFormatter.INSTANCE.convertToClosingTimeFormatter(viewModel.auctionDetailModel.closingTime)}"
+                    android:text="@{viewModel.auctionDetailModel.closingTime==null ? null :AuctionDetailFormatter.INSTANCE.formatClosingTime(viewModel.auctionDetailModel.closingTime)}"
                     android:textColor="@color/black_900"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_auction_status"
@@ -143,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@{@string/detail_auction_price_status(viewModel.auctionDetailModel.auctionDetailStatusModel.priceStatus, viewModel.auctionDetailModel.lastBidPrice)}"
+                    android:text="@{viewModel.auctionDetailModel==null ? null :AuctionDetailFormatter.INSTANCE.formatAuctionDetailStatus(viewModel.auctionDetailModel)}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_main_header"
                     android:textStyle="bold"
