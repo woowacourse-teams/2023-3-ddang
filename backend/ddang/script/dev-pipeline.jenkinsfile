@@ -10,6 +10,16 @@ pipeline {
     }
 
     stages {
+        stage('build start notification to slack') {
+            steps {
+                slackSend (
+                    channel: '#빌드-결과',
+                    color: '#FFFF00',
+                    message: "빌드 시작!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)"
+                )
+            }
+        }
+
         stage('github clone') {
             steps {
                 checkout scmGit(
@@ -46,6 +56,22 @@ pipeline {
                     deleteDirs: true,
                     disableDeferredWipeout: true,
                     notFailBuild: true)
+        }
+        success {
+            slackSend (
+                channel: '#빌드-결과',
+                color: '#00FF00',
+                message: """
+                    빌드 성공!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)
+                """
+            )
+        }
+        failure {
+            slackSend (
+                channel: '#빌드-결과',
+                color: '#FF0000',
+                message: "<!channel>\n빌드 실패...: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)"
+            )
         }
     }
 }
