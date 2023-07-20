@@ -101,14 +101,14 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val closingTime = closingTime.value
         val directRegion = directRegion.value
 
-        if (imageUrl == null ||
-            title == null ||
-            category == null ||
-            description == null ||
-            startPrice == null ||
-            bidUnit == null ||
+        if (imageUrl.isNullOrBlank() ||
+            title.isNullOrBlank() ||
+            category.isNullOrBlank() ||
+            description.isNullOrBlank() ||
+            startPrice.isNullOrBlank() ||
+            bidUnit.isNullOrBlank() ||
             closingTime == null ||
-            directRegion == null
+            directRegion.isNullOrBlank()
         ) {
             setBlankExistEvent()
             return

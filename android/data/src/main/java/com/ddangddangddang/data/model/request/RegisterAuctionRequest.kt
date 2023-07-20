@@ -11,5 +11,5 @@ data class RegisterAuctionRequest(
     val startPrice: Int,
     val bidUnit: Int,
     val closingTime: String,
-    val directRegion: List<DirectRegionRequest>,
+    val directRegions: List<DirectRegionRequest>,
 )

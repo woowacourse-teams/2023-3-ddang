@@ -49,6 +49,7 @@ class RegisterAuctionActivity :
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitResult -> {
                 navigationToDetail(event.id)
+                finish()
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.InputErrorEvent.InvalidValueInputEvent -> {
