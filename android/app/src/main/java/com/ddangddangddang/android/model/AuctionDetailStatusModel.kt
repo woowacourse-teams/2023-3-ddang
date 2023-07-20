@@ -16,14 +16,10 @@ enum class AuctionDetailStatusModel(
 
     companion object {
         private const val ERROR_NOT_FOUND = "[ERROR] 매칭되는 Status가 존재하지 않습니다"
-        fun findStatus(status: String): AuctionDetailStatusModel {
-            return when (status) {
-                "ongoing" -> ONGOING
-                "unbidden" -> UNBIDDEN
-                "success" -> SUCCESS
-                "failure" -> FAILURE
-                else -> throw IllegalArgumentException(ERROR_NOT_FOUND)
-            }
+        fun find(status: String): AuctionDetailStatusModel {
+            return values().find { it.name == status } ?: throw IllegalArgumentException(
+                ERROR_NOT_FOUND,
+            )
         }
     }
 }
