@@ -43,10 +43,6 @@ class RegisterAuctionActivity :
                 backActivity()
             }
 
-            is RegisterAuctionViewModel.RegisterAuctionEvent.Submit -> {
-                viewModel.submitAuction()
-            }
-
             is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitResult -> {
                 navigationToDetail(event.id)
                 finish()

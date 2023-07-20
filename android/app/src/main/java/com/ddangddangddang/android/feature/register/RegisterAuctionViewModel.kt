@@ -40,10 +40,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.Exit
     }
 
-    fun setSubmitEvent() {
-        _event.value = RegisterAuctionEvent.Submit
-    }
-
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
         _closingTime.value =
             LocalDateTime.of(
@@ -60,8 +56,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     }
 
     fun submitAuction() {
-        judgeValidInputs()
-        if (_event.value is RegisterAuctionEvent.InputErrorEvent) return
+        val isValidInputs = judgeValidInputs()
+        if (!isValidInputs) return
 
         viewModelScope.launch {
             val response = repository.registerAuction(createRequestModel())
@@ -91,7 +87,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         )
     }
 
-    private fun judgeValidInputs() {
+    private fun judgeValidInputs(): Boolean {
         val imageUrl = imageUrl.value
         val title = title.value
         val category = category.value
@@ -111,13 +107,14 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             directRegion.isNullOrBlank()
         ) {
             setBlankExistEvent()
-            return
+            return false
         }
 
         if (startPrice.toIntOrNull() == null || bidUnit.toIntOrNull() == null) {
             setInvalidValueInputEvent()
-            return
+            return false
         }
+        return true
     }
 
     private fun setBlankExistEvent() {
@@ -131,7 +128,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     sealed class RegisterAuctionEvent {
         object Exit : RegisterAuctionEvent()
         class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
-        object Submit : RegisterAuctionEvent()
         class SubmitResult(val id: Long) : RegisterAuctionEvent()
         sealed class InputErrorEvent : RegisterAuctionEvent() {
             object InvalidValueInputEvent : InputErrorEvent()
