@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.repository.AuctionRepository
 
-class AuctionDetailViewModel : ViewModel() {
+class AuctionDetailViewModel(
+    private val repository: AuctionRepository,
+) : ViewModel() {
     private val _event: SingleLiveEvent<AuctionDetailEvent> = SingleLiveEvent()
     val event: LiveData<AuctionDetailEvent>
         get() = _event
