@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -20,24 +21,23 @@ class AuctionDetailActivity :
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
         val auctionId = intent.getLongExtra(AUCTION_ID_KEY, -1L)
-        setupViewModel(auctionId)
-        setupViewPager()
+        setupViewModel()
     }
 
-    private fun setupViewModel(auctionId: Long) {
-        // 경매 번호를 뷰모델에 넘겨서 불러온다
-        // 옵저버로 관찰한다
-        viewModel.event.observe(this) {
-            finish()
+    private fun setupViewModel() {
+        viewModel.event.observe(this) { finish() }
+        viewModel.auctionDetailModel.observe(this) {
+            setupAuctionImages(it.images)
+            setupDirectRegions(it.directRegions)
         }
     }
 
-    private fun setupViewPager() {
+    private fun setupAuctionImages(images: List<String>) {
         binding.vpImageList.apply {
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 1
-            adapter = AuctionImageAdapter(viewModel.images)
+            adapter = AuctionImageAdapter(images)
             setPageTransformer(MarginPageTransformer(convertDpToPx(20f)))
             setPadding(200, 0, 200, 0)
         }
@@ -48,6 +48,10 @@ class AuctionDetailActivity :
     private fun convertDpToPx(dp: Float): Int {
         val density = Resources.getSystem().displayMetrics.density
         return (dp * density + 0.5f).toInt()
+    }
+
+    private fun setupDirectRegions(regions: List<RegionModel>) {
+        binding.rvDirectExchangeRegions.adapter = AuctionDirectRegionsAdapter(regions)
     }
 
     companion object {

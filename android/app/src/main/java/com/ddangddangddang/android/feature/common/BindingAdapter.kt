@@ -7,10 +7,12 @@ import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 
 @BindingAdapter("imageUrl")
-fun ImageView.setImageUrl(url: String) {
-    Glide.with(context)
-        .load(url)
-        .into(this)
+fun ImageView.setImageUrl(url: String?) {
+    url?.let {
+        Glide.with(context)
+            .load(it)
+            .into(this)
+    }
 }
 
 @BindingAdapter("isVisible")
