@@ -42,8 +42,8 @@ public class Auction extends BaseTimeEntity {
     private BidUnit bidUnit;
 
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "start_bid_price"))
-    private Price startBidPrice;
+    @AttributeOverride(name = "value", column = @Column(name = "start_price"))
+    private Price startPrice;
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "last_bid_price"))
@@ -76,7 +76,7 @@ public class Auction extends BaseTimeEntity {
             final String title,
             final String description,
             final BidUnit bidUnit,
-            final Price startBidPrice,
+            final Price startPrice,
             final LocalDateTime closingTime,
             final String image,
             final String firstRegion,
@@ -88,7 +88,7 @@ public class Auction extends BaseTimeEntity {
         this.title = title;
         this.description = description;
         this.bidUnit = bidUnit;
-        this.startBidPrice = startBidPrice;
+        this.startPrice = startPrice;
         this.closingTime = closingTime;
         this.image = image;
         this.firstRegion = firstRegion;

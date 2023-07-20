@@ -18,7 +18,7 @@ public record AuctionDetailResponse(
 
         String description,
 
-        int startBidPrice,
+        int startPrice,
 
         Integer lastBidPrice,
 
@@ -34,9 +34,7 @@ public record AuctionDetailResponse(
 
         DirectRegionResponse directRegions,
 
-        int auctioneerCount,
-
-        boolean deleted
+        int auctioneerCount
 ) {
 
     public static AuctionDetailResponse from(final ReadAuctionDto dto) {
@@ -47,15 +45,14 @@ public record AuctionDetailResponse(
                 dto.title(),
                 new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
-                dto.startBidPrice(),
+                dto.startPrice(),
                 dto.lastBidPrice(),
                 processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
                 new DirectRegionResponse(dto.firstRegion(), dto.secondRegion(), dto.thirdRegion()),
-                0,
-                dto.deleted()
+                0
         );
     }
 
