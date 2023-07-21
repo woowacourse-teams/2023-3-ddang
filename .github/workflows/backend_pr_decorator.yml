@@ -14,13 +14,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: settings java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
-        run: |
-          git fetch --unshallow
 
       - name: cache gradle
         uses: actions/cache@v2
