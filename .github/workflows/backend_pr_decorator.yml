@@ -61,7 +61,7 @@ jobs:
           echo "AUTHOR_NAME=${AUTHOR_NAME}" >> $GITHUB_OUTPUT
           echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
 
-      - name: Run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
+      - name: run an analysis of the ${{ github.REF }} branch ${{ github.BASE_REF }} base
         uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -76,7 +76,7 @@ jobs:
             -Dsonar.java.coveragePlugin=jacoco
             -Dsonar.coverage.jacoco.xmlReportPaths=backend/ddang/build/reports/jacoco/test/jacocoTestReport.xml
 
-      - name: SonarQube Quality Check
+      - name: sonarqube quality check
         id: sonar-quality
         run: |
           SONAR_PROJECT_KEY="develop-be-project"
