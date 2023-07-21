@@ -17,10 +17,10 @@ jobs:
       - name: settings java
         uses: actions/setup-java@v3
         with:
-          ref: ${{ github.event.sha }}
-          fetch-depth: 0
           java-version: '17'
           distribution: 'temurin'
+        run: |
+          git fetch --unshallow
 
       - name: cache gradle
         uses: actions/cache@v2
