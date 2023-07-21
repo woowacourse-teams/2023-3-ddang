@@ -77,7 +77,6 @@ jobs:
             -Dsonar.java.binaries=backend/ddang/build/classes
             -Dsonar.sources=backend/ddang/src/main/java
             -Dsonar.tests=backend/ddang/src/test/java
-            -Dsonar.exclusions=**/*Dto*.java,**/*Application*.java,**/*Exception*.java,**/*Response*.java,**/*Request*.java,**/*Configuration*.java,**/*Appender*.java
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.java.coveragePlugin=jacoco
             -Dsonar.coverage.jacoco.xmlReportPaths=backend/ddang/build/reports/jacoco/test/jacocoTestReport.xml
