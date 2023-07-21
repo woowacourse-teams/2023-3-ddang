@@ -17,6 +17,7 @@ jobs:
       - name: settings java
         uses: actions/setup-java@v3
         with:
+          ref: ${{ github.event.sha }}
           fetch-depth: 0
           java-version: '17'
           distribution: 'temurin'
