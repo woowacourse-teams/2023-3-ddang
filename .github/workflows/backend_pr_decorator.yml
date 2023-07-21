@@ -19,6 +19,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          fetch-depth: 0
 
       - name: cache gradle
         uses: actions/cache@v2
