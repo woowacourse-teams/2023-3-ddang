@@ -21,6 +21,10 @@ jobs:
           distribution: 'temurin'
           fetch-depth: 0
 
+      - name: Retrieve entire repository history  
+        run: |  
+          git fetch --unshallow
+
       - name: cache gradle
         uses: actions/cache@v2
         with:
