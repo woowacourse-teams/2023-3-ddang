@@ -10,7 +10,8 @@ import java.util.Map;
 
 public class SlackAppender extends AppenderBase<ILoggingEvent> {
 
-    private static final String SLACK_WEB_HOOK_URL = System.getenv("SLACK_WEB_HOOK_URL");
+    private static final String SLACK_WEB_HOOK_URL = System.getenv("" 
+            + "");
     private static final String PROFILE = System.getenv("PROFILE");
 
     @Override
@@ -57,9 +58,3 @@ public class SlackAppender extends AppenderBase<ILoggingEvent> {
                 eventObject.getFormattedMessage());
     }
 }
-
-
-
-
-
-
