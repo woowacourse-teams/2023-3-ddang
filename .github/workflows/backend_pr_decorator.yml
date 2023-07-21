@@ -38,9 +38,6 @@ jobs:
       - name: chmod gradle
         run: chmod +x backend/ddang/gradlew
 
-      - name: Fetch main branch code
-        run: git fetch origin main && git checkout origin/main
-
       - name: run jacocoTestCoverage
         run: |
           cd backend/ddang
