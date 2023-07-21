@@ -17,9 +17,9 @@ jobs:
       - name: settings java
         uses: actions/setup-java@v3
         with:
+          fetch-depth: 0
           java-version: '17'
           distribution: 'temurin'
-          fetch-depth: 0
 
       - name: cache gradle
         uses: actions/cache@v2
