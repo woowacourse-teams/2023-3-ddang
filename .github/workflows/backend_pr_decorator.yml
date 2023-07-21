@@ -71,8 +71,6 @@ jobs:
             -Dsonar.issuesReport.console.enable=true
             -Dsonar.projectKey=develop-be-project
             -Dsonar.java.binaries=backend/ddang/build/classes
-            -Dsonar.sources=
-            -Dsonar.tests=backend/ddang/src/test/java
             -Dsonar.exclusions=**/*Dto*.java,**/*Application*.java,**/*Exception*.java,**/*Response*.java,**/*Request*.java,**/*Configuration*.java,**/*Appender*.java
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.java.coveragePlugin=jacoco
