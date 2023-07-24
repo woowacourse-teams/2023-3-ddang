@@ -75,9 +75,11 @@ jobs:
             -Dsonar.sourceEncoding=UTF-8
             -Dsonar.java.coveragePlugin=jacoco
             -Dsonar.coverage.jacoco.xmlReportPaths=backend/ddang/build/reports/jacoco/test/jacocoTestReport.xml
-            -Dsonar.issue.ignore.multicriteria=e1
+            -Dsonar.issue.ignore.multicriteria=e1,e2
             -Dsonar.issue.ignore.multicriteria.e1.ruleKey=java:S100
             -Dsonar.issue.ignore.multicriteria.e1.resourceKey=**/*Test.java
+            -Dsonar.issue.ignore.multicriteria.e2.ruleKey=java:S1192
+            -Dsonar.issue.ignore.multicriteria.e2.resourceKey=**/*Test.java
 
       - name: sonarqube quality check
         id: sonar-quality
