@@ -17,3 +17,9 @@ spring:
 
   flyway:
     enabled: false
+
+open:
+  api:
+    region:
+      service: service_secret
+      key: key_secret
