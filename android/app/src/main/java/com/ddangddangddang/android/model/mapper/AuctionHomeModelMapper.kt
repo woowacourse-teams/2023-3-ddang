@@ -2,19 +2,17 @@ package com.ddangddangddang.android.model.mapper
 
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.AuctionHomeStatusModel
-import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 
-object AuctionHomeModelMapper : Mapper<List<AuctionHomeModel>, AuctionPreviewsResponse> {
-    override fun AuctionPreviewsResponse.toPresentation(): List<AuctionHomeModel> {
-        return auctions.map {
-            AuctionHomeModel(
-                it.id,
-                it.title,
-                it.image,
-                it.auctionPrice,
-                AuctionHomeStatusModel.find(it.status),
-                it.auctioneerCount,
-            )
-        }
+object AuctionHomeModelMapper : Mapper<AuctionHomeModel, AuctionPreviewResponse> {
+    override fun AuctionPreviewResponse.toPresentation(): AuctionHomeModel {
+        return AuctionHomeModel(
+            id,
+            title,
+            image,
+            auctionPrice,
+            AuctionHomeStatusModel.find(status),
+            auctioneerCount,
+        )
     }
 }
