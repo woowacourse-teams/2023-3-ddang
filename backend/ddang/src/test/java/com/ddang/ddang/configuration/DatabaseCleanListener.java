@@ -20,16 +20,16 @@ public class DatabaseCleanListener extends AbstractTestExecutionListener {
 
     private EntityManager findEntityManager(final TestContext testContext) {
         return testContext.getApplicationContext()
-                .getBean(EntityManager.class);
+                          .getBean(EntityManager.class);
     }
 
     private List<String> calculateTableNames(final EntityManager em) {
         return em.getMetamodel()
-                .getEntities()
-                .stream()
-                .filter(entityType -> entityType.getJavaType().getAnnotation(Entity.class) != null)
-                .map(this::calculateTableName)
-                .toList();
+                 .getEntities()
+                 .stream()
+                 .filter(entityType -> entityType.getJavaType().getAnnotation(Entity.class) != null)
+                 .map(this::calculateTableName)
+                 .toList();
     }
 
     private String calculateTableName(final EntityType<?> entityType) {
