@@ -24,3 +24,8 @@ open:
     region:
       service: service_secret
       key: key_secret
+
+data:
+  init:
+    region:
+      enabled: true
