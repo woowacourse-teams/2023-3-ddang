@@ -1,20 +1,23 @@
 package com.ddang.ddang.region.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+
 import com.ddang.ddang.region.application.dto.ReadRegionDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import com.ddang.ddang.region.domain.InitializationRegionProcessor;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import java.util.List;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
@@ -22,11 +25,46 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @SuppressWarnings("NonAsciiCharacters")
 class RegionServiceTest {
 
+    @MockBean
+    InitializationRegionProcessor regionProcessor;
+
     @Autowired
     RegionService regionService;
 
     @Autowired
     JpaRegionRepository regionRepository;
+
+    @Test
+    void 대한민국_전국의_지역을_초기화한다() {
+        // given
+        final Region firstRegion = new Region("서울특별시");
+        final Region secondRegion = new Region("송파구");
+        final Region thirdRegion = new Region("가락1동");
+
+        secondRegion.addThirdRegion(thirdRegion);
+        firstRegion.addSecondRegion(secondRegion);
+        given(regionProcessor.requestRegions()).willReturn(List.of(firstRegion));
+
+        // when
+        regionService.createRegions();
+
+        // then
+        final List<Region> actual = regionRepository.findAll();
+
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(3);
+
+            softAssertions.assertThat(actual.get(0)).isEqualTo(firstRegion);
+            softAssertions.assertThat(actual.get(0).getSecondRegions()).hasSize(1);
+
+            final Region actualSecondRegion = actual.get(0).getSecondRegions().get(0);
+            softAssertions.assertThat(actualSecondRegion).isEqualTo(secondRegion);
+            softAssertions.assertThat(actualSecondRegion.getThirdRegions()).hasSize(1);
+
+            final Region actualThirdRegion = actualSecondRegion.getThirdRegions().get(0);
+            softAssertions.assertThat(actualThirdRegion).isEqualTo(thirdRegion);
+        });
+    }
 
     @Test
     void 모든_첫번째_지역을_조회한다() {

@@ -13,6 +13,7 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         show_sql: true
         use_sql_comments: true
+        default_batch_fetch_size: 5000
     open-in-view: false
 
   flyway:
