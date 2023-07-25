@@ -18,13 +18,13 @@ val viewModelFactory = object : ViewModelProvider.Factory {
             when {
                 isAssignableFrom(MainViewModel::class.java) -> MainViewModel()
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(
-                    AuctionRepositoryImpl(AuctionRetrofit.getInstance().service),
+                    AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service),
                 )
                 isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(
-                    AuctionRepositoryImpl(AuctionRetrofit.getInstance().service),
+                    AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service),
                 )
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(
-                    AuctionRepositoryImpl(AuctionRetrofit.getInstance().service),
+                    AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service),
                 )
                 else ->
                     throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

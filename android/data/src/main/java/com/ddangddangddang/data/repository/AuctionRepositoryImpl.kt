@@ -7,7 +7,7 @@ import com.ddangddangddang.data.model.response.RegisterAuctionResponse
 import com.ddangddangddang.data.remote.Service
 import java.lang.IllegalArgumentException
 
-class AuctionRepositoryImpl(private val service: Service) : AuctionRepository {
+class AuctionRepositoryImpl private constructor(private val service: Service) : AuctionRepository {
     override suspend fun getAuctionPreviews(): AuctionPreviewsResponse {
         val response = service.fetchAuctionPreviews()
         if (response.isSuccessful) {
@@ -30,5 +30,20 @@ class AuctionRepositoryImpl(private val service: Service) : AuctionRepository {
             response.body()?.let { return it }
         }
         throw IllegalArgumentException()
+    }
+
+    companion object {
+        @Volatile
+        private var instance: AuctionRepositoryImpl? = null
+
+        fun getInstance(service: Service): AuctionRepositoryImpl {
+            return instance ?: synchronized(this) {
+                instance ?: createInstance(service)
+            }
+        }
+
+        private fun createInstance(service: Service): AuctionRepositoryImpl {
+            return AuctionRepositoryImpl(service)
+        }
     }
 }
