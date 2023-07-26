@@ -33,15 +33,16 @@ import org.springframework.web.client.RestTemplate;
 @SuppressWarnings("NonAsciiCharacters")
 class RestTemplateInitRegionProcessorTest {
 
-    private MockRestServiceServer mockRestServiceServer;
+    MockRestServiceServer mockRestServiceServer;
 
     @Autowired
-    private RestTemplate restTemplate;
+    RestTemplate restTemplate;
 
     @Autowired
-    private RestTemplateInitRegionProcessor regionProcessor;
+    RestTemplateInitRegionProcessor regionProcessor;
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
