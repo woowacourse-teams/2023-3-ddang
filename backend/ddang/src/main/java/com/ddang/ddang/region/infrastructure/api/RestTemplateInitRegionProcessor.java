@@ -75,7 +75,7 @@ public class RestTemplateInitRegionProcessor implements InitializationRegionProc
     }
 
     private String requestApiAccessToken() {
-        URI authenticationUri = UriComponentsBuilder.fromUriString(REGION_API_DOMAIN)
+        final URI authenticationUri = UriComponentsBuilder.fromUriString(REGION_API_DOMAIN)
                                                     .path(AUTHENTICATION_URL)
                                                     .queryParam(SERVICE_KEY_NAME, serviceSecret)
                                                     .queryParam(SECRET_KEY_NAME, keySecret)
