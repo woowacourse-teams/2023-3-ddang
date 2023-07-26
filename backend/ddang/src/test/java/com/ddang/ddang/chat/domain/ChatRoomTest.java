@@ -2,6 +2,7 @@ package com.ddang.ddang.chat.domain;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -31,6 +32,9 @@ class ChatRoomTest {
     @Autowired
     JpaUserRepository userRepository;
 
+    @Autowired
+    JpaChatRoomRepository chatRoomRepository;
+
     @ParameterizedTest
     @CsvSource(value = {"0:true", "9:true", "10:false"}, delimiter = ':')
     void 채팅방_비활성화_여부를_체크한다(final long plusDay, final boolean expected) {
@@ -46,7 +50,7 @@ class ChatRoomTest {
         auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, seller, buyer);
-        em.persist(chatRoom);
+        chatRoomRepository.save(chatRoom);
 
         em.flush();
         em.clear();
