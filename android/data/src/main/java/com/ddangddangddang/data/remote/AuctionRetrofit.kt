@@ -28,6 +28,7 @@ class AuctionRetrofit private constructor(retrofit: Retrofit) {
                 Retrofit.Builder()
                     .baseUrl(BuildConfig.BASE_URL)
                     .client(createOkHttpClient())
+                    .addCallAdapterFactory(CallAdapterFactory())
                     .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
                     .build(),
             ).also { instance = it }

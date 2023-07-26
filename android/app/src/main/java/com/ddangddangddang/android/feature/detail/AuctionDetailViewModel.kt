@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.mapper.AuctionDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
 
@@ -23,8 +24,12 @@ class AuctionDetailViewModel(
 
     fun loadAuctionDetail(auctionId: Long) {
         viewModelScope.launch {
-            val auctionDetailModel = repository.getAuctionDetail(auctionId).toPresentation()
-            _auctionDetailModel.value = auctionDetailModel
+            when (val response = repository.getAuctionDetail(auctionId)) {
+                is ApiResponse.Success -> _auctionDetailModel.value = response.body.toPresentation()
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
         }
     }
 

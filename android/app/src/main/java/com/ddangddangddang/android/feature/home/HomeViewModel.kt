@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
 
@@ -27,7 +28,12 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     fun loadAuctions() {
         if (lastAuctionId.value == null) {
             viewModelScope.launch {
-                repository.getAuctionPreviews()
+                when (val response = repository.getAuctionPreviews()) {
+                    is ApiResponse.Success -> {}
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
             }
         }
     }
