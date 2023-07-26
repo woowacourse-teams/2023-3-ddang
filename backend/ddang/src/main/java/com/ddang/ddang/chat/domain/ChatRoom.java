@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 public class ChatRoom extends BaseTimeEntity {
 
     public static final long CHAT_EXPIRATION_DAY = 10L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -50,10 +51,9 @@ public class ChatRoom extends BaseTimeEntity {
     }
 
     // TODO : 쪽지 비활성화 일수 리팩토링시 수정
-    public boolean isChatAvailable() {
+    public boolean isChatAvailable(final LocalDateTime targetTime) {
         final LocalDateTime maxChatTime = getCreatedTime().plusDays(CHAT_EXPIRATION_DAY);
 
-        return LocalDateTime.now()
-                            .isBefore(maxChatTime);
+        return targetTime.isBefore(maxChatTime);
     }
 }
