@@ -28,4 +28,4 @@ open:
 data:
   init:
     region:
-      enabled: true
+      enabled: false
