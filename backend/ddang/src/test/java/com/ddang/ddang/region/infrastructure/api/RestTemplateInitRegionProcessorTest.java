@@ -120,7 +120,10 @@ class RestTemplateInitRegionProcessorTest {
 
         mockRestServiceServer
                 .expect(requestTo(thirdRegionUri))
-                .andRespond(withSuccess(objectMapper.writeValueAsString(thirdOpenApiResultApiRegionResponse), MediaType.APPLICATION_JSON));
+                .andRespond(withSuccess(
+                        objectMapper.writeValueAsString(thirdOpenApiResultApiRegionResponse),
+                        MediaType.APPLICATION_JSON
+                ));
 
         // when
         final List<Region> actual = regionProcessor.requestRegions();
