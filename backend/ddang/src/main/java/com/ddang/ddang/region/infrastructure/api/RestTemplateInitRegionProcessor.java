@@ -90,14 +90,14 @@ public class RestTemplateInitRegionProcessor implements InitializationRegionProc
         try {
             return accessTokenResponse.getResult()
                                       .get(ACCESS_TOKEN_NAME);
-        } catch (final NullPointerException e) {
+        } catch (final NullPointerException ex) {
             final String exceptionFormatter =  "API 요청 도중 문제가 발생했습니다. 코드 번호 : %s, 메세지 : %s";
             throw new RegionApiException(
                     String.format(
                             exceptionFormatter,
                             accessTokenResponse.getErrCd(),
                             accessTokenResponse.getErrMsg()
-                    ), e
+                    ), ex
             );
         }
     }
@@ -111,8 +111,8 @@ public class RestTemplateInitRegionProcessor implements InitializationRegionProc
 
         try {
             return regionResponse.getResult();
-        } catch (NullPointerException e) {
-            throw new RegionApiException("API 요청 도중 문제가 발생했습니다.", e);
+        } catch (final NullPointerException ex) {
+            throw new RegionApiException("API 요청 도중 문제가 발생했습니다.", ex);
         }
     }
 
