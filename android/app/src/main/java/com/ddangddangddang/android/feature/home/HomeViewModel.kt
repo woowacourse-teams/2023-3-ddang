@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
@@ -11,23 +12,24 @@ import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
-    private val _auctions: MutableLiveData<List<AuctionHomeModel>> = MutableLiveData()
-    val auctions: LiveData<List<AuctionHomeModel>>
-        get() = _auctions
+    val auctions: LiveData<List<AuctionHomeModel>> =
+        repository.observeAuctionPreviews().map { auctionPreviews ->
+            println("view model ${Thread.currentThread().id}")
+            lastAuctionId.value = auctionPreviews.lastOrNull()?.id
+            auctionPreviews.map { it.toPresentation() }
+        }
 
-    private val _lastAuctionId: MutableLiveData<Long?> = MutableLiveData()
-    val lastAuctionId: LiveData<Long?>
-        get() = _lastAuctionId
+    private val lastAuctionId: MutableLiveData<Long?> = MutableLiveData()
 
     private val _event: SingleLiveEvent<HomeEvent> = SingleLiveEvent()
     val event: LiveData<HomeEvent>
         get() = _event
 
     fun loadAuctions() {
-        viewModelScope.launch {
-            val response = repository.getAuctionPreviews()
-            _auctions.value = response.toPresentation()
-            _lastAuctionId.value = response.lastAuctionId
+        if (lastAuctionId.value == null) {
+            viewModelScope.launch {
+                repository.getAuctionPreviews()
+            }
         }
     }
 

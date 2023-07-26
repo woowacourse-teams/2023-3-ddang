@@ -18,7 +18,7 @@ class AuctionRepositoryImplTest {
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .build()
         .create(Service::class.java)
-    private val repository: AuctionRepository = AuctionRepositoryImpl(service)
+    private val repository: AuctionRepository = AuctionRepositoryImpl.getInstance(service)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test

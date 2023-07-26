@@ -1,8 +1,10 @@
 package com.ddangddangddang.android
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import com.ddangddangddang.android.feature.home.HomeViewModel
 import com.ddangddangddang.android.model.AuctionHomeModel
+import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -18,7 +20,8 @@ import org.junit.Test
 
 class HomeViewModelTest {
     private val repository: AuctionRepository = mockk()
-    private val viewModel: HomeViewModel = HomeViewModel(repository)
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var cache: MutableLiveData<List<AuctionPreviewResponse>>
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
@@ -27,6 +30,10 @@ class HomeViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
+        cache = MutableLiveData()
+        coEvery { repository.observeAuctionPreviews() } returns cache
+
+        viewModel = HomeViewModel(repository)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -34,16 +41,17 @@ class HomeViewModelTest {
     fun `경매_목록을_불러오면_경매_상품과_마지막_경매_상품_아이디_값을_가져온다`() = runTest {
         // given
         val auctionPreviewsResponse = createAuctionPreviewsResponse()
-        coEvery { repository.getAuctionPreviews() } returns auctionPreviewsResponse
+        coEvery { repository.getAuctionPreviews() } answers {
+            cache.value = auctionPreviewsResponse.auctions
+        }
 
         // when
         viewModel.loadAuctions()
 
         // then
+        viewModel.auctions.getOrAwaitValue()
         val expectedAuctions: List<AuctionHomeModel> = listOf(createAuctionHomeModel())
-        val expectedLastAuctionId = 1L
         assertEquals(expectedAuctions, viewModel.auctions.value)
-        assertEquals(expectedLastAuctionId, viewModel.lastAuctionId.value)
     }
 
     @Test

@@ -10,6 +10,8 @@ import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 
+val repository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
+
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T =
@@ -17,17 +19,10 @@ val viewModelFactory = object : ViewModelProvider.Factory {
             // 레포지토리 싱글톤 객체 얻어옴
             when {
                 isAssignableFrom(MainViewModel::class.java) -> MainViewModel()
-                isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(
-                    AuctionRepositoryImpl(AuctionRetrofit.getInstance().service),
-                )
-                isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(
-                    AuctionRepositoryImpl(AuctionRetrofit.getInstance().service),
-                )
-                isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(
-                    AuctionRepositoryImpl(AuctionRetrofit.getInstance().service),
-                )
-                else ->
-                    throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
+                isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(repository)
+                isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(repository)
+                isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(repository)
+                else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
 }

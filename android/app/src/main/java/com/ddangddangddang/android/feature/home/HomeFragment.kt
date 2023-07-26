@@ -31,6 +31,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             is HomeViewModel.HomeEvent.NavigateToAuctionDetail -> {
                 navigateToAuctionDetail(event.auctionId)
             }
+
             is HomeViewModel.HomeEvent.NavigateToRegisterAuction -> {
                 navigateToRegisterAuction()
             }
