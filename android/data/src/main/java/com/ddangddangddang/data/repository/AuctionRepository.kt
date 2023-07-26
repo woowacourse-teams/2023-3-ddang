@@ -4,12 +4,14 @@ import androidx.lifecycle.LiveData
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
+import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.RegisterAuctionResponse
+import com.ddangddangddang.data.remote.ApiResponse
 
 interface AuctionRepository {
     fun observeAuctionPreviews(): LiveData<List<AuctionPreviewResponse>>
 
-    suspend fun getAuctionPreviews()
-    suspend fun getAuctionDetail(id: Long): AuctionDetailResponse
-    suspend fun registerAuction(auction: RegisterAuctionRequest): RegisterAuctionResponse
+    suspend fun getAuctionPreviews(): ApiResponse<AuctionPreviewsResponse>
+    suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse>
+    suspend fun registerAuction(auction: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse>
 }

@@ -6,7 +6,9 @@ import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
+import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.RegisterAuctionResponse
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.Service
 
 class AuctionRepositoryImpl private constructor(
@@ -18,27 +20,32 @@ class AuctionRepositoryImpl private constructor(
         return localDataSource.observeAuctionPreviews()
     }
 
-    override suspend fun getAuctionPreviews() {
-        val auctionPreviewsResponse = remoteDataSource.getAuctionPreviews()
-        localDataSource.addAuctionPreviews(auctionPreviewsResponse.auctions)
+    override suspend fun getAuctionPreviews(): ApiResponse<AuctionPreviewsResponse> {
+        val response = remoteDataSource.getAuctionPreviews()
+        if (response is ApiResponse.Success) {
+            localDataSource.addAuctionPreviews(response.body.auctions)
+        }
+        return response
     }
 
-    override suspend fun getAuctionDetail(id: Long): AuctionDetailResponse {
+    override suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> {
         return remoteDataSource.getAuctionDetail(id)
     }
 
-    override suspend fun registerAuction(auction: RegisterAuctionRequest): RegisterAuctionResponse {
-        val registerAuctionResponse = remoteDataSource.registerAuction(auction)
-        val auctionPreviewResponse = AuctionPreviewResponse(
-            registerAuctionResponse.id,
-            auction.title,
-            auction.images.firstOrNull() ?: "",
-            auction.startPrice,
-            "UNBIDDEN",
-            0,
-        )
-        localDataSource.addAuctionPreview(auctionPreviewResponse)
-        return registerAuctionResponse
+    override suspend fun registerAuction(auction: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse> {
+        val response = remoteDataSource.registerAuction(auction)
+        if (response is ApiResponse.Success) {
+            val auctionPreviewResponse = AuctionPreviewResponse(
+                response.body.id,
+                auction.title,
+                auction.images.firstOrNull() ?: "",
+                auction.startPrice,
+                "UNBIDDEN",
+                0,
+            )
+            localDataSource.addAuctionPreview(auctionPreviewResponse)
+        }
+        return response
     }
 
     companion object {

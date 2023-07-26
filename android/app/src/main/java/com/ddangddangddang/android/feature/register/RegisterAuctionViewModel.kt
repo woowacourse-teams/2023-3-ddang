@@ -8,6 +8,7 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.CategoryRequest
 import com.ddangddangddang.data.model.request.DirectRegionRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -60,8 +61,14 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         if (!isValidInputs) return
 
         viewModelScope.launch {
-            val response = repository.registerAuction(createRequestModel())
-            _event.value = RegisterAuctionEvent.SubmitResult(response.id)
+            when (val response = repository.registerAuction(createRequestModel())) {
+                is ApiResponse.Success -> {
+                    _event.value = RegisterAuctionEvent.SubmitResult(response.body.id)
+                }
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
         }
     }
 
