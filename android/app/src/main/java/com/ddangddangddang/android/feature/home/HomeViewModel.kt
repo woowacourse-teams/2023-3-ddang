@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     val auctions: LiveData<List<AuctionHomeModel>> =
         repository.observeAuctionPreviews().map { auctionPreviews ->
+            println("view model ${Thread.currentThread().id}")
             lastAuctionId.value = auctionPreviews.lastOrNull()?.id
             auctionPreviews.map { it.toPresentation() }
         }
