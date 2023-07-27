@@ -72,4 +72,34 @@ class JpaMessageRepositoryTest {
 
         assertThat(message.getId()).isPositive();
     }
+
+    @Test
+    void 메시지를_읽었음으로_처리한다() {
+        // given
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .build();
+
+        userRepository.save(seller);
+        userRepository.save(buyer);
+        auctionRepository.save(auction);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, seller, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        final Message message = Message.builder()
+                                       .chatRoom(chatRoom)
+                                       .writer(seller)
+                                       .receiver(buyer)
+                                       .contents("안녕하세요")
+                                       .build();
+
+        // when
+        message.read();
+
+        // then
+        assertThat(message.isRead()).isTrue();
+    }
 }

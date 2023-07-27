@@ -21,8 +21,10 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(callSuper = false, of = "id")
-@ToString(of = {"id", "contents"})
+@ToString(of = {"id", "contents", "read"})
 public class Message extends BaseTimeEntity {
+
+    public static final boolean READ_STATUS = true;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,11 +45,18 @@ public class Message extends BaseTimeEntity {
     @Column(nullable = false, length = 20_000)
     private String contents;
 
+    @Column(name = "is_read", nullable = false)
+    private boolean read = false;
+
     @Builder
     private Message(final ChatRoom chatRoom, final User writer, final User receiver, final String contents) {
         this.chatRoom = chatRoom;
         this.writer = writer;
         this.receiver = receiver;
         this.contents = contents;
+    }
+
+    public void read() {
+        read = READ_STATUS;
     }
 }
