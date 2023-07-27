@@ -33,15 +33,16 @@ public class ChatRoom extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY) // 의도하는 것 : Auction이 삭제되어도 ChatRoom은 삭제되지 않음. ChatRoom 조회 시 Auction은 lazy 로딩
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_id", nullable = false)
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", foreignKey = @ForeignKey(name = "fk_chat_room_seller"))
+    @JoinColumn(name = "seller_id", nullable = false, foreignKey = @ForeignKey(name = "fk_chat_room_seller"))
     private User seller;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id", foreignKey = @ForeignKey(name = "fk_chat_room_buyer"))
+    @JoinColumn(name = "buyer_id", nullable = false, foreignKey = @ForeignKey(name = "fk_chat_room_buyer"))
     private User buyer;
 
     public ChatRoom(final Auction auction, final User seller, final User buyer) {
