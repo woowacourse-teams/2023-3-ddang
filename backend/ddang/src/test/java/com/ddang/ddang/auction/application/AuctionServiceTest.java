@@ -9,6 +9,8 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.region.domain.Region;
+import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -32,13 +34,25 @@ class AuctionServiceTest {
     @Autowired
     JpaAuctionRepository auctionRepository;
 
+    @Autowired
+    JpaRegionRepository regionRepository;
+
     @Test
     void 경매를_등록한다() {
         // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        secondRegion.addThirdRegion(thirdRegion);
+        firstRegion.addSecondRegion(secondRegion);
+
+        regionRepository.save(firstRegion);
+
         final CreateRegionDto createRegionDto = new CreateRegionDto(
-                1L,
-                2L,
-                3L
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
         );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
@@ -63,11 +77,19 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_조회한다() {
         // given
-        // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        secondRegion.addThirdRegion(thirdRegion);
+        firstRegion.addSecondRegion(secondRegion);
+
+        regionRepository.save(firstRegion);
+
         final CreateRegionDto createRegionDto = new CreateRegionDto(
-                1L,
-                2L,
-                3L
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
         );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
@@ -115,11 +137,19 @@ class AuctionServiceTest {
     @Test
     void 첫번째_페이지의_경매_목록을_조회한다() {
         // given
-        // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        secondRegion.addThirdRegion(thirdRegion);
+        firstRegion.addSecondRegion(secondRegion);
+
+        regionRepository.save(firstRegion);
+
         final CreateRegionDto createRegionDto = new CreateRegionDto(
-                1L,
-                2L,
-                3L
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
         );
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
@@ -162,10 +192,19 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
         // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        secondRegion.addThirdRegion(thirdRegion);
+        firstRegion.addSecondRegion(secondRegion);
+
+        regionRepository.save(firstRegion);
+
         final CreateRegionDto createRegionDto = new CreateRegionDto(
-                1L,
-                2L,
-                3L
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
         );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
