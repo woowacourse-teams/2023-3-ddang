@@ -8,10 +8,14 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface Service {
     @GET("/auctions")
-    suspend fun fetchAuctionPreviews(): ApiResponse<AuctionPreviewsResponse>
+    suspend fun fetchAuctionPreviews(
+        @Query("lastAuctionId") id: Long?,
+        @Query("size") size: Int,
+    ): ApiResponse<AuctionPreviewsResponse>
 
     @GET("/auctions/{id}")
     suspend fun fetchAuctionDetail(@Path("id") id: Long): ApiResponse<AuctionDetailResponse>

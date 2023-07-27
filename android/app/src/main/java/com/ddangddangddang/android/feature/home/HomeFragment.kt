@@ -3,26 +3,49 @@ package com.ddangddangddang.android.feature.home
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentHomeBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
-import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
+    private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            // 다음 페이지가 존재하는지 뷰 모델 데이터 확인하는 코드 추가 필요
+
+            if (!viewModel.loadingAuctionInProgress) {
+                val lastVisibleItemPosition =
+                    (binding.rvAuction.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
+                val auctionsSize = viewModel.auctions.value?.size ?: 0
+                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                    viewModel.loadAuctions()
+                }
+            }
+        }
+    }
+    private val auctionAdapter = AuctionAdapter { auctionId ->
+        viewModel.navigateToAuctionDetail(auctionId)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         setupViewModel()
-        viewModel.loadAuctions()
+        setupAuctionRecyclerView()
+        if (viewModel.lastAuctionId.value == null) {
+            viewModel.loadAuctions()
+        }
     }
 
     private fun setupViewModel() {
-        viewModel.auctions.observe(viewLifecycleOwner) { setupAuctionRecyclerView(it) }
+        viewModel.auctions.observe(viewLifecycleOwner) { auctionAdapter.setAuctions(it) }
         viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
     }
 
@@ -48,12 +71,11 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         startActivity(intent)
     }
 
-    private fun setupAuctionRecyclerView(auctions: List<AuctionHomeModel>) {
+    private fun setupAuctionRecyclerView() {
         with(binding.rvAuction) {
-            adapter = AuctionAdapter { auctionId ->
-                viewModel.navigateToAuctionDetail(auctionId)
-            }.apply { setAuctions(auctions) }
+            adapter = auctionAdapter
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = 20))
+            addOnScrollListener(auctionScrollListener)
         }
     }
 }

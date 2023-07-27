@@ -11,7 +11,7 @@ import com.ddangddangddang.data.remote.ApiResponse
 interface AuctionRepository {
     fun observeAuctionPreviews(): LiveData<List<AuctionPreviewResponse>>
 
-    suspend fun getAuctionPreviews(): ApiResponse<AuctionPreviewsResponse>
+    suspend fun getAuctionPreviews(lastAuctionId: Long?, size: Int): ApiResponse<AuctionPreviewsResponse>
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse>
     suspend fun registerAuction(auction: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse>
 }
