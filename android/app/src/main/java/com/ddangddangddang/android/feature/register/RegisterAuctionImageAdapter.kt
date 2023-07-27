@@ -4,14 +4,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class RegisterAuctionImageAdapter :
+class RegisterAuctionImageAdapter(private val onDeleteImageListener: (String) -> Unit) :
     ListAdapter<String, RegisterAuctionImageViewHolder>(RegisterAuctionImageDiffUtil) {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int,
     ): RegisterAuctionImageViewHolder {
-        return RegisterAuctionImageViewHolder.create(parent)
+        return RegisterAuctionImageViewHolder.create(parent, onDeleteImageListener)
     }
 
     override fun onBindViewHolder(holder: RegisterAuctionImageViewHolder, position: Int) {

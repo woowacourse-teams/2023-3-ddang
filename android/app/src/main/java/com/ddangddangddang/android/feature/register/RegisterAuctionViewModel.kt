@@ -28,7 +28,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     )
     val images: LiveData<List<String>>
         get() = _images
-    val imageUrl: MutableLiveData<String> = MutableLiveData("")
     val title: MutableLiveData<String> = MutableLiveData("")
     val category: MutableLiveData<String> = MutableLiveData("전자기기 > 노트북")
     val description: MutableLiveData<String> = MutableLiveData("")
@@ -86,7 +85,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     }
 
     private fun createRequestModel(): RegisterAuctionRequest {
-        val imageUrl = imageUrl.value ?: ""
+        val images = images.value ?: emptyList()
         val title = title.value ?: ""
         val category = category.value ?: ""
         val description = description.value ?: ""
@@ -96,7 +95,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val directRegion = directRegion.value ?: ""
 
         return RegisterAuctionRequest(
-            listOf(imageUrl),
+            images,
             title,
             CategoryRequest(category.split(" > ")[0], category.split(" > ")[1]),
             description,
@@ -108,7 +107,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     }
 
     private fun judgeValidInputs(): Boolean {
-        val imageUrl = imageUrl.value
+        val isNoImage = images.value?.isEmpty() ?: true
         val title = title.value
         val category = category.value
         val description = description.value
@@ -117,7 +116,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val closingTime = closingTime.value
         val directRegion = directRegion.value
 
-        if (imageUrl.isNullOrBlank() ||
+        if (isNoImage ||
             title.isNullOrBlank() ||
             category.isNullOrBlank() ||
             description.isNullOrBlank() ||
@@ -145,6 +144,14 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.InputErrorEvent.InvalidValueInputEvent
     }
 
+    fun setDeleteImageEvent(imageUrl: String) {
+        _event.value = RegisterAuctionEvent.DeleteImage(imageUrl)
+    }
+
+    fun deleteImage(imageUrl: String) {
+        _images.value = _images.value?.minus(imageUrl) ?: emptyList()
+    }
+
     sealed class RegisterAuctionEvent {
         object Exit : RegisterAuctionEvent()
         class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
@@ -153,5 +160,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             object InvalidValueInputEvent : InputErrorEvent()
             object BlankExistEvent : InputErrorEvent()
         }
+        class DeleteImage(val imageUrl: String) : RegisterAuctionEvent()
     }
 }
