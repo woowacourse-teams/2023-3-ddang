@@ -11,8 +11,8 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
         tools:context=".feature.detail.bid.AuctionBidDialog">
 
@@ -50,7 +50,7 @@
 
             <EditText
                 android:id="@+id/et_bid_price"
-                android:layout_width="0dp"
+                android:layout_width="264dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
