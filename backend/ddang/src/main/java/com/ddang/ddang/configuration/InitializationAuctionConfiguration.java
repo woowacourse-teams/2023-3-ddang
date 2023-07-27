@@ -7,12 +7,12 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-
 @Configuration
+@ConditionalOnProperty(name = "data.init.auction.enabled", havingValue = "true")
 @RequiredArgsConstructor
 public class InitializationAuctionConfiguration implements ApplicationRunner {
 
@@ -43,9 +43,6 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .closingTime(LocalDateTime.now()
                                                                   .plusDays(5L))
                                         .image("https://www.apple.com/newsroom/images/product/mac/standard/Apple_MacBook-Pro_14-16-inch_10182021_big.jpg.large.jpg")
-                                        .firstRegion("서울특별시")
-                                        .secondRegion("관악구")
-                                        .thirdRegion("성현동")
                                         .mainCategory("전자기기")
                                         .subCategory("노트북")
                                         .build();
