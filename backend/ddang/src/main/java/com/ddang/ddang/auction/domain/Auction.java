@@ -1,7 +1,9 @@
 package com.ddang.ddang.auction.domain;
 
 import com.ddang.ddang.common.entity.BaseTimeEntity;
+import com.ddang.ddang.region.domain.AuctionRegion;
 import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -9,14 +11,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -58,14 +62,11 @@ public class Auction extends BaseTimeEntity {
 
     private LocalDateTime closingTime;
 
+    @OneToMany(mappedBy = "auction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<AuctionRegion> auctionRegions = new ArrayList<>();
+
     // TODO 2차 데모데이 이후 리펙터링 예정
     private String image;
-
-    private String firstRegion;
-
-    private String secondRegion;
-
-    private String thirdRegion;
 
     private String mainCategory;
 
@@ -79,9 +80,6 @@ public class Auction extends BaseTimeEntity {
             final Price startPrice,
             final LocalDateTime closingTime,
             final String image,
-            final String firstRegion,
-            final String secondRegion,
-            final String thirdRegion,
             final String mainCategory,
             final String subCategory
     ) {
@@ -91,14 +89,16 @@ public class Auction extends BaseTimeEntity {
         this.startPrice = startPrice;
         this.closingTime = closingTime;
         this.image = image;
-        this.firstRegion = firstRegion;
-        this.secondRegion = secondRegion;
-        this.thirdRegion = thirdRegion;
         this.mainCategory = mainCategory;
         this.subCategory = subCategory;
     }
 
     public void delete() {
         deleted = DELETED_STATUS;
+    }
+
+    public void addAuctionRegion(final AuctionRegion auctionRegion) {
+        this.auctionRegions.add(auctionRegion);
+        auctionRegion.initAuction(this);
     }
 }

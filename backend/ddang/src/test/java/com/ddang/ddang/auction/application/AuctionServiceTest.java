@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import java.time.LocalDateTime;
@@ -28,16 +29,19 @@ class AuctionServiceTest {
     @Test
     void 경매를_등록한다() {
         // given
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                1L,
+                2L,
+                3L
+        );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -53,16 +57,20 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_조회한다() {
         // given
+        // given
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                1L,
+                2L,
+                3L
+        );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -101,16 +109,20 @@ class AuctionServiceTest {
     @Test
     void 첫번째_페이지의_경매_목록을_조회한다() {
         // given
+        // given
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                1L,
+                2L,
+                3L
+        );
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -121,10 +133,8 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -146,16 +156,19 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
         // given
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                1L,
+                2L,
+                3L
+        );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""

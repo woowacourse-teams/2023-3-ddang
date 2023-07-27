@@ -31,7 +31,7 @@ public record AuctionDetailResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime closingTime,
 
-        List<DirectRegionResponse> directRegions,
+        List<DirectRegionsResponse> directRegions,
 
         int auctioneerCount
 ) {
@@ -50,9 +50,16 @@ public record AuctionDetailResponse(
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
-                List.of(new DirectRegionResponse(dto.firstRegion(), dto.secondRegion(), dto.thirdRegion())),
+                convertDirectRegionsResponse(dto),
                 0
         );
+    }
+
+    private static List<DirectRegionsResponse> convertDirectRegionsResponse(final ReadAuctionDto dto) {
+        return dto.auctionRegions()
+                  .stream()
+                  .map(DirectRegionsResponse::from)
+                  .toList();
     }
 
     // TODO 2차 데모데이 이후 enum으로 처리
