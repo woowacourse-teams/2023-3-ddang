@@ -45,6 +45,7 @@
 
     <!-- bid -->
     <string name="bid_title">입찰하기</string>
+    <string name="bid_min_price">%,d원</string>
     <string name="bid_unit_price">판매자가 설정한 경매 단위: %,d원</string>
     <string name="bid_cancel">취소</string>
     <string name="bid_submit">입찰</string>

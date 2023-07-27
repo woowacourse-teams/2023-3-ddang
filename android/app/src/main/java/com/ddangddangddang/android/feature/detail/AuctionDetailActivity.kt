@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.google.android.material.tabs.TabLayoutMediator
@@ -45,7 +46,9 @@ class AuctionDetailActivity :
         }
     }
 
-    private fun showAuctionBidDialog() {}
+    private fun showAuctionBidDialog() {
+        AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
+    }
 
     private fun setupAuctionImages(images: List<String>) {
         binding.vpImageList.apply {
@@ -71,6 +74,7 @@ class AuctionDetailActivity :
 
     companion object {
         private const val AUCTION_ID_KEY = "auction_id_key"
+        private const val BID_DIALOG_TAG = "bid_dialog_tag"
 
         fun getIntent(context: Context, auctionId: Long): Intent {
             return Intent(context, AuctionDetailActivity::class.java).apply {
