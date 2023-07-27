@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"auction", "user"})
+@ToString(exclude = {"auction", "bidder"})
 public class Bid {
 
     @Id
@@ -34,12 +34,12 @@ public class Bid {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bid_auction_id", foreignKey = @ForeignKey(name = "fk_bid_auction_id"))
+    @JoinColumn(name = "auction_id", foreignKey = @ForeignKey(name = "fk_bid_auction_id"))
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bid_user_id", foreignKey = @ForeignKey(name = "fk_bid_user_id"))
-    private User user;
+    @JoinColumn(name = "bidder_id", foreignKey = @ForeignKey(name = "fk_bid_user_id"))
+    private User bidder;
 
     @Embedded
     @AttributeOverride(name = "value", column = @Column(name = "price"))
@@ -50,9 +50,9 @@ public class Bid {
     @Column(nullable = false)
     private LocalDateTime createdTime;
 
-    public Bid(final Auction auction, final User user, final Price price, final LocalDateTime createdTime) {
+    public Bid(final Auction auction, final User bidder, final Price price, final LocalDateTime createdTime) {
         this.auction = auction;
-        this.user = user;
+        this.bidder = bidder;
         this.price = price;
         this.createdTime = createdTime;
     }
