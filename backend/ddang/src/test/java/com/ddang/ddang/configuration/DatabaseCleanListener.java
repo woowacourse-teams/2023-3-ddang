@@ -47,7 +47,7 @@ public class DatabaseCleanListener extends AbstractTestExecutionListener {
         em.flush();
         em.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 
-        for (String tableName : tableNames) {
+        for (final String tableName : tableNames) {
             em.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
             em.createNativeQuery("ALTER TABLE " + tableName + " ALTER COLUMN id RESTART WITH 1").executeUpdate();
         }
