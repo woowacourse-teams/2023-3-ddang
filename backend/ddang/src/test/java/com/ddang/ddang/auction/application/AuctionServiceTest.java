@@ -9,6 +9,8 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import java.time.LocalDateTime;
@@ -19,11 +21,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
+@IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuctionServiceTest {
@@ -72,6 +71,33 @@ class AuctionServiceTest {
 
         // then
         assertThat(actual).isPositive();
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_지역이_없을때_경매를_등록하면_예외가_발생한다() {
+        // given
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                1L,
+                2L,
+                3L
+        );
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(createRegionDto),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                ""
+        );
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.create(createAuctionDto))
+                .isInstanceOf(RegionNotFoundException.class)
+                .hasMessage("지정한 세 번째 지역이 없습니다.");
     }
 
     @Test
