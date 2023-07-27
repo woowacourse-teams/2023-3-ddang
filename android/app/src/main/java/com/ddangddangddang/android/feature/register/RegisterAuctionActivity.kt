@@ -18,19 +18,18 @@ import java.time.LocalTime
 class RegisterAuctionActivity :
     BindingActivity<ActivityRegisterAuctionBinding>(R.layout.activity_register_auction) {
     private val viewModel by viewModels<RegisterAuctionViewModel> { viewModelFactory }
+    private val imageAdapter = RegisterAuctionImageAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
         setupViewModel()
+        setupImageRecyclerView()
     }
 
     private fun setupViewModel() {
-        viewModel.event.observe(
-            this,
-        ) {
-            handleEvent(it)
-        }
+        viewModel.images.observe(this) { imageAdapter.setImages(it) }
+        viewModel.event.observe(this) { handleEvent(it) }
     }
 
     private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
@@ -103,6 +102,13 @@ class RegisterAuctionActivity :
 
     private fun navigationToDetail(id: Long) {
         startActivity(AuctionDetailActivity.getIntent(this, id))
+    }
+
+    private fun setupImageRecyclerView() {
+        with(binding.rvImage) {
+            adapter = imageAdapter
+            addItemDecoration(RegisterAuctionImageSpaceItemDecoration(space = 24))
+        }
     }
 
     companion object {
