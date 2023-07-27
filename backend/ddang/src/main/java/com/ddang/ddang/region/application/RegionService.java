@@ -2,6 +2,7 @@ package com.ddang.ddang.region.application;
 
 import com.ddang.ddang.region.application.dto.ReadRegionDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import com.ddang.ddang.region.domain.InitializationRegionProcessor;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,14 @@ import java.util.List;
 public class RegionService {
 
     private final JpaRegionRepository regionRepository;
+    private final InitializationRegionProcessor regionProcessor;
+
+    @Transactional
+    public void createRegions() {
+        final List<Region> regions = regionProcessor.requestRegions();
+
+        regionRepository.saveAll(regions);
+    }
 
     public List<ReadRegionDto> readAllFirst() {
         final List<Region> firstRegions = regionRepository.findFirstAll();
