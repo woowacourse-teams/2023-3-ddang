@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.register
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -42,6 +43,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     }
 
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
+        Log.d("test", "setClosingDate: $month")
         _closingTime.value =
             LocalDateTime.of(
                 LocalDate.of(year, month, dayOfMonth),
