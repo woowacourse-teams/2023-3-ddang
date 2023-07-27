@@ -60,7 +60,7 @@ class RegisterAuctionActivity :
 
     private fun showDateTimePicker(selectedDateTime: LocalDateTime) {
         // DataPicker Dialog에서 month는 0~11 범위
-        // LocalDateTime에서 month는 1~11 범위
+        // LocalDateTime에서 month는 1~12 범위
         // 따라서, 기본값을 세팅해줄 때는 -1, LocalDateTime에 저장할 때는 +1을 해주어야함
         DatePickerDialog(
             this,
