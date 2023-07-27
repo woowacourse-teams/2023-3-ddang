@@ -46,14 +46,14 @@ public class RestTemplateInitRegionProcessor implements InitializationRegionProc
 
         final List<Region> totalRegions = new ArrayList<>();
 
-        for (ResultApiRegionResponse firstRegionResponse : firstRegionsResponses) {
+        for (final ResultApiRegionResponse firstRegionResponse : firstRegionsResponses) {
             final Region firstRegion = firstRegionResponse.toEntity();
             final List<ResultApiRegionResponse> secondRegionsResponses = requestApiRegionResponse(
                     firstRegionResponse.getRegionCode(),
                     accessToken
             );
 
-            for (ResultApiRegionResponse secondRegionsResponse : secondRegionsResponses) {
+            for (final ResultApiRegionResponse secondRegionsResponse : secondRegionsResponses) {
                 final Region secondRegion = secondRegionsResponse.toEntity();
                 final List<ResultApiRegionResponse> thirdRegionsResponses = requestApiRegionResponse(
                         secondRegionsResponse.getRegionCode(),
@@ -62,7 +62,7 @@ public class RestTemplateInitRegionProcessor implements InitializationRegionProc
 
                 firstRegion.addSecondRegion(secondRegion);
 
-                for (ResultApiRegionResponse thirdRegionsResponse : thirdRegionsResponses) {
+                for (final ResultApiRegionResponse thirdRegionsResponse : thirdRegionsResponses) {
                     final Region thirdRegion = thirdRegionsResponse.toEntity();
                     secondRegion.addThirdRegion(thirdRegion);
                 }
