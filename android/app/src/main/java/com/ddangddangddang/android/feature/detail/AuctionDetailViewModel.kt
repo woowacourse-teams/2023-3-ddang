@@ -33,11 +33,18 @@ class AuctionDetailViewModel(
         }
     }
 
+    fun popupAuctionBid() {
+        _auctionDetailModel.value?.let {
+            _event.value = AuctionDetailEvent.PopupAuctionBid
+        }
+    }
+
     fun exit() {
         _event.value = AuctionDetailEvent.Exit
     }
 
     sealed class AuctionDetailEvent {
         object Exit : AuctionDetailEvent()
+        object PopupAuctionBid : AuctionDetailEvent()
     }
 }

@@ -26,12 +26,26 @@ class AuctionDetailActivity :
     }
 
     private fun setupViewModel() {
-        viewModel.event.observe(this) { finish() }
+        viewModel.event.observe(this) { event ->
+            handleEvent(event)
+        }
         viewModel.auctionDetailModel.observe(this) {
             setupAuctionImages(it.images)
             setupDirectRegions(it.directRegions)
         }
     }
+
+    private fun handleEvent(event: AuctionDetailViewModel.AuctionDetailEvent) {
+        when (event) {
+            is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
+
+            is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> {
+                showAuctionBidDialog()
+            }
+        }
+    }
+
+    private fun showAuctionBidDialog() {}
 
     private fun setupAuctionImages(images: List<String>) {
         binding.vpImageList.apply {
@@ -43,7 +57,7 @@ class AuctionDetailActivity :
             setPadding(200, 0, 200, 0)
         }
 
-        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { tab, position -> }.attach()
+        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { _, _ -> }.attach()
     }
 
     private fun convertDpToPx(dp: Float): Int {
