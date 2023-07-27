@@ -56,7 +56,12 @@ class JpaMessageRepositoryTest {
         final ChatRoom chatRoom = new ChatRoom(auction, seller, buyer);
         chatRoomRepository.save(chatRoom);
 
-        final Message message = new Message(chatRoom, seller, buyer, "안녕하세요.");
+        final Message message = Message.builder()
+                                       .chatRoom(chatRoom)
+                                       .writer(seller)
+                                       .receiver(buyer)
+                                       .contents("안녕하세요")
+                                       .build();
 
         // when
         messageRepository.save(message);

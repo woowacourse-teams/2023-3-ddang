@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,8 @@ public class Message extends BaseTimeEntity {
     @Column(nullable = false, length = 20_000)
     private String contents;
 
-    public Message(final ChatRoom chatRoom, final User writer, final User receiver, final String contents) {
+    @Builder
+    private Message(final ChatRoom chatRoom, final User writer, final User receiver, final String contents) {
         this.chatRoom = chatRoom;
         this.writer = writer;
         this.receiver = receiver;
