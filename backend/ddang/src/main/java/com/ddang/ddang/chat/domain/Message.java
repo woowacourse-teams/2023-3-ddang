@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(callSuper = false, of = "id")
-@ToString
+@ToString(of = {"id", "contents"})
 public class Message extends BaseTimeEntity {
 
     @Id

@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(callSuper = false, of = "id")
-@ToString
+@ToString(of = "id")
 public class ChatRoom extends BaseTimeEntity {
 
     public static final long CHAT_EXPIRATION_DAY = 10L;
