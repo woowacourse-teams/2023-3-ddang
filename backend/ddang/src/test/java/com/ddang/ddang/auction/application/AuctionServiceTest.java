@@ -7,8 +7,11 @@ import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -25,6 +28,9 @@ class AuctionServiceTest {
 
     @Autowired
     AuctionService auctionService;
+
+    @Autowired
+    JpaAuctionRepository auctionRepository;
 
     @Test
     void 경매를_등록한다() {
@@ -180,8 +186,12 @@ class AuctionServiceTest {
         auctionService.deleteByAuctionId(savedAuctionId);
 
         // then
-        final ReadAuctionDto actual = auctionService.readByAuctionId(savedAuctionId);
-        assertThat(actual.deleted()).isTrue();
+        final Optional<Auction> actual = auctionRepository.findById(savedAuctionId);
+
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isPresent();
+            softAssertions.assertThat(actual.get().isDeleted()).isTrue();
+        });
     }
 
     @Test
