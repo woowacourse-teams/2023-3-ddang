@@ -8,6 +8,8 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
@@ -26,27 +28,37 @@ public class AuctionService {
     private final JpaAuctionRepository auctionRepository;
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
+    private final StoreImageProcessor imageProcessor;
 
     @Transactional
     public Long create(final CreateAuctionDto dto) {
         final Auction auction = convertAuction(dto);
-        final List<AuctionRegion> auctionRegions = convertToAuctionRegions(dto);
+        final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
+        final List<AuctionImage> auctionImages = convertAuctionImage(dto);
 
         auction.addAuctionRegions(auctionRegions);
+        auction.addAuctionImages(auctionImages);
         return auctionRepository.save(auction)
                                 .getId();
     }
 
+    private List<AuctionImage> convertAuctionImage(final CreateAuctionDto dto) {
+        return imageProcessor.storeImageFiles(dto.auctionImages())
+                             .stream()
+                             .map(imageDto -> new AuctionImage(imageDto.uploadName(), imageDto.storeName()))
+                             .toList();
+    }
+
     private Auction convertAuction(final CreateAuctionDto dto) {
         final Category subCategory = categoryRepository.findSubCategoryById(dto.subCategoryId())
-                                                    .orElseThrow(() -> new CategoryNotFoundException(
-                                                            "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
-                                                    ));
+                                                       .orElseThrow(() -> new CategoryNotFoundException(
+                                                               "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
+                                                       ));
 
         return dto.toEntity(subCategory);
     }
 
-    private List<AuctionRegion> convertToAuctionRegions(final CreateAuctionDto dto) {
+    private List<AuctionRegion> convertAuctionRegions(final CreateAuctionDto dto) {
         final List<AuctionRegion> auctionRegions = new ArrayList<>();
 
         for (final Long thirdRegionId : dto.thirdRegionIds()) {

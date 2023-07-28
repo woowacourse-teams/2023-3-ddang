@@ -61,7 +61,7 @@ class AuctionTest {
         final AuctionImage auctionImage = new AuctionImage("image.png", "image.png");
 
         // when
-        auction.addAuctionImage(auctionImage);
+        auction.addAuctionImages(List.of(auctionImage));
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

@@ -106,8 +106,10 @@ public class Auction extends BaseTimeEntity {
         }
     }
 
-    public void addAuctionImage(final AuctionImage auctionImage) {
-        auctionImages.add(auctionImage);
-        auctionImage.initAuction(this);
+    public void addAuctionImages(final List<AuctionImage> auctionImages) {
+        for (final AuctionImage auctionImage : auctionImages) {
+            this.auctionImages.add(auctionImage);
+            auctionImage.initAuction(this);
+        }
     }
 }
