@@ -1,19 +1,20 @@
 package com.ddang.ddang.region.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.region.domain.Region;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Optional;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -93,5 +94,56 @@ class JpaRegionRepositoryTest {
 
         // then
         assertThat(actual).hasSize(2);
+    }
+
+    @Test
+    void 세번째_지역을_조회한다() {
+        // given
+        final Region first = new Region("first");
+        final Region second = new Region("second");
+        final Region third1 = new Region("third1");
+        final Region third2 = new Region("third2");
+
+        first.addSecondRegion(second);
+        second.addThirdRegion(third1);
+        second.addThirdRegion(third2);
+
+        regionRepository.save(first);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final Optional<Region> actual = regionRepository.findThirdRegionById(third1.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isPresent();
+            softAssertions.assertThat(actual.get()).isEqualTo(third1);
+        });
+    }
+
+    @Test
+    void 세번째_지역이_아닌_아이디를_전달하면_빈_Optional을_반환한다() {
+        // given
+        final Region first = new Region("first");
+        final Region second = new Region("second");
+        final Region third1 = new Region("third1");
+        final Region third2 = new Region("third2");
+
+        first.addSecondRegion(second);
+        second.addThirdRegion(third1);
+        second.addThirdRegion(third2);
+
+        regionRepository.save(first);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final Optional<Region> actual = regionRepository.findThirdRegionById(first.getId());
+
+        // then
+        assertThat(actual).isEmpty();
     }
 }
