@@ -14,7 +14,7 @@ import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 
 class AuctionBidDialog : DialogFragment() {
     private var _binding: FragmentAuctionBidDialogBinding? = null
-    val binding: FragmentAuctionBidDialogBinding
+    private val binding: FragmentAuctionBidDialogBinding
         get() = _binding!!
 
     private val activityViewModel: AuctionDetailViewModel by activityViewModels { viewModelFactory }
