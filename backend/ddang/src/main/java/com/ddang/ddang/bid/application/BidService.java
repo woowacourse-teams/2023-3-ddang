@@ -59,11 +59,19 @@ public class BidService {
         final Price price = getPrice(bidDto.price());
 
         if (lastBid == null) {
+            final Auction auction = auctionRepository.findById(bidDto.auctionId()).get();
+            checkInvalidFirstBidPrice(auction, price);
             return;
         }
 
         checkIsNotLastBidder(lastBid, bidder);
-        checkInvalidBidPrice(lastBid,price);
+        checkInvalidBidPrice(lastBid, price);
+    }
+
+    private void checkInvalidFirstBidPrice(final Auction auction, final Price price) {
+        if (auction.getStartPrice().isOverThan(price)) {
+            throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
+        }
     }
 
     private void checkIsNotLastBidder(final Bid lastBid, final User bidder) {
@@ -73,7 +81,7 @@ public class BidService {
     }
 
     private void checkInvalidBidPrice(final Bid lastBid, final Price price) {
-        if (lastBid.isPriceMoreThan(price)) {
+        if (lastBid.getPrice().isMoreThan(price)) {
             throw new InvalidBidPriceException("마지막 입찰 금액보다 낮은 금액을 입력했습니다");
         }
         if (lastBid.getNextMinimumBidPrice() > price.getValue()) {
