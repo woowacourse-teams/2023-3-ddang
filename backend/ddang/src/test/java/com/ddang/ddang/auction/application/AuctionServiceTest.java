@@ -24,6 +24,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -62,6 +64,11 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -70,8 +77,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         // when
@@ -90,6 +96,11 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -98,8 +109,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(3L),
                 sub.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         // when & then
@@ -126,6 +136,11 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -134,8 +149,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(secondRegion.getId()),
                 sub.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         // when & then
@@ -156,6 +170,11 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -164,8 +183,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 1L,
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         // when & then
@@ -192,6 +210,11 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -200,8 +223,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 main.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         // when & then
@@ -228,6 +250,11 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -236,8 +263,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);
@@ -288,6 +314,11 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -296,10 +327,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
-
         final CreateAuctionDto createAuctionDto2 = new CreateAuctionDto(
                 "경매 상품 2",
                 "이것은 경매 상품 2 입니다.",
@@ -308,8 +337,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         auctionService.create(createAuctionDto1);
@@ -343,6 +371,11 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -351,8 +384,7 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                ""
+                List.of(auctionImage)
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);

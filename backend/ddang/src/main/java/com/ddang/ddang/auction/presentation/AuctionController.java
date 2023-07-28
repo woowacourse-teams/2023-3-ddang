@@ -9,19 +9,19 @@ import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailRespon
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
 import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
-import java.util.List;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/auctions")
@@ -31,7 +31,7 @@ public class AuctionController {
     private final AuctionService auctionService;
 
     @PostMapping
-    public ResponseEntity<CreateAuctionResponse> create(@RequestBody @Valid final CreateAuctionRequest request) {
+    public ResponseEntity<CreateAuctionResponse> create(@ModelAttribute @Valid final CreateAuctionRequest request) {
         final Long auctionId = auctionService.create(CreateAuctionDto.from(request));
         final CreateAuctionResponse response = new CreateAuctionResponse(auctionId);
 
@@ -42,7 +42,8 @@ public class AuctionController {
     @GetMapping("/{auctionId}")
     public ResponseEntity<ReadAuctionDetailResponse> read(@PathVariable final Long auctionId) {
         final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
-        final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.from(readAuctionDto);
+        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.from(readAuctionDto, baseUrl);
 
         return ResponseEntity.ok(response);
     }
@@ -50,11 +51,14 @@ public class AuctionController {
     @GetMapping
     public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
             @RequestParam(required = false) final Long lastAuctionId,
-            @RequestParam(required = false, defaultValue = "9999") final int size
+            @RequestParam(required = false, defaultValue = "10") final int size
     ) {
         final List<ReadAuctionDto> readAuctionDtos = auctionService.readAllByLastAuctionId(lastAuctionId, size);
+        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
         final List<ReadAuctionResponse> readAuctionResponses = readAuctionDtos.stream()
-                                                                              .map(ReadAuctionResponse::from)
+                                                                              .map(dto -> ReadAuctionResponse.of(
+                                                                                      dto, baseUrl
+                                                                              ))
                                                                               .toList();
 
         final ReadAuctionsResponse response = new ReadAuctionsResponse(

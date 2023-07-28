@@ -2,6 +2,7 @@ package com.ddang.ddang.auction.domain;
 
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
@@ -74,8 +75,8 @@ public class Auction extends BaseTimeEntity {
     @JoinColumn(name = "sub_category_id", foreignKey = @ForeignKey(name = "fk_auction_sub_category"))
     private Category subCategory;
 
-    // TODO 2차 데모데이 이후 리펙터링 예정
-    private String image;
+    @OneToMany(mappedBy = "auction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<AuctionImage> auctionImages = new ArrayList<>();
 
     @Builder
     private Auction(
@@ -84,8 +85,7 @@ public class Auction extends BaseTimeEntity {
             final BidUnit bidUnit,
             final Price startPrice,
             final LocalDateTime closingTime,
-            final Category subCategory,
-            final String image
+            final Category subCategory
     ) {
         this.title = title;
         this.description = description;
@@ -93,7 +93,6 @@ public class Auction extends BaseTimeEntity {
         this.startPrice = startPrice;
         this.closingTime = closingTime;
         this.subCategory = subCategory;
-        this.image = image;
     }
 
     public void delete() {
@@ -105,5 +104,10 @@ public class Auction extends BaseTimeEntity {
             this.auctionRegions.add(auctionRegion);
             auctionRegion.initAuction(this);
         }
+    }
+
+    public void addAuctionImage(final AuctionImage auctionImage) {
+        auctionImages.add(auctionImage);
+        auctionImage.initAuction(this);
     }
 }

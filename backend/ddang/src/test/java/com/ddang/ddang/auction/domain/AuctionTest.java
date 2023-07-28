@@ -2,9 +2,11 @@ package com.ddang.ddang.auction.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import java.util.List;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -48,5 +50,23 @@ class AuctionTest {
 
         // then
         assertThat(auction.getAuctionRegions()).hasSize(1);
+    }
+
+    @Test
+    void 경매_이미지_연관_관계를_세팅한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .build();
+        final AuctionImage auctionImage = new AuctionImage("image.png", "image.png");
+
+        // when
+        auction.addAuctionImage(auctionImage);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(auction.getAuctionImages()).isNotEmpty();
+            softAssertions.assertThat(auctionImage.getAuction()).isNotNull();
+        });
     }
 }

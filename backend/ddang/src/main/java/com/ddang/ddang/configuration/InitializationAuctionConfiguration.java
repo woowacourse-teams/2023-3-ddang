@@ -53,7 +53,6 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .bidUnit(new BidUnit(1_000))
                                         .startPrice(new Price(1_000_000))
                                         .closingTime(LocalDateTime.now())
-                                        .image("https://www.apple.com/newsroom/images/product/mac/standard/Apple_MacBook-Pro_14-16-inch_10182021_big.jpg.large.jpg")
                                         .subCategory(sub)
                                         .build();
         auction1.addAuctionRegions(List.of(auctionRegion1));
@@ -65,7 +64,6 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .startPrice(new Price(900_000))
                                         .closingTime(LocalDateTime.now()
                                                                   .plusDays(5L))
-                                        .image("https://www.apple.com/newsroom/images/product/mac/standard/Apple_MacBook-Pro_14-16-inch_10182021_big.jpg.large.jpg")
                                         .subCategory(sub)
                                         .build();
         auction2.addAuctionRegions(List.of(auctionRegion2));

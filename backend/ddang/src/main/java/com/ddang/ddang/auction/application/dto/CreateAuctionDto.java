@@ -8,6 +8,7 @@ import com.ddang.ddang.category.domain.Category;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public record CreateAuctionDto(
         String title,
@@ -17,9 +18,7 @@ public record CreateAuctionDto(
         LocalDateTime closingTime,
         List<Long> thirdRegionIds,
         Long subCategoryId,
-
-        // TODO 2차 데모데이 이후 리펙터링 예정
-        String image
+        List<MultipartFile> auctionImages
 ) {
 
     public static CreateAuctionDto from(final CreateAuctionRequest request) {
@@ -31,8 +30,7 @@ public record CreateAuctionDto(
                 request.closingTime(),
                 calculateThirdRegionIds(request),
                 request.subCategoryId(),
-                // TODO 2차 데모데이 이후 리펙터링 예정
-                request.images().get(0)
+                request.auctionImages()
         );
     }
 
@@ -52,8 +50,6 @@ public record CreateAuctionDto(
                       .startPrice(new Price(startPrice))
                       .closingTime(closingTime)
                       .subCategory(subCategory)
-                      // TODO 2차 데모데이 이후 리펙터링 예정
-                      .image(image)
                       .build();
     }
 }

@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.web.multipart.MultipartFile;
 
 public record CreateAuctionRequest(
         @NotEmpty(message = "제목이 입력되지 않았습니다.")
@@ -33,8 +34,7 @@ public record CreateAuctionRequest(
 
         List<Long> thirdRegionIds,
 
-        // TODO 2차 데모데이 이후 리펙터링 예정
-        List<String> images
+        List<MultipartFile> auctionImages
 ) {
 
 }
