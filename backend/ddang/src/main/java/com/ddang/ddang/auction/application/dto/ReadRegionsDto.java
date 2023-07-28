@@ -8,6 +8,7 @@ public record ReadRegionsDto(
         ReadRegionDto secondRegionDto,
         ReadRegionDto thirdRegionDto
 ) {
+
     public static ReadRegionsDto from(final AuctionRegion auctionRegion) {
         final Region thirdRegion = auctionRegion.getThirdRegion();
 
