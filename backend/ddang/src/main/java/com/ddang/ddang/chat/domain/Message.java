@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.domain;
 
-import com.ddang.ddang.common.entity.BaseTimeEntity;
+import com.ddang.ddang.common.entity.BaseCreateTimeEntity;
 import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(callSuper = false, of = "id")
 @ToString(of = {"id", "contents"})
-public class Message extends BaseTimeEntity {
+public class Message extends BaseCreateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

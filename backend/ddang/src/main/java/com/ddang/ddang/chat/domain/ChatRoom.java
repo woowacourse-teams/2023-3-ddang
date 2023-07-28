@@ -1,7 +1,7 @@
 package com.ddang.ddang.chat.domain;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.common.entity.BaseTimeEntity;
+import com.ddang.ddang.common.entity.BaseCreateTimeEntity;
 import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @Getter
 @EqualsAndHashCode(callSuper = false, of = "id")
 @ToString(of = "id")
-public class ChatRoom extends BaseTimeEntity {
+public class ChatRoom extends BaseCreateTimeEntity {
 
     public static final long CHAT_EXPIRATION_DAY = 10L;
 
