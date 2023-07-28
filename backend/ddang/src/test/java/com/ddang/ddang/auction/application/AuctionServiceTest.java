@@ -9,6 +9,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
@@ -20,12 +21,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.transaction.annotation.Transactional;
 
-@Transactional
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuctionServiceTest {
