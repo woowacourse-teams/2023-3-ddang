@@ -1,7 +1,6 @@
 package com.ddang.ddang.auction.application;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
-import com.ddang.ddang.auction.application.dto.CreateRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
@@ -14,11 +13,10 @@ import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -51,8 +49,8 @@ public class AuctionService {
     private List<AuctionRegion> convertToAuctionRegions(final CreateAuctionDto dto) {
         final List<AuctionRegion> auctionRegions = new ArrayList<>();
 
-        for (final CreateRegionDto regionDto : dto.createRegionDtos()) {
-            final Region thirdRegion = regionRepository.findThirdRegionById(regionDto.thirdRegionId())
+        for (final Long thirdRegionId : dto.thirdRegionIds()) {
+            final Region thirdRegion = regionRepository.findThirdRegionById(thirdRegionId)
                                                        .orElseThrow(() -> new RegionNotFoundException(
                                                                "지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다."
                                                        ));

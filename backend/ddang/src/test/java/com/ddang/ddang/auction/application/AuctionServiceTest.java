@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
-import com.ddang.ddang.auction.application.dto.CreateRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
@@ -57,12 +56,6 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                firstRegion.getId(),
-                secondRegion.getId(),
-                thirdRegion.getId()
-        );
-
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -75,10 +68,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                sub.getId()
+                ""
         );
 
         // when
@@ -91,12 +84,6 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_지역이_없을때_경매를_등록하면_예외가_발생한다() {
         // given
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                1L,
-                2L,
-                3L
-        );
-
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -109,10 +96,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(3L),
+                sub.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                sub.getId()
+                ""
         );
 
         // when & then
@@ -133,12 +120,6 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                firstRegion.getId(),
-                thirdRegion.getId(),
-                secondRegion.getId()
-        );
-
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -151,10 +132,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(secondRegion.getId()),
+                sub.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                sub.getId()
+                ""
         );
 
         // when & then
@@ -175,22 +156,16 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                firstRegion.getId(),
-                secondRegion.getId(),
-                thirdRegion.getId()
-        );
-
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(thirdRegion.getId()),
+                1L,
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                1L
+                ""
         );
 
         // when & then
@@ -211,12 +186,6 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                firstRegion.getId(),
-                secondRegion.getId(),
-                thirdRegion.getId()
-        );
-
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -229,10 +198,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(thirdRegion.getId()),
+                main.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                main.getId()
+                ""
         );
 
         // when & then
@@ -253,12 +222,6 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                firstRegion.getId(),
-                secondRegion.getId(),
-                thirdRegion.getId()
-        );
-
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -271,10 +234,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                sub.getId()
+                ""
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);
@@ -319,12 +282,6 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                firstRegion.getId(),
-                secondRegion.getId(),
-                thirdRegion.getId()
-        );
-
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -337,10 +294,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                sub.getId()
+                ""
         );
 
         final CreateAuctionDto createAuctionDto2 = new CreateAuctionDto(
@@ -349,10 +306,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                sub.getId()
+                ""
         );
 
         auctionService.create(createAuctionDto1);
@@ -380,12 +337,6 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final CreateRegionDto createRegionDto = new CreateRegionDto(
-                firstRegion.getId(),
-                secondRegion.getId(),
-                thirdRegion.getId()
-        );
-
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -398,10 +349,10 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
-                List.of(createRegionDto),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                sub.getId()
+                ""
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);

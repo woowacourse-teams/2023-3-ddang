@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.category.domain.Category;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 public record CreateAuctionDto(
@@ -14,12 +15,11 @@ public record CreateAuctionDto(
         int bidUnit,
         int startPrice,
         LocalDateTime closingTime,
-
-        List<CreateRegionDto> createRegionDtos,
+        List<Long> thirdRegionIds,
+        Long subCategoryId,
 
         // TODO 2차 데모데이 이후 리펙터링 예정
-        String image,
-        Long subCategoryId
+        String image
 ) {
 
     public static CreateAuctionDto from(final CreateAuctionRequest request) {
@@ -29,18 +29,19 @@ public record CreateAuctionDto(
                 request.bidUnit(),
                 request.startPrice(),
                 request.closingTime(),
-                convertCreateRegionDto(request),
+                calculateThirdRegionIds(request),
+                request.subCategoryId(),
                 // TODO 2차 데모데이 이후 리펙터링 예정
-                request.images().get(0),
-                request.subCategoryId()
+                request.images().get(0)
         );
     }
 
-    private static List<CreateRegionDto> convertCreateRegionDto(final CreateAuctionRequest request) {
-        return request.directRegions()
-                      .stream()
-                      .map(CreateRegionDto::from)
-                      .toList();
+    private static List<Long> calculateThirdRegionIds(final CreateAuctionRequest request) {
+        if (request.thirdRegionIds() == null) {
+            return Collections.emptyList();
+        }
+
+        return request.thirdRegionIds();
     }
 
     public Auction toEntity(final Category subCategory) {

@@ -20,7 +20,6 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.auction.presentation.dto.request.CreateDirectRegionRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
@@ -73,8 +72,8 @@ class AuctionControllerTest {
                              .plusDays(3L),
                 2L,
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                List.of(""),
-                List.of(new CreateDirectRegionRequest(1L, 2L, 3L))
+                List.of(3L),
+                List.of("")
         );
 
         given(auctionService.create(any(CreateAuctionDto.class))).willReturn(1L);
