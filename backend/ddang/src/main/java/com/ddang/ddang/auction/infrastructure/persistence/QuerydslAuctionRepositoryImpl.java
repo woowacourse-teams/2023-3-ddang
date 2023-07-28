@@ -25,7 +25,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 .selectFrom(auction)
                 .where(auction.deleted.isFalse(), lessThanLastAuctionId(lastAuctionId))
                 .orderBy(auction.id.desc())
-                .limit(size)
+                .limit(size + 1L)
                 .fetch();
     }
 

@@ -167,8 +167,9 @@ class QuerydslAuctionRepositoryImplTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(1);
+            softAssertions.assertThat(actual).hasSize(2);
             softAssertions.assertThat(actual.get(0).getTitle()).isEqualTo(auction3.getTitle());
+            softAssertions.assertThat(actual.get(1).getTitle()).isEqualTo(auction2.getTitle());
         });
     }
 
@@ -209,8 +210,9 @@ class QuerydslAuctionRepositoryImplTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(1);
+            softAssertions.assertThat(actual).hasSize(2);
             softAssertions.assertThat(actual.get(0).getTitle()).isEqualTo(auction2.getTitle());
+            softAssertions.assertThat(actual.get(1).getTitle()).isEqualTo(auction1.getTitle());
         });
     }
 
