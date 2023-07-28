@@ -42,7 +42,7 @@
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_seller_reliability">(%.1f)</string>
-  
+
     <!-- register -->
     <string name="register_auction">경매 상품 등록</string>
     <string name="register_auction_default_image_count">(%d/%d)</string>
@@ -57,4 +57,7 @@
     <string name="register_auction_blank_exist_error">채우지 않은 필드가 존재합니다.</string>
     <string name="register_auction_invalid_input_error">필드에 유효하지 않은 값이 존재합니다.</string>
     <string name="register_auction_ok">확인</string>
+
+    <!-- category -->
+    <string name="select_category">카테고리 선택</string>
 </resources>
