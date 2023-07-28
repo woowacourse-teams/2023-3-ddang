@@ -44,7 +44,7 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -70,35 +70,15 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_end="@dimen/margin_side_layout" />
 
-                <EditText
-                    android:id="@+id/et_image_url"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginTop="12dp"
-                    android:background="@drawable/bg_stroke_gray_radius_1dp"
-                    android:hint="@string/register_auction_image_url"
-                    android:inputType="textUri"
-                    android:padding="16dp"
-                    android:text="@={viewModel.imageUrl}"
-                    android:textCursorDrawable="@drawable/ic_edittext_cursor"
-                    android:textSize="@dimen/textsize_body"
-                    app:layout_constraintEnd_toStartOf="@id/gl_end"
-                    app:layout_constraintStart_toEndOf="@id/gl_start"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-
                 <LinearLayout
                     android:id="@+id/ll_register_image"
                     android:layout_width="78dp"
                     android:layout_height="78dp"
-                    android:layout_marginStart="@dimen/margin_side_layout"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/gl_start"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -111,11 +91,26 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/register_auction_default_image_count"
+                        android:text="@{@string/register_auction_default_image_count(viewModel.images.size, 10)}"
                         android:textColor="@color/black_900"
                         android:textSize="12sp"
                         tools:text="(0/10)" />
                 </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toEndOf="@id/ll_register_image"
+                    app:layout_constraintBottom_toBottomOf="@id/ll_register_image"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    android:layout_marginStart="16dp"
+                    tools:listitem="@layout/item_register_image"
+                    tools:itemCount="10"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintVertical_bias="0.0" />
 
                 <TextView
                     android:id="@+id/tv_title"
@@ -127,7 +122,7 @@
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
-                    app:layout_constraintTop_toBottomOf="@id/et_image_url" />
+                    app:layout_constraintTop_toBottomOf="@id/ll_register_image" />
 
                 <EditText
                     android:id="@+id/et_title"
@@ -332,7 +327,7 @@
                     app:layout_constraintTop_toBottomOf="@id/et_direct_region" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

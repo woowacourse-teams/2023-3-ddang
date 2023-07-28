@@ -11,6 +11,7 @@ import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -18,19 +19,18 @@ import java.time.LocalTime
 class RegisterAuctionActivity :
     BindingActivity<ActivityRegisterAuctionBinding>(R.layout.activity_register_auction) {
     private val viewModel by viewModels<RegisterAuctionViewModel> { viewModelFactory }
+    private val imageAdapter = RegisterAuctionImageAdapter { viewModel.setDeleteImageEvent(it) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
         setupViewModel()
+        setupImageRecyclerView()
     }
 
     private fun setupViewModel() {
-        viewModel.event.observe(
-            this,
-        ) {
-            handleEvent(it)
-        }
+        viewModel.images.observe(this) { imageAdapter.setImages(it) }
+        viewModel.event.observe(this) { handleEvent(it) }
     }
 
     private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
@@ -54,6 +54,10 @@ class RegisterAuctionActivity :
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.InputErrorEvent.BlankExistEvent -> {
                 showBlankExistMessage()
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.DeleteImage -> {
+                showDeleteImageDialog(event.imageUrl)
             }
         }
     }
@@ -106,6 +110,21 @@ class RegisterAuctionActivity :
 
     private fun navigationToDetail(id: Long) {
         startActivity(AuctionDetailActivity.getIntent(this, id))
+    }
+
+    private fun showDeleteImageDialog(imageUrl: String) {
+        showDialog(
+            messageId = R.string.register_auction_dialog_delete_image_message,
+            positiveStringId = R.string.register_auction_dialog_delete_image_positive_button,
+            actionPositive = { viewModel.deleteImage(imageUrl) },
+        )
+    }
+
+    private fun setupImageRecyclerView() {
+        with(binding.rvImage) {
+            adapter = imageAdapter
+            addItemDecoration(RegisterAuctionImageSpaceItemDecoration(space = 24))
+        }
     }
 
     companion object {

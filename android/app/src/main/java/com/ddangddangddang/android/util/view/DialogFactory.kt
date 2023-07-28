@@ -4,16 +4,17 @@ import android.app.Activity
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import com.ddangddangddang.android.R
 
 fun Activity.showDialog(
     @StringRes
-    titleId: Int,
+    titleId: Int = R.string.all_dialog_default_title,
     @StringRes
     messageId: Int,
     @StringRes
-    negativeStringId: Int,
+    negativeStringId: Int = R.string.all_dialog_default_negative_button,
     @StringRes
-    positiveStringId: Int,
+    positiveStringId: Int = R.string.all_dialog_default_positive_button,
     actionNegative: () -> Unit = {},
     actionPositive: () -> Unit = {},
 ) {
