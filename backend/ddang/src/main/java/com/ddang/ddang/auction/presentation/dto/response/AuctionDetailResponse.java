@@ -31,7 +31,7 @@ public record AuctionDetailResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime closingTime,
 
-        List<DirectRegionsResponse> directRegions,
+        List<DirectRegionResponse> directRegions,
 
         int auctioneerCount
 ) {
@@ -55,10 +55,10 @@ public record AuctionDetailResponse(
         );
     }
 
-    private static List<DirectRegionsResponse> convertDirectRegionsResponse(final ReadAuctionDto dto) {
+    private static List<DirectRegionResponse> convertDirectRegionsResponse(final ReadAuctionDto dto) {
         return dto.auctionRegions()
                   .stream()
-                  .map(DirectRegionsResponse::from)
+                  .map(DirectRegionResponse::from)
                   .toList();
     }
 
