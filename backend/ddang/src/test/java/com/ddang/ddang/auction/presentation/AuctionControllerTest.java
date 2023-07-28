@@ -1,28 +1,5 @@
 package com.ddang.ddang.auction.presentation;
 
-import com.ddang.ddang.auction.application.AuctionService;
-import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionCategoryRequest;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.auction.presentation.dto.request.CreateDirectRegionRequest;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -36,6 +13,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.ddang.ddang.auction.application.AuctionService;
+import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionCategoryRequest;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
+import com.ddang.ddang.auction.presentation.dto.request.CreateDirectRegionRequest;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @WebMvcTest(controllers = {AuctionController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -73,7 +74,7 @@ class AuctionControllerTest {
                              .plusDays(3L),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 List.of(""),
-                List.of(new CreateDirectRegionRequest("", "", "")),
+                List.of(new CreateDirectRegionRequest(1L, 2L, 3L)),
                 new CreateAuctionCategoryRequest("", "")
         );
 
@@ -93,6 +94,11 @@ class AuctionControllerTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_조회한다() throws Exception {
         // given
+        final ReadRegionsDto readRegionsDto = new ReadRegionsDto(
+                new ReadRegionDto(1L, "서울특별시"),
+                new ReadRegionDto(2L, "강서구"),
+                new ReadRegionDto(3L, "역삼동")
+        );
         final ReadAuctionDto auction = new ReadAuctionDto(
                 1L,
                 "경매 상품 1",
@@ -104,10 +110,8 @@ class AuctionControllerTest {
                 false,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
+                List.of(readRegionsDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -132,6 +136,11 @@ class AuctionControllerTest {
     @Test
     void 첫번째_페이지의_경매_목록을_조회한다() throws Exception {
         // given
+        final ReadRegionsDto readRegionsDto = new ReadRegionsDto(
+                new ReadRegionDto(1L, "서울특별시"),
+                new ReadRegionDto(2L, "강서구"),
+                new ReadRegionDto(3L, "역삼동")
+        );
         final ReadAuctionDto auction1 = new ReadAuctionDto(
                 1L,
                 "경매 상품 1",
@@ -144,12 +153,10 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "image1",
-                "first1",
-                "second1",
-                "third1",
-                "main1",
-                "sub1"
+                List.of(readRegionsDto),
+                "",
+                "",
+                ""
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -162,11 +169,9 @@ class AuctionControllerTest {
                 false,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
+                List.of(readRegionsDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "image2",
-                "first2",
-                "second2",
-                "third2",
+                "",
                 "main2",
                 "sub2"
         );

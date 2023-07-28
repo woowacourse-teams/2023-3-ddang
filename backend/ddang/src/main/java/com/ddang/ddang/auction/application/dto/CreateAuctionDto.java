@@ -4,8 +4,8 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record CreateAuctionDto(
         String title,
@@ -14,11 +14,10 @@ public record CreateAuctionDto(
         int startPrice,
         LocalDateTime closingTime,
 
+        List<CreateRegionDto> createRegionDtos,
+
         // TODO 2차 데모데이 이후 리펙터링 예정
         String image,
-        String firstRegion,
-        String secondRegion,
-        String thirdRegion,
         String mainCategory,
         String subCategory
 ) {
@@ -30,14 +29,19 @@ public record CreateAuctionDto(
                 request.bidUnit(),
                 request.startPrice(),
                 request.closingTime(),
+                convertCreateRegionDto(request),
                 // TODO 2차 데모데이 이후 리펙터링 예정
                 request.images().get(0),
-                request.directRegions().get(0).first(),
-                request.directRegions().get(0).second(),
-                request.directRegions().get(0).third(),
                 request.category().main(),
                 request.category().sub()
         );
+    }
+
+    private static List<CreateRegionDto> convertCreateRegionDto(final CreateAuctionRequest request) {
+        return request.directRegions()
+                      .stream()
+                      .map(CreateRegionDto::from)
+                      .toList();
     }
 
     public Auction toEntity() {
@@ -49,9 +53,6 @@ public record CreateAuctionDto(
                       .closingTime(closingTime)
                       // TODO 2차 데모데이 이후 리펙터링 예정
                       .image(image)
-                      .firstRegion(firstRegion)
-                      .secondRegion(secondRegion)
-                      .thirdRegion(thirdRegion)
                       .mainCategory(mainCategory)
                       .subCategory(subCategory)
                       .build();

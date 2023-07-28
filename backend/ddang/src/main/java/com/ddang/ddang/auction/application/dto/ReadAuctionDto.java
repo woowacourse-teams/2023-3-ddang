@@ -2,8 +2,8 @@ package com.ddang.ddang.auction.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.Price;
-
 import java.time.LocalDateTime;
+import java.util.List;
 
 public record ReadAuctionDto(
         Long id,
@@ -16,11 +16,9 @@ public record ReadAuctionDto(
         boolean deleted,
         LocalDateTime registerTime,
         LocalDateTime closingTime,
+        List<ReadRegionsDto> auctionRegions,
         // TODO 2차 데모데이 이후 리펙터링 예정
         String image,
-        String firstRegion,
-        String secondRegion,
-        String thirdRegion,
         String mainCategory,
         String subCategory
 ) {
@@ -37,11 +35,8 @@ public record ReadAuctionDto(
                 auction.isDeleted(),
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
-                // TODO 2차 데모데이 이후 리펙터링 예정
+                convertReadRegionsDto(auction),
                 auction.getImage(),
-                auction.getFirstRegion(),
-                auction.getSecondRegion(),
-                auction.getThirdRegion(),
                 auction.getMainCategory(),
                 auction.getSubCategory()
         );
@@ -53,5 +48,12 @@ public record ReadAuctionDto(
         }
 
         return price.getValue();
+    }
+
+    private static List<ReadRegionsDto> convertReadRegionsDto(final Auction auction) {
+        return auction.getAuctionRegions()
+                      .stream()
+                      .map(ReadRegionsDto::from)
+                      .toList();
     }
 }

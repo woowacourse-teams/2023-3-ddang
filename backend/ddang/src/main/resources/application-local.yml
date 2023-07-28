@@ -29,3 +29,5 @@ data:
   init:
     region:
       enabled: false
+    auction:
+      enabled: false

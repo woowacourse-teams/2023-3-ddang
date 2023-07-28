@@ -50,9 +50,16 @@ public record AuctionDetailResponse(
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
-                List.of(new DirectRegionResponse(dto.firstRegion(), dto.secondRegion(), dto.thirdRegion())),
+                convertDirectRegionsResponse(dto),
                 0
         );
+    }
+
+    private static List<DirectRegionResponse> convertDirectRegionsResponse(final ReadAuctionDto dto) {
+        return dto.auctionRegions()
+                  .stream()
+                  .map(DirectRegionResponse::from)
+                  .toList();
     }
 
     // TODO 2차 데모데이 이후 enum으로 처리

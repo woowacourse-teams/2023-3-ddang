@@ -4,19 +4,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import com.ddang.ddang.region.domain.Region;
+import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -25,19 +33,37 @@ class AuctionServiceTest {
     @Autowired
     AuctionService auctionService;
 
+    @Autowired
+    JpaAuctionRepository auctionRepository;
+
+    @Autowired
+    JpaRegionRepository regionRepository;
+
     @Test
     void 경매를_등록한다() {
         // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
+        );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -51,18 +77,93 @@ class AuctionServiceTest {
     }
 
     @Test
-    void 지정한_아이디에_해당하는_경매를_조회한다() {
+    void 지정한_아이디에_해당하는_지역이_없을때_경매를_등록하면_예외가_발생한다() {
         // given
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                1L,
+                2L,
+                3L
+        );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
                 "",
+                ""
+        );
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.create(createAuctionDto))
+                .isInstanceOf(RegionNotFoundException.class)
+                .hasMessage("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다.");
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_지역이_세_번째_지역이_아닐_떄_경매를_등록하면_예외가_발생한다() {
+        // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                thirdRegion.getId(),
+                secondRegion.getId()
+        );
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(createRegionDto),
+                // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
+                "",
+                ""
+        );
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.create(createAuctionDto))
+                .isInstanceOf(RegionNotFoundException.class)
+                .hasMessage("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다.");
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_경매를_조회한다() {
+        // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
+        );
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(createRegionDto),
+                // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
                 "",
                 ""
@@ -101,16 +202,28 @@ class AuctionServiceTest {
     @Test
     void 첫번째_페이지의_경매_목록을_조회한다() {
         // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
+        );
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -121,10 +234,8 @@ class AuctionServiceTest {
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -146,16 +257,28 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
         // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
+        );
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
                 1_000,
                 1_000,
                 LocalDateTime.now(),
+                List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
-                "",
-                "",
                 "",
                 "",
                 ""
@@ -167,8 +290,12 @@ class AuctionServiceTest {
         auctionService.deleteByAuctionId(savedAuctionId);
 
         // then
-        final ReadAuctionDto actual = auctionService.readByAuctionId(savedAuctionId);
-        assertThat(actual.deleted()).isTrue();
+        final Optional<Auction> actual = auctionRepository.findById(savedAuctionId);
+
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isPresent();
+            softAssertions.assertThat(actual.get().isDeleted()).isTrue();
+        });
     }
 
     @Test
