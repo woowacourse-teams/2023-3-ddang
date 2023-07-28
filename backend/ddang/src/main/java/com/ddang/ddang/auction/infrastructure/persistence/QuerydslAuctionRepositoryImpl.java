@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
 import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.category.domain.QCategory.category;
 import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
 
@@ -44,6 +45,8 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
                 .leftJoin(region.firstRegion).fetchJoin()
                 .leftJoin(region.secondRegion).fetchJoin()
+                .leftJoin(auction.subCategory, category).fetchJoin()
+                .leftJoin(category.mainCategory).fetchJoin()
                 .where(auction.deleted.isFalse(), auction.id.eq(auctionId))
                 .fetchOne();
 

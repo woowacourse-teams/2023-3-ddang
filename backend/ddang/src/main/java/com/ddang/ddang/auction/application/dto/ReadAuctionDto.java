@@ -37,8 +37,8 @@ public record ReadAuctionDto(
                 auction.getClosingTime(),
                 convertReadRegionsDto(auction),
                 auction.getImage(),
-                auction.getMainCategory(),
-                auction.getSubCategory()
+                auction.getSubCategory().getMainCategory().getName(),
+                auction.getSubCategory().getName()
         );
     }
 

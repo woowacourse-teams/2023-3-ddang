@@ -27,11 +27,13 @@ public record CreateAuctionRequest(
         @FutureOrPresent(message = "마감 시간은 과거를 입력할 수 없습니다.")
         LocalDateTime closingTime,
 
+        Long subCategoryId,
+
         // TODO 2차 데모데이 이후 리펙터링 예정
         List<String> images,
 
-        List<CreateDirectRegionRequest> directRegions,
-        
-        CreateAuctionCategoryRequest category
+        List<CreateDirectRegionRequest> directRegions
+
+
 ) {
 }

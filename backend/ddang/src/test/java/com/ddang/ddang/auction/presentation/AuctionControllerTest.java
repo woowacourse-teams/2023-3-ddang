@@ -19,7 +19,6 @@ import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionCategoryRequest;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.request.CreateDirectRegionRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
@@ -72,10 +71,10 @@ class AuctionControllerTest {
                 1_000,
                 LocalDateTime.now()
                              .plusDays(3L),
+                2L,
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 List.of(""),
-                List.of(new CreateDirectRegionRequest(1L, 2L, 3L)),
-                new CreateAuctionCategoryRequest("", "")
+                List.of(new CreateDirectRegionRequest(1L, 2L, 3L))
         );
 
         given(auctionService.create(any(CreateAuctionDto.class))).willReturn(1L);

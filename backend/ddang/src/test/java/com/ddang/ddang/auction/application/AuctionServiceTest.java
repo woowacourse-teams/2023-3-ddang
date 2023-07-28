@@ -9,6 +9,9 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
@@ -39,6 +42,9 @@ class AuctionServiceTest {
     @Autowired
     JpaRegionRepository regionRepository;
 
+    @Autowired
+    JpaCategoryRepository categoryRepository;
+
     @Test
     void 경매를_등록한다() {
         // given
@@ -56,6 +62,13 @@ class AuctionServiceTest {
                 secondRegion.getId(),
                 thirdRegion.getId()
         );
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -65,8 +78,7 @@ class AuctionServiceTest {
                 List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                ""
+                sub.getId()
         );
 
         // when
@@ -84,6 +96,13 @@ class AuctionServiceTest {
                 2L,
                 3L
         );
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -93,8 +112,7 @@ class AuctionServiceTest {
                 List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                ""
+                sub.getId()
         );
 
         // when & then
@@ -120,6 +138,13 @@ class AuctionServiceTest {
                 thirdRegion.getId(),
                 secondRegion.getId()
         );
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -129,14 +154,91 @@ class AuctionServiceTest {
                 List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                ""
+                sub.getId()
         );
 
         // when & then
         assertThatThrownBy(() -> auctionService.create(createAuctionDto))
                 .isInstanceOf(RegionNotFoundException.class)
                 .hasMessage("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다.");
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_카테고리가_없을때_경매를_등록하면_예외가_발생한다() {
+        // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
+        );
+
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(createRegionDto),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                1L
+        );
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.create(createAuctionDto))
+                .isInstanceOf(CategoryNotFoundException.class)
+                .hasMessage("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다.");
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_카테고리가_하위_카테고리가_아닐_떄_경매를_등록하면_예외가_발생한다() {
+        // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                secondRegion.getId(),
+                thirdRegion.getId()
+        );
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(createRegionDto),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                main.getId()
+        );
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.create(createAuctionDto))
+                .isInstanceOf(CategoryNotFoundException.class)
+                .hasMessage("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다.");
     }
 
     @Test
@@ -156,6 +258,13 @@ class AuctionServiceTest {
                 secondRegion.getId(),
                 thirdRegion.getId()
         );
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -165,8 +274,7 @@ class AuctionServiceTest {
                 List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                ""
+                sub.getId()
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);
@@ -216,6 +324,13 @@ class AuctionServiceTest {
                 secondRegion.getId(),
                 thirdRegion.getId()
         );
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -225,9 +340,9 @@ class AuctionServiceTest {
                 List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                ""
+                sub.getId()
         );
+
         final CreateAuctionDto createAuctionDto2 = new CreateAuctionDto(
                 "경매 상품 2",
                 "이것은 경매 상품 2 입니다.",
@@ -237,8 +352,7 @@ class AuctionServiceTest {
                 List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                ""
+                sub.getId()
         );
 
         auctionService.create(createAuctionDto1);
@@ -271,6 +385,13 @@ class AuctionServiceTest {
                 secondRegion.getId(),
                 thirdRegion.getId()
         );
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
         final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -280,8 +401,7 @@ class AuctionServiceTest {
                 List.of(createRegionDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 "",
-                "",
-                ""
+                sub.getId()
         );
 
         final Long savedAuctionId = auctionService.create(createAuctionDto);
