@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(callSuper = false, of = "id")
+@EqualsAndHashCode(of = "id")
 @ToString(of = "id")
 public class ChatRoom extends BaseCreateTimeEntity {
 
