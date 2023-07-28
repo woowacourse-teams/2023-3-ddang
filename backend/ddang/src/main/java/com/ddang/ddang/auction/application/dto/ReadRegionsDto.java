@@ -12,7 +12,7 @@ public record ReadRegionsDto(
         final Region thirdRegion = auctionRegion.getThirdRegion();
 
         return new ReadRegionsDto(
-                ReadRegionDto.from(thirdRegion.getFirstRegion()),
+                ReadRegionDto.from(thirdRegion.getSecondRegion().getFirstRegion()),
                 ReadRegionDto.from(thirdRegion.getSecondRegion()),
                 ReadRegionDto.from(thirdRegion)
         );

@@ -68,7 +68,7 @@ class QuerydslAuctionRepositoryImplTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        auction.addAuctionRegion(auctionRegion);
+        auction.addAuctionRegions(List.of(auctionRegion));
 
         auctionRepository.save(auction);
 

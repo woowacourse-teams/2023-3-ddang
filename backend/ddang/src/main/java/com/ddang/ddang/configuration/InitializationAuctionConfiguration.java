@@ -8,6 +8,7 @@ import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -46,7 +47,7 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .mainCategory("전자기기")
                                         .subCategory("노트북")
                                         .build();
-        auction1.addAuctionRegion(auctionRegion1);
+        auction1.addAuctionRegions(List.of(auctionRegion1));
 
         final Auction auction2 = Auction.builder()
                                         .title("맥북 16인치")
@@ -59,7 +60,7 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .mainCategory("전자기기")
                                         .subCategory("노트북")
                                         .build();
-        auction2.addAuctionRegion(auctionRegion2);
+        auction2.addAuctionRegions(List.of(auctionRegion2));
 
         auctionRepository.save(auction1);
         auctionRepository.save(auction2);

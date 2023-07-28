@@ -97,8 +97,10 @@ public class Auction extends BaseTimeEntity {
         deleted = DELETED_STATUS;
     }
 
-    public void addAuctionRegion(final AuctionRegion auctionRegion) {
-        this.auctionRegions.add(auctionRegion);
-        auctionRegion.initAuction(this);
+    public void addAuctionRegions(final List<AuctionRegion> auctionRegions) {
+        for (final AuctionRegion auctionRegion : auctionRegions) {
+            this.auctionRegions.add(auctionRegion);
+            auctionRegion.initAuction(this);
+        }
     }
 }

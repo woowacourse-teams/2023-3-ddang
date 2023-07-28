@@ -10,6 +10,7 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,19 +28,25 @@ public class AuctionService {
     @Transactional
     public Long create(final CreateAuctionDto dto) {
         final Auction auction = dto.toEntity();
+        final List<AuctionRegion> auctionRegions = convertToAuctionRegions(dto);
+
+        auction.addAuctionRegions(auctionRegions);
+        return auctionRepository.save(auction)
+                                .getId();
+    }
+
+    private List<AuctionRegion> convertToAuctionRegions(final CreateAuctionDto dto) {
+        final List<AuctionRegion> auctionRegions = new ArrayList<>();
 
         for (final CreateRegionDto regionDto : dto.createRegionDtos()) {
             final Region thirdRegion = regionRepository.findById(regionDto.thirdRegionId())
                                                   .orElseThrow(() -> new RegionNotFoundException(
                                                           "지정한 세 번째 지역이 없습니다."
                                                   ));
-            final AuctionRegion auctionRegion = new AuctionRegion(thirdRegion);
-
-            auction.addAuctionRegion(auctionRegion);
+            auctionRegions.add(new AuctionRegion(thirdRegion));
         }
 
-        return auctionRepository.save(dto.toEntity())
-                                .getId();
+        return auctionRegions;
     }
 
     public ReadAuctionDto readByAuctionId(final Long auctionId) {
