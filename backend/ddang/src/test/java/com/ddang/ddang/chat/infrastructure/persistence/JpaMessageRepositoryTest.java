@@ -43,23 +43,23 @@ class JpaMessageRepositoryTest {
     @Test
     void 메시지를_저장한다() {
         // given
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User participant1 = new User("판매자", "이미지", 5.0);
+        final User participant2 = new User("구매자", "이미지", 5.0);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
 
-        userRepository.save(seller);
-        userRepository.save(buyer);
+        userRepository.save(participant1);
+        userRepository.save(participant2);
         auctionRepository.save(auction);
 
-        final ChatRoom chatRoom = new ChatRoom(auction, seller, buyer);
+        final ChatRoom chatRoom = new ChatRoom(auction, participant2);
         chatRoomRepository.save(chatRoom);
 
         final Message message = Message.builder()
                                        .chatRoom(chatRoom)
-                                       .writer(seller)
-                                       .receiver(buyer)
+                                       .writer(participant1)
+                                       .receiver(participant2)
                                        .contents("안녕하세요")
                                        .build();
 

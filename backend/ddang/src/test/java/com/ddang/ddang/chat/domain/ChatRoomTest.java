@@ -41,17 +41,15 @@ class ChatRoomTest {
     @CsvSource(value = {"0:true", "9:true", "10:false"}, delimiter = ':')
     void 채팅방_비활성화_여부를_체크한다(final long plusDay, final boolean expected) {
         // given
-        final User seller = new User("판매자", "이미지", 5.0);
         final User buyer = new User("구매자", "이미지", 5.0);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
 
-        userRepository.save(seller);
         userRepository.save(buyer);
         auctionRepository.save(auction);
 
-        final ChatRoom chatRoom = new ChatRoom(auction, seller, buyer);
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
         chatRoomRepository.save(chatRoom);
 
         em.flush();

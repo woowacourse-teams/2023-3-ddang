@@ -42,17 +42,15 @@ class JpaChatRoomRepositoryTest {
     @Test
     void 채팅방을_저장한다() {
         // given
-        final User seller = new User("판매자", "이미지", 5.0);
         final User buyer = new User("구매자", "이미지", 5.0);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
 
-        userRepository.save(seller);
         userRepository.save(buyer);
         auctionRepository.save(auction);
 
-        final ChatRoom chatRoom = new ChatRoom(auction, seller, buyer);
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
 
         // when
         chatRoomRepository.save(chatRoom);
@@ -67,17 +65,15 @@ class JpaChatRoomRepositoryTest {
     @Test
     void 지정한_아이디에_대한_채팅방을_조회한다() {
         // given
-        final User seller = new User("판매자", "이미지", 5.0);
         final User buyer = new User("구매자", "이미지", 5.0);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
 
-        userRepository.save(seller);
         userRepository.save(buyer);
         auctionRepository.save(auction);
 
-        final ChatRoom expected = new ChatRoom(auction, seller, buyer);
+        final ChatRoom expected = new ChatRoom(auction, buyer);
 
         chatRoomRepository.save(expected);
 
@@ -92,7 +88,6 @@ class JpaChatRoomRepositoryTest {
             softAssertions.assertThat(actual).isPresent();
             softAssertions.assertThat(actual.get().getId()).isEqualTo(expected.getId());
             softAssertions.assertThat(actual.get().getAuction()).isEqualTo(expected.getAuction());
-            softAssertions.assertThat(actual.get().getSeller()).isEqualTo(expected.getSeller());
             softAssertions.assertThat(actual.get().getBuyer()).isEqualTo(expected.getBuyer());
         });
     }

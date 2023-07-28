@@ -38,16 +38,11 @@ public class ChatRoom extends BaseCreateTimeEntity {
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seller_id", nullable = false, foreignKey = @ForeignKey(name = "fk_chat_room_seller"))
-    private User seller;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "buyer_id", nullable = false, foreignKey = @ForeignKey(name = "fk_chat_room_buyer"))
     private User buyer;
 
-    public ChatRoom(final Auction auction, final User seller, final User buyer) {
+    public ChatRoom(final Auction auction, final User buyer) {
         this.auction = auction;
-        this.seller = seller;
         this.buyer = buyer;
     }
 
