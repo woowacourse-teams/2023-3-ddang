@@ -66,21 +66,9 @@ public class AuctionController {
                                                                                       dto, baseUrl
                                                                               ))
                                                                               .toList();
-        final ReadAuctionsResponse response = new ReadAuctionsResponse(
-                readAuctionResponses,
-                findLastAuctionId(readAuctionResponses)
-        );
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionResponses, size);
 
         return ResponseEntity.ok(response);
-    }
-
-    private Long findLastAuctionId(final List<ReadAuctionResponse> readAuctionResponses) {
-        if (readAuctionResponses.isEmpty()) {
-            return null;
-        }
-
-        return readAuctionResponses.get(readAuctionResponses.size() - 1)
-                                   .id();
     }
 
     @DeleteMapping("/{auctionId}")

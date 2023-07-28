@@ -348,8 +348,9 @@ class AuctionServiceTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(1);
+            softAssertions.assertThat(actual).hasSize(2);
             softAssertions.assertThat(actual.get(0).title()).isEqualTo(createAuctionDto2.title());
+            softAssertions.assertThat(actual.get(1).title()).isEqualTo(createAuctionDto1.title());
         });
     }
 
