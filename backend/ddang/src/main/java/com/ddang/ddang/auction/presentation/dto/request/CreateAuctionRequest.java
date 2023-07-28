@@ -34,6 +34,7 @@ public record CreateAuctionRequest(
 
         List<Long> thirdRegionIds,
 
+        @NotEmpty(message = "이미지를 1장 이상 등록해주세요.")
         List<MultipartFile> images
 ) {
 
