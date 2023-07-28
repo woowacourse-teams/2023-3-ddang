@@ -42,7 +42,10 @@ public class AuctionController {
     @GetMapping("/{auctionId}")
     public ResponseEntity<ReadAuctionDetailResponse> read(@PathVariable final Long auctionId) {
         final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
-        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                                                          .build()
+                                                          .toUriString()
+                                                          .concat("/auctions/images/");
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.from(readAuctionDto, baseUrl);
 
         return ResponseEntity.ok(response);
@@ -54,13 +57,15 @@ public class AuctionController {
             @RequestParam(required = false, defaultValue = "10") final int size
     ) {
         final List<ReadAuctionDto> readAuctionDtos = auctionService.readAllByLastAuctionId(lastAuctionId, size);
-        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString();
+        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                                                          .build()
+                                                          .toUriString()
+                                                          .concat("/auctions/images/");
         final List<ReadAuctionResponse> readAuctionResponses = readAuctionDtos.stream()
                                                                               .map(dto -> ReadAuctionResponse.of(
                                                                                       dto, baseUrl
                                                                               ))
                                                                               .toList();
-
         final ReadAuctionsResponse response = new ReadAuctionsResponse(
                 readAuctionResponses,
                 findLastAuctionId(readAuctionResponses)

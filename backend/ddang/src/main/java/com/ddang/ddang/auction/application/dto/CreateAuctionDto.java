@@ -30,7 +30,7 @@ public record CreateAuctionDto(
                 request.closingTime(),
                 calculateThirdRegionIds(request),
                 request.subCategoryId(),
-                request.auctionImages()
+                request.images()
         );
     }
 

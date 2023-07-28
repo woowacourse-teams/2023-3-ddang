@@ -34,7 +34,7 @@ public record CreateAuctionRequest(
 
         List<Long> thirdRegionIds,
 
-        List<MultipartFile> auctionImages
+        List<MultipartFile> images
 ) {
 
 }
