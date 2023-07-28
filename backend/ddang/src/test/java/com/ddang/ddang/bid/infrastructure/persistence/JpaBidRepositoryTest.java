@@ -53,7 +53,7 @@ class JpaBidRepositoryTest {
                                        .closingTime(LocalDateTime.now())
                                        .build();
         final User user = new User("사용자", "이미지", 4.9);
-        final Bid bid = new Bid(auction, user, new Price(10_000), LocalDateTime.now());
+        final Bid bid = new Bid(auction, user, new Price(10_000));
 
         // when
         auctionRepository.save(auction);
@@ -85,9 +85,9 @@ class JpaBidRepositoryTest {
                                        .closingTime(LocalDateTime.now())
                                        .build();
         final User user = new User("사용자", "이미지", 4.9);
-        final Bid bid1 = new Bid(auction1, user, new Price(10_000), LocalDateTime.now());
-        final Bid bid2 = new Bid(auction1, user, new Price(10_000), LocalDateTime.now());
-        final Bid bid3 = new Bid(auction2, user, new Price(10_000), LocalDateTime.now());
+        final Bid bid1 = new Bid(auction1, user, new Price(10_000));
+        final Bid bid2 = new Bid(auction1, user, new Price(10_000));
+        final Bid bid3 = new Bid(auction2, user, new Price(10_000));
 
         auctionRepository.save(auction1);
         auctionRepository.save(auction2);

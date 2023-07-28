@@ -2,6 +2,7 @@ package com.ddang.ddang.bid.domain;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.common.entity.BaseCreateTimeEntity;
 import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
@@ -20,14 +21,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = {"auction", "bidder"})
-public class Bid {
+public class Bid extends BaseCreateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,14 +45,9 @@ public class Bid {
     @Column(nullable = false)
     private Price price;
 
-    // TODO: 2023/07/25 BaseTimeEntity 사용 고려, 단 createdTime만 필요함
-    @Column(nullable = false)
-    private LocalDateTime createdTime;
-
-    public Bid(final Auction auction, final User bidder, final Price price, final LocalDateTime createdTime) {
+    public Bid(final Auction auction, final User bidder, final Price price) {
         this.auction = auction;
         this.bidder = bidder;
         this.price = price;
-        this.createdTime = createdTime;
     }
 }
