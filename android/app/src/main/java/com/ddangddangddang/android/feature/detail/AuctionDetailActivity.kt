@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.google.android.material.tabs.TabLayoutMediator
@@ -26,11 +27,27 @@ class AuctionDetailActivity :
     }
 
     private fun setupViewModel() {
-        viewModel.event.observe(this) { finish() }
+        viewModel.event.observe(this) { event ->
+            handleEvent(event)
+        }
         viewModel.auctionDetailModel.observe(this) {
             setupAuctionImages(it.images)
             setupDirectRegions(it.directRegions)
         }
+    }
+
+    private fun handleEvent(event: AuctionDetailViewModel.AuctionDetailEvent) {
+        when (event) {
+            is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
+
+            is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> {
+                showAuctionBidDialog()
+            }
+        }
+    }
+
+    private fun showAuctionBidDialog() {
+        AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
     }
 
     private fun setupAuctionImages(images: List<String>) {
@@ -43,7 +60,7 @@ class AuctionDetailActivity :
             setPadding(200, 0, 200, 0)
         }
 
-        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { tab, position -> }.attach()
+        TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { _, _ -> }.attach()
     }
 
     private fun convertDpToPx(dp: Float): Int {
@@ -57,6 +74,7 @@ class AuctionDetailActivity :
 
     companion object {
         private const val AUCTION_ID_KEY = "auction_id_key"
+        private const val BID_DIALOG_TAG = "bid_dialog_tag"
 
         fun getIntent(context: Context, auctionId: Long): Intent {
             return Intent(context, AuctionDetailActivity::class.java).apply {

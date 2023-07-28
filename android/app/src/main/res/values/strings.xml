@@ -45,7 +45,14 @@
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_seller_reliability">(%.1f)</string>
-  
+
+    <!-- bid -->
+    <string name="detail_auction_bid_dialog_title">입찰하기</string>
+    <string name="detail_auction_bid_dialog_min_price">%,d원</string>
+    <string name="detail_auction_bid_dialog_unit_price">판매자가 설정한 경매 단위: %,d원</string>
+    <string name="detail_auction_bid_dialog_cancel">취소</string>
+    <string name="detail_auction_bid_dialog_submit">입찰</string>
+
     <!-- register -->
     <string name="register_auction">경매 상품 등록</string>
     <string name="register_auction_default_image_count">(%d/%d)</string>
