@@ -50,4 +50,18 @@ public class Bid extends BaseCreateTimeEntity {
         this.bidder = bidder;
         this.price = price;
     }
+
+    public boolean isLastBidder(final User user) {
+        return bidder.equals(user);
+    }
+
+    // TODO: 2023/07/28 (고민) 메서드 명에 Price를 넣는게 어색해서 고민이네요, 없애면 Bid를 기준으로 이해하기가 어려울 것 같고요...!
+    public boolean isPriceMoreThan(final Price otherPrice) {
+        return this.price.isMoreThan(otherPrice);
+    }
+
+    // TODO: 2023/07/28 필드 관련 메서드 외 메서드 명에 getter 괜찮은가?
+    public int getNextMinimumBidPrice() {
+        return this.price.getValue() + this.auction.getBidUnit().getValue();
+    }
 }

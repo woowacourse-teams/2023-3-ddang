@@ -30,4 +30,8 @@ public class Price {
 
         this.value = value;
     }
+
+    public boolean isMoreThan(final Price otherPrice) {
+        return this.value > otherPrice.value;
+    }
 }
