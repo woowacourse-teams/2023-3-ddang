@@ -1,12 +1,8 @@
-package com.ddang.ddang.bid.domain;
+package com.ddang.ddang.chat.domain;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.common.entity.BaseCreateTimeEntity;
 import com.ddang.ddang.user.domain.User;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -15,39 +11,45 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"auction", "bidder"})
-public class Bid extends BaseCreateTimeEntity {
+@ToString(of = "id")
+public class ChatRoom extends BaseCreateTimeEntity {
+
+    public static final long CHAT_EXPIRATION_DAY = 10L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id", foreignKey = @ForeignKey(name = "fk_bid_auction_id"))
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "auction_id", nullable = false)
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bidder_id", foreignKey = @ForeignKey(name = "fk_bid_user_id"))
-    private User bidder;
+    @JoinColumn(name = "buyer_id", nullable = false, foreignKey = @ForeignKey(name = "fk_chat_room_buyer"))
+    private User buyer;
 
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "price"))
-    @Column(nullable = false)
-    private Price price;
-
-    public Bid(final Auction auction, final User bidder, final Price price) {
+    public ChatRoom(final Auction auction, final User buyer) {
         this.auction = auction;
-        this.bidder = bidder;
-        this.price = price;
+        this.buyer = buyer;
+    }
+
+    // TODO : 쪽지 비활성화 일수 리팩토링시 수정
+    public boolean isChatAvailable(final LocalDateTime targetTime) {
+        final LocalDateTime maxChatTime = getCreatedTime().plusDays(CHAT_EXPIRATION_DAY);
+
+        return targetTime.isBefore(maxChatTime);
     }
 }
