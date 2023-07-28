@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.application;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
@@ -31,15 +32,17 @@ public class AuctionService {
     private final StoreImageProcessor imageProcessor;
 
     @Transactional
-    public Long create(final CreateAuctionDto dto) {
+    public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
         final Auction auction = convertAuction(dto);
         final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
         final List<AuctionImage> auctionImages = convertAuctionImage(dto);
 
         auction.addAuctionRegions(auctionRegions);
         auction.addAuctionImages(auctionImages);
-        return auctionRepository.save(auction)
-                                .getId();
+
+        final Auction persistAuction = auctionRepository.save(auction);
+
+        return CreateInfoAuctionDto.from(persistAuction);
     }
 
     private List<AuctionImage> convertAuctionImage(final CreateAuctionDto dto) {

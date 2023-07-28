@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
@@ -81,10 +82,10 @@ class AuctionServiceTest {
         );
 
         // when
-        final Long actual = auctionService.create(createAuctionDto);
+        final CreateInfoAuctionDto actual = auctionService.create(createAuctionDto);
 
         // then
-        assertThat(actual).isPositive();
+        assertThat(actual.id()).isPositive();
     }
 
     @Test
@@ -266,10 +267,10 @@ class AuctionServiceTest {
                 List.of(auctionImage)
         );
 
-        final Long savedAuctionId = auctionService.create(createAuctionDto);
+        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(createAuctionDto);
 
         // when
-        final ReadAuctionDto actual = auctionService.readByAuctionId(savedAuctionId);
+        final ReadAuctionDto actual = auctionService.readByAuctionId(createInfoAuctionDto.id());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -388,13 +389,13 @@ class AuctionServiceTest {
                 List.of(auctionImage)
         );
 
-        final Long savedAuctionId = auctionService.create(createAuctionDto);
+        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(createAuctionDto);
 
         // when
-        auctionService.deleteByAuctionId(savedAuctionId);
+        auctionService.deleteByAuctionId(createInfoAuctionDto.id());
 
         // then
-        final Optional<Auction> actual = auctionRepository.findById(savedAuctionId);
+        final Optional<Auction> actual = auctionRepository.findById(createInfoAuctionDto.id());
 
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPresent();

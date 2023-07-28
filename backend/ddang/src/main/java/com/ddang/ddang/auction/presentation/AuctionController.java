@@ -2,6 +2,7 @@ package com.ddang.ddang.auction.presentation;
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
@@ -28,14 +29,20 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 public class AuctionController {
 
+    private static final String AUCTIONS_IMAGE_BASE_URL = "/auctions/images/";
+
     private final AuctionService auctionService;
 
     @PostMapping
     public ResponseEntity<CreateAuctionResponse> create(@ModelAttribute @Valid final CreateAuctionRequest request) {
-        final Long auctionId = auctionService.create(CreateAuctionDto.from(request));
-        final CreateAuctionResponse response = new CreateAuctionResponse(auctionId);
+        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.from(request));
+        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                                                          .build()
+                                                          .toUriString()
+                                                          .concat(AUCTIONS_IMAGE_BASE_URL);
+        final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, baseUrl);
 
-        return ResponseEntity.created(URI.create("/auctions/" + auctionId))
+        return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
                              .body(response);
     }
 
@@ -45,7 +52,7 @@ public class AuctionController {
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                                                           .build()
                                                           .toUriString()
-                                                          .concat("/auctions/images/");
+                                                          .concat(AUCTIONS_IMAGE_BASE_URL);
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.from(readAuctionDto, baseUrl);
 
         return ResponseEntity.ok(response);
@@ -60,7 +67,7 @@ public class AuctionController {
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                                                           .build()
                                                           .toUriString()
-                                                          .concat("/auctions/images/");
+                                                          .concat(AUCTIONS_IMAGE_BASE_URL);
         final List<ReadAuctionResponse> readAuctionResponses = readAuctionDtos.stream()
                                                                               .map(dto -> ReadAuctionResponse.of(
                                                                                       dto, baseUrl

@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
@@ -69,8 +70,9 @@ class AuctionControllerTest {
                 MediaType.IMAGE_PNG.toString(),
                 new byte[]{1}
         );
+        final CreateInfoAuctionDto createInfoAuctionDto = new CreateInfoAuctionDto(1L, "title", 1L, 1_000);
 
-        given(auctionService.create(any(CreateAuctionDto.class))).willReturn(1L);
+        given(auctionService.create(any(CreateAuctionDto.class))).willReturn(createInfoAuctionDto);
 
         // when & then
         mockMvc.perform(multipart("/auctions")
