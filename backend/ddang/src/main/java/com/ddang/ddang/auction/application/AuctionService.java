@@ -39,9 +39,9 @@ public class AuctionService {
         final List<AuctionRegion> auctionRegions = new ArrayList<>();
 
         for (final CreateRegionDto regionDto : dto.createRegionDtos()) {
-            final Region thirdRegion = regionRepository.findById(regionDto.thirdRegionId())
+            final Region thirdRegion = regionRepository.findThirdRegionById(regionDto.thirdRegionId())
                                                   .orElseThrow(() -> new RegionNotFoundException(
-                                                          "지정한 세 번째 지역이 없습니다."
+                                                          "지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다."
                                                   ));
             auctionRegions.add(new AuctionRegion(thirdRegion));
         }

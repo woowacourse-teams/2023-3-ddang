@@ -9,7 +9,6 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
@@ -21,8 +20,12 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.transaction.annotation.Transactional;
 
-@IsolateDatabase
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuctionServiceTest {
@@ -43,8 +46,8 @@ class AuctionServiceTest {
         final Region secondRegion = new Region("second");
         final Region thirdRegion = new Region("third");
 
-        secondRegion.addThirdRegion(thirdRegion);
         firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
 
         regionRepository.save(firstRegion);
 
@@ -97,7 +100,43 @@ class AuctionServiceTest {
         // when & then
         assertThatThrownBy(() -> auctionService.create(createAuctionDto))
                 .isInstanceOf(RegionNotFoundException.class)
-                .hasMessage("지정한 세 번째 지역이 없습니다.");
+                .hasMessage("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다.");
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_지역이_세_번째_지역이_아닐_떄_경매를_등록하면_예외가_발생한다() {
+        // given
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final CreateRegionDto createRegionDto = new CreateRegionDto(
+                firstRegion.getId(),
+                thirdRegion.getId(),
+                secondRegion.getId()
+        );
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(createRegionDto),
+                // TODO 2차 데모데이 이후 리펙토링 예정
+                "",
+                "",
+                ""
+        );
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.create(createAuctionDto))
+                .isInstanceOf(RegionNotFoundException.class)
+                .hasMessage("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다.");
     }
 
     @Test
@@ -107,8 +146,8 @@ class AuctionServiceTest {
         final Region secondRegion = new Region("second");
         final Region thirdRegion = new Region("third");
 
-        secondRegion.addThirdRegion(thirdRegion);
         firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
 
         regionRepository.save(firstRegion);
 
@@ -167,8 +206,8 @@ class AuctionServiceTest {
         final Region secondRegion = new Region("second");
         final Region thirdRegion = new Region("third");
 
-        secondRegion.addThirdRegion(thirdRegion);
         firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
 
         regionRepository.save(firstRegion);
 
@@ -222,8 +261,8 @@ class AuctionServiceTest {
         final Region secondRegion = new Region("second");
         final Region thirdRegion = new Region("third");
 
-        secondRegion.addThirdRegion(thirdRegion);
         firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
 
         regionRepository.save(firstRegion);
 
