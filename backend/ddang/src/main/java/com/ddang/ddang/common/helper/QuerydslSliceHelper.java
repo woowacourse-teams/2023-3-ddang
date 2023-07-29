@@ -1,4 +1,4 @@
-package com.ddang.ddang.configuration;
+package com.ddang.ddang.common.helper;
 
 import java.util.List;
 import org.springframework.data.domain.PageRequest;
@@ -7,6 +7,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
 public class QuerydslSliceHelper {
+
+    private QuerydslSliceHelper() {
+    }
 
     public static <T> Slice<T> toSlice(List<T> contents, int size) {
         final boolean hasNext = isContentSizeGreaterThanPageSize(contents, size);

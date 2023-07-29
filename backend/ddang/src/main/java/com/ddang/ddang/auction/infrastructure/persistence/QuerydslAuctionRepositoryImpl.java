@@ -6,7 +6,7 @@ import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.configuration.QuerydslSliceHelper;
+import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
