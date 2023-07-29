@@ -39,10 +39,7 @@ class AuctionDetailActivity :
     private fun handleEvent(event: AuctionDetailViewModel.AuctionDetailEvent) {
         when (event) {
             is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
-
-            is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> {
-                showAuctionBidDialog()
-            }
+            is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> showAuctionBidDialog()
         }
     }
 
