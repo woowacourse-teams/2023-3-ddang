@@ -6,11 +6,13 @@ import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
 
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.configuration.QuerydslSliceHelper;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,13 +22,15 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
-        return queryFactory
+    public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
+        final List<Auction> auctions = queryFactory
                 .selectFrom(auction)
                 .where(auction.deleted.isFalse(), lessThanLastAuctionId(lastAuctionId))
                 .orderBy(auction.id.desc())
                 .limit(size + 1L)
                 .fetch();
+
+        return QuerydslSliceHelper.toSlice(auctions, size);
     }
 
     private BooleanExpression lessThanLastAuctionId(final Long lastAuctionId) {

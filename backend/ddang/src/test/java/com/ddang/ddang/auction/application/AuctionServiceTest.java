@@ -8,6 +8,7 @@ import static org.mockito.BDDMockito.given;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
@@ -365,13 +366,13 @@ class AuctionServiceTest {
         auctionService.create(createAuctionDto2);
 
         // when
-        final List<ReadAuctionDto> actual = auctionService.readAllByLastAuctionId(null, 1);
+        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(null, 1);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).title()).isEqualTo(createAuctionDto2.title());
-            softAssertions.assertThat(actual.get(1).title()).isEqualTo(createAuctionDto1.title());
+            final List<ReadAuctionDto> actualReadAuctionDtos = actual.readAuctionDtos();
+            softAssertions.assertThat(actualReadAuctionDtos).hasSize(1);
+            softAssertions.assertThat(actualReadAuctionDtos.get(0).title()).isEqualTo(createAuctionDto2.title());
         });
     }
 

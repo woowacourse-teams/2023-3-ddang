@@ -3,6 +3,7 @@ package com.ddang.ddang.auction.application;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
@@ -18,6 +19,7 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,12 +86,10 @@ public class AuctionService {
         return ReadAuctionDto.from(auction);
     }
 
-    public List<ReadAuctionDto> readAllByLastAuctionId(final Long lastAuctionId, final int size) {
-        final List<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(lastAuctionId, size);
+    public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final int size) {
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(lastAuctionId, size);
 
-        return auctions.stream()
-                       .map(ReadAuctionDto::from)
-                       .toList();
+        return ReadAuctionsDto.from(auctions);
     }
 
     @Transactional

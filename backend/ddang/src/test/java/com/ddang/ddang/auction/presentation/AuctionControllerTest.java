@@ -18,6 +18,7 @@ import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
@@ -177,7 +178,8 @@ class AuctionControllerTest {
                 "sub2"
         );
 
-        given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(List.of(auction2, auction1));
+        final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
+        given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
         mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON))

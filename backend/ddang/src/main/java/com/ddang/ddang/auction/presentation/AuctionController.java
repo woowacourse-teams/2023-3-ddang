@@ -4,14 +4,13 @@ import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailResponse;
-import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -63,17 +62,12 @@ public class AuctionController {
             @RequestParam(required = false) final Long lastAuctionId,
             @RequestParam(required = false, defaultValue = "10") final int size
     ) {
-        final List<ReadAuctionDto> readAuctionDtos = auctionService.readAllByLastAuctionId(lastAuctionId, size);
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(lastAuctionId, size);
         final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
                                                           .build()
                                                           .toUriString()
                                                           .concat(AUCTIONS_IMAGE_BASE_URL);
-        final List<ReadAuctionResponse> readAuctionResponses = readAuctionDtos.stream()
-                                                                              .map(dto -> ReadAuctionResponse.of(
-                                                                                      dto, baseUrl
-                                                                              ))
-                                                                              .toList();
-        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionResponses, size);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, baseUrl);
 
         return ResponseEntity.ok(response);
     }
