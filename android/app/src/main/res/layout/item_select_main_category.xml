@@ -19,6 +19,7 @@
         android:background="@color/it_white_to_red_100">
 
         <TextView
+            android:id="@+id/tv_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{category.name}"
