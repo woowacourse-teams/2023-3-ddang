@@ -25,6 +25,12 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
         final List<Auction> auctions = queryFactory
                 .selectFrom(auction)
+                .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
+                .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
+                .leftJoin(region.firstRegion).fetchJoin()
+                .leftJoin(region.secondRegion).fetchJoin()
+                .leftJoin(auction.subCategory, category).fetchJoin()
+                .leftJoin(category.mainCategory).fetchJoin()
                 .where(auction.deleted.isFalse(), lessThanLastAuctionId(lastAuctionId))
                 .orderBy(auction.id.desc())
                 .limit(size + 1L)
