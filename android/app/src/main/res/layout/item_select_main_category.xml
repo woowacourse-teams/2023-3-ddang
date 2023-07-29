@@ -3,7 +3,7 @@
     <data>
         <variable
             name="category"
-            type="com.ddangddangddang.android.model.CategoriesModel.CategoryModel" />
+            type="com.ddangddangddang.android.model.CategoryModel" />
         <variable
             name="onItemClick"
             type="kotlin.jvm.functions.Function1" />

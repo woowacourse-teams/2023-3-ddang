@@ -4,7 +4,7 @@ import android.graphics.Typeface
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ItemSelectMainCategoryBinding
-import com.ddangddangddang.android.model.CategoriesModel
+import com.ddangddangddang.android.model.CategoryModel
 
 class MainCategoryViewHolder(
     private val binding: ItemSelectMainCategoryBinding,
@@ -15,7 +15,7 @@ class MainCategoryViewHolder(
         binding.onItemClick = onItemClickListener
     }
 
-    fun bind(category: CategoriesModel.CategoryModel) {
+    fun bind(category: CategoryModel) {
         binding.category = category
         if (category.isChecked) {
             binding.clMainCategoryItem.isSelected = true

@@ -2,7 +2,7 @@ package com.ddangddangddang.android.feature.register.category
 
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.databinding.ItemSelectSubCategoryBinding
-import com.ddangddangddang.android.model.CategoriesModel
+import com.ddangddangddang.android.model.CategoryModel
 
 class SubCategoryViewHolder(
     private val binding: ItemSelectSubCategoryBinding,
@@ -13,7 +13,7 @@ class SubCategoryViewHolder(
         binding.onItemClick = onItemClickListener
     }
 
-    fun bind(category: CategoriesModel.CategoryModel) {
+    fun bind(category: CategoryModel) {
         binding.category = category
     }
 }

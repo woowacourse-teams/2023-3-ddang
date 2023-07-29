@@ -1,19 +1,19 @@
 package com.ddangddangddang.android.feature.register.category
 
 import androidx.recyclerview.widget.DiffUtil
-import com.ddangddangddang.android.model.CategoriesModel
+import com.ddangddangddang.android.model.CategoryModel
 
-class CategoryDiffUtil : DiffUtil.ItemCallback<CategoriesModel.CategoryModel>() {
+class CategoryDiffUtil : DiffUtil.ItemCallback<CategoryModel>() {
     override fun areItemsTheSame(
-        oldItem: CategoriesModel.CategoryModel,
-        newItem: CategoriesModel.CategoryModel,
+        oldItem: CategoryModel,
+        newItem: CategoryModel,
     ): Boolean {
         return oldItem.id == newItem.id
     }
 
     override fun areContentsTheSame(
-        oldItem: CategoriesModel.CategoryModel,
-        newItem: CategoriesModel.CategoryModel,
+        oldItem: CategoryModel,
+        newItem: CategoryModel,
     ): Boolean {
         return oldItem == newItem
     }

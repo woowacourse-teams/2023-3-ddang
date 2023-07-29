@@ -4,15 +4,15 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.ddangddangddang.android.databinding.ItemSelectSubCategoryBinding
-import com.ddangddangddang.android.model.CategoriesModel
+import com.ddangddangddang.android.model.CategoryModel
 
 class SubCategoryAdapter(
     private val onItemClickListener: (Long) -> Unit,
-) : ListAdapter<CategoriesModel.CategoryModel, SubCategoryViewHolder>(
+) : ListAdapter<CategoryModel, SubCategoryViewHolder>(
     CategoryDiffUtil(),
 ) {
 
-    fun setCategories(categories: List<CategoriesModel.CategoryModel>) {
+    fun setCategories(categories: List<CategoryModel>) {
         submitList(categories)
     }
 
