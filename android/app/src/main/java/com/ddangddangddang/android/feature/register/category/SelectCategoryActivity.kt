@@ -18,8 +18,23 @@ class SelectCategoryActivity :
         val dividerItemDecoration = DividerItemDecoration(this, LinearLayoutManager.VERTICAL)
         binding.rvMainCategory.addItemDecoration(dividerItemDecoration)
         binding.rvMainCategory.adapter =
-            MainCategoryAdapter(listOf("가전제품", "가전제품", "가전제품", "가전제품", "가전제품", "가전제품"))
+            MainCategoryAdapter(
+                viewModel.mainCategories,
+            ) { id ->
+                viewModel.setMainCategorySelection(id)
+                binding.rvMainCategory.adapter?.notifyDataSetChanged()
+            }
         binding.rvSubCategory.adapter =
             SubCategoryAdapter(listOf("컴퓨터", "컴퓨터", "컴퓨터", "컴퓨터", "컴퓨터", "컴퓨터"))
+
+        viewModel.event.observe(this) {
+            handleEvent(it)
+        }
+    }
+
+    private fun handleEvent(event: SelectCategoryViewModel.SelectCategoryEvent) {
+        when (event) {
+            is SelectCategoryViewModel.SelectCategoryEvent.Exit -> finish()
+        }
     }
 }

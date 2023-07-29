@@ -2,15 +2,42 @@ package com.ddangddangddang.android.feature.register.category
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
+import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ItemSelectMainCategoryBinding
+import com.ddangddangddang.android.model.CategoriesModel
 
-class MainCategoryAdapter(private val categories: List<String>) :
+class MainCategoryAdapter(
+    private val categories: LiveData<List<CategoriesModel.CategoryModel>>,
+    private val onItemClickListener: (Long) -> Unit,
+) :
     RecyclerView.Adapter<MainCategoryAdapter.MainCategoryViewHolder>() {
-    class MainCategoryViewHolder(val binding: ItemSelectMainCategoryBinding) :
+
+    class MainCategoryViewHolder(
+        private val binding: ItemSelectMainCategoryBinding,
+        onItemClickListener: (Long) -> Unit,
+    ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(category: String) {
+        init {
+            binding.onItemClick = onItemClickListener
+        }
+
+        fun bind(category: CategoriesModel.CategoryModel) {
             binding.category = category
+            if (category.isChecked) {
+                binding.clMainCategoryItem.setBackgroundColor(
+                    binding.root.context.getColor(
+                        R.color.red_100,
+                    ),
+                )
+            } else {
+                binding.clMainCategoryItem.setBackgroundColor(
+                    binding.root.context.getColor(
+                        R.color.white,
+                    ),
+                )
+            }
         }
     }
 
@@ -20,12 +47,14 @@ class MainCategoryAdapter(private val categories: List<String>) :
             parent,
             false,
         )
-        return MainCategoryViewHolder(binding)
+        return MainCategoryViewHolder(binding, onItemClickListener)
     }
 
-    override fun getItemCount(): Int = categories.size
+    override fun getItemCount(): Int = categories.value?.size ?: 0
 
     override fun onBindViewHolder(holder: MainCategoryViewHolder, position: Int) {
-        holder.bind(categories[position])
+        categories.value?.let {
+            holder.bind(it[position])
+        }
     }
 }

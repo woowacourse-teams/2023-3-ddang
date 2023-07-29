@@ -3,19 +3,25 @@
     <data>
         <variable
             name="category"
-            type="String" />
+            type="com.ddangddangddang.android.model.CategoriesModel.CategoryModel" />
+        <variable
+            name="onItemClick"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/cl_main_category_item"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:onClick="@{() -> onItemClick.invoke(category.id)}"
+        android:background="@color/it_white_to_red_100">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{category}"
+            android:text="@{category.name}"
             android:textColor="@color/black_600"
             android:textSize="@dimen/textsize_sub_header"
             app:layout_constraintBottom_toBottomOf="parent"
