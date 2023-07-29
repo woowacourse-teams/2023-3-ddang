@@ -309,6 +309,7 @@
             android:layout_height="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
             android:gravity="center"
+            android:onClick="@{()->viewModel.popupAuctionBid()}"
             android:padding="0dp"
             android:text="@string/detail_auction_submit"
             android:textSize="@dimen/textsize_submit_button"

@@ -19,22 +19,29 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
             auctionPreviews.map { it.toPresentation() }
         }
 
-    private val lastAuctionId: MutableLiveData<Long?> = MutableLiveData()
+    val lastAuctionId: MutableLiveData<Long?> = MutableLiveData()
+
+    private var _loadingAuctionsInProgress: Boolean = false
+    val loadingAuctionInProgress: Boolean
+        get() = _loadingAuctionsInProgress
 
     private val _event: SingleLiveEvent<HomeEvent> = SingleLiveEvent()
     val event: LiveData<HomeEvent>
         get() = _event
 
     fun loadAuctions() {
-        if (lastAuctionId.value == null) {
-            viewModelScope.launch {
-                when (val response = repository.getAuctionPreviews()) {
-                    is ApiResponse.Success -> {}
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
-                }
+        _loadingAuctionsInProgress = true
+        viewModelScope.launch {
+            when (
+                val response =
+                    repository.getAuctionPreviews(lastAuctionId.value, SIZE_AUCTION_LOAD)
+            ) {
+                is ApiResponse.Success -> {}
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
             }
+            _loadingAuctionsInProgress = false
         }
     }
 
@@ -49,5 +56,9 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     sealed class HomeEvent {
         data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
         object NavigateToRegisterAuction : HomeEvent()
+    }
+
+    companion object {
+        private val SIZE_AUCTION_LOAD = 10
     }
 }

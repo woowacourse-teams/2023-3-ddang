@@ -8,8 +8,8 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.Service
 
 class AuctionRemoteDataSource(private val service: Service) {
-    suspend fun getAuctionPreviews(): ApiResponse<AuctionPreviewsResponse> =
-        service.fetchAuctionPreviews()
+    suspend fun getAuctionPreviews(lastAuctionId: Long?, size: Int): ApiResponse<AuctionPreviewsResponse> =
+        service.fetchAuctionPreviews(lastAuctionId, size)
 
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> =
         service.fetchAuctionDetail(id)

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.ddangddangddang.android.feature.home.HomeViewModel
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -43,6 +44,7 @@ class HomeViewModelTest {
         val auctionPreviewsResponse = createAuctionPreviewsResponse()
         coEvery { repository.getAuctionPreviews() } answers {
             cache.value = auctionPreviewsResponse.auctions
+            ApiResponse.Success(auctionPreviewsResponse)
         }
 
         // when

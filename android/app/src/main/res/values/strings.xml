@@ -14,6 +14,9 @@
     <string name="all_auction_success">낙찰 완료</string>
     <string name="all_auction_failure">경매 유찰</string>
     <string name="all_app_bar_back_key_description">뒤로가기 버튼</string>
+    <string name="all_dialog_default_title"></string>
+    <string name="all_dialog_default_negative_button">취소</string>
+    <string name="all_dialog_default_positive_button">확인</string>
 
     <!-- home -->
     <string name="home">경매 상품 목록</string>
@@ -43,6 +46,13 @@
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_seller_reliability">(%.1f)</string>
 
+    <!-- bid -->
+    <string name="detail_auction_bid_dialog_title">입찰하기</string>
+    <string name="detail_auction_bid_dialog_min_price">%,d원</string>
+    <string name="detail_auction_bid_dialog_unit_price">판매자가 설정한 경매 단위: %,d원</string>
+    <string name="detail_auction_bid_dialog_cancel">취소</string>
+    <string name="detail_auction_bid_dialog_submit">입찰</string>
+
     <!-- register -->
     <string name="register_auction">경매 상품 등록</string>
     <string name="register_auction_default_image_count">(%d/%d)</string>
@@ -58,6 +68,11 @@
     <string name="register_auction_invalid_input_error">필드에 유효하지 않은 값이 존재합니다.</string>
     <string name="register_auction_ok">확인</string>
 
+
     <!-- category -->
     <string name="select_category">카테고리 선택</string>
+    <string name="register_auction_image_description">경매에 등록할 사진</string>
+    <string name="register_auction_delete_image_button_description">경매에 등록할 사진 삭제 버튼</string>
+    <string name="register_auction_dialog_delete_image_message">사진을 삭제하시겠습니까?</string>
+    <string name="register_auction_dialog_delete_image_positive_button">삭제</string>
 </resources>

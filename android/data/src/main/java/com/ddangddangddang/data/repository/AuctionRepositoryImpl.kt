@@ -20,8 +20,8 @@ class AuctionRepositoryImpl private constructor(
         return localDataSource.observeAuctionPreviews()
     }
 
-    override suspend fun getAuctionPreviews(): ApiResponse<AuctionPreviewsResponse> {
-        val response = remoteDataSource.getAuctionPreviews()
+    override suspend fun getAuctionPreviews(lastAuctionId: Long?, size: Int): ApiResponse<AuctionPreviewsResponse> {
+        val response = remoteDataSource.getAuctionPreviews(lastAuctionId, size)
         if (response is ApiResponse.Success) {
             localDataSource.addAuctionPreviews(response.body.auctions)
         }
