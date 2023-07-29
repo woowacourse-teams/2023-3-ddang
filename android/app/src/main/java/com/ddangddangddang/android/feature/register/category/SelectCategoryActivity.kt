@@ -1,7 +1,6 @@
 package com.ddangddangddang.android.feature.register.category
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -42,7 +41,6 @@ class SelectCategoryActivity :
         // Observe
         viewModel.event.observe(this) {
             handleEvent(it)
-            Log.d("test", it.toString())
         }
     }
 
