@@ -18,6 +18,11 @@ class SelectCategoryActivity :
             viewModel.setMainCategorySelection(id)
         }
     }
+    private val subAdapter by lazy {
+        SubCategoryAdapter { id ->
+            viewModel.setSubCategorySelection(id)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +36,8 @@ class SelectCategoryActivity :
         mainAdapter.setCategories(viewModel.mainCategories)
 
         // Sub
-        binding.rvSubCategory.adapter =
-            SubCategoryAdapter(listOf("컴퓨터", "컴퓨터", "컴퓨터", "컴퓨터", "컴퓨터", "컴퓨터"))
+        binding.rvSubCategory.adapter = subAdapter
+        subAdapter.setCategories(viewModel.subCategories)
 
         // Observe
         viewModel.event.observe(this) {
@@ -45,6 +50,10 @@ class SelectCategoryActivity :
         when (event) {
             is SelectCategoryViewModel.SelectCategoryEvent.Exit -> finish()
             is SelectCategoryViewModel.SelectCategoryEvent.MainCategoriesChanged -> mainAdapter.setCategories(viewModel.mainCategories)
+            is SelectCategoryViewModel.SelectCategoryEvent.SubCategoriesChanged -> {
+                subAdapter.setCategories(viewModel.subCategories)
+                // 인텐트에 결과값 담아서 등록 페이지로 리턴하는 코드 들어갈 예정
+            }
         }
     }
 }

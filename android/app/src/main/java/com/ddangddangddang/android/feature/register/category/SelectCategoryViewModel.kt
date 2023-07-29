@@ -20,6 +20,14 @@ class SelectCategoryViewModel : ViewModel() {
     val mainCategories: List<CategoriesModel.CategoryModel>
         get() = _mainCategories.toList() // DiffUtil은 리스트의 주소가 다르지 않으면 Difference를 검사 안함
 
+    private val _subCategories = mutableListOf(
+        CategoriesModel.CategoryModel("노트북", 0, true),
+        CategoriesModel.CategoryModel("헤드셋", 1, false),
+        CategoriesModel.CategoryModel("태블릿PC", 2, false),
+    )
+    val subCategories: List<CategoriesModel.CategoryModel>
+        get() = _subCategories.toList() // DiffUtil은 리스트의 주소가 다르지 않으면 Difference를 검사 안함
+
     fun setExitEvent() {
         _event.value = SelectCategoryEvent.Exit
     }
@@ -37,8 +45,22 @@ class SelectCategoryViewModel : ViewModel() {
         _event.value = SelectCategoryEvent.MainCategoriesChanged
     }
 
+    fun setSubCategorySelection(subCategoryId: Long) {
+        _subCategories.replaceAll {
+            if (it.id == subCategoryId) {
+                it.copy(isChecked = true)
+            } else if (it.isChecked) {
+                it.copy(isChecked = false)
+            } else {
+                it
+            }
+        }
+        _event.value = SelectCategoryEvent.SubCategoriesChanged
+    }
+
     sealed class SelectCategoryEvent {
         object Exit : SelectCategoryEvent()
         object MainCategoriesChanged : SelectCategoryEvent()
+        object SubCategoriesChanged : SelectCategoryEvent()
     }
 }
