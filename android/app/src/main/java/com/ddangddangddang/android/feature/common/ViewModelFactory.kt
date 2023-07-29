@@ -10,8 +10,10 @@ import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
+import com.ddangddangddang.data.repository.CategoryRepositoryMockImpl
 
 val repository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
+val categoryRepository = CategoryRepositoryMockImpl()
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -23,7 +25,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(repository)
                 isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(repository)
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(repository)
-                isAssignableFrom(SelectCategoryViewModel::class.java) -> SelectCategoryViewModel()
+                isAssignableFrom(SelectCategoryViewModel::class.java) -> SelectCategoryViewModel(categoryRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
