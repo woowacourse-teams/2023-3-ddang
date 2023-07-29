@@ -2,43 +2,19 @@ package com.ddangddangddang.android.feature.register.category
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.lifecycle.LiveData
-import androidx.recyclerview.widget.RecyclerView
-import com.ddangddangddang.android.R
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.ddangddangddang.android.databinding.ItemSelectMainCategoryBinding
 import com.ddangddangddang.android.model.CategoriesModel
 
 class MainCategoryAdapter(
-    private val categories: LiveData<List<CategoriesModel.CategoryModel>>,
     private val onItemClickListener: (Long) -> Unit,
-) :
-    RecyclerView.Adapter<MainCategoryAdapter.MainCategoryViewHolder>() {
+) : ListAdapter<CategoriesModel.CategoryModel, MainCategoryViewHolder>(
+    mainCategoryDiffUtil,
+) {
 
-    class MainCategoryViewHolder(
-        private val binding: ItemSelectMainCategoryBinding,
-        onItemClickListener: (Long) -> Unit,
-    ) :
-        RecyclerView.ViewHolder(binding.root) {
-        init {
-            binding.onItemClick = onItemClickListener
-        }
-
-        fun bind(category: CategoriesModel.CategoryModel) {
-            binding.category = category
-            if (category.isChecked) {
-                binding.clMainCategoryItem.setBackgroundColor(
-                    binding.root.context.getColor(
-                        R.color.red_100,
-                    ),
-                )
-            } else {
-                binding.clMainCategoryItem.setBackgroundColor(
-                    binding.root.context.getColor(
-                        R.color.white,
-                    ),
-                )
-            }
-        }
+    fun setCategories(categories: List<CategoriesModel.CategoryModel>) {
+        submitList(categories)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainCategoryViewHolder {
@@ -50,11 +26,27 @@ class MainCategoryAdapter(
         return MainCategoryViewHolder(binding, onItemClickListener)
     }
 
-    override fun getItemCount(): Int = categories.value?.size ?: 0
+    override fun getItemCount(): Int = currentList.size
 
     override fun onBindViewHolder(holder: MainCategoryViewHolder, position: Int) {
-        categories.value?.let {
-            holder.bind(it[position])
+        holder.bind(currentList[position])
+    }
+
+    companion object {
+        private val mainCategoryDiffUtil = object : DiffUtil.ItemCallback<CategoriesModel.CategoryModel>() {
+            override fun areItemsTheSame(
+                oldItem: CategoriesModel.CategoryModel,
+                newItem: CategoriesModel.CategoryModel,
+            ): Boolean {
+                return oldItem.id == newItem.id
+            }
+
+            override fun areContentsTheSame(
+                oldItem: CategoriesModel.CategoryModel,
+                newItem: CategoriesModel.CategoryModel,
+            ): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }
