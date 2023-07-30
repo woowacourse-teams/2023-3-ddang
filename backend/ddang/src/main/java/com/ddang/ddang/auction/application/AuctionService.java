@@ -37,7 +37,7 @@ public class AuctionService {
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
         final Auction auction = convertAuction(dto);
         final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
-        final List<AuctionImage> auctionImages = convertAuctionImage(dto);
+        final List<AuctionImage> auctionImages = convertAuctionImages(dto);
 
         auction.addAuctionRegions(auctionRegions);
         auction.addAuctionImages(auctionImages);
@@ -45,13 +45,6 @@ public class AuctionService {
         final Auction persistAuction = auctionRepository.save(auction);
 
         return CreateInfoAuctionDto.from(persistAuction);
-    }
-
-    private List<AuctionImage> convertAuctionImage(final CreateAuctionDto dto) {
-        return imageProcessor.storeImageFiles(dto.auctionImages())
-                             .stream()
-                             .map(imageDto -> new AuctionImage(imageDto.uploadName(), imageDto.storeName()))
-                             .toList();
     }
 
     private Auction convertAuction(final CreateAuctionDto dto) {
@@ -75,6 +68,13 @@ public class AuctionService {
         }
 
         return auctionRegions;
+    }
+
+    private List<AuctionImage> convertAuctionImages(final CreateAuctionDto dto) {
+        return imageProcessor.storeImageFiles(dto.auctionImages())
+                             .stream()
+                             .map(imageDto -> new AuctionImage(imageDto.uploadName(), imageDto.storeName()))
+                             .toList();
     }
 
     public ReadAuctionDto readByAuctionId(final Long auctionId) {
