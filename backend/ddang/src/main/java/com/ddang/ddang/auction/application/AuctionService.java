@@ -12,6 +12,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
+import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
@@ -73,7 +74,7 @@ public class AuctionService {
     private List<AuctionImage> convertAuctionImages(final CreateAuctionDto dto) {
         return imageProcessor.storeImageFiles(dto.auctionImages())
                              .stream()
-                             .map(imageDto -> new AuctionImage(imageDto.uploadName(), imageDto.storeName()))
+                             .map(StoreImageDto::toEntity)
                              .toList();
     }
 
