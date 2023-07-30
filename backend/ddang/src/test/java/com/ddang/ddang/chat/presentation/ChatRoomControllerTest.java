@@ -79,11 +79,7 @@ class ChatRoomControllerTest {
     void 메시지를_생성한다() throws Exception {
         // given
         final String contents = "메시지 내용";
-        final CreateMessageRequest request = new CreateMessageRequest(
-                1L,
-                1L,
-                contents
-        );
+        final CreateMessageRequest request = new CreateMessageRequest(1L, 1L, contents);
 
         given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
 
@@ -105,9 +101,8 @@ class ChatRoomControllerTest {
         final String contents = "메시지 내용";
         final CreateMessageRequest request = new CreateMessageRequest(1L, 1L, contents);
 
-        final ChatRoomNotFoundException chatRoomNotFoundException =
-                new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        given(messageService.create(CreateMessageDto.of(invalidChatRoomId, request)))
+        final ChatRoomNotFoundException chatRoomNotFoundException = new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+        given(messageService.create(CreateMessageDto.from(invalidChatRoomId, request)))
                 .willThrow(chatRoomNotFoundException);
 
         // when & then
