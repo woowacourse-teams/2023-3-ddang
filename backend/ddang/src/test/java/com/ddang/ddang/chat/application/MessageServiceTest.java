@@ -51,12 +51,7 @@ class MessageServiceTest {
         final ChatRoom chatRoom = createChatRoom(auction, receiver);
         final String contents = "메시지 내용";
 
-        final CreateMessageDto createMessageDto = new CreateMessageDto(
-                chatRoom.getId(),
-                writer.getId(),
-                receiver.getId(),
-                contents
-        );
+        final CreateMessageDto createMessageDto = new CreateMessageDto(chatRoom.getId(), writer.getId(), receiver.getId(), contents);
 
         // when
         final Long messageId = messageService.create(createMessageDto);
@@ -72,11 +67,7 @@ class MessageServiceTest {
     }
 
     private User createUser(final String userName) {
-        final User user = new User(
-                userName,
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                0.8
-        );
+        final User user = new User(userName, "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg", 0.8);
 
         return userRepository.save(user);
     }
@@ -85,15 +76,15 @@ class MessageServiceTest {
         final BidUnit bidUnit = new BidUnit(1_000);
         final Price startPrice = new Price(10_000);
         final Auction auction = Auction.builder()
-                .title("title")
-                .description("description")
-                .bidUnit(bidUnit)
-                .startPrice(startPrice)
-                .closingTime(LocalDateTime.now().plusDays(3L))
-                .image("image")
-                .mainCategory("mainCategory")
-                .subCategory("subCategory")
-                .build();
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .image("image")
+                                       .mainCategory("mainCategory")
+                                       .subCategory("subCategory")
+                                       .build();
 
         return auctionRepository.save(auction);
     }

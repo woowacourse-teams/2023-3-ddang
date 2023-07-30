@@ -27,10 +27,10 @@ public record CreateMessageDto(
             final User receiver
     ) {
         return Message.builder()
-                .chatRoom(chatRoom)
-                .writer(writer)
-                .receiver(receiver)
-                .contents(contents)
-                .build();
+                      .chatRoom(chatRoom)
+                      .writer(writer)
+                      .receiver(receiver)
+                      .contents(contents)
+                      .build();
     }
 }
