@@ -1,5 +1,6 @@
 package com.ddang.ddang.bid.application;
 
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -8,6 +9,8 @@ import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.CreateUserDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
+import com.ddang.ddang.bid.application.exception.InvalidBidderException;
+import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -103,7 +106,7 @@ class BidServiceTest {
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
                                        .startPrice(new Price(1_000))
-                                       .closingTime(LocalDateTime.now().minusDays(1))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
 
@@ -111,12 +114,74 @@ class BidServiceTest {
         userRepository.save(user);
 
         final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 1_000);
+
+        // when
+        final Long actual = bidService.create(createUserDto, createBidDto);
+
+        // then
+        assertThat(actual).isPositive();
+    }
+
+    @Test
+    void 존재하지_않는_경매에_입찰하는_경우_예외가_발생한다() {
+        // given
+        final User user = new User("사용자1", "이미지1", 4.9);
+        userRepository.save(user);
+
+        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final CreateBidDto createBidDto = new CreateBidDto(9999L, 10_000);
+
+        // when & then
+        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("해당 경매를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 존재하지_않는_사용자가_경매에_입찰하는_경우_예외가_발생한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final CreateUserDto createUserDto = new CreateUserDto(9999L);
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 10_000);
 
         // when & then
         assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
-                .isInstanceOf(InvalidAuctionToBidException.class)
-                .hasMessage("이미 종료된 경매입니다");
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 첫_입찰자가_시작가_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+        final User user = new User("사용자1", "이미지1", 4.9);
+
+        auctionRepository.save(auction);
+        userRepository.save(user);
+
+        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 900);
+
+        // when && then
+        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+                .isInstanceOf(InvalidBidPriceException.class)
+                .hasMessage("입찰 금액이 잘못되었습니다");
     }
 
     @Test
@@ -196,6 +261,34 @@ class BidServiceTest {
         assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
                 .isInstanceOf(InvalidAuctionToBidException.class)
                 .hasMessage("삭제된 경매입니다");
+    }
+
+    @Test
+    void 마지막_입찰자가_연속으로_입찰하는_경우_예외가_발생한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+        final User user = new User("사용자1", "이미지1", 4.9);
+
+        auctionRepository.save(auction);
+        userRepository.save(user);
+
+        final CreateUserDto createUserDto1 = new CreateUserDto(user.getId());
+        final CreateBidDto createBidDto1 = new CreateBidDto(auction.getId(), 10_000);
+        bidService.create(createUserDto1, createBidDto1);
+
+        final CreateUserDto createUserDto2 = new CreateUserDto(user.getId());
+        final CreateBidDto createBidDto2 = new CreateBidDto(auction.getId(), 12_000);
+
+        // when && then
+        assertThatThrownBy(() -> bidService.create(createUserDto2, createBidDto2))
+                .isInstanceOf(InvalidBidderException.class)
+                .hasMessage("이미 최고 입찰자입니다");
     }
 
     @Test
