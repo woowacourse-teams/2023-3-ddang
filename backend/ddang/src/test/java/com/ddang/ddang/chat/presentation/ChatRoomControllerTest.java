@@ -46,7 +46,8 @@ class ChatRoomControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(chatRoomController).setControllerAdvice(new GlobalExceptionHandler())
+        mockMvc = MockMvcBuilders.standaloneSetup(chatRoomController)
+                                 .setControllerAdvice(new GlobalExceptionHandler())
                                  .alwaysDo(print()).build();
     }
 
@@ -59,9 +60,14 @@ class ChatRoomControllerTest {
         given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.post("/chattings/1/messages").contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(MockMvcRequestBuilders.post("/chattings/1/messages")
+                                              .contentType(MediaType.APPLICATION_JSON)
                                               .content(objectMapper.writeValueAsString(request)))
-               .andExpectAll(status().isCreated(), header().string(HttpHeaders.LOCATION, is("/chattings/1/messages/1")), jsonPath("$.id", is(1L), Long.class));
+               .andExpectAll(
+                       status().isCreated(),
+                       header().string(HttpHeaders.LOCATION, is("/chattings/1/messages/1")),
+                       jsonPath("$.id", is(1L), Long.class)
+               );
     }
 
     @Test
@@ -79,7 +85,10 @@ class ChatRoomControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
                                               .content(objectMapper.writeValueAsString(request))
                                               .contentType(MediaType.APPLICATION_JSON))
-               .andExpectAll(status().isNotFound(), jsonPath("$.message", is(chatRoomNotFoundException.getMessage())));
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(chatRoomNotFoundException.getMessage()))
+               );
     }
 
     @Test
@@ -98,6 +107,9 @@ class ChatRoomControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/chattings/{chatRoomId}/messages", chatRoomId)
                                               .content(objectMapper.writeValueAsString(request))
                                               .contentType(MediaType.APPLICATION_JSON))
-               .andExpectAll(status().isNotFound(), jsonPath("$.message", is(userNotFoundException.getMessage())));
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+               );
     }
 }
