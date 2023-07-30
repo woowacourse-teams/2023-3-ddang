@@ -1,6 +1,8 @@
 package com.ddang.ddang.exception;
 
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -46,6 +48,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(RegionNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleRegionNotFoundException(final RegionNotFoundException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, RegionNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ChatRoomNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleChatRoomNotFoundException(final ChatRoomNotFoundException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ChatRoomNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final UserNotFoundException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
