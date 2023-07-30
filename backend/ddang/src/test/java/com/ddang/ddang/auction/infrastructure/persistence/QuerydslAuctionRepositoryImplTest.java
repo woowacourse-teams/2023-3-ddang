@@ -90,7 +90,7 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Optional<Auction> actual = querydslAuctionRepository.findAuctionWithRegionsById(auction.getId());
+        final Optional<Auction> actual = querydslAuctionRepository.findAuctionById(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -124,7 +124,7 @@ class QuerydslAuctionRepositoryImplTest {
         final Long invalidId = -999L;
 
         // when
-        final Optional<Auction> actual = querydslAuctionRepository.findAuctionWithRegionsById(invalidId);
+        final Optional<Auction> actual = querydslAuctionRepository.findAuctionById(invalidId);
 
         // then
         assertThat(actual).isEmpty();

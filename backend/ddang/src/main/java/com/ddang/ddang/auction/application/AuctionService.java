@@ -78,7 +78,7 @@ public class AuctionService {
     }
 
     public ReadAuctionDto readByAuctionId(final Long auctionId) {
-        final Auction auction = auctionRepository.findAuctionWithRegionsById(auctionId)
+        final Auction auction = auctionRepository.findAuctionById(auctionId)
                                                  .orElseThrow(() -> new AuctionNotFoundException(
                                                          "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                  ));

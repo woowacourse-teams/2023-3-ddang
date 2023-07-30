@@ -8,5 +8,5 @@ public interface QuerydslAuctionRepository {
 
     Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size);
 
-    Optional<Auction> findAuctionWithRegionsById(final Long auctionId);
+    Optional<Auction> findAuctionById(final Long auctionId);
 }

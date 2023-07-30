@@ -48,7 +48,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     }
 
     @Override
-    public Optional<Auction> findAuctionWithRegionsById(final Long auctionId) {
+    public Optional<Auction> findAuctionById(final Long auctionId) {
         final Auction findAuction = queryFactory
                 .selectFrom(auction)
                 .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
