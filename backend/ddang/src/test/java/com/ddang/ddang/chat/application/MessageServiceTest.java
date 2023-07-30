@@ -5,6 +5,8 @@ import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
@@ -63,6 +66,69 @@ class MessageServiceTest {
 
         // then
         assertThat(messageId).isPositive();
+    }
+
+    @Test
+    void 채팅방이_없는_경우_메시지를_생성하면_예외가_발생한다() {
+        // given
+        final User writer = createUser("발신자");
+        final User receiver = createUser("수신자");
+        final Long invalidChatRoomId = -999L;
+        final String contents = "메시지 내용";
+
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                invalidChatRoomId,
+                writer.getId(),
+                receiver.getId(),
+                contents
+        );
+
+        // when & then
+        assertThatThrownBy(() -> messageService.create(createMessageDto))
+                .isInstanceOf(ChatRoomNotFoundException.class)
+                .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 발신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
+        // given
+        final Auction auction = createAuction();
+        final Long invalidWriterId = -999L;
+        final User receiver = createUser("수신자");
+        final ChatRoom chatRoom = createChatRoom(auction, receiver);
+        final String contents = "메시지 내용";
+
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                chatRoom.getId(),
+                invalidWriterId,
+                receiver.getId(),
+                contents
+        );
+
+        assertThatThrownBy(() -> messageService.create(createMessageDto))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 수신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
+        // given
+        final Auction auction = createAuction();
+        final User writer = createUser("발신자");
+        final Long invalidReceiverId = -999L;
+        final ChatRoom chatRoom = createChatRoom(auction, writer);
+        final String contents = "메시지 내용";
+
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                chatRoom.getId(),
+                writer.getId(),
+                invalidReceiverId,
+                contents
+        );
+
+        assertThatThrownBy(() -> messageService.create(createMessageDto))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
     }
 
     private ChatRoom createChatRoom(final Auction auction, final User buyer) {
