@@ -35,11 +35,7 @@ public class AuctionController {
     @PostMapping
     public ResponseEntity<CreateAuctionResponse> create(@ModelAttribute @Valid final CreateAuctionRequest request) {
         final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.from(request));
-        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                                                          .build()
-                                                          .toUriString()
-                                                          .concat(AUCTIONS_IMAGE_BASE_URL);
-        final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, baseUrl);
+        final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, calculateBaseImageUrl());
 
         return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
                              .body(response);
@@ -48,11 +44,10 @@ public class AuctionController {
     @GetMapping("/{auctionId}")
     public ResponseEntity<ReadAuctionDetailResponse> read(@PathVariable final Long auctionId) {
         final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
-        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                                                          .build()
-                                                          .toUriString()
-                                                          .concat(AUCTIONS_IMAGE_BASE_URL);
-        final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.from(readAuctionDto, baseUrl);
+        final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.from(
+                readAuctionDto,
+                calculateBaseImageUrl()
+        );
 
         return ResponseEntity.ok(response);
     }
@@ -63,11 +58,7 @@ public class AuctionController {
             @RequestParam(required = false, defaultValue = "10") final int size
     ) {
         final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(lastAuctionId, size);
-        final String baseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                                                          .build()
-                                                          .toUriString()
-                                                          .concat(AUCTIONS_IMAGE_BASE_URL);
-        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, baseUrl);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
 
         return ResponseEntity.ok(response);
     }
@@ -78,5 +69,12 @@ public class AuctionController {
 
         return ResponseEntity.noContent()
                              .build();
+    }
+
+    private String calculateBaseImageUrl() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                                          .build()
+                                          .toUriString()
+                                          .concat(AUCTIONS_IMAGE_BASE_URL);
     }
 }
