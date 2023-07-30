@@ -27,7 +27,7 @@ public class ChatRoomController {
             @PathVariable final Long chatRoomId,
             @RequestBody @Valid final CreateMessageRequest request
     ) {
-        final Long messageId = messageService.create(CreateMessageDto.from(request));
+        final Long messageId = messageService.create(CreateMessageDto.from(chatRoomId, request));
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 
         return ResponseEntity.created(URI.create("/chattings/" + chatRoomId + "/messages/" + messageId))

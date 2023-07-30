@@ -12,9 +12,9 @@ public record CreateMessageDto(
         String contents
 ) {
 
-    public static CreateMessageDto from(final CreateMessageRequest request) {
+    public static CreateMessageDto from(final Long chatRoomId, final CreateMessageRequest request) {
         return new CreateMessageDto(
-                request.chatRoomId(),
+                chatRoomId,
                 request.writerId(),
                 request.receiverId(),
                 request.contents()
