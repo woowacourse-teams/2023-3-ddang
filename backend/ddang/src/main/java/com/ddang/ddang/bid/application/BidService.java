@@ -38,7 +38,7 @@ public class BidService {
 
         // TODO: 2023/07/28 추후 User 패키지 내에 UserNotFoundException이 생긴다면 해당 예외를 사용하도록 수정 하겠습니다.
         final User bidder = userRepository.findById(userDto.usedId())
-                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+                                          .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         checkInvalidBid(bidder, bidDto);
 
         return bidRepository.save(bidDto.toEntity(auction, bidder))
@@ -75,6 +75,7 @@ public class BidService {
     }
 
     private void checkIsNotLastBidder(final Bid lastBid, final User bidder) {
+        // TODO: 2023/07/30 경매 등록자가 입찰하는 경우에 대한 예외 케이스 추가 예정
         if (lastBid.isLastBidder(bidder)) {
             throw new InvalidBidderException("이미 최고 입찰자입니다");
         }
