@@ -51,7 +51,12 @@ class MessageServiceTest {
         final ChatRoom chatRoom = createChatRoom(auction, receiver);
         final String contents = "메시지 내용";
 
-        final CreateMessageDto createMessageDto = new CreateMessageDto(chatRoom.getId(), writer.getId(), receiver.getId(), contents);
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                chatRoom.getId(),
+                writer.getId(),
+                receiver.getId(),
+                contents
+        );
 
         // when
         final Long messageId = messageService.create(createMessageDto);
