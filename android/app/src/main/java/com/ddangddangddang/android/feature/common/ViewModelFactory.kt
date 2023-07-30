@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.CreationExtras
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
+import com.ddangddangddang.android.feature.detail.bid.AuctionBidViewModel
 import com.ddangddangddang.android.feature.home.HomeViewModel
 import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
@@ -22,6 +23,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(repository)
                 isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(repository)
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(repository)
+                isAssignableFrom(AuctionBidViewModel::class.java) -> AuctionBidViewModel()
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
