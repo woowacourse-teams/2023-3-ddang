@@ -33,15 +33,15 @@ public class MessageService {
                                 .getId();
     }
 
-    private User getUser(final Long dto, final String message) {
-        return userRepository.findById(dto)
-                             .orElseThrow(() -> new UserNotFoundException(message));
-    }
-
     private ChatRoom getChatRoom(final CreateMessageDto dto) {
         return chatRoomRepository.findById(dto.chatRoomId())
                                  .orElseThrow(() -> new ChatRoomNotFoundException(
                                          "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
                                  ));
+    }
+
+    private User getUser(final Long dto, final String message) {
+        return userRepository.findById(dto)
+                             .orElseThrow(() -> new UserNotFoundException(message));
     }
 }
