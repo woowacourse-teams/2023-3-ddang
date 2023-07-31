@@ -36,11 +36,10 @@ public record AuctionDetailResponse(
         int auctioneerCount
 ) {
 
-    public static AuctionDetailResponse from(final ReadAuctionDto dto) {
-        // TODO 2차 데모데이 이후 리펙터링 예정
+    public static AuctionDetailResponse of(final ReadAuctionDto dto, final String baseUrl) {
         return new AuctionDetailResponse(
                 dto.id(),
-                List.of(dto.image()),
+                convertImageUrls(dto, baseUrl),
                 dto.title(),
                 new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
@@ -53,6 +52,13 @@ public record AuctionDetailResponse(
                 convertDirectRegionsResponse(dto),
                 0
         );
+    }
+
+    private static List<String> convertImageUrls(final ReadAuctionDto dto, final String baseUrl) {
+        return dto.auctionImageIds()
+                  .stream()
+                  .map(id -> baseUrl.concat(String.valueOf(id)))
+                  .toList();
     }
 
     private static List<DirectRegionResponse> convertDirectRegionsResponse(final ReadAuctionDto dto) {

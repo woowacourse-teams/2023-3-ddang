@@ -4,6 +4,8 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
@@ -23,6 +25,7 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
 
     private final JpaAuctionRepository auctionRepository;
     private final JpaRegionRepository regionRepository;
+    private final JpaCategoryRepository categoryRepository;
 
     @Override
     @Transactional
@@ -37,15 +40,20 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
         final AuctionRegion auctionRegion1 = new AuctionRegion(thirdRegion);
         final AuctionRegion auctionRegion2 = new AuctionRegion(thirdRegion);
 
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
         final Auction auction1 = Auction.builder()
                                         .title("맥북 2021 13인치")
                                         .description("맥북 2021 13인치 팝니다. 애플 감성 안 맞아요.")
                                         .bidUnit(new BidUnit(1_000))
                                         .startPrice(new Price(1_000_000))
                                         .closingTime(LocalDateTime.now())
-                                        .image("https://www.apple.com/newsroom/images/product/mac/standard/Apple_MacBook-Pro_14-16-inch_10182021_big.jpg.large.jpg")
-                                        .mainCategory("전자기기")
-                                        .subCategory("노트북")
+                                        .subCategory(sub)
                                         .build();
         auction1.addAuctionRegions(List.of(auctionRegion1));
 
@@ -56,9 +64,7 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .startPrice(new Price(900_000))
                                         .closingTime(LocalDateTime.now()
                                                                   .plusDays(5L))
-                                        .image("https://www.apple.com/newsroom/images/product/mac/standard/Apple_MacBook-Pro_14-16-inch_10182021_big.jpg.large.jpg")
-                                        .mainCategory("전자기기")
-                                        .subCategory("노트북")
+                                        .subCategory(sub)
                                         .build();
         auction2.addAuctionRegions(List.of(auctionRegion2));
 

@@ -1,4 +1,4 @@
-package com.ddang.ddang.region.domain;
+package com.ddang.ddang.image.domain;
 
 import com.ddang.ddang.auction.domain.Auction;
 import jakarta.persistence.Entity;
@@ -19,23 +19,26 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"auction", "thirdRegion"})
-public class AuctionRegion {
+@ToString(of = {"id", "uploadName", "storeName", "authenticated"})
+public class AuctionImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String uploadName;
+
+    private String storeName;
+
+    private boolean authenticated = false;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id", foreignKey = @ForeignKey(name = "fk_auction_region_auction"))
+    @JoinColumn(name = "auction_id", foreignKey = @ForeignKey(name = "fk_auction_image"))
     private Auction auction;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "third_region_id", foreignKey = @ForeignKey(name = "fk_auction_region_third_region"))
-    private Region thirdRegion;
-
-    public AuctionRegion(final Region thirdRegion) {
-        this.thirdRegion = thirdRegion;
+    public AuctionImage(final String uploadName, final String storeName) {
+        this.uploadName = uploadName;
+        this.storeName = storeName;
     }
 
     public void initAuction(final Auction auction) {

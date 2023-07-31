@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.region.domain.AuctionRegion;
@@ -13,6 +15,8 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,9 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.time.LocalDateTime;
-import java.util.List;
+import org.springframework.data.domain.Slice;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -41,6 +43,9 @@ class QuerydslAuctionRepositoryImplTest {
     @Autowired
     JpaRegionRepository regionRepository;
 
+    @Autowired
+    JpaCategoryRepository categoryRepository;
+
     QuerydslAuctionRepository querydslAuctionRepository;
 
     @BeforeEach
@@ -51,6 +56,22 @@ class QuerydslAuctionRepositoryImplTest {
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
         // given
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .subCategory(sub)
+                                       .build();
+
         final Region firstRegion = new Region("서울특별시");
         final Region secondRegion = new Region("강남구");
         final Region thirdRegion = new Region("개포1동");
@@ -61,13 +82,6 @@ class QuerydslAuctionRepositoryImplTest {
         regionRepository.save(firstRegion);
         final AuctionRegion auctionRegion = new AuctionRegion(thirdRegion);
 
-        final Auction auction = Auction.builder()
-                                       .title("경매 상품 1")
-                                       .description("이것은 경매 상품 1 입니다.")
-                                       .bidUnit(new BidUnit(1_000))
-                                       .startPrice(new Price(1_000))
-                                       .closingTime(LocalDateTime.now())
-                                       .build();
         auction.addAuctionRegions(List.of(auctionRegion));
 
         auctionRepository.save(auction);
@@ -76,7 +90,7 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Optional<Auction> actual = querydslAuctionRepository.findAuctionWithRegionsById(auction.getId());
+        final Optional<Auction> actual = querydslAuctionRepository.findAuctionById(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -95,6 +109,12 @@ class QuerydslAuctionRepositoryImplTest {
 
             final Region actualFirstRegion = actualSecondRegion.getFirstRegion();
             softAssertions.assertThat(actualFirstRegion.getName()).isEqualTo(firstRegion.getName());
+
+            final Category subCategory = actual.get().getSubCategory();
+            softAssertions.assertThat(subCategory).isEqualTo(sub);
+
+            final Category mainCategory = subCategory.getMainCategory();
+            softAssertions.assertThat(mainCategory).isEqualTo(main);
         });
     }
 
@@ -104,7 +124,7 @@ class QuerydslAuctionRepositoryImplTest {
         final Long invalidId = -999L;
 
         // when
-        final Optional<Auction> actual = querydslAuctionRepository.findAuctionWithRegionsById(invalidId);
+        final Optional<Auction> actual = querydslAuctionRepository.findAuctionById(invalidId);
 
         // then
         assertThat(actual).isEmpty();
@@ -143,12 +163,14 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final List<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(null, 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(null, 1);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(1);
-            softAssertions.assertThat(actual.get(0).getTitle()).isEqualTo(auction3.getTitle());
+
+            final List<Auction> actualAuctions = actual.getContent();
+            softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction3.getTitle());
         });
     }
 
@@ -185,12 +207,14 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final List<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(1);
-            softAssertions.assertThat(actual.get(0).getTitle()).isEqualTo(auction2.getTitle());
+
+            final List<Auction> actualAuctions = actual.getContent();
+            softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction2.getTitle());
         });
     }
 
@@ -229,12 +253,14 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final List<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(1);
-            softAssertions.assertThat(actual.get(0).getTitle()).isEqualTo(auction1.getTitle());
+
+            final List<Auction> actualAuctions = actual.getContent();
+            softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction1.getTitle());
         });
     }
 }

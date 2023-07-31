@@ -8,7 +8,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -16,12 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionCategoryRequest;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.auction.presentation.dto.request.CreateDirectRegionRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
@@ -35,6 +34,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -65,24 +65,27 @@ class AuctionControllerTest {
     @Test
     void 경매를_등록한다() throws Exception {
         // given
-        final CreateAuctionRequest request = new CreateAuctionRequest(
-                "경매 상품 1",
-                "이것은 경매 상품 1 입니다.",
-                1_000,
-                1_000,
-                LocalDateTime.now()
-                             .plusDays(3L),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                List.of(""),
-                List.of(new CreateDirectRegionRequest(1L, 2L, 3L)),
-                new CreateAuctionCategoryRequest("", "")
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "images",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1}
         );
+        final CreateInfoAuctionDto createInfoAuctionDto = new CreateInfoAuctionDto(1L, "title", 1L, 1_000);
 
-        given(auctionService.create(any(CreateAuctionDto.class))).willReturn(1L);
+        given(auctionService.create(any(CreateAuctionDto.class))).willReturn(createInfoAuctionDto);
 
         // when & then
-        mockMvc.perform(post("/auctions").contentType(MediaType.APPLICATION_JSON)
-                                         .content(objectMapper.writeValueAsString(request))
+        mockMvc.perform(multipart("/auctions")
+                       .file(auctionImage)
+                       .param("title", "경매 상품 1")
+                       .param("description", "이것은 경매 상품 1 입니다.")
+                       .param("bidUnit", "1000")
+                       .param("startPrice", "1000")
+                       .param("closingTime", LocalDateTime.now().plusDays(3L).toString())
+                       .param("subCategoryId", "2")
+                       .param("thirdRegionIds", "3")
+                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                )
                .andExpectAll(
                        status().isCreated(),
@@ -111,8 +114,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
-                // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
+                List.of(1L),
                 "",
                 ""
         );
@@ -154,7 +156,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 // TODO 2차 데모데이 이후 리펙토링 예정
                 List.of(readRegionsDto),
-                "",
+                List.of(1L),
                 "",
                 ""
         );
@@ -171,12 +173,13 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 // TODO 2차 데모데이 이후 리펙토링 예정
-                "",
+                List.of(1L),
                 "main2",
                 "sub2"
         );
 
-        given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(List.of(auction2, auction1));
+        final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
+        given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
         mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON))
@@ -184,13 +187,13 @@ class AuctionControllerTest {
                        status().isOk(),
                        jsonPath("$.auctions.[0].id", is(auction2.id()), Long.class),
                        jsonPath("$.auctions.[0].title", is(auction2.title())),
-                       jsonPath("$.auctions.[0].image", is(auction2.image())),
+                       jsonPath("$.auctions.[0].image").exists(),
                        jsonPath("$.auctions.[0].auctionPrice", is(auction2.startPrice())),
                        jsonPath("$.auctions.[0].status").exists(),
                        jsonPath("$.auctions.[0].auctioneerCount").exists(),
                        jsonPath("$.auctions.[1].id", is(auction1.id()), Long.class),
                        jsonPath("$.auctions.[1].title", is(auction1.title())),
-                       jsonPath("$.auctions.[1].image", is(auction1.image())),
+                       jsonPath("$.auctions.[1].image").exists(),
                        jsonPath("$.auctions.[1].auctionPrice", is(auction1.startPrice())),
                        jsonPath("$.auctions.[1].status").exists(),
                        jsonPath("$.auctions.[1].auctioneerCount").exists()

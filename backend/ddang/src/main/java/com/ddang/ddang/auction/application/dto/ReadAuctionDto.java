@@ -2,6 +2,7 @@ package com.ddang.ddang.auction.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.image.domain.AuctionImage;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,8 +18,7 @@ public record ReadAuctionDto(
         LocalDateTime registerTime,
         LocalDateTime closingTime,
         List<ReadRegionsDto> auctionRegions,
-        // TODO 2차 데모데이 이후 리펙터링 예정
-        String image,
+        List<Long> auctionImageIds,
         String mainCategory,
         String subCategory
 ) {
@@ -36,10 +36,17 @@ public record ReadAuctionDto(
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
                 convertReadRegionsDto(auction),
-                auction.getImage(),
-                auction.getMainCategory(),
-                auction.getSubCategory()
+                convertImageUrls(auction),
+                auction.getSubCategory().getMainCategory().getName(),
+                auction.getSubCategory().getName()
         );
+    }
+
+    private static List<Long> convertImageUrls(final Auction auction) {
+        return auction.getAuctionImages()
+                .stream()
+                .map(AuctionImage::getId)
+                .toList();
     }
 
     private static Integer convertPrice(final Price price) {
