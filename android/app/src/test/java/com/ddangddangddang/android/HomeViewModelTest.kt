@@ -42,7 +42,7 @@ class HomeViewModelTest {
     fun `경매_목록을_불러오면_경매_상품과_마지막_경매_상품_아이디_값을_가져온다`() = runTest {
         // given
         val auctionPreviewsResponse = createAuctionPreviewsResponse()
-        coEvery { repository.getAuctionPreviews() } answers {
+        coEvery { repository.getAuctionPreviews(any(), any()) } answers {
             cache.value = auctionPreviewsResponse.auctions
             ApiResponse.Success(auctionPreviewsResponse)
         }

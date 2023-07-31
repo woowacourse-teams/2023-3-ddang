@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.common
 
+import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import androidx.core.view.isVisible
@@ -9,6 +10,15 @@ import com.bumptech.glide.Glide
 @BindingAdapter("imageUrl")
 fun ImageView.setImageUrl(url: String?) {
     url?.let {
+        Glide.with(context)
+            .load(it)
+            .into(this)
+    }
+}
+
+@BindingAdapter("imageUri")
+fun ImageView.setImageUrl(uri: Uri?) {
+    uri?.let {
         Glide.with(context)
             .load(it)
             .into(this)

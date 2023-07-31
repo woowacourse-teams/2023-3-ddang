@@ -5,11 +5,15 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
@@ -20,11 +24,35 @@ class RegisterAuctionActivity :
     BindingActivity<ActivityRegisterAuctionBinding>(R.layout.activity_register_auction) {
     private val viewModel by viewModels<RegisterAuctionViewModel> { viewModelFactory }
     private val imageAdapter = RegisterAuctionImageAdapter { viewModel.setDeleteImageEvent(it) }
+    private val pickMultipleMediaLaunchers = setupMultipleMediaLaunchers()
+
+    private fun setupMultipleMediaLaunchers(): List<ActivityResultLauncher<PickVisualMediaRequest>> {
+        return List(RegisterAuctionViewModel.MAXIMUM_IMAGE_SIZE) { index ->
+            if (index == 0) {
+                registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                    if (uri != null) {
+                        val image = RegisterImageModel(uri = uri)
+                        viewModel.addImages(listOf(image))
+                    }
+                }
+            } else {
+                registerForActivityResult(
+                    ActivityResultContracts.PickMultipleVisualMedia(index + 1),
+                ) { uris ->
+                    if (uris.isNotEmpty()) {
+                        val images = uris.map { uri -> RegisterImageModel(uri = uri) }
+                        viewModel.addImages(images)
+                    }
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
         setupViewModel()
+        setupLinearLayoutRegisterImage()
         setupImageRecyclerView()
     }
 
@@ -57,7 +85,13 @@ class RegisterAuctionActivity :
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.DeleteImage -> {
-                showDeleteImageDialog(event.imageUrl)
+                showDeleteImageDialog(event.image)
+            }
+
+            is RegisterAuctionViewModel.RegisterAuctionEvent.MultipleMediaPicker -> {
+                pickMultipleMediaLaunchers[viewModel.selectableImageSize - 1].launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
+                )
             }
         }
     }
@@ -112,12 +146,22 @@ class RegisterAuctionActivity :
         startActivity(AuctionDetailActivity.getIntent(this, id))
     }
 
-    private fun showDeleteImageDialog(imageUrl: String) {
+    private fun showDeleteImageDialog(image: RegisterImageModel) {
         showDialog(
             messageId = R.string.register_auction_dialog_delete_image_message,
             positiveStringId = R.string.register_auction_dialog_delete_image_positive_button,
-            actionPositive = { viewModel.deleteImage(imageUrl) },
+            actionPositive = { viewModel.deleteImage(image) },
         )
+    }
+
+    private fun setupLinearLayoutRegisterImage() {
+        binding.llRegisterImage.setOnClickListener {
+            if (viewModel.selectableImageSize <= 0) {
+                binding.llRegisterImage.showSnackbar(textId = R.string.register_autcion_snackbar_image_limit)
+            } else {
+                viewModel.pickImages()
+            }
+        }
     }
 
     private fun setupImageRecyclerView() {
