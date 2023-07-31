@@ -38,7 +38,6 @@ class SelectCategoryActivity :
     private fun setupAdapter() {
         // Main
         binding.rvMainCategory.adapter = mainAdapter
-        mainAdapter.setCategories(viewModel.mainCategories)
 
         // Sub
         binding.rvSubCategory.adapter = subAdapter
@@ -49,13 +48,15 @@ class SelectCategoryActivity :
         viewModel.event.observe(this) {
             handleEvent(it)
         }
+        viewModel.mainCategories.observe(this) {
+            mainAdapter.setCategories(it)
+        }
     }
 
     private fun handleEvent(event: SelectCategoryViewModel.SelectCategoryEvent) {
         when (event) {
             is SelectCategoryViewModel.SelectCategoryEvent.Exit -> finish()
             is SelectCategoryViewModel.SelectCategoryEvent.MainCategoriesSelectionChanged -> {
-                mainAdapter.setCategories(event.mainCategories) // 메인 카테고리 selected 변경
                 subAdapter.setCategories(event.subCategories) // 목록 변경
             }
 
