@@ -12,15 +12,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -102,5 +103,13 @@ public class Auction extends BaseTimeEntity {
             this.auctionRegions.add(auctionRegion);
             auctionRegion.initAuction(this);
         }
+    }
+
+    public boolean isClosed() {
+        return LocalDateTime.now().isAfter(closingTime);
+    }
+
+    public boolean isInvalidFirstBidPrice(final Price price) {
+        return startPrice.isOverThan(price);
     }
 }
