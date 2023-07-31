@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.databinding.ItemRegisterImageBinding
+import com.ddangddangddang.android.model.RegisterImageModel
 
 class RegisterAuctionImageViewHolder private constructor(
     private val binding: ItemRegisterImageBinding,
-    private val onDeleteImageListener: (String) -> Unit,
+    private val onDeleteImageListener: (RegisterImageModel) -> Unit,
 ) :
     RecyclerView.ViewHolder(binding.root) {
     init {
@@ -16,17 +17,17 @@ class RegisterAuctionImageViewHolder private constructor(
     }
 
     private fun deleteImage() {
-        binding.imageUrl?.let { onDeleteImageListener(it) }
+        binding.image?.let { onDeleteImageListener(it) }
     }
 
-    fun bind(imageUrl: String) {
-        binding.imageUrl = imageUrl
+    fun bind(image: RegisterImageModel) {
+        binding.image = image
     }
 
     companion object {
         fun create(
             parent: ViewGroup,
-            onDeleteImageListener: (String) -> Unit,
+            onDeleteImageListener: (RegisterImageModel) -> Unit,
         ): RegisterAuctionImageViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemRegisterImageBinding.inflate(layoutInflater, parent, false)
