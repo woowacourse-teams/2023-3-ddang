@@ -17,6 +17,7 @@
     <string name="all_dialog_default_title"></string>
     <string name="all_dialog_default_negative_button">취소</string>
     <string name="all_dialog_default_positive_button">확인</string>
+    <string name="all_snackbar_default_action">확인</string>
 
     <!-- home -->
     <string name="home">경매 상품 목록</string>
@@ -71,6 +72,7 @@
     <string name="register_auction_delete_image_button_description">경매에 등록할 사진 삭제 버튼</string>
     <string name="register_auction_dialog_delete_image_message">사진을 삭제하시겠습니까?</string>
     <string name="register_auction_dialog_delete_image_positive_button">삭제</string>
+    <string name="register_autcion_snackbar_image_limit">사진은 최대 10개까지 등록 가능합니다.</string>
 
     <!-- category -->
     <string name="select_category">카테고리 선택</string>

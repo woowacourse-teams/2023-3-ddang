@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.CategoryRequest
 import com.ddangddangddang.data.model.request.DirectRegionRequest
@@ -16,17 +17,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class RegisterAuctionViewModel(private val repository: AuctionRepository) : ViewModel() {
-    private val _images: MutableLiveData<List<String>> = MutableLiveData(
-        listOf(
-            "https://m.the-nora.com/web/upload/NNEditor/20161207/IMG_292920copy.JPG",
-            "https://img.animalplanet.co.kr/news/2020/02/10/700/1b2b4q83cbc25b47g551.jpg",
-            "https://i.ytimg.com/vi/Mk7n5UvpMzQ/maxresdefault.jpg",
-            "https://cdn.dominos.co.kr/admin/upload/goods/20221117_V7ZfEQKb.jpg?RS=350x350&SP=1",
-            "https://i.namu.wiki/i/HehKgZCWtYmx88aflvkUl29biDUxoTVPPpWOBaakkKZEjvGP6T5vGZAYOUip8UhwX9Wi-hDo-O4i1wBc9VNtIQ.webp",
-            "https://downloadwap.com/thumbs2/wallpapers/p2/22/cartoon-anime/9hIWVxSI.jpg",
-        ),
-    )
-    val images: LiveData<List<String>>
+    private val _images: MutableLiveData<List<RegisterImageModel>> = MutableLiveData()
+    val images: LiveData<List<RegisterImageModel>>
         get() = _images
     val title: MutableLiveData<String> = MutableLiveData("")
     val category: MutableLiveData<String> = MutableLiveData("전자기기 > 노트북")
@@ -38,6 +30,9 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     val closingTime: LiveData<LocalDateTime>
         get() = _closingTime
     val directRegion: MutableLiveData<String> = MutableLiveData("경기도 부천시")
+
+    val selectableImageSize: Int
+        get() = MAXIMUM_IMAGE_SIZE - (images.value?.size ?: 0)
 
     private val _event: SingleLiveEvent<RegisterAuctionEvent> = SingleLiveEvent()
     val event: LiveData<RegisterAuctionEvent>
@@ -95,7 +90,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val directRegion = directRegion.value ?: ""
 
         return RegisterAuctionRequest(
-            images,
+            listOf("https://item.kakaocdn.net/do/58119590d6204ebd70e97763ca933baf113e2bd2b7407c8202a97d2241a96625"),
             title,
             CategoryRequest(category.split(" > ")[0], category.split(" > ")[1]),
             description,
@@ -144,12 +139,20 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.InputErrorEvent.InvalidValueInputEvent
     }
 
-    fun setDeleteImageEvent(imageUrl: String) {
-        _event.value = RegisterAuctionEvent.DeleteImage(imageUrl)
+    fun setDeleteImageEvent(image: RegisterImageModel) {
+        _event.value = RegisterAuctionEvent.DeleteImage(image)
     }
 
-    fun deleteImage(imageUrl: String) {
-        _images.value = _images.value?.minus(imageUrl) ?: emptyList()
+    fun addImages(images: List<RegisterImageModel>) {
+        _images.value = _images.value?.plus(images) ?: images
+    }
+
+    fun deleteImage(image: RegisterImageModel) {
+        _images.value = _images.value?.minus(image) ?: emptyList()
+    }
+
+    fun pickImages() {
+        _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
     sealed class RegisterAuctionEvent {
@@ -160,6 +163,12 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             object InvalidValueInputEvent : InputErrorEvent()
             object BlankExistEvent : InputErrorEvent()
         }
-        class DeleteImage(val imageUrl: String) : RegisterAuctionEvent()
+
+        class DeleteImage(val image: RegisterImageModel) : RegisterAuctionEvent()
+        object MultipleMediaPicker : RegisterAuctionEvent()
+    }
+
+    companion object {
+        const val MAXIMUM_IMAGE_SIZE = 10
     }
 }
