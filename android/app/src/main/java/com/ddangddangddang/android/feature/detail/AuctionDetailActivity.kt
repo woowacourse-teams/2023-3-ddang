@@ -23,7 +23,8 @@ class AuctionDetailActivity :
         binding.viewModel = viewModel
         val auctionId = intent.getLongExtra(AUCTION_ID_KEY, -1L)
         setupViewModel()
-        viewModel.loadAuctionDetail(auctionId)
+
+        if (savedInstanceState == null) { viewModel.loadAuctionDetail(auctionId) }
     }
 
     private fun setupViewModel() {
@@ -39,10 +40,7 @@ class AuctionDetailActivity :
     private fun handleEvent(event: AuctionDetailViewModel.AuctionDetailEvent) {
         when (event) {
             is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
-
-            is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> {
-                showAuctionBidDialog()
-            }
+            is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> showAuctionBidDialog()
         }
     }
 
