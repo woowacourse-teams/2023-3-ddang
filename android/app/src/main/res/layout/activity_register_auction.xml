@@ -315,7 +315,7 @@
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_marginVertical="22dp"
-                    android:onClick="@{() -> viewModel.submitAuction()}"
+                    android:onClick="@{() -> viewModel.submitAuction(context)}"
                     android:padding="0dp"
                     android:text="@string/register_auction"
                     android:textSize="18sp"
