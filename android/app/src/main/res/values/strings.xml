@@ -67,12 +67,11 @@
     <string name="register_auction_blank_exist_error">채우지 않은 필드가 존재합니다.</string>
     <string name="register_auction_invalid_input_error">필드에 유효하지 않은 값이 존재합니다.</string>
     <string name="register_auction_ok">확인</string>
-
-
-    <!-- category -->
-    <string name="select_category">카테고리 선택</string>
     <string name="register_auction_image_description">경매에 등록할 사진</string>
     <string name="register_auction_delete_image_button_description">경매에 등록할 사진 삭제 버튼</string>
     <string name="register_auction_dialog_delete_image_message">사진을 삭제하시겠습니까?</string>
     <string name="register_auction_dialog_delete_image_positive_button">삭제</string>
+
+    <!-- category -->
+    <string name="select_category">카테고리 선택</string>
 </resources>
