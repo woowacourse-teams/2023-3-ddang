@@ -46,7 +46,7 @@
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_seller_reliability">(%.1f)</string>
 
-    <!-- detail_auction_bid -->
+    <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>
     <string name="detail_auction_bid_dialog_input_price">%,d 원</string>
     <string name="detail_auction_bid_dialog_unit_price">판매자가 설정한 경매 단위: %,d원</string>
