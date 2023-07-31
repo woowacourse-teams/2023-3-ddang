@@ -13,7 +13,8 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
         get() = _event
 
     private val _mainCategories =
-        categoryRepository.getMainCategories().categories.map { it.toPresentation() }.toMutableList()
+        categoryRepository.getMainCategories().categories.map { it.toPresentation() }
+            .toMutableList()
     val mainCategories: List<CategoryModel>
         get() = _mainCategories.toList() // DiffUtil은 리스트의 주소가 다르지 않으면 Difference를 검사 안함
 
@@ -41,7 +42,10 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
             categoryRepository.getSubCategories(mainCategoryId).categories.map { it.toPresentation() }
         _subCategories = newSubCategories.toMutableList()
 
-        _event.value = SelectCategoryEvent.MainCategoriesSelectionChanged // Adapter 갱신 위한 이벤트 변경
+        _event.value = SelectCategoryEvent.MainCategoriesSelectionChanged(
+            mainCategories,
+            subCategories,
+        ) // Adapter 갱신 위한 이벤트 변경
     }
 
     fun setSubCategorySelection(subCategoryId: Long) {
@@ -54,12 +58,18 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
                 it
             }
         }
-        _event.value = SelectCategoryEvent.SubCategoriesSelectionChanged // Adapter 갱신 위한 이벤트 변경
+        _event.value =
+            SelectCategoryEvent.SubCategoriesSelectionChanged(subCategories) // Adapter 갱신 위한 이벤트 변경
     }
 
     sealed class SelectCategoryEvent {
         object Exit : SelectCategoryEvent()
-        object MainCategoriesSelectionChanged : SelectCategoryEvent()
-        object SubCategoriesSelectionChanged : SelectCategoryEvent()
+        data class MainCategoriesSelectionChanged(
+            val mainCategories: List<CategoryModel>,
+            val subCategories: List<CategoryModel>,
+        ) : SelectCategoryEvent()
+
+        data class SubCategoriesSelectionChanged(val subCategories: List<CategoryModel>) :
+            SelectCategoryEvent()
     }
 }
