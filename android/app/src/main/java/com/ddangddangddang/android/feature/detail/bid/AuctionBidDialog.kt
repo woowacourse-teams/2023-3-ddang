@@ -34,6 +34,17 @@ class AuctionBidDialog : DialogFragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.bidPrice.value?.let { // 다이얼로그 최초로 띄우는 경우
+            activityViewModel.auctionDetailModel.value?.let {
+                val lastBidPrice = it.lastBidPrice
+                val bidUnit = it.bidUnit
+                viewModel.setBidPrice(lastBidPrice + bidUnit)
+            } ?: dismiss()
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,40 +65,50 @@ class AuctionBidDialog : DialogFragment() {
         setupObserver()
     }
 
+    override fun onResume() {
+        super.onResume()
+        binding.etBidPrice.requestFocus()
+        binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(binding.etBidPrice.text.toString()))
+    }
+
     private fun setupListener() {
         binding.etBidPrice.addTextChangedListener(watcher)
         binding.etBidPrice.setOnClickListener {
-            val curLength = binding.etBidPrice.text.toString().length
-            binding.etBidPrice.setSelection(curLength - 2)
-        }
-
-        binding.tvBidCancel.setOnClickListener {
-            activityViewModel.loadAuctionDetail(2L)
+            binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(binding.etBidPrice.text.toString()))
         }
     }
 
     private fun setupObserver() {
-        viewModel.bidPrice.observe(viewLifecycleOwner) {
-            setInputBidPrice(it)
-        }
+        viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
+        viewModel.bidPrice.observe(viewLifecycleOwner) { setInputBidPrice(it) }
+    }
 
-        activityViewModel.auctionDetailModel.observe(viewLifecycleOwner) {
-            viewModel.setBidPrice(it.lastBidPrice + it.bidUnit)
+    private fun handleEvent(event: AuctionBidViewModel.AuctionBidEvent) {
+        when (event) {
+            is AuctionBidViewModel.AuctionBidEvent.Cancel -> cancel()
+            is AuctionBidViewModel.AuctionBidEvent.SuccessSubmit -> successSubmit(event.price)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        binding.etBidPrice.requestFocus()
-        binding.etBidPrice.setSelection(binding.etBidPrice.text.toString().length - 2)
+    private fun cancel() {
+        dismiss()
+    }
+
+    private fun successSubmit(price: Int) {
+        activityViewModel.auctionDetailModel.value?.let { activityViewModel.loadAuctionDetail(it.id) }
+        dismiss()
     }
 
     private fun setInputBidPrice(price: Int) {
         val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price).format(price)
         binding.etBidPrice.removeTextChangedListener(watcher)
         binding.etBidPrice.setText(displayPrice)
-        binding.etBidPrice.setSelection(displayPrice.length - 2) // " 원" 앞으로 커서 이동
+        binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
         binding.etBidPrice.addTextChangedListener(watcher)
+    }
+
+    private fun getCursorPositionFrontSuffix(content: String): Int {
+        return content.length - AuctionBidViewModel.SUFFIX_INPUT_PRICE.length
     }
 
     override fun onDestroyView() {

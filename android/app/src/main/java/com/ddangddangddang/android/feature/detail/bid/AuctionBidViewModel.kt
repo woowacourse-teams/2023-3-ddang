@@ -3,8 +3,16 @@ package com.ddangddangddang.android.feature.detail.bid
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import kotlinx.coroutines.launch
+import java.math.BigInteger
 
 class AuctionBidViewModel : ViewModel() {
+    private val _event: SingleLiveEvent<AuctionBidEvent> = SingleLiveEvent()
+    val event: LiveData<AuctionBidEvent>
+        get() = _event
+
     private val _bidPrice: MutableLiveData<Int> = MutableLiveData()
     val bidPrice: LiveData<Int>
         get() = _bidPrice
@@ -15,22 +23,35 @@ class AuctionBidViewModel : ViewModel() {
 
     fun changeInputPriceText(string: String) {
         val originalValue = string.replace(",", "") // 문자열 내 들어있는 콤마를 모두 제거
-        val targetString = SUFFIX_INPUT_PRICE // " 원"
-        val priceValue = originalValue.substringBefore(targetString)
-        val parsedValue = priceValue.toIntOrNull() ?: getDefaultPrice(priceValue)
+        val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE) // " 원"
+        val parsedValue =
+            priceValue.toBigIntegerOrNull() ?: return setBidPrice(ZERO) // 입력에 문자가 섞인 경우
 
-        if (parsedValue > Int.MAX_VALUE) return setBidPrice(Int.MAX_VALUE)
-        setBidPrice(parsedValue)
+        if (parsedValue.isOverMaxPrice()) return setBidPrice(MAX_PRICE)
+        setBidPrice(parsedValue.toInt()) // 파싱에 성공한 금액으로 설정
     }
 
-    private fun getDefaultPrice(priceValue: String): Int =
-        if ((priceValue.toBigIntegerOrNull()?.compareTo(Int.MAX_VALUE.toBigInteger()) ?: -1) == 1) {
-            Int.MAX_VALUE
-        } else {
-            0
+    private fun BigInteger.isOverMaxPrice(): Boolean {
+        return this > MAX_PRICE.toBigInteger()
+    }
+
+    fun cancel() {
+        _event.value = AuctionBidEvent.Cancel
+    }
+
+    fun submit() {
+        viewModelScope.launch {
         }
+    }
+
+    sealed class AuctionBidEvent {
+        object Cancel : AuctionBidEvent()
+        data class SuccessSubmit(val price: Int) : AuctionBidEvent()
+    }
 
     companion object {
-        private const val SUFFIX_INPUT_PRICE = " 원"
+        const val SUFFIX_INPUT_PRICE = " 원"
+        private const val ZERO = 0
+        private const val MAX_PRICE = Int.MAX_VALUE
     }
 }
