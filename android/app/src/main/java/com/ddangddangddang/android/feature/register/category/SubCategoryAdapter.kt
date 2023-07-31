@@ -18,8 +18,6 @@ class SubCategoryAdapter(
         return SubCategoryViewHolder.create(parent, onItemClickListener)
     }
 
-    override fun getItemCount(): Int = currentList.size
-
     override fun onBindViewHolder(holder: SubCategoryViewHolder, position: Int) {
         holder.bind(currentList[position])
     }

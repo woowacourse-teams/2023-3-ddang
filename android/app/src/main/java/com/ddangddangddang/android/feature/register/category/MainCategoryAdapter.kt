@@ -16,8 +16,6 @@ class MainCategoryAdapter(
         return MainCategoryViewHolder.create(parent, onItemClickListener)
     }
 
-    override fun getItemCount(): Int = currentList.size
-
     override fun onBindViewHolder(holder: MainCategoryViewHolder, position: Int) {
         holder.bind(currentList[position])
     }
