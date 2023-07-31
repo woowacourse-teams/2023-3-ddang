@@ -10,6 +10,7 @@ import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.RegisterAuctionResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.Service
+import java.io.File
 
 class AuctionRepositoryImpl private constructor(
     private val localDataSource: AuctionLocalDataSource,
@@ -32,8 +33,8 @@ class AuctionRepositoryImpl private constructor(
         return remoteDataSource.getAuctionDetail(id)
     }
 
-    override suspend fun registerAuction(auction: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse> {
-        val response = remoteDataSource.registerAuction(auction)
+    override suspend fun registerAuction(images: List<File>, auction: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse> {
+        val response = remoteDataSource.registerAuction(images, auction)
         if (response is ApiResponse.Success) {
             val auctionPreviewResponse = AuctionPreviewResponse(
                 response.body.id,

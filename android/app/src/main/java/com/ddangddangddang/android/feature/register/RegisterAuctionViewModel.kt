@@ -12,6 +12,7 @@ import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -67,7 +68,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         if (!isValidInputs) return
 
         viewModelScope.launch {
-            when (val response = repository.registerAuction(createRequestModel())) {
+            val files = images.value?.map { File(it.uri.path ?: "") } ?: emptyList()
+            when (val response = repository.registerAuction(files, createRequestModel())) {
                 is ApiResponse.Success -> {
                     _event.value = RegisterAuctionEvent.SubmitResult(response.body.id)
                 }
