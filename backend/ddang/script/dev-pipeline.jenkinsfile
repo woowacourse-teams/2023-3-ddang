@@ -43,7 +43,7 @@ pipeline {
                sshagent(credentials: ['ddang-dev-ec2']) {
                    sh "scp backend/ddang/build/libs/ddang-0.0.1-SNAPSHOT.jar ubuntu@${env.EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
                    sh "scp backend/ddang/3-ddang-submodule/application-dev.yml ubuntu@${env.EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
-                   sh "scp backend/ddang/script/deploy-script.sh ubuntu@${env.EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
+                   sh "scp backend/ddang/script/dev-deploy-script.sh ubuntu@${env.EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
                    sh "ssh ubuntu@${env.EC2_PRIVATE_IP} 'sh ${env.EC2_DIRECTORY}/deploy-script.sh' "
                }
            }
