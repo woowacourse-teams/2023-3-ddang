@@ -34,7 +34,7 @@ public class ChatRoom extends BaseCreateTimeEntity {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id", nullable = false)
+    @JoinColumn(name = "auction_id", nullable = false, foreignKey = @ForeignKey(name = "fk_chat_room_auction"))
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)
