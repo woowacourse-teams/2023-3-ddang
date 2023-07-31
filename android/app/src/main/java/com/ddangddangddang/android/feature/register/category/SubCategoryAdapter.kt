@@ -1,9 +1,7 @@
 package com.ddangddangddang.android.feature.register.category
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.ddangddangddang.android.databinding.ItemSelectSubCategoryBinding
 import com.ddangddangddang.android.model.CategoryModel
 
 class SubCategoryAdapter(
@@ -17,12 +15,7 @@ class SubCategoryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubCategoryViewHolder {
-        val binding = ItemSelectSubCategoryBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false,
-        )
-        return SubCategoryViewHolder(binding, onItemClickListener)
+        return SubCategoryViewHolder.create(parent, onItemClickListener)
     }
 
     override fun getItemCount(): Int = currentList.size

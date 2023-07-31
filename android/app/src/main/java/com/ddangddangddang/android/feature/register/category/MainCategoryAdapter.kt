@@ -1,9 +1,7 @@
 package com.ddangddangddang.android.feature.register.category
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.ddangddangddang.android.databinding.ItemSelectMainCategoryBinding
 import com.ddangddangddang.android.model.CategoryModel
 
 class MainCategoryAdapter(
@@ -15,12 +13,7 @@ class MainCategoryAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainCategoryViewHolder {
-        val binding = ItemSelectMainCategoryBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false,
-        )
-        return MainCategoryViewHolder(binding, onItemClickListener)
+        return MainCategoryViewHolder.create(parent, onItemClickListener)
     }
 
     override fun getItemCount(): Int = currentList.size

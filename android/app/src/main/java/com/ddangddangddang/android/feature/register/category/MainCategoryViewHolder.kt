@@ -1,6 +1,8 @@
 package com.ddangddangddang.android.feature.register.category
 
 import android.graphics.Typeface
+import android.view.LayoutInflater
+import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ItemSelectMainCategoryBinding
@@ -25,6 +27,14 @@ class MainCategoryViewHolder(
             binding.clMainCategoryItem.isSelected = false
             binding.tvCategory.setTextColor(binding.root.context.getColor(R.color.black_600))
             binding.tvCategory.setTypeface(null, Typeface.NORMAL)
+        }
+    }
+
+    companion object {
+        fun create(parent: ViewGroup, onItemClick: (Long) -> Unit): MainCategoryViewHolder {
+            val layoutInflater = LayoutInflater.from(parent.context)
+            val binding = ItemSelectMainCategoryBinding.inflate(layoutInflater, parent, false)
+            return MainCategoryViewHolder(binding, onItemClick)
         }
     }
 }

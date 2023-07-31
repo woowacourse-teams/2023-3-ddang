@@ -18,6 +18,7 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
         get() = _mainCategories.toList() // DiffUtil은 리스트의 주소가 다르지 않으면 Difference를 검사 안함
 
     private val _subCategories = mutableListOf<CategoryModel>()
+
     val subCategories: List<CategoryModel>
         get() = _subCategories.toList()
 
