@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:onClick="@{() -> onItemClick.invoke(category.id)}"
-        android:background="@color/it_white_to_red_100">
+        android:background="@color/white_to_red_100_selected">
 
         <TextView
             android:id="@+id/tv_category"
