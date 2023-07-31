@@ -17,8 +17,7 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
     val mainCategories: List<CategoryModel>
         get() = _mainCategories.toList() // DiffUtil은 리스트의 주소가 다르지 않으면 Difference를 검사 안함
 
-    private val _subCategories = mutableListOf<CategoryModel>()
-
+    private var _subCategories = mutableListOf<CategoryModel>()
     val subCategories: List<CategoryModel>
         get() = _subCategories.toList()
 
@@ -38,10 +37,9 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
         }
 
         // 서브 카테고리 변경
-        _subCategories.clear()
         val newSubCategories =
             categoryRepository.getSubCategories(mainCategoryId).categories.map { it.toPresentation() }
-        _subCategories.addAll(newSubCategories)
+        _subCategories = newSubCategories.toMutableList()
 
         _event.value = SelectCategoryEvent.MainCategoriesSelectionChanged // Adapter 갱신 위한 이벤트 변경
     }
