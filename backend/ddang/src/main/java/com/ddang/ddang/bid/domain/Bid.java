@@ -25,7 +25,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString(exclude = {"auction", "bidder"})
+@ToString(of = {"id", "price"})
 public class Bid extends BaseCreateTimeEntity {
 
     @Id
@@ -49,5 +49,17 @@ public class Bid extends BaseCreateTimeEntity {
         this.auction = auction;
         this.bidder = bidder;
         this.price = price;
+    }
+
+    public boolean isSameBidder(final User bidder) {
+        return this.bidder.equals(bidder);
+    }
+
+    public boolean isBidPriceGreaterThan(final Price price) {
+        return this.price.isMoreThan(price);
+    }
+
+    public boolean isNextBidPriceGreaterThan(final Price price) {
+        return auction.isSmallerThanNextBidPrice(price);
     }
 }
