@@ -1,6 +1,7 @@
 package com.ddangddangddang.android.feature.register.category
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +20,7 @@ class SelectCategoryActivity :
     }
     private val subAdapter by lazy {
         SubCategoryAdapter { id ->
-            viewModel.setSubCategorySelection(id)
+            viewModel.submitCategory(id)
         }
     }
 
@@ -59,6 +60,10 @@ class SelectCategoryActivity :
     private fun handleEvent(event: SelectCategoryViewModel.SelectCategoryEvent) {
         when (event) {
             is SelectCategoryViewModel.SelectCategoryEvent.Exit -> finish()
+            is SelectCategoryViewModel.SelectCategoryEvent.Submit -> {
+                // 인텐트에 담아서 넘기는 코드 작성 예정
+                Log.d("test", "Submit ${event.category}") // 코드 작성 전까지 확인용
+            }
         }
     }
 }

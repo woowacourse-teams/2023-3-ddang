@@ -50,13 +50,7 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
 
     fun setMainCategorySelection(mainCategoryId: Long) {
         _mainCategories.value?.let { items ->
-            _mainCategories.value = items.map { categoryModel -> // mainCategoryId로 isChecked = true, 나머지 false로 변경
-                if (categoryModel.id == mainCategoryId) {
-                    categoryModel.copy(isChecked = true)
-                } else {
-                    categoryModel.copy(isChecked = false)
-                }
-            }
+            _mainCategories.value = items.changeIsChecked(mainCategoryId)
 
             // 서브 카테고리 변경
             if (subCategoriesCache[mainCategoryId] == null || subCategoriesCache[mainCategoryId]!!.isEmpty()) {
@@ -78,19 +72,27 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
         }
     }
 
-    fun setSubCategorySelection(subCategoryId: Long) {
-        _subCategories.value?.let { items ->
-            _subCategories.value = items.map { categoryModel ->
-                if (categoryModel.id == subCategoryId) {
-                    categoryModel.copy(isChecked = true)
-                } else {
-                    categoryModel.copy(isChecked = false)
-                }
-            }
+    fun submitCategory(subCategoryId: Long) {
+        val main = _mainCategories.value?.find { it.isChecked }
+        val sub = _subCategories.value?.find { it.id == subCategoryId }
+
+        if (main != null && sub != null) {
+            val category = CategoryModel("${main.name} > ${sub.name}", subCategoryId)
+            _event.value = SelectCategoryEvent.Submit(category)
         }
     }
 
+    private fun List<CategoryModel>.changeIsChecked(checkedId: Long): List<CategoryModel> =
+        this.map {
+            if (it.id == checkedId) {
+                it.copy(isChecked = true)
+            } else {
+                it.copy(isChecked = false)
+            }
+        }
+
     sealed class SelectCategoryEvent {
         object Exit : SelectCategoryEvent()
+        data class Submit(val category: CategoryModel) : SelectCategoryEvent()
     }
 }
