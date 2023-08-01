@@ -77,7 +77,6 @@ class QuerydslAuctionRepositoryImplTest {
                                        .bidUnit(new BidUnit(1_000))
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
-                                       .subCategory(sub)
                                        .build();
 
         final Region firstRegion = new Region("서울특별시");
@@ -92,6 +91,7 @@ class QuerydslAuctionRepositoryImplTest {
 
         auction.addAuctionRegions(List.of(auctionRegion));
         auction.addSeller(seller);
+        auction.addSubCategory(sub);
 
         auctionRepository.save(auction);
 

@@ -4,7 +4,6 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.category.domain.Category;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -49,14 +48,13 @@ public record CreateAuctionDto(
         return request.thirdRegionIds();
     }
 
-    public Auction toEntity(final Category subCategory) {
+    public Auction toEntity() {
         return Auction.builder()
                       .title(title)
                       .description(description)
                       .bidUnit(new BidUnit(bidUnit))
                       .startPrice(new Price(startPrice))
                       .closingTime(closingTime)
-                      .subCategory(subCategory)
                       .build();
     }
 }

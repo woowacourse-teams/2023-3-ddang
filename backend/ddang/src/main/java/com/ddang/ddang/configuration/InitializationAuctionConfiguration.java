@@ -53,7 +53,6 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .bidUnit(new BidUnit(1_000))
                                         .startPrice(new Price(1_000_000))
                                         .closingTime(LocalDateTime.now())
-                                        .subCategory(sub)
                                         .build();
         auction1.addAuctionRegions(List.of(auctionRegion1));
 
@@ -64,7 +63,6 @@ public class InitializationAuctionConfiguration implements ApplicationRunner {
                                         .startPrice(new Price(900_000))
                                         .closingTime(LocalDateTime.now()
                                                                   .plusDays(5L))
-                                        .subCategory(sub)
                                         .build();
         auction2.addAuctionRegions(List.of(auctionRegion2));
 

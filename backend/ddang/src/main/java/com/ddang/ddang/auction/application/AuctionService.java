@@ -40,28 +40,24 @@ public class AuctionService {
 
     @Transactional
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
-        final Auction auction = convertAuction(dto);
+        final Auction auction = dto.toEntity();
         final User seller = userRepository.findById(dto.sellerId())
                                         .orElseThrow(() -> new UserNotFoundException("지정한 판매자를 찾을 수 없습니다."));
+        final Category subCategory = categoryRepository.findSubCategoryById(dto.subCategoryId())
+                                                       .orElseThrow(() -> new CategoryNotFoundException(
+                                                               "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
+                                                       ));
         final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
         final List<AuctionImage> auctionImages = convertAuctionImages(dto);
 
         auction.addAuctionRegions(auctionRegions);
         auction.addAuctionImages(auctionImages);
         auction.addSeller(seller);
+        auction.addSubCategory(subCategory);
 
         final Auction persistAuction = auctionRepository.save(auction);
 
         return CreateInfoAuctionDto.from(persistAuction);
-    }
-
-    private Auction convertAuction(final CreateAuctionDto dto) {
-        final Category subCategory = categoryRepository.findSubCategoryById(dto.subCategoryId())
-                                                       .orElseThrow(() -> new CategoryNotFoundException(
-                                                               "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
-                                                       ));
-
-        return dto.toEntity(subCategory);
     }
 
     private List<AuctionRegion> convertAuctionRegions(final CreateAuctionDto dto) {

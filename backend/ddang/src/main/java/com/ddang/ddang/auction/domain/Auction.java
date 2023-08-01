@@ -87,15 +87,13 @@ public class Auction extends BaseTimeEntity {
             final String description,
             final BidUnit bidUnit,
             final Price startPrice,
-            final LocalDateTime closingTime,
-            final Category subCategory
+            final LocalDateTime closingTime
     ) {
         this.title = title;
         this.description = description;
         this.bidUnit = bidUnit;
         this.startPrice = startPrice;
         this.closingTime = closingTime;
-        this.subCategory = subCategory;
     }
 
     public void delete() {
