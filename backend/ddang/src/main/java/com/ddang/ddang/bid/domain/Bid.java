@@ -55,15 +55,11 @@ public class Bid extends BaseCreateTimeEntity {
         return this.bidder.equals(bidder);
     }
 
-    public boolean isSmallerThanBidPrice(final Price price) {
+    public boolean isBidPriceGreaterThan(final Price price) {
         return this.price.isMoreThan(price);
     }
 
-    public boolean isSmallerThanNextBidPrice(final Price price) {
-        return calculateNextMinimumBidPrice() > price.getValue();
-    }
-
-    private int calculateNextMinimumBidPrice() {
-        return this.price.getValue() + this.auction.getBidUnit().getValue();
+    public boolean isNextBidPriceGreaterThan(final Price price) {
+        return auction.isSmallerThanNextBidPrice(price);
     }
 }

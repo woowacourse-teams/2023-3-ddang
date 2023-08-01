@@ -52,7 +52,7 @@ class BidTest {
         final Bid bid = new Bid(auction, user, new Price(10_000));
 
         // when
-        final boolean actual = bid.isSmallerThanBidPrice(new Price(9_000));
+        final boolean actual = bid.isBidPriceGreaterThan(new Price(9_000));
 
         // then
         assertThat(actual).isTrue();
@@ -73,7 +73,7 @@ class BidTest {
         final Bid bid = new Bid(auction, user, new Price(10_000));
 
         // when
-        final boolean actual = bid.isSmallerThanNextBidPrice(new Price(10_900));
+        final boolean actual = bid.isNextBidPriceGreaterThan(new Price(10_900));
 
         // then
         assertThat(actual).isTrue();

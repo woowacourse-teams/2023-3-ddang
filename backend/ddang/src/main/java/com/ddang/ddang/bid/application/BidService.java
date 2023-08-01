@@ -87,10 +87,10 @@ public class BidService {
     }
 
     private void checkInvalidBidPrice(final Bid lastBid, final Price price) {
-        if (lastBid.isSmallerThanBidPrice(price)) {
+        if (lastBid.isBidPriceGreaterThan(price)) {
             throw new InvalidBidPriceException("마지막 입찰 금액보다 낮은 금액을 입력했습니다");
         }
-        if (lastBid.isSmallerThanNextBidPrice(price)) {
+        if (lastBid.isNextBidPriceGreaterThan(price)) {
             throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
         }
     }
