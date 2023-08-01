@@ -82,7 +82,7 @@ class BidControllerTest {
     @Test
     void 해당_경매가_없는_경우_입찰시_404를_반환한다() throws Exception {
         // given
-        final long invalidAuctionId = 9999L;
+        final Long invalidAuctionId = 9999L;
 
         final CreateBidRequest bidRequest = new CreateBidRequest(invalidAuctionId, 10_000);
         final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
@@ -148,7 +148,7 @@ class BidControllerTest {
                 .willThrow(auctionNotFoundException);
 
         // when & then
-        final long invalidAuctionId = -999L;
+        final Long invalidAuctionId = -999L;
         mockMvc.perform(get("/bids/{auctionId}", invalidAuctionId).contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
