@@ -1,5 +1,8 @@
 package com.ddangddangddang.android.feature.register
 
+import android.content.Context
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +15,7 @@ import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -62,12 +66,13 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         )
     }
 
-    fun submitAuction() {
+    fun submitAuction(context: Context) {
         val isValidInputs = judgeValidInputs()
         if (!isValidInputs) return
 
         viewModelScope.launch {
-            when (val response = repository.registerAuction(createRequestModel())) {
+            val files = images.value?.map { File(it.uri.getAbsolutePath(context)) } ?: emptyList()
+            when (val response = repository.registerAuction(files, createRequestModel())) {
                 is ApiResponse.Success -> {
                     _event.value = RegisterAuctionEvent.SubmitResult(response.body.id)
                 }
@@ -77,6 +82,19 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
                 is ApiResponse.Unexpected -> {}
             }
         }
+    }
+
+    private fun Uri.getAbsolutePath(context: Context): String {
+        val pathColumn = MediaStore.Images.Media.DATA
+        val projection = arrayOf(pathColumn)
+        val cursor = context.contentResolver.query(this, projection, null, null, null)
+        cursor?.use {
+            if (it.moveToFirst()) {
+                val columnIndex = it.getColumnIndexOrThrow(pathColumn)
+                return it.getString(columnIndex)
+            }
+        }
+        return ""
     }
 
     private fun createRequestModel(): RegisterAuctionRequest {
