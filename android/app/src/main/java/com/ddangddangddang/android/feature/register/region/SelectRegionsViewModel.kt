@@ -69,6 +69,10 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
         regionSelections.removeIf { it.id == thirdId }
     }
 
+    fun submit() {
+        _event.value = SelectRegionsEvent.Submit(regionSelections)
+    }
+
     // checked를 바꿔주는 확장 함수
     private fun List<RegionSelectionModel>.changeIsChecked(checkedId: Long): List<RegionSelectionModel> =
         this.map {
@@ -82,5 +86,6 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     sealed class SelectRegionsEvent {
         object Exit : SelectRegionsEvent()
         data class AddRegion(val newRegion: RegionSelectionModel) : SelectRegionsEvent()
+        data class Submit(val regions: List<RegionSelectionModel>) : SelectRegionsEvent()
     }
 }

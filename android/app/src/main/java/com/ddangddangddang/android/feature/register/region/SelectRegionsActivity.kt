@@ -5,6 +5,7 @@ import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectRegionsBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.google.android.material.chip.Chip
 
@@ -60,6 +61,10 @@ class SelectRegionsActivity :
             is SelectRegionsViewModel.SelectRegionsEvent.AddRegion -> {
                 addRegionChip(event.newRegion.id, event.newRegion.name)
             }
+
+            is SelectRegionsViewModel.SelectRegionsEvent.Submit -> {
+                submit(event.regions)
+            }
         }
     }
 
@@ -73,5 +78,9 @@ class SelectRegionsActivity :
             }
         }
         binding.cgRegionChips.addView(newChip)
+    }
+
+    private fun submit(regions: List<RegionSelectionModel>) {
+        // 인텐트에 담고 종료
     }
 }
