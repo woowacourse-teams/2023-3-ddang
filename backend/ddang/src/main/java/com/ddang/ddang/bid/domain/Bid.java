@@ -51,11 +51,11 @@ public class Bid extends BaseCreateTimeEntity {
         this.price = price;
     }
 
-    public boolean isLastBidder(final User bidder) {
+    public boolean isSameBidder(final User bidder) {
         return this.bidder.equals(bidder);
     }
 
-    public boolean isSmallerThanLastBidPrice(final Price price) {
+    public boolean isSmallerThanBidPrice(final Price price) {
         return this.price.isMoreThan(price);
     }
 
@@ -63,7 +63,6 @@ public class Bid extends BaseCreateTimeEntity {
         return calculateNextMinimumBidPrice() > price.getValue();
     }
 
-    // TODO: 2023/07/28 필드 관련 메서드 외 메서드 명에 getter 괜찮은가?
     private int calculateNextMinimumBidPrice() {
         return this.price.getValue() + this.auction.getBidUnit().getValue();
     }
