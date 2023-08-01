@@ -1,5 +1,10 @@
 package com.ddang.ddang.auction.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
@@ -15,7 +20,10 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
-import org.assertj.core.api.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -26,15 +34,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @Transactional
@@ -92,7 +91,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         // when
@@ -124,7 +124,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(3L),
                 sub.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         // when & then
@@ -164,7 +165,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(secondRegion.getId()),
                 sub.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         // when & then
@@ -198,7 +200,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 1L,
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         // when & then
@@ -238,7 +241,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 main.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         // when & then
@@ -282,7 +286,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(createAuctionDto);
@@ -349,7 +354,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
         final CreateAuctionDto createAuctionDto2 = new CreateAuctionDto(
                 "경매 상품 2",
@@ -359,7 +365,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         auctionService.create(createAuctionDto1);
@@ -411,7 +418,8 @@ class AuctionServiceTest {
                 LocalDateTime.now(),
                 List.of(thirdRegion.getId()),
                 sub.getId(),
-                List.of(auctionImage)
+                List.of(auctionImage),
+                1L
         );
 
         final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(createAuctionDto);

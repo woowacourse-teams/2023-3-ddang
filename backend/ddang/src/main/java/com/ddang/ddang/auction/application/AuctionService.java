@@ -7,6 +7,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -17,6 +18,8 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuctionService {
 
+    private final JpaUserRepository userRepository;
     private final JpaAuctionRepository auctionRepository;
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
@@ -37,11 +41,14 @@ public class AuctionService {
     @Transactional
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
         final Auction auction = convertAuction(dto);
+        final User seller = userRepository.findById(dto.sellerId())
+                                        .orElseThrow(() -> new UserNotFoundException("지정한 판매자를 찾을 수 없습니다."));
         final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
         final List<AuctionImage> auctionImages = convertAuctionImages(dto);
 
         auction.addAuctionRegions(auctionRegions);
         auction.addAuctionImages(auctionImages);
+        auction.addSeller(seller);
 
         final Auction persistAuction = auctionRepository.save(auction);
 
