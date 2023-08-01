@@ -1,10 +1,8 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-
 import java.time.LocalDateTime;
 
-// TODO 2차 데모데이 이후 리팩토링 예정
 public record ReadAuctionResponse(
         Long id,
         String title,
@@ -14,15 +12,19 @@ public record ReadAuctionResponse(
         int auctioneerCount
 ) {
 
-    public static ReadAuctionResponse from(final ReadAuctionDto dto) {
+    public static ReadAuctionResponse of(final ReadAuctionDto dto, final String baseUrl) {
         return new ReadAuctionResponse(
                 dto.id(),
                 dto.title(),
-                dto.image(),
+                convertImageUrl(dto, baseUrl),
                 processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                 processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
                 0
         );
+    }
+
+    private static String convertImageUrl(final ReadAuctionDto dto, final String baseUrl) {
+        return baseUrl.concat(String.valueOf(dto.auctionImageIds().get(0)));
     }
 
     private static int processAuctionPrice(final Integer startPrice, final Integer lastBidPrice) {

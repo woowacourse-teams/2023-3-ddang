@@ -4,7 +4,6 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,11 +26,10 @@ public record CreateAuctionRequest(
         @FutureOrPresent(message = "마감 시간은 과거를 입력할 수 없습니다.")
         LocalDateTime closingTime,
 
-        // TODO 2차 데모데이 이후 리펙터링 예정
-        List<String> images,
+        @NotNull(message = "하위 카테고리가 입력되지 않았습니다.")
+        @Positive(message = "카테고리 아이디는 음수 또는 0을 입력할 수 없습니다.")
+        Long subCategoryId,
 
-        List<CreateDirectRegionRequest> directRegions,
-        
-        CreateAuctionCategoryRequest category
+        List<Long> thirdRegionIds
 ) {
 }

@@ -4,8 +4,8 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 
 public record ReadAuctionDetailResponse(AuctionDetailResponse auction, SellerResponse seller) {
 
-    public static ReadAuctionDetailResponse from(final ReadAuctionDto dto) {
-        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(dto);
+    public static ReadAuctionDetailResponse from(final ReadAuctionDto dto, final String baseUrl) {
+        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(dto, baseUrl);
         final SellerResponse sellerResponse = new SellerResponse(
                 1L,
                 "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",

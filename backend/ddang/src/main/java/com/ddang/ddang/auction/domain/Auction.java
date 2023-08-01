@@ -1,16 +1,21 @@
 package com.ddang.ddang.auction.domain;
 
+import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Lob;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,7 +44,7 @@ public class Auction extends BaseTimeEntity {
     @Column(length = 30)
     private String title;
 
-    @Lob
+    @Column(columnDefinition = "text")
     private String description;
 
     @Embedded
@@ -66,12 +71,12 @@ public class Auction extends BaseTimeEntity {
     @OneToMany(mappedBy = "auction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<AuctionRegion> auctionRegions = new ArrayList<>();
 
-    // TODO 2차 데모데이 이후 리펙터링 예정
-    private String image;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sub_category_id", foreignKey = @ForeignKey(name = "fk_auction_sub_category"))
+    private Category subCategory;
 
-    private String mainCategory;
-
-    private String subCategory;
+    @OneToMany(mappedBy = "auction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private List<AuctionImage> auctionImages = new ArrayList<>();
 
     @Builder
     private Auction(
@@ -80,17 +85,13 @@ public class Auction extends BaseTimeEntity {
             final BidUnit bidUnit,
             final Price startPrice,
             final LocalDateTime closingTime,
-            final String image,
-            final String mainCategory,
-            final String subCategory
+            final Category subCategory
     ) {
         this.title = title;
         this.description = description;
         this.bidUnit = bidUnit;
         this.startPrice = startPrice;
         this.closingTime = closingTime;
-        this.image = image;
-        this.mainCategory = mainCategory;
         this.subCategory = subCategory;
     }
 
@@ -124,5 +125,11 @@ public class Auction extends BaseTimeEntity {
     private Price calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBidPrice.getValue() + this.bidUnit.getValue();
         return new Price(nextMinimumBidPrice);
+      
+    public void addAuctionImages(final List<AuctionImage> auctionImages) {
+        for (final AuctionImage auctionImage : auctionImages) {
+            this.auctionImages.add(auctionImage);
+            auctionImage.initAuction(this);
+        }
     }
 }

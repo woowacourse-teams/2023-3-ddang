@@ -31,3 +31,7 @@ data:
       enabled: false
     auction:
       enabled: false
+
+image:
+  store:
+    dir: ./

@@ -33,11 +33,11 @@ public class Bid extends BaseCreateTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id", foreignKey = @ForeignKey(name = "fk_bid_auction_id"))
+    @JoinColumn(name = "auction_id", foreignKey = @ForeignKey(name = "fk_bid_auction"))
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bidder_id", foreignKey = @ForeignKey(name = "fk_bid_user_id"))
+    @JoinColumn(name = "bidder_id", foreignKey = @ForeignKey(name = "fk_bid_user"))
     private User bidder;
 
     @Embedded
