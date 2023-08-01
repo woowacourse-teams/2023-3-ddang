@@ -6,6 +6,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectRegionsBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.google.android.material.chip.Chip
 
 class SelectRegionsActivity :
     BindingActivity<ActivitySelectRegionsBinding>(R.layout.activity_select_regions) {
@@ -22,7 +23,7 @@ class SelectRegionsActivity :
     }
     private val thirdRegionsAdapter by lazy {
         ThirdRegionsAdapter {
-            viewModel.setThirdRegionSelection(it)
+            viewModel.addRegion(it)
         }
     }
 
@@ -55,10 +56,23 @@ class SelectRegionsActivity :
 
     private fun handleEvent(event: SelectRegionsViewModel.SelectRegionsEvent) {
         when (event) {
-            SelectRegionsViewModel.SelectRegionsEvent.Exit -> finish()
-            is SelectRegionsViewModel.SelectRegionsEvent.FirstRegionSelectionChanged -> TODO()
-            is SelectRegionsViewModel.SelectRegionsEvent.SecondRegionSelectionChanged -> TODO()
-            is SelectRegionsViewModel.SelectRegionsEvent.ThirdRegionSelectionChanged -> TODO()
+            is SelectRegionsViewModel.SelectRegionsEvent.Exit -> finish()
+            is SelectRegionsViewModel.SelectRegionsEvent.AddRegion -> {
+                addRegionChip(event.id, event.regionName)
+            }
         }
+    }
+
+    private fun addRegionChip(id: Long, name: String) {
+        binding.cgRegionChips.addView(
+            Chip(this).apply {
+                text = name
+                isCloseIconVisible = true
+                setOnCloseIconClickListener {
+                    viewModel.deleteRegion(id)
+                    binding.cgRegionChips.removeView(this)
+                }
+            },
+        )
     }
 }

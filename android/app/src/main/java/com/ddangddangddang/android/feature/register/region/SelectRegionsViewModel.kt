@@ -1,6 +1,5 @@
 package com.ddangddangddang.android.feature.register.region
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,6 +29,8 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     val thirdRegions: LiveData<List<RegionSelectionModel>>
         get() = _thirdRegions
 
+    private val regionSelectionsId = mutableListOf<Long>() // 임시
+
     fun setExitEvent() {
         _event.value = SelectRegionsEvent.Exit
     }
@@ -48,7 +49,6 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     }
 
     fun setSecondRegionSelection(id: Long) {
-        Log.d("test", id.toString())
         _secondRegions.value?.let { regionSelectionModels ->
             _secondRegions.value = regionSelectionModels.map { regionSelectionModel ->
                 if (regionSelectionModel.id == id) {
@@ -59,21 +59,29 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
             }
         }
         _thirdRegions.value = regionRepository.getThirdRegions(id).map { it.toPresentation() }
-        Log.d("test", thirdRegions.value.toString())
     }
 
-    fun setThirdRegionSelection(id: Long) {
-        // chip 추가 시키는 코드
+    fun addRegion(thirdId: Long) {
+        // 이미 있는 칩이면 종료
+        if (regionSelectionsId.contains(thirdId)) return
+
+        // 없는 칩이면 추가
+        val first = _firstRegions.value?.find { it.isChecked }
+        val second = _secondRegions.value?.find { it.isChecked }
+        val third = _thirdRegions.value?.find { it.id == thirdId }
+
+        if (first != null && second != null && third != null) {
+            _event.value =
+                SelectRegionsEvent.AddRegion(thirdId, "${first.name} ${second.name} ${third.name}")
+        }
+    }
+
+    fun deleteRegion(thirdId: Long) {
+        regionSelectionsId.remove(thirdId)
     }
 
     sealed class SelectRegionsEvent {
         object Exit : SelectRegionsEvent()
-        class FirstRegionSelectionChanged(val secondRegions: List<RegionSelectionModel>) :
-            SelectRegionsEvent()
-
-        class SecondRegionSelectionChanged(val thirdRegions: List<RegionSelectionModel>) :
-            SelectRegionsEvent()
-
-        class ThirdRegionSelectionChanged() : SelectRegionsEvent()
+        data class AddRegion(val id: Long, val regionName: String) : SelectRegionsEvent()
     }
 }

@@ -50,17 +50,12 @@
             app:layout_constraintTop_toBottomOf="@id/tb_select_regions">
 
             <com.google.android.material.chip.ChipGroup
+                android:id="@+id/cg_region_chips"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="64dp"
                 android:paddingHorizontal="@dimen/margin_side_layout"
                 android:paddingVertical="4dp"
                 app:chipSpacingHorizontal="16dp">
-
-                <com.google.android.material.chip.Chip
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:closeIconVisible="true"
-                    tools:text="경기도 시흥시" />
 
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
