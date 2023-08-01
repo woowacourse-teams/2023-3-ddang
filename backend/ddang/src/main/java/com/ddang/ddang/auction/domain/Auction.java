@@ -5,6 +5,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
+import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,6 +43,10 @@ public class Auction extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "seller_id", foreignKey = @ForeignKey(name = "fk_auction_seller"))
+    private User seller;
 
     @Column(length = 30)
     private String title;
@@ -104,6 +109,17 @@ public class Auction extends BaseTimeEntity {
         }
     }
 
+    public void addAuctionImages(final List<AuctionImage> auctionImages) {
+        for (final AuctionImage auctionImage : auctionImages) {
+            this.auctionImages.add(auctionImage);
+            auctionImage.initAuction(this);
+        }
+    }
+
+    public void addSeller(final User seller) {
+        this.seller = seller;
+    }
+
     public boolean isClosed(final LocalDateTime targetTime) {
         return targetTime.isAfter(closingTime);
     }
@@ -123,12 +139,5 @@ public class Auction extends BaseTimeEntity {
     private Price calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBid.getPrice().getValue() + this.bidUnit.getValue();
         return new Price(nextMinimumBidPrice);
-    }
-
-    public void addAuctionImages(final List<AuctionImage> auctionImages) {
-        for (final AuctionImage auctionImage : auctionImages) {
-            this.auctionImages.add(auctionImage);
-            auctionImage.initAuction(this);
-        }
     }
 }
