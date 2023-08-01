@@ -168,7 +168,6 @@ class AuctionControllerTest {
                 false,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
                 List.of(readRegionsDto),
                 List.of(1L),
                 "main1",
