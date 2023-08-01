@@ -72,7 +72,7 @@ public class BidService {
         }
     }
 
-    public void checkIsNotLastBidder(final Bid lastBid, final User bidder) {
+    private void checkIsNotLastBidder(final Bid lastBid, final User bidder) {
         // TODO: 2023/07/30 경매 등록자가 입찰하는 경우에 대한 예외 케이스 추가 예정
         if (lastBid.isSameBidder(bidder)) {
             throw new InvalidBidderException("이미 최고 입찰자입니다");
