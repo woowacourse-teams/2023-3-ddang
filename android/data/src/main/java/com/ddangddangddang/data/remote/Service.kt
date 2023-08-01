@@ -3,6 +3,7 @@ package com.ddangddangddang.data.remote
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.RegisterAuctionResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -22,4 +23,10 @@ interface Service {
 
     @POST("/auctions")
     suspend fun registerAuction(@Body body: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse>
+
+    @GET("/categories")
+    suspend fun fetchMainCategories(): ApiResponse<List<EachCategoryResponse>>
+
+    @GET("/categories/{id}")
+    suspend fun fetchSubCategories(@Path("id") mainId: Long): ApiResponse<List<EachCategoryResponse>>
 }
