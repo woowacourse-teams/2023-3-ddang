@@ -134,7 +134,7 @@
             app:layout_constraintEnd_toStartOf="@id/tv_region_second_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_region_first_title"
-            tools:listitem="@layout/item_select_regions_first" />
+            tools:listitem="@layout/item_select_region_first" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -145,7 +145,7 @@
             app:layout_constraintEnd_toStartOf="@id/rv_regions_third"
             app:layout_constraintStart_toEndOf="@id/rv_regions_first"
             app:layout_constraintTop_toBottomOf="@id/tv_region_second_title"
-            tools:listitem="@layout/item_select_regions_second" />
+            tools:listitem="@layout/item_select_region_second" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_regions_third"
@@ -155,7 +155,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/rv_regions_second"
             app:layout_constraintTop_toBottomOf="@id/tv_region_third_title"
-            tools:listitem="@layout/item_select_regions_third" />
+            tools:listitem="@layout/item_select_region_third" />
 
         <Button
             android:id="@+id/btn_select_submit"
