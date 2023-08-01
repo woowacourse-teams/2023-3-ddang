@@ -25,6 +25,10 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     val loadingAuctionInProgress: Boolean
         get() = _loadingAuctionsInProgress
 
+    private var _isLast = false
+    val isLast: Boolean
+        get() = _isLast
+
     private val _event: SingleLiveEvent<HomeEvent> = SingleLiveEvent()
     val event: LiveData<HomeEvent>
         get() = _event
@@ -36,7 +40,10 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
                 val response =
                     repository.getAuctionPreviews(lastAuctionId.value, SIZE_AUCTION_LOAD)
             ) {
-                is ApiResponse.Success -> {}
+                is ApiResponse.Success -> {
+                    _isLast = response.body.isLast
+                }
+
                 is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}

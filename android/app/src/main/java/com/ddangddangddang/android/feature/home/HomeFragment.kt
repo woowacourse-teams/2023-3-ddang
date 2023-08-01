@@ -18,7 +18,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
 
-            // 다음 페이지가 존재하는지 뷰 모델 데이터 확인하는 코드 추가 필요
+            if (viewModel.isLast) return
 
             if (!viewModel.loadingAuctionInProgress) {
                 val lastVisibleItemPosition =
