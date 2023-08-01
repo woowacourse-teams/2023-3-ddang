@@ -7,7 +7,6 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.LoginUserDto;
-import com.ddang.ddang.bid.application.dto.CreateUserDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
@@ -15,6 +14,7 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -408,17 +408,17 @@ class BidServiceTest {
         userRepository.save(user1);
         userRepository.save(user2);
 
-        final CreateUserDto createUserDto1 = new CreateUserDto(user1.getId());
+        final LoginUserDto loginUserDto1 = new LoginUserDto(user1.getId());
         final CreateBidDto createBidDto1 = new CreateBidDto(auction1.getId(), 1_000);
-        bidService.create(createUserDto1, createBidDto1);
+        bidService.create(loginUserDto1, createBidDto1);
 
-        final CreateUserDto createUserDto2 = new CreateUserDto(user1.getId());
+        final LoginUserDto loginUserDto2 = new LoginUserDto(user1.getId());
         final CreateBidDto createBidDto2 = new CreateBidDto(auction2.getId(), 1_000);
-        bidService.create(createUserDto2, createBidDto2);
+        bidService.create(loginUserDto2, createBidDto2);
 
-        final CreateUserDto createUserDto3 = new CreateUserDto(user2.getId());
+        final LoginUserDto loginUserDto3 = new LoginUserDto(user2.getId());
         final CreateBidDto createBidDto3 = new CreateBidDto(auction1.getId(), 10_000);
-        bidService.create(createUserDto3, createBidDto3);
+        bidService.create(loginUserDto3, createBidDto3);
 
         // when
         final List<ReadBidDto> actual = bidService.readAllByAuctionId(auction1.getId());
