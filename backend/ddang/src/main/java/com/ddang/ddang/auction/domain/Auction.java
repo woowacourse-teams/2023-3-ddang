@@ -112,4 +112,8 @@ public class Auction extends BaseTimeEntity {
     public boolean isInvalidFirstBidPrice(final Price price) {
         return startPrice.isOverThan(price);
     }
+
+    public void updateLastBidPrice(final Price lastBidPrice) {
+        this.lastBidPrice = lastBidPrice;
+    }
 }
