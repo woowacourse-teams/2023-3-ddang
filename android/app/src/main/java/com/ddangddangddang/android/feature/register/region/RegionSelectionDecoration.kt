@@ -12,11 +12,13 @@ class RegionSelectionDecoration : RecyclerView.ItemDecoration() {
         state: RecyclerView.State,
     ) {
         val position = parent.getChildAdapterPosition(view)
-        if (position == 0) outRect.left = DEFAULT_ITEM_MARGIN
+        if (position == 0) {
+            outRect.left = DEFAULT_ITEM_MARGIN
+        }
         outRect.right = DEFAULT_ITEM_MARGIN
     }
 
     companion object {
-        private const val DEFAULT_ITEM_MARGIN = 42
+        private val DEFAULT_ITEM_MARGIN = 36
     }
 }

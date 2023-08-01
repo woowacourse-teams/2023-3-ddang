@@ -18,6 +18,6 @@
         android:text="@{region.name}"
         app:closeIconVisible="true"
         tools:text="서울특별시 동작구 흑석동"
-        android:onClick="@{() -> onCloseItemClick.invoke(region.id)}"/>
+        onCloseClick="@{() -> onCloseItemClick.invoke(region.id)}" />
 
 </layout>
