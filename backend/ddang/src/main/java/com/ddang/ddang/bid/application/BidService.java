@@ -55,7 +55,7 @@ public class BidService {
 
     private void checkInvalidBid(final Auction auction, final User bidder, final CreateBidDto bidDto) {
         final Bid lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
-        final Price price = getPrice(bidDto.price());
+        final Price price = findPrice(bidDto.price());
 
         if (lastBid == null) {
             checkInvalidFirstBidPrice(auction, price);
@@ -88,7 +88,7 @@ public class BidService {
         }
     }
 
-    private Price getPrice(final int value) {
+    private Price findPrice(final int value) {
         try {
             return new Price(value);
         } catch (final InvalidPriceValueException ex) {
