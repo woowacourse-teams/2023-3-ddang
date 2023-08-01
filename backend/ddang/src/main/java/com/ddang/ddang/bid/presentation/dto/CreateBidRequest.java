@@ -10,6 +10,6 @@ public record CreateBidRequest(
 
         @NotNull(message = "입찰 금액이 입력되지 않았습니다.")
         @Positive
-        int bidPrice
+        Integer bidPrice
 ) {
 }
