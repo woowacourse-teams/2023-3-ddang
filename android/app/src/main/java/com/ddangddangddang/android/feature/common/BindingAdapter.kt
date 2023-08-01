@@ -7,7 +7,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.chip.Chip
-import kotlin.jvm.functions.FunctionN
 
 @BindingAdapter("imageUrl")
 fun ImageView.setImageUrl(url: String?) {
