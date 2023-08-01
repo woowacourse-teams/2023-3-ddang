@@ -15,6 +15,11 @@ class SelectRegionsActivity :
             viewModel.setFirstRegionSelection(it)
         }
     }
+    private val secondRegionsAdapter by lazy {
+        SecondRegionsAdapter {
+            viewModel.setSecondRegionSelection(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +29,7 @@ class SelectRegionsActivity :
 
     private fun setupAdapter() {
         binding.rvRegionsFirst.adapter = firstRegionsAdapter
+        binding.rvRegionsSecond.adapter = secondRegionsAdapter
     }
 
     private fun setupObserve() {
@@ -34,6 +40,7 @@ class SelectRegionsActivity :
             firstRegionsAdapter.setRegions(it)
         }
         viewModel.secondRegions.observe(this) {
+            secondRegionsAdapter.setRegions(it)
         }
 //        viewModel.thirdRegions.observe(this) {
 //

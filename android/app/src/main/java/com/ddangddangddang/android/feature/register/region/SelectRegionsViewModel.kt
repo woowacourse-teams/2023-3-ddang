@@ -46,6 +46,19 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
         _secondRegions.value = regionRepository.getSecondRegions(id).map { it.toPresentation() }
     }
 
+    fun setSecondRegionSelection(id: Long) {
+        _secondRegions.value?.let { regionSelectionModels ->
+            _secondRegions.value = regionSelectionModels.map { regionSelectionModel ->
+                if (regionSelectionModel.id == id) {
+                    regionSelectionModel.copy(isChecked = true)
+                } else {
+                    regionSelectionModel.copy(isChecked = false)
+                }
+            }
+        }
+        _thirdRegions.value = regionRepository.getThirdRegions(id).map { it.toPresentation() }
+    }
+
     sealed class SelectRegionsEvent {
         object Exit : SelectRegionsEvent()
         class FirstRegionSelectionChanged(val secondRegions: List<RegionSelectionModel>) :
