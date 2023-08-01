@@ -214,7 +214,7 @@ class MessageServiceTest {
     }
 
     @Test
-    void 수신자가_없는_경우_메시지를_생성하면제_예외가_발생한다() {
+    void 수신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // given
         final BidUnit bidUnit = new BidUnit(1_000);
         final Price startPrice = new Price(10_000);
