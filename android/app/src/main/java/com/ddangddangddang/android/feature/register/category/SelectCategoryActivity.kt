@@ -28,6 +28,7 @@ class SelectCategoryActivity :
         setupDecoration()
         setupAdapter()
         setupObserve()
+        viewModel.loadMainCategories()
     }
 
     private fun setupDecoration() {
@@ -41,7 +42,6 @@ class SelectCategoryActivity :
 
         // Sub
         binding.rvSubCategory.adapter = subAdapter
-        subAdapter.setCategories(viewModel.subCategories)
     }
 
     private fun setupObserve() {
@@ -50,6 +50,9 @@ class SelectCategoryActivity :
         }
         viewModel.mainCategories.observe(this) {
             mainAdapter.setCategories(it)
+        }
+        viewModel.subCategories.observe(this) {
+            subAdapter.setCategories(it)
         }
     }
 
