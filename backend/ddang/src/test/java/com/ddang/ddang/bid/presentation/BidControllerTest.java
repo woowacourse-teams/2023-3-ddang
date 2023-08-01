@@ -3,7 +3,7 @@ package com.ddang.ddang.bid.presentation;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.bid.application.BidService;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.CreateUserDto;
+import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.presentation.dto.CreateBidRequest;
 import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
@@ -60,7 +60,7 @@ class BidControllerTest {
         // given
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
 
-        given(bidService.create(any(CreateUserDto.class), any(CreateBidDto.class))).willReturn(1L);
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class))).willReturn(1L);
 
         // when & then
         mockMvc.perform(post("/bids").header("Authorization", 1L)
@@ -78,7 +78,7 @@ class BidControllerTest {
         // given
         final CreateBidRequest bidRequest = new CreateBidRequest(9999L, 10_000);
         final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
-        given(bidService.create(any(CreateUserDto.class), any(CreateBidDto.class)))
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
                 .willThrow(auctionNotFoundException);
 
         // when & then
@@ -96,7 +96,7 @@ class BidControllerTest {
         // given
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidAuctionToBidException invalidAuctionToBidException = new InvalidAuctionToBidException("삭제된 경매입니다");
-        given(bidService.create(any(CreateUserDto.class), any(CreateBidDto.class)))
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
                 .willThrow(invalidAuctionToBidException);
 
         // when & then

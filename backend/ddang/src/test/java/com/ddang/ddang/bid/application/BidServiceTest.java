@@ -6,7 +6,7 @@ import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.CreateUserDto;
+import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
@@ -57,11 +57,11 @@ class BidServiceTest {
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 10_000);
 
         // when
-        final Long actual = bidService.create(createUserDto, createBidDto);
+        final Long actual = bidService.create(loginUserDto, createBidDto);
 
         // then
         assertThat(actual).isPositive();
@@ -84,15 +84,15 @@ class BidServiceTest {
         userRepository.save(user1);
         userRepository.save(user2);
 
-        final CreateUserDto createUserDto1 = new CreateUserDto(user1.getId());
-        final CreateUserDto createUserDto2 = new CreateUserDto(user2.getId());
+        final LoginUserDto loginUserDto1 = new LoginUserDto(user1.getId());
+        final LoginUserDto loginUserDto2 = new LoginUserDto(user2.getId());
         final CreateBidDto createBidDto1 = new CreateBidDto(auction.getId(), 10_000);
         final CreateBidDto createBidDto2 = new CreateBidDto(auction.getId(), 14_000);
 
-        bidService.create(createUserDto1, createBidDto1);
+        bidService.create(loginUserDto1, createBidDto1);
 
         // when
-        final Long actual = bidService.create(createUserDto2, createBidDto2);
+        final Long actual = bidService.create(loginUserDto2, createBidDto2);
 
         // then
         assertThat(actual).isPositive();
@@ -113,11 +113,11 @@ class BidServiceTest {
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 1_000);
 
         // when
-        final Long actual = bidService.create(createUserDto, createBidDto);
+        final Long actual = bidService.create(loginUserDto, createBidDto);
 
         // then
         assertThat(actual).isPositive();
@@ -129,11 +129,11 @@ class BidServiceTest {
         final User user = new User("사용자1", "이미지1", 4.9);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto = new CreateBidDto(9999L, 10_000);
 
         // when & then
-        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+        assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
@@ -151,11 +151,11 @@ class BidServiceTest {
 
         auctionRepository.save(auction);
 
-        final CreateUserDto createUserDto = new CreateUserDto(9999L);
+        final LoginUserDto loginUserDto = new LoginUserDto(9999L);
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 10_000);
 
         // when & then
-        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+        assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }
@@ -175,11 +175,11 @@ class BidServiceTest {
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 900);
 
         // when && then
-        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+        assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
                 .isInstanceOf(InvalidBidPriceException.class)
                 .hasMessage("입찰 금액이 잘못되었습니다");
     }
@@ -199,11 +199,11 @@ class BidServiceTest {
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 10_000);
 
         // when & then
-        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+        assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
                 .isInstanceOf(InvalidAuctionToBidException.class)
                 .hasMessage("이미 종료된 경매입니다");
     }
@@ -223,12 +223,12 @@ class BidServiceTest {
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 10_000);
         auction.delete();
 
         // when & then
-        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+        assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
                 .isInstanceOf(InvalidAuctionToBidException.class)
                 .hasMessage("삭제된 경매입니다");
     }
@@ -248,15 +248,15 @@ class BidServiceTest {
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto1 = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto1 = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto1 = new CreateBidDto(auction.getId(), 10_000);
-        bidService.create(createUserDto1, createBidDto1);
+        bidService.create(loginUserDto1, createBidDto1);
 
-        final CreateUserDto createUserDto2 = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto2 = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto2 = new CreateBidDto(auction.getId(), 12_000);
 
         // when && then
-        assertThatThrownBy(() -> bidService.create(createUserDto2, createBidDto2))
+        assertThatThrownBy(() -> bidService.create(loginUserDto2, createBidDto2))
                 .isInstanceOf(InvalidBidderException.class)
                 .hasMessage("이미 최고 입찰자입니다");
     }
@@ -278,15 +278,15 @@ class BidServiceTest {
         userRepository.save(user1);
         userRepository.save(user2);
 
-        final CreateUserDto createUserDto1 = new CreateUserDto(user1.getId());
+        final LoginUserDto loginUserDto1 = new LoginUserDto(user1.getId());
         final CreateBidDto createBidDto1 = new CreateBidDto(auction.getId(), 10_000);
-        bidService.create(createUserDto1, createBidDto1);
+        bidService.create(loginUserDto1, createBidDto1);
 
-        final CreateUserDto createUserDto2 = new CreateUserDto(user2.getId());
+        final LoginUserDto loginUserDto2 = new LoginUserDto(user2.getId());
         final CreateBidDto createBidDto2 = new CreateBidDto(auction.getId(), 8_000);
 
         // when & then
-        assertThatThrownBy(() -> bidService.create(createUserDto2, createBidDto2))
+        assertThatThrownBy(() -> bidService.create(loginUserDto2, createBidDto2))
                 .isInstanceOf(InvalidBidPriceException.class)
                 .hasMessage("마지막 입찰 금액보다 낮은 금액을 입력했습니다");
     }
@@ -308,15 +308,15 @@ class BidServiceTest {
         userRepository.save(user1);
         userRepository.save(user2);
 
-        final CreateUserDto createUserDto1 = new CreateUserDto(user1.getId());
-        final CreateUserDto createUserDto2 = new CreateUserDto(user2.getId());
+        final LoginUserDto loginUserDto1 = new LoginUserDto(user1.getId());
+        final LoginUserDto loginUserDto2 = new LoginUserDto(user2.getId());
         final CreateBidDto createBidDto1 = new CreateBidDto(auction.getId(), 10_000);
         final CreateBidDto createBidDto2 = new CreateBidDto(auction.getId(), 10_800);
 
-        bidService.create(createUserDto1, createBidDto1);
+        bidService.create(loginUserDto1, createBidDto1);
 
         // when && then
-        assertThatThrownBy(() -> bidService.create(createUserDto2, createBidDto2))
+        assertThatThrownBy(() -> bidService.create(loginUserDto2, createBidDto2))
                 .isInstanceOf(InvalidBidPriceException.class)
                 .hasMessage("입찰 금액이 잘못되었습니다");
     }
@@ -338,15 +338,15 @@ class BidServiceTest {
         userRepository.save(user1);
         userRepository.save(user2);
 
-        final CreateUserDto createUserDto1 = new CreateUserDto(user1.getId());
+        final LoginUserDto loginUserDto1 = new LoginUserDto(user1.getId());
         final CreateBidDto createBidDto1 = new CreateBidDto(auction.getId(), 10_000);
-        bidService.create(createUserDto1, createBidDto1);
+        bidService.create(loginUserDto1, createBidDto1);
 
-        final CreateUserDto createUserDto2 = new CreateUserDto(user2.getId());
+        final LoginUserDto loginUserDto2 = new LoginUserDto(user2.getId());
         final CreateBidDto createBidDto2 = new CreateBidDto(auction.getId(), 10_500);
 
         // when & then
-        assertThatThrownBy(() -> bidService.create(createUserDto2, createBidDto2))
+        assertThatThrownBy(() -> bidService.create(loginUserDto2, createBidDto2))
                 .isInstanceOf(InvalidBidPriceException.class)
                 .hasMessage("입찰 금액이 잘못되었습니다");
     }
@@ -367,11 +367,11 @@ class BidServiceTest {
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final CreateUserDto createUserDto = new CreateUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), bidPrice);
 
         // when & then
-        assertThatThrownBy(() -> bidService.create(createUserDto, createBidDto))
+        assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
                 .isInstanceOf(InvalidBidPriceException.class)
                 .hasMessage("입찰 금액이 잘못되었습니다");
     }

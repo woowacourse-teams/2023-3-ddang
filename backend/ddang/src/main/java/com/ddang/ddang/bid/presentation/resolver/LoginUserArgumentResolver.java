@@ -1,6 +1,6 @@
 package com.ddang.ddang.bid.presentation.resolver;
 
-import com.ddang.ddang.bid.presentation.dto.CreateUserRequest;
+import com.ddang.ddang.bid.presentation.dto.LoginUserRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -12,7 +12,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return parameter.getParameterType().equals(CreateUserRequest.class) &&
+        return parameter.getParameterType().equals(LoginUserRequest.class) &&
                 parameter.hasParameterAnnotation(LoginUser.class);
     }
 
@@ -29,6 +29,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
             throw new IllegalArgumentException("사용자 정보가 없습니다.");
         }
 
-        return new CreateUserRequest(Long.parseLong(authorization));
+        return new LoginUserRequest(Long.parseLong(authorization));
     }
 }

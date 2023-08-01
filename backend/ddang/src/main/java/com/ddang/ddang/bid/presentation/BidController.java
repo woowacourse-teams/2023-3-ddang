@@ -2,9 +2,9 @@ package com.ddang.ddang.bid.presentation;
 
 import com.ddang.ddang.bid.application.BidService;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.CreateUserDto;
+import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.presentation.dto.CreateBidRequest;
-import com.ddang.ddang.bid.presentation.dto.CreateUserRequest;
+import com.ddang.ddang.bid.presentation.dto.LoginUserRequest;
 import com.ddang.ddang.bid.presentation.resolver.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +25,10 @@ public class BidController {
 
     @PostMapping
     public ResponseEntity<Void> create(
-            @LoginUser final CreateUserRequest userRequest,
+            @LoginUser final LoginUserRequest userRequest,
             @RequestBody @Valid final CreateBidRequest bidRequest
     ) {
-        bidService.create(CreateUserDto.from(userRequest), CreateBidDto.from(bidRequest));
+        bidService.create(LoginUserDto.from(userRequest), CreateBidDto.from(bidRequest));
 
         return ResponseEntity.created(URI.create("/auctions/" + bidRequest.auctionId()))
                              .build();

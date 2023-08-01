@@ -6,7 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.CreateUserDto;
+import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
@@ -29,7 +29,7 @@ public class BidService {
     private final JpaBidRepository bidRepository;
 
     @Transactional
-    public Long create(final CreateUserDto userDto, final CreateBidDto bidDto) {
+    public Long create(final LoginUserDto userDto, final CreateBidDto bidDto) {
         final Auction auction = auctionRepository.findById(bidDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
         checkInvalidAuction(auction);
