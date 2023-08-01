@@ -3,6 +3,8 @@ package com.ddang.ddang.exception;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -53,11 +55,35 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
+    @ExceptionHandler(ChatRoomNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleChatRoomNotFoundException(final ChatRoomNotFoundException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ChatRoomNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final UserNotFoundException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
     @ExceptionHandler(AuctionNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleAuctionNotFoundException(final AuctionNotFoundException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, AuctionNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidBidException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidBidException(final InvalidBidException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidBidException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
@@ -77,13 +103,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(message));
-    }
-
-    @ExceptionHandler(InvalidBidException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidBidException(final InvalidBidException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidBidException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .body(new ExceptionResponse(ex.getMessage()));
     }
 }
