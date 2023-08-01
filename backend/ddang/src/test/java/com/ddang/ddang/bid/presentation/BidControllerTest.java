@@ -148,7 +148,8 @@ class BidControllerTest {
                 .willThrow(auctionNotFoundException);
 
         // when & then
-        mockMvc.perform(get("/bids/{auctionId}", -999L).contentType(MediaType.APPLICATION_JSON))
+        final long invalidAuctionId = -999L;
+        mockMvc.perform(get("/bids/{auctionId}", invalidAuctionId).contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(auctionNotFoundException.getMessage()))
