@@ -85,7 +85,7 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
 
     sealed class SelectRegionsEvent {
         object Exit : SelectRegionsEvent()
-        data class AddRegion(val newRegion: RegionSelectionModel) : SelectRegionsEvent()
+        data class AddRegion(val region: RegionSelectionModel) : SelectRegionsEvent()
         data class Submit(val regions: List<RegionSelectionModel>) : SelectRegionsEvent()
     }
 }
