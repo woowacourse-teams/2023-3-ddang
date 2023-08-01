@@ -48,10 +48,41 @@ class MessageServiceTest {
     @Test
     void 메시지를_생성한다() {
         // given
-        final Auction auction = createAuction();
-        final User writer = createUser("발신자");
-        final User receiver = createUser("수신자");
-        final ChatRoom chatRoom = createChatRoom(auction, receiver);
+        final BidUnit bidUnit = new BidUnit(1_000);
+        final Price startPrice = new Price(10_000);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .image("image")
+                                       .mainCategory("mainCategory")
+                                       .subCategory("subCategory")
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final User writer = new User(
+                "발신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(writer);
+
+        final User receiver = new User(
+                "수신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(receiver);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, writer);
+
+        chatRoomRepository.save(chatRoom);
+
         final String contents = "메시지 내용";
 
         final CreateMessageDto createMessageDto = new CreateMessageDto(
@@ -71,8 +102,37 @@ class MessageServiceTest {
     @Test
     void 채팅방이_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // given
-        final User writer = createUser("발신자");
-        final User receiver = createUser("수신자");
+        final BidUnit bidUnit = new BidUnit(1_000);
+        final Price startPrice = new Price(10_000);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .image("image")
+                                       .mainCategory("mainCategory")
+                                       .subCategory("subCategory")
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final User writer = new User(
+                "발신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(writer);
+
+        final User receiver = new User(
+                "수신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(receiver);
+
         final Long invalidChatRoomId = -999L;
         final String contents = "메시지 내용";
 
@@ -92,11 +152,36 @@ class MessageServiceTest {
     @Test
     void 발신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // given
-        final Auction auction = createAuction();
-        final Long invalidWriterId = -999L;
-        final User receiver = createUser("수신자");
-        final ChatRoom chatRoom = createChatRoom(auction, receiver);
+        final BidUnit bidUnit = new BidUnit(1_000);
+        final Price startPrice = new Price(10_000);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .image("image")
+                                       .mainCategory("mainCategory")
+                                       .subCategory("subCategory")
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final User receiver = new User(
+                "수신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(receiver);
+
+
+        final ChatRoom chatRoom = new ChatRoom(auction, receiver);
+
+        chatRoomRepository.save(chatRoom);
+
         final String contents = "메시지 내용";
+        final Long invalidWriterId = -999L;
 
         final CreateMessageDto createMessageDto = new CreateMessageDto(
                 chatRoom.getId(),
@@ -111,39 +196,8 @@ class MessageServiceTest {
     }
 
     @Test
-    void 수신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
+    void 수신자가_없는_경우_메시지를_생성하면제_예외가_발생한다() {
         // given
-        final Auction auction = createAuction();
-        final User writer = createUser("발신자");
-        final Long invalidReceiverId = -999L;
-        final ChatRoom chatRoom = createChatRoom(auction, writer);
-        final String contents = "메시지 내용";
-
-        final CreateMessageDto createMessageDto = new CreateMessageDto(
-                chatRoom.getId(),
-                writer.getId(),
-                invalidReceiverId,
-                contents
-        );
-
-        assertThatThrownBy(() -> messageService.create(createMessageDto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
-    }
-
-    private ChatRoom createChatRoom(final Auction auction, final User buyer) {
-        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
-
-        return chatRoomRepository.save(chatRoom);
-    }
-
-    private User createUser(final String userName) {
-        final User user = new User(userName, "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg", 0.8);
-
-        return userRepository.save(user);
-    }
-
-    private Auction createAuction() {
         final BidUnit bidUnit = new BidUnit(1_000);
         final Price startPrice = new Price(10_000);
         final Auction auction = Auction.builder()
@@ -157,6 +211,33 @@ class MessageServiceTest {
                                        .subCategory("subCategory")
                                        .build();
 
-        return auctionRepository.save(auction);
+        auctionRepository.save(auction);
+
+        final User writer = new User(
+                "발신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(writer);
+
+
+        final ChatRoom chatRoom = new ChatRoom(auction, writer);
+
+        chatRoomRepository.save(chatRoom);
+
+        final Long invalidReceiverId = -999L;
+        final String contents = "메시지 내용";
+
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                chatRoom.getId(),
+                writer.getId(),
+                invalidReceiverId,
+                contents
+        );
+
+        assertThatThrownBy(() -> messageService.create(createMessageDto))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
     }
 }
