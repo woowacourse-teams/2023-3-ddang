@@ -6,7 +6,7 @@ import com.ddangddangddang.android.model.RegionSelectionModel
 
 class FirstRegionsAdapter(private val onItemClickListener: (Long) -> Unit) :
     ListAdapter<RegionSelectionModel, FirstRegionViewHolder>(RegionsDiffUtil()) {
-    fun setregions(regions: List<RegionSelectionModel>) {
+    fun setRegions(regions: List<RegionSelectionModel>) {
         submitList(regions)
     }
 
