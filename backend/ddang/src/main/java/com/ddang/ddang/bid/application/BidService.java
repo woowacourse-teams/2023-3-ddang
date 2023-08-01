@@ -39,7 +39,8 @@ public class BidService {
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         checkInvalidBid(auction, bidder, bidDto);
 
-        return bidRepository.save(bidDto.toEntity(auction, bidder))
+        final Bid createBid = bidDto.toEntity(auction, bidder);
+        return bidRepository.save(createBid)
                             .getId();
     }
 
