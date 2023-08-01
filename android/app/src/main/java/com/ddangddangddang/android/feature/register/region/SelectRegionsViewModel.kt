@@ -37,26 +37,14 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
 
     fun setFirstRegionSelection(id: Long) {
         _firstRegions.value?.let { regionSelectionModels ->
-            _firstRegions.value = regionSelectionModels.map { regionSelectionModel ->
-                if (regionSelectionModel.id == id) {
-                    regionSelectionModel.copy(isChecked = true)
-                } else {
-                    regionSelectionModel.copy(isChecked = false)
-                }
-            }
+            _firstRegions.value = regionSelectionModels.changeIsChecked(id)
         }
         _secondRegions.value = regionRepository.getSecondRegions(id).map { it.toPresentation() }
     }
 
     fun setSecondRegionSelection(id: Long) {
         _secondRegions.value?.let { regionSelectionModels ->
-            _secondRegions.value = regionSelectionModels.map { regionSelectionModel ->
-                if (regionSelectionModel.id == id) {
-                    regionSelectionModel.copy(isChecked = true)
-                } else {
-                    regionSelectionModel.copy(isChecked = false)
-                }
-            }
+            _secondRegions.value = regionSelectionModels.changeIsChecked(id)
         }
         _thirdRegions.value = regionRepository.getThirdRegions(id).map { it.toPresentation() }
     }
@@ -81,6 +69,16 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     fun deleteRegion(thirdId: Long) {
         regionSelections.removeIf { it.id == (thirdId) }
     }
+
+    // checked를 바꿔주는 확장 함수
+    private fun List<RegionSelectionModel>.changeIsChecked(checkedId: Long): List<RegionSelectionModel> =
+        this.map {
+            if (it.id == checkedId) {
+                it.copy(isChecked = true)
+            } else {
+                it.copy(isChecked = false)
+            }
+        }
 
     sealed class SelectRegionsEvent {
         object Exit : SelectRegionsEvent()
