@@ -20,7 +20,11 @@ public record ReadAuctionDto(
         List<ReadRegionsDto> auctionRegions,
         List<Long> auctionImageIds,
         String mainCategory,
-        String subCategory
+        String subCategory,
+        Long sellerId,
+        String sellerProfile,
+        String sellerName,
+        double sellerReliability
 ) {
 
     public static ReadAuctionDto from(final Auction auction) {
@@ -37,7 +41,11 @@ public record ReadAuctionDto(
                 convertReadRegionsDto(auction),
                 convertImageUrls(auction),
                 auction.getSubCategory().getMainCategory().getName(),
-                auction.getSubCategory().getName()
+                auction.getSubCategory().getName(),
+                auction.getSeller().getId(),
+                auction.getSeller().getProfileImage(),
+                auction.getSeller().getName(),
+                auction.getSeller().getReliability()
         );
     }
 

@@ -128,8 +128,12 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
-                "",
-                ""
+                "main",
+                "sub",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
         );
 
         given(auctionService.readByAuctionId(anyLong())).willReturn(auction);
@@ -169,7 +173,11 @@ class AuctionControllerTest {
                 List.of(readRegionsDto),
                 List.of(1L),
                 "main1",
-                "sub1"
+                "sub1",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -184,7 +192,11 @@ class AuctionControllerTest {
                 List.of(readRegionsDto),
                 List.of(1L),
                 "main2",
-                "sub2"
+                "sub2",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
         );
 
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);

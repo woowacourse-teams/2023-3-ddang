@@ -12,6 +12,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -100,6 +101,55 @@ class AuctionServiceTest {
 
         // then
         assertThat(actual.id()).isPositive();
+    }
+
+    @Test
+    void 지정한_아이디에_대한_회원이_없는_경우_경매를_등록하면_예외가_발생한다() {
+        // given
+        final StoreImageDto storeImageDto = new StoreImageDto("upload.png", "store.png");
+
+        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(storeImageDto));
+
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1}
+        );
+
+        final Long invalidSellerId = -999L;
+
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
+                List.of(auctionImage),
+                invalidSellerId
+        );
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.create(createAuctionDto))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("지정한 판매자를 찾을 수 없습니다.");
     }
 
     @Test
