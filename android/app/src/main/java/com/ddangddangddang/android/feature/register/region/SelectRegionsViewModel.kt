@@ -61,13 +61,12 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
         if (first != null && second != null && third != null) {
             val newItem = third.copy(name = "${first.name} ${second.name} ${third.name}")
             regionSelections.add(newItem)
-            _event.value =
-                SelectRegionsEvent.AddRegion(newItem)
+            _event.value = SelectRegionsEvent.AddRegion(newItem)
         }
     }
 
     fun deleteRegion(thirdId: Long) {
-        regionSelections.removeIf { it.id == (thirdId) }
+        regionSelections.removeIf { it.id == thirdId }
     }
 
     // checked를 바꿔주는 확장 함수
