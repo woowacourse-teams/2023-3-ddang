@@ -43,6 +43,7 @@ class SelectRegionsActivity :
         binding.rvRegionsSecond.adapter = secondRegionsAdapter
         binding.rvRegionsThird.adapter = thirdRegionsAdapter
         binding.rvRegionChips.adapter = regionSelectionAdapter
+        binding.rvRegionChips.addItemDecoration(RegionSelectionDecoration())
     }
 
     private fun setupObserve() {
