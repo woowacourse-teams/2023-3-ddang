@@ -59,14 +59,6 @@ class SelectCategoryActivity :
     private fun handleEvent(event: SelectCategoryViewModel.SelectCategoryEvent) {
         when (event) {
             is SelectCategoryViewModel.SelectCategoryEvent.Exit -> finish()
-            is SelectCategoryViewModel.SelectCategoryEvent.MainCategoriesSelectionChanged -> {
-                subAdapter.setCategories(event.subCategories) // 목록 변경
-            }
-
-            is SelectCategoryViewModel.SelectCategoryEvent.SubCategoriesSelectionChanged -> {
-                subAdapter.setCategories(event.subCategories) // 서브 카테고리 selected 변경
-                // 인텐트에 결과값 담아서 등록 페이지로 리턴하는 코드 들어갈 예정
-            }
         }
     }
 }

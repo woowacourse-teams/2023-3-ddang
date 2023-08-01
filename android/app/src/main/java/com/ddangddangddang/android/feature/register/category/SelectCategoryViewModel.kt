@@ -59,14 +59,13 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
             }
 
             // 서브 카테고리 변경
-            if (subCategoriesCache[mainCategoryId] == null) {
+            if (subCategoriesCache[mainCategoryId] == null || subCategoriesCache[mainCategoryId]!!.isEmpty()) {
                 viewModelScope.launch {
                     val response = categoryRepository.getSubCategories(mainCategoryId)
                     when (response) {
                         is ApiResponse.Success -> {
                             val presentation = response.body.map { it.toPresentation() }
                             _subCategories.value = presentation
-                            _event.value = SelectCategoryEvent.MainCategoriesSelectionChanged(presentation) // Adapter 갱신 위한 이벤트 변경
                         }
                         is ApiResponse.Failure -> {}
                         is ApiResponse.NetworkError -> {}
@@ -75,7 +74,6 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
                 }
             } else {
                 _subCategories.value = subCategoriesCache[mainCategoryId]
-                _event.value = SelectCategoryEvent.MainCategoriesSelectionChanged(subCategoriesCache[mainCategoryId] ?: emptyList())
             }
         }
     }
@@ -89,16 +87,10 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
                     categoryModel.copy(isChecked = false)
                 }
             }
-//            _event.value =
-//                SelectCategoryEvent.SubCategoriesSelectionChanged(_subCategories.value) // Adapter 갱신 위한 이벤트 변경
         }
     }
 
     sealed class SelectCategoryEvent {
         object Exit : SelectCategoryEvent()
-        data class MainCategoriesSelectionChanged(val subCategories: List<CategoryModel>) : SelectCategoryEvent()
-
-        data class SubCategoriesSelectionChanged(val subCategories: List<CategoryModel>) :
-            SelectCategoryEvent()
     }
 }
