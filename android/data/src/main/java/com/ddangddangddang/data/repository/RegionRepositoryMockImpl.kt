@@ -28,9 +28,9 @@ class RegionRepositoryMockImpl : RegionRepository {
 
     private val thirdRegions: Map<Int, List<RegionDetailResponse>> = mapOf(
         3 to listOf(
-            RegionDetailResponse(12, "동작구구"),
-            RegionDetailResponse(13, "강남구구"),
-            RegionDetailResponse(14, "양천구구"),
+            RegionDetailResponse(12, "노량진1동"),
+            RegionDetailResponse(13, "상도1동"),
+            RegionDetailResponse(14, "흑석동"),
         ),
         4 to listOf(
             RegionDetailResponse(15, "시흥시시"),
@@ -41,6 +41,36 @@ class RegionRepositoryMockImpl : RegionRepository {
             RegionDetailResponse(18, "서구구"),
             RegionDetailResponse(19, "동구구"),
             RegionDetailResponse(20, "연수구구"),
+        ),
+        6 to listOf(
+            RegionDetailResponse(21, "동작구구"),
+            RegionDetailResponse(22, "강남구구"),
+            RegionDetailResponse(23, "양천구구"),
+        ),
+        7 to listOf(
+            RegionDetailResponse(24, "시흥시시"),
+            RegionDetailResponse(25, "부천시시"),
+            RegionDetailResponse(26, "광명시시"),
+        ),
+        8 to listOf(
+            RegionDetailResponse(27, "서구구"),
+            RegionDetailResponse(28, "동구구"),
+            RegionDetailResponse(29, "연수구구"),
+        ),
+        9 to listOf(
+            RegionDetailResponse(30, "동작구구"),
+            RegionDetailResponse(31, "강남구구"),
+            RegionDetailResponse(32, "양천구구"),
+        ),
+        10 to listOf(
+            RegionDetailResponse(33, "시흥시시"),
+            RegionDetailResponse(34, "부천시시"),
+            RegionDetailResponse(35, "광명시시"),
+        ),
+        11 to listOf(
+            RegionDetailResponse(36, "서구구"),
+            RegionDetailResponse(37, "동구구"),
+            RegionDetailResponse(38, "연수구구"),
         ),
     )
 

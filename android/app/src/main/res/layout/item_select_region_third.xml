@@ -2,25 +2,30 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
-<!--        <variable-->
-<!--            name="category"-->
-<!--            type="com.ddangddangddang.android.model.CategoryModel" />-->
-<!--        <variable-->
-<!--            name="onItemClick"-->
-<!--            type="kotlin.jvm.functions.Function1" />-->
+
+        <variable
+            name="region"
+            type="com.ddangddangddang.android.model.RegionSelectionModel" />
+
+        <variable
+            name="onItemClick"
+            type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_third_region_item"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:onClick="@{() -> onItemClick.invoke(region.id)}"
         android:background="?attr/selectableItemBackground">
 
         <TextView
             android:id="@+id/tv_region"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{region.name}"
             android:textColor="@color/black_600"
             android:textSize="@dimen/textsize_sub_header"
             app:layout_constraintBottom_toBottomOf="parent"

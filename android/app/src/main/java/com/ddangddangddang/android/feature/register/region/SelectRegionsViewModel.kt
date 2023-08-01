@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.register.region
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,6 +48,7 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     }
 
     fun setSecondRegionSelection(id: Long) {
+        Log.d("test", id.toString())
         _secondRegions.value?.let { regionSelectionModels ->
             _secondRegions.value = regionSelectionModels.map { regionSelectionModel ->
                 if (regionSelectionModel.id == id) {
@@ -57,6 +59,11 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
             }
         }
         _thirdRegions.value = regionRepository.getThirdRegions(id).map { it.toPresentation() }
+        Log.d("test", thirdRegions.value.toString())
+    }
+
+    fun setThirdRegionSelection(id: Long) {
+        // chip 추가 시키는 코드
     }
 
     sealed class SelectRegionsEvent {
