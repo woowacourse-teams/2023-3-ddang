@@ -11,16 +11,18 @@ import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailRespon
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
 import jakarta.validation.Valid;
 import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
@@ -33,8 +35,11 @@ public class AuctionController {
     private final AuctionService auctionService;
 
     @PostMapping
-    public ResponseEntity<CreateAuctionResponse> create(@ModelAttribute @Valid final CreateAuctionRequest request) {
-        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.from(request));
+    public ResponseEntity<CreateAuctionResponse> create(
+            @RequestPart final List<MultipartFile> images,
+            @RequestPart @Valid final CreateAuctionRequest request
+    ) {
+        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.from(request, images));
         final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, calculateBaseImageUrl());
 
         return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
