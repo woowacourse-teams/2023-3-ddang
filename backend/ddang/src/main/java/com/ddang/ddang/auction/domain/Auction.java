@@ -1,5 +1,6 @@
 package com.ddang.ddang.auction.domain;
 
+import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -17,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -32,7 +34,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(callSuper = false, of = {"id"})
-@ToString
+@ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime"})
 public class Auction extends BaseTimeEntity {
 
     private static final boolean DELETED_STATUS = true;
@@ -55,13 +57,9 @@ public class Auction extends BaseTimeEntity {
     @AttributeOverride(name = "value", column = @Column(name = "start_price"))
     private Price startPrice;
 
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "last_bid_price"))
-    private Price lastBidPrice;
-
-    @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "winning_bid_price"))
-    private Price winningBidPrice;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "last_bid_id", foreignKey = @ForeignKey(name = "fk_auction_last_bid"))
+    private Bid lastBid;
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
@@ -114,8 +112,8 @@ public class Auction extends BaseTimeEntity {
         return startPrice.isOverThan(price);
     }
 
-    public void updateLastBidPrice(final Price lastBidPrice) {
-        this.lastBidPrice = lastBidPrice;
+    public void updateLastBidPrice(final Bid lastBid) {
+        this.lastBid = lastBid;
     }
 
     public boolean isSmallerThanNextBidPrice(final Price price) {
@@ -123,10 +121,10 @@ public class Auction extends BaseTimeEntity {
     }
 
     private Price calculateNextMinimumBidPrice() {
-        final int nextMinimumBidPrice = this.lastBidPrice.getValue() + this.bidUnit.getValue();
+        final int nextMinimumBidPrice = this.lastBid.getPrice().getValue() + this.bidUnit.getValue();
         return new Price(nextMinimumBidPrice);
     }
-      
+
     public void addAuctionImages(final List<AuctionImage> auctionImages) {
         for (final AuctionImage auctionImage : auctionImages) {
             this.auctionImages.add(auctionImage);

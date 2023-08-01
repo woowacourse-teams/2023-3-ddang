@@ -71,6 +71,7 @@ class BidTest {
         final User user = new User("사용자1", "이미지1", 4.9);
 
         final Bid bid = new Bid(auction, user, new Price(10_000));
+        auction.updateLastBidPrice(bid);
 
         // when
         final boolean actual = bid.isNextBidPriceGreaterThan(new Price(10_900));

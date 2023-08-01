@@ -1,12 +1,11 @@
 package com.ddang.ddang.auction.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
-import java.util.List;
-import org.assertj.core.api.SoftAssertions;
+import com.ddang.ddang.user.domain.User;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -91,5 +90,22 @@ class AuctionTest {
             softAssertions.assertThat(auction.getAuctionImages()).isNotEmpty();
             softAssertions.assertThat(auctionImage.getAuction()).isNotNull();
         });
+    }
+
+    @Test
+    void 경매_마지막_입찰_정보를_업데이트한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .build();
+        final User user = new User("사용자1", "이미지1", 4.9);
+
+        final Bid bid = new Bid(auction, user, new Price(10_000));
+
+        // when
+        auction.updateLastBidPrice(bid);
+
+        // then
+        assertThat(auction.getLastBid()).isEqualTo(bid);
     }
 }
