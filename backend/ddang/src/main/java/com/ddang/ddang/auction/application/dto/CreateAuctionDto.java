@@ -21,7 +21,7 @@ public record CreateAuctionDto(
         List<MultipartFile> auctionImages
 ) {
 
-    public static CreateAuctionDto from(final CreateAuctionRequest request) {
+    public static CreateAuctionDto from(final CreateAuctionRequest request, final List<MultipartFile> images) {
         return new CreateAuctionDto(
                 request.title(),
                 request.description(),
@@ -30,7 +30,7 @@ public record CreateAuctionDto(
                 request.closingTime(),
                 calculateThirdRegionIds(request),
                 request.subCategoryId(),
-                request.images()
+                images
         );
     }
 
