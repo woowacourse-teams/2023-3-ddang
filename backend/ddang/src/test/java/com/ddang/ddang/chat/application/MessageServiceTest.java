@@ -67,7 +67,6 @@ class MessageServiceTest {
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);
@@ -125,7 +124,6 @@ class MessageServiceTest {
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);
@@ -180,7 +178,6 @@ class MessageServiceTest {
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);
@@ -231,7 +228,6 @@ class MessageServiceTest {
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);
