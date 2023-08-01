@@ -57,7 +57,6 @@ class ChatRoomControllerTest {
         final CreateMessageRequest request = new CreateMessageRequest(
                 1L,
                 1L,
-                1L,
                 contents
         );
 
