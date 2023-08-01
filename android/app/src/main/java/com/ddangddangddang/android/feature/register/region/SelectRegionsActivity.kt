@@ -58,21 +58,20 @@ class SelectRegionsActivity :
         when (event) {
             is SelectRegionsViewModel.SelectRegionsEvent.Exit -> finish()
             is SelectRegionsViewModel.SelectRegionsEvent.AddRegion -> {
-                addRegionChip(event.id, event.regionName)
+                addRegionChip(event.newRegion.id, event.newRegion.name)
             }
         }
     }
 
     private fun addRegionChip(id: Long, name: String) {
-        binding.cgRegionChips.addView(
-            Chip(this).apply {
-                text = name
-                isCloseIconVisible = true
-                setOnCloseIconClickListener {
-                    viewModel.deleteRegion(id)
-                    binding.cgRegionChips.removeView(this)
-                }
-            },
-        )
+        val newChip = Chip(this).apply {
+            text = name
+            isCloseIconVisible = true
+            setOnCloseIconClickListener {
+                viewModel.deleteRegion(id)
+                binding.cgRegionChips.removeView(this)
+            }
+        }
+        binding.cgRegionChips.addView(newChip)
     }
 }
