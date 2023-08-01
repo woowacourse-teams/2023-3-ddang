@@ -108,4 +108,38 @@ class AuctionTest {
         // then
         assertThat(auction.getLastBid()).isEqualTo(bid);
     }
+
+    @Test
+    void 특정_금액이_경매의_시작가보다_작다면_참을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .startPrice(new Price(1_000))
+                                       .build();
+
+        // when
+        final boolean actual = auction.isInvalidFirstBidPrice(new Price(900));
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_금액이_경매의_마지막_입찰가보다_작다면_참을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .build();
+        final User user = new User("사용자1", "이미지1", 4.9);
+        final Bid bid = new Bid(auction, user, new Price(10_000));
+
+        auction.updateLastBidPrice(bid);
+
+        // when
+        final boolean actual = auction.isSmallerThanNextBidPrice(new Price(9_000));
+
+        // then
+        assertThat(actual).isTrue();
+    }
 }
