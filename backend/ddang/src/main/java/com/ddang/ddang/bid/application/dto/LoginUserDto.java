@@ -1,6 +1,6 @@
 package com.ddang.ddang.bid.application.dto;
 
-import com.ddang.ddang.bid.presentation.dto.LoginUserRequest;
+import com.ddang.ddang.bid.presentation.dto.request.LoginUserRequest;
 
 public record LoginUserDto(Long usedId) {
 

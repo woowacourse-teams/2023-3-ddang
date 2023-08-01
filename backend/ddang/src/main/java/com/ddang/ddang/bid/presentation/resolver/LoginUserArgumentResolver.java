@@ -1,6 +1,6 @@
 package com.ddang.ddang.bid.presentation.resolver;
 
-import com.ddang.ddang.bid.presentation.dto.LoginUserRequest;
+import com.ddang.ddang.bid.presentation.dto.request.LoginUserRequest;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.support.WebDataBinderFactory;
