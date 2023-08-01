@@ -21,6 +21,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
@@ -68,23 +69,36 @@ class AuctionControllerTest {
         final MockMultipartFile auctionImage = new MockMultipartFile(
                 "images",
                 "image.png",
-                MediaType.IMAGE_PNG.toString(),
+                MediaType.IMAGE_PNG_VALUE,
                 new byte[]{1}
         );
-        final CreateInfoAuctionDto createInfoAuctionDto = new CreateInfoAuctionDto(1L, "title", 1L, 1_000);
+        final CreateAuctionRequest createAuctionRequest = new CreateAuctionRequest(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now().plusDays(3L),
+                2L,
+                List.of(3L)
+        );
+        final CreateInfoAuctionDto createInfoAuctionDto = new CreateInfoAuctionDto(
+                1L,
+                "title",
+                1L,
+                1_000);
+        final MockMultipartFile request = new MockMultipartFile(
+                "request",
+                "request",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsBytes(createAuctionRequest)
+        );
 
         given(auctionService.create(any(CreateAuctionDto.class))).willReturn(createInfoAuctionDto);
 
         // when & then
         mockMvc.perform(multipart("/auctions")
                        .file(auctionImage)
-                       .param("title", "경매 상품 1")
-                       .param("description", "이것은 경매 상품 1 입니다.")
-                       .param("bidUnit", "1000")
-                       .param("startPrice", "1000")
-                       .param("closingTime", LocalDateTime.now().plusDays(3L).toString())
-                       .param("subCategoryId", "2")
-                       .param("thirdRegionIds", "3")
+                       .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                )
                .andExpectAll(
@@ -154,11 +168,10 @@ class AuctionControllerTest {
                 false,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                // TODO 2차 데모데이 이후 리펙토링 예정
                 List.of(readRegionsDto),
                 List.of(1L),
-                "",
-                ""
+                "main1",
+                "sub1"
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -172,7 +185,6 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
-                // TODO 2차 데모데이 이후 리펙토링 예정
                 List.of(1L),
                 "main2",
                 "sub2"
