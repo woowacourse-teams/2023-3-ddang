@@ -76,7 +76,9 @@ class BidControllerTest {
     @Test
     void 해당_경매가_없는_경우_입찰시_404를_반환한다() throws Exception {
         // given
-        final CreateBidRequest bidRequest = new CreateBidRequest(9999L, 10_000);
+        final long invalidAuctionId = -9999L;
+
+        final CreateBidRequest bidRequest = new CreateBidRequest(invalidAuctionId, 10_000);
         final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
         given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
                 .willThrow(auctionNotFoundException);

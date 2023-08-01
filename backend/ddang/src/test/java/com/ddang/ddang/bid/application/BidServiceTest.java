@@ -126,11 +126,13 @@ class BidServiceTest {
     @Test
     void 존재하지_않는_경매에_입찰하는_경우_예외가_발생한다() {
         // given
+        final long invaliAuctionId = -9999L;
+
         final User user = new User("사용자1", "이미지1", 4.9);
         userRepository.save(user);
 
         final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
-        final CreateBidDto createBidDto = new CreateBidDto(9999L, 10_000);
+        final CreateBidDto createBidDto = new CreateBidDto(invaliAuctionId, 10_000);
 
         // when & then
         assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
@@ -141,6 +143,8 @@ class BidServiceTest {
     @Test
     void 존재하지_않는_사용자가_경매에_입찰하는_경우_예외가_발생한다() {
         // given
+        final long invalidUserId = -9999L;
+
         final Auction auction = Auction.builder()
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
@@ -151,7 +155,7 @@ class BidServiceTest {
 
         auctionRepository.save(auction);
 
-        final LoginUserDto loginUserDto = new LoginUserDto(9999L);
+        final LoginUserDto loginUserDto = new LoginUserDto(invalidUserId);
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 10_000);
 
         // when & then
