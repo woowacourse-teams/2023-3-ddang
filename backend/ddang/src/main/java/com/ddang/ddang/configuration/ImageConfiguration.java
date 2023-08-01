@@ -14,7 +14,6 @@ public class ImageConfiguration {
     private static final long MAXIMUM_FILE_SIZE = 10L;
     private static final long MAXIMUM_REQUEST_SIZE = 110L;
 
-    @Bean
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
 
