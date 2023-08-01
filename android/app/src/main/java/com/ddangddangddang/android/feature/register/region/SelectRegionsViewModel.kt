@@ -30,6 +30,7 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
         get() = _thirdRegions
 
     fun setExitEvent() {
+        _event.value = SelectRegionsEvent.Exit
     }
 
     fun setFirstRegionSelection(id: Long) {

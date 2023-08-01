@@ -15,9 +15,9 @@ class SelectRegionsActivity :
             viewModel.setFirstRegionSelection(it)
         }
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_select_regions)
         setupAdapter()
         setupObserve()
     }
@@ -27,14 +27,25 @@ class SelectRegionsActivity :
     }
 
     private fun setupObserve() {
+        viewModel.event.observe(this) {
+            handleEvent(it)
+        }
         viewModel.firstRegions.observe(this) {
             firstRegionsAdapter.setRegions(it)
         }
-//        viewModel.secondRegions.observe(this) {
-//
-//        }
+        viewModel.secondRegions.observe(this) {
+        }
 //        viewModel.thirdRegions.observe(this) {
 //
 //        }
+    }
+
+    private fun handleEvent(event: SelectRegionsViewModel.SelectRegionsEvent) {
+        when (event) {
+            SelectRegionsViewModel.SelectRegionsEvent.Exit -> finish()
+            is SelectRegionsViewModel.SelectRegionsEvent.FirstRegionSelectionChanged -> TODO()
+            is SelectRegionsViewModel.SelectRegionsEvent.SecondRegionSelectionChanged -> TODO()
+            is SelectRegionsViewModel.SelectRegionsEvent.ThirdRegionSelectionChanged -> TODO()
+        }
     }
 }

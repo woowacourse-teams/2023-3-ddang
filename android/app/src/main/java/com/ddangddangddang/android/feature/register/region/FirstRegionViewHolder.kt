@@ -32,7 +32,7 @@ class FirstRegionViewHolder(
     companion object {
         fun create(parent: ViewGroup, onItemClick: (Long) -> Unit): FirstRegionViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
-            val binding = ItemSelectRegionFirstBinding.inflate(layoutInflater)
+            val binding = ItemSelectRegionFirstBinding.inflate(layoutInflater, parent, false)
             return FirstRegionViewHolder(binding, onItemClick)
         }
     }

@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.register.region
 
+import android.util.Log
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import com.ddangddangddang.android.model.RegionSelectionModel
@@ -16,5 +17,6 @@ class FirstRegionsAdapter(private val onItemClickListener: (Long) -> Unit) :
 
     override fun onBindViewHolder(holder: FirstRegionViewHolder, position: Int) {
         holder.bind(currentList[position])
+        Log.d("test", currentList[position].toString())
     }
 }
