@@ -4,6 +4,8 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
@@ -45,20 +47,27 @@ class MessageServiceTest {
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
 
+    @Autowired
+    JpaCategoryRepository categoryRepository;
+
     @Test
     void 메시지를_생성한다() {
         // given
         final BidUnit bidUnit = new BidUnit(1_000);
         final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .description("description")
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .image("image")
-                                       .mainCategory("mainCategory")
-                                       .subCategory("subCategory")
+                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);
@@ -104,13 +113,19 @@ class MessageServiceTest {
         // given
         final BidUnit bidUnit = new BidUnit(1_000);
         final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .description("description")
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory("subCategory")
+                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);
@@ -152,13 +167,20 @@ class MessageServiceTest {
         // given
         final BidUnit bidUnit = new BidUnit(1_000);
         final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .description("description")
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory("subCategory")
+                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);
@@ -196,13 +218,20 @@ class MessageServiceTest {
         // given
         final BidUnit bidUnit = new BidUnit(1_000);
         final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .description("description")
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory("subCategory")
+                                       .subCategory(sub)
                                        .build();
 
         auctionRepository.save(auction);

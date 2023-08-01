@@ -24,9 +24,7 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers = {ChatRoomController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -48,14 +46,20 @@ class ChatRoomControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(chatRoomController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
-                                 .alwaysDo(print()).build();
+                                 .alwaysDo(print())
+                                 .build();
     }
 
     @Test
     void 메시지를_생성한다() throws Exception {
         // given
         final String contents = "메시지 내용";
-        final CreateMessageRequest request = new CreateMessageRequest(1L, 1L, contents);
+        final CreateMessageRequest request = new CreateMessageRequest(
+                1L,
+                1L,
+                1L,
+                contents
+        );
 
         given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
 

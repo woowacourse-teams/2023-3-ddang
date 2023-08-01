@@ -1,7 +1,6 @@
 package com.ddang.ddang.exception;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
@@ -66,9 +65,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final UserNotFoundException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
-      
-         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                         .body(new ExceptionResponse(ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(AuctionNotFoundException.class)
@@ -95,13 +94,5 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(message));
-    }
-
-    @ExceptionHandler(InvalidBidException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidBidException(final InvalidBidException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidBidException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .body(new ExceptionResponse(ex.getMessage()));
     }
 }
