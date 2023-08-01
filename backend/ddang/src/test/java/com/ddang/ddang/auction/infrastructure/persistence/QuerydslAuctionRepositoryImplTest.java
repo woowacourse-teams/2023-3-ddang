@@ -7,11 +7,14 @@ import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -24,11 +27,10 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Slice;
 
-@DataJpaTest
+@IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
@@ -36,6 +38,9 @@ class QuerydslAuctionRepositoryImplTest {
 
     @PersistenceContext
     EntityManager em;
+
+    @Autowired
+    JpaUserRepository userRepository;
 
     @Autowired
     JpaAuctionRepository auctionRepository;
@@ -56,6 +61,9 @@ class QuerydslAuctionRepositoryImplTest {
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
         // given
+        final User seller = new User("판매자", "https://profile.com", 3.5d);
+        userRepository.save(seller);
+
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -83,6 +91,7 @@ class QuerydslAuctionRepositoryImplTest {
         final AuctionRegion auctionRegion = new AuctionRegion(thirdRegion);
 
         auction.addAuctionRegions(List.of(auctionRegion));
+        auction.addSeller(seller);
 
         auctionRepository.save(auction);
 
@@ -115,6 +124,9 @@ class QuerydslAuctionRepositoryImplTest {
 
             final Category mainCategory = subCategory.getMainCategory();
             softAssertions.assertThat(mainCategory).isEqualTo(main);
+
+            final User actualSeller = actual.get().getSeller();
+            softAssertions.assertThat(actualSeller).isEqualTo(seller);
         });
     }
 
