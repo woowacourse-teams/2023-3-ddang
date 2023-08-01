@@ -23,3 +23,7 @@ open:
     region:
       service: service_secret
       key: key_secret
+
+image:
+  store:
+    dir: ./

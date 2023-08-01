@@ -108,4 +108,43 @@ class JpaBidRepositoryTest {
             softAssertions.assertThat(actual.get(1).getId()).isEqualTo(bid2.getId());
         });
     }
+
+    @Test
+    void 특정_경매의_마지막_입찰을_조회한다() {
+        // given
+        final Auction auction1 = Auction.builder()
+                                        .title("경매 상품 1")
+                                        .description("이것은 경매 상품 1 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+        final Auction auction2 = Auction.builder()
+                                        .title("경매 상품 2")
+                                        .description("이것은 경매 상품 2 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+        final User user = new User("사용자", "이미지", 4.9);
+        final Bid bid1 = new Bid(auction1, user, new Price(10_000));
+        final Bid bid2 = new Bid(auction1, user, new Price(12_000));
+        final Bid bid3 = new Bid(auction2, user, new Price(10_000));
+
+        auctionRepository.save(auction1);
+        auctionRepository.save(auction2);
+        userRepository.save(user);
+        bidRepository.save(bid1);
+        bidRepository.save(bid2);
+        bidRepository.save(bid3);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final Bid actual = bidRepository.findLastBidByAuctionId(auction1.getId());
+
+        // then
+        assertThat(actual.getId()).isEqualTo(bid2.getId());
+    }
 }

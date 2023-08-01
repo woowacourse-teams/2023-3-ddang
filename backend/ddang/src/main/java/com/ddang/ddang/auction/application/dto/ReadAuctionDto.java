@@ -1,7 +1,9 @@
 package com.ddang.ddang.auction.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.image.domain.AuctionImage;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,13 +14,11 @@ public record ReadAuctionDto(
         int bidUnit,
         int startPrice,
         Integer lastBidPrice,
-        Integer winningBidPrice,
         boolean deleted,
         LocalDateTime registerTime,
         LocalDateTime closingTime,
         List<ReadRegionsDto> auctionRegions,
-        // TODO 2차 데모데이 이후 리펙터링 예정
-        String image,
+        List<Long> auctionImageIds,
         String mainCategory,
         String subCategory
 ) {
@@ -30,24 +30,31 @@ public record ReadAuctionDto(
                 auction.getDescription(),
                 auction.getBidUnit().getValue(),
                 auction.getStartPrice().getValue(),
-                convertPrice(auction.getLastBidPrice()),
-                convertPrice(auction.getWinningBidPrice()),
+                convertPrice(auction.getLastBid()),
                 auction.isDeleted(),
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
                 convertReadRegionsDto(auction),
-                auction.getImage(),
-                auction.getMainCategory(),
-                auction.getSubCategory()
+                convertImageUrls(auction),
+                auction.getSubCategory().getMainCategory().getName(),
+                auction.getSubCategory().getName()
         );
     }
 
-    private static Integer convertPrice(final Price price) {
-        if (price == null) {
+    private static List<Long> convertImageUrls(final Auction auction) {
+        return auction.getAuctionImages()
+                      .stream()
+                      .map(AuctionImage::getId)
+                      .toList();
+    }
+
+    private static Integer convertPrice(final Bid bid) {
+        if (bid == null) {
             return null;
         }
 
-        return price.getValue();
+        return bid.getPrice()
+                  .getValue();
     }
 
     private static List<ReadRegionsDto> convertReadRegionsDto(final Auction auction) {

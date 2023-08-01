@@ -1,13 +1,12 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
 import com.ddang.ddang.auction.domain.Auction;
-
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Slice;
 
 public interface QuerydslAuctionRepository {
 
-    List<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size);
+    Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size);
 
-    Optional<Auction> findAuctionWithRegionsById(final Long auctionId);
+    Optional<Auction> findAuctionById(final Long auctionId);
 }
