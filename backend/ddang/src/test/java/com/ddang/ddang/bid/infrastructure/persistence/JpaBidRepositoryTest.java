@@ -144,9 +144,6 @@ class JpaBidRepositoryTest {
         // when
         final Bid actual = bidRepository.findLastBidByAuctionId(auction1.getId());
 
-        System.out.println(bid1.getCreatedTime());
-        System.out.println(bid2.getCreatedTime());
-
         // then
         assertThat(actual.getId()).isEqualTo(bid2.getId());
     }
