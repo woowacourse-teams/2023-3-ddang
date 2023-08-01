@@ -7,7 +7,6 @@ import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
-import com.ddangddangddang.data.model.response.RegisterAuctionResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.Service
 import java.io.File
@@ -21,7 +20,10 @@ class AuctionRepositoryImpl private constructor(
         return localDataSource.observeAuctionPreviews()
     }
 
-    override suspend fun getAuctionPreviews(lastAuctionId: Long?, size: Int): ApiResponse<AuctionPreviewsResponse> {
+    override suspend fun getAuctionPreviews(
+        lastAuctionId: Long?,
+        size: Int,
+    ): ApiResponse<AuctionPreviewsResponse> {
         val response = remoteDataSource.getAuctionPreviews(lastAuctionId, size)
         if (response is ApiResponse.Success) {
             localDataSource.addAuctionPreviews(response.body.auctions)
@@ -33,18 +35,13 @@ class AuctionRepositoryImpl private constructor(
         return remoteDataSource.getAuctionDetail(id)
     }
 
-    override suspend fun registerAuction(images: List<File>, auction: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse> {
+    override suspend fun registerAuction(
+        images: List<File>,
+        auction: RegisterAuctionRequest,
+    ): ApiResponse<AuctionPreviewResponse> {
         val response = remoteDataSource.registerAuction(images, auction)
         if (response is ApiResponse.Success) {
-            val auctionPreviewResponse = AuctionPreviewResponse(
-                response.body.id,
-                auction.title,
-                auction.images.firstOrNull() ?: "",
-                auction.startPrice,
-                "UNBIDDEN",
-                0,
-            )
-            localDataSource.addAuctionPreview(auctionPreviewResponse)
+            localDataSource.addAuctionPreview(response.body)
         }
         return response
     }

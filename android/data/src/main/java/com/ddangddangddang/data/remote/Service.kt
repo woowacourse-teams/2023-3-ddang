@@ -1,13 +1,15 @@
 package com.ddangddangddang.data.remote
 
-import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
+import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
-import com.ddangddangddang.data.model.response.RegisterAuctionResponse
-import retrofit2.http.Body
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -21,8 +23,12 @@ interface Service {
     @GET("/auctions/{id}")
     suspend fun fetchAuctionDetail(@Path("id") id: Long): ApiResponse<AuctionDetailResponse>
 
+    @Multipart
     @POST("/auctions")
-    suspend fun registerAuction(@Body body: RegisterAuctionRequest): ApiResponse<RegisterAuctionResponse>
+    suspend fun registerAuction(
+        @Part images: List<MultipartBody.Part>,
+        @Part("request") body: RequestBody,
+    ): ApiResponse<AuctionPreviewResponse>
 
     @GET("/categories")
     suspend fun fetchMainCategories(): ApiResponse<List<EachCategoryResponse>>
