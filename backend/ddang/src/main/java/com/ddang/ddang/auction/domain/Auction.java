@@ -104,8 +104,8 @@ public class Auction extends BaseTimeEntity {
         }
     }
 
-    public boolean isClosed() {
-        return LocalDateTime.now().isAfter(closingTime);
+    public boolean isClosed(final LocalDateTime targetTime) {
+        return targetTime.isAfter(closingTime);
     }
 
     public boolean isInvalidFirstBidPrice(final Price price) {

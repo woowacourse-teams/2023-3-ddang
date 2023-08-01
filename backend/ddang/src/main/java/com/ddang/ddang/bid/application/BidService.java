@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -53,7 +55,8 @@ public class BidService {
     }
 
     private void checkInvalidAuction(final Auction auction) {
-        if (auction.isClosed()) {
+        final LocalDateTime now = LocalDateTime.now();
+        if (auction.isClosed(now)) {
             throw new InvalidAuctionToBidException("이미 종료된 경매입니다");
         }
         if (auction.isDeleted()) {

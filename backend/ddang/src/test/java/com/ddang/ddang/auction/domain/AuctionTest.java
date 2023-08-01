@@ -93,6 +93,21 @@ class AuctionTest {
     }
 
     @Test
+    void 경매가_특정_시간을_기준으로_종료되었는지_확인한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .closingTime(LocalDateTime.now().minusDays(6))
+                                       .build();
+
+        // when
+        final boolean actual = auction.isClosed(LocalDateTime.now());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
     void 경매_마지막_입찰_정보를_업데이트한다() {
         // given
         final Auction auction = Auction.builder()
