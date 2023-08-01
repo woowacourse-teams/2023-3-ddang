@@ -9,8 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
-import com.ddangddangddang.data.model.request.CategoryRequest
-import com.ddangddangddang.data.model.request.DirectRegionRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
@@ -98,24 +96,21 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     }
 
     private fun createRequestModel(): RegisterAuctionRequest {
-        val images = images.value ?: emptyList()
         val title = title.value ?: ""
-        val category = category.value ?: ""
         val description = description.value ?: ""
         val startPrice = startPrice.value?.toInt() ?: 0
         val bidUnit = bidUnit.value?.toInt() ?: 0
         val closingTime = closingTime.value.toString() + ":00" // seconds
-        val directRegion = directRegion.value ?: ""
 
+        // 카테고리와 지역 선택 기능 구현 후 수정 필요!
         return RegisterAuctionRequest(
-            listOf("https://item.kakaocdn.net/do/58119590d6204ebd70e97763ca933baf113e2bd2b7407c8202a97d2241a96625"),
             title,
-            CategoryRequest(category.split(" > ")[0], category.split(" > ")[1]),
+            102,
             description,
             startPrice,
             bidUnit,
             closingTime,
-            listOf(DirectRegionRequest("경기도", "부천시", "원미구")),
+            listOf(3),
         )
     }
 

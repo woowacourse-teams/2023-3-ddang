@@ -1,7 +1,5 @@
 package com.ddangddangddang.data
 
-import com.ddangddangddang.data.model.request.CategoryRequest
-import com.ddangddangddang.data.model.request.DirectRegionRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -9,7 +7,6 @@ import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.AuctionResponse
 import com.ddangddangddang.data.model.response.CategoryResponse
 import com.ddangddangddang.data.model.response.DirectRegionResponse
-import com.ddangddangddang.data.model.response.RegisterAuctionResponse
 import com.ddangddangddang.data.model.response.SellerResponse
 
 private fun createAuctionPreviewResponse(
@@ -23,30 +20,27 @@ private fun createAuctionPreviewResponse(
 
 fun createAuctionPreviewsResponse(
     auctions: List<AuctionPreviewResponse> = listOf(createAuctionPreviewResponse()),
-    lastAuctionId: Long = 1,
-) = AuctionPreviewsResponse(auctions, lastAuctionId)
+    isLast: Boolean = false,
+) = AuctionPreviewsResponse(auctions, isLast)
 
 fun createRegisterAuctionRequest(
-    images: List<String> = listOf("https://i0.wp.com/opensea.kr/wp-content/uploads/2021/01/2169FF1C-8A4A-46CE-A55A-7ED291EEA033_1_105_c-1.jpeg?w=1051&ssl=1"),
     title: String = "맥북 에어 13인치",
-    category: CategoryRequest = CategoryRequest("전자기기", "노트북"),
+    subCategoryId: Long = 1,
     description: String = "얼마 안쓴 맥북 팝니다",
     startPrice: Int = 100000,
     bidUnit: Int = 1000,
     closingTime: String = "2100-07-31T12:00:00",
-    directRegions: List<DirectRegionRequest> = listOf(DirectRegionRequest("경기도", "부천시", "원미구")),
+    thirdRegionIds: List<Long> = listOf(1),
 ) = RegisterAuctionRequest(
-    images,
     title,
-    category,
+    subCategoryId,
     description,
     startPrice,
     bidUnit,
     closingTime,
-    directRegions,
+    thirdRegionIds,
 )
 
-fun createRegisterAuctionResponse(id: Long = 2) = RegisterAuctionResponse(id)
 fun createAuctionDetailResponse(
     auction: AuctionResponse = createAuctionResponse(),
     seller: SellerResponse = createSellerResponse(),

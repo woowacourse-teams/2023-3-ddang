@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AuctionPreviewsResponse(
     val auctions: List<AuctionPreviewResponse>,
-    val lastAuctionId: Long? = null,
+    val isLast: Boolean,
 )
