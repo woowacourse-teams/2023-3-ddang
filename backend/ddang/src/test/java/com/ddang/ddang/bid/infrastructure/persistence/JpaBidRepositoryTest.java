@@ -68,6 +68,33 @@ class JpaBidRepositoryTest {
     }
 
     @Test
+    void 특정_경매가_존재하는지_확인한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .build();
+        final User user = new User("사용자", "이미지", 4.9);
+        final Bid bid = new Bid(auction, user, new Price(10_000));
+
+        auctionRepository.save(auction);
+        userRepository.save(user);
+        bidRepository.save(bid);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = bidRepository.existsById(bid.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
     void 특정_경매의_입찰을_모두_조회한다() {
         // given
         final Auction auction1 = Auction.builder()
