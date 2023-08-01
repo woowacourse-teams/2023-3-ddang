@@ -7,6 +7,7 @@ import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.LoginUserDto;
+import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -105,5 +107,17 @@ public class BidService {
         } catch (final InvalidPriceValueException ex) {
             throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
         }
+    }
+
+    public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
+        if (auctionRepository.existsById(auctionId)) {
+            final List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+
+            return bids.stream()
+                       .map(ReadBidDto::from)
+                       .toList();
+        }
+
+        throw new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
     }
 }
