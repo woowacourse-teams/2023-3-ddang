@@ -14,6 +14,7 @@ public record ReadBidDto(
 
     public static ReadBidDto from(final Bid bid) {
         final User bidder = bid.getBidder();
+
         return new ReadBidDto(
                 bidder.getName(),
                 bidder.getProfileImage(),

@@ -112,7 +112,9 @@ public class BidService {
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
         auctionRepository.findById(auctionId)
                          .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+
         final List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+
         return bids.stream()
                    .map(ReadBidDto::from)
                    .toList();
