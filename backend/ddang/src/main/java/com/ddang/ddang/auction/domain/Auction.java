@@ -125,6 +125,7 @@ public class Auction extends BaseTimeEntity {
     private Price calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBidPrice.getValue() + this.bidUnit.getValue();
         return new Price(nextMinimumBidPrice);
+    }
       
     public void addAuctionImages(final List<AuctionImage> auctionImages) {
         for (final AuctionImage auctionImage : auctionImages) {
