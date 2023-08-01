@@ -110,8 +110,6 @@ class MessageServiceTest {
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .image("image")
-                                       .mainCategory("mainCategory")
                                        .subCategory("subCategory")
                                        .build();
 
@@ -160,8 +158,6 @@ class MessageServiceTest {
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .image("image")
-                                       .mainCategory("mainCategory")
                                        .subCategory("subCategory")
                                        .build();
 
@@ -206,8 +202,6 @@ class MessageServiceTest {
                                        .bidUnit(bidUnit)
                                        .startPrice(startPrice)
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .image("image")
-                                       .mainCategory("mainCategory")
                                        .subCategory("subCategory")
                                        .build();
 
