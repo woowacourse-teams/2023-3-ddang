@@ -7,7 +7,6 @@ import com.ddangddangddang.android.databinding.ActivitySelectRegionsBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
-import com.google.android.material.chip.Chip
 
 class SelectRegionsActivity :
     BindingActivity<ActivitySelectRegionsBinding>(R.layout.activity_select_regions) {
@@ -27,6 +26,11 @@ class SelectRegionsActivity :
             viewModel.addRegion(it)
         }
     }
+    private val regionSelectionAdapter by lazy {
+        RegionSelectionAdapter {
+            viewModel.deleteRegion(it)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,11 +42,15 @@ class SelectRegionsActivity :
         binding.rvRegionsFirst.adapter = firstRegionsAdapter
         binding.rvRegionsSecond.adapter = secondRegionsAdapter
         binding.rvRegionsThird.adapter = thirdRegionsAdapter
+        binding.rvRegionChips.adapter = regionSelectionAdapter
     }
 
     private fun setupObserve() {
         viewModel.event.observe(this) {
             handleEvent(it)
+        }
+        viewModel.regionSelections.observe(this) {
+            regionSelectionAdapter.setRegions(it)
         }
         viewModel.firstRegions.observe(this) {
             firstRegionsAdapter.setRegions(it)
@@ -58,26 +66,10 @@ class SelectRegionsActivity :
     private fun handleEvent(event: SelectRegionsViewModel.SelectRegionsEvent) {
         when (event) {
             is SelectRegionsViewModel.SelectRegionsEvent.Exit -> finish()
-            is SelectRegionsViewModel.SelectRegionsEvent.AddRegion -> {
-                addRegionChip(event.region.id, event.region.name)
-            }
-
             is SelectRegionsViewModel.SelectRegionsEvent.Submit -> {
                 submit(event.regions)
             }
         }
-    }
-
-    private fun addRegionChip(id: Long, name: String) {
-        val chip = Chip(this).apply {
-            text = name
-            isCloseIconVisible = true
-            setOnCloseIconClickListener {
-                viewModel.deleteRegion(id)
-                binding.cgRegionChips.removeView(this)
-            }
-        }
-        binding.cgRegionChips.addView(chip)
     }
 
     private fun submit(regions: List<RegionSelectionModel>) {

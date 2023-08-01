@@ -29,7 +29,9 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     val thirdRegions: LiveData<List<RegionSelectionModel>>
         get() = _thirdRegions
 
-    private val regionSelections = mutableListOf<RegionSelectionModel>() // 임시
+    private val _regionSelections = MutableLiveData<List<RegionSelectionModel>>(emptyList())
+    val regionSelections: LiveData<List<RegionSelectionModel>>
+        get() = _regionSelections
 
     fun setExitEvent() {
         _event.value = SelectRegionsEvent.Exit
@@ -50,27 +52,32 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     }
 
     fun addRegion(thirdId: Long) {
-        // 이미 있는 칩이면 종료
-        if (regionSelections.any { it.id == (thirdId) }) return
+        _regionSelections.value?.let { regions ->
+            // 이미 있는 칩이면 종료
+            if (regions.any { it.id == (thirdId) }) return
 
-        // 없는 칩이면 추가
-        val first = _firstRegions.value?.find { it.isChecked }
-        val second = _secondRegions.value?.find { it.isChecked }
-        val third = _thirdRegions.value?.find { it.id == thirdId }
+            // 없는 칩이면 추가
+            val first = _firstRegions.value?.find { it.isChecked }
+            val second = _secondRegions.value?.find { it.isChecked }
+            val third = _thirdRegions.value?.find { it.id == thirdId }
 
-        if (first != null && second != null && third != null) {
-            val newItem = third.copy(name = "${first.name} ${second.name} ${third.name}")
-            regionSelections.add(newItem)
-            _event.value = SelectRegionsEvent.AddRegion(newItem)
+            if (first != null && second != null && third != null) {
+                val newItem = third.copy(name = "${first.name} ${second.name} ${third.name}")
+                _regionSelections.value = regions + newItem
+            }
         }
     }
 
     fun deleteRegion(thirdId: Long) {
-        regionSelections.removeIf { it.id == thirdId }
+        _regionSelections.value?.let { regions ->
+            regions.find { it.id == thirdId }?.let {
+                _regionSelections.value = regions - it
+            }
+        }
     }
 
     fun submit() {
-        _event.value = SelectRegionsEvent.Submit(regionSelections)
+        _event.value = SelectRegionsEvent.Submit(_regionSelections.value ?: emptyList())
     }
 
     // checked를 바꿔주는 확장 함수
@@ -85,7 +92,6 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
 
     sealed class SelectRegionsEvent {
         object Exit : SelectRegionsEvent()
-        data class AddRegion(val region: RegionSelectionModel) : SelectRegionsEvent()
         data class Submit(val regions: List<RegionSelectionModel>) : SelectRegionsEvent()
     }
 }

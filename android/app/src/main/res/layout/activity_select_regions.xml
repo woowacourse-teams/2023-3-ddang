@@ -42,24 +42,16 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
-        <HorizontalScrollView
-            android:id="@+id/sv_region_chips"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_region_chips"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_select_regions">
-
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/cg_region_chips"
-                android:layout_width="wrap_content"
-                android:layout_height="64dp"
-                android:paddingHorizontal="@dimen/margin_side_layout"
-                android:paddingVertical="4dp"
-                app:chipSpacingHorizontal="16dp">
-
-            </com.google.android.material.chip.ChipGroup>
-        </HorizontalScrollView>
+        </androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:id="@+id/tv_region_first_title"
@@ -73,7 +65,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/tv_region_second_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sv_region_chips" />
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
 
         <View
             android:id="@+id/v_regions_divider_first"
@@ -83,7 +75,7 @@
             app:layout_constraintBottom_toTopOf="@id/btn_select_submit"
             app:layout_constraintEnd_toStartOf="@id/tv_region_second_title"
             app:layout_constraintStart_toEndOf="@id/tv_region_first_title"
-            app:layout_constraintTop_toBottomOf="@id/sv_region_chips" />
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
 
         <TextView
             android:id="@+id/tv_region_second_title"
@@ -97,7 +89,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@id/tv_region_third_title"
             app:layout_constraintStart_toEndOf="@id/tv_region_first_title"
-            app:layout_constraintTop_toBottomOf="@id/sv_region_chips" />
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
 
         <View
             android:id="@+id/v_regions_divider_second"
@@ -107,7 +99,7 @@
             app:layout_constraintBottom_toTopOf="@id/btn_select_submit"
             app:layout_constraintEnd_toStartOf="@id/tv_region_third_title"
             app:layout_constraintStart_toEndOf="@id/tv_region_second_title"
-            app:layout_constraintTop_toBottomOf="@id/sv_region_chips" />
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
 
         <TextView
             android:id="@+id/tv_region_third_title"
@@ -121,7 +113,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_region_second_title"
-            app:layout_constraintTop_toBottomOf="@id/sv_region_chips" />
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
 
 
         <androidx.recyclerview.widget.RecyclerView
