@@ -1,9 +1,17 @@
 package com.ddang.ddang.region.presentation;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.application.dto.ReadRegionDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -14,15 +22,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.List;
-
-import static org.hamcrest.Matchers.is;
-import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {RegionController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -59,10 +58,10 @@ class RegionControllerTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.regions.[0].id", is(first1.id()), Long.class),
-                       jsonPath("$.regions.[0].name", is(first1.name())),
-                       jsonPath("$.regions.[1].id", is(first2.id()), Long.class),
-                       jsonPath("$.regions.[1].name", is(first2.name()))
+                       jsonPath("$.[0].id", is(first1.id()), Long.class),
+                       jsonPath("$.[0].name", is(first1.name())),
+                       jsonPath("$.[1].id", is(first2.id()), Long.class),
+                       jsonPath("$.[1].name", is(first2.name()))
                );
     }
 
@@ -95,10 +94,10 @@ class RegionControllerTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.regions.[0].id", is(second1.id()), Long.class),
-                       jsonPath("$.regions.[0].name", is(second1.name())),
-                       jsonPath("$.regions.[1].id", is(second2.id()), Long.class),
-                       jsonPath("$.regions.[1].name", is(second2.name()))
+                       jsonPath("$.[0].id", is(second1.id()), Long.class),
+                       jsonPath("$.[0].name", is(second1.name())),
+                       jsonPath("$.[1].id", is(second2.id()), Long.class),
+                       jsonPath("$.[1].name", is(second2.name()))
                );
     }
 
@@ -137,10 +136,10 @@ class RegionControllerTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.regions.[0].id", is(third1.id()), Long.class),
-                       jsonPath("$.regions.[0].name", is(third1.name())),
-                       jsonPath("$.regions.[1].id", is(third2.id()), Long.class),
-                       jsonPath("$.regions.[1].name", is(third2.name()))
+                       jsonPath("$.[0].id", is(third1.id()), Long.class),
+                       jsonPath("$.[0].name", is(third1.name())),
+                       jsonPath("$.[1].id", is(third2.id()), Long.class),
+                       jsonPath("$.[1].name", is(third2.name()))
                );
     }
 
