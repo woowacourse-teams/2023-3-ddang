@@ -60,11 +60,11 @@ public class Bid extends BaseCreateTimeEntity {
     }
 
     public boolean isSmallerThanNextBidPrice(final Price price) {
-        return getNextMinimumBidPrice() > price.getValue();
+        return calculateNextMinimumBidPrice() > price.getValue();
     }
 
     // TODO: 2023/07/28 필드 관련 메서드 외 메서드 명에 getter 괜찮은가?
-    private int getNextMinimumBidPrice() {
+    private int calculateNextMinimumBidPrice() {
         return this.price.getValue() + this.auction.getBidUnit().getValue();
     }
 }
