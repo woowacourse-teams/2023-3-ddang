@@ -28,19 +28,23 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
 
     fun loadMainCategories() {
         viewModelScope.launch {
-            val response = categoryRepository.getMainCategories()
-            when (response) {
+            when (val response = categoryRepository.getMainCategories()) {
                 is ApiResponse.Success -> {
-                    val presentation = response.body.map { it.toPresentation() }
-                    _mainCategories.value = presentation
-                    presentation.forEach {
-                        subCategoriesCache[it.id] = emptyList()
-                    }
+                    val mainCategories = response.body.map { it.toPresentation() }
+                    _mainCategories.value = mainCategories
+                    setupCategoryCacheBase(mainCategories) // 메인 카테고리 - 서브 카테고리 세팅
                 }
+
                 is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
+        }
+    }
+
+    private fun setupCategoryCacheBase(mainCategories: List<CategoryModel>) {
+        mainCategories.forEach {
+            subCategoriesCache[it.id] = emptyList()
         }
     }
 
@@ -53,22 +57,27 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
             _mainCategories.value = items.changeIsChecked(mainCategoryId)
 
             // 서브 카테고리 변경
-            if (subCategoriesCache[mainCategoryId] == null || subCategoriesCache[mainCategoryId]!!.isEmpty()) {
-                viewModelScope.launch {
-                    val response = categoryRepository.getSubCategories(mainCategoryId)
-                    when (response) {
-                        is ApiResponse.Success -> {
-                            val presentation = response.body.map { it.toPresentation() }
-                            _subCategories.value = presentation
-                        }
-                        is ApiResponse.Failure -> {}
-                        is ApiResponse.NetworkError -> {}
-                        is ApiResponse.Unexpected -> {}
+            changeSubCategories(mainCategoryId)
+        }
+    }
+
+    private fun changeSubCategories(mainCategoryId: Long) {
+        if (subCategoriesCache[mainCategoryId].isNullOrEmpty()) {
+            viewModelScope.launch {
+                when (val response = categoryRepository.getSubCategories(mainCategoryId)) {
+                    is ApiResponse.Success -> {
+                        val subCategories = response.body.map { it.toPresentation() }
+                        _subCategories.value = subCategories
+                        subCategoriesCache[mainCategoryId] = subCategories // 캐시 저장
                     }
+
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
                 }
-            } else {
-                _subCategories.value = subCategoriesCache[mainCategoryId]
             }
+        } else {
+            _subCategories.value = subCategoriesCache[mainCategoryId]
         }
     }
 
