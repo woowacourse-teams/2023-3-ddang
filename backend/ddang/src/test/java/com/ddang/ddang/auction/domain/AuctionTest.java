@@ -3,6 +3,7 @@ package com.ddang.ddang.auction.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
@@ -89,6 +90,21 @@ class AuctionTest {
             softAssertions.assertThat(auction.getAuctionImages()).isNotEmpty();
             softAssertions.assertThat(auctionImage.getAuction()).isNotNull();
         });
+    }
+
+    @Test
+    void 하위_카테고리_연관_관계를_세팅한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .build();
+        final Category subCategory = new Category("sub");
+
+        // when
+        auction.addSubCategory(subCategory);
+
+        // then
+        assertThat(auction.getSubCategory()).isNotNull();
     }
 
     @Test

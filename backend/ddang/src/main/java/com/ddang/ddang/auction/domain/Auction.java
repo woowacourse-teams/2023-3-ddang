@@ -120,6 +120,10 @@ public class Auction extends BaseTimeEntity {
         this.seller = seller;
     }
 
+    public void addSubCategory(final Category subCategory) {
+        this.subCategory = subCategory;
+    }
+
     public boolean isClosed(final LocalDateTime targetTime) {
         return targetTime.isAfter(closingTime);
     }
