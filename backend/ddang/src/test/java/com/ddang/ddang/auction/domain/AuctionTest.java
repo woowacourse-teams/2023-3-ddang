@@ -57,7 +57,7 @@ class AuctionTest {
     }
 
     @Test
-    void 첫_입찰자가_시작가_낮은_금액으로_입찰하는_참을_반환한다() {
+    void 첫_입찰자가_시작가_보다_낮은_금액으로_입찰하는_경우_참을_반환한다() {
         // given
         final Auction auction = Auction.builder()
                                        .title("경매 상품 1")
