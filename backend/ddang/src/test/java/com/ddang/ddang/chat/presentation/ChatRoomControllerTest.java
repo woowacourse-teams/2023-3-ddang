@@ -103,7 +103,8 @@ class ChatRoomControllerTest {
         final String contents = "메시지 내용";
         final CreateMessageRequest request = new CreateMessageRequest(1L, 1L, contents);
 
-        final ChatRoomNotFoundException chatRoomNotFoundException = new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+        final ChatRoomNotFoundException chatRoomNotFoundException =
+                new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
         given(messageService.create(CreateMessageDto.from(invalidChatRoomId, request)))
                 .willThrow(chatRoomNotFoundException);
 
@@ -125,7 +126,8 @@ class ChatRoomControllerTest {
         final String contents = "메시지 내용";
         final CreateMessageRequest request = new CreateMessageRequest(invalidWriterId, 1L, contents);
 
-        final UserNotFoundException userNotFoundException = new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+        final UserNotFoundException userNotFoundException =
+                new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
         given(messageService.create(CreateMessageDto.from(chatRoomId, request)))
                 .willThrow(userNotFoundException);
 
@@ -170,7 +172,7 @@ class ChatRoomControllerTest {
                                         .build();
         auction2.addAuctionImages(List.of(new AuctionImage("사진", "image")));
         auction2.updateLastBidPrice(new Bid(auction2, user1, new Price(5000)));
-        
+
         final ReadParticipatingChatRoomDto chatRoom1 = new ReadParticipatingChatRoomDto(
                 1L,
                 ReadAuctionDto.from(auction1),
@@ -204,7 +206,8 @@ class ChatRoomControllerTest {
     void 요청한_사용자_정보가_없다면_404를_반환한다() throws Exception {
         // given
         final Long invalidUserId = -999L;
-        final UserNotFoundException userNotFoundException = new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+        final UserNotFoundException userNotFoundException =
+                new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
         given(chatRoomService.readAllParticipatingChatRoomsByUserId(invalidUserId))
                 .willThrow(userNotFoundException);
 
