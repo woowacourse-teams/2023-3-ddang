@@ -14,6 +14,7 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -186,5 +187,43 @@ class AuctionTest {
 
         // then
         assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_회원이_경매_판매자와_일치하면_참을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .build();
+        final User seller = new User("사용자1", "이미지1", 4.9);
+
+        auction.addSeller(seller);
+
+        // when
+        final boolean actual = auction.isOwner(seller);
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_회원이_경매_판매자와_일치하지_않으면_거짓을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .build();
+        final User seller = new User("사용자1", "이미지1", 4.9);
+        final User user = new User("사용자2", "이미지2", 4.9);
+
+        ReflectionTestUtils.setField(user, "id", 1L);
+        auction.addSeller(seller);
+
+        // when
+        final boolean actual = auction.isOwner(user);
+
+        // then
+        assertThat(actual).isFalse();
     }
 }
