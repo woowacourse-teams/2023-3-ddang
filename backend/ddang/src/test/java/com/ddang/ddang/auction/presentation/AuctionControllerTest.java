@@ -7,6 +7,13 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
@@ -26,6 +33,7 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
@@ -39,15 +47,24 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @WebMvcTest(controllers = {AuctionController.class})
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuctionControllerTest {
@@ -59,15 +76,20 @@ class AuctionControllerTest {
     AuctionController auctionController;
 
     @Autowired
+    RestDocumentationResultHandler restDocs;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         mockMvc = MockMvcBuilders.standaloneSetup(auctionController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
+                                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
+                                 .alwaysDo(restDocs)
                                  .build();
     }
 
@@ -114,6 +136,22 @@ class AuctionControllerTest {
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/auctions/1")),
                        jsonPath("$.id", is(1L), Long.class)
+               )
+               .andDo(
+                       restDocs.document(
+                               requestParts(
+                                       partWithName("images").description("이미지 파일(Array, 최대 10장)"),
+                                       partWithName("request").description("요청 데이터")
+                               ),
+                               responseFields(
+                                       fieldWithPath("id").type(JsonFieldType.NUMBER).description("경매 ID"),
+                                       fieldWithPath("title").type(JsonFieldType.STRING).description("경매 글 제목"),
+                                       fieldWithPath("image").type(JsonFieldType.STRING).description("경매 대표 이미지"),
+                                       fieldWithPath("auctionPrice").type(JsonFieldType.NUMBER).description("시작가"),
+                                       fieldWithPath("status").type(JsonFieldType.STRING).description("경매 상태"),
+                                       fieldWithPath("auctioneerCount").type(JsonFieldType.NUMBER).description("경매 참여자 수")
+                               )
+                       )
                );
     }
 
@@ -392,7 +430,7 @@ class AuctionControllerTest {
         given(auctionService.readByAuctionId(anyLong())).willReturn(auction);
 
         // when & then
-        mockMvc.perform(get("/auctions/{auctionId}", auction.id()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/{auctionId}", auction.id()).contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.auction.id", is(auction.id()), Long.class),
@@ -402,6 +440,39 @@ class AuctionControllerTest {
                        jsonPath("$.auction.startPrice", is(auction.startPrice())),
                        jsonPath("$.auction.registerTime").exists(),
                        jsonPath("$.auction.closingTime").exists()
+               )
+               .andDo(
+                       restDocs.document(
+                               pathParameters(
+                                       parameterWithName("auctionId").description("조회하고자 하는 경매 ID")
+                               ),
+                               responseFields(
+                                       fieldWithPath("auction.id").type(JsonFieldType.NUMBER).description("경매 글 ID"),
+                                       fieldWithPath("auction.images").type(JsonFieldType.ARRAY).description("경매 이미지"),
+                                       fieldWithPath("auction.title").type(JsonFieldType.STRING).description("경매 글 제목"),
+                                       fieldWithPath("auction.category").type(JsonFieldType.OBJECT).description("경매 카테고리"),
+                                       fieldWithPath("auction.category.main").type(JsonFieldType.STRING).description("상위 카테고리"),
+                                       fieldWithPath("auction.category.sub").type(JsonFieldType.STRING).description("하위 카테고리"),
+                                       fieldWithPath("auction.description").type(JsonFieldType.STRING).description("경매 본문"),
+                                       fieldWithPath("auction.startPrice").type(JsonFieldType.NUMBER).description("시작가"),
+                                       fieldWithPath("auction.lastBidPrice").description("마지막 입찰가"),
+                                       fieldWithPath("auction.status").description("경매 상태"),
+                                       fieldWithPath("auction.bidUnit").type(JsonFieldType.NUMBER).description("입찰 단위"),
+                                       fieldWithPath("auction.registerTime").type(JsonFieldType.STRING).description("경매 등록시간"),
+                                       fieldWithPath("auction.closingTime").type(JsonFieldType.STRING).description("경매 마감시간"),
+                                       fieldWithPath("auction.directRegions").type(JsonFieldType.ARRAY).description("모든 직거래 지역"),
+                                       fieldWithPath("auction.directRegions.[]").type(JsonFieldType.ARRAY).description("단일 직거래 지역"),
+                                       fieldWithPath("auction.directRegions.[].first").type(JsonFieldType.STRING).description("첫 번째 직거래 지역"),
+                                       fieldWithPath("auction.directRegions.[].second").type(JsonFieldType.STRING).description("두 번째 직거래 지역"),
+                                       fieldWithPath("auction.directRegions.[].third").type(JsonFieldType.STRING).description("세 번째 직거래 지역"),
+                                       fieldWithPath("auction.auctioneerCount").type(JsonFieldType.NUMBER).description("경매 참여자 수"),
+                                       fieldWithPath("seller").type(JsonFieldType.OBJECT).description("판매자 정보"),
+                                       fieldWithPath("seller.id").type(JsonFieldType.NUMBER).description("판매자 ID"),
+                                       fieldWithPath("seller.image").type(JsonFieldType.STRING).description("판매자 프로필 이미지 주소"),
+                                       fieldWithPath("seller.nickname").type(JsonFieldType.STRING).description("판매자 닉네임"),
+                                       fieldWithPath("seller.reliability").type(JsonFieldType.NUMBER).description("판매자 신뢰도")
+                               )
+                       )
                );
     }
 
@@ -473,7 +544,9 @@ class AuctionControllerTest {
         given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
-        mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("size", "10")
+               )
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.auctions.[0].id", is(auction2.id()), Long.class),
@@ -488,6 +561,25 @@ class AuctionControllerTest {
                        jsonPath("$.auctions.[1].auctionPrice", is(auction1.startPrice())),
                        jsonPath("$.auctions.[1].status").exists(),
                        jsonPath("$.auctions.[1].auctioneerCount").exists()
+               )
+               .andDo(
+                       restDocs.document(
+                               queryParameters(
+                                       parameterWithName("lastAuctionId").description("마지막으로 조회한 경매 ID").optional(),
+                                       parameterWithName("size").description("페이지 크기").optional()
+                               ),
+                               responseFields(
+                                       fieldWithPath("auctions").type(JsonFieldType.ARRAY).description("조회한 경매 목록"),
+                                       fieldWithPath("auctions.[]").type(JsonFieldType.ARRAY).description("조회한 단일 경매 정보"),
+                                       fieldWithPath("auctions.[].id").type(JsonFieldType.NUMBER).description("경매 ID"),
+                                       fieldWithPath("auctions.[].title").type(JsonFieldType.STRING).description("경매 글 제목"),
+                                       fieldWithPath("auctions.[].image").type(JsonFieldType.STRING).description("경매 대표 이미지"),
+                                       fieldWithPath("auctions.[].auctionPrice").type(JsonFieldType.NUMBER).description("경매가(시작가, 현재가, 낙찰가 중 하나)"),
+                                       fieldWithPath("auctions.[].status").type(JsonFieldType.STRING).description("경매 상태"),
+                                       fieldWithPath("auctions.[].auctioneerCount").type(JsonFieldType.NUMBER).description("경매 참여자 수"),
+                                       fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
+                               )
+                       )
                );
     }
 
