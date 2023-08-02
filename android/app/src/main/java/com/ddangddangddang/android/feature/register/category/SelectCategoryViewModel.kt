@@ -32,19 +32,12 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
                 is ApiResponse.Success -> {
                     val mainCategories = response.body.map { it.toPresentation() }
                     _mainCategories.value = mainCategories
-                    setupCategoryCacheBase(mainCategories) // 메인 카테고리 - 서브 카테고리 세팅
                 }
 
                 is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
-        }
-    }
-
-    private fun setupCategoryCacheBase(mainCategories: List<CategoryModel>) {
-        mainCategories.forEach {
-            subCategoriesCache[it.id] = emptyList()
         }
     }
 
@@ -62,22 +55,22 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
     }
 
     private fun changeSubCategories(mainCategoryId: Long) {
-        if (subCategoriesCache[mainCategoryId].isNullOrEmpty()) {
-            viewModelScope.launch {
-                when (val response = categoryRepository.getSubCategories(mainCategoryId)) {
-                    is ApiResponse.Success -> {
-                        val subCategories = response.body.map { it.toPresentation() }
-                        _subCategories.value = subCategories
-                        subCategoriesCache[mainCategoryId] = subCategories // 캐시 저장
-                    }
-
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
-                }
-            }
-        } else {
+        if (!subCategoriesCache[mainCategoryId].isNullOrEmpty()) {
             _subCategories.value = subCategoriesCache[mainCategoryId]
+            return
+        }
+        viewModelScope.launch {
+            when (val response = categoryRepository.getSubCategories(mainCategoryId)) {
+                is ApiResponse.Success -> {
+                    val subCategories = response.body.map { it.toPresentation() }
+                    _subCategories.value = subCategories
+                    subCategoriesCache[mainCategoryId] = subCategories // 캐시 저장
+                }
+
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
         }
     }
 
