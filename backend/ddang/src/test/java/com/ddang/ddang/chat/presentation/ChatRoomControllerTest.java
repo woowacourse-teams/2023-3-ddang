@@ -1,11 +1,22 @@
 package com.ddang.ddang.chat.presentation;
 
+import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.domain.BidUnit;
+import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadUserDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
+import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -19,9 +30,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -32,6 +48,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class ChatRoomControllerTest {
+
+    @MockBean
+    ChatRoomService chatRoomService;
 
     @MockBean
     MessageService messageService;
@@ -48,6 +67,7 @@ class ChatRoomControllerTest {
     void setUp() {
         mockMvc = MockMvcBuilders.standaloneSetup(chatRoomController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
+                                 .setCustomArgumentResolvers(new UserIdArgumentResolver())
                                  .alwaysDo(print())
                                  .build();
     }
@@ -111,6 +131,83 @@ class ChatRoomControllerTest {
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
                        .content(objectMapper.writeValueAsString(request))
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 사용자가_참여한_모든_채팅방을_조회한다() throws Exception {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        final User user1 = new User("상대1", "", 5.0);
+        final User user2 = new User("상대2", "", 5.0);
+        final Auction auction1 = Auction.builder()
+                                        .title("경매 상품 1")
+                                        .description("이것은 경매 상품 1 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+        auction1.addSeller(user1);
+        auction1.addSubCategory(sub);
+        auction1.addAuctionImages(List.of(new AuctionImage("사진", "image")));
+
+        final Auction auction2 = Auction.builder()
+                                        .title("경매 상품 2")
+                                        .description("이것은 경매 상품 2 입니다.")
+                                        .bidUnit(new BidUnit(2_000))
+                                        .startPrice(new Price(2_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+        auction2.addSeller(user2);
+        auction2.addSubCategory(sub);
+        auction2.addAuctionImages(List.of(new AuctionImage("사진", "image")));
+
+        final ReadParticipatingChatRoomDto chatRoom1 = new ReadParticipatingChatRoomDto(
+                1L,
+                ReadAuctionDto.from(auction1),
+                ReadUserDto.from(user1)
+        );
+        final ReadParticipatingChatRoomDto chatRoom2 = new ReadParticipatingChatRoomDto(
+                2L,
+                ReadAuctionDto.from(auction2),
+                ReadUserDto.from(user2)
+        );
+
+        given(chatRoomService.readAllParticipatingChatRoomsByUserId(anyLong()))
+                .willReturn(List.of(chatRoom1, chatRoom2));
+
+        // when & then
+        mockMvc.perform(get("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.chattings.[0].id", is(chatRoom1.id()), Long.class),
+                       jsonPath("$.chattings.[0].chatPartner.name", is(user1.getName())),
+                       jsonPath("$.chattings.[0].auction.title", is(auction1.getTitle())),
+                       jsonPath("$.chattings.[1].id", is(chatRoom2.id()), Long.class),
+                       jsonPath("$.chattings.[1].chatPartner.name", is(user2.getName())),
+                       jsonPath("$.chattings.[1].auction.title", is(auction2.getTitle()))
+               );
+    }
+
+    @Test
+    void 요청한_사용자_정보가_없다면_404를_반환한다() throws Exception {
+        // given
+        final Long invalidUserId = -999L;
+        final UserNotFoundException userNotFoundException = new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+        given(chatRoomService.readAllParticipatingChatRoomsByUserId(invalidUserId))
+                .willThrow(userNotFoundException);
+
+        // when & then
+        mockMvc.perform(get("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, invalidUserId)
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
