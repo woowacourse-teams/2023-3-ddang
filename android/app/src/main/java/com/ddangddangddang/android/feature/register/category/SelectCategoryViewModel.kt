@@ -75,13 +75,11 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
     }
 
     fun submitCategory(subCategoryId: Long) {
-        val main = _mainCategories.value?.find { it.isChecked }
-        val sub = _subCategories.value?.find { it.id == subCategoryId }
+        val main = _mainCategories.value?.find { it.isChecked } ?: return
+        val sub = _subCategories.value?.find { it.id == subCategoryId } ?: return
 
-        if (main != null && sub != null) {
-            val category = CategoryModel("${main.name} > ${sub.name}", subCategoryId)
-            _event.value = SelectCategoryEvent.Submit(category)
-        }
+        val category = CategoryModel("${main.name} > ${sub.name}", subCategoryId)
+        _event.value = SelectCategoryEvent.Submit(category)
     }
 
     private fun List<CategoryModel>.changeIsChecked(checkedId: Long): List<CategoryModel> =
