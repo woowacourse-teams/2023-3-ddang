@@ -2,7 +2,6 @@ package com.ddang.ddang.chat.domain;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
@@ -69,15 +68,21 @@ class ChatRoomTest {
         // given
         final User seller = new User("판매자", "이미지", 5.0);
         final User buyer = new User("구매자", "이미지", 5.0);
-        final Category main = new Category("메인");
-        final Category sub = new Category("서브");
-        main.addSubCategory(sub);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .seller(seller)
-                                       .subCategory(sub)
                                        .build();
+
+        auctionRepository.save(auction);
+
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        em.flush();
+        em.clear();
 
         // when
         final User actual = chatRoom.calculateChatPartnerOf(buyer);
