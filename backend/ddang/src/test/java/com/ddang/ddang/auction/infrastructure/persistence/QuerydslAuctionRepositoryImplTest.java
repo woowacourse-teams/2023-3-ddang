@@ -12,6 +12,8 @@ import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -38,6 +40,9 @@ class QuerydslAuctionRepositoryImplTest {
     EntityManager em;
 
     @Autowired
+    JpaUserRepository userRepository;
+
+    @Autowired
     JpaAuctionRepository auctionRepository;
 
     @Autowired
@@ -56,6 +61,9 @@ class QuerydslAuctionRepositoryImplTest {
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
         // given
+        final User seller = new User("판매자", "https://profile.com", 3.5d);
+        userRepository.save(seller);
+
         final Category main = new Category("main");
         final Category sub = new Category("sub");
 
@@ -69,7 +77,6 @@ class QuerydslAuctionRepositoryImplTest {
                                        .bidUnit(new BidUnit(1_000))
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
-                                       .subCategory(sub)
                                        .build();
 
         final Region firstRegion = new Region("서울특별시");
@@ -83,6 +90,8 @@ class QuerydslAuctionRepositoryImplTest {
         final AuctionRegion auctionRegion = new AuctionRegion(thirdRegion);
 
         auction.addAuctionRegions(List.of(auctionRegion));
+        auction.addSeller(seller);
+        auction.addSubCategory(sub);
 
         auctionRepository.save(auction);
 
@@ -115,6 +124,9 @@ class QuerydslAuctionRepositoryImplTest {
 
             final Category mainCategory = subCategory.getMainCategory();
             softAssertions.assertThat(mainCategory).isEqualTo(main);
+
+            final User actualSeller = actual.get().getSeller();
+            softAssertions.assertThat(actualSeller).isEqualTo(seller);
         });
     }
 

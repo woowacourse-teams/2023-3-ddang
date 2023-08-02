@@ -128,8 +128,12 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
-                "",
-                ""
+                "main",
+                "sub",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
         );
 
         given(auctionService.readByAuctionId(anyLong())).willReturn(auction);
@@ -169,7 +173,11 @@ class AuctionControllerTest {
                 List.of(readRegionsDto),
                 List.of(1L),
                 "main1",
-                "sub1"
+                "sub1",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -184,7 +192,11 @@ class AuctionControllerTest {
                 List.of(readRegionsDto),
                 List.of(1L),
                 "main2",
-                "sub2"
+                "sub2",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
         );
 
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
@@ -212,7 +224,7 @@ class AuctionControllerTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() throws Exception {
         // given
-        willDoNothing().given(auctionService).deleteByAuctionId(anyLong());
+        willDoNothing().given(auctionService).deleteByAuctionId(anyLong(), anyLong());
 
         // when & then
         mockMvc.perform(delete("/auctions/{auctionId}", 1L).contentType(MediaType.APPLICATION_JSON))

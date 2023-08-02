@@ -39,7 +39,12 @@ public class AuctionController {
             @RequestPart final List<MultipartFile> images,
             @RequestPart @Valid final CreateAuctionRequest request
     ) {
-        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.from(request, images));
+        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.from(
+                request,
+                images,
+                // TODO 3차 데모데이 이후 리펙토링 예정
+                1L
+        ));
         final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, calculateBaseImageUrl());
 
         return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
@@ -70,7 +75,8 @@ public class AuctionController {
 
     @DeleteMapping("/{auctionId}")
     public ResponseEntity<Void> delete(@PathVariable final Long auctionId) {
-        auctionService.deleteByAuctionId(auctionId);
+        // TODO 3차 데모데이 이후 리펙토링 예정
+        auctionService.deleteByAuctionId(auctionId, 1L);
 
         return ResponseEntity.noContent()
                              .build();
