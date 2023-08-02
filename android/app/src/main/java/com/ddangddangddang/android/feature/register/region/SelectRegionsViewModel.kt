@@ -42,9 +42,6 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
                 is ApiResponse.Success -> {
                     val regions = response.body.map { it.toPresentation() }
                     _firstRegions.value = regions
-                    regions.forEach {
-                        secondRegionsCache[it.id] = emptyList()
-                    }
                 }
                 is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
@@ -62,27 +59,26 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
             _firstRegions.value = regionSelectionModels.changeIsChecked(id)
         }
 
-        if (secondRegionsCache[id].isNullOrEmpty()) {
-            viewModelScope.launch {
-                when (val response = regionRepository.getSecondRegions(id)) {
-                    is ApiResponse.Success -> {
-                        val regions = response.body.map { it.toPresentation() }
-                        _secondRegions.value = regions
-                        _thirdRegions.value = emptyList()
-
-                        secondRegionsCache[id] = regions
-                        regions.forEach {
-                            thirdRegionsCache[it.id] = emptyList()
-                        }
-                    }
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
-                }
-            }
-        } else {
+        // 캐싱되어있는 경우
+        if (!secondRegionsCache[id].isNullOrEmpty()) {
             _secondRegions.value = secondRegionsCache[id]
             _thirdRegions.value = emptyList()
+            return
+        }
+
+        viewModelScope.launch {
+            when (val response = regionRepository.getSecondRegions(id)) {
+                is ApiResponse.Success -> {
+                    val regions = response.body.map { it.toPresentation() }
+                    _secondRegions.value = regions
+                    _thirdRegions.value = emptyList()
+                    secondRegionsCache[id] = regions
+                }
+
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
         }
     }
 
@@ -93,21 +89,24 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
             _secondRegions.value = regionSelectionModels.changeIsChecked(secondId)
         }
 
-        if (thirdRegionsCache[secondId].isNullOrEmpty()) {
-            viewModelScope.launch {
-                when (val response = regionRepository.getThirdRegions(first.id, secondId)) {
-                    is ApiResponse.Success -> {
-                        val regions = response.body.map { it.toPresentation() }
-                        _thirdRegions.value = regions
-                        thirdRegionsCache[secondId] = regions
-                    }
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
-                }
-            }
-        } else {
+        // 캐싱 되어있는 경우
+        if (!thirdRegionsCache[secondId].isNullOrEmpty()) {
             _thirdRegions.value = thirdRegionsCache[secondId]
+            return
+        }
+
+        viewModelScope.launch {
+            when (val response = regionRepository.getThirdRegions(first.id, secondId)) {
+                is ApiResponse.Success -> {
+                    val regions = response.body.map { it.toPresentation() }
+                    _thirdRegions.value = regions
+                    thirdRegionsCache[secondId] = regions
+                }
+
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
         }
     }
 
