@@ -2,8 +2,8 @@ package com.ddang.ddang.chat.presentation;
 
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.presentation.dto.CreateMessageRequest;
-import com.ddang.ddang.chat.presentation.dto.CreateMessageResponse;
+import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

@@ -4,7 +4,7 @@ import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
-import com.ddang.ddang.chat.presentation.dto.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,14 +17,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {ChatRoomController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -63,9 +65,9 @@ class ChatRoomControllerTest {
         given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.post("/chattings/1/messages")
-                                              .contentType(MediaType.APPLICATION_JSON)
-                                              .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(post("/chattings/1/messages")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request)))
                .andExpectAll(
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/chattings/1/messages/1")),
@@ -85,9 +87,9 @@ class ChatRoomControllerTest {
                 .willThrow(chatRoomNotFoundException);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
-                                              .content(objectMapper.writeValueAsString(request))
-                                              .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
+                       .content(objectMapper.writeValueAsString(request))
+                       .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(chatRoomNotFoundException.getMessage()))
@@ -107,9 +109,9 @@ class ChatRoomControllerTest {
                 .willThrow(userNotFoundException);
 
         // when & then
-        mockMvc.perform(MockMvcRequestBuilders.post("/chattings/{chatRoomId}/messages", chatRoomId)
-                                              .content(objectMapper.writeValueAsString(request))
-                                              .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
+                       .content(objectMapper.writeValueAsString(request))
+                       .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(userNotFoundException.getMessage()))
