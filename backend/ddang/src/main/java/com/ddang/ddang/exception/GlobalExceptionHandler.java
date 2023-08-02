@@ -6,7 +6,7 @@ import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
@@ -69,6 +69,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final UserNotFoundException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(com.ddang.ddang.bid.application.exception.UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final com.ddang.ddang.bid.application.exception.UserNotFoundException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
