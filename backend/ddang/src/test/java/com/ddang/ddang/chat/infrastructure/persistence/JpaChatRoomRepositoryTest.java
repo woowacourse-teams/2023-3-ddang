@@ -4,6 +4,8 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
@@ -38,6 +40,9 @@ class JpaChatRoomRepositoryTest {
 
     @Autowired
     JpaUserRepository userRepository;
+
+    @Autowired
+    JpaCategoryRepository categoryRepository;
 
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
@@ -98,6 +103,11 @@ class JpaChatRoomRepositoryTest {
     @Test
     void 지정한_사용자_아이디가_포함된_채팅방을_조회한다() {
         // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
         final User merry = new User("메리", "이미지", 5.0);
         final User encho = new User("엔초", "이미지", 5.0);
         final User jamie = new User("제이미", "이미지", 5.0);
@@ -109,22 +119,25 @@ class JpaChatRoomRepositoryTest {
 
         final Auction merryAuction = Auction.builder()
                                             .title("경매 1")
+                                            .seller(merry)
+                                            .subCategory(sub)
                                             .bidUnit(new BidUnit(1_000))
                                             .startPrice(new Price(10_000))
                                             .build();
-        merryAuction.addSeller(merry);
         final Auction enchoAuction = Auction.builder()
                                             .title("경매 2")
+                                            .seller(encho)
+                                            .subCategory(sub)
                                             .bidUnit(new BidUnit(2_000))
                                             .startPrice(new Price(20_000))
                                             .build();
-        enchoAuction.addSeller(encho);
         final Auction jamieAuction = Auction.builder()
                                             .title("경매 3")
+                                            .seller(jamie)
+                                            .subCategory(sub)
                                             .bidUnit(new BidUnit(3_000))
                                             .startPrice(new Price(30_000))
                                             .build();
-        jamieAuction.addSeller(jamie);
 
         auctionRepository.save(merryAuction);
         auctionRepository.save(enchoAuction);

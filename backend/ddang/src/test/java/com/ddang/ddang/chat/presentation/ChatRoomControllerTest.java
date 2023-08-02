@@ -148,24 +148,24 @@ class ChatRoomControllerTest {
         final User user2 = new User("상대2", "", 5.0);
         final Auction auction1 = Auction.builder()
                                         .title("경매 상품 1")
+                                        .seller(user1)
+                                        .subCategory(sub)
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
                                         .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
-        auction1.addSeller(user1);
-        auction1.addSubCategory(sub);
         auction1.addAuctionImages(List.of(new AuctionImage("사진", "image")));
 
         final Auction auction2 = Auction.builder()
                                         .title("경매 상품 2")
+                                        .seller(user2)
+                                        .subCategory(sub)
                                         .description("이것은 경매 상품 2 입니다.")
                                         .bidUnit(new BidUnit(2_000))
                                         .startPrice(new Price(2_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
-        auction2.addSeller(user2);
-        auction2.addSubCategory(sub);
         auction2.addAuctionImages(List.of(new AuctionImage("사진", "image")));
 
         final ReadParticipatingChatRoomDto chatRoom1 = new ReadParticipatingChatRoomDto(

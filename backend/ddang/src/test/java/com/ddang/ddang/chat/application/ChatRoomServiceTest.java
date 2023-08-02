@@ -64,25 +64,25 @@ class ChatRoomServiceTest {
 
         final Auction merryAuction = Auction.builder()
                                             .title("경매 1")
+                                            .seller(merry)
+                                            .subCategory(sub)
                                             .bidUnit(new BidUnit(1_000))
                                             .startPrice(new Price(10_000))
                                             .build();
-        merryAuction.addSeller(merry);
-        merryAuction.addSubCategory(sub);
         final Auction enchoAuction = Auction.builder()
                                             .title("경매 2")
+                                            .seller(encho)
+                                            .subCategory(sub)
                                             .bidUnit(new BidUnit(2_000))
                                             .startPrice(new Price(20_000))
                                             .build();
-        enchoAuction.addSeller(encho);
-        enchoAuction.addSubCategory(sub);
         final Auction jamieAuction = Auction.builder()
                                             .title("경매 3")
+                                            .seller(jamie)
+                                            .subCategory(sub)
                                             .bidUnit(new BidUnit(3_000))
                                             .startPrice(new Price(30_000))
                                             .build();
-        jamieAuction.addSeller(jamie);
-        jamieAuction.addSubCategory(sub);
 
         auctionRepository.save(merryAuction);
         auctionRepository.save(enchoAuction);
