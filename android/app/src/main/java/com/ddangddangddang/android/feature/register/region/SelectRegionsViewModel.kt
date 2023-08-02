@@ -3,11 +3,14 @@ package com.ddangddangddang.android.feature.register.region
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.feature.common.regionRepository
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.mapper.RegionModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.RegionRepository
+import kotlinx.coroutines.launch
 
 class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectRegionsEvent> =
@@ -15,9 +18,7 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     val event: LiveData<SelectRegionsEvent>
         get() = _event
 
-    private val _firstRegions = MutableLiveData(
-        regionRepository.getFirstRegions().map { it.toPresentation() },
-    )
+    private val _firstRegions = MutableLiveData<List<RegionSelectionModel>>()
     val firstRegions: LiveData<List<RegionSelectionModel>>
         get() = _firstRegions
 
@@ -33,6 +34,19 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     val regionSelections: LiveData<List<RegionSelectionModel>>
         get() = _regionSelections
 
+    fun loadFirstRegions() {
+        viewModelScope.launch {
+            when (val response = regionRepository.getFirstRegions()) {
+                is ApiResponse.Success -> {
+                    _firstRegions.value = response.body.map { it.toPresentation() }
+                }
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
+    }
+
     fun setExitEvent() {
         _event.value = SelectRegionsEvent.Exit
     }
@@ -41,15 +55,37 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
         _firstRegions.value?.let { regionSelectionModels ->
             _firstRegions.value = regionSelectionModels.changeIsChecked(id)
         }
-        _secondRegions.value = regionRepository.getSecondRegions(id).map { it.toPresentation() }
-        _thirdRegions.value = emptyList()
+
+        viewModelScope.launch {
+            when (val response = regionRepository.getSecondRegions(id)) {
+                is ApiResponse.Success -> {
+                    _secondRegions.value = response.body.map { it.toPresentation() }
+                    _thirdRegions.value = emptyList()
+                }
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
     }
 
-    fun setSecondRegionSelection(id: Long) {
+    fun setSecondRegionSelection(secondId: Long) {
+        val first = _firstRegions.value?.find { it.isChecked } ?: return
+
         _secondRegions.value?.let { regionSelectionModels ->
-            _secondRegions.value = regionSelectionModels.changeIsChecked(id)
+            _secondRegions.value = regionSelectionModels.changeIsChecked(secondId)
         }
-        _thirdRegions.value = regionRepository.getThirdRegions(id).map { it.toPresentation() }
+
+        viewModelScope.launch {
+            when (val response = regionRepository.getThirdRegions(first.id, secondId)) {
+                is ApiResponse.Success -> {
+                    _thirdRegions.value = response.body.map { it.toPresentation() }
+                }
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
     }
 
     fun addRegion(thirdId: Long) {
