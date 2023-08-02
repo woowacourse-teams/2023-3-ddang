@@ -3,7 +3,6 @@ package com.ddang.ddang.auction.domain;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ddang.ddang.bid.domain.Bid;
-import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
@@ -94,36 +93,6 @@ class AuctionTest {
     }
 
     @Test
-    void 하위_카테고리_연관_관계를_세팅한다() {
-        // given
-        final Auction auction = Auction.builder()
-                                       .title("title")
-                                       .build();
-        final Category subCategory = new Category("sub");
-
-        // when
-        auction.addSubCategory(subCategory);
-
-        // then
-        assertThat(auction.getSubCategory()).isNotNull();
-    }
-
-    @Test
-    void 경매_판매자_연관_관계를_세팅한다() {
-        // given
-        final Auction auction = Auction.builder()
-                                       .title("title")
-                                       .build();
-        final User seller = new User("seller", "https://profile.com", 3.5d);
-
-        // when
-        auction.addSeller(seller);
-
-        // then
-        assertThat(auction.getSeller()).isNotNull();
-    }
-
-    @Test
     void 경매가_특정_시간을_기준으로_종료되었는지_확인한다() {
         // given
         final Auction auction = Auction.builder()
@@ -192,13 +161,12 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하면_참을_반환한다() {
         // given
+        final User seller = new User("사용자1", "이미지1", 4.9);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
+                                       .seller(seller)
                                        .build();
-        final User seller = new User("사용자1", "이미지1", 4.9);
-
-        auction.addSeller(seller);
 
         // when
         final boolean actual = auction.isOwner(seller);
@@ -210,15 +178,15 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하지_않으면_거짓을_반환한다() {
         // given
+        final User seller = new User("사용자1", "이미지1", 4.9);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
+                                       .seller(seller)
                                        .build();
-        final User seller = new User("사용자1", "이미지1", 4.9);
         final User user = new User("사용자2", "이미지2", 4.9);
 
         ReflectionTestUtils.setField(user, "id", 1L);
-        auction.addSeller(seller);
 
         // when
         final boolean actual = auction.isOwner(user);
