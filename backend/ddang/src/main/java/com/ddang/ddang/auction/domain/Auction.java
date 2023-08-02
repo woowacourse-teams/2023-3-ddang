@@ -87,13 +87,17 @@ public class Auction extends BaseTimeEntity {
             final String description,
             final BidUnit bidUnit,
             final Price startPrice,
-            final LocalDateTime closingTime
+            final LocalDateTime closingTime,
+            final User seller,
+            final Category subCategory
     ) {
         this.title = title;
         this.description = description;
         this.bidUnit = bidUnit;
         this.startPrice = startPrice;
         this.closingTime = closingTime;
+        this.seller = seller;
+        this.subCategory = subCategory;
     }
 
     public void delete() {
@@ -112,14 +116,6 @@ public class Auction extends BaseTimeEntity {
             this.auctionImages.add(auctionImage);
             auctionImage.initAuction(this);
         }
-    }
-
-    public void addSeller(final User seller) {
-        this.seller = seller;
-    }
-
-    public void addSubCategory(final Category subCategory) {
-        this.subCategory = subCategory;
     }
 
     public boolean isOwner(final User seller) {

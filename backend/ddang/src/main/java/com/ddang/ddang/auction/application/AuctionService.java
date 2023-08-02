@@ -41,16 +41,14 @@ public class AuctionService {
 
     @Transactional
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
-        final Auction auction = dto.toEntity();
         final User seller = findSeller(dto);
         final Category subCategory = findSubCategory(dto);
+        final Auction auction = dto.toEntity(seller, subCategory);
         final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
         final List<AuctionImage> auctionImages = convertAuctionImages(dto);
 
         auction.addAuctionRegions(auctionRegions);
         auction.addAuctionImages(auctionImages);
-        auction.addSeller(seller);
-        auction.addSubCategory(subCategory);
 
         final Auction persistAuction = auctionRepository.save(auction);
 
