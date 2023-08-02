@@ -9,12 +9,15 @@ import com.ddangddangddang.android.feature.home.HomeViewModel
 import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
+import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryMockImpl
+import com.ddangddangddang.data.repository.RegionRepositoryMockImpl
 
 val repository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val categoryRepository = CategoryRepositoryMockImpl()
+val regionRepository = RegionRepositoryMockImpl()
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -28,6 +31,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(repository)
                 isAssignableFrom(AuctionBidViewModel::class.java) -> AuctionBidViewModel()
                 isAssignableFrom(SelectCategoryViewModel::class.java) -> SelectCategoryViewModel(categoryRepository)
+                isAssignableFrom(SelectRegionsViewModel::class.java) -> SelectRegionsViewModel(regionRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
