@@ -589,8 +589,15 @@ class AuctionControllerTest {
         willDoNothing().given(auctionService).deleteByAuctionId(anyLong(), anyLong());
 
         // when & then
-        mockMvc.perform(delete("/auctions/{auctionId}", 1L).contentType(MediaType.APPLICATION_JSON))
-               .andExpectAll(status().isNoContent());
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/auctions/{auctionId}", 1L).contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(status().isNoContent())
+               .andDo(
+                       restDocs.document(
+                               pathParameters(
+                                       parameterWithName("auctionId").description("삭제할 경매 ID")
+                               )
+                       )
+               );
     }
 
     @Test
