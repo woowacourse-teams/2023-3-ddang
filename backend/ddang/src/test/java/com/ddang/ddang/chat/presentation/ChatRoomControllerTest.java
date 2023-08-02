@@ -4,6 +4,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
@@ -156,6 +157,7 @@ class ChatRoomControllerTest {
                                         .closingTime(LocalDateTime.now())
                                         .build();
         auction1.addAuctionImages(List.of(new AuctionImage("사진", "image")));
+        auction1.updateLastBidPrice(new Bid(auction1, user2, new Price(3000)));
 
         final Auction auction2 = Auction.builder()
                                         .title("경매 상품 2")
@@ -167,7 +169,8 @@ class ChatRoomControllerTest {
                                         .closingTime(LocalDateTime.now())
                                         .build();
         auction2.addAuctionImages(List.of(new AuctionImage("사진", "image")));
-
+        auction2.updateLastBidPrice(new Bid(auction2, user1, new Price(5000)));
+        
         final ReadParticipatingChatRoomDto chatRoom1 = new ReadParticipatingChatRoomDto(
                 1L,
                 ReadAuctionDto.from(auction1),

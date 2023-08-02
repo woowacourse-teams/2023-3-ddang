@@ -57,6 +57,9 @@ public class ChatRoomController {
                                           .concat(AUCTIONS_IMAGE_BASE_URL);
     }
 
+//    @GetMapping
+//    public
+
     @PostMapping("/{chatRoomId}/messages")
     public ResponseEntity<CreateMessageResponse> create(
             @PathVariable final Long chatRoomId,
