@@ -1,14 +1,19 @@
 package com.ddangddangddang.android.feature.detail.bid
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
 import java.math.BigInteger
 
-class AuctionBidViewModel : ViewModel() {
+class AuctionBidViewModel(
+    private val repository: AuctionRepository,
+) : ViewModel() {
     private val _event: SingleLiveEvent<AuctionBidEvent> = SingleLiveEvent()
     val event: LiveData<AuctionBidEvent>
         get() = _event
@@ -39,9 +44,32 @@ class AuctionBidViewModel : ViewModel() {
         _event.value = AuctionBidEvent.Cancel
     }
 
-    fun submit() {
+    fun submit(auctionId: Long, minBidPrice: Int) {
+        val bidPrice = bidPrice.value ?: return
+        if (isBidAmountUnderMinimum(bidPrice, minBidPrice)) return
         viewModelScope.launch {
+            when (val response = repository.submitAuctionBid(auctionId, bidPrice)) {
+                is ApiResponse.Success -> {
+                    Log.d("mendel", "success")
+                }
+
+                is ApiResponse.Failure -> {
+                    Log.d("mendel", "failure ${response.error}")
+                }
+
+                is ApiResponse.NetworkError -> {
+                    Log.d("mendel", "networkerror")
+                }
+
+                is ApiResponse.Unexpected -> {
+                    Log.d("mendel", "enexpected")
+                }
+            }
         }
+    }
+
+    private fun isBidAmountUnderMinimum(bidPrice: Int, minBidPrice: Int): Boolean {
+        return bidPrice < minBidPrice
     }
 
     sealed class AuctionBidEvent {

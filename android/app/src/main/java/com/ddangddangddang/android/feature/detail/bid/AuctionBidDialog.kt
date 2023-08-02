@@ -36,7 +36,7 @@ class AuctionBidDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.bidPrice.value?.let { // 다이얼로그 최초로 띄우는 경우
+        if (viewModel.bidPrice.value == null) {
             activityViewModel.auctionDetailModel.value?.let {
                 val lastBidPrice = it.lastBidPrice
                 val bidUnit = it.bidUnit
@@ -68,7 +68,6 @@ class AuctionBidDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
         binding.etBidPrice.requestFocus()
-        binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(binding.etBidPrice.text.toString()))
     }
 
     private fun setupListener() {

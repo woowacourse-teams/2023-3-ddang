@@ -29,7 +29,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(repository)
                 isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(repository)
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(repository)
-                isAssignableFrom(AuctionBidViewModel::class.java) -> AuctionBidViewModel()
+                isAssignableFrom(AuctionBidViewModel::class.java) -> AuctionBidViewModel(repository)
                 isAssignableFrom(SelectCategoryViewModel::class.java) -> SelectCategoryViewModel(categoryRepository)
                 isAssignableFrom(SelectRegionsViewModel::class.java) -> SelectRegionsViewModel(regionRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")

@@ -1,5 +1,6 @@
 package com.ddangddangddang.data.datasource
 
+import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -36,4 +37,8 @@ class AuctionRemoteDataSource(private val service: Service) {
             .toRequestBody("application/json".toMediaType())
         return service.registerAuction(files, body)
     }
+
+    suspend fun submitAuctionBid(
+        auctionBidRequest: AuctionBidRequest,
+    ): ApiResponse<Unit> = service.submitAuctionBid("3", auctionBidRequest)
 }
