@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
@@ -90,12 +91,16 @@ public class AuctionService {
     }
 
     public ReadAuctionDto readByAuctionId(final Long auctionId) {
-        final Auction auction = auctionRepository.findAuctionById(auctionId)
-                                                 .orElseThrow(() -> new AuctionNotFoundException(
-                                                         "지정한 아이디에 대한 경매를 찾을 수 없습니다."
-                                                 ));
+        final Auction auction = findAuction(auctionId);
 
         return ReadAuctionDto.from(auction);
+    }
+
+    private Auction findAuction(final Long auctionId) {
+        return auctionRepository.findAuctionById(auctionId)
+                                .orElseThrow(() -> new AuctionNotFoundException(
+                                        "지정한 아이디에 대한 경매를 찾을 수 없습니다."
+                                ));
     }
 
     public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final int size) {
@@ -105,12 +110,19 @@ public class AuctionService {
     }
 
     @Transactional
-    public void deleteByAuctionId(final Long auctionId) {
-        final Auction auction = auctionRepository.findById(auctionId)
-                                                 .orElseThrow(() -> new AuctionNotFoundException(
-                                                         "지정한 아이디에 대한 경매를 찾을 수 없습니다."
-                                                 ));
+    public void deleteByAuctionId(final Long auctionId, final Long userId) {
+        final Auction auction = findAuction(auctionId);
+        final User user = findUser(userId);
+
+        if (!auction.isOwner(user)) {
+            throw new UserNotAuthorizationException("권한이 없습니다.");
+        }
 
         auction.delete();
+    }
+
+    private User findUser(final Long userId) {
+        return userRepository.findById(userId)
+                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
     }
 }

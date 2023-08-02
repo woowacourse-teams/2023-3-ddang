@@ -224,7 +224,7 @@ class AuctionControllerTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() throws Exception {
         // given
-        willDoNothing().given(auctionService).deleteByAuctionId(anyLong());
+        willDoNothing().given(auctionService).deleteByAuctionId(anyLong(), anyLong());
 
         // when & then
         mockMvc.perform(delete("/auctions/{auctionId}", 1L).contentType(MediaType.APPLICATION_JSON))
