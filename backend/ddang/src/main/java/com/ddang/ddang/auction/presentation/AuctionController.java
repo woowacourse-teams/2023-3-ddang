@@ -39,7 +39,7 @@ public class AuctionController {
             @RequestPart final List<MultipartFile> images,
             @RequestPart @Valid final CreateAuctionRequest request
     ) {
-        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.from(
+        final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.of(
                 request,
                 images,
                 // TODO 3차 데모데이 이후 리펙토링 예정
@@ -54,7 +54,7 @@ public class AuctionController {
     @GetMapping("/{auctionId}")
     public ResponseEntity<ReadAuctionDetailResponse> read(@PathVariable final Long auctionId) {
         final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
-        final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.from(
+        final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
                 calculateBaseImageUrl()
         );

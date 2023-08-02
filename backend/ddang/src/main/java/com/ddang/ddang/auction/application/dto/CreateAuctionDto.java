@@ -23,7 +23,7 @@ public record CreateAuctionDto(
         Long sellerId
 ) {
 
-    public static CreateAuctionDto from(
+    public static CreateAuctionDto of(
             final CreateAuctionRequest request,
             final List<MultipartFile> images,
             // TODO 3차 데모데이 이후 리펙토링 예정
