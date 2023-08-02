@@ -2,8 +2,6 @@ package com.ddang.ddang.bid.application;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.LoginUserDto;
@@ -13,6 +11,7 @@ import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -68,17 +67,17 @@ public class BidService {
 
     private void checkInvalidBid(final Auction auction, final User bidder, final CreateBidDto bidDto) {
         final Bid lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
-        final Price price = findPrice(bidDto.price());
+        final BidPrice bidPrice = processBidPrice(bidDto.bidPrice());
 
         checkIsSeller(auction, bidder);
 
         if (lastBid == null) {
-            checkInvalidFirstBidPrice(auction, price);
+            checkInvalidFirstBidPrice(auction, bidPrice);
             return;
         }
 
         checkIsNotLastBidder(lastBid, bidder);
-        checkInvalidBidPrice(lastBid, price);
+        checkInvalidBidPrice(lastBid, bidPrice);
     }
 
     private void checkIsSeller(final Auction auction, final User bidder) {
@@ -87,8 +86,8 @@ public class BidService {
         }
     }
 
-    private void checkInvalidFirstBidPrice(final Auction auction, final Price price) {
-        if (auction.isInvalidFirstBidPrice(price)) {
+    private void checkInvalidFirstBidPrice(final Auction auction, final BidPrice bidPrice) {
+        if (auction.isInvalidFirstBidPrice(bidPrice)) {
             throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
         }
     }
@@ -99,19 +98,19 @@ public class BidService {
         }
     }
 
-    private void checkInvalidBidPrice(final Bid lastBid, final Price price) {
-        if (lastBid.isBidPriceGreaterThan(price)) {
+    private void checkInvalidBidPrice(final Bid lastBid, final BidPrice bidPrice) {
+        if (lastBid.isBidPriceGreaterThan(bidPrice)) {
             throw new InvalidBidPriceException("마지막 입찰 금액보다 낮은 금액을 입력했습니다");
         }
-        if (lastBid.isNextBidPriceGreaterThan(price)) {
+        if (lastBid.isNextBidPriceGreaterThan(bidPrice)) {
             throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
         }
     }
 
-    private Price findPrice(final int value) {
+    private BidPrice processBidPrice(final int value) {
         try {
-            return new Price(value);
-        } catch (final InvalidPriceValueException ex) {
+            return new BidPrice(value);
+        } catch (final InvalidBidPriceException ex) {
             throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
         }
     }

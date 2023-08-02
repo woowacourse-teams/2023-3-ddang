@@ -48,7 +48,9 @@ class BidServiceTest {
     @Test
     void 입찰을_등록한다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
@@ -57,6 +59,7 @@ class BidServiceTest {
                                        .build();
         final User user = new User("사용자", "이미지", 4.9);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user);
 
@@ -73,7 +76,9 @@ class BidServiceTest {
     @Test
     void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액_이상의_금액으로_입찰을_등록할_수_있다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
@@ -83,6 +88,7 @@ class BidServiceTest {
         final User user1 = new User("사용자1", "이미지1", 4.9);
         final User user2 = new User("사용자2", "이미지2", 3.4);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user1);
         userRepository.save(user2);
@@ -104,19 +110,22 @@ class BidServiceTest {
     @Test
     void 첫_입찰자는_시작가를_입찰로_등록할_수_있다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User buyer = new User("사용자2", "이미지2", 4.9);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
-        userRepository.save(user);
+        userRepository.save(buyer);
 
-        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
+        final LoginUserDto loginUserDto = new LoginUserDto(buyer.getId());
         final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 1_000);
 
         // when
@@ -194,7 +203,9 @@ class BidServiceTest {
     @Test
     void 첫_입찰자가_시작가_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
@@ -203,6 +214,7 @@ class BidServiceTest {
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user);
 
@@ -267,7 +279,9 @@ class BidServiceTest {
     @Test
     void 마지막_입찰자가_연속으로_입찰하는_경우_예외가_발생한다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
@@ -276,6 +290,7 @@ class BidServiceTest {
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user);
 
@@ -295,7 +310,9 @@ class BidServiceTest {
     @Test
     void 마지막_입찰액보다_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
@@ -305,6 +322,7 @@ class BidServiceTest {
         final User user1 = new User("사용자1", "이미지1", 4.9);
         final User user2 = new User("사용자2", "이미지2", 4.9);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user1);
         userRepository.save(user2);
@@ -325,7 +343,9 @@ class BidServiceTest {
     @Test
     void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액보다_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
@@ -335,6 +355,7 @@ class BidServiceTest {
         final User user1 = new User("사용자1", "이미지1", 4.9);
         final User user2 = new User("사용자2", "이미지2", 3.4);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user1);
         userRepository.save(user2);
@@ -355,7 +376,9 @@ class BidServiceTest {
     @Test
     void 최소_입찰_단위보다_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction = Auction.builder()
+                                       .seller(seller)
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
@@ -365,6 +388,7 @@ class BidServiceTest {
         final User user1 = new User("사용자1", "이미지1", 4.9);
         final User user2 = new User("사용자2", "이미지2", 4.9);
 
+        userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user1);
         userRepository.save(user2);
@@ -410,7 +434,9 @@ class BidServiceTest {
     @Test
     void 특정_경매에_대한_입찰_목록을_조회한다() {
         // given
+        final User seller = new User("판매자", "이미지", 4.9);
         final Auction auction1 = Auction.builder()
+                                        .seller(seller)
                                         .title("경매 상품 1")
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
@@ -418,6 +444,7 @@ class BidServiceTest {
                                         .closingTime(LocalDateTime.now().plusDays(7))
                                         .build();
         final Auction auction2 = Auction.builder()
+                                        .seller(seller)
                                         .title("경매 상품 2")
                                         .description("이것은 경매 상품 2 입니다.")
                                         .bidUnit(new BidUnit(1_000))
@@ -427,6 +454,7 @@ class BidServiceTest {
         final User user1 = new User("사용자1", "이미지1", 4.9);
         final User user2 = new User("사용자2", "이미지2", 4.9);
 
+        userRepository.save(seller);
         auctionRepository.save(auction1);
         auctionRepository.save(auction2);
         userRepository.save(user1);

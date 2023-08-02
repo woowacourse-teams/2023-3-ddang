@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.domain;
 
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -126,21 +127,22 @@ public class Auction extends BaseTimeEntity {
         return targetTime.isAfter(closingTime);
     }
 
-    public boolean isInvalidFirstBidPrice(final Price price) {
-        return startPrice.isOverThan(price);
+    public boolean isInvalidFirstBidPrice(final BidPrice bidPrice) {
+        final BidPrice startBidPrice = new BidPrice(startPrice.getValue());
+        return startBidPrice.isGreaterThan(bidPrice);
     }
 
     public void updateLastBidPrice(final Bid lastBid) {
         this.lastBid = lastBid;
     }
 
-    public boolean isSmallerThanNextBidPrice(final Price price) {
-        return calculateNextMinimumBidPrice().isMoreThan(price);
+    public boolean isSmallerThanNextBidPrice(final BidPrice bidPrice) {
+        return calculateNextMinimumBidPrice().isGreaterThan(bidPrice);
     }
 
-    private Price calculateNextMinimumBidPrice() {
+    private BidPrice calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBid.getPrice().getValue() + this.bidUnit.getValue();
-        return new Price(nextMinimumBidPrice);
+        return new BidPrice(nextMinimumBidPrice);
     }
 
     public boolean isSeller(final User bidder) {

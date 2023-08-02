@@ -28,7 +28,7 @@ class BidTest {
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
 
-        final Bid bid = new Bid(auction, user, new Price(10_000));
+        final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         // when
         final boolean actual = bid.isSameBidder(user);
@@ -49,10 +49,10 @@ class BidTest {
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
 
-        final Bid bid = new Bid(auction, user, new Price(10_000));
+        final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         // when
-        final boolean actual = bid.isBidPriceGreaterThan(new Price(9_000));
+        final boolean actual = bid.isBidPriceGreaterThan(new BidPrice(9_000));
 
         // then
         assertThat(actual).isTrue();
@@ -70,11 +70,11 @@ class BidTest {
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
 
-        final Bid bid = new Bid(auction, user, new Price(10_000));
+        final Bid bid = new Bid(auction, user, new BidPrice(10_000));
         auction.updateLastBidPrice(bid);
 
         // when
-        final boolean actual = bid.isNextBidPriceGreaterThan(new Price(10_900));
+        final boolean actual = bid.isNextBidPriceGreaterThan(new BidPrice(10_900));
 
         // then
         assertThat(actual).isTrue();
