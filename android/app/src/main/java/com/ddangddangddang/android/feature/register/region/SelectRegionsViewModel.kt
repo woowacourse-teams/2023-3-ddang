@@ -42,6 +42,7 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
             _firstRegions.value = regionSelectionModels.changeIsChecked(id)
         }
         _secondRegions.value = regionRepository.getSecondRegions(id).map { it.toPresentation() }
+        _thirdRegions.value = emptyList()
     }
 
     fun setSecondRegionSelection(id: Long) {
