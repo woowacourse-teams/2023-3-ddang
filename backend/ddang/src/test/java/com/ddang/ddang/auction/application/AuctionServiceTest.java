@@ -444,17 +444,19 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
         // given
-        final Auction auction = Auction.builder()
-                                     .title("경매 상품 1")
-                                     .description("이것은 경매 상품 1 입니다.")
-                                     .bidUnit(new BidUnit(1_000))
-                                     .startPrice(new Price(1_000))
-                                     .closingTime(LocalDateTime.now())
-                                     .build();
         final User seller = new User("판매자", "https://profie.com", 4.5d);
 
         userRepository.save(seller);
-        auction.addSeller(seller);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .seller(seller)
+                                       .build();
+
         auctionRepository.save(auction);
 
         // when
@@ -494,7 +496,6 @@ class AuctionServiceTest {
         final Long invalidSellerId = -999L;
 
         userRepository.save(seller);
-        auction.addSeller(seller);
         auctionRepository.save(auction);
 
         // when & then
@@ -506,19 +507,19 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_회원과_판매자가_일치하지_않는_경우_삭제시_예외가_발생한다() {
         // given
+        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        userRepository.save(seller);
         final Auction auction = Auction.builder()
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
                                        .bidUnit(new BidUnit(1_000))
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
+                                       .seller(seller)
                                        .build();
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
         final User user = new User("회원", "https://profiles.com", 4.5d);
 
-        userRepository.save(seller);
         userRepository.save(user);
-        auction.addSeller(seller);
         auctionRepository.save(auction);
 
         final Long invalidSellerId = user.getId();
