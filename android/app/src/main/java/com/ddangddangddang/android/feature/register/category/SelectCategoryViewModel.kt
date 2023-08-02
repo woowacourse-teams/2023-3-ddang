@@ -11,6 +11,7 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.CategoryRepository
 import kotlinx.coroutines.launch
 
+private typealias MainId = Long
 class SelectCategoryViewModel(private val categoryRepository: CategoryRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectCategoryEvent> = SingleLiveEvent()
     val event: LiveData<SelectCategoryEvent>
@@ -24,7 +25,7 @@ class SelectCategoryViewModel(private val categoryRepository: CategoryRepository
     val subCategories: LiveData<List<CategoryModel>>
         get() = _subCategories
 
-    private val subCategoriesCache = mutableMapOf<Long, List<CategoryModel>>()
+    private val subCategoriesCache = mutableMapOf<MainId, List<CategoryModel>>()
 
     fun loadMainCategories() {
         viewModelScope.launch {
