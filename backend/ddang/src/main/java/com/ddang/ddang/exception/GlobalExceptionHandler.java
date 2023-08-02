@@ -1,12 +1,18 @@
 package com.ddang.ddang.exception;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
+import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.chat.application.exception.UserNotFoundException;
+import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
+import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
+import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
+import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import java.util.stream.Collectors;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,8 +23,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -82,6 +86,52 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidBidException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidBidException(final InvalidBidException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidBidException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserNotAuthorizationException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotAuthorizationException(
+            final UserNotAuthorizationException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UserNotAuthorizationException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidPriceValueException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidPriceValueException(
+            final InvalidPriceValueException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidPriceValueException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(EmptyImageException.class)
+    public ResponseEntity<ExceptionResponse> handleEmptyImageException(final EmptyImageException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, EmptyImageException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(StoreImageFailureException.class)
+    public ResponseEntity<ExceptionResponse> handleStoreImageFailureException(
+            final StoreImageFailureException ex
+    ) {
+        logger.error(String.format(EXCEPTION_FORMAT, StoreImageFailureException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UnsupportedImageFileExtensionException.class)
+    public ResponseEntity<ExceptionResponse> handleUnsupportedImageFileExtensionException(final UnsupportedImageFileExtensionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedImageFileExtensionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
