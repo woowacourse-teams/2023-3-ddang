@@ -58,21 +58,24 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
         _firstRegions.value?.let { regionSelectionModels ->
             _firstRegions.value = regionSelectionModels.changeIsChecked(id)
         }
+        changeSecondRegions(id)
+    }
 
+    private fun changeSecondRegions(firstId: Long) {
         // 캐싱되어있는 경우
-        if (!secondRegionsCache[id].isNullOrEmpty()) {
-            _secondRegions.value = secondRegionsCache[id]
+        if (!secondRegionsCache[firstId].isNullOrEmpty()) {
+            _secondRegions.value = secondRegionsCache[firstId]
             _thirdRegions.value = emptyList()
             return
         }
 
         viewModelScope.launch {
-            when (val response = regionRepository.getSecondRegions(id)) {
+            when (val response = regionRepository.getSecondRegions(firstId)) {
                 is ApiResponse.Success -> {
                     val regions = response.body.map { it.toPresentation() }
                     _secondRegions.value = regions
                     _thirdRegions.value = emptyList()
-                    secondRegionsCache[id] = regions
+                    secondRegionsCache[firstId] = regions
                 }
 
                 is ApiResponse.Failure -> {}
@@ -83,12 +86,16 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
     }
 
     fun setSecondRegionSelection(secondId: Long) {
-        val first = _firstRegions.value?.find { it.isChecked } ?: return
+        val firstId = _firstRegions.value?.find { it.isChecked }?.id ?: return
 
         _secondRegions.value?.let { regionSelectionModels ->
             _secondRegions.value = regionSelectionModels.changeIsChecked(secondId)
         }
 
+        changeThirdRegions(firstId, secondId)
+    }
+
+    private fun changeThirdRegions(firstId: Long, secondId: Long) {
         // 캐싱 되어있는 경우
         if (!thirdRegionsCache[secondId].isNullOrEmpty()) {
             _thirdRegions.value = thirdRegionsCache[secondId]
@@ -96,7 +103,7 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
         }
 
         viewModelScope.launch {
-            when (val response = regionRepository.getThirdRegions(first.id, secondId)) {
+            when (val response = regionRepository.getThirdRegions(firstId, secondId)) {
                 is ApiResponse.Success -> {
                     val regions = response.body.map { it.toPresentation() }
                     _thirdRegions.value = regions
