@@ -34,6 +34,6 @@ fun View.isVisible(isVisible: Boolean) {
 @BindingAdapter("onCloseClick")
 fun Chip.onCloseClick(onCloseClick: () -> Unit) {
     this.setOnCloseIconClickListener {
-        onCloseClick.invoke()
+        onCloseClick()
     }
 }
