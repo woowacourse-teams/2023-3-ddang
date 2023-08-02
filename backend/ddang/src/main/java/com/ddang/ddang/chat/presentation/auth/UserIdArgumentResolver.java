@@ -10,17 +10,17 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
-    public boolean supportsParameter(MethodParameter parameter) {
+    public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.getParameterType().equals(AuthenticateUserInfo.class) &&
                 parameter.hasParameterAnnotation(com.ddang.ddang.chat.presentation.auth.AuthenticateUser.class);
     }
 
     @Override
     public Object resolveArgument(
-            MethodParameter parameter,
-            ModelAndViewContainer mavContainer,
-            NativeWebRequest webRequest,
-            WebDataBinderFactory binderFactory
+            final MethodParameter parameter,
+            final ModelAndViewContainer mavContainer,
+            final NativeWebRequest webRequest,
+            final WebDataBinderFactory binderFactory
     ) {
         final String authorization = webRequest.getHeader(HttpHeaders.AUTHORIZATION);
 
