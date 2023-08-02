@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
-
 import com.ddang.ddang.chat.application.dto.ReadUserDto;
 
 public record ReadChatPartnerResponse(Long id, String name, String profileImage) {
