@@ -52,4 +52,14 @@ public class ChatRoom extends BaseCreateTimeEntity {
 
         return targetTime.isBefore(maxChatTime);
     }
+
+    public User calculateChatPartnerOf(final User user) {
+        final User seller = auction.getSeller();
+
+        if (user.equals(seller)) {
+            return buyer;
+        }
+
+        return seller;
+    }
 }

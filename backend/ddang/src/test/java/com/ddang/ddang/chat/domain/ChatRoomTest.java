@@ -11,6 +11,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,5 +61,23 @@ class ChatRoomTest {
 
         // then
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void 주어진_사용자의_채팅상대를_반환한다() {
+        // given
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .build();
+        auction.addSeller(seller);
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+
+        // when
+        final User actual = chatRoom.calculateChatPartnerOf(buyer);
+
+        // then
+        assertThat(actual).isEqualTo(seller);
     }
 }
