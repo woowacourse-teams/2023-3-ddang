@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.ddangddangddang.android.feature.common.regionRepository
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.mapper.RegionModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -12,7 +11,7 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.RegionRepository
 import kotlinx.coroutines.launch
 
-class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
+class SelectRegionsViewModel(private val regionRepository: RegionRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectRegionsEvent> =
         SingleLiveEvent()
     val event: LiveData<SelectRegionsEvent>
@@ -34,11 +33,18 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     val regionSelections: LiveData<List<RegionSelectionModel>>
         get() = _regionSelections
 
+    private val secondRegionsCache: MutableMap<Long, List<RegionSelectionModel>> = mutableMapOf()
+    private val thirdRegionsCache: MutableMap<Long, List<RegionSelectionModel>> = mutableMapOf()
+
     fun loadFirstRegions() {
         viewModelScope.launch {
             when (val response = regionRepository.getFirstRegions()) {
                 is ApiResponse.Success -> {
-                    _firstRegions.value = response.body.map { it.toPresentation() }
+                    val regions = response.body.map { it.toPresentation() }
+                    _firstRegions.value = regions
+                    regions.forEach {
+                        secondRegionsCache[it.id] = emptyList()
+                    }
                 }
                 is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
@@ -56,16 +62,27 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
             _firstRegions.value = regionSelectionModels.changeIsChecked(id)
         }
 
-        viewModelScope.launch {
-            when (val response = regionRepository.getSecondRegions(id)) {
-                is ApiResponse.Success -> {
-                    _secondRegions.value = response.body.map { it.toPresentation() }
-                    _thirdRegions.value = emptyList()
+        if (secondRegionsCache[id].isNullOrEmpty()) {
+            viewModelScope.launch {
+                when (val response = regionRepository.getSecondRegions(id)) {
+                    is ApiResponse.Success -> {
+                        val regions = response.body.map { it.toPresentation() }
+                        _secondRegions.value = regions
+                        _thirdRegions.value = emptyList()
+
+                        secondRegionsCache[id] = regions
+                        regions.forEach {
+                            thirdRegionsCache[it.id] = emptyList()
+                        }
+                    }
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
                 }
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
             }
+        } else {
+            _secondRegions.value = secondRegionsCache[id]
+            _thirdRegions.value = emptyList()
         }
     }
 
@@ -76,15 +93,21 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
             _secondRegions.value = regionSelectionModels.changeIsChecked(secondId)
         }
 
-        viewModelScope.launch {
-            when (val response = regionRepository.getThirdRegions(first.id, secondId)) {
-                is ApiResponse.Success -> {
-                    _thirdRegions.value = response.body.map { it.toPresentation() }
+        if (thirdRegionsCache[secondId].isNullOrEmpty()) {
+            viewModelScope.launch {
+                when (val response = regionRepository.getThirdRegions(first.id, secondId)) {
+                    is ApiResponse.Success -> {
+                        val regions = response.body.map { it.toPresentation() }
+                        _thirdRegions.value = regions
+                        thirdRegionsCache[secondId] = regions
+                    }
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
                 }
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
             }
+        } else {
+            _thirdRegions.value = thirdRegionsCache[secondId]
         }
     }
 
