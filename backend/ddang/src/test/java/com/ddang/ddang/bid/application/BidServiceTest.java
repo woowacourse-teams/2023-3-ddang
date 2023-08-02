@@ -168,6 +168,30 @@ class BidServiceTest {
     }
 
     @Test
+    void 판매자가_입찰하는_경우_예외가_발생한다() {
+        final User user = new User("사용자1", "이미지1", 4.9);
+        final Auction auction = Auction.builder()
+                                       .seller(user)
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+
+        userRepository.save(user);
+        auctionRepository.save(auction);
+
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
+        final CreateBidDto createBidDto = new CreateBidDto(auction.getId(), 10_000);
+
+        // when && then
+        assertThatThrownBy(() -> bidService.create(loginUserDto, createBidDto))
+                .isInstanceOf(InvalidBidderException.class)
+                .hasMessage("판매자는 입찰할 수 없습니다");
+    }
+
+    @Test
     void 첫_입찰자가_시작가_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
         final Auction auction = Auction.builder()

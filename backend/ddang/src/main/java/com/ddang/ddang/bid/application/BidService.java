@@ -70,6 +70,8 @@ public class BidService {
         final Bid lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
         final Price price = findPrice(bidDto.price());
 
+        checkIsSeller(auction, bidder);
+
         if (lastBid == null) {
             checkInvalidFirstBidPrice(auction, price);
             return;
@@ -79,6 +81,12 @@ public class BidService {
         checkInvalidBidPrice(lastBid, price);
     }
 
+    private void checkIsSeller(final Auction auction, final User bidder) {
+        if (auction.isSeller(bidder)) {
+            throw new InvalidBidderException("판매자는 입찰할 수 없습니다");
+        }
+    }
+
     private void checkInvalidFirstBidPrice(final Auction auction, final Price price) {
         if (auction.isInvalidFirstBidPrice(price)) {
             throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
@@ -86,7 +94,6 @@ public class BidService {
     }
 
     private void checkIsNotLastBidder(final Bid lastBid, final User bidder) {
-        // TODO: 2023/07/30 경매 등록자가 입찰하는 경우에 대한 예외 케이스 추가 예정
         if (lastBid.isSameBidder(bidder)) {
             throw new InvalidBidderException("이미 최고 입찰자입니다");
         }
