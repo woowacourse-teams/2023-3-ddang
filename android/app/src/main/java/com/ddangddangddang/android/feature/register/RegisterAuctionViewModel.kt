@@ -1,8 +1,10 @@
 package com.ddangddangddang.android.feature.register
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
-import android.provider.MediaStore
+import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,7 +15,9 @@ import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -69,7 +73,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         if (!isValidInputs) return
 
         viewModelScope.launch {
-            val files = images.value?.map { File(it.uri.getAbsolutePath(context)) } ?: emptyList()
+            val files =
+                images.value?.mapNotNull { it.uri.toAdjustImageFile(context) } ?: emptyList()
             when (val response = repository.registerAuction(files, createRequestModel())) {
                 is ApiResponse.Success -> {
                     _event.value = RegisterAuctionEvent.SubmitResult(response.body.id)
@@ -82,17 +87,44 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         }
     }
 
-    private fun Uri.getAbsolutePath(context: Context): String {
-        val pathColumn = MediaStore.Images.Media.DATA
-        val projection = arrayOf(pathColumn)
-        val cursor = context.contentResolver.query(this, projection, null, null, null)
-        cursor?.use {
-            if (it.moveToFirst()) {
-                val columnIndex = it.getColumnIndexOrThrow(pathColumn)
-                return it.getString(columnIndex)
-            }
+    private fun Uri.toAdjustImageFile(context: Context): File? {
+        val bitmap = toBitmap(context) ?: return null
+
+        val file = createAdjustImageFile(bitmap, context.cacheDir)
+
+        val orientation = context.contentResolver
+            .openInputStream(this)?.use {
+            ExifInterface(it)
+        }?.getAttribute(ExifInterface.TAG_ORIENTATION)
+        orientation?.let { file.setOrientation(it) }
+
+        return file
+    }
+
+    private fun Uri.toBitmap(context: Context): Bitmap? {
+        return context.contentResolver
+            .openInputStream(this)?.use {
+            BitmapFactory.decodeStream(it)
         }
-        return ""
+    }
+
+    private fun createAdjustImageFile(bitmap: Bitmap, directory: File): File {
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, true)
+            .compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
+
+        val tempFile = File.createTempFile("resized_image", ".jpg", directory)
+        FileOutputStream(tempFile).use {
+            it.write(byteArrayOutputStream.toByteArray())
+        }
+        return tempFile
+    }
+
+    private fun File.setOrientation(orientation: String) {
+        ExifInterface(this.path).apply {
+            setAttribute(ExifInterface.TAG_ORIENTATION, orientation)
+            saveAttributes()
+        }
     }
 
     private fun createRequestModel(): RegisterAuctionRequest {
