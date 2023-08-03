@@ -51,7 +51,7 @@ class AuctionBidViewModel(
         if (isBidAmountUnderMinimum(bidPrice, minBidPrice)) return
         viewModelScope.launch {
             when (val response = repository.submitAuctionBid(auctionId, bidPrice)) {
-                is ApiResponse.Success -> _event.value = AuctionBidEvent.SuccessSubmit(bidPrice)
+                is ApiResponse.Success -> _event.value = AuctionBidEvent.SubmitSuccess(bidPrice)
                 is ApiResponse.Failure -> {
                     val jsonObject = JSONObject(response.error)
                     val message = jsonObject.getString("message")
@@ -94,7 +94,7 @@ class AuctionBidViewModel(
 
     sealed class AuctionBidEvent {
         object Cancel : AuctionBidEvent()
-        data class SuccessSubmit(val price: Int) : AuctionBidEvent()
+        data class SubmitSuccess(val price: Int) : AuctionBidEvent()
         sealed class SubmitFailureEvent(@StringRes val messageId: Int) : AuctionBidEvent() {
             object Finish : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_finish)
             object Deleted : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_deleted)

@@ -83,7 +83,7 @@ class AuctionBidDialog : DialogFragment() {
     private fun handleEvent(event: AuctionBidViewModel.AuctionBidEvent) {
         when (event) {
             is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
-            is AuctionBidViewModel.AuctionBidEvent.SuccessSubmit -> submitSuccess(event.price)
+            is AuctionBidViewModel.AuctionBidEvent.SubmitSuccess -> submitSuccess(event.price)
             is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(event)
         }
     }
