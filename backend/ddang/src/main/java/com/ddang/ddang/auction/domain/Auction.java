@@ -82,6 +82,8 @@ public class Auction extends BaseTimeEntity {
     @OneToMany(mappedBy = "auction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<AuctionImage> auctionImages = new ArrayList<>();
 
+    private int auctioneerCount = 0;
+
     @Builder
     private Auction(
             final String title,
@@ -132,8 +134,9 @@ public class Auction extends BaseTimeEntity {
         return startBidPrice.isGreaterThan(bidPrice);
     }
 
-    public void updateLastBidPrice(final Bid lastBid) {
+    public void updateLastBid(final Bid lastBid) {
         this.lastBid = lastBid;
+        this.auctioneerCount += 1;
     }
 
     public boolean isSmallerThanNextBidPrice(final BidPrice bidPrice) {

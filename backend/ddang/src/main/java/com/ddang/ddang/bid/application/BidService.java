@@ -50,7 +50,7 @@ public class BidService {
         final Bid createBid = bidDto.toEntity(auction, bidder);
         final Bid saveBid = bidRepository.save(createBid);
 
-        auction.updateLastBidPrice(saveBid);
+        auction.updateLastBid(saveBid);
 
         return saveBid;
     }

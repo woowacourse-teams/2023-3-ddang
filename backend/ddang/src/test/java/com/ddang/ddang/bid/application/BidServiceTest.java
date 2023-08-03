@@ -12,6 +12,7 @@ import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.*;
@@ -21,8 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -30,8 +29,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
+@IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class BidServiceTest {
@@ -70,7 +68,11 @@ class BidServiceTest {
         final Long actual = bidService.create(loginUserDto, createBidDto);
 
         // then
-        assertThat(actual).isPositive();
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isPositive();
+            softAssertions.assertThat(auction.getLastBid().getPrice().getValue()).isEqualTo(createBidDto.bidPrice());
+            softAssertions.assertThat(auction.getAuctioneerCount()).isEqualTo(1);
+        });
     }
 
     @Test

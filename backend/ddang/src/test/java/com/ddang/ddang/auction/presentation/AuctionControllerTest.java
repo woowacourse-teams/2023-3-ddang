@@ -1,5 +1,31 @@
 package com.ddang.ddang.auction.presentation;
 
+import com.ddang.ddang.auction.application.AuctionService;
+import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -13,31 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.ddang.ddang.auction.application.AuctionService;
-import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
-import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @WebMvcTest(controllers = {AuctionController.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -128,6 +129,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
+                2,
                 "main",
                 "sub",
                 1L,
@@ -172,6 +174,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
+                2,
                 "main1",
                 "sub1",
                 1L,
@@ -191,6 +194,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
+                2,
                 "main2",
                 "sub2",
                 1L,
@@ -211,13 +215,13 @@ class AuctionControllerTest {
                        jsonPath("$.auctions.[0].image").exists(),
                        jsonPath("$.auctions.[0].auctionPrice", is(auction2.startPrice())),
                        jsonPath("$.auctions.[0].status").exists(),
-                       jsonPath("$.auctions.[0].auctioneerCount").exists(),
+                       jsonPath("$.auctions.[0].auctioneerCount", is(auction2.auctioneerCount())),
                        jsonPath("$.auctions.[1].id", is(auction1.id()), Long.class),
                        jsonPath("$.auctions.[1].title", is(auction1.title())),
                        jsonPath("$.auctions.[1].image").exists(),
                        jsonPath("$.auctions.[1].auctionPrice", is(auction1.startPrice())),
                        jsonPath("$.auctions.[1].status").exists(),
-                       jsonPath("$.auctions.[1].auctioneerCount").exists()
+                       jsonPath("$.auctions.[1].auctioneerCount", is(auction1.auctioneerCount()))
                );
     }
 
