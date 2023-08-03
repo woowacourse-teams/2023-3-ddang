@@ -29,9 +29,10 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     val images: LiveData<List<RegisterImageModel>>
         get() = _images
     val title: MutableLiveData<String> = MutableLiveData("")
-    private var _category: MutableLiveData<CategoryModel> = MutableLiveData()
+    private val _category: MutableLiveData<CategoryModel> = MutableLiveData()
     val category: LiveData<String>
         get() = _category.map { it.name }
+
     val description: MutableLiveData<String> = MutableLiveData("")
     val startPrice: MutableLiveData<String> = MutableLiveData("0")
     val bidUnit: MutableLiveData<String> = MutableLiveData("0")
@@ -212,8 +213,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
-    fun setCategory(category: CategoryModel) {
-        _category.value = category
+    fun setCategory(item: CategoryModel) {
+        _category.value = item
     }
 
     sealed class RegisterAuctionEvent {

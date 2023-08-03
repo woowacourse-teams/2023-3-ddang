@@ -3,7 +3,6 @@ package com.ddangddangddang.android.feature.register.category
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,12 +65,9 @@ class SelectCategoryActivity :
                 finish()
             }
             is SelectCategoryViewModel.SelectCategoryEvent.Submit -> {
-                val intent = Intent().apply {
-                    intent.putExtra(RegisterAuctionActivity.CATEGORY_RESULT, event.category)
-                }
+                intent.putExtra(RegisterAuctionActivity.CATEGORY_RESULT, event.category)
                 setResult(RESULT_OK, intent)
                 finish()
-                Log.d("test", "Submit ${event.category}") // 코드 작성 전까지 확인용
             }
         }
     }

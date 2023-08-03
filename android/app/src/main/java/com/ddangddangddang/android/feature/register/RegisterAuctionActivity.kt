@@ -5,7 +5,6 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -58,7 +57,6 @@ class RegisterAuctionActivity :
             if (it.resultCode == RESULT_OK) {
                 val category = it.data?.getParcelableCompat<CategoryModel>(CATEGORY_RESULT) ?: return@registerForActivityResult
                 viewModel.setCategory(category)
-                Log.d("test", "$category")
             }
         }
     }
@@ -74,7 +72,6 @@ class RegisterAuctionActivity :
     private fun setupViewModel() {
         viewModel.images.observe(this) { imageAdapter.setImages(it) }
         viewModel.event.observe(this) { handleEvent(it) }
-        viewModel.category.observe(this) { binding.etCategory.setText(viewModel.category.value) }
     }
 
     private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
@@ -198,7 +195,7 @@ class RegisterAuctionActivity :
 
     companion object {
         const val CATEGORY_RESULT = "category_result"
-        private const val REGIONS_RESULT = "region_result"
+        const val REGIONS_RESULT = "region_result"
 
         fun getIntent(context: Context): Intent =
             Intent(context, RegisterAuctionActivity::class.java)
