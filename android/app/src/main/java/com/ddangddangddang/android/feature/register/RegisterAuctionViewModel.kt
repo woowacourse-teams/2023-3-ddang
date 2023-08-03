@@ -29,8 +29,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     // EditText Values - Two Way Binding
     val title: MutableLiveData<String> = MutableLiveData("")
     val description: MutableLiveData<String> = MutableLiveData("")
-    val startPrice: MutableLiveData<String> = MutableLiveData("0")
-    val bidUnit: MutableLiveData<String> = MutableLiveData("0")
+    val startPrice: MutableLiveData<String> = MutableLiveData()
+    val bidUnit: MutableLiveData<String> = MutableLiveData()
 
     // Images
     private val _images: MutableLiveData<List<RegisterImageModel>> = MutableLiveData()
