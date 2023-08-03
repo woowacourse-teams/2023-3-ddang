@@ -3,7 +3,7 @@ package com.ddang.ddang.image.infrastructure.local;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
-import com.ddang.ddang.image.infrastructure.local.exception.StoreImageException;
+import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
 
             return storeImageDtos;
         } catch (IOException e) {
-            throw new StoreImageException("이미지 저장에 실패했습니다.", e);
+            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", e);
         }
     }
 

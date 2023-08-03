@@ -9,7 +9,7 @@ import static org.mockito.Mockito.mock;
 
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
-import com.ddang.ddang.image.infrastructure.local.exception.StoreImageException;
+import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import java.io.File;
 import java.io.IOException;
@@ -48,7 +48,7 @@ class LocalStoreImageProcessorTest {
 
         // when & then
         assertThatThrownBy(() -> imageProcessor.storeImageFiles(List.of(imageFile)))
-                .isInstanceOf(StoreImageException.class)
+                .isInstanceOf(StoreImageFailureException.class)
                 .hasMessage("이미지 저장에 실패했습니다.");
     }
 
