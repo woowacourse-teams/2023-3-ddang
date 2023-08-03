@@ -2,10 +2,13 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="category"
             type="com.ddangddangddang.android.model.CategoryModel" />
+
         <variable
             name="onItemClick"
             type="kotlin.jvm.functions.Function1" />
@@ -15,14 +18,15 @@
         android:id="@+id/cl_main_category_item"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:onClick="@{() -> onItemClick.invoke(category.id)}"
-        android:background="@color/white_to_red_100_selected">
+        android:background="@color/white_to_red_100_selected"
+        android:onClick="@{() -> onItemClick.invoke(category.id)}">
 
         <TextView
             android:id="@+id/tv_category"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{category.name}"
+            android:textAlignment="center"
             android:textColor="@color/black_600"
             android:textSize="@dimen/textsize_sub_header"
             app:layout_constraintBottom_toBottomOf="parent"
