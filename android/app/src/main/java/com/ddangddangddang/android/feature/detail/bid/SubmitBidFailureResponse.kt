@@ -9,9 +9,8 @@ enum class SubmitBidFailureResponse(private val message: String) {
     ;
 
     companion object {
-        private const val errorMessageFormat = "{\"message\":\"%s\"}"
         fun find(message: String?): SubmitBidFailureResponse {
-            return values().find { errorMessageFormat.format(it.message) == message } ?: ELSE
+            return values().find { it.message == message } ?: ELSE
         }
     }
 }

@@ -10,6 +10,7 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.math.BigInteger
 
 class AuctionBidViewModel(
@@ -51,9 +52,11 @@ class AuctionBidViewModel(
         viewModelScope.launch {
             when (val response = repository.submitAuctionBid(auctionId, bidPrice)) {
                 is ApiResponse.Success -> _event.value = AuctionBidEvent.SuccessSubmit(bidPrice)
-                is ApiResponse.Failure -> handleSubmitBidFailure(
-                    SubmitBidFailureResponse.find(response.error),
-                )
+                is ApiResponse.Failure -> {
+                    val jsonObject = JSONObject(response.error)
+                    val message = jsonObject.getString("message")
+                    handleSubmitBidFailure(SubmitBidFailureResponse.find(message))
+                }
 
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
