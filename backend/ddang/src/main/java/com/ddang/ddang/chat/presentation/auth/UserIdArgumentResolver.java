@@ -12,7 +12,7 @@ public class UserIdArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.getParameterType().equals(AuthenticateUserInfo.class) &&
-                parameter.hasParameterAnnotation(com.ddang.ddang.chat.presentation.auth.AuthenticateUser.class);
+                parameter.hasParameterAnnotation(AuthenticateUser.class);
     }
 
     @Override
