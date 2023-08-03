@@ -105,7 +105,7 @@ class ChatRoomControllerTest {
 
         final ChatRoomNotFoundException chatRoomNotFoundException =
                 new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        given(messageService.create(CreateMessageDto.from(invalidChatRoomId, request)))
+        given(messageService.create(CreateMessageDto.of(invalidChatRoomId, request)))
                 .willThrow(chatRoomNotFoundException);
 
         // when & then
@@ -128,7 +128,7 @@ class ChatRoomControllerTest {
 
         final UserNotFoundException userNotFoundException =
                 new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
-        given(messageService.create(CreateMessageDto.from(chatRoomId, request)))
+        given(messageService.create(CreateMessageDto.of(chatRoomId, request)))
                 .willThrow(userNotFoundException);
 
         // when & then
