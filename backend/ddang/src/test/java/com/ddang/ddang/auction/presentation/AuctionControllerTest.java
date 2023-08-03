@@ -40,8 +40,6 @@ import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureExc
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -61,6 +59,23 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {AuctionController.class})
 @AutoConfigureRestDocs
@@ -419,6 +434,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
+                2,
                 "main",
                 "sub",
                 1L,
@@ -513,6 +529,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
+                2,
                 "main1",
                 "sub1",
                 1L,
@@ -532,6 +549,7 @@ class AuctionControllerTest {
                 LocalDateTime.now(),
                 List.of(readRegionsDto),
                 List.of(1L),
+                2,
                 "main2",
                 "sub2",
                 1L,
@@ -554,13 +572,13 @@ class AuctionControllerTest {
                        jsonPath("$.auctions.[0].image").exists(),
                        jsonPath("$.auctions.[0].auctionPrice", is(auction2.startPrice())),
                        jsonPath("$.auctions.[0].status").exists(),
-                       jsonPath("$.auctions.[0].auctioneerCount").exists(),
+                       jsonPath("$.auctions.[0].auctioneerCount", is(auction2.auctioneerCount())),
                        jsonPath("$.auctions.[1].id", is(auction1.id()), Long.class),
                        jsonPath("$.auctions.[1].title", is(auction1.title())),
                        jsonPath("$.auctions.[1].image").exists(),
                        jsonPath("$.auctions.[1].auctionPrice", is(auction1.startPrice())),
                        jsonPath("$.auctions.[1].status").exists(),
-                       jsonPath("$.auctions.[1].auctioneerCount").exists()
+                       jsonPath("$.auctions.[1].auctioneerCount", is(auction1.auctioneerCount()))
                )
                .andDo(
                        restDocs.document(

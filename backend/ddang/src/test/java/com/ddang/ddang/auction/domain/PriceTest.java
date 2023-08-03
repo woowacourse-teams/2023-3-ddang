@@ -15,7 +15,7 @@ class PriceTest {
     @Test
     void 가능한_범위_내의_가격을_받는_경우_정상적으로_생성된다() {
         // when & then
-        assertThatCode(() -> new Price(1000)).doesNotThrowAnyException();
+        assertThatCode(() -> new Price(1_000)).doesNotThrowAnyException();
     }
 
     @Test

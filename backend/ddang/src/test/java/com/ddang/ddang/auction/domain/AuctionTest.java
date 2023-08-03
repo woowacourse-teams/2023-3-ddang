@@ -1,19 +1,21 @@
 package com.ddang.ddang.auction.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.user.domain.User;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -68,7 +70,7 @@ class AuctionTest {
                                        .build();
 
         // when
-        final boolean actual = auction.isInvalidFirstBidPrice(new Price(900));
+        final boolean actual = auction.isInvalidFirstBidPrice(new BidPrice(900));
 
         // then
         assertThat(actual).isTrue();
@@ -115,13 +117,14 @@ class AuctionTest {
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
 
-        final Bid bid = new Bid(auction, user, new Price(10_000));
+        final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         // when
-        auction.updateLastBidPrice(bid);
+        auction.updateLastBid(bid);
 
         // then
         assertThat(auction.getLastBid()).isEqualTo(bid);
+        assertThat(auction.getAuctioneerCount()).isEqualTo(1);
     }
 
     @Test
@@ -133,7 +136,7 @@ class AuctionTest {
                                        .build();
 
         // when
-        final boolean actual = auction.isInvalidFirstBidPrice(new Price(900));
+        final boolean actual = auction.isInvalidFirstBidPrice(new BidPrice(900));
 
         // then
         assertThat(actual).isTrue();
@@ -147,12 +150,12 @@ class AuctionTest {
                                        .bidUnit(new BidUnit(1_000))
                                        .build();
         final User user = new User("사용자1", "이미지1", 4.9);
-        final Bid bid = new Bid(auction, user, new Price(10_000));
+        final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
-        auction.updateLastBidPrice(bid);
+        auction.updateLastBid(bid);
 
         // when
-        final boolean actual = auction.isSmallerThanNextBidPrice(new Price(9_000));
+        final boolean actual = auction.isSmallerThanNextBidPrice(new BidPrice(9_000));
 
         // then
         assertThat(actual).isTrue();

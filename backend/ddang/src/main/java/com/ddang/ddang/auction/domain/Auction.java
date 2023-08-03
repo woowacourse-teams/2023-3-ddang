@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.domain;
 
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -81,6 +82,8 @@ public class Auction extends BaseTimeEntity {
     @OneToMany(mappedBy = "auction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<AuctionImage> auctionImages = new ArrayList<>();
 
+    private int auctioneerCount = 0;
+
     @Builder
     private Auction(
             final String title,
@@ -118,28 +121,30 @@ public class Auction extends BaseTimeEntity {
         }
     }
 
-    public boolean isOwner(final User seller) {
-        return this.seller.equals(seller);
+    public boolean isOwner(final User user) {
+        return this.seller.equals(user);
     }
 
     public boolean isClosed(final LocalDateTime targetTime) {
         return targetTime.isAfter(closingTime);
     }
 
-    public boolean isInvalidFirstBidPrice(final Price price) {
-        return startPrice.isOverThan(price);
+    public boolean isInvalidFirstBidPrice(final BidPrice bidPrice) {
+        final BidPrice startBidPrice = new BidPrice(startPrice.getValue());
+        return startBidPrice.isGreaterThan(bidPrice);
     }
 
-    public void updateLastBidPrice(final Bid lastBid) {
+    public void updateLastBid(final Bid lastBid) {
         this.lastBid = lastBid;
+        this.auctioneerCount += 1;
     }
 
-    public boolean isSmallerThanNextBidPrice(final Price price) {
-        return calculateNextMinimumBidPrice().isMoreThan(price);
+    public boolean isSmallerThanNextBidPrice(final BidPrice bidPrice) {
+        return calculateNextMinimumBidPrice().isGreaterThan(bidPrice);
     }
 
-    private Price calculateNextMinimumBidPrice() {
+    private BidPrice calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBid.getPrice().getValue() + this.bidUnit.getValue();
-        return new Price(nextMinimumBidPrice);
+        return new BidPrice(nextMinimumBidPrice);
     }
 }
