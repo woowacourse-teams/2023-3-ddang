@@ -13,10 +13,16 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.register.category.SelectCategoryActivity
+import com.ddangddangddang.android.feature.register.region.SelectRegionsActivity
+import com.ddangddangddang.android.model.CategoryModel
+import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.compat.getParcelableCompat
+import com.ddangddangddang.android.util.compat.getSerializableExtraCompat
 import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
 import java.time.LocalDateTime
@@ -28,6 +34,8 @@ class RegisterAuctionActivity :
     private val viewModel by viewModels<RegisterAuctionViewModel> { viewModelFactory }
     private val imageAdapter = RegisterAuctionImageAdapter { viewModel.setDeleteImageEvent(it) }
     private val pickMultipleMediaLaunchers = setupMultipleMediaLaunchers()
+    private val categoryActivityLauncher = setupCategoryLauncher()
+    private val regionActivityLauncher = setupRegionLauncher()
 
     private fun setupMultipleMediaLaunchers(): List<ActivityResultLauncher<PickVisualMediaRequest>> {
         return List(RegisterAuctionViewModel.MAXIMUM_IMAGE_SIZE) { index ->
@@ -47,6 +55,27 @@ class RegisterAuctionActivity :
                         viewModel.addImages(images)
                     }
                 }
+            }
+        }
+    }
+
+    private fun setupCategoryLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val category = it.data?.getParcelableCompat<CategoryModel>(CATEGORY_RESULT)
+                    ?: return@registerForActivityResult
+                viewModel.setCategory(category)
+            }
+        }
+    }
+
+    private fun setupRegionLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val regions =
+                    it.data?.getSerializableExtraCompat<Array<RegionSelectionModel>>(REGIONS_RESULT)
+                        ?: return@registerForActivityResult
+                viewModel.setRegion(regions.toList())
             }
         }
     }
@@ -97,6 +126,14 @@ class RegisterAuctionActivity :
                 pickMultipleMediaLaunchers[viewModel.selectableImageSize - 1].launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                 )
+            }
+
+            RegisterAuctionViewModel.RegisterAuctionEvent.PickCategory -> {
+                navigationToCategorySelection()
+            }
+
+            RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
+                navigationToRegionSelection()
             }
         }
     }
@@ -151,6 +188,14 @@ class RegisterAuctionActivity :
         startActivity(AuctionDetailActivity.getIntent(this, id))
     }
 
+    private fun navigationToCategorySelection() {
+        categoryActivityLauncher.launch(SelectCategoryActivity.getIntent(this))
+    }
+
+    private fun navigationToRegionSelection() {
+        regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
+    }
+
     private fun showDeleteImageDialog(image: RegisterImageModel) {
         showDialog(
             messageId = R.string.register_auction_dialog_delete_image_message,
@@ -177,6 +222,9 @@ class RegisterAuctionActivity :
     }
 
     companion object {
+        const val CATEGORY_RESULT = "category_result"
+        const val REGIONS_RESULT = "region_result"
+
         fun getIntent(context: Context): Intent =
             Intent(context, RegisterAuctionActivity::class.java)
     }

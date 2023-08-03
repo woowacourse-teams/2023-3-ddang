@@ -8,7 +8,10 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.model.CategoryModel
+import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
@@ -23,35 +26,39 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class RegisterAuctionViewModel(private val repository: AuctionRepository) : ViewModel() {
+    // EditText Values - Two Way Binding
+    val title: MutableLiveData<String> = MutableLiveData("")
+    val description: MutableLiveData<String> = MutableLiveData("")
+    val startPrice: MutableLiveData<String> = MutableLiveData()
+    val bidUnit: MutableLiveData<String> = MutableLiveData()
+
+    // Images
     private val _images: MutableLiveData<List<RegisterImageModel>> = MutableLiveData()
     val images: LiveData<List<RegisterImageModel>>
         get() = _images
-    val title: MutableLiveData<String> = MutableLiveData("")
-    val category: MutableLiveData<String> = MutableLiveData("전자기기 > 노트북")
-    val description: MutableLiveData<String> = MutableLiveData("")
-    val startPrice: MutableLiveData<String> = MutableLiveData("0")
-    val bidUnit: MutableLiveData<String> = MutableLiveData("0")
+    val selectableImageSize: Int
+        get() = MAXIMUM_IMAGE_SIZE - (images.value?.size ?: 0)
+
+    // Category
+    private val _category: MutableLiveData<CategoryModel> = MutableLiveData()
+    val category: LiveData<String>
+        get() = _category.map { it.name }
+
+    // DateTime
     private var _closingTime: MutableLiveData<LocalDateTime> =
         MutableLiveData<LocalDateTime>(LocalDateTime.now())
     val closingTime: LiveData<LocalDateTime>
         get() = _closingTime
-    val directRegion: MutableLiveData<String> = MutableLiveData("경기도 부천시")
 
-    val selectableImageSize: Int
-        get() = MAXIMUM_IMAGE_SIZE - (images.value?.size ?: 0)
+    // Direct Region
+    private val _directRegion: MutableLiveData<List<RegionSelectionModel>> = MutableLiveData()
+    val directRegion: LiveData<String>
+        get() = _directRegion.map { regions -> regions.joinToString { it.name } }
 
+    // Event
     private val _event: SingleLiveEvent<RegisterAuctionEvent> = SingleLiveEvent()
     val event: LiveData<RegisterAuctionEvent>
         get() = _event
-
-    fun setClosingTimeEvent() {
-        _event.value =
-            RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
-    }
-
-    fun setExitEvent() {
-        _event.value = RegisterAuctionEvent.Exit
-    }
 
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
         _closingTime.value =
@@ -85,6 +92,56 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
                 is ApiResponse.Unexpected -> {}
             }
         }
+    }
+
+    private fun judgeValidInputs(): Boolean {
+        val isNoImage = images.value?.isEmpty() ?: true
+        val title = title.value
+        val category = _category.value?.id
+        val description = description.value
+        val startPrice = startPrice.value
+        val bidUnit = bidUnit.value
+        val closingTime = closingTime.value
+        val directRegion = _directRegion.value?.size ?: 0
+
+        if (isNoImage ||
+            title.isNullOrBlank() ||
+            category == null ||
+            description.isNullOrBlank() ||
+            startPrice.isNullOrBlank() ||
+            bidUnit.isNullOrBlank() ||
+            closingTime == null ||
+            directRegion == 0
+        ) {
+            setBlankExistEvent()
+            return false
+        }
+
+        if (startPrice.toIntOrNull() == null || bidUnit.toIntOrNull() == null) {
+            setInvalidValueInputEvent()
+            return false
+        }
+        return true
+    }
+
+    private fun createRequestModel(): RegisterAuctionRequest {
+        val title = title.value ?: ""
+        val category = _category.value?.id ?: -1
+        val description = description.value ?: ""
+        val startPrice = startPrice.value?.toInt() ?: 0
+        val bidUnit = bidUnit.value?.toInt() ?: 0
+        val closingTime = closingTime.value.toString() + ":00" // seconds
+        val regions = _directRegion.value?.map { it.id } ?: emptyList()
+
+        return RegisterAuctionRequest(
+            title,
+            category,
+            description,
+            startPrice,
+            bidUnit,
+            closingTime,
+            regions,
+        )
     }
 
     private fun Uri.toAdjustImageFile(context: Context): File? {
@@ -127,53 +184,33 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         }
     }
 
-    private fun createRequestModel(): RegisterAuctionRequest {
-        val title = title.value ?: ""
-        val description = description.value ?: ""
-        val startPrice = startPrice.value?.toInt() ?: 0
-        val bidUnit = bidUnit.value?.toInt() ?: 0
-        val closingTime = closingTime.value.toString() + ":00" // seconds
-
-        // 카테고리와 지역 선택 기능 구현 후 수정 필요!
-        return RegisterAuctionRequest(
-            title,
-            102,
-            description,
-            startPrice,
-            bidUnit,
-            closingTime,
-            listOf(3),
-        )
+    fun addImages(images: List<RegisterImageModel>) {
+        _images.value = _images.value?.plus(images) ?: images
     }
 
-    private fun judgeValidInputs(): Boolean {
-        val isNoImage = images.value?.isEmpty() ?: true
-        val title = title.value
-        val category = category.value
-        val description = description.value
-        val startPrice = startPrice.value
-        val bidUnit = bidUnit.value
-        val closingTime = closingTime.value
-        val directRegion = directRegion.value
+    fun deleteImage(image: RegisterImageModel) {
+        _images.value = _images.value?.minus(image) ?: emptyList()
+    }
 
-        if (isNoImage ||
-            title.isNullOrBlank() ||
-            category.isNullOrBlank() ||
-            description.isNullOrBlank() ||
-            startPrice.isNullOrBlank() ||
-            bidUnit.isNullOrBlank() ||
-            closingTime == null ||
-            directRegion.isNullOrBlank()
-        ) {
-            setBlankExistEvent()
-            return false
-        }
+    fun pickImages() {
+        _event.value = RegisterAuctionEvent.MultipleMediaPicker
+    }
 
-        if (startPrice.toIntOrNull() == null || bidUnit.toIntOrNull() == null) {
-            setInvalidValueInputEvent()
-            return false
-        }
-        return true
+    fun setClosingTimeEvent() {
+        _event.value =
+            RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+    }
+
+    fun setExitEvent() {
+        _event.value = RegisterAuctionEvent.Exit
+    }
+
+    fun setPickCategoryEvent() {
+        _event.value = RegisterAuctionEvent.PickCategory
+    }
+
+    fun setPickRegionEvent() {
+        _event.value = RegisterAuctionEvent.PickRegion
     }
 
     private fun setBlankExistEvent() {
@@ -188,16 +225,12 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.DeleteImage(image)
     }
 
-    fun addImages(images: List<RegisterImageModel>) {
-        _images.value = _images.value?.plus(images) ?: images
+    fun setCategory(category: CategoryModel) {
+        _category.value = category
     }
 
-    fun deleteImage(image: RegisterImageModel) {
-        _images.value = _images.value?.minus(image) ?: emptyList()
-    }
-
-    fun pickImages() {
-        _event.value = RegisterAuctionEvent.MultipleMediaPicker
+    fun setRegion(regions: List<RegionSelectionModel>) {
+        _directRegion.value = regions
     }
 
     sealed class RegisterAuctionEvent {
@@ -211,6 +244,9 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
         class DeleteImage(val image: RegisterImageModel) : RegisterAuctionEvent()
         object MultipleMediaPicker : RegisterAuctionEvent()
+
+        object PickCategory : RegisterAuctionEvent()
+        object PickRegion : RegisterAuctionEvent()
     }
 
     companion object {
