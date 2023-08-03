@@ -21,4 +21,9 @@ interface AuctionRepository {
         images: List<File>,
         auction: RegisterAuctionRequest,
     ): ApiResponse<AuctionPreviewResponse>
+
+    suspend fun submitAuctionBid(
+        auctionId: Long,
+        bidPrice: Int,
+    ): ApiResponse<Unit>
 }

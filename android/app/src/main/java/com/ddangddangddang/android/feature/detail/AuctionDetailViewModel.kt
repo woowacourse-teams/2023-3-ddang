@@ -22,6 +22,12 @@ class AuctionDetailViewModel(
     val auctionDetailModel: LiveData<AuctionDetailModel>
         get() = _auctionDetailModel
 
+    val minBidPrice: Int
+        get() {
+            val auction = auctionDetailModel.value ?: return 0
+            return auction.lastBidPrice + auction.bidUnit
+        }
+
     fun loadAuctionDetail(auctionId: Long) {
         viewModelScope.launch {
             when (val response = repository.getAuctionDetail(auctionId)) {
