@@ -169,21 +169,21 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     private fun judgeValidInputs(): Boolean {
         val isNoImage = images.value?.isEmpty() ?: true
         val title = title.value
-        val category = category.value
+        val category = _category.value?.id
         val description = description.value
         val startPrice = startPrice.value
         val bidUnit = bidUnit.value
         val closingTime = closingTime.value
-        val directRegion = directRegion.value
+        val directRegion = _directRegion.value?.size ?: 0
 
         if (isNoImage ||
             title.isNullOrBlank() ||
-            category.isNullOrBlank() ||
+            category == null ||
             description.isNullOrBlank() ||
             startPrice.isNullOrBlank() ||
             bidUnit.isNullOrBlank() ||
             closingTime == null ||
-            directRegion.isNullOrBlank()
+            directRegion == 0
         ) {
             setBlankExistEvent()
             return false
