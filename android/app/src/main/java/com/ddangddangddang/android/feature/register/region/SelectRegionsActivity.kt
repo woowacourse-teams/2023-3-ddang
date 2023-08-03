@@ -36,6 +36,7 @@ class SelectRegionsActivity :
         super.onCreate(savedInstanceState)
         setupAdapter()
         setupObserve()
+        viewModel.loadFirstRegions()
     }
 
     private fun setupAdapter() {

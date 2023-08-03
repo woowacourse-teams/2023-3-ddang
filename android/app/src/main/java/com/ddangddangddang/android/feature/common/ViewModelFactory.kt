@@ -13,9 +13,11 @@ import com.ddangddangddang.android.feature.register.region.SelectRegionsViewMode
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
+import com.ddangddangddang.data.repository.RegionRepositoryImpl
 
 val repository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val categoryRepository = CategoryRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
+val regionRepository = RegionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {

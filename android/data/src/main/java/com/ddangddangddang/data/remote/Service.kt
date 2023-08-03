@@ -3,6 +3,7 @@ package com.ddangddangddang.data.remote
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -29,6 +30,18 @@ interface Service {
         @Part images: List<MultipartBody.Part>,
         @Part("request") body: RequestBody,
     ): ApiResponse<AuctionPreviewResponse>
+
+    @GET("/regions")
+    suspend fun fetchFirstRegions(): ApiResponse<List<RegionDetailResponse>>
+
+    @GET("/regions/{firstId}")
+    suspend fun fetchSecondRegions(@Path("firstId") firstId: Long): ApiResponse<List<RegionDetailResponse>>
+
+    @GET("/regions/{firstId}/{secondId}")
+    suspend fun fetchThirdRegions(
+        @Path("firstId") firstId: Long,
+        @Path("secondId") secondId: Long,
+    ): ApiResponse<List<RegionDetailResponse>>
 
     @GET("/categories")
     suspend fun fetchMainCategories(): ApiResponse<List<EachCategoryResponse>>
