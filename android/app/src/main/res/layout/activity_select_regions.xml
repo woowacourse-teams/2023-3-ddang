@@ -50,7 +50,7 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_select_regions"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintTop_toBottomOf="@id/tb_select_regions" />
 
         <TextView
             android:id="@+id/tv_region_first_title"
