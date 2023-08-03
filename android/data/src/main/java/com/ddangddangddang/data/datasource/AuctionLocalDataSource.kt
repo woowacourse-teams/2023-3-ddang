@@ -27,13 +27,7 @@ class AuctionLocalDataSource {
 
         val updatedList = currentList.map {
             if (it.id == auction.id) {
-                it.copy(
-                    title = auction.title,
-                    image = auction.images.firstOrNull() ?: "",
-                    status = auction.status,
-                    auctionPrice = auction.lastBidPrice ?: auction.startPrice,
-                    auctioneerCount = auction.auctioneerCount,
-                )
+                auction.toPreview()
             } else {
                 it
             }
