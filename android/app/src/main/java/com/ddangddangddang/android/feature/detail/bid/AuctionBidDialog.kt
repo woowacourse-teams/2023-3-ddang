@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -84,16 +85,23 @@ class AuctionBidDialog : DialogFragment() {
 
     private fun handleEvent(event: AuctionBidViewModel.AuctionBidEvent) {
         when (event) {
-            is AuctionBidViewModel.AuctionBidEvent.Cancel -> cancel()
+            is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
             is AuctionBidViewModel.AuctionBidEvent.SuccessSubmit -> successSubmit(event.price)
+            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(event)
         }
     }
 
-    private fun cancel() {
-        dismiss()
+    private fun successSubmit(price: Int) {
+        showMessage(getString(R.string.detail_auction_bid_dialog_success).format(price))
+        exit()
     }
 
-    private fun successSubmit(price: Int) {
+    private fun handleSubmitFailureEvent(event: AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent) {
+        showMessage(getString(event.messageId))
+        exit()
+    }
+
+    private fun exit() {
         activityViewModel.auctionDetailModel.value?.let { activityViewModel.loadAuctionDetail(it.id) }
         dismiss()
     }
@@ -108,6 +116,10 @@ class AuctionBidDialog : DialogFragment() {
 
     private fun getCursorPositionFrontSuffix(content: String): Int {
         return content.length - AuctionBidViewModel.SUFFIX_INPUT_PRICE.length
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {

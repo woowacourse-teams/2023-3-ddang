@@ -1,10 +1,11 @@
 package com.ddangddangddang.android.feature.detail.bid
 
-import android.util.Log
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.R
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
@@ -49,21 +50,10 @@ class AuctionBidViewModel(
         if (isBidAmountUnderMinimum(bidPrice, minBidPrice)) return
         viewModelScope.launch {
             when (val response = repository.submitAuctionBid(auctionId, bidPrice)) {
-                is ApiResponse.Success -> {
-                    Log.d("mendel", "success")
-                }
-
-                is ApiResponse.Failure -> {
-                    Log.d("mendel", "failure ${response.error}")
-                }
-
-                is ApiResponse.NetworkError -> {
-                    Log.d("mendel", "networkerror")
-                }
-
-                is ApiResponse.Unexpected -> {
-                    Log.d("mendel", "enexpected")
-                }
+                is ApiResponse.Success -> _event.value = AuctionBidEvent.SuccessSubmit(bidPrice)
+                is ApiResponse.Failure -> handleSubmitBidFailure(SubmitBidFailureResponse.find(response.error))
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
             }
         }
     }
@@ -72,9 +62,44 @@ class AuctionBidViewModel(
         return bidPrice < minBidPrice
     }
 
+    private fun handleSubmitBidFailure(failure: SubmitBidFailureResponse) {
+        when (failure) {
+            SubmitBidFailureResponse.FINISH ->
+                _event.value =
+                    AuctionBidEvent.SubmitFailureEvent.Finish
+
+            SubmitBidFailureResponse.DELETED ->
+                _event.value =
+                    AuctionBidEvent.SubmitFailureEvent.Deleted
+
+            SubmitBidFailureResponse.UNDER_PRICE -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.UnderPrice
+            }
+
+            SubmitBidFailureResponse.ALREADY_HIGHEST_BIDDER -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.AlreadyHighestBidder
+            }
+
+            SubmitBidFailureResponse.ELSE ->
+                _event.value =
+                    AuctionBidEvent.SubmitFailureEvent.Unknown
+        }
+    }
+
     sealed class AuctionBidEvent {
         object Cancel : AuctionBidEvent()
         data class SuccessSubmit(val price: Int) : AuctionBidEvent()
+        sealed class SubmitFailureEvent(@StringRes val messageId: Int) : AuctionBidEvent() {
+            object Finish : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_finish)
+            object Deleted : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_deleted)
+            object UnderPrice :
+                SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_under_price)
+
+            object AlreadyHighestBidder :
+                SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_already_highest_bidder)
+
+            object Unknown : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_else)
+        }
     }
 
     companion object {
