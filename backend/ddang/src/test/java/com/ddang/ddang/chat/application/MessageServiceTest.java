@@ -12,22 +12,20 @@ import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
+@IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class MessageServiceTest {
