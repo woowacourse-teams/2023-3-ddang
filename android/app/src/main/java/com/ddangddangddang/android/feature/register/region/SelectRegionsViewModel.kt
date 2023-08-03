@@ -11,6 +11,9 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.RegionRepository
 import kotlinx.coroutines.launch
 
+private typealias FirstId = Long
+private typealias SecondId = Long
+
 class SelectRegionsViewModel(private val regionRepository: RegionRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectRegionsEvent> =
         SingleLiveEvent()
@@ -33,8 +36,8 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
     val regionSelections: LiveData<List<RegionSelectionModel>>
         get() = _regionSelections
 
-    private val secondRegionsCache: MutableMap<Long, List<RegionSelectionModel>> = mutableMapOf()
-    private val thirdRegionsCache: MutableMap<Long, List<RegionSelectionModel>> = mutableMapOf()
+    private val secondRegionsCache: MutableMap<FirstId, List<RegionSelectionModel>> = mutableMapOf()
+    private val thirdRegionsCache: MutableMap<SecondId, List<RegionSelectionModel>> = mutableMapOf()
 
     fun loadFirstRegions() {
         viewModelScope.launch {
