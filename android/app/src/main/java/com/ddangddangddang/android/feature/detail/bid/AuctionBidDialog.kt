@@ -38,11 +38,8 @@ class AuctionBidDialog : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (viewModel.bidPrice.value == null) {
-            activityViewModel.auctionDetailModel.value?.let {
-                val lastBidPrice = it.lastBidPrice
-                val bidUnit = it.bidUnit
-                viewModel.setBidPrice(lastBidPrice + bidUnit)
-            } ?: dismiss()
+            if (activityViewModel.minBidPrice == 0) return exit()
+            viewModel.setBidPrice(activityViewModel.minBidPrice)
         }
     }
 
@@ -86,13 +83,13 @@ class AuctionBidDialog : DialogFragment() {
     private fun handleEvent(event: AuctionBidViewModel.AuctionBidEvent) {
         when (event) {
             is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
-            is AuctionBidViewModel.AuctionBidEvent.SuccessSubmit -> successSubmit(event.price)
+            is AuctionBidViewModel.AuctionBidEvent.SuccessSubmit -> submitSuccess(event.price)
             is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(event)
         }
     }
 
-    private fun successSubmit(price: Int) {
-        showMessage(getString(R.string.detail_auction_bid_dialog_success).format(price))
+    private fun submitSuccess(price: Int) {
+        showMessage(getString(R.string.detail_auction_bid_dialog_success, price))
         exit()
     }
 
@@ -107,7 +104,7 @@ class AuctionBidDialog : DialogFragment() {
     }
 
     private fun setInputBidPrice(price: Int) {
-        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price).format(price)
+        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
         binding.etBidPrice.removeTextChangedListener(watcher)
         binding.etBidPrice.setText(displayPrice)
         binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동

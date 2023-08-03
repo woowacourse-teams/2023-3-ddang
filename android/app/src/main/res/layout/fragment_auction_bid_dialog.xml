@@ -102,7 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:onClick="@{()->viewModel.submit(activityViewModel.auctionDetailModel.id, activityViewModel.auctionDetailModel.lastBidPrice + activityViewModel.auctionDetailModel.bidUnit)}"
+                android:onClick="@{()->viewModel.submit(activityViewModel.auctionDetailModel.id, activityViewModel.minBidPrice)}"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="10dp"
                 android:text="@string/detail_auction_bid_dialog_submit"

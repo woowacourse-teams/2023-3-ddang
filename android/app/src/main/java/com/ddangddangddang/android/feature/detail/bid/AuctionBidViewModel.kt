@@ -51,7 +51,10 @@ class AuctionBidViewModel(
         viewModelScope.launch {
             when (val response = repository.submitAuctionBid(auctionId, bidPrice)) {
                 is ApiResponse.Success -> _event.value = AuctionBidEvent.SuccessSubmit(bidPrice)
-                is ApiResponse.Failure -> handleSubmitBidFailure(SubmitBidFailureResponse.find(response.error))
+                is ApiResponse.Failure -> handleSubmitBidFailure(
+                    SubmitBidFailureResponse.find(response.error),
+                )
+
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
@@ -64,13 +67,13 @@ class AuctionBidViewModel(
 
     private fun handleSubmitBidFailure(failure: SubmitBidFailureResponse) {
         when (failure) {
-            SubmitBidFailureResponse.FINISH ->
-                _event.value =
-                    AuctionBidEvent.SubmitFailureEvent.Finish
+            SubmitBidFailureResponse.FINISH -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.Finish
+            }
 
-            SubmitBidFailureResponse.DELETED ->
-                _event.value =
-                    AuctionBidEvent.SubmitFailureEvent.Deleted
+            SubmitBidFailureResponse.DELETED -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.Deleted
+            }
 
             SubmitBidFailureResponse.UNDER_PRICE -> {
                 _event.value = AuctionBidEvent.SubmitFailureEvent.UnderPrice
@@ -80,9 +83,9 @@ class AuctionBidViewModel(
                 _event.value = AuctionBidEvent.SubmitFailureEvent.AlreadyHighestBidder
             }
 
-            SubmitBidFailureResponse.ELSE ->
-                _event.value =
-                    AuctionBidEvent.SubmitFailureEvent.Unknown
+            SubmitBidFailureResponse.ELSE -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.Unknown
+            }
         }
     }
 
