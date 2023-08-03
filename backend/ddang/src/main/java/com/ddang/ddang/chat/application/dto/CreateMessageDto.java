@@ -2,7 +2,7 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.presentation.dto.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.user.domain.User;
 
 public record CreateMessageDto(
@@ -12,7 +12,7 @@ public record CreateMessageDto(
         String contents
 ) {
 
-    public static CreateMessageDto from(final Long chatRoomId, final CreateMessageRequest request) {
+    public static CreateMessageDto of(final Long chatRoomId, final CreateMessageRequest request) {
         return new CreateMessageDto(
                 chatRoomId,
                 request.writerId(),

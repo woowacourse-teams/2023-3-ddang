@@ -1,4 +1,4 @@
-package com.ddang.ddang.chat.presentation.dto;
+package com.ddang.ddang.chat.presentation.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 
