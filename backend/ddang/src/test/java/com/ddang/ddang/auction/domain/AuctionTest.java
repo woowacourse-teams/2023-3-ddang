@@ -155,7 +155,7 @@ class AuctionTest {
         auction.updateLastBid(bid);
 
         // when
-        final boolean actual = auction.isSmallerThanNextBidPrice(new BidPrice(9_000));
+        final boolean actual = auction.isNextBidPriceGreaterThan(new BidPrice(9_000));
 
         // then
         assertThat(actual).isTrue();

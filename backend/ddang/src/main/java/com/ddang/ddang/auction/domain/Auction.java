@@ -139,7 +139,7 @@ public class Auction extends BaseTimeEntity {
         this.auctioneerCount += 1;
     }
 
-    public boolean isSmallerThanNextBidPrice(final BidPrice bidPrice) {
+    public boolean isNextBidPriceGreaterThan(final BidPrice bidPrice) {
         return calculateNextMinimumBidPrice().isGreaterThan(bidPrice);
     }
 
