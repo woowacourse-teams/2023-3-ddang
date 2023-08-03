@@ -1,6 +1,8 @@
 package com.ddang.ddang.chat.application;
 
+import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -21,12 +23,35 @@ public class ChatRoomService {
     private final JpaUserRepository userRepository;
 
     public List<ReadParticipatingChatRoomDto> readAllByUserId(final Long userId) {
-        final User findUser = userRepository.findById(userId)
-                                            .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
+        final User findUser = findUser(userId);
         final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
         return chatRooms.stream()
                         .map(chatRoom -> toDto(findUser, chatRoom))
                         .toList();
+    }
+
+    private User findUser(final Long userId) {
+        return userRepository.findById(userId)
+                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
+    }
+
+    public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
+        final User findUser = findUser(userId);
+        final ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+                                                    .orElseThrow(() ->
+                                                            new ChatRoomNotFoundException(
+                                                                    "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
+                                                            )
+                                                    );
+        checkAccessible(findUser, chatRoom);
+
+        return toDto(findUser, chatRoom);
+    }
+
+    private static void checkAccessible(final User findUser, final ChatRoom chatRoom) {
+        if (!chatRoom.isParticipant(findUser)) {
+            throw new UserNotAuthorizationException("권한이 없습니다.");
+        }
     }
 
     private ReadParticipatingChatRoomDto toDto(final User findUser, final ChatRoom chatRoom) {
