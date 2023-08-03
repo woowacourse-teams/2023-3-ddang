@@ -9,5 +9,5 @@ import java.util.List;
 public interface JpaChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     @Query("select c from ChatRoom c where c.auction.seller.id = :userId or c.buyer.id = :userId")
-    List<ChatRoom> findAllParticipatingChatRoomByUserId(final Long userId);
+    List<ChatRoom> findAllByUserId(final Long userId);
 }

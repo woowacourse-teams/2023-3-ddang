@@ -154,7 +154,7 @@ class JpaChatRoomRepositoryTest {
         em.clear();
 
         // when
-        final List<ChatRoom> actual = chatRoomRepository.findAllParticipatingChatRoomByUserId(encho.getId());
+        final List<ChatRoom> actual = chatRoomRepository.findAllByUserId(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

@@ -39,7 +39,7 @@ public class ChatRoomController {
             @AuthenticateUser final AuthenticateUserInfo userInfo
     ) {
         final List<ReadParticipatingChatRoomDto> readParticipatingChatRoomDtos =
-                chatRoomService.readAllParticipatingChatRoomsByUserId(userInfo.id());
+                chatRoomService.readAllByUserId(userInfo.id());
 
         final List<ReadChatRoomResponse> responses =
                 readParticipatingChatRoomDtos.stream()

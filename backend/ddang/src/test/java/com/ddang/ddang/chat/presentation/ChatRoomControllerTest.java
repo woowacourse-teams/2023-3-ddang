@@ -184,7 +184,7 @@ class ChatRoomControllerTest {
                 ReadUserDto.from(user2)
         );
 
-        given(chatRoomService.readAllParticipatingChatRoomsByUserId(anyLong()))
+        given(chatRoomService.readAllByUserId(anyLong()))
                 .willReturn(List.of(chatRoom1, chatRoom2));
 
         // when & then
@@ -208,7 +208,7 @@ class ChatRoomControllerTest {
         final Long invalidUserId = -999L;
         final UserNotFoundException userNotFoundException =
                 new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
-        given(chatRoomService.readAllParticipatingChatRoomsByUserId(invalidUserId))
+        given(chatRoomService.readAllByUserId(invalidUserId))
                 .willThrow(userNotFoundException);
 
         // when & then

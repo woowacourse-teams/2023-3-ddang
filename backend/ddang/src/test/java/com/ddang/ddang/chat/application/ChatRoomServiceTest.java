@@ -97,7 +97,7 @@ class ChatRoomServiceTest {
 
         // when
         final List<ReadParticipatingChatRoomDto> actual =
-                chatRoomService.readAllParticipatingChatRoomsByUserId(encho.getId());
+                chatRoomService.readAllByUserId(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -117,7 +117,7 @@ class ChatRoomServiceTest {
         final Long invalidUserId = -999L;
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.readAllParticipatingChatRoomsByUserId(invalidUserId))
+        assertThatThrownBy(() -> chatRoomService.readAllByUserId(invalidUserId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("사용자 정보를 찾을 수 없습니다.");
     }

@@ -20,10 +20,10 @@ public class ChatRoomService {
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
 
-    public List<ReadParticipatingChatRoomDto> readAllParticipatingChatRoomsByUserId(final Long userId) {
+    public List<ReadParticipatingChatRoomDto> readAllByUserId(final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        final List<ChatRoom> chatRooms = chatRoomRepository.findAllParticipatingChatRoomByUserId(findUser.getId());
+        final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
         return chatRooms.stream()
                         .map(chatRoom -> toDto(findUser, chatRoom))
                         .toList();
