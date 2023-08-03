@@ -11,10 +11,12 @@ import com.ddangddangddang.android.feature.home.HomeFragment
 import com.ddangddangddang.android.feature.message.MessageFragment
 import com.ddangddangddang.android.feature.mypage.MyPageFragment
 import com.ddangddangddang.android.feature.search.SearchFragment
+import com.ddangddangddang.android.global.screenViewLogEvent
 import com.ddangddangddang.android.util.binding.BindingActivity
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel by viewModels<MainViewModel> { viewModelFactory }
+    private var isInitialized = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
@@ -22,9 +24,19 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         setupViewModel()
     }
 
-    fun setupViewModel() {
+    override fun onResume() {
+        super.onResume()
+        if (isInitialized) {
+            viewModel.currentFragmentType.value?.let { screenViewLogEvent(it.name) }
+            return
+        }
+        isInitialized = true
+    }
+
+    private fun setupViewModel() {
         viewModel.currentFragmentType.observe(this) {
             changeFragment(it)
+            screenViewLogEvent(it.name)
         }
     }
 

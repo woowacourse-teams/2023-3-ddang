@@ -13,6 +13,8 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.global.AnalyticsDelegate
+import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showDialog
@@ -21,7 +23,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class RegisterAuctionActivity :
-    BindingActivity<ActivityRegisterAuctionBinding>(R.layout.activity_register_auction) {
+    BindingActivity<ActivityRegisterAuctionBinding>(R.layout.activity_register_auction),
+    AnalyticsDelegate by AnalyticsDelegateImpl() {
     private val viewModel by viewModels<RegisterAuctionViewModel> { viewModelFactory }
     private val imageAdapter = RegisterAuctionImageAdapter { viewModel.setDeleteImageEvent(it) }
     private val pickMultipleMediaLaunchers = setupMultipleMediaLaunchers()
@@ -50,6 +53,8 @@ class RegisterAuctionActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        registerAnalytics(javaClass.simpleName, lifecycle)
+
         binding.viewModel = viewModel
         setupViewModel()
         setupLinearLayoutRegisterImage()
