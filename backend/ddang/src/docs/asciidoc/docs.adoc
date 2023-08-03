@@ -34,7 +34,7 @@ include::{snippets}/category-controller-test/모든_메인_카테고리를_조�
 
 ==== 응답
 
-include::{snippets}/category-controller-test/모든_메인_카테고리를_조회한다/response-body.adoc[]
+include::{snippets}/category-controller-test/모든_메인_카테고리를_조회한다/http-response.adoc[]
 include::{snippets}/category-controller-test/모든_메인_카테고리를_조회한다/response-fields.adoc[]
 
 === 서브 카테고리 조회
@@ -45,5 +45,91 @@ include::{snippets}/category-controller-test/메인_카테고리에_해당하는
 
 ==== 응답
 
-include::{snippets}/category-controller-test/메인_카테고리에_해당하는_모든_서브_카테고리를_조회한다/response-body.adoc[]
+include::{snippets}/category-controller-test/메인_카테고리에_해당하는_모든_서브_카테고리를_조회한다/http-response.adoc[]
 include::{snippets}/category-controller-test/메인_카테고리에_해당하는_모든_서브_카테고리를_조회한다/response-fields.adoc[]
+
+== 직거래 지역 API
+
+=== 첫 번째 직거래 지역 조회
+
+==== 요청
+
+include::{snippets}/region-controller-test/모든_첫번째_지역을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/region-controller-test/모든_첫번째_지역을_조회한다/http-response.adoc[]
+include::{snippets}/region-controller-test/모든_첫번째_지역을_조회한다/response-fields.adoc[]
+
+=== 두 번째 직거래 지역 조회
+
+==== 요청
+
+include::{snippets}/region-controller-test/첫번째_지역에_해당하는_모든_두번째_지역을_조회한다/http-request.adoc[]
+include::{snippets}/region-controller-test/첫번째_지역에_해당하는_모든_두번째_지역을_조회한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/region-controller-test/첫번째_지역에_해당하는_모든_두번째_지역을_조회한다/http-response.adoc[]
+include::{snippets}/region-controller-test/첫번째_지역에_해당하는_모든_두번째_지역을_조회한다/response-fields.adoc[]
+
+=== 세 번째 직거래 지역 조회
+
+==== 요청
+
+include::{snippets}/region-controller-test/두번째_지역에_해당하는_모든_세번째_지역을_조회한다/http-request.adoc[]
+include::{snippets}/region-controller-test/두번째_지역에_해당하는_모든_세번째_지역을_조회한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/region-controller-test/두번째_지역에_해당하는_모든_세번째_지역을_조회한다/http-response.adoc[]
+include::{snippets}/region-controller-test/두번째_지역에_해당하는_모든_세번째_지역을_조회한다/response-fields.adoc[]
+
+== 경매 API
+
+=== 경매 등록
+
+==== 요청
+
+include::{snippets}/auction-controller-test/경매를_등록한다/http-request.adoc[]
+include::{snippets}/auction-controller-test/경매를_등록한다/request-parts.adoc[]
+
+==== 응답
+
+include::{snippets}/auction-controller-test/경매를_등록한다/http-response.adoc[]
+include::{snippets}/auction-controller-test/경매를_등록한다/response-fields.adoc[]
+
+=== 경매 목록 조회
+
+==== 요청
+
+include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/http-request.adoc[]
+include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/query-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/http-response.adoc[]
+include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/response-fields.adoc[]
+
+=== 경매 상세 조회
+
+==== 요청
+
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/http-request.adoc[]
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/http-response.adoc[]
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/response-fields.adoc[]
+
+=== 경매 삭제
+
+==== 요청
+
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/http-request.adoc[]
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/http-response.adoc[]
