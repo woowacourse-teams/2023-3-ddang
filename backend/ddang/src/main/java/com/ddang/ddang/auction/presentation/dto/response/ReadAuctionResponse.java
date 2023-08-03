@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+
 import java.time.LocalDateTime;
 
 public record ReadAuctionResponse(
@@ -19,7 +20,7 @@ public record ReadAuctionResponse(
                 convertImageUrl(dto, baseUrl),
                 processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                 processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
-                0
+                dto.auctioneerCount()
         );
     }
 
