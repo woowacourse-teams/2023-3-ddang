@@ -31,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ChatRoomServiceTest {
 
     @Autowired
-    com.ddang.ddang.chat.application.ChatRoomService chatRoomService;
+    ChatRoomService chatRoomService;
 
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
