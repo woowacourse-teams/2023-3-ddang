@@ -3,6 +3,7 @@ package com.ddangddangddang.data.repository
 import androidx.lifecycle.LiveData
 import com.ddangddangddang.data.datasource.AuctionLocalDataSource
 import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
+import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -32,7 +33,11 @@ class AuctionRepositoryImpl private constructor(
     }
 
     override suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> {
-        return remoteDataSource.getAuctionDetail(id)
+        val response = remoteDataSource.getAuctionDetail(id)
+        if (response is ApiResponse.Success) {
+            localDataSource.updateAuctionPreview(response.body)
+        }
+        return response
     }
 
     override suspend fun registerAuction(
@@ -44,6 +49,13 @@ class AuctionRepositoryImpl private constructor(
             localDataSource.addAuctionPreview(response.body)
         }
         return response
+    }
+
+    override suspend fun submitAuctionBid(
+        auctionId: Long,
+        bidPrice: Int,
+    ): ApiResponse<Unit> {
+        return remoteDataSource.submitAuctionBid(AuctionBidRequest(auctionId, bidPrice))
     }
 
     companion object {

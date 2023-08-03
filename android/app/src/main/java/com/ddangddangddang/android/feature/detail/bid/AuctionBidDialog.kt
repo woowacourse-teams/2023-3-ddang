@@ -15,6 +15,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentAuctionBidDialogBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
+import com.ddangddangddang.android.util.view.Toaster
 
 class AuctionBidDialog : DialogFragment() {
     private var _binding: FragmentAuctionBidDialogBinding? = null
@@ -36,12 +37,9 @@ class AuctionBidDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.bidPrice.value?.let { // 다이얼로그 최초로 띄우는 경우
-            activityViewModel.auctionDetailModel.value?.let {
-                val lastBidPrice = it.lastBidPrice
-                val bidUnit = it.bidUnit
-                viewModel.setBidPrice(lastBidPrice + bidUnit)
-            } ?: dismiss()
+        if (viewModel.bidPrice.value == null) {
+            if (activityViewModel.minBidPrice == 0) return exit()
+            viewModel.setBidPrice(activityViewModel.minBidPrice)
         }
     }
 
@@ -68,7 +66,6 @@ class AuctionBidDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
         binding.etBidPrice.requestFocus()
-        binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(binding.etBidPrice.text.toString()))
     }
 
     private fun setupListener() {
@@ -85,22 +82,29 @@ class AuctionBidDialog : DialogFragment() {
 
     private fun handleEvent(event: AuctionBidViewModel.AuctionBidEvent) {
         when (event) {
-            is AuctionBidViewModel.AuctionBidEvent.Cancel -> cancel()
-            is AuctionBidViewModel.AuctionBidEvent.SuccessSubmit -> successSubmit(event.price)
+            is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
+            is AuctionBidViewModel.AuctionBidEvent.SubmitSuccess -> submitSuccess(event.price)
+            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(event)
         }
     }
 
-    private fun cancel() {
-        dismiss()
+    private fun submitSuccess(price: Int) {
+        showMessage(getString(R.string.detail_auction_bid_dialog_success, price))
+        exit()
     }
 
-    private fun successSubmit(price: Int) {
+    private fun handleSubmitFailureEvent(event: AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent) {
+        showMessage(getString(event.messageId))
+        exit()
+    }
+
+    private fun exit() {
         activityViewModel.auctionDetailModel.value?.let { activityViewModel.loadAuctionDetail(it.id) }
         dismiss()
     }
 
     private fun setInputBidPrice(price: Int) {
-        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price).format(price)
+        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
         binding.etBidPrice.removeTextChangedListener(watcher)
         binding.etBidPrice.setText(displayPrice)
         binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
@@ -109,6 +113,10 @@ class AuctionBidDialog : DialogFragment() {
 
     private fun getCursorPositionFrontSuffix(content: String): Int {
         return content.length - AuctionBidViewModel.SUFFIX_INPUT_PRICE.length
+    }
+
+    private fun showMessage(message: String) {
+        Toaster.showShort(requireContext(), message)
     }
 
     override fun onDestroyView() {

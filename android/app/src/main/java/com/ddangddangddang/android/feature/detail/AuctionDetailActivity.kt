@@ -24,7 +24,7 @@ class AuctionDetailActivity :
         val auctionId = intent.getLongExtra(AUCTION_ID_KEY, -1L)
         setupViewModel()
 
-        if (savedInstanceState == null) { viewModel.loadAuctionDetail(auctionId) }
+        if (savedInstanceState == null) viewModel.loadAuctionDetail(auctionId)
     }
 
     private fun setupViewModel() {

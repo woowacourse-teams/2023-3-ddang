@@ -17,4 +17,13 @@ data class AuctionResponse(
     val closingTime: String,
     val directRegions: List<DirectRegionResponse>,
     val auctioneerCount: Int,
-)
+) {
+    fun toPreview(): AuctionPreviewResponse = AuctionPreviewResponse(
+        id,
+        title,
+        images.firstOrNull() ?: "",
+        lastBidPrice ?: startPrice,
+        status,
+        auctioneerCount,
+    )
+}
