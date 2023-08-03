@@ -3,21 +3,24 @@ package com.ddangddangddang.android.feature.register.region
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ddangddangddang.android.feature.common.regionRepository
+import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.mapper.RegionModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.RegionRepository
+import kotlinx.coroutines.launch
 
-class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
+private typealias FirstId = Long
+private typealias SecondId = Long
+
+class SelectRegionsViewModel(private val regionRepository: RegionRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectRegionsEvent> =
         SingleLiveEvent()
     val event: LiveData<SelectRegionsEvent>
         get() = _event
 
-    private val _firstRegions = MutableLiveData(
-        regionRepository.getFirstRegions().map { it.toPresentation() },
-    )
+    private val _firstRegions = MutableLiveData<List<RegionSelectionModel>>()
     val firstRegions: LiveData<List<RegionSelectionModel>>
         get() = _firstRegions
 
@@ -33,6 +36,23 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
     val regionSelections: LiveData<List<RegionSelectionModel>>
         get() = _regionSelections
 
+    private val secondRegionsCache: MutableMap<FirstId, List<RegionSelectionModel>> = mutableMapOf()
+    private val thirdRegionsCache: MutableMap<SecondId, List<RegionSelectionModel>> = mutableMapOf()
+
+    fun loadFirstRegions() {
+        viewModelScope.launch {
+            when (val response = regionRepository.getFirstRegions()) {
+                is ApiResponse.Success -> {
+                    val regions = response.body.map { it.toPresentation() }
+                    _firstRegions.value = regions
+                }
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
+    }
+
     fun setExitEvent() {
         _event.value = SelectRegionsEvent.Exit
     }
@@ -41,15 +61,63 @@ class SelectRegionsViewModel(regionRepository: RegionRepository) : ViewModel() {
         _firstRegions.value?.let { regionSelectionModels ->
             _firstRegions.value = regionSelectionModels.changeIsChecked(id)
         }
-        _secondRegions.value = regionRepository.getSecondRegions(id).map { it.toPresentation() }
-        _thirdRegions.value = emptyList()
+        changeSecondRegions(id)
     }
 
-    fun setSecondRegionSelection(id: Long) {
-        _secondRegions.value?.let { regionSelectionModels ->
-            _secondRegions.value = regionSelectionModels.changeIsChecked(id)
+    private fun changeSecondRegions(firstId: Long) {
+        // 캐싱되어있는 경우
+        if (!secondRegionsCache[firstId].isNullOrEmpty()) {
+            _secondRegions.value = secondRegionsCache[firstId]
+            _thirdRegions.value = emptyList()
+            return
         }
-        _thirdRegions.value = regionRepository.getThirdRegions(id).map { it.toPresentation() }
+
+        viewModelScope.launch {
+            when (val response = regionRepository.getSecondRegions(firstId)) {
+                is ApiResponse.Success -> {
+                    val regions = response.body.map { it.toPresentation() }
+                    _secondRegions.value = regions
+                    _thirdRegions.value = emptyList()
+                    secondRegionsCache[firstId] = regions
+                }
+
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
+    }
+
+    fun setSecondRegionSelection(secondId: Long) {
+        val firstId = _firstRegions.value?.find { it.isChecked }?.id ?: return
+
+        _secondRegions.value?.let { regionSelectionModels ->
+            _secondRegions.value = regionSelectionModels.changeIsChecked(secondId)
+        }
+
+        changeThirdRegions(firstId, secondId)
+    }
+
+    private fun changeThirdRegions(firstId: Long, secondId: Long) {
+        // 캐싱 되어있는 경우
+        if (!thirdRegionsCache[secondId].isNullOrEmpty()) {
+            _thirdRegions.value = thirdRegionsCache[secondId]
+            return
+        }
+
+        viewModelScope.launch {
+            when (val response = regionRepository.getThirdRegions(firstId, secondId)) {
+                is ApiResponse.Success -> {
+                    val regions = response.body.map { it.toPresentation() }
+                    _thirdRegions.value = regions
+                    thirdRegionsCache[secondId] = regions
+                }
+
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
     }
 
     fun addRegion(thirdId: Long) {

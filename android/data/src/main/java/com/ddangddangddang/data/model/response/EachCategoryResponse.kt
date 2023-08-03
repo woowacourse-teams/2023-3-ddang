@@ -1,3 +1,6 @@
 package com.ddangddangddang.data.model.response
 
-data class EachCategoryResponse(val name: String, val id: Long)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class EachCategoryResponse(val id: Long, val name: String)

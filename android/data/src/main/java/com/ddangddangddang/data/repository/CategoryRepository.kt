@@ -1,9 +1,10 @@
 package com.ddangddangddang.data.repository
 
-import com.ddangddangddang.data.model.response.CategoriesResponse
+import com.ddangddangddang.data.model.response.EachCategoryResponse
+import com.ddangddangddang.data.remote.ApiResponse
 
 interface CategoryRepository {
-    fun getMainCategories(): CategoriesResponse
+    suspend fun getMainCategories(): ApiResponse<List<EachCategoryResponse>>
 
-    fun getSubCategories(mainCategoryId: Long): CategoriesResponse
+    suspend fun getSubCategories(mainCategoryId: Long): ApiResponse<List<EachCategoryResponse>>
 }
