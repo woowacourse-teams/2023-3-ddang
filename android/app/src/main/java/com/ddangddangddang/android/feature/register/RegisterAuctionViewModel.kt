@@ -94,6 +94,26 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         }
     }
 
+    private fun createRequestModel(): RegisterAuctionRequest {
+        val title = title.value ?: ""
+        val category = _category.value?.id ?: -1
+        val description = description.value ?: ""
+        val startPrice = startPrice.value?.toInt() ?: 0
+        val bidUnit = bidUnit.value?.toInt() ?: 0
+        val closingTime = closingTime.value.toString() + ":00" // seconds
+        val regions = _directRegion.value?.map { it.id } ?: emptyList()
+
+        return RegisterAuctionRequest(
+            title,
+            category,
+            description,
+            startPrice,
+            bidUnit,
+            closingTime,
+            regions,
+        )
+    }
+
     fun addImages(images: List<RegisterImageModel>) {
         _images.value = _images.value?.plus(images) ?: images
     }
@@ -144,26 +164,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             setAttribute(ExifInterface.TAG_ORIENTATION, orientation)
             saveAttributes()
         }
-    }
-
-    private fun createRequestModel(): RegisterAuctionRequest {
-        val title = title.value ?: ""
-        val category = _category.value?.id ?: -1
-        val description = description.value ?: ""
-        val startPrice = startPrice.value?.toInt() ?: 0
-        val bidUnit = bidUnit.value?.toInt() ?: 0
-        val closingTime = closingTime.value.toString() + ":00" // seconds
-        val regions = _directRegion.value?.map { it.id } ?: emptyList()
-
-        return RegisterAuctionRequest(
-            title,
-            category,
-            description,
-            startPrice,
-            bidUnit,
-            closingTime,
-            regions,
-        )
     }
 
     private fun judgeValidInputs(): Boolean {
