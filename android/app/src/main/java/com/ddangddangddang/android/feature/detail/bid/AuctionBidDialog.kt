@@ -8,7 +8,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,6 +15,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentAuctionBidDialogBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
+import com.ddangddangddang.android.util.view.Toaster
 
 class AuctionBidDialog : DialogFragment() {
     private var _binding: FragmentAuctionBidDialogBinding? = null
@@ -116,7 +116,7 @@ class AuctionBidDialog : DialogFragment() {
     }
 
     private fun showMessage(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+        Toaster.showShort(requireContext(), message)
     }
 
     override fun onDestroyView() {
