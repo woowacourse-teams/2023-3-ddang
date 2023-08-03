@@ -4,6 +4,7 @@ import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
+import com.ddangddangddang.data.model.response.EachCategoryResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.GET
@@ -41,4 +42,10 @@ interface Service {
         @Path("firstId") firstId: Long,
         @Path("secondId") secondId: Long,
     ): ApiResponse<List<RegionDetailResponse>>
+
+    @GET("/categories")
+    suspend fun fetchMainCategories(): ApiResponse<List<EachCategoryResponse>>
+
+    @GET("/categories/{id}")
+    suspend fun fetchSubCategories(@Path("id") mainId: Long): ApiResponse<List<EachCategoryResponse>>
 }
