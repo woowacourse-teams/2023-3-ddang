@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.register.region
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -146,6 +147,7 @@ class SelectRegionsViewModel(private val regionRepository: RegionRepository) : V
     }
 
     fun submit() {
+        Log.d("test", "submit")
         _event.value = SelectRegionsEvent.Submit(_regionSelections.value ?: emptyList())
     }
 

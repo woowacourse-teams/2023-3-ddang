@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.CategoryModel
+import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
@@ -40,7 +41,9 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         MutableLiveData<LocalDateTime>(LocalDateTime.now())
     val closingTime: LiveData<LocalDateTime>
         get() = _closingTime
-    val directRegion: MutableLiveData<String> = MutableLiveData("경기도 부천시")
+    private val _directRegion: MutableLiveData<List<RegionSelectionModel>> = MutableLiveData()
+    val directRegion: LiveData<String>
+        get() = _directRegion.map { regions -> regions.joinToString { it.name } }
 
     val selectableImageSize: Int
         get() = MAXIMUM_IMAGE_SIZE - (images.value?.size ?: 0)
@@ -213,8 +216,12 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
-    fun setCategory(item: CategoryModel) {
-        _category.value = item
+    fun setCategory(category: CategoryModel) {
+        _category.value = category
+    }
+
+    fun setRegion(regions: List<RegionSelectionModel>) {
+        _directRegion.value = regions
     }
 
     sealed class RegisterAuctionEvent {

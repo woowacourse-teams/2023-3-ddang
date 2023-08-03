@@ -1,10 +1,14 @@
 package com.ddangddangddang.android.feature.register.region
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectRegionsBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 
@@ -34,6 +38,7 @@ class SelectRegionsActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.viewModel = viewModel
         setupAdapter()
         setupObserve()
         viewModel.loadFirstRegions()
@@ -69,12 +74,20 @@ class SelectRegionsActivity :
         when (event) {
             is SelectRegionsViewModel.SelectRegionsEvent.Exit -> finish()
             is SelectRegionsViewModel.SelectRegionsEvent.Submit -> {
+                Log.d("test", "event shooting")
                 submit(event.regions)
             }
         }
     }
 
     private fun submit(regions: List<RegionSelectionModel>) {
-        // 인텐트에 담고 종료
+        Log.d("test", "$regions")
+        intent.putExtra(RegisterAuctionActivity.REGIONS_RESULT, regions.toTypedArray())
+        setResult(RESULT_OK, intent)
+        finish()
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(context, SelectRegionsActivity::class.java)
     }
 }

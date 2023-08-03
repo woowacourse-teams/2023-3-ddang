@@ -28,6 +28,7 @@ class SelectCategoryActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding.viewModel = viewModel
         setupDecoration()
         setupAdapter()
         setupObserve()

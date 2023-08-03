@@ -46,12 +46,11 @@
             android:id="@+id/rv_region_chips"
             android:layout_width="0dp"
             android:layout_height="64dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tb_select_regions">
-        </androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintTop_toBottomOf="@id/tb_select_regions"></androidx.recyclerview.widget.RecyclerView>
 
         <TextView
             android:id="@+id/tv_region_first_title"
@@ -156,6 +155,7 @@
             android:layout_height="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
             android:layout_marginBottom="8dp"
+            android:onClick="@{() -> viewModel.submit()}"
             android:text="@string/seelct_regions_submit"
             android:textSize="18sp"
             android:textStyle="bold"
