@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,8 +14,11 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.register.category.SelectCategoryActivity
+import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
 import java.time.LocalDateTime
@@ -25,6 +29,7 @@ class RegisterAuctionActivity :
     private val viewModel by viewModels<RegisterAuctionViewModel> { viewModelFactory }
     private val imageAdapter = RegisterAuctionImageAdapter { viewModel.setDeleteImageEvent(it) }
     private val pickMultipleMediaLaunchers = setupMultipleMediaLaunchers()
+    private val categoryActivityLauncher = setupCategoryLauncher()
 
     private fun setupMultipleMediaLaunchers(): List<ActivityResultLauncher<PickVisualMediaRequest>> {
         return List(RegisterAuctionViewModel.MAXIMUM_IMAGE_SIZE) { index ->
@@ -48,6 +53,16 @@ class RegisterAuctionActivity :
         }
     }
 
+    private fun setupCategoryLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == RESULT_OK) {
+                val category = it.data?.getParcelableCompat<CategoryModel>(CATEGORY_RESULT) ?: return@registerForActivityResult
+                viewModel.setCategory(category)
+                Log.d("test", "$category")
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
@@ -59,6 +74,7 @@ class RegisterAuctionActivity :
     private fun setupViewModel() {
         viewModel.images.observe(this) { imageAdapter.setImages(it) }
         viewModel.event.observe(this) { handleEvent(it) }
+        viewModel.category.observe(this) { binding.etCategory.setText(viewModel.category.value) }
     }
 
     private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
@@ -93,6 +109,11 @@ class RegisterAuctionActivity :
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                 )
             }
+
+            RegisterAuctionViewModel.RegisterAuctionEvent.PickCategory -> {
+                navigationToCategorySelection()
+            }
+            RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> TODO()
         }
     }
 
@@ -146,6 +167,10 @@ class RegisterAuctionActivity :
         startActivity(AuctionDetailActivity.getIntent(this, id))
     }
 
+    private fun navigationToCategorySelection() {
+        categoryActivityLauncher.launch(SelectCategoryActivity.getIntent(this))
+    }
+
     private fun showDeleteImageDialog(image: RegisterImageModel) {
         showDialog(
             messageId = R.string.register_auction_dialog_delete_image_message,
@@ -172,6 +197,9 @@ class RegisterAuctionActivity :
     }
 
     companion object {
+        const val CATEGORY_RESULT = "category_result"
+        private const val REGIONS_RESULT = "region_result"
+
         fun getIntent(context: Context): Intent =
             Intent(context, RegisterAuctionActivity::class.java)
     }

@@ -1,5 +1,7 @@
 package com.ddangddangddang.android.feature.register.category
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectCategoryBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
 
 class SelectCategoryActivity :
@@ -59,11 +62,21 @@ class SelectCategoryActivity :
 
     private fun handleEvent(event: SelectCategoryViewModel.SelectCategoryEvent) {
         when (event) {
-            is SelectCategoryViewModel.SelectCategoryEvent.Exit -> finish()
+            is SelectCategoryViewModel.SelectCategoryEvent.Exit -> {
+                finish()
+            }
             is SelectCategoryViewModel.SelectCategoryEvent.Submit -> {
-                // 인텐트에 담아서 넘기는 코드 작성 예정
+                val intent = Intent().apply {
+                    intent.putExtra(RegisterAuctionActivity.CATEGORY_RESULT, event.category)
+                }
+                setResult(RESULT_OK, intent)
+                finish()
                 Log.d("test", "Submit ${event.category}") // 코드 작성 전까지 확인용
             }
         }
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent = Intent(context, SelectCategoryActivity::class.java)
     }
 }

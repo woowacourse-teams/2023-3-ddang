@@ -8,7 +8,9 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
@@ -27,7 +29,9 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     val images: LiveData<List<RegisterImageModel>>
         get() = _images
     val title: MutableLiveData<String> = MutableLiveData("")
-    val category: MutableLiveData<String> = MutableLiveData("전자기기 > 노트북")
+    private var _category: MutableLiveData<CategoryModel> = MutableLiveData()
+    val category: LiveData<String>
+        get() = _category.map { it.name }
     val description: MutableLiveData<String> = MutableLiveData("")
     val startPrice: MutableLiveData<String> = MutableLiveData("0")
     val bidUnit: MutableLiveData<String> = MutableLiveData("0")
@@ -51,6 +55,14 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     fun setExitEvent() {
         _event.value = RegisterAuctionEvent.Exit
+    }
+
+    fun setPickCategoryEvent() {
+        _event.value = RegisterAuctionEvent.PickCategory
+    }
+
+    fun setPickRegionEvent() {
+        _event.value = RegisterAuctionEvent.PickRegion
     }
 
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
@@ -200,6 +212,10 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
+    fun setCategory(category: CategoryModel) {
+        _category.value = category
+    }
+
     sealed class RegisterAuctionEvent {
         object Exit : RegisterAuctionEvent()
         class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
@@ -211,6 +227,9 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
         class DeleteImage(val image: RegisterImageModel) : RegisterAuctionEvent()
         object MultipleMediaPicker : RegisterAuctionEvent()
+
+        object PickCategory : RegisterAuctionEvent()
+        object PickRegion : RegisterAuctionEvent()
     }
 
     companion object {
