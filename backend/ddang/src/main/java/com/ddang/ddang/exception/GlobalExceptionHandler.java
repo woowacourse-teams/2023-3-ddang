@@ -8,10 +8,12 @@ import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
+import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import java.net.MalformedURLException;
 import java.util.stream.Collectors;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
@@ -143,6 +145,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ImageNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleImageNotFoundException(final ImageNotFoundException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ImageNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(MalformedURLException.class)
+    public ResponseEntity<ExceptionResponse> handleMalformedURLException(final MalformedURLException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, MalformedURLException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new ExceptionResponse("이미지 조회에 실패했습니다."));
     }
 
     @Override
