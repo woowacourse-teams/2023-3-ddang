@@ -10,6 +10,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectCategoryBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
+import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 
 class SelectCategoryActivity :
@@ -66,11 +67,15 @@ class SelectCategoryActivity :
                 finish()
             }
             is SelectCategoryViewModel.SelectCategoryEvent.Submit -> {
-                intent.putExtra(RegisterAuctionActivity.CATEGORY_RESULT, event.category)
-                setResult(RESULT_OK, intent)
-                finish()
+                submit(event.category)
             }
         }
+    }
+
+    private fun submit(category: CategoryModel) {
+        intent.putExtra(RegisterAuctionActivity.CATEGORY_RESULT, category)
+        setResult(RESULT_OK, intent)
+        finish()
     }
 
     companion object {

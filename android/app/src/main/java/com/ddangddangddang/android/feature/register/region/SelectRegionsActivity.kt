@@ -3,7 +3,6 @@ package com.ddangddangddang.android.feature.register.region
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectRegionsBinding
@@ -74,14 +73,12 @@ class SelectRegionsActivity :
         when (event) {
             is SelectRegionsViewModel.SelectRegionsEvent.Exit -> finish()
             is SelectRegionsViewModel.SelectRegionsEvent.Submit -> {
-                Log.d("test", "event shooting")
                 submit(event.regions)
             }
         }
     }
 
     private fun submit(regions: List<RegionSelectionModel>) {
-        Log.d("test", "$regions")
         intent.putExtra(RegisterAuctionActivity.REGIONS_RESULT, regions.toTypedArray())
         setResult(RESULT_OK, intent)
         finish()

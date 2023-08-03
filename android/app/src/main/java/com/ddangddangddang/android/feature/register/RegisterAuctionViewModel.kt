@@ -26,48 +26,39 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 
 class RegisterAuctionViewModel(private val repository: AuctionRepository) : ViewModel() {
+    // EditText Values - Two Way Binding
+    val title: MutableLiveData<String> = MutableLiveData("")
+    val description: MutableLiveData<String> = MutableLiveData("")
+    val startPrice: MutableLiveData<String> = MutableLiveData("0")
+    val bidUnit: MutableLiveData<String> = MutableLiveData("0")
+
+    // Images
     private val _images: MutableLiveData<List<RegisterImageModel>> = MutableLiveData()
     val images: LiveData<List<RegisterImageModel>>
         get() = _images
-    val title: MutableLiveData<String> = MutableLiveData("")
+    val selectableImageSize: Int
+        get() = MAXIMUM_IMAGE_SIZE - (images.value?.size ?: 0)
+
+    // Category
     private val _category: MutableLiveData<CategoryModel> = MutableLiveData()
     val category: LiveData<String>
         get() = _category.map { it.name }
 
-    val description: MutableLiveData<String> = MutableLiveData("")
-    val startPrice: MutableLiveData<String> = MutableLiveData("0")
-    val bidUnit: MutableLiveData<String> = MutableLiveData("0")
+    // DateTime
     private var _closingTime: MutableLiveData<LocalDateTime> =
         MutableLiveData<LocalDateTime>(LocalDateTime.now())
     val closingTime: LiveData<LocalDateTime>
         get() = _closingTime
+
+    // Direct Region
     private val _directRegion: MutableLiveData<List<RegionSelectionModel>> = MutableLiveData()
     val directRegion: LiveData<String>
         get() = _directRegion.map { regions -> regions.joinToString { it.name } }
 
-    val selectableImageSize: Int
-        get() = MAXIMUM_IMAGE_SIZE - (images.value?.size ?: 0)
-
+    // Event
     private val _event: SingleLiveEvent<RegisterAuctionEvent> = SingleLiveEvent()
     val event: LiveData<RegisterAuctionEvent>
         get() = _event
-
-    fun setClosingTimeEvent() {
-        _event.value =
-            RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
-    }
-
-    fun setExitEvent() {
-        _event.value = RegisterAuctionEvent.Exit
-    }
-
-    fun setPickCategoryEvent() {
-        _event.value = RegisterAuctionEvent.PickCategory
-    }
-
-    fun setPickRegionEvent() {
-        _event.value = RegisterAuctionEvent.PickRegion
-    }
 
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
         _closingTime.value =
@@ -101,6 +92,18 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
                 is ApiResponse.Unexpected -> {}
             }
         }
+    }
+
+    fun addImages(images: List<RegisterImageModel>) {
+        _images.value = _images.value?.plus(images) ?: images
+    }
+
+    fun deleteImage(image: RegisterImageModel) {
+        _images.value = _images.value?.minus(image) ?: emptyList()
+    }
+
+    fun pickImages() {
+        _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
     private fun Uri.toAdjustImageFile(context: Context): File? {
@@ -145,20 +148,21 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     private fun createRequestModel(): RegisterAuctionRequest {
         val title = title.value ?: ""
+        val category = _category.value?.id ?: -1
         val description = description.value ?: ""
         val startPrice = startPrice.value?.toInt() ?: 0
         val bidUnit = bidUnit.value?.toInt() ?: 0
         val closingTime = closingTime.value.toString() + ":00" // seconds
+        val regions = _directRegion.value?.map { it.id } ?: emptyList()
 
-        // 카테고리와 지역 선택 기능 구현 후 수정 필요!
         return RegisterAuctionRequest(
             title,
-            102,
+            category,
             description,
             startPrice,
             bidUnit,
             closingTime,
-            listOf(3),
+            regions,
         )
     }
 
@@ -192,6 +196,23 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         return true
     }
 
+    fun setClosingTimeEvent() {
+        _event.value =
+            RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+    }
+
+    fun setExitEvent() {
+        _event.value = RegisterAuctionEvent.Exit
+    }
+
+    fun setPickCategoryEvent() {
+        _event.value = RegisterAuctionEvent.PickCategory
+    }
+
+    fun setPickRegionEvent() {
+        _event.value = RegisterAuctionEvent.PickRegion
+    }
+
     private fun setBlankExistEvent() {
         _event.value = RegisterAuctionEvent.InputErrorEvent.BlankExistEvent
     }
@@ -202,18 +223,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     fun setDeleteImageEvent(image: RegisterImageModel) {
         _event.value = RegisterAuctionEvent.DeleteImage(image)
-    }
-
-    fun addImages(images: List<RegisterImageModel>) {
-        _images.value = _images.value?.plus(images) ?: images
-    }
-
-    fun deleteImage(image: RegisterImageModel) {
-        _images.value = _images.value?.minus(image) ?: emptyList()
-    }
-
-    fun pickImages() {
-        _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
     fun setCategory(category: CategoryModel) {
