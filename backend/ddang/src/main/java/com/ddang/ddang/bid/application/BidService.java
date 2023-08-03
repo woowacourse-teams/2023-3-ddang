@@ -81,7 +81,7 @@ public class BidService {
     }
 
     private void checkIsSeller(final Auction auction, final User bidder) {
-        if (auction.isSeller(bidder)) {
+        if (auction.isOwner(bidder)) {
             throw new InvalidBidderException("판매자는 입찰할 수 없습니다");
         }
     }

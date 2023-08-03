@@ -119,8 +119,8 @@ public class Auction extends BaseTimeEntity {
         }
     }
 
-    public boolean isOwner(final User seller) {
-        return this.seller.equals(seller);
+    public boolean isOwner(final User user) {
+        return this.seller.equals(user);
     }
 
     public boolean isClosed(final LocalDateTime targetTime) {
@@ -143,9 +143,5 @@ public class Auction extends BaseTimeEntity {
     private BidPrice calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBid.getPrice().getValue() + this.bidUnit.getValue();
         return new BidPrice(nextMinimumBidPrice);
-    }
-
-    public boolean isSeller(final User bidder) {
-        return seller.equals(bidder);
     }
 }
