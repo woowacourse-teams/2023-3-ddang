@@ -94,6 +94,36 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         }
     }
 
+    private fun judgeValidInputs(): Boolean {
+        val isNoImage = images.value?.isEmpty() ?: true
+        val title = title.value
+        val category = _category.value?.id
+        val description = description.value
+        val startPrice = startPrice.value
+        val bidUnit = bidUnit.value
+        val closingTime = closingTime.value
+        val directRegion = _directRegion.value?.size ?: 0
+
+        if (isNoImage ||
+            title.isNullOrBlank() ||
+            category == null ||
+            description.isNullOrBlank() ||
+            startPrice.isNullOrBlank() ||
+            bidUnit.isNullOrBlank() ||
+            closingTime == null ||
+            directRegion == 0
+        ) {
+            setBlankExistEvent()
+            return false
+        }
+
+        if (startPrice.toIntOrNull() == null || bidUnit.toIntOrNull() == null) {
+            setInvalidValueInputEvent()
+            return false
+        }
+        return true
+    }
+
     private fun createRequestModel(): RegisterAuctionRequest {
         val title = title.value ?: ""
         val category = _category.value?.id ?: -1
@@ -112,18 +142,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             closingTime,
             regions,
         )
-    }
-
-    fun addImages(images: List<RegisterImageModel>) {
-        _images.value = _images.value?.plus(images) ?: images
-    }
-
-    fun deleteImage(image: RegisterImageModel) {
-        _images.value = _images.value?.minus(image) ?: emptyList()
-    }
-
-    fun pickImages() {
-        _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
     private fun Uri.toAdjustImageFile(context: Context): File? {
@@ -166,34 +184,16 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         }
     }
 
-    private fun judgeValidInputs(): Boolean {
-        val isNoImage = images.value?.isEmpty() ?: true
-        val title = title.value
-        val category = _category.value?.id
-        val description = description.value
-        val startPrice = startPrice.value
-        val bidUnit = bidUnit.value
-        val closingTime = closingTime.value
-        val directRegion = _directRegion.value?.size ?: 0
+    fun addImages(images: List<RegisterImageModel>) {
+        _images.value = _images.value?.plus(images) ?: images
+    }
 
-        if (isNoImage ||
-            title.isNullOrBlank() ||
-            category == null ||
-            description.isNullOrBlank() ||
-            startPrice.isNullOrBlank() ||
-            bidUnit.isNullOrBlank() ||
-            closingTime == null ||
-            directRegion == 0
-        ) {
-            setBlankExistEvent()
-            return false
-        }
+    fun deleteImage(image: RegisterImageModel) {
+        _images.value = _images.value?.minus(image) ?: emptyList()
+    }
 
-        if (startPrice.toIntOrNull() == null || bidUnit.toIntOrNull() == null) {
-            setInvalidValueInputEvent()
-            return false
-        }
-        return true
+    fun pickImages() {
+        _event.value = RegisterAuctionEvent.MultipleMediaPicker
     }
 
     fun setClosingTimeEvent() {
