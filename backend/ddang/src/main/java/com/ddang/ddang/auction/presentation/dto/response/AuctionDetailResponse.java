@@ -50,7 +50,7 @@ public record AuctionDetailResponse(
                 dto.registerTime(),
                 dto.closingTime(),
                 convertDirectRegionsResponse(dto),
-                0
+                dto.auctioneerCount()
         );
     }
 
