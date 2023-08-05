@@ -6,6 +6,9 @@ import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
+import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
+import com.ddang.ddang.bid.application.exception.InvalidBidderException;
+import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
 import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
@@ -14,6 +17,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -78,7 +83,6 @@ class BidControllerTest {
                );
     }
 
-    // TODO: 2023/07/30 [고민] 예외 상황들에 대해 모두 해주는 것이 좋을까요? 혹은 대표 예외 케이스(404, 400)에 대해서만 해줘도 괜찮을까요?
     @Test
     void 해당_경매가_없는_경우_입찰시_404를_반환한다() throws Exception {
         // given
@@ -100,6 +104,44 @@ class BidControllerTest {
     }
 
     @Test
+    void 해당_사용자가_없는_경우_입찰시_404를_반환한다() throws Exception {
+        // given
+        final Long invalidUserId = 9999L;
+
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
+        final UserNotFoundException userNotFoundException = new UserNotFoundException("해당 사용자를 찾을 수 없습니다.");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(userNotFoundException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", invalidUserId)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 이미_종료된_경매_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
+        final InvalidAuctionToBidException invalidAuctionToBidException = new InvalidAuctionToBidException("이미 종료된 경매입니다");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(invalidAuctionToBidException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidAuctionToBidException.getMessage()))
+               );
+    }
+
+    @Test
     void 이미_삭제된_경매_입찰시_400을_반환한다() throws Exception {
         // given
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
@@ -114,6 +156,176 @@ class BidControllerTest {
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidAuctionToBidException.getMessage()))
+               );
+    }
+
+    @Test
+    void 판매자가_본인_경매에_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
+        final InvalidBidderException invalidBidderException = new InvalidBidderException("판매자는 입찰할 수 없습니다");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(invalidBidderException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidBidderException.getMessage()))
+               );
+    }
+
+    @Test
+    void 첫_입찰자가_시작가_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
+        final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(invalidBidPriceException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidBidPriceException.getMessage()))
+               );
+    }
+
+    @Test
+    void 마지막_입찰자가_연속으로_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
+        final InvalidBidderException invalidBidderException = new InvalidBidderException("이미 최고 입찰자입니다");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(invalidBidderException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidBidderException.getMessage()))
+               );
+    }
+
+    @Test
+    void 마지막_입찰액보다_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
+        final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("가능 입찰액보다 낮은 금액을 입력했습니다");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(invalidBidPriceException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidBidPriceException.getMessage()))
+               );
+    }
+
+    @Test
+    void 최소_입찰_단위보다_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
+        final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("가능 입찰액보다 낮은 금액을 입력했습니다");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(invalidBidPriceException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidBidPriceException.getMessage()))
+               );
+    }
+
+    @Test
+    void 범위_밖의_금액으로_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, 2_100_000_001);
+        final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
+        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+                .willThrow(invalidBidPriceException);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidBidPriceException.getMessage()))
+               );
+    }
+
+    @Test
+    void 경매_아이디가_없는_경우_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(null, 10_000);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is("경매 아이디가 입력되지 않았습니다."))
+               );
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = {-1L, 0L})
+    void 경매_아이디가_양수가_아닌_값으로_입찰시_400을_반환한다(final Long auctionId) throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(auctionId, 10_000);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is("경매 아이디는 양수입니다."))
+               );
+    }
+
+    @Test
+    void 입찰_금액이_없는_경우_입찰시_400을_반환한다() throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, null);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is("입찰 금액이 입력되지 않았습니다."))
+               );
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-1, 0})
+    void 입찰_금액이_양수가_아닌_값으로_입찰시_400을_반환한다(final Integer bidPrice) throws Exception {
+        // given
+        final CreateBidRequest bidRequest = new CreateBidRequest(1L, bidPrice);
+
+        // when & then
+        mockMvc.perform(post("/bids").header("Authorization", 1L)
+                                     .contentType(MediaType.APPLICATION_JSON)
+                                     .content(objectMapper.writeValueAsString(bidRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is("입찰 금액은 양수입니다."))
                );
     }
 
