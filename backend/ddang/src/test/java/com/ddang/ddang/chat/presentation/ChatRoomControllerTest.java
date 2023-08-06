@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.presentation;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -14,6 +13,7 @@ import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
@@ -209,7 +209,7 @@ class ChatRoomControllerTest {
         // given
         final Long invalidUserId = -999L;
         final UserNotFoundException userNotFoundException =
-                new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+                new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
         given(chatRoomService.readAllByUserId(invalidUserId))
                 .willThrow(userNotFoundException);
 
@@ -270,7 +270,7 @@ class ChatRoomControllerTest {
         // given
         final Long invalidUserId = -999L;
         final UserNotFoundException userNotFoundException =
-                new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+                new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong()))
                 .willThrow(userNotFoundException);
 
@@ -306,18 +306,18 @@ class ChatRoomControllerTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_요청한_사용자_채팅방의_참여자가_아니라면_404를_반환한다() throws Exception {
         // given
-        final UserNotAuthorizationException userNotAuthorizationException =
-                new UserNotAuthorizationException("권한이 없습니다.");
+        final UserNotAccessibleException userNotAccessibleException =
+                new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong()))
-                .willThrow(userNotAuthorizationException);
+                .willThrow(userNotAccessibleException);
 
         // when & then
         mockMvc.perform(get("/chattings/1")
                        .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
-                       status().isUnauthorized(),
-                       jsonPath("$.message", is(userNotAuthorizationException.getMessage()))
+                       status().isForbidden(),
+                       jsonPath("$.message", is(userNotAccessibleException.getMessage()))
                );
     }
 }

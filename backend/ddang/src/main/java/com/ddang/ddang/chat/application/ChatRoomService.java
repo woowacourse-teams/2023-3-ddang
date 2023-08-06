@@ -1,8 +1,8 @@
 package com.ddang.ddang.chat.application;
 
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -25,7 +25,7 @@ public class ChatRoomService {
     public List<ReadParticipatingChatRoomDto> readAllByUserId(final Long userId) {
         final User findUser = findUser(userId);
         final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
-        
+
         return chatRooms.stream()
                         .map(chatRoom -> toDto(findUser, chatRoom))
                         .toList();
@@ -51,7 +51,7 @@ public class ChatRoomService {
 
     private static void checkAccessible(final User findUser, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(findUser)) {
-            throw new UserNotAuthorizationException("권한이 없습니다.");
+            throw new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
         }
     }
 

@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.application;
 
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -9,6 +8,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -221,7 +221,7 @@ class ChatRoomServiceTest {
 
         // when & then
         assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, nonAuthorizedUserId))
-                .isInstanceOf(UserNotAuthorizationException.class)
-                .hasMessageContaining("권한이 없습니다.");
+                .isInstanceOf(UserNotAccessibleException.class)
+                .hasMessageContaining("해당 채팅방에 접근할 권한이 없습니다.");
     }
 }
