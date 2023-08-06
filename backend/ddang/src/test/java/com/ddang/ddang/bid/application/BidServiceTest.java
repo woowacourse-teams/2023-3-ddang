@@ -339,7 +339,7 @@ class BidServiceTest {
         // when & then
         assertThatThrownBy(() -> bidService.create(loginUserDto2, createBidDto2))
                 .isInstanceOf(InvalidBidPriceException.class)
-                .hasMessage("마지막 입찰 금액보다 낮은 금액을 입력했습니다");
+                .hasMessage("가능 입찰액보다 낮은 금액을 입력했습니다");
     }
 
     @Test
@@ -372,7 +372,7 @@ class BidServiceTest {
         // when && then
         assertThatThrownBy(() -> bidService.create(loginUserDto2, createBidDto2))
                 .isInstanceOf(InvalidBidPriceException.class)
-                .hasMessage("입찰 금액이 잘못되었습니다");
+                .hasMessage("가능 입찰액보다 낮은 금액을 입력했습니다");
     }
 
     @Test
@@ -405,7 +405,7 @@ class BidServiceTest {
         // when & then
         assertThatThrownBy(() -> bidService.create(loginUserDto2, createBidDto2))
                 .isInstanceOf(InvalidBidPriceException.class)
-                .hasMessage("입찰 금액이 잘못되었습니다");
+                .hasMessage("가능 입찰액보다 낮은 금액을 입력했습니다");
     }
 
     @ParameterizedTest
