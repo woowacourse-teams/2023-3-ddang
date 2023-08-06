@@ -41,7 +41,7 @@ public class BidController {
     }
 
     @GetMapping("/{auctionId}")
-    private ResponseEntity<ReadBidsResponse> readAllByAuctionId(@PathVariable final Long auctionId) {
+    public ResponseEntity<ReadBidsResponse> readAllByAuctionId(@PathVariable final Long auctionId) {
         final List<ReadBidDto> readBidDtos = bidService.readAllByAuctionId(auctionId);
         final List<ReadBidResponse> readBidResponses = readBidDtos.stream()
                                                                   .map(ReadBidResponse::from)
