@@ -49,7 +49,7 @@ public class ChatRoomService {
         return toDto(findUser, chatRoom);
     }
 
-    private static void checkAccessible(final User findUser, final ChatRoom chatRoom) {
+    private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(findUser)) {
             throw new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
         }
