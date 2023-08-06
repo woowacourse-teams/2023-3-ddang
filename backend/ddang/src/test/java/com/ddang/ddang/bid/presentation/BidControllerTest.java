@@ -11,6 +11,7 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
 import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,10 +21,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -34,6 +41,11 @@ import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -42,6 +54,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {BidController.class})
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class BidControllerTest {
@@ -53,16 +67,21 @@ class BidControllerTest {
     BidController bidController;
 
     @Autowired
+    RestDocumentationResultHandler restDocs;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         mockMvc = MockMvcBuilders.standaloneSetup(bidController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .setCustomArgumentResolvers(new LoginUserArgumentResolver())
+                                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
+                                 .alwaysDo(restDocs)
                                  .build();
     }
 
@@ -80,9 +99,21 @@ class BidControllerTest {
                .andExpectAll(
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/auctions/1"))
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("로그인한 사용자 ID")
+                               ),
+                               requestFields(
+                                       fieldWithPath("auctionId").description("입찰할 경매 ID"),
+                                       fieldWithPath("bidPrice").description("입찰 금액")
+                               )
+                       )
                );
     }
 
+    // TODO: 2023-08-06 예외 케이스 api 문서화의 경우 예외에 대한 변경이 없을 때 추가할 것
     @Test
     void 해당_경매가_없는_경우_입찰시_404를_반환한다() throws Exception {
         // given
@@ -349,6 +380,17 @@ class BidControllerTest {
                        jsonPath("$.bids.[1].profileImage", is(bid2.profileImage())),
                        jsonPath("$.bids.[1].price", is(bid2.price())),
                        jsonPath("$.bids.[1].bidTime").exists()
+               )
+               .andDo(
+                       restDocs.document(
+                               responseFields(
+                                       fieldWithPath("bids.[]").type(JsonFieldType.ARRAY).description("특정 경매의 모든 입찰 목록"),
+                                       fieldWithPath("bids.[].name").type(JsonFieldType.STRING).description("입찰한 사용자의 닉네임"),
+                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING).description("입찰한 사용자의 프로필 이미지 URL"),
+                                       fieldWithPath("bids.[].price").type(JsonFieldType.NUMBER).description("입찰한 금액"),
+                                       fieldWithPath("bids.[].bidTime").type(JsonFieldType.STRING).description("입찰한 시간")
+                               )
+                       )
                );
     }
 

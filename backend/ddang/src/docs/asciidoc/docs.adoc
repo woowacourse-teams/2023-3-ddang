@@ -133,3 +133,29 @@ include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_
 ==== 응답
 
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/http-response.adoc[]
+
+== 입찰 API
+
+=== 입찰 등록
+
+==== 요청
+
+include::{snippets}/bid-controller-test/입찰을_등록한다/http-request.adoc[]
+include::{snippets}/bid-controller-test/입찰을_등록한다/request-headers.adoc[]
+include::{snippets}/bid-controller-test/입찰을_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/bid-controller-test/입찰을_등록한다/http-response.adoc[]
+
+=== 입찰 조회
+
+==== 요청
+
+include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/http-request.adoc[]
+include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/http-response.adoc[]
+include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/response-fields.adoc[]
