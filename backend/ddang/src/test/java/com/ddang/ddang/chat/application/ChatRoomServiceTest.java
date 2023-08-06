@@ -126,8 +126,8 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_조회한다() {
         // given
-        final User seller = new User("판매자", "", 5.0);
-        final User buyer = new User("구매자", "", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0);
+        final User buyer = new User("구매자", "profileImage.png", 5.0);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -160,7 +160,7 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_조회를_요청한_사용자의_정보를_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = new User("구매자", "", 5.0);
+        final User user = new User("구매자", "profileImage.png", 5.0);
         userRepository.save(user);
 
         final Auction auction = Auction.builder()
@@ -184,7 +184,7 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = new User("구매자", "", 5.0);
+        final User user = new User("구매자", "profileImage.png", 5.0);
         userRepository.save(user);
 
         final Long invalidChatRoomId = -999L;
@@ -200,9 +200,9 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_주어진_사용자가_채팅의_참여자가_아니라면_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "", 5.0);
-        final User buyer = new User("구매자", "", 5.0);
-        final User stranger = new User("일반인", "", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0);
+        final User buyer = new User("구매자", "profileImage.png", 5.0);
+        final User stranger = new User("일반인", "profileImage.png", 5.0);
         userRepository.save(seller);
         userRepository.save(buyer);
         userRepository.save(stranger);

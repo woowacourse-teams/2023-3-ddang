@@ -149,8 +149,8 @@ class ChatRoomControllerTest {
         final Category main = new Category("메인");
         final Category sub = new Category("서브");
         main.addSubCategory(sub);
-        final User user1 = new User("상대1", "", 5.0);
-        final User user2 = new User("상대2", "", 5.0);
+        final User user1 = new User("상대1", "profileImage.png", 5.0);
+        final User user2 = new User("상대2", "profileImage.png", 5.0);
         final Auction auction1 = Auction.builder()
                                         .title("경매 상품 1")
                                         .seller(user1)
@@ -230,8 +230,8 @@ class ChatRoomControllerTest {
         final Category sub = new Category("서브");
         main.addSubCategory(sub);
 
-        final User seller = new User("판매자", "", 5.0);
-        final User buyer = new User("구매자", "", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0);
+        final User buyer = new User("구매자", "profileImage.png", 5.0);
 
         final Auction auction1 = Auction.builder()
                                         .title("경매 상품 1")

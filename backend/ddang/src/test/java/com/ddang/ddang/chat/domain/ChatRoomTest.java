@@ -94,8 +94,8 @@ class ChatRoomTest {
     @Test
     void 주어진_사용자가_판매자라면_채팅_참여자이다() {
         // given
-        final User seller = new User("판매자", "", 5.0);
-        final User buyer = new User("구매자", "", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0);
+        final User buyer = new User("구매자", "profileImage.png", 5.0);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -121,8 +121,8 @@ class ChatRoomTest {
     @Test
     void 주어진_사용자가_구매자라면_채팅_참여자이다() {
         // given
-        final User seller = new User("판매자", "", 5.0);
-        final User buyer = new User("구매자", "", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0);
+        final User buyer = new User("구매자", "profileImage.png", 5.0);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -148,9 +148,9 @@ class ChatRoomTest {
     @Test
     void 주어진_사용자가_판매자와_구매자_모두_아니라면_채팅_참여자가_아니다() {
         // given
-        final User seller = new User("판매자", "", 5.0);
-        final User buyer = new User("구매자", "", 5.0);
-        final User stranger = new User("일반인", "", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0);
+        final User buyer = new User("구매자", "profileImage.png", 5.0);
+        final User stranger = new User("일반인", "profileImage.png", 5.0);
         userRepository.save(seller);
         userRepository.save(buyer);
         userRepository.save(stranger);
