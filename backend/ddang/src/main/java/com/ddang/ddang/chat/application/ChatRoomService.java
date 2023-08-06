@@ -25,6 +25,7 @@ public class ChatRoomService {
     public List<ReadParticipatingChatRoomDto> readAllByUserId(final Long userId) {
         final User findUser = findUser(userId);
         final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
+        
         return chatRooms.stream()
                         .map(chatRoom -> toDto(findUser, chatRoom))
                         .toList();

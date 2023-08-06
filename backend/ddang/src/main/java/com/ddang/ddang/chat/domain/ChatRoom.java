@@ -65,6 +65,7 @@ public class ChatRoom extends BaseCreateTimeEntity {
         if (isSeller(user)) {
             return true;
         }
+
         return isBuyer(user);
     }
 
