@@ -58,7 +58,7 @@ public class ChatRoomController {
     }
 
     @GetMapping("/{chatRoomId}")
-    public ResponseEntity<ReadChatRoomResponse> read(
+    public ResponseEntity<ReadChatRoomResponse> readChatRoomById(
             @PathVariable final Long chatRoomId,
             @AuthenticateUser final AuthenticateUserInfo userInfo
     ) {
@@ -69,7 +69,7 @@ public class ChatRoomController {
     }
 
     @PostMapping("/{chatRoomId}/messages")
-    public ResponseEntity<CreateMessageResponse> create(
+    public ResponseEntity<CreateMessageResponse> createMessage(
             @PathVariable final Long chatRoomId,
             @RequestBody @Valid final CreateMessageRequest request
     ) {
