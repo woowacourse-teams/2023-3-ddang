@@ -1,5 +1,5 @@
 name: "\U0001F41E Bug Report"
-description: "버그가 발생했나요?"
+description: "버그를 제보하고 싶으신가요?"
 labels: "\U0001F41E Bug"
 body:
   - type: textarea
