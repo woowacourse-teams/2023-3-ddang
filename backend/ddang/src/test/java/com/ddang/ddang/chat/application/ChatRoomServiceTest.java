@@ -21,6 +21,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -142,13 +143,18 @@ class ChatRoomServiceTest {
                                        .subCategory(sub)
                                        .bidUnit(new BidUnit(1_000))
                                        .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(6))
                                        .build();
         auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);
         chatRoomRepository.save(chatRoom);
 
-        final ReadParticipatingChatRoomDto expect = ReadParticipatingChatRoomDto.of(buyer, chatRoom);
+        final ReadParticipatingChatRoomDto expect = ReadParticipatingChatRoomDto.of(
+                buyer,
+                chatRoom,
+                chatRoom.isChatAvailableTime(LocalDateTime.now())
+        );
 
         // when
         final ReadParticipatingChatRoomDto actual = chatRoomService.readByChatRoomId(chatRoom.getId(), seller.getId());

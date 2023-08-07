@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,6 +57,9 @@ public class ChatRoomService {
     }
 
     private ReadParticipatingChatRoomDto toDto(final User findUser, final ChatRoom chatRoom) {
-        return ReadParticipatingChatRoomDto.of(chatRoom.calculateChatPartnerOf(findUser), chatRoom);
+        return ReadParticipatingChatRoomDto.of(
+                chatRoom.calculateChatPartnerOf(findUser),
+                chatRoom,
+                chatRoom.isChatAvailableTime(LocalDateTime.now()));
     }
 }

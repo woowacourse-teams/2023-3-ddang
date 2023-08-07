@@ -178,12 +178,14 @@ class ChatRoomControllerTest {
         final ReadParticipatingChatRoomDto chatRoom1 = new ReadParticipatingChatRoomDto(
                 1L,
                 ReadAuctionDto.from(auction1),
-                ReadUserDto.from(user1)
+                ReadUserDto.from(user1),
+                true
         );
         final ReadParticipatingChatRoomDto chatRoom2 = new ReadParticipatingChatRoomDto(
                 2L,
                 ReadAuctionDto.from(auction2),
-                ReadUserDto.from(user2)
+                ReadUserDto.from(user2),
+                true
         );
 
         given(chatRoomService.readAllByUserId(anyLong()))
@@ -248,7 +250,8 @@ class ChatRoomControllerTest {
         final ReadParticipatingChatRoomDto chatRoom = new ReadParticipatingChatRoomDto(
                 1L,
                 ReadAuctionDto.from(auction1),
-                ReadUserDto.from(seller)
+                ReadUserDto.from(seller),
+                true
         );
 
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willReturn(chatRoom);
