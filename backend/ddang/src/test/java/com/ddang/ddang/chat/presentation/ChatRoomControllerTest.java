@@ -82,12 +82,13 @@ class ChatRoomControllerTest {
     void 메시지를_생성한다() throws Exception {
         // given
         final String contents = "메시지 내용";
-        final CreateMessageRequest request = new CreateMessageRequest(1L, 1L, contents);
+        final CreateMessageRequest request = new CreateMessageRequest(1L, contents);
 
         given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
 
         // when & then
         mockMvc.perform(post("/chattings/1/messages")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
                .andExpectAll(
@@ -102,14 +103,15 @@ class ChatRoomControllerTest {
         // given
         final Long invalidChatRoomId = -999L;
         final String contents = "메시지 내용";
-        final CreateMessageRequest request = new CreateMessageRequest(1L, 1L, contents);
+        final CreateMessageRequest request = new CreateMessageRequest(1L, contents);
 
         final ChatRoomNotFoundException chatRoomNotFoundException = new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        given(messageService.create(CreateMessageDto.of(invalidChatRoomId, request)))
+        given(messageService.create(CreateMessageDto.of(1L, invalidChatRoomId, request)))
                 .willThrow(chatRoomNotFoundException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
                        .content(objectMapper.writeValueAsString(request))
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
@@ -124,15 +126,15 @@ class ChatRoomControllerTest {
         final Long invalidWriterId = -999L;
         final Long chatRoomId = 1L;
         final String contents = "메시지 내용";
-        final CreateMessageRequest request = new CreateMessageRequest(invalidWriterId, 1L, contents);
+        final CreateMessageRequest request = new CreateMessageRequest(1L, contents);
 
-        final UserNotFoundException userNotFoundException =
-                new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
-        given(messageService.create(CreateMessageDto.of(chatRoomId, request)))
+        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보가 없습니다.");
+        given(messageService.create(CreateMessageDto.of(invalidWriterId, chatRoomId, request)))
                 .willThrow(userNotFoundException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
+                       .header(HttpHeaders.AUTHORIZATION, invalidWriterId)
                        .content(objectMapper.writeValueAsString(request))
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
@@ -259,10 +261,9 @@ class ChatRoomControllerTest {
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willReturn(List.of(readMessageDto));
 
         // when & then
-        mockMvc.perform(get("/chattings/1/messages")
+        mockMvc.perform(get("/chattings/1/messages/1")
                        .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .queryParam("lastMessageId", "1")
                )
                .andExpectAll(
                        status().isOk(),
@@ -283,10 +284,9 @@ class ChatRoomControllerTest {
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(userNotFoundException);
 
         // when & then
-        mockMvc.perform(get("/chattings/1/messages")
+        mockMvc.perform(get("/chattings/1/messages/1")
                        .header(HttpHeaders.AUTHORIZATION, invalidUserId)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .queryParam("lastMessageId", "1")
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -304,10 +304,9 @@ class ChatRoomControllerTest {
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(messageNotFoundException);
 
         // when & then
-        mockMvc.perform(get("/chattings/1/messages")
+        mockMvc.perform(get("/chattings/1/messages/" + invalidLastMessageId)
                        .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .queryParam("lastMessageId", invalidLastMessageId.toString())
                )
                .andExpectAll(
                        status().isNotFound(),
