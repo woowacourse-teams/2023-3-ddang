@@ -1,13 +1,20 @@
 package com.ddang.ddang.chat.application;
 
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.exception.ChatAlreadyExistException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -46,6 +53,262 @@ class ChatRoomServiceTest {
 
     @Autowired
     JpaAuctionRepository auctionRepository;
+
+    @Autowired
+    JpaBidRepository bidRepository;
+
+    @Test
+    void 채팅방을_생성한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+
+        auction.updateLastBid(bid);
+
+        final Long auctionId = auction.getId();
+        final Long userId = buyer.getId();
+        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
+
+        // when
+        final Long actual = chatRoomService.create(userId, createChatRoomDto);
+
+        // then
+        assertThat(actual).isPositive();
+    }
+
+    @Test
+    void 채팅방_생성시_요청한_사용자_정보를_찾을_수_없다면_예외가_발생한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+
+        auction.updateLastBid(bid);
+
+        final Long auctionId = auction.getId();
+        final Long invalidUserId = -999L;
+        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.create(invalidUserId, createChatRoomDto))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("사용자 정보를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 채팅방_생성시_관련된_경매_정보를_찾을_수_없다면_예외가_발생한다() {
+        // given
+        final User user = new User("사용자", "이미지", 5.0);
+        userRepository.save(user);
+
+        final Long userId = user.getId();
+        final Long invalidAuctionId = -999L;
+        final CreateChatRoomDto invalidDto = new CreateChatRoomDto(invalidAuctionId);
+
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.create(userId, invalidDto))
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("해당 경매를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 경매가_종료되지_않은_상태에서_채팅방을_생성하면_예외가_발생한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+
+        auction.updateLastBid(bid);
+
+        final Long auctionId = auction.getId();
+        final Long userId = buyer.getId();
+        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
+                .isInstanceOf(InvalidAuctionToChatException.class)
+                .hasMessage("경매가 아직 종료되지 않았습니다.");
+    }
+
+    @Test
+    void 경매가_삭제된_상태에서_채팅방을_생성하면_예외가_발생한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
+        auctionRepository.save(auction);
+
+        auction.delete();
+
+        final Long auctionId = auction.getId();
+        final Long userId = buyer.getId();
+        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
+                .isInstanceOf(InvalidAuctionToChatException.class)
+                .hasMessage("삭제된 경매입니다.");
+    }
+
+    @Test
+    void 채팅방_생성을_요청한_사용자가_경매의_판매자_또는_최종_낙찰자가_아니라면_예외가_발생한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        final User stranger = new User("일반인", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+        userRepository.save(stranger);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+
+        auction.updateLastBid(bid);
+
+        final Long auctionId = auction.getId();
+        final Long strangeUserId = stranger.getId();
+        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.create(strangeUserId, createChatRoomDto))
+                .isInstanceOf(UserNotAccessibleException.class)
+                .hasMessage("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+    }
+
+    @Test
+    void 해당_경매에_대한_채팅이_이미_존재할_경우_예외가_발생한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+
+        auction.updateLastBid(bid);
+
+        final Long auctionId = auction.getId();
+        final Long userId = buyer.getId();
+        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
+
+        chatRoomRepository.save(createChatRoomDto.toEntity(auction));
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
+                .isInstanceOf(ChatAlreadyExistException.class)
+                .hasMessage("해당 경매에 대한 채팅방이 이미 존재합니다.");
+    }
 
     @Test
     void 사용자가_참여한_모든_채팅방을_조회한다() {
