@@ -8,6 +8,9 @@ import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.ReadAuctionDto;
+import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
+import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
@@ -29,9 +32,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -227,6 +234,62 @@ class AuctionReportControllerTest {
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is("신고 내용이 입력되지 않았습니다."))
+               );
+    }
+
+    @Test
+    void 전체_신고_목록을_조회한다() throws Exception {
+        // given
+        final ReadAuctionReportDto auctionReportDto1 = new ReadAuctionReportDto(
+                1L,
+                new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
+                LocalDateTime.now(),
+                new ReadAuctionDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                "신고합니다."
+        );
+        final ReadAuctionReportDto auctionReportDto2 = new ReadAuctionReportDto(
+                2L,
+                new ReadReporterDto(2L, "회원2", "이미지2", 5.0),
+                LocalDateTime.now(),
+                new ReadAuctionDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                "신고합니다."
+        );
+        final ReadAuctionReportDto auctionReportDto3 = new ReadAuctionReportDto(
+                3L,
+                new ReadReporterDto(3L, "회원3", "이미지3", 5.0),
+                LocalDateTime.now(),
+                new ReadAuctionDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                "신고합니다."
+        );
+
+        given(auctionReportService.readAll())
+                .willReturn(List.of(auctionReportDto1, auctionReportDto2, auctionReportDto3));
+
+        // when & then
+        mockMvc.perform(get("/reports/auctions").contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.reports.[0].id", is(auctionReportDto1.id()), Long.class),
+                       jsonPath("$.reports.[0].reporter.id", is(auctionReportDto1.reporterDto().id()), Long.class),
+                       jsonPath("$.reports.[0].reporter.name", is(auctionReportDto1.reporterDto().name())),
+                       jsonPath("$.reports.[0].createdTime").exists(),
+                       jsonPath("$.reports.[0].auction.id", is(auctionReportDto1.auctionDto().id()), Long.class),
+                       jsonPath("$.reports.[0].auction.title", is(auctionReportDto1.auctionDto().title())),
+                       jsonPath("$.reports.[0].description", is(auctionReportDto1.description())),
+                       jsonPath("$.reports.[1].id", is(auctionReportDto2.id()), Long.class),
+                       jsonPath("$.reports.[1].reporter.id", is(auctionReportDto2.reporterDto().id()), Long.class),
+                       jsonPath("$.reports.[1].reporter.name", is(auctionReportDto2.reporterDto().name())),
+                       jsonPath("$.reports.[1].createdTime").exists(),
+                       jsonPath("$.reports.[1].auction.id", is(auctionReportDto2.auctionDto().id()), Long.class),
+                       jsonPath("$.reports.[1].auction.title", is(auctionReportDto2.auctionDto().title())),
+                       jsonPath("$.reports.[1].description", is(auctionReportDto2.description())),
+                       jsonPath("$.reports.[2].id", is(auctionReportDto3.id()), Long.class),
+                       jsonPath("$.reports.[2].reporter.id", is(auctionReportDto3.reporterDto().id()), Long.class),
+                       jsonPath("$.reports.[2].reporter.name", is(auctionReportDto3.reporterDto().name())),
+                       jsonPath("$.reports.[2].createdTime").exists(),
+                       jsonPath("$.reports.[2].auction.id", is(auctionReportDto3.auctionDto().id()), Long.class),
+                       jsonPath("$.reports.[2].auction.title", is(auctionReportDto3.auctionDto().title())),
+                       jsonPath("$.reports.[2].description", is(auctionReportDto3.description()))
                );
     }
 }
