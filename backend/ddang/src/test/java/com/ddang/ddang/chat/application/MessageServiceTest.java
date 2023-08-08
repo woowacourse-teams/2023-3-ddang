@@ -98,6 +98,7 @@ class MessageServiceTest {
 
         final CreateMessageDto createMessageDto = new CreateMessageDto(
                 chatRoom.getId(),
+                LocalDateTime.now(),
                 writer.getId(),
                 receiver.getId(),
                 contents
