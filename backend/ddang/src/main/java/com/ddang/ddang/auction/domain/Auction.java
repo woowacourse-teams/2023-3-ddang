@@ -1,5 +1,6 @@
 package com.ddang.ddang.auction.domain;
 
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
@@ -146,5 +147,26 @@ public class Auction extends BaseTimeEntity {
     private BidPrice calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBid.getPrice().getValue() + this.bidUnit.getValue();
         return new BidPrice(nextMinimumBidPrice);
+    }
+
+    public boolean isWinner(final User user, final LocalDateTime targetTime) {
+        final User winner = findWinner(targetTime);
+
+        return user.equals(winner);
+    }
+
+    public User findWinner(final LocalDateTime targetTime) {
+        checkWinnerExist(targetTime);
+
+        return lastBid.getBidder();
+    }
+
+    private void checkWinnerExist(final LocalDateTime targetTime) {
+        if (!isClosed(targetTime)) {
+            throw new WinnerNotFoundException("경매가 종료된 후에 낙찰자가 결정됩니다.");
+        }
+        if (auctioneerCount == 0) {
+            throw new WinnerNotFoundException("입찰자가 존재하지 않아 낙찰자가 없습니다.");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.ddang.ddang.auction.domain;
 
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -196,5 +198,133 @@ class AuctionTest {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 주어진_사용자가_경매의_최종_낙찰자인지_판단한다() {
+        // given
+        User seller = new User("판매자", "profileImage.png", 5.0);
+        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+
+        // when
+        final boolean actual = auction.isWinner(winner, LocalDateTime.now());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 경매가_종료되지_않았다면_최종_낙찰자인지_판단할_때_예외가_발생한다() {
+        // given
+        User seller = new User("판매자", "profileImage.png", 5.0);
+        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final LocalDateTime futureTime = LocalDateTime.now().plusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(futureTime)
+                                       .build();
+        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+
+        final LocalDateTime currentTime = LocalDateTime.now();
+
+        // when & then
+        assertThatThrownBy(() -> auction.isWinner(winner, currentTime))
+                .isInstanceOf(WinnerNotFoundException.class)
+                .hasMessage("경매가 종료된 후에 낙찰자가 결정됩니다.");
+    }
+
+    @Test
+    void 입찰자가_존재하지_않는다면_최종_낙찰자인지_판단할_때_예외가_발생한다() {
+        // given
+        User seller = new User("판매자", "profileImage.png", 5.0);
+        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+
+        final LocalDateTime currentTime = LocalDateTime.now();
+
+        // when & then
+        assertThatThrownBy(() -> auction.isWinner(winner, currentTime))
+                .isInstanceOf(WinnerNotFoundException.class)
+                .hasMessage("입찰자가 존재하지 않아 낙찰자가 없습니다.");
+    }
+
+
+    @Test
+    void 경매의_최종_낙찰자를_반환한다() {
+        // given
+        User seller = new User("판매자", "profileImage.png", 5.0);
+        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+
+        // when
+        final User actual = auction.findWinner(LocalDateTime.now());
+
+        // then
+        assertThat(actual).isEqualTo(winner);
+    }
+
+    @Test
+    void 경매가_종료되지_않았다면_최종_낙찰자를_구할_떄_예외가_발생한다() {
+        // given
+        User seller = new User("판매자", "profileImage.png", 5.0);
+        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final LocalDateTime futureTime = LocalDateTime.now().plusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(futureTime)
+                                       .build();
+        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+
+        final LocalDateTime currentTime = LocalDateTime.now();
+
+        // when & then
+        assertThatThrownBy(() -> auction.findWinner(currentTime))
+                .isInstanceOf(WinnerNotFoundException.class)
+                .hasMessage("경매가 종료된 후에 낙찰자가 결정됩니다.");
+    }
+
+    @Test
+    void 입찰자가_존재하지_않는다면_최종_낙찰자를_구할_때_예외가_발생한다() {
+        // given
+        User seller = new User("판매자", "profileImage.png", 5.0);
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+
+        final LocalDateTime currentTime = LocalDateTime.now();
+
+        // when & then
+        assertThatThrownBy(() -> auction.findWinner(currentTime))
+                .isInstanceOf(WinnerNotFoundException.class)
+                .hasMessage("입찰자가 존재하지 않아 낙찰자가 없습니다.");
     }
 }
