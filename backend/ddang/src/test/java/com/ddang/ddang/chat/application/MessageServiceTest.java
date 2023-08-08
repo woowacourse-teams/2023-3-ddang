@@ -156,6 +156,7 @@ class MessageServiceTest {
                 contents
         );
 
+        // when & then
         assertThatThrownBy(() -> messageService.create(createMessageDto))
                 .isInstanceOf(ChatRoomNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
