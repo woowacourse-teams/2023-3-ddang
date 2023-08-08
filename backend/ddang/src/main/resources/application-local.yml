@@ -35,3 +35,10 @@ data:
 image:
   store:
     dir: ./
+
+token:
+  jwt:
+    access-key: thisistoolargeaccesstokenkeyfordummykeydataforlocal
+    refresh-key: thisistoolargerefreshtokenkeyfordummykeydataforlocal
+    access-expired-hours: 12
+    refresh-expired-hours: 1460
