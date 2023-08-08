@@ -2,7 +2,7 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.CreateMessageRequest;
 import com.ddang.ddang.user.domain.User;
 
 import java.time.LocalDateTime;
