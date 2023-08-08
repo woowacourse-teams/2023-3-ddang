@@ -10,6 +10,7 @@ import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -103,5 +105,51 @@ class JpaAuctionReportRepositoryTest {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 전체_경매_신고_목록을_조회한다() {
+        // given
+        final User seller = new User("사용자", "이미지", 4.9);
+        final Auction auction = Auction.builder()
+                                       .seller(seller)
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .build();
+        final User user1 = new User("사용자1", "이미지", 4.9);
+        final User user2 = new User("사용자2", "이미지", 4.9);
+        final User user3 = new User("사용자3", "이미지", 4.9);
+        final AuctionReport auctionReport1 = new AuctionReport(user1, auction, "신고합니다");
+        final AuctionReport auctionReport2 = new AuctionReport(user2, auction, "신고합니다");
+        final AuctionReport auctionReport3 = new AuctionReport(user3, auction, "신고합니다");
+
+        userRepository.save(seller);
+        auctionRepository.save(auction);
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
+
+        auctionReportRepository.save(auctionReport1);
+        auctionReportRepository.save(auctionReport2);
+        auctionReportRepository.save(auctionReport3);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final List<AuctionReport> actual = auctionReportRepository.findAll();
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.get(0).getReporter()).isEqualTo(user1);
+            softAssertions.assertThat(actual.get(0).getAuction()).isEqualTo(auction);
+            softAssertions.assertThat(actual.get(1).getReporter()).isEqualTo(user2);
+            softAssertions.assertThat(actual.get(1).getAuction()).isEqualTo(auction);
+            softAssertions.assertThat(actual.get(2).getReporter()).isEqualTo(user3);
+            softAssertions.assertThat(actual.get(2).getAuction()).isEqualTo(auction);
+        });
     }
 }
