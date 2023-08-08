@@ -30,43 +30,33 @@ public class MessageService {
 
     @Transactional
     public Long create(final CreateMessageDto dto) {
-        final ChatRoom chatRoom = getChatRoom(dto);
-        final User writer = getUser(dto.writerId(), "지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
-        final User receiver = getUser(dto.receiverId(), "지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
+        final ChatRoom chatRoom = findChatRoom(dto.chatRoomId(), "지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+        final User writer = findUser(dto.writerId(), "지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+        final User receiver = findUser(dto.receiverId(), "지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
         final Message message = dto.toEntity(chatRoom, writer, receiver);
 
         return messageRepository.save(message)
                                 .getId();
     }
 
-    private ChatRoom getChatRoom(final CreateMessageDto dto) {
-        return chatRoomRepository.findById(dto.chatRoomId())
-                                 .orElseThrow(() -> new ChatRoomNotFoundException(
-                                         "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
-                                 ));
+    private ChatRoom findChatRoom(final Long chatRoomId, final String message) {
+        return chatRoomRepository.findById(chatRoomId)
+                                 .orElseThrow(() -> new ChatRoomNotFoundException(message));
     }
 
-    private User getUser(final Long dto, final String message) {
+    private User findUser(final Long dto, final String message) {
         return userRepository.findById(dto)
                              .orElseThrow(() -> new UserNotFoundException(message));
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        final User user = userRepository.findById(request.userId())
-                                        .orElseThrow(() -> new UserNotFoundException("메시지 조회할 권한이 없는 사용자입니다."));
-
-        final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
-                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                            "조회하고자 하는 채팅방이 존재하지 않습니다."
-                                                    ));
+        final User user = findUser(request.userId(), "메시지 조회할 권한이 없는 사용자입니다.");
+        final ChatRoom chatRoom = findChatRoom(request.chatRoomId(), "조회하고자 하는 채팅방이 존재하지 않습니다.");
 
         Long lastMessageId = request.lastMessageId();
         if (lastMessageId != null) {
-            lastMessageId = messageRepository.findById(request.lastMessageId())
-                                             .orElseThrow(() -> new MessageNotFoundException(
-                                                     "조회한 마지막 메시지가 존재하지 않습니다."
-                                             ))
-                                             .getId();
+            lastMessageId = findMessage(lastMessageId, "조회한 마지막 메시지가 존재하지 않습니다.").getId();
+            findMessage(request.lastMessageId(), "조회한 마지막 메시지가 존재하지 않습니다.");
         }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
@@ -78,5 +68,10 @@ public class MessageService {
         return readMessages.stream()
                            .map(ReadMessageDto::from)
                            .collect(Collectors.toList());
+    }
+
+    private Message findMessage(final Long messageId, final String message) {
+        return messageRepository.findById(messageId)
+                                .orElseThrow(() -> new MessageNotFoundException(message));
     }
 }
