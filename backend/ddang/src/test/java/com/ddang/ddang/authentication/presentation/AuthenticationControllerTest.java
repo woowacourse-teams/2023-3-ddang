@@ -11,11 +11,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.authentication.infrastructure.oauth2.exception.InvalidSocialOauth2TokenException;
 import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
@@ -106,7 +105,7 @@ class AuthenticationControllerTest {
         final AccessTokenRequest request = new AccessTokenRequest(invalidKakaoAccessToken);
 
         given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString()))
-                .willThrow(new InvalidSocialOauth2TokenException("401 Unauthorized", new RuntimeException()));
+                .willThrow(new InvalidTokenException("401 Unauthorized", new RuntimeException()));
 
         // when & then
         mockMvc.perform(post("/oauth2/login/{oauth2Type}", "kakao")

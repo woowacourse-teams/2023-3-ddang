@@ -2,9 +2,9 @@ package com.ddang.ddang.authentication.infrastructure.oauth2.kakao;
 
 import com.ddang.ddang.authentication.configuration.KakaoProvidersConfigurationProperties;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.authentication.infrastructure.oauth2.exception.InvalidSocialOauth2TokenException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -51,7 +51,7 @@ public class KakaoUserInformationProvider implements OAuth2UserInformationProvid
         } catch (final HttpClientErrorException ex) {
             final String message = ex.getMessage().split(REST_TEMPLATE_MESSAGE_SEPARATOR)[MESSAGE_INDEX];
 
-            throw new InvalidSocialOauth2TokenException(message, ex);
+            throw new InvalidTokenException(message, ex);
         }
     }
 }

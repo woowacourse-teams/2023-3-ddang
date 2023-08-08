@@ -6,7 +6,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
@@ -14,10 +14,8 @@ import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
-import com.ddang.ddang.authentication.infrastructure.jwt.exception.InvalidTokenTypeException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.authentication.infrastructure.oauth2.exception.InvalidSocialOauth2TokenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -90,13 +88,13 @@ class AuthenticationServiceTest {
         // given
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
         given(mockProvider.findUserInformation(anyString()))
-                .willThrow(new InvalidSocialOauth2TokenException("401 Unauthorized", null));
+                .willThrow(new InvalidTokenException("401 Unauthorized"));
 
         final String invalidAccessToken = "invalidAccessToken";
 
         // when & then
         assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, invalidAccessToken))
-                .isInstanceOf(InvalidSocialOauth2TokenException.class)
+                .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("401 Unauthorized");
     }
 
@@ -196,7 +194,7 @@ class AuthenticationServiceTest {
 
         // when & then
         assertThatThrownBy(() -> authenticationService.refreshToken(invalidRefreshToken))
-                .isInstanceOf(InvalidTokenTypeException.class)
+                .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("Bearer 타입이 아닙니다.");
     }
 }

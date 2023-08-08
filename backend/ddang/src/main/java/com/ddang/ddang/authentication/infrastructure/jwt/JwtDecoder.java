@@ -4,7 +4,7 @@ import com.ddang.ddang.authentication.configuration.JwtConfigurationProperties;
 import com.ddang.ddang.authentication.domain.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.infrastructure.jwt.exception.InvalidTokenTypeException;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -38,13 +38,13 @@ public class JwtDecoder implements TokenDecoder {
 
             validateTokenType(tokenType);
         } catch (final StringIndexOutOfBoundsException ex) {
-            throw new InvalidTokenTypeException("Bearer 타입이 아니거나 유효한 토큰이 아닙니다.", ex);
+            throw new InvalidTokenException("Bearer 타입이 아니거나 유효한 토큰이 아닙니다.", ex);
         }
     }
 
     private void validateTokenType(final String tokenType) {
         if (!TOKEN_TYPE.equals(tokenType)) {
-            throw new InvalidTokenTypeException("Bearer 타입이 아닙니다.");
+            throw new InvalidTokenException("Bearer 타입이 아닙니다.");
         }
     }
 

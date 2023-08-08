@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.ddang.ddang.authentication.configuration.JwtConfigurationProperties;
 import com.ddang.ddang.authentication.domain.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.infrastructure.jwt.exception.InvalidTokenTypeException;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
@@ -43,7 +43,7 @@ class JwtDecoderTest {
 
         // when & then
         assertThatThrownBy(() -> jwtDecoder.decode(TokenType.ACCESS, invalidLengthToken))
-                .isInstanceOf(InvalidTokenTypeException.class)
+                .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("Bearer 타입이 아니거나 유효한 토큰이 아닙니다.");
     }
 
@@ -54,7 +54,7 @@ class JwtDecoderTest {
 
         // when & then
         assertThatThrownBy(() -> jwtDecoder.decode(TokenType.ACCESS, invalidTypeToken))
-                .isInstanceOf(InvalidTokenTypeException.class)
+                .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("Bearer 타입이 아닙니다.");
     }
 

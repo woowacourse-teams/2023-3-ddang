@@ -3,10 +3,8 @@ package com.ddang.ddang.exception;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
-import com.ddang.ddang.authentication.application.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
-import com.ddang.ddang.authentication.infrastructure.jwt.exception.InvalidTokenTypeException;
-import com.ddang.ddang.authentication.infrastructure.oauth2.exception.InvalidSocialOauth2TokenException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -178,17 +176,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotAccessibleException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                             .body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler({
-            InvalidTokenTypeException.class,
-            InvalidSocialOauth2TokenException.class
-    })
-    public ResponseEntity<ExceptionResponse> handleInvalidTokenException(final Exception ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, ex.getCause().getClass().getSimpleName()), ex);
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
