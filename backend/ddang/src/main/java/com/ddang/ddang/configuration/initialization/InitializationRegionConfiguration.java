@@ -1,4 +1,4 @@
-package com.ddang.ddang.configuration;
+package com.ddang.ddang.configuration.initialization;
 
 import com.ddang.ddang.region.application.RegionService;
 import lombok.RequiredArgsConstructor;

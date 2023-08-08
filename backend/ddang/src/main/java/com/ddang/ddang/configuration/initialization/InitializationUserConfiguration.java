@@ -1,14 +1,12 @@
-package com.ddang.ddang.configuration;
+package com.ddang.ddang.configuration.initialization;
 
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.Transactional;
 
-@Configuration
 @RequiredArgsConstructor
 public class InitializationUserConfiguration implements ApplicationRunner {
 
