@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -70,7 +71,7 @@ public class MessageService {
 
         return readMessages.stream()
                            .map(ReadMessageDto::from)
-                           .toList();
+                           .collect(Collectors.toList());
     }
 
     private void validateLastMessageId(final Long lastMessageId) {
