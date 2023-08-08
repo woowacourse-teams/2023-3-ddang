@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
@@ -16,6 +17,8 @@ import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -49,5 +52,12 @@ public class AuctionReportService {
         if (auctionReportRepository.existsByAuctionIdAndReporterId(auction.getId(), reporter.getId())) {
             throw new AlreadyReportAuctionException("이미 신고한 경매입니다.");
         }
+    }
+
+    public List<ReadAuctionReportDto> readAll() {
+        final List<AuctionReport> auctionReports = auctionReportRepository.findAll();
+        return auctionReports.stream()
+                             .map(ReadAuctionReportDto::from)
+                             .toList();
     }
 }

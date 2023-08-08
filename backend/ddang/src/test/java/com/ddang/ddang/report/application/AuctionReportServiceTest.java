@@ -9,17 +9,20 @@ import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -188,5 +191,54 @@ class AuctionReportServiceTest {
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
                 .isInstanceOf(AlreadyReportAuctionException.class)
                 .hasMessage("이미 신고한 경매입니다.");
+    }
+
+    @Test
+    void 전체_신고_목록을_조회한다() {
+        // given
+        final User seller = new User("판매자", "이미지", 4.9);
+        final Auction auction = Auction.builder()
+                                       .seller(seller)
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+        final User user1 = new User("사용자1", "이미지1", 4.9);
+        final User user2 = new User("사용자2", "이미지2", 4.9);
+        final User user3 = new User("사용자3", "이미지3", 4.9);
+
+        userRepository.save(seller);
+        auctionRepository.save(auction);
+        userRepository.save(user1);
+        userRepository.save(user2);
+        userRepository.save(user3);
+
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
+
+        final LoginUserDto loginUserDto1 = new LoginUserDto(user1.getId());
+        auctionReportService.create(loginUserDto1, createAuctionReportDto);
+
+        final LoginUserDto loginUserDto2 = new LoginUserDto(user2.getId());
+        auctionReportService.create(loginUserDto2, createAuctionReportDto);
+
+        final LoginUserDto loginUserDto3 = new LoginUserDto(user3.getId());
+        auctionReportService.create(loginUserDto3, createAuctionReportDto);
+
+
+
+        // when
+        final List<ReadAuctionReportDto> actual = auctionReportService.readAll();
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.get(0).reporterDto().id()).isEqualTo(user1.getId());
+            softAssertions.assertThat(actual.get(0).auctionDto().id()).isEqualTo(auction.getId());
+            softAssertions.assertThat(actual.get(1).reporterDto().id()).isEqualTo(user2.getId());
+            softAssertions.assertThat(actual.get(1).auctionDto().id()).isEqualTo(auction.getId());
+            softAssertions.assertThat(actual.get(2).reporterDto().id()).isEqualTo(user3.getId());
+            softAssertions.assertThat(actual.get(2).auctionDto().id()).isEqualTo(auction.getId());
+        });
     }
 }
