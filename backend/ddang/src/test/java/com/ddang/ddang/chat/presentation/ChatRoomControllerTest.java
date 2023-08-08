@@ -10,13 +10,16 @@ import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadAuctionDto;
+import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
+import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
+import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.user.domain.User;
@@ -221,18 +224,16 @@ class ChatRoomControllerTest {
     }
 
     @Test
-    void 지정한_아이디에_해당하는_채팅방을_조회한다() throws Exception {
+    void 메시지를_조회한다() throws Exception {
         // given
         final Category main = new Category("메인");
         final Category sub = new Category("서브");
         main.addSubCategory(sub);
-
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
-
+        final User user1 = new User(1L, "상대1", "", 5.0);
+        final User user2 = new User(2L, "상대2", "", 5.0);
         final Auction auction1 = Auction.builder()
                                         .title("경매 상품 1")
-                                        .seller(seller)
+                                        .seller(user1)
                                         .subCategory(sub)
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
@@ -240,42 +241,53 @@ class ChatRoomControllerTest {
                                         .closingTime(LocalDateTime.now())
                                         .build();
         auction1.addAuctionImages(List.of(new AuctionImage("사진", "image")));
-        auction1.updateLastBid(new Bid(auction1, buyer, new BidPrice(3000)));
+        auction1.updateLastBid(new Bid(auction1, user2, new BidPrice(3000)));
 
-        final ReadParticipatingChatRoomDto chatRoom = new ReadParticipatingChatRoomDto(
+        final ChatRoom chatRoom = new ChatRoom(auction1, user1);
+
+        final String contents = "메시지 내용";
+        final LocalDateTime createdAt = LocalDateTime.now();
+
+        final ReadMessageDto readMessageDto = new ReadMessageDto(
                 1L,
-                ReadAuctionDto.from(auction1),
-                ReadUserDto.from(seller),
-                true
+                createdAt,
+                chatRoom,
+                user1,
+                user2,
+                "메시지 내용"
         );
-
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willReturn(chatRoom);
+        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willReturn(List.of(readMessageDto));
 
         // when & then
-        mockMvc.perform(get("/chattings/1")
+        mockMvc.perform(get("/chattings/1/messages")
                        .header(HttpHeaders.AUTHORIZATION, 1L)
-                       .contentType(MediaType.APPLICATION_JSON))
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("lastMessageId", "1")
+               )
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.id", is(chatRoom.id()), Long.class),
-                       jsonPath("$.chatPartner.name", is(chatRoom.partnerDto().name())),
-                       jsonPath("$.auction.title", is(chatRoom.auctionDto().title()))
+                       jsonPath("$.[0].id", is(1L), Long.class),
+                       jsonPath("$.[0].createdAt").exists(),
+                       jsonPath("$.[0].isMyMessage", is(true), boolean.class),
+                       jsonPath("$.[0].contents", is(contents), String.class)
                );
     }
 
     @Test
-    void 지정한_아이디에_해당하는_채팅방_조회시_요청한_사용자_정보가_없다면_404를_반환한다() throws Exception {
+    void 잘못된_사용자가_메시지를_조회할_경우_404를_반환한다() throws Exception {
         // given
         final Long invalidUserId = -999L;
         final UserNotFoundException userNotFoundException =
-                new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong()))
-                .willThrow(userNotFoundException);
+                new UserNotFoundException("메시지 조회할 권한이 없는 사용자입니다.");
+        new ReadMessageRequest(invalidUserId, 1L, 1L);
+        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(userNotFoundException);
 
         // when & then
-        mockMvc.perform(get("/chattings/1")
+        mockMvc.perform(get("/chattings/1/messages")
                        .header(HttpHeaders.AUTHORIZATION, invalidUserId)
-                       .contentType(MediaType.APPLICATION_JSON))
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("lastMessageId", "1")
+               )
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(userNotFoundException.getMessage()))
@@ -283,39 +295,23 @@ class ChatRoomControllerTest {
     }
 
     @Test
-    void 지정한_아이디에_해당하는_채팅방_조회시_채팅방을_찾을_수_없다면_404를_반환한다() throws Exception {
+    void 조회하고자_하는_채팅방이_없는_경우_404를_반환한다() throws Exception {
         // given
-        final Long invalidChatRoomId = -999L;
-        final ChatRoomNotFoundException chatRoomNotFoundException =
-                new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong()))
-                .willThrow(chatRoomNotFoundException);
+        final Long invalidLastMessageId = -999L;
+        final MessageNotFoundException messageNotFoundException =
+                new MessageNotFoundException("조회한 마지막 메시지가 존재하지 않습니다.");
+        new ReadMessageRequest(1L, 1L, invalidLastMessageId);
+        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(messageNotFoundException);
 
         // when & then
-        mockMvc.perform(get("/chattings/{chatRoomId}", invalidChatRoomId)
+        mockMvc.perform(get("/chattings/1/messages")
                        .header(HttpHeaders.AUTHORIZATION, 1L)
-                       .contentType(MediaType.APPLICATION_JSON))
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("lastMessageId", invalidLastMessageId.toString())
+               )
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(chatRoomNotFoundException.getMessage()))
-               );
-    }
-
-    @Test
-    void 지정한_아이디에_해당하는_채팅방_조회시_요청한_사용자_채팅방의_참여자가_아니라면_404를_반환한다() throws Exception {
-        // given
-        final UserNotAccessibleException userNotAccessibleException =
-                new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong()))
-                .willThrow(userNotAccessibleException);
-
-        // when & then
-        mockMvc.perform(get("/chattings/1")
-                       .header(HttpHeaders.AUTHORIZATION, 1L)
-                       .contentType(MediaType.APPLICATION_JSON))
-               .andExpectAll(
-                       status().isForbidden(),
-                       jsonPath("$.message", is(userNotAccessibleException.getMessage()))
+                       jsonPath("$.message", is(messageNotFoundException.getMessage()))
                );
     }
 }

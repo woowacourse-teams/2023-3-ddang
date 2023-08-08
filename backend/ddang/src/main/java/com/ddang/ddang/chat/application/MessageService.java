@@ -52,6 +52,9 @@ public class MessageService {
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
+        final User user = userRepository.findById(request.userId())
+                                        .orElseThrow(() -> new UserNotFoundException("메시지 조회할 권한이 없는 사용자입니다."));
+
         final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "조회하고자 하는 채팅방이 존재하지 않습니다."
@@ -67,7 +70,7 @@ public class MessageService {
         }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
-                request.userId(),
+                user.getId(),
                 chatRoom.getId(),
                 lastMessageId
         );
