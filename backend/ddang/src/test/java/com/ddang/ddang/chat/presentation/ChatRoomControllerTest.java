@@ -92,11 +92,7 @@ class ChatRoomControllerTest {
     void 메시지를_생성한다() throws Exception {
         // given
         final String contents = "메시지 내용";
-        final CreateMessageRequest request = new CreateMessageRequest(
-                1L,
-                contents,
-                LocalDateTime.now()
-        );
+        final CreateMessageRequest request = new CreateMessageRequest(1L, contents, LocalDateTime.now());
 
         given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
 
@@ -119,8 +115,7 @@ class ChatRoomControllerTest {
         final String contents = "메시지 내용";
         final CreateMessageRequest request = new CreateMessageRequest(1L, contents, LocalDateTime.now());
 
-        final ChatRoomNotFoundException chatRoomNotFoundException =
-                new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+        final ChatRoomNotFoundException chatRoomNotFoundException = new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
         given(messageService.create(CreateMessageDto.of(1L, invalidChatRoomId, request)))
                 .willThrow(chatRoomNotFoundException);
 
@@ -141,15 +136,15 @@ class ChatRoomControllerTest {
         final Long invalidWriterId = -999L;
         final Long chatRoomId = 1L;
         final String contents = "메시지 내용";
-        final CreateMessageRequest request = new CreateMessageRequest(invalidWriterId, contents, LocalDateTime.now());
+        final CreateMessageRequest request = new CreateMessageRequest(1L, contents, LocalDateTime.now());
 
-        final UserNotFoundException userNotFoundException =
-                new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
-        given(messageService.create(CreateMessageDto.of(1L, chatRoomId, request)))
+        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보가 없습니다.");
+        given(messageService.create(CreateMessageDto.of(invalidWriterId, chatRoomId, request)))
                 .willThrow(userNotFoundException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
+                       .header(HttpHeaders.AUTHORIZATION, invalidWriterId)
                        .content(objectMapper.writeValueAsString(request))
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
