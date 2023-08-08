@@ -7,6 +7,9 @@ plugins {
     id 'com.google.firebase.crashlytics'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'com.ddangddangddang.android'
     compileSdk 33
@@ -19,6 +22,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        manifestPlaceholders = [KEY_KAKAO: properties['key.kakao']]
+        buildConfigField 'String', 'KEY_KAKAO', properties['key.kakao.string']
     }
 
     buildTypes {
@@ -75,4 +81,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+
+    // 카카오 로그인
+    implementation 'com.kakao.sdk:v2-user:2.15.0'
 }
