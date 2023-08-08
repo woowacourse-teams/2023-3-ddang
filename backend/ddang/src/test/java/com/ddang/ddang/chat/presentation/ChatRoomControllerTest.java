@@ -1,5 +1,6 @@
 package com.ddang.ddang.chat.presentation;
 
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -13,7 +14,9 @@ import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadAuctionDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserDto;
+import com.ddang.ddang.chat.application.exception.ChatAlreadyExistException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
@@ -342,6 +345,133 @@ class ChatRoomControllerTest {
                .andExpectAll(
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/chattings/" + newChatRoomId))
+               );
+    }
+
+    @Test
+    void 채팅방_생성시_요청한_사용자_정보를_찾을_수_없다면_404를_반환한다() throws Exception {
+        // given
+        final Long invalidUserId = -999L;
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
+        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
+                .willThrow(userNotFoundException);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, invalidUserId)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 채팅방_생성시_관련된_경매_정보를_찾을_수_없다면_404를_반환한다() throws Exception {
+        // given
+        final Long invalidAuctionId = 999L;
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(invalidAuctionId);
+        final AuctionNotFoundException auctionNotFoundException =
+                new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
+                .willThrow(auctionNotFoundException);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(auctionNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 경매가_종료되지_않은_상태에서_채팅방을_생성하면_400을_반환한다() throws Exception {
+        // given
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
+        final InvalidAuctionToChatException invalidAuctionToChatException =
+                new InvalidAuctionToChatException("경매가 아직 종료되지 않았습니다.");
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
+                .willThrow(invalidAuctionToChatException);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidAuctionToChatException.getMessage()))
+               );
+    }
+
+    @Test
+    void 경매가_삭제된_상태에서_채팅방을_생성하면_400을_반환한다() throws Exception {
+        // given
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
+        final InvalidAuctionToChatException invalidAuctionToChatException =
+                new InvalidAuctionToChatException("삭제된 경매입니다.");
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
+                .willThrow(invalidAuctionToChatException);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(invalidAuctionToChatException.getMessage()))
+               );
+    }
+
+    @Test
+    void 채팅방_생성을_요청한_사용자가_경매의_판매자_또는_최종_낙찰자가_아니라면_400을_반환한다() throws Exception {
+        // given
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
+        final UserNotAccessibleException userNotAccessibleException =
+                new UserNotAccessibleException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
+                .willThrow(userNotAccessibleException);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isForbidden(),
+                       jsonPath("$.message", is(userNotAccessibleException.getMessage()))
+               );
+    }
+
+    @Test
+    void 해당_경매에_대한_채팅이_이미_존재할_경우_400을_반환한다() throws Exception {
+        // given
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
+        final ChatAlreadyExistException chatAlreadyExistException =
+                new ChatAlreadyExistException("해당 경매에 대한 채팅방이 이미 존재합니다.");
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
+                .willThrow(chatAlreadyExistException);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(chatAlreadyExistException.getMessage()))
                );
     }
 }

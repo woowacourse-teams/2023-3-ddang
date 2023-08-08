@@ -3,9 +3,12 @@ package com.ddang.ddang.exception;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.chat.application.exception.ChatAlreadyExistException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
@@ -172,6 +175,36 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotAccessibleException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(WinnerNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleWinnerNotFoundException(
+            final WinnerNotFoundException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, WinnerNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAuctionToChatException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidAuctionToChatException(
+            final InvalidAuctionToChatException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidAuctionToChatException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ChatAlreadyExistException.class)
+    public ResponseEntity<ExceptionResponse> handleChatAlreadyExistException(
+            final ChatAlreadyExistException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ChatAlreadyExistException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
