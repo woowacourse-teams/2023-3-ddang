@@ -49,6 +49,8 @@
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_seller_reliability">(%.1f)</string>
+    <string name="detail_auction_create_chat_room_dialog_message">쪽지방을 생성하시겠습니까?</string>
+    <string name="detail_auction_create_chat_room_dialog_positive_button">생성</string>
 
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>

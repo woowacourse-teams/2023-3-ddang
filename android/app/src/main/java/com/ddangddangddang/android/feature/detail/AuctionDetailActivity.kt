@@ -12,6 +12,7 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
 
 class AuctionDetailActivity :
@@ -41,11 +42,21 @@ class AuctionDetailActivity :
         when (event) {
             is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
             is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> showAuctionBidDialog()
+            is AuctionDetailViewModel.AuctionDetailEvent.CreateChatRoom -> showCreateChatRoomDialog()
+            is AuctionDetailViewModel.AuctionDetailEvent.EnterChatRoom -> {}
         }
     }
 
     private fun showAuctionBidDialog() {
         AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
+    }
+
+    private fun showCreateChatRoomDialog() {
+        showDialog(
+            messageId = R.string.detail_auction_create_chat_room_dialog_message,
+            positiveStringId = R.string.detail_auction_create_chat_room_dialog_positive_button,
+            actionPositive = { viewModel.createChatRoom() },
+        )
     }
 
     private fun setupAuctionImages(images: List<String>) {

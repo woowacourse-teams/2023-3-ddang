@@ -2,33 +2,36 @@ package com.ddangddangddang.android.feature.detail
 
 import androidx.annotation.StringRes
 import com.ddangddangddang.android.R
+import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.AuctionDetailStatusModel
-import com.ddangddangddang.android.model.ChatAuctionDetailModel
 
 sealed class AuctionDetailBottomButtonStatus(
-    @StringRes val content: Int,
+    @StringRes val text: Int,
     val enabled: Boolean,
 ) {
-    object AuctionBid : AuctionDetailBottomButtonStatus(R.string.detail_auction_submit, true)
-    object AuctionBidFinish :
+    object BidAuction : AuctionDetailBottomButtonStatus(R.string.detail_auction_submit, true)
+
+    object FinishAuction :
         AuctionDetailBottomButtonStatus(R.string.detail_auction_finish, false)
 
-    object AuctionChatCreatable :
+    object CreateAuctionChatRoom :
         AuctionDetailBottomButtonStatus(R.string.detail_auction_chat_room_create, true)
 
-    data class AuctionChatEntrance(val chatId: Long) :
+    object EnterAuctionChatRoom :
         AuctionDetailBottomButtonStatus(R.string.detail_auction_chat_room_entrance, true)
 
     companion object {
         fun find(
-            auctionStatus: AuctionDetailStatusModel,
-            chatStatus: ChatAuctionDetailModel,
+            auctionDetailModel: AuctionDetailModel,
         ): AuctionDetailBottomButtonStatus {
-            chatStatus.id?.let { if (chatStatus.isChatParticipant) return AuctionChatEntrance(it) }
+            val auctionStatus = auctionDetailModel.auctionDetailStatusModel
+            val chatStatus = auctionDetailModel.chatAuctionDetailModel
+
             return when {
-                chatStatus.isChatParticipant -> AuctionChatCreatable
-                auctionStatus == AuctionDetailStatusModel.ONGOING || auctionStatus == AuctionDetailStatusModel.UNBIDDEN -> AuctionBid
-                else -> AuctionBidFinish
+                chatStatus.isChatParticipant && chatStatus.id != null -> EnterAuctionChatRoom
+                chatStatus.isChatParticipant -> CreateAuctionChatRoom
+                auctionStatus == AuctionDetailStatusModel.ONGOING || auctionStatus == AuctionDetailStatusModel.UNBIDDEN -> BidAuction
+                else -> FinishAuction
             }
         }
     }
