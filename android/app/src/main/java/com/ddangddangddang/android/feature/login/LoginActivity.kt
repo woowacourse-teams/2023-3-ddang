@@ -50,7 +50,7 @@ class LoginActivity :
                 }
                 loginByKakaoAccount()
             } else if (token != null) {
-                completeLogin(token)
+                completeLoginByKakao(token)
             }
         }
     }
@@ -63,7 +63,7 @@ class LoginActivity :
             if (error != null) {
                 logLoginError(error)
             } else if (token != null) {
-                completeLogin(token)
+                completeLoginByKakao(token)
             }
         }
     }
@@ -72,7 +72,7 @@ class LoginActivity :
         Log.d("test", "로그인 실패 $error")
     }
 
-    private fun completeLogin(token: OAuthToken) {
-        Log.d("test", "로그인 성공 ${token.accessToken}")
+    private fun completeLoginByKakao(token: OAuthToken) {
+        viewModel.completeLoginByKakao(token.accessToken)
     }
 }

@@ -5,8 +5,9 @@ import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.Service
 
-class RegionRepositoryImpl(private val remoteDataSource: RegionRemoteDataSource) :
-    RegionRepository {
+class RegionRepositoryImpl private constructor(
+    private val remoteDataSource: RegionRemoteDataSource,
+) : RegionRepository {
 
     override suspend fun getFirstRegions(): ApiResponse<List<RegionDetailResponse>> {
         return remoteDataSource.getFirstRegions()
