@@ -64,7 +64,7 @@ public class JwtDecoder implements TokenDecoder {
     }
 
     private PrivateClaims convert(Claims claims) {
-        return new PrivateClaims(claims.get(CLAIM_NAME, Long.class));
+        return new PrivateClaims(claims.get(CLAIM_NAME, String.class));
     }
 
     private String findPureToken(String token) {

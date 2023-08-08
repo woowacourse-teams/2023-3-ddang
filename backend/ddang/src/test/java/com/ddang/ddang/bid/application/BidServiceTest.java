@@ -49,7 +49,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
@@ -63,7 +63,7 @@ class BidServiceTest {
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12346L)
+                              .oauthId("12346")
                               .build();
 
         userRepository.save(seller);
@@ -91,7 +91,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
@@ -105,13 +105,13 @@ class BidServiceTest {
                                .name("사용자1")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12347L)
+                               .oauthId("12347")
                                .build();
 
         userRepository.save(seller);
@@ -140,7 +140,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
@@ -154,7 +154,7 @@ class BidServiceTest {
                                .name("사용자2")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
 
         userRepository.save(seller);
@@ -180,7 +180,7 @@ class BidServiceTest {
                               .name("사용자1")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
         userRepository.save(user);
 
@@ -231,7 +231,7 @@ class BidServiceTest {
                               .name("사용자1")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
 
         auctionRepository.save(auction);
@@ -260,7 +260,7 @@ class BidServiceTest {
                               .name("사용자1")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
 
         auctionRepository.save(auction);
@@ -282,7 +282,7 @@ class BidServiceTest {
                               .name("사용자1")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
         final Auction auction = Auction.builder()
                                        .seller(user)
@@ -312,7 +312,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
@@ -326,7 +326,7 @@ class BidServiceTest {
                               .name("사용자1")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12346L)
+                              .oauthId("12346")
                               .build();
 
         userRepository.save(seller);
@@ -349,7 +349,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
@@ -363,7 +363,7 @@ class BidServiceTest {
                               .name("사용자1")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12346L)
+                              .oauthId("12346")
                               .build();
 
         userRepository.save(seller);
@@ -390,7 +390,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
@@ -404,13 +404,13 @@ class BidServiceTest {
                                .name("사용자1")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12347L)
+                               .oauthId("12347")
                                .build();
 
         userRepository.save(seller);
@@ -438,7 +438,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
@@ -452,13 +452,13 @@ class BidServiceTest {
                                .name("사용자1")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12347L)
+                               .oauthId("12347")
                                .build();
 
         userRepository.save(seller);
@@ -494,7 +494,7 @@ class BidServiceTest {
                               .name("사용자1")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
 
         auctionRepository.save(auction);
@@ -516,7 +516,7 @@ class BidServiceTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction1 = Auction.builder()
                                         .seller(seller)
@@ -538,13 +538,13 @@ class BidServiceTest {
                                .name("사용자1")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12347L)
+                               .oauthId("12347")
                                .build();
 
         userRepository.save(seller);
@@ -589,7 +589,7 @@ class BidServiceTest {
                                .name("사용자1")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12345L)
+                               .oauthId("12345")
                                .build();
 
         auctionRepository.save(auction1);
@@ -599,7 +599,7 @@ class BidServiceTest {
         final List<ReadBidDto> actual = bidService.readAllByAuctionId(auction1.getId());
 
         // then
-        assertThat(actual).hasSize(0);
+        assertThat(actual).isEmpty();
     }
 
     @Test

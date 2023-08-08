@@ -53,7 +53,7 @@ class JpaChatRoomRepositoryTest {
                                .name("구매자")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12345L)
+                               .oauthId("12345")
                                .build();
         final Auction auction = Auction.builder()
                                        .title("title")
@@ -81,7 +81,7 @@ class JpaChatRoomRepositoryTest {
                                .name("구매자")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12345L)
+                               .oauthId("12345")
                                .build();
         final Auction auction = Auction.builder()
                                        .title("title")
@@ -121,25 +121,25 @@ class JpaChatRoomRepositoryTest {
                                .name("메리")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12345L)
+                               .oauthId("12345")
                                .build();
         final User encho = User.builder()
                                .name("엔초")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         final User jamie = User.builder()
                                .name("제이미")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12347L)
+                               .oauthId("12347")
                                .build();
         final User zeeto = User.builder()
                                .name("지토")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12348L)
+                               .oauthId("12348")
                                .build();
         userRepository.save(merry);
         userRepository.save(encho);

@@ -72,7 +72,7 @@ class MessageServiceTest {
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(writer);
@@ -81,7 +81,7 @@ class MessageServiceTest {
                                   .name("수신자")
                                   .profileImage("profile.png")
                                   .reliability(4.7d)
-                                  .oauthId(12346L)
+                                  .oauthId("12346")
                                   .build();
 
         userRepository.save(receiver);
@@ -131,7 +131,7 @@ class MessageServiceTest {
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(writer);
@@ -140,7 +140,7 @@ class MessageServiceTest {
                                   .name("수신자")
                                   .profileImage("profile.png")
                                   .reliability(4.7d)
-                                  .oauthId(12346L)
+                                  .oauthId("12346")
                                   .build();
 
         userRepository.save(receiver);
@@ -187,7 +187,7 @@ class MessageServiceTest {
                                   .name("수신자")
                                   .profileImage("profile.png")
                                   .reliability(4.7d)
-                                  .oauthId(12345L)
+                                  .oauthId("12345")
                                   .build();
 
         userRepository.save(receiver);
@@ -238,7 +238,7 @@ class MessageServiceTest {
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(writer);

@@ -88,7 +88,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -179,7 +179,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -229,7 +229,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -273,7 +273,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -323,7 +323,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -377,7 +377,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -455,7 +455,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -509,7 +509,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(seller);
@@ -562,7 +562,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Long invalidSellerId = -999L;
 
@@ -582,7 +582,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         userRepository.save(seller);
         final Auction auction = Auction.builder()
@@ -597,7 +597,7 @@ class AuctionServiceTest {
                               .name("회원")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12346L)
+                              .oauthId("12346")
                               .build();
 
         userRepository.save(user);

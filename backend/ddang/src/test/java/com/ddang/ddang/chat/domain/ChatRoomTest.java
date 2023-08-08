@@ -46,7 +46,7 @@ class ChatRoomTest {
                                .name("회원")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12345L)
+                               .oauthId("12345")
                                .build();
         final Auction auction = Auction.builder()
                                        .title("title")
@@ -75,13 +75,13 @@ class ChatRoomTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -113,13 +113,13 @@ class ChatRoomTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -150,13 +150,13 @@ class ChatRoomTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -187,19 +187,19 @@ class ChatRoomTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         final User stranger = User.builder()
                                   .name("일반인")
                                   .profileImage("profile.png")
                                   .reliability(4.7d)
-                                  .oauthId(12347L)
+                                  .oauthId("12347")
                                   .build();
         userRepository.save(seller);
         userRepository.save(buyer);

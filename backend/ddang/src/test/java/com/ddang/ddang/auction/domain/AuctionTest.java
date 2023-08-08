@@ -118,7 +118,7 @@ class AuctionTest {
                               .name("회원")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
@@ -157,7 +157,7 @@ class AuctionTest {
                               .name("회원")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -177,7 +177,7 @@ class AuctionTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .title("title")
@@ -199,7 +199,7 @@ class AuctionTest {
                                 .name("회원1")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final Auction auction = Auction.builder()
                                        .title("title")
@@ -210,7 +210,7 @@ class AuctionTest {
                               .name("회원2")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
 
         ReflectionTestUtils.setField(user, "id", 1L);

@@ -26,6 +26,7 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     private String profileImage;
@@ -33,14 +34,14 @@ public class User extends BaseTimeEntity {
     private double reliability;
 
     @Column(unique = true)
-    private Long oauthId;
+    private String oauthId;
 
     @Builder
     private User(
             final String name,
             final String profileImage,
             final double reliability,
-            final Long oauthId
+            final String oauthId
     ) {
         this.name = name;
         this.profileImage = profileImage;

@@ -47,13 +47,13 @@ class JpaMessageRepositoryTest {
                                       .name("판매자")
                                       .profileImage("profile.png")
                                       .reliability(4.7d)
-                                      .oauthId(12345L)
+                                      .oauthId("12345")
                                       .build();
         final User participant2 = User.builder()
                                       .name("구매자")
                                       .profileImage("profile.png")
                                       .reliability(4.7d)
-                                      .oauthId(12346L)
+                                      .oauthId("12346")
                                       .build();
         final Auction auction = Auction.builder()
                                        .title("title")

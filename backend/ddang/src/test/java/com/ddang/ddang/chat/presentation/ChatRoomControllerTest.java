@@ -152,13 +152,13 @@ class ChatRoomControllerTest {
                                .name("상대1")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12345L)
+                               .oauthId("12345")
                                .build();
         final User user2 = User.builder()
                                .name("상대2")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
         final Auction auction1 = Auction.builder()
                                         .title("경매 상품 1")
@@ -245,13 +245,13 @@ class ChatRoomControllerTest {
                                 .name("판매자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
                                .profileImage("profile.png")
                                .reliability(4.7d)
-                               .oauthId(12346L)
+                               .oauthId("12346")
                                .build();
 
         final Auction auction1 = Auction.builder()

@@ -1,3 +1,4 @@
-alter table users add oauth_id bigint;
+alter table users add oauth_id varchat(50);
 
-UPDATE users SET oauth_id = 0 where oauth_id is null;
+alter table users add constraint uq_oauth_id unique(oauth_id);
+alter table users add constraint uq_name unique(name);

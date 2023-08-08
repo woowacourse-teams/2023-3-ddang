@@ -65,7 +65,7 @@ class QuerydslAuctionRepositoryImplTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
         userRepository.save(seller);
 

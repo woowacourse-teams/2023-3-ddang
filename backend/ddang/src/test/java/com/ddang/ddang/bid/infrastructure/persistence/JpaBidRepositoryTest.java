@@ -56,7 +56,7 @@ class JpaBidRepositoryTest {
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -86,7 +86,7 @@ class JpaBidRepositoryTest {
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -125,7 +125,7 @@ class JpaBidRepositoryTest {
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
         final Bid bid1 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid2 = new Bid(auction1, user, new BidPrice(10_000));
@@ -172,7 +172,7 @@ class JpaBidRepositoryTest {
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
-                              .oauthId(12345L)
+                              .oauthId("12345")
                               .build();
         final Bid bid1 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid2 = new Bid(auction1, user, new BidPrice(12_000));

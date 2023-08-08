@@ -20,21 +20,21 @@ public class InitializationUserConfiguration implements ApplicationRunner {
                                  .name("판매자1")
                                  .profileImage(IMAGE_URL)
                                  .reliability(4.7d)
-                                 .oauthId(12345L)
+                                 .oauthId("12345")
                                  .build();
 
         final User buyer1 = User.builder()
                                 .name("구매자1")
                                 .profileImage(IMAGE_URL)
                                 .reliability(3.0d)
-                                .oauthId(12346L)
+                                .oauthId("12346")
                                 .build();
 
         final User buyer2 = User.builder()
                                 .name("구매자1")
                                 .profileImage(IMAGE_URL)
                                 .reliability(0.8d)
-                                .oauthId(12347L)
+                                .oauthId("12347")
                                 .build();
 
         userRepository.save(seller1);

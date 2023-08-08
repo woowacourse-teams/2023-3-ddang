@@ -34,7 +34,7 @@ class JpaUserRepositoryTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId(12345L)
+                                .oauthId("12345")
                                 .build();
 
         userRepository.save(user);
@@ -52,7 +52,7 @@ class JpaUserRepositoryTest {
     @Test
     void 존재하지_않는_oauthId를_전달하면_해당_회원을_Optional로_반환한다() {
         // given
-        final Long invalidOauthId = -999L;
+        final String invalidOauthId = "invalidOauthId";
 
         // when
         final Optional<User> actual = userRepository.findByOauthId(invalidOauthId);

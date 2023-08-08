@@ -40,13 +40,13 @@ public class AuthenticationService {
     }
 
     private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {
-        return userRepository.findByOauthId(userInformationDto.id())
+        return userRepository.findByOauthId(userInformationDto.findUserId())
                              .orElseGet(() -> {
                                  final User user = User.builder()
                                                        .name(oauth2Type.calculateNickname(userInformationDto))
                                                        .profileImage(null)
                                                        .reliability(0.0d)
-                                                       .oauthId(userInformationDto.id())
+                                                       .oauthId(userInformationDto.findUserId())
                                                        .build();
 
                                  return userRepository.save(user);
