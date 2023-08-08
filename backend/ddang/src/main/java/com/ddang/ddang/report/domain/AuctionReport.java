@@ -22,7 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString(of = {"id"})
+@ToString(of = {"id", "description"})
 public class AuctionReport extends BaseCreateTimeEntity {
 
     @Id
