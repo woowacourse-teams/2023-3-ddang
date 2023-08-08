@@ -52,12 +52,7 @@ public class MessageService {
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
         final User user = findUser(request.userId(), "메시지 조회할 권한이 없는 사용자입니다.");
         final ChatRoom chatRoom = findChatRoom(request.chatRoomId(), "조회하고자 하는 채팅방이 존재하지 않습니다.");
-
-        Long lastMessageId = request.lastMessageId();
-        if (lastMessageId != null) {
-            lastMessageId = findMessage(lastMessageId, "조회한 마지막 메시지가 존재하지 않습니다.").getId();
-            findMessage(request.lastMessageId(), "조회한 마지막 메시지가 존재하지 않습니다.");
-        }
+        final Long lastMessageId = findLastMessageId(request.lastMessageId());
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
                 user.getId(),
@@ -68,6 +63,14 @@ public class MessageService {
         return readMessages.stream()
                            .map(ReadMessageDto::from)
                            .collect(Collectors.toList());
+    }
+
+    private Long findLastMessageId(final Long messageId) {
+        if (messageId != null) {
+            return findMessage(messageId, "조회한 마지막 메시지가 존재하지 않습니다.").getId();
+        }
+
+        return null;
     }
 
     private Message findMessage(final Long messageId, final String message) {
