@@ -87,6 +87,7 @@ jacocoTestReport {
                             '**/*Response*',
                             '**/*Request*',
                             '**/*Dto*',
+                            '**/*PrivateClaims*',
                             '**/*Configuration*',
                             '**/*Appender*',
                             '**/*Helper*'
@@ -124,6 +125,7 @@ jacocoTestCoverageVerification {
                     '*.*Request*',
                     '*.*Application*',
                     '*.*Dto*',
+                    '*.*PrivateClaims*',
                     '*.*Configuration*',
                     '*.*Appender*',
                     '*.*Helper*'
