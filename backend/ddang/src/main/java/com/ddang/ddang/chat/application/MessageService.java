@@ -1,17 +1,23 @@
 package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,5 +49,31 @@ public class MessageService {
     private User getUser(final Long dto, final String message) {
         return userRepository.findById(dto)
                              .orElseThrow(() -> new UserNotFoundException(message));
+    }
+
+    public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
+        final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
+                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
+                                                            "조회하고자 하는 채팅방이 존재하지 않습니다."
+                                                    ));
+
+        Long lastMessageId = request.lastMessageId();
+        if (lastMessageId != null) {
+            lastMessageId = messageRepository.findById(request.lastMessageId())
+                                             .orElseThrow(() -> new MessageNotFoundException(
+                                                     "조회한 마지막 메시지가 존재하지 않습니다."
+                                             ))
+                                             .getId();
+        }
+
+        final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
+                request.userId(),
+                chatRoom.getId(),
+                lastMessageId
+        );
+
+        return readMessages.stream()
+                           .map(ReadMessageDto::from)
+                           .collect(Collectors.toList());
     }
 }
