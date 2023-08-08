@@ -98,6 +98,7 @@ class ChatRoomControllerTest {
 
         // when & then
         mockMvc.perform(post("/chattings/1/messages")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
                .andExpectAll(
