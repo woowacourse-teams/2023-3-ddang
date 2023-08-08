@@ -31,6 +31,7 @@ public class ChatRoomService {
     private final JpaUserRepository userRepository;
     private final JpaAuctionRepository auctionRepository;
 
+    @Transactional
     public Long create(final Long userId, final CreateChatRoomDto chatRoomDto) {
         final User findUser = findUser(userId);
         final Auction findAuction = findAuction(chatRoomDto);
