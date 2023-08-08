@@ -9,7 +9,7 @@ import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
-import com.ddang.ddang.report.application.exception.InvalidReportAuctionExcpetion;
+import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -157,7 +157,7 @@ class AuctionReportServiceTest {
 
         // when && then
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
-                .isInstanceOf(InvalidReportAuctionExcpetion.class)
+                .isInstanceOf(InvalidReportAuctionException.class)
                 .hasMessage("이미 삭제된 경매입니다.");
     }
 }

@@ -15,6 +15,9 @@ import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFile
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import java.net.MalformedURLException;
 import java.util.stream.Collectors;
+
+import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
+import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -161,6 +164,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(new ExceptionResponse("이미지 조회에 실패했습니다."));
+    }
+
+    @ExceptionHandler(InvalidReporterToAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidReporterToAuctionException(final InvalidReporterToAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReporterToAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidReportAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidReportAuctionException(final InvalidReportAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReportAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
     }
 
     @Override
