@@ -59,7 +59,6 @@ class QuerydslMessageRepositoryTest {
         querydslMessageRepository = new QuerydslMessageRepositoryImpl(queryFactory);
     }
 
-    // TODO: 아이디 대신 다른 방법 찾아보기
     @Test
     void 마지막으로_읽은_메시지_이후에_추가된_메시지를_조회한다() {
         // given
