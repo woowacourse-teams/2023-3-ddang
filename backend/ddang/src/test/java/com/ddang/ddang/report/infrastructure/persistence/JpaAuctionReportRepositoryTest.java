@@ -64,4 +64,44 @@ class JpaAuctionReportRepositoryTest {
 
         assertThat(auctionReport.getId()).isPositive();
     }
+
+    @Test
+    void 특정_경매_아이디와_신고자_아이디가_동일한_레코드가_존재하면_참을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .build();
+        final User user = new User("사용자", "이미지", 4.9);
+        final AuctionReport auctionReport = new AuctionReport(user, auction, "신고합니다");
+
+        auctionRepository.save(auction);
+        userRepository.save(user);
+        auctionReportRepository.save(auctionReport);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = auctionReportRepository.existsByAuctionIdAndReporterId(auction.getId(), user.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_경매_아이디와_신고자_아이디가_동일한_레코드가_존재하지_않는다면_거짓을_반환한다() {
+        // given
+        final long invalidAuctionId = -9999L;
+        final long invalidUserId = -9999L;
+
+        // when
+        final boolean actual = auctionReportRepository.existsByAuctionIdAndReporterId(invalidAuctionId, invalidUserId);
+
+        // then
+        assertThat(actual).isFalse();
+    }
 }

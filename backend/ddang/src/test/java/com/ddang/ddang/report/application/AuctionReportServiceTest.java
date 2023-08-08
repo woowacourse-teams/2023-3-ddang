@@ -9,6 +9,7 @@ import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.domain.User;
@@ -159,5 +160,33 @@ class AuctionReportServiceTest {
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
                 .isInstanceOf(InvalidReportAuctionException.class)
                 .hasMessage("이미 삭제된 경매입니다.");
+    }
+
+    @Test
+    void 이미_신고한_경매를_신고하는_경우_예외가_발생한다() {
+        // given
+        final User seller = new User("판매자", "이미지", 4.9);
+        final Auction auction = Auction.builder()
+                                       .seller(seller)
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+        final User user = new User("사용자", "이미지", 4.9);
+
+        userRepository.save(seller);
+        auctionRepository.save(auction);
+        userRepository.save(user);
+
+        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
+        auctionReportService.create(loginUserDto, createAuctionReportDto);
+
+        // when && then
+        assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
+                .isInstanceOf(AlreadyReportAuctionException.class)
+                .hasMessage("이미 신고한 경매입니다.");
     }
 }

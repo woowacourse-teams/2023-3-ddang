@@ -8,6 +8,7 @@ import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.presentation.dto.CreateAuctionReportRequest;
@@ -154,6 +155,25 @@ class AuctionReportControllerTest {
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidReportAuctionException.getMessage()))
+               );
+    }
+
+    @Test
+    void 이미_신고한_경매_신고시_400을_반환한다() throws Exception {
+        // given
+        final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
+        final AlreadyReportAuctionException alreadyReportAuctionException = new AlreadyReportAuctionException("이미 신고한 경매입니다.");
+
+        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class)))
+                .willThrow(alreadyReportAuctionException);
+
+        // when & then
+        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+                                                 .contentType(MediaType.APPLICATION_JSON)
+                                                 .content(objectMapper.writeValueAsString(auctionReportRequest)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(alreadyReportAuctionException.getMessage()))
                );
     }
 

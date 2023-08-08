@@ -16,6 +16,7 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import java.net.MalformedURLException;
 import java.util.stream.Collectors;
 
+import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -177,6 +178,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidReportAuctionException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidReportAuctionException(final InvalidReportAuctionException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidReportAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyReportAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyReportAuctionException(final AlreadyReportAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportAuctionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
