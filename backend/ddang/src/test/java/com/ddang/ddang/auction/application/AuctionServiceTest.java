@@ -342,7 +342,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 main.getId(),
                 List.of(auctionImage),
-                1L
+                seller.getId()
         );
 
         // when & then
@@ -579,7 +579,7 @@ class AuctionServiceTest {
     void 지정한_아이디에_해당하는_회원과_판매자가_일치하지_않는_경우_삭제시_예외가_발생한다() {
         // given
         final User seller = User.builder()
-                                .name("회원")
+                                .name("회원1")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
@@ -594,7 +594,7 @@ class AuctionServiceTest {
                                        .seller(seller)
                                        .build();
         final User user = User.builder()
-                              .name("회원")
+                              .name("회원2")
                               .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12346")

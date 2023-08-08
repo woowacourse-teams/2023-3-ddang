@@ -146,7 +146,7 @@ class AuthenticationServiceTest {
     @Test
     void refreshToken을_전달하면_새로운_accessToken을_반환한다() {
         // given
-        final Map<String, Object> privateClaims = Map.of("userId", "12345");
+        final Map<String, Object> privateClaims = Map.of("userId", 1L);
         final String refreshToken = "Bearer " + tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.REFRESH,

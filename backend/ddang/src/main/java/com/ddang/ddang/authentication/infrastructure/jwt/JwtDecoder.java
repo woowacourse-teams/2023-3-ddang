@@ -28,7 +28,7 @@ public class JwtDecoder implements TokenDecoder {
     public Optional<PrivateClaims> decode(final TokenType tokenType, final String token) {
         validateBearerToken(token);
 
-        return this.parseWithClaims(token, tokenType)
+        return this.parse(tokenType, token)
                    .map(this::convert);
     }
 
@@ -48,8 +48,9 @@ public class JwtDecoder implements TokenDecoder {
         }
     }
 
-    private Optional<Claims> parseWithClaims(final String token, final TokenType tokenType) {
+    private Optional<Claims> parse(final TokenType tokenType, final String token) {
         final String key = jwtConfigurationProperties.findTokenKey(tokenType);
+
         try {
             return Optional.of(
                     Jwts.parserBuilder()
@@ -64,7 +65,7 @@ public class JwtDecoder implements TokenDecoder {
     }
 
     private PrivateClaims convert(Claims claims) {
-        return new PrivateClaims(claims.get(CLAIM_NAME, String.class));
+        return new PrivateClaims(claims.get(CLAIM_NAME, Long.class));
     }
 
     private String findPureToken(String token) {

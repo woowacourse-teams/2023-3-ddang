@@ -73,7 +73,7 @@ class JwtDecoderTest {
     @Test
     void 유효한_토큰이면_해당_토큰의_본문을_반환한다() {
         // given
-        final Map<String, Object> privateClaims = Map.of("userId", "12345");
+        final Map<String, Object> privateClaims = Map.of("userId", 1L);
         final String accessToken = "Bearer " + jwtEncoder.encode(LocalDateTime.now(), TokenType.ACCESS, privateClaims);
 
         // when
