@@ -8,6 +8,7 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
+import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadAuctionDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
@@ -16,6 +17,7 @@ import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
+import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -321,6 +323,25 @@ class ChatRoomControllerTest {
                .andExpectAll(
                        status().isForbidden(),
                        jsonPath("$.message", is(userNotAccessibleException.getMessage()))
+               );
+    }
+
+    @Test
+    void 채팅방을_생성한다() throws Exception {
+        // given
+        final Long newChatRoomId = 1L;
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willReturn(newChatRoomId);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isCreated(),
+                       header().string(HttpHeaders.LOCATION, is("/chattings/" + newChatRoomId))
                );
     }
 }
