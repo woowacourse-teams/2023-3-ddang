@@ -3,6 +3,7 @@ package com.ddang.ddang.chat.application.dto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.image.domain.AuctionImage;
 
 import java.time.LocalDateTime;
 import java.util.List;
