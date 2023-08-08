@@ -1,5 +1,8 @@
 package com.ddang.ddang.chat.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -15,17 +18,13 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -55,10 +54,30 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User merry = new User("메리", "이미지", 5.0);
-        final User encho = new User("엔초", "이미지", 5.0);
-        final User jamie = new User("제이미", "이미지", 5.0);
-        final User zeeto = new User("지토", "이미지", 5.0);
+        final User merry = User.builder()
+                               .name("메리")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12345L)
+                               .build();
+        final User encho = User.builder()
+                               .name("엔초")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12346L)
+                               .build();
+        final User jamie = User.builder()
+                               .name("제이미")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12347L)
+                               .build();
+        final User zeeto = User.builder()
+                               .name("지토")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12348L)
+                               .build();
         userRepository.save(merry);
         userRepository.save(encho);
         userRepository.save(jamie);
@@ -127,8 +146,18 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_조회한다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12346L)
+                               .build();
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -166,7 +195,12 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_조회를_요청한_사용자의_정보를_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = new User("구매자", "profileImage.png", 5.0);
+        final User user = User.builder()
+                              .name("구매자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
         userRepository.save(user);
 
         final Auction auction = Auction.builder()
@@ -190,7 +224,12 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = new User("구매자", "profileImage.png", 5.0);
+        final User user = User.builder()
+                              .name("구매자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
         userRepository.save(user);
 
         final Long invalidChatRoomId = -999L;
@@ -206,9 +245,24 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_주어진_사용자가_채팅의_참여자가_아니라면_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
-        final User stranger = new User("일반인", "profileImage.png", 5.0);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12346L)
+                               .build();
+        final User stranger = User.builder()
+                                  .name("일반인")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId(12347L)
+                                  .build();
         userRepository.save(seller);
         userRepository.save(buyer);
         userRepository.save(stranger);

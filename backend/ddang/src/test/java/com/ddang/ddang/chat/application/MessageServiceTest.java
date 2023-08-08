@@ -1,5 +1,8 @@
 package com.ddang.ddang.chat.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -15,15 +18,11 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -69,19 +68,21 @@ class MessageServiceTest {
 
         auctionRepository.save(auction);
 
-        final User writer = new User(
-                "발신자",
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                0.8
-        );
+        final User writer = User.builder()
+                                .name("발신자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(writer);
 
-        final User receiver = new User(
-                "수신자",
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                0.8
-        );
+        final User receiver = User.builder()
+                                  .name("수신자")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId(12346L)
+                                  .build();
 
         userRepository.save(receiver);
 
@@ -126,19 +127,21 @@ class MessageServiceTest {
 
         auctionRepository.save(auction);
 
-        final User writer = new User(
-                "발신자",
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                0.8
-        );
+        final User writer = User.builder()
+                                .name("발신자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(writer);
 
-        final User receiver = new User(
-                "수신자",
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                0.8
-        );
+        final User receiver = User.builder()
+                                  .name("수신자")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId(12346L)
+                                  .build();
 
         userRepository.save(receiver);
 
@@ -180,11 +183,12 @@ class MessageServiceTest {
 
         auctionRepository.save(auction);
 
-        final User receiver = new User(
-                "수신자",
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                0.8
-        );
+        final User receiver = User.builder()
+                                  .name("수신자")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId(12345L)
+                                  .build();
 
         userRepository.save(receiver);
 
@@ -230,11 +234,12 @@ class MessageServiceTest {
 
         auctionRepository.save(auction);
 
-        final User writer = new User(
-                "발신자",
-                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-                0.8
-        );
+        final User writer = User.builder()
+                                .name("발신자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(writer);
 

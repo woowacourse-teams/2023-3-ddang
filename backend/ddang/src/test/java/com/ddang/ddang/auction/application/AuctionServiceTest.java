@@ -84,7 +84,12 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -170,7 +175,12 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -215,7 +225,12 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -254,7 +269,12 @@ class AuctionServiceTest {
 
         regionRepository.save(firstRegion);
 
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -299,7 +319,12 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -348,7 +373,12 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -421,7 +451,12 @@ class AuctionServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -470,7 +505,12 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
         // given
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
 
         userRepository.save(seller);
 
@@ -518,7 +558,12 @@ class AuctionServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
         final Long invalidSellerId = -999L;
 
         userRepository.save(seller);
@@ -533,7 +578,12 @@ class AuctionServiceTest {
     @Test
     void 지정한_아이디에_해당하는_회원과_판매자가_일치하지_않는_경우_삭제시_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "https://profie.com", 4.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
         userRepository.save(seller);
         final Auction auction = Auction.builder()
                                        .title("경매 상품 1")
@@ -543,7 +593,12 @@ class AuctionServiceTest {
                                        .closingTime(LocalDateTime.now())
                                        .seller(seller)
                                        .build();
-        final User user = new User("회원", "https://profiles.com", 4.5d);
+        final User user = User.builder()
+                              .name("회원")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12346L)
+                              .build();
 
         userRepository.save(user);
         auctionRepository.save(auction);

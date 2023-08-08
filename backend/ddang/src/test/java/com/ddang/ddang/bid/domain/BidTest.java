@@ -1,16 +1,15 @@
 package com.ddang.ddang.bid.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.user.domain.User;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -26,7 +25,12 @@ class BidTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -47,7 +51,12 @@ class BidTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
         auction.updateLastBid(bid);
@@ -69,7 +78,12 @@ class BidTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
         auction.updateLastBid(bid);

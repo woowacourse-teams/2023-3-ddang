@@ -1,5 +1,7 @@
 package com.ddang.ddang.chat.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -17,8 +19,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -42,7 +42,12 @@ class ChatRoomTest {
     @CsvSource(value = {"0:true", "9:true", "10:false"}, delimiter = ':')
     void 채팅방_비활성화_여부를_체크한다(final long plusDay, final boolean expected) {
         // given
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User buyer = User.builder()
+                               .name("회원")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12345L)
+                               .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
@@ -66,8 +71,18 @@ class ChatRoomTest {
     @Test
     void 주어진_사용자의_채팅상대를_반환한다() {
         // given
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12346L)
+                               .build();
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -94,8 +109,18 @@ class ChatRoomTest {
     @Test
     void 주어진_사용자가_판매자라면_채팅_참여자이다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12346L)
+                               .build();
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -121,8 +146,18 @@ class ChatRoomTest {
     @Test
     void 주어진_사용자가_구매자라면_채팅_참여자이다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12346L)
+                               .build();
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -148,9 +183,24 @@ class ChatRoomTest {
     @Test
     void 주어진_사용자가_판매자와_구매자_모두_아니라면_채팅_참여자가_아니다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
-        final User stranger = new User("일반인", "profileImage.png", 5.0);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId(12345L)
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId(12346L)
+                               .build();
+        final User stranger = User.builder()
+                                  .name("일반인")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId(12347L)
+                                  .build();
         userRepository.save(seller);
         userRepository.save(buyer);
         userRepository.save(stranger);

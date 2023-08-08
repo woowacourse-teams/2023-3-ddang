@@ -1,5 +1,7 @@
 package com.ddang.ddang.bid.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -12,6 +14,8 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -19,11 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -53,7 +52,12 @@ class JpaBidRepositoryTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         // when
@@ -78,7 +82,12 @@ class JpaBidRepositoryTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         auctionRepository.save(auction);
@@ -112,7 +121,12 @@ class JpaBidRepositoryTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
         final Bid bid1 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid2 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid3 = new Bid(auction2, user, new BidPrice(10_000));
@@ -154,7 +168,12 @@ class JpaBidRepositoryTest {
                                         .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId(12345L)
+                              .build();
         final Bid bid1 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid2 = new Bid(auction1, user, new BidPrice(12_000));
         final Bid bid3 = new Bid(auction2, user, new BidPrice(10_000));
