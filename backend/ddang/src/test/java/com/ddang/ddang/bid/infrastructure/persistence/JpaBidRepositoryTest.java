@@ -53,7 +53,12 @@ class JpaBidRepositoryTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         // when
@@ -78,7 +83,12 @@ class JpaBidRepositoryTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         auctionRepository.save(auction);
@@ -99,20 +109,25 @@ class JpaBidRepositoryTest {
     void 특정_경매의_입찰을_모두_조회한다() {
         // given
         final Auction auction1 = Auction.builder()
-                                       .title("경매 상품 1")
-                                       .description("이것은 경매 상품 1 입니다.")
-                                       .bidUnit(new BidUnit(1_000))
-                                       .startPrice(new Price(1_000))
-                                       .closingTime(LocalDateTime.now())
-                                       .build();
+                                        .title("경매 상품 1")
+                                        .description("이것은 경매 상품 1 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
         final Auction auction2 = Auction.builder()
-                                       .title("경매 상품 2")
-                                       .description("이것은 경매 상품 2 입니다.")
-                                       .bidUnit(new BidUnit(1_000))
-                                       .startPrice(new Price(1_000))
-                                       .closingTime(LocalDateTime.now())
-                                       .build();
-        final User user = new User("사용자", "이미지", 4.9);
+                                        .title("경매 상품 2")
+                                        .description("이것은 경매 상품 2 입니다.")
+                                        .bidUnit(new BidUnit(1_000))
+                                        .startPrice(new Price(1_000))
+                                        .closingTime(LocalDateTime.now())
+                                        .build();
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final Bid bid1 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid2 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid3 = new Bid(auction2, user, new BidPrice(10_000));
@@ -154,7 +169,12 @@ class JpaBidRepositoryTest {
                                         .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now())
                                         .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final Bid bid1 = new Bid(auction1, user, new BidPrice(10_000));
         final Bid bid2 = new Bid(auction1, user, new BidPrice(12_000));
         final Bid bid3 = new Bid(auction2, user, new BidPrice(10_000));

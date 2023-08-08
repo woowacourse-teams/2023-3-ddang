@@ -43,8 +43,18 @@ class JpaMessageRepositoryTest {
     @Test
     void 메시지를_저장한다() {
         // given
-        final User participant1 = new User("판매자", "이미지", 5.0);
-        final User participant2 = new User("구매자", "이미지", 5.0);
+        final User participant1 = User.builder()
+                                      .name("판매자")
+                                      .profileImage("profile.png")
+                                      .reliability(4.7d)
+                                      .oauthId("12345")
+                                      .build();
+        final User participant2 = User.builder()
+                                      .name("구매자")
+                                      .profileImage("profile.png")
+                                      .reliability(4.7d)
+                                      .oauthId("12346")
+                                      .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();

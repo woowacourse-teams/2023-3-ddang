@@ -50,7 +50,12 @@ class JpaChatRoomRepositoryTest {
     @Test
     void 채팅방을_저장한다() {
         // given
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
@@ -73,7 +78,12 @@ class JpaChatRoomRepositoryTest {
     @Test
     void 지정한_아이디에_대한_채팅방을_조회한다() {
         // given
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
@@ -108,10 +118,30 @@ class JpaChatRoomRepositoryTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User merry = new User("메리", "이미지", 5.0);
-        final User encho = new User("엔초", "이미지", 5.0);
-        final User jamie = new User("제이미", "이미지", 5.0);
-        final User zeeto = new User("지토", "이미지", 5.0);
+        final User merry = User.builder()
+                               .name("메리")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
+        final User encho = User.builder()
+                               .name("엔초")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User jamie = User.builder()
+                               .name("제이미")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12347")
+                               .build();
+        final User zeeto = User.builder()
+                               .name("지토")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12348")
+                               .build();
         userRepository.save(merry);
         userRepository.save(encho);
         userRepository.save(jamie);

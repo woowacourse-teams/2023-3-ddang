@@ -26,7 +26,12 @@ class BidTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -47,7 +52,12 @@ class BidTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
         auction.updateLastBid(bid);
@@ -69,7 +79,12 @@ class BidTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
         auction.updateLastBid(bid);

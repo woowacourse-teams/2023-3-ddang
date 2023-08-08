@@ -322,8 +322,18 @@ class ChatRoomControllerTest {
         final Category sub = new Category("서브");
         main.addSubCategory(sub);
 
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
 
         final Auction auction1 = Auction.builder()
                                         .title("경매 상품 1")
