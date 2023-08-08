@@ -3,6 +3,10 @@ package com.ddang.ddang.exception;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
+import com.ddang.ddang.authentication.application.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
+import com.ddang.ddang.authentication.infrastructure.jwt.exception.InvalidTokenTypeException;
+import com.ddang.ddang.authentication.infrastructure.oauth2.exception.InvalidSocialOauth2TokenException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -80,7 +84,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(com.ddang.ddang.bid.application.exception.UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final com.ddang.ddang.bid.application.exception.UserNotFoundException ex) {
+    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(
+            final com.ddang.ddang.bid.application.exception.UserNotFoundException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -142,7 +147,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UnsupportedImageFileExtensionException.class)
-    public ResponseEntity<ExceptionResponse> handleUnsupportedImageFileExtensionException(final UnsupportedImageFileExtensionException ex) {
+    public ResponseEntity<ExceptionResponse> handleUnsupportedImageFileExtensionException(
+            final UnsupportedImageFileExtensionException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedImageFileExtensionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -172,6 +178,35 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotAccessibleException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler({
+            InvalidTokenTypeException.class,
+            InvalidSocialOauth2TokenException.class
+    })
+    public ResponseEntity<ExceptionResponse> handleInvalidTokenException(final Exception ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ex.getCause().getClass().getSimpleName()), ex);
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidTokenException(final InvalidTokenException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidTokenException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UnsupportedSocialLoginException.class)
+    public ResponseEntity<ExceptionResponse> handleUnsupportedSocialLoginException(
+            final UnsupportedSocialLoginException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedSocialLoginException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
