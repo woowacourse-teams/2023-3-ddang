@@ -57,8 +57,19 @@ public class ChatRoomController {
                                           .concat(AUCTIONS_IMAGE_BASE_URL);
     }
 
+    @GetMapping("/{chatRoomId}")
+    public ResponseEntity<ReadChatRoomResponse> readChatRoomById(
+            @PathVariable final Long chatRoomId,
+            @AuthenticateUser final AuthenticateUserInfo userInfo
+    ) {
+        final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(chatRoomId, userInfo.id());
+        final ReadChatRoomResponse response = ReadChatRoomResponse.of(chatRoomDto, calculateBaseImageUrl());
+
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/{chatRoomId}/messages")
-    public ResponseEntity<CreateMessageResponse> create(
+    public ResponseEntity<CreateMessageResponse> createMessage(
             @PathVariable final Long chatRoomId,
             @RequestBody @Valid final CreateMessageRequest request
     ) {

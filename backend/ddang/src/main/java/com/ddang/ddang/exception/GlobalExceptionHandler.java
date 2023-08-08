@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
@@ -13,9 +14,6 @@ import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
-import java.net.MalformedURLException;
-import java.util.stream.Collectors;
-
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
@@ -29,6 +27,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.net.MalformedURLException;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -165,6 +166,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(new ExceptionResponse("이미지 조회에 실패했습니다."));
+    }
+
+    @ExceptionHandler(UserNotAccessibleException.class)
+    public ResponseEntity<ExceptionResponse> handleUserNotAccessibleException(
+            final UserNotAccessibleException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UserNotAccessibleException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                             .body(new ExceptionResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(InvalidReporterToAuctionException.class)
