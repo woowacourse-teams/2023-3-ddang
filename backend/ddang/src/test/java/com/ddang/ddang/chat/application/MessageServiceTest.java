@@ -460,6 +460,67 @@ class MessageServiceTest {
     }
 
     @Test
+    void 잘못된_사용자가_메시지를_조회할_경우_예외가_발생한다() {
+        // given
+        final BidUnit bidUnit = new BidUnit(1_000);
+        final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final User writer = new User(
+                "발신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(writer);
+
+        final User receiver = new User(
+                "수신자",
+                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
+                0.8
+        );
+
+        userRepository.save(receiver);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, writer);
+
+        chatRoomRepository.save(chatRoom);
+
+        final String contents = "메시지 내용";
+
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                chatRoom.getId(),
+                writer.getId(),
+                receiver.getId(),
+                contents
+        );
+
+        final Long lastMessageId = messageService.create(createMessageDto);
+
+        final Long invalidUserId = -999L;
+        final ReadMessageRequest request = new ReadMessageRequest(invalidUserId, chatRoom.getId(), lastMessageId);
+
+        // when & then
+        assertThatThrownBy(() -> messageService.readAllByLastMessageId(request))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("메시지 조회할 권한이 없는 사용자입니다.");
+    }
+
+    @Test
     void 조회한_채팅방이_없는_경우_예외가_발생한다() {
         // given
         final BidUnit bidUnit = new BidUnit(1_000);
