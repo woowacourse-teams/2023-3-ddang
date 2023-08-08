@@ -1,7 +1,7 @@
 package com.ddang.ddang.authentication.infrastructure.oauth2;
 
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
-import com.ddang.ddang.authentication.infrastructure.oauth2.exception.UnsupportedSocialLoginException;
+import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import java.util.Locale;
 
 public enum Oauth2Type {

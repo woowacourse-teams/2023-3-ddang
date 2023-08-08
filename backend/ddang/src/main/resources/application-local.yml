@@ -42,3 +42,9 @@ token:
     refresh-key: thisistoolargerefreshtokenkeyfordummykeydataforlocal
     access-expired-hours: 12
     refresh-expired-hours: 1460
+
+oauth2:
+  client:
+    providers:
+      kakao:
+        user-info-uri: https://kapi.kakao.com/v2/user/me
