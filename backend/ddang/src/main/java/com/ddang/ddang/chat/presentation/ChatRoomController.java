@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -96,11 +97,11 @@ public class ChatRoomController {
                              .body(response);
     }
 
-    @GetMapping("/{chatRoomId}/messages/{lastMessageId}")
+    @GetMapping("/{chatRoomId}/messages")
     public ResponseEntity<List<ReadMessageResponse>> readAllByLastMessageId(
             @AuthenticateUser final AuthenticateUserInfo userInfo,
             @PathVariable final Long chatRoomId,
-            @PathVariable(required = false) final Long lastMessageId
+            @RequestParam(required = false) final Long lastMessageId
     ) {
         final ReadMessageRequest readMessageRequest = new ReadMessageRequest(userInfo.id(), chatRoomId, lastMessageId);
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(readMessageRequest);

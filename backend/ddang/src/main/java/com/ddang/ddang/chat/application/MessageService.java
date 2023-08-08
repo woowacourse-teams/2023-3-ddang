@@ -4,6 +4,7 @@ import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -31,6 +32,9 @@ public class MessageService {
     @Transactional
     public Long create(final CreateMessageDto dto) {
         final ChatRoom chatRoom = findChatRoom(dto.chatRoomId(), "지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+        if (!chatRoom.isChatAvailableTime(dto.createdAt())) {
+            throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
+        }
         final User writer = findUser(dto.writerId(), "지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
         final User receiver = findUser(dto.receiverId(), "지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
         final Message message = dto.toEntity(chatRoom, writer, receiver);

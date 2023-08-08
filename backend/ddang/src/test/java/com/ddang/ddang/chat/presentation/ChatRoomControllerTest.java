@@ -246,7 +246,7 @@ class ChatRoomControllerTest {
     }
 
     @Test
-    void 메시지를_조회한다() throws Exception {
+    void 지정한_아이디에_해당하는_채팅방을_조회한다() throws Exception {
         // given
         final Category main = new Category("메인");
         final Category sub = new Category("서브");

@@ -151,7 +151,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(UnsupportedImageFileExtensionException.class)
-    public ResponseEntity<ExceptionResponse> handleUnsupportedImageFileExtensionException(final UnsupportedImageFileExtensionException ex) {
+    public ResponseEntity<ExceptionResponse> handleUnsupportedImageFileExtensionException(
+            final UnsupportedImageFileExtensionException ex
+    ) {
         logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedImageFileExtensionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

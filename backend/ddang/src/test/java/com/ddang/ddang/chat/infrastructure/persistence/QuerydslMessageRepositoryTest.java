@@ -62,25 +62,35 @@ class QuerydslMessageRepositoryTest {
     @Test
     void 마지막으로_읽은_메시지_이후에_추가된_메시지를_조회한다() {
         // given
-        final User participant1 = new User("판매자", "이미지", 5.0);
-        final User participant2 = new User("구매자", "이미지", 5.0);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("78923")
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
 
-        userRepository.save(participant1);
-        userRepository.save(participant2);
+        userRepository.save(seller);
+        userRepository.save(buyer);
         auctionRepository.save(auction);
 
-        final ChatRoom chatRoom = new ChatRoom(auction, participant2);
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
         chatRoomRepository.save(chatRoom);
 
         final int messagesCount = 10;
         for (int count = 0; count < messagesCount; count++) {
             final Message message = Message.builder()
                                            .chatRoom(chatRoom)
-                                           .writer(participant1)
-                                           .receiver(participant2)
+                                           .writer(seller)
+                                           .receiver(buyer)
                                            .contents("안녕하세요")
                                            .build();
 
@@ -93,7 +103,63 @@ class QuerydslMessageRepositoryTest {
         // when
         final Long lastMessageId = 3L;
         final List<Message> messages = messageRepository.findMessagesAllByLastMessageId(
-                participant1.getId(),
+                seller.getId(),
+                chatRoom.getId(),
+                lastMessageId
+        );
+
+        // then
+        assertThat(messages).hasSizeGreaterThanOrEqualTo(7);
+    }
+
+    @Test
+    void 상대방이_메시지를_추가한_경우_마지막으로_읽은_메시지_이후의_메시지를_조회한다() {
+        // given
+        final User writer = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("78923")
+                                .build();
+        final User receiver = User.builder()
+                                  .name("구매자")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId("12345")
+                                  .build();
+
+        userRepository.save(writer);
+        userRepository.save(receiver);
+
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, receiver);
+
+        chatRoomRepository.save(chatRoom);
+
+        final int messagesCount = 10;
+        for (int count = 0; count < messagesCount; count++) {
+            final Message message = Message.builder()
+                                           .chatRoom(chatRoom)
+                                           .writer(writer)
+                                           .receiver(receiver)
+                                           .contents("안녕하세요")
+                                           .build();
+
+            messageRepository.save(message);
+        }
+
+        em.flush();
+        em.clear();
+
+        // when
+        final Long lastMessageId = 3L;
+        final List<Message> messages = messageRepository.findMessagesAllByLastMessageId(
+                receiver.getId(),
                 chatRoom.getId(),
                 lastMessageId
         );

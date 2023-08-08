@@ -122,6 +122,6 @@ public class AuctionService {
 
     private User findUser(final Long userId) {
         return userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+                             .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
     }
 }

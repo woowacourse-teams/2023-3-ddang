@@ -2,6 +2,7 @@ package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.Message;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -27,7 +28,8 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
         return queryFactory
                 .selectFrom(message)
                 .where(
-                        message.writer.id.eq(userId),
+                        message.writer.id.eq(userId)
+                                         .or(message.receiver.id.eq(userId)),
                         message.chatRoom.id.eq(chatRoomId),
                         isGreaterThanLastId(lastMessageId)
                 )
@@ -35,11 +37,11 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
                 .fetch();
     }
 
-    private BooleanBuilder isGreaterThanLastId(final Long lastMessageId) {
+    private BooleanExpression isGreaterThanLastId(final Long lastMessageId) {
         if (lastMessageId == null) {
             return null;
         }
 
-        return booleanBuilder.or(message.id.gt(lastMessageId));
+        return message.id.gt(lastMessageId);
     }
 }
