@@ -7,6 +7,7 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -151,7 +152,9 @@ class MessageServiceTest {
                 contents
         );
 
-        return chatRoomRepository.save(chatRoom);
+        assertThatThrownBy(() -> messageService.create(createMessageDto))
+                .isInstanceOf(ChatRoomNotFoundException.class)
+                .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
     }
 
     @Test
