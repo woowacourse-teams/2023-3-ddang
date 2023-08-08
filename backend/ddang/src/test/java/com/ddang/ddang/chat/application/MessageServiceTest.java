@@ -95,6 +95,7 @@ class MessageServiceTest {
 
         final CreateMessageDto createMessageDto = new CreateMessageDto(
                 chatRoom.getId(),
+                LocalDateTime.now(),
                 writer.getId(),
                 receiver.getId(),
                 contents
@@ -151,6 +152,7 @@ class MessageServiceTest {
 
         final CreateMessageDto createMessageDto = new CreateMessageDto(
                 invalidChatRoomId,
+                LocalDateTime.now(),
                 writer.getId(),
                 receiver.getId(),
                 contents
@@ -203,6 +205,7 @@ class MessageServiceTest {
 
         final CreateMessageDto createMessageDto = new CreateMessageDto(
                 chatRoom.getId(),
+                LocalDateTime.now(),
                 invalidWriterId,
                 receiver.getId(),
                 contents
@@ -254,6 +257,7 @@ class MessageServiceTest {
 
         final CreateMessageDto createMessageDto = new CreateMessageDto(
                 chatRoom.getId(),
+                LocalDateTime.now(),
                 writer.getId(),
                 invalidReceiverId,
                 contents

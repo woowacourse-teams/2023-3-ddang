@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -86,21 +85,22 @@ public class ChatRoomController {
 
     @PostMapping("/{chatRoomId}/messages")
     public ResponseEntity<CreateMessageResponse> createMessage(
+            @AuthenticateUser final AuthenticateUserInfo userInfo,
             @PathVariable final Long chatRoomId,
             @RequestBody @Valid final CreateMessageRequest request
     ) {
-        final Long messageId = messageService.create(CreateMessageDto.of(chatRoomId, request));
+        final Long messageId = messageService.create(CreateMessageDto.of(userInfo.id(), chatRoomId, request));
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 
         return ResponseEntity.created(URI.create("/chattings/" + chatRoomId + "/messages/" + messageId))
                              .body(response);
     }
 
-    @GetMapping("/{chatRoomId}/messages")
+    @GetMapping("/{chatRoomId}/messages/{lastMessageId}")
     public ResponseEntity<List<ReadMessageResponse>> readAllByLastMessageId(
             @AuthenticateUser final AuthenticateUserInfo userInfo,
             @PathVariable final Long chatRoomId,
-            @RequestParam(required = false) final Long lastMessageId
+            @PathVariable(required = false) final Long lastMessageId
     ) {
         final ReadMessageRequest readMessageRequest = new ReadMessageRequest(userInfo.id(), chatRoomId, lastMessageId);
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(readMessageRequest);
@@ -114,6 +114,8 @@ public class ChatRoomController {
     }
 
     private boolean calculateMessageOwner(final ReadMessageDto readMessageDto, final AuthenticateUserInfo userInfo) {
-        return readMessageDto.writer().getId().equals(userInfo.id());
+        return readMessageDto.writer()
+                             .getId()
+                             .equals(userInfo.id());
     }
 }
