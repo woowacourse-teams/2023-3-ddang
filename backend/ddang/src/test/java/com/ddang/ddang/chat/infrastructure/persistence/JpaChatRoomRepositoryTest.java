@@ -4,6 +4,9 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -21,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,6 +50,9 @@ class JpaChatRoomRepositoryTest {
 
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    JpaBidRepository bidRepository;
 
     @Test
     void 채팅방을_저장한다() {
@@ -161,6 +168,50 @@ class JpaChatRoomRepositoryTest {
             softAssertions.assertThat(actual).hasSize(2);
             softAssertions.assertThat(actual.get(0).getId()).isEqualTo(enchoZeeto.getId());
             softAssertions.assertThat(actual.get(1).getId()).isEqualTo(jamieEncho.getId());
+        });
+    }
+
+    @Test
+    void 지정한_경매_아이디가_포함된_채팅방을_조회한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 1")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+
+        auction.updateLastBid(bid);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final Optional<ChatRoom> actual = chatRoomRepository.findByAuctionId(auction.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isPresent();
+            softAssertions.assertThat(actual.get().getId()).isEqualTo(chatRoom.getId());
         });
     }
 }
