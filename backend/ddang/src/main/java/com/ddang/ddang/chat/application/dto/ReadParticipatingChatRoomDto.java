@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.application.dto;
 
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.user.domain.User;
 
