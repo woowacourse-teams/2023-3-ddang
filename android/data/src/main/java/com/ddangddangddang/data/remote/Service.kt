@@ -1,11 +1,13 @@
 package com.ddangddangddang.data.remote
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
+import com.ddangddangddang.data.model.request.KakaoLoginRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
-import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
+import com.ddangddangddang.data.model.response.RegionDetailResponse
+import com.ddangddangddang.data.model.response.TokenResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -39,7 +41,7 @@ interface Service {
         @Header("Authorization") authorization: String,
         @Body auctionBidRequest: AuctionBidRequest,
     ): ApiResponse<Unit>
-  
+
     @GET("/regions")
     suspend fun fetchFirstRegions(): ApiResponse<List<RegionDetailResponse>>
 
@@ -57,4 +59,9 @@ interface Service {
 
     @GET("/categories/{id}")
     suspend fun fetchSubCategories(@Path("id") mainId: Long): ApiResponse<List<EachCategoryResponse>>
+
+    @POST("/oauth2/login/kakao")
+    suspend fun loginByKakao(
+        @Body kakaoLoginRequest: KakaoLoginRequest,
+    ): ApiResponse<TokenResponse>
 }
