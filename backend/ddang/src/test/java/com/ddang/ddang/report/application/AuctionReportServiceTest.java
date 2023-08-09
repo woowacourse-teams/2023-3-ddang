@@ -104,7 +104,7 @@ class AuctionReportServiceTest {
         final LoginUserDto loginUserDto = new LoginUserDto(invalidUserId);
         final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
 
-        // when && then
+        // when & then
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
@@ -125,7 +125,7 @@ class AuctionReportServiceTest {
         final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(invalidAuctionId, "신고합니다");
 
-        // when && then
+        // when & then
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
@@ -155,7 +155,7 @@ class AuctionReportServiceTest {
         final LoginUserDto loginUserDto = new LoginUserDto(seller.getId());
         final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
 
-        // when && then
+        // when & then
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
                 .isInstanceOf(InvalidReporterToAuctionException.class)
                 .hasMessage("본인 경매글입니다.");
@@ -194,7 +194,7 @@ class AuctionReportServiceTest {
         final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
         final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
 
-        // when && then
+        // when & then
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
                 .isInstanceOf(InvalidReportAuctionException.class)
                 .hasMessage("이미 삭제된 경매입니다.");
@@ -232,7 +232,7 @@ class AuctionReportServiceTest {
         final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
         auctionReportService.create(loginUserDto, createAuctionReportDto);
 
-        // when && then
+        // when & then
         assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
                 .isInstanceOf(AlreadyReportAuctionException.class)
                 .hasMessage("이미 신고한 경매입니다.");
