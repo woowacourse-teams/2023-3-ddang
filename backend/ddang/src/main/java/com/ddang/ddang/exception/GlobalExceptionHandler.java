@@ -1,7 +1,7 @@
 package com.ddang.ddang.exception;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
@@ -106,11 +106,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(UserNotAuthorizationException.class)
+    @ExceptionHandler(UserForbiddenException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotAuthorizationException(
-            final UserNotAuthorizationException ex
+            final UserForbiddenException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserNotAuthorizationException.class), ex);
+        logger.warn(String.format(EXCEPTION_FORMAT, UserForbiddenException.class), ex);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
