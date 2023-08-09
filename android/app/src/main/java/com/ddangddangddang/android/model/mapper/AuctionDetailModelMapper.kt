@@ -2,6 +2,7 @@ package com.ddangddangddang.android.model.mapper
 
 import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.AuctionDetailStatusModel
+import com.ddangddangddang.android.model.ChatAuctionDetailModel
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.model.SellerModel
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
@@ -34,6 +35,7 @@ object AuctionDetailModelMapper : Mapper<AuctionDetailModel, AuctionDetailRespon
             },
             auction.auctioneerCount,
             SellerModel(seller.id, seller.image, seller.nickname, seller.reliability),
+            ChatAuctionDetailModel(chat.id, chat.isChatParticipant),
         )
     }
 }

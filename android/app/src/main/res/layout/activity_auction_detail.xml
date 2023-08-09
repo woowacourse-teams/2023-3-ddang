@@ -29,7 +29,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:contentDescription="@string/all_app_bar_back_key_description"
-                android:onClick="@{()->viewModel.exit()}"
+                android:onClick="@{()->viewModel.setExitEvent()}"
                 android:src="@drawable/ic_left_24"
                 app:tint="@color/black_900" />
 
@@ -48,7 +48,7 @@
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/btn_submit_auction"
+            app:layout_constraintBottom_toTopOf="@id/btn_auction_detail_bottom_button"
             app:layout_constraintTop_toBottomOf="@id/tb_detail_auction">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -304,18 +304,20 @@
         </androidx.core.widget.NestedScrollView>
 
         <Button
-            android:id="@+id/btn_submit_auction"
+            android:id="@+id/btn_auction_detail_bottom_button"
             android:layout_width="0dp"
             android:layout_height="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
+            android:enabled="@{viewModel.auctionDetailBottomButtonStatus == null ? false :viewModel.auctionDetailBottomButtonStatus.enabled }"
             android:gravity="center"
-            android:onClick="@{()->viewModel.popupAuctionBid()}"
+            android:onClick="@{()->viewModel.handleAuctionDetailBottomButton()}"
             android:padding="0dp"
-            android:text="@string/detail_auction_submit"
+            android:text="@{AuctionDetailFormatter.INSTANCE.getAuctionBottomButtonText(context,viewModel.auctionDetailBottomButtonStatus)}"
             android:textSize="@dimen/textsize_submit_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="입찰하기" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

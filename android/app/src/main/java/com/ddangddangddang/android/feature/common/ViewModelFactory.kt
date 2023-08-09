@@ -15,11 +15,13 @@ import com.ddangddangddang.android.feature.splash.SplashViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
+import com.ddangddangddang.data.repository.ChatRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
 
 val auctionRepository = AuctionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 val categoryRepository = CategoryRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 val regionRepository = RegionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
+val chatRepository = ChatRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -31,6 +33,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(auctionRepository)
                 isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(
                     auctionRepository,
+                    chatRepository,
                 )
 
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(
