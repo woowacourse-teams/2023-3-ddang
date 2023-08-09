@@ -1,5 +1,6 @@
 package com.ddang.ddang.user.application;
 
+import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -37,7 +38,7 @@ class UserServiceTest {
         userRepository.save(user);
 
         // when
-        final ReadUserDto actual = userService.readByUserId(user.getId());
+        final ReadUserDto actual = userService.readById(new LoginUserDto(user.getId()));
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -53,7 +54,7 @@ class UserServiceTest {
         final Long invalidUserId = -999L;
 
         // when & then
-        assertThatThrownBy(() -> userService.readByUserId(invalidUserId))
+        assertThatThrownBy(() -> userService.readById(new LoginUserDto(invalidUserId)))
                 .isInstanceOf(UserNotFoundException.class).hasMessage("사용자 정보를 사용할 수 없습니다.");
     }
 }
