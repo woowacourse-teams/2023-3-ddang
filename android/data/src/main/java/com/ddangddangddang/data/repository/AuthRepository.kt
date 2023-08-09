@@ -6,4 +6,8 @@ import com.ddangddangddang.data.remote.ApiResponse
 
 interface AuthRepository {
     suspend fun loginByKakao(kakaoToken: KakaoLoginRequest): ApiResponse<TokenResponse>
+
+    fun getAccessToken(): String
+
+    fun getRefreshToken(): String
 }

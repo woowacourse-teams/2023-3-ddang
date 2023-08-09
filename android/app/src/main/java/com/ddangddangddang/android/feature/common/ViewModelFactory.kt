@@ -11,16 +11,15 @@ import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
+import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
-import com.ddangddangddang.data.repository.AuthRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
 
 val auctionRepository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val categoryRepository = CategoryRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val regionRepository = RegionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
-val authRepository = AuthRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -50,7 +49,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                     regionRepository,
                 )
 
-                isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(authRepository)
+                isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(DdangDdangDdang.authRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
