@@ -1,10 +1,13 @@
 package com.ddangddangddang.android.feature.splash
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySplashBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.login.LoginActivity
+import com.ddangddangddang.android.feature.main.MainActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
 
 class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_splash) {
@@ -27,7 +30,13 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
         }
     }
 
-    private fun navigateToMain() {}
+    private fun navigateToMain() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
 
-    private fun navigateToLogin() {}
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
+    }
 }
