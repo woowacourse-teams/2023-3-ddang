@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Table;
 import jakarta.persistence.metamodel.EntityType;
-import jakarta.persistence.metamodel.Metamodel;
 import java.util.List;
 import org.springframework.test.context.TestContext;
 import org.springframework.test.context.support.AbstractTestExecutionListener;
@@ -25,8 +24,6 @@ public class DatabaseCleanListener extends AbstractTestExecutionListener {
     }
 
     private List<String> calculateTableNames(final EntityManager em) {
-        final Metamodel metamodel = em.getMetamodel();
-
         return em.getMetamodel()
                  .getEntities()
                  .stream()
