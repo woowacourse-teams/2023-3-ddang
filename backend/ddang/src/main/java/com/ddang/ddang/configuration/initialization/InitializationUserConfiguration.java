@@ -31,7 +31,7 @@ public class InitializationUserConfiguration implements ApplicationRunner {
                                 .build();
 
         final User buyer2 = User.builder()
-                                .name("구매자1")
+                                .name("구매자2")
                                 .profileImage(IMAGE_URL)
                                 .reliability(0.8d)
                                 .oauthId("12347")
