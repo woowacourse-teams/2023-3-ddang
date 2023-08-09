@@ -24,7 +24,8 @@ public class Oauth2WebConfiguration implements WebMvcConfigurer {
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         registry.addInterceptor(authenticationInterceptor)
-                .addPathPatterns("/**");
+                .addPathPatterns("/**")
+                .excludePathPatterns("/oauth2/**");
     }
 
     @Override
