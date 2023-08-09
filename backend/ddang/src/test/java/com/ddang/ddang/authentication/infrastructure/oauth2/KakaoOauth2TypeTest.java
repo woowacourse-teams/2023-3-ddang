@@ -45,6 +45,6 @@ class KakaoOauth2TypeTest {
         final String actual = Oauth2Type.KAKAO.calculateNickname(userInformationDto);
 
         // then
-        assertThat(actual).contains("kakao");
+        assertThat(actual).isEqualTo("kakao12345");
     }
 }
