@@ -11,14 +11,16 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.chat.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+
 import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

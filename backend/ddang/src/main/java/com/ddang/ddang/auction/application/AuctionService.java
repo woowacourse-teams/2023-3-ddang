@@ -8,7 +8,6 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -19,14 +18,16 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)

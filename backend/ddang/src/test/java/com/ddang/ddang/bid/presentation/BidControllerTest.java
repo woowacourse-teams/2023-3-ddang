@@ -8,7 +8,7 @@ import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
 import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
@@ -384,9 +384,12 @@ class BidControllerTest {
                .andDo(
                        restDocs.document(
                                responseFields(
-                                       fieldWithPath("bids.[]").type(JsonFieldType.ARRAY).description("특정 경매의 모든 입찰 목록"),
-                                       fieldWithPath("bids.[].name").type(JsonFieldType.STRING).description("입찰한 사용자의 닉네임"),
-                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING).description("입찰한 사용자의 프로필 이미지 URL"),
+                                       fieldWithPath("bids.[]").type(JsonFieldType.ARRAY)
+                                                               .description("특정 경매의 모든 입찰 목록"),
+                                       fieldWithPath("bids.[].name").type(JsonFieldType.STRING)
+                                                                    .description("입찰한 사용자의 닉네임"),
+                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING)
+                                                                            .description("입찰한 사용자의 프로필 이미지 URL"),
                                        fieldWithPath("bids.[].price").type(JsonFieldType.NUMBER).description("입찰한 금액"),
                                        fieldWithPath("bids.[].bidTime").type(JsonFieldType.STRING).description("입찰한 시간")
                                )

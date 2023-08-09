@@ -15,7 +15,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -27,9 +27,11 @@ import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

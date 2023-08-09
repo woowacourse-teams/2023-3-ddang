@@ -2,11 +2,11 @@ package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.chat.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
