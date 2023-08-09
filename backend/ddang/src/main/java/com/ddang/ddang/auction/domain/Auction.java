@@ -1,6 +1,5 @@
 package com.ddang.ddang.auction.domain;
 
-import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
@@ -32,6 +31,7 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -150,23 +150,24 @@ public class Auction extends BaseTimeEntity {
     }
 
     public boolean isWinner(final User user, final LocalDateTime targetTime) {
-        final User winner = findWinner(targetTime);
+        final Optional<User> nullableWinner = findWinner(targetTime);
 
-        return user.equals(winner);
+        return nullableWinner.filter(user::equals)
+                             .isPresent();
     }
 
-    public User findWinner(final LocalDateTime targetTime) {
-        checkWinnerExist(targetTime);
-
-        return lastBid.getBidder();
-    }
-
-    private void checkWinnerExist(final LocalDateTime targetTime) {
-        if (!isClosed(targetTime)) {
-            throw new WinnerNotFoundException("경매가 종료된 후에 낙찰자가 결정됩니다.");
+    public Optional<User> findWinner(final LocalDateTime targetTime) {
+        if (isWinnerExist(targetTime)) {
+            return Optional.of(lastBid.getBidder());
         }
+
+        return Optional.empty();
+    }
+
+    private boolean isWinnerExist(final LocalDateTime targetTime) {
         if (auctioneerCount == 0) {
-            throw new WinnerNotFoundException("입찰자가 존재하지 않아 낙찰자가 없습니다.");
+            return false;
         }
+        return isClosed(targetTime);
     }
 }

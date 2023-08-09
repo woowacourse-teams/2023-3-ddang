@@ -1,27 +1,37 @@
 package com.ddang.ddang.auction.domain;
 
-import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.configuration.JpaConfiguration;
+import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class AuctionTest {
+
+    @Autowired
+    JpaUserRepository userRepository;
 
     @Test
     void 경매를_삭제한다() {
@@ -201,10 +211,14 @@ class AuctionTest {
     }
 
     @Test
-    void 주어진_사용자가_경매의_최종_낙찰자인지_판단한다() {
+    void 주어진_사용자가_낙찰자라면_참을_반환한다() {
         // given
         User seller = new User("판매자", "profileImage.png", 5.0);
         User winner = new User("낙찰자", "profileImage.png", 5.0);
+
+        userRepository.save(seller);
+        userRepository.save(winner);
+
         final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
 
         final Auction auction = Auction.builder()
@@ -222,54 +236,16 @@ class AuctionTest {
     }
 
     @Test
-    void 경매가_종료되지_않았다면_최종_낙찰자인지_판단할_때_예외가_발생한다() {
+    void 주어진_사용자가_낙찰자가_아니라면_거짓을_반환한다() {
         // given
         User seller = new User("판매자", "profileImage.png", 5.0);
         User winner = new User("낙찰자", "profileImage.png", 5.0);
-        final LocalDateTime futureTime = LocalDateTime.now().plusDays(3L);
+        User stranger = new User("일반인", "profileImage.png", 5.0);
 
-        final Auction auction = Auction.builder()
-                                       .title("경매")
-                                       .seller(seller)
-                                       .closingTime(futureTime)
-                                       .build();
-        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+        userRepository.save(seller);
+        userRepository.save(winner);
+        userRepository.save(stranger);
 
-        final LocalDateTime currentTime = LocalDateTime.now();
-
-        // when & then
-        assertThatThrownBy(() -> auction.isWinner(winner, currentTime))
-                .isInstanceOf(WinnerNotFoundException.class)
-                .hasMessage("경매가 종료된 후에 낙찰자가 결정됩니다.");
-    }
-
-    @Test
-    void 입찰자가_존재하지_않는다면_최종_낙찰자인지_판단할_때_예외가_발생한다() {
-        // given
-        User seller = new User("판매자", "profileImage.png", 5.0);
-        User winner = new User("낙찰자", "profileImage.png", 5.0);
-        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
-
-        final Auction auction = Auction.builder()
-                                       .title("경매")
-                                       .seller(seller)
-                                       .closingTime(pastTime)
-                                       .build();
-
-        final LocalDateTime currentTime = LocalDateTime.now();
-
-        // when & then
-        assertThatThrownBy(() -> auction.isWinner(winner, currentTime))
-                .isInstanceOf(WinnerNotFoundException.class)
-                .hasMessage("입찰자가 존재하지 않아 낙찰자가 없습니다.");
-    }
-
-
-    @Test
-    void 경매의_최종_낙찰자를_반환한다() {
-        // given
-        User seller = new User("판매자", "profileImage.png", 5.0);
-        User winner = new User("낙찰자", "profileImage.png", 5.0);
         final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
 
         final Auction auction = Auction.builder()
@@ -280,17 +256,50 @@ class AuctionTest {
         auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
 
         // when
-        final User actual = auction.findWinner(LocalDateTime.now());
+        final boolean actual = auction.isWinner(stranger, LocalDateTime.now());
 
         // then
-        assertThat(actual).isEqualTo(winner);
+        assertThat(actual).isFalse();
     }
 
+
     @Test
-    void 경매가_종료되지_않았다면_최종_낙찰자를_구할_떄_예외가_발생한다() {
+    void 경매의_최종_낙찰자를_반환한다() {
         // given
         User seller = new User("판매자", "profileImage.png", 5.0);
         User winner = new User("낙찰자", "profileImage.png", 5.0);
+
+        userRepository.save(seller);
+        userRepository.save(winner);
+
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+
+        // when
+        final Optional<User> actual = auction.findWinner(LocalDateTime.now());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            assertThat(actual).isPresent();
+            assertThat(actual).contains(winner);
+        });
+    }
+
+    @Test
+    void 경매가_종료되지_않았다면_최종_낙찰자가_없다() {
+        // given
+        User seller = new User("판매자", "profileImage.png", 5.0);
+        User winner = new User("낙찰자", "profileImage.png", 5.0);
+
+        userRepository.save(seller);
+        userRepository.save(winner);
+
         final LocalDateTime futureTime = LocalDateTime.now().plusDays(3L);
 
         final Auction auction = Auction.builder()
@@ -300,18 +309,19 @@ class AuctionTest {
                                        .build();
         auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
 
-        final LocalDateTime currentTime = LocalDateTime.now();
+        // when
+        final Optional<User> actual = auction.findWinner(LocalDateTime.now());
 
-        // when & then
-        assertThatThrownBy(() -> auction.findWinner(currentTime))
-                .isInstanceOf(WinnerNotFoundException.class)
-                .hasMessage("경매가 종료된 후에 낙찰자가 결정됩니다.");
+        // then
+        assertThat(actual).isEmpty();
     }
 
     @Test
-    void 입찰자가_존재하지_않는다면_최종_낙찰자를_구할_때_예외가_발생한다() {
+    void 입찰자가_존재하지_않는다면_최종_낙찰자가_없다() {
         // given
         User seller = new User("판매자", "profileImage.png", 5.0);
+        userRepository.save(seller);
+
         final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
 
         final Auction auction = Auction.builder()
@@ -320,11 +330,10 @@ class AuctionTest {
                                        .closingTime(pastTime)
                                        .build();
 
-        final LocalDateTime currentTime = LocalDateTime.now();
+        // when
+        final Optional<User> actual = auction.findWinner(LocalDateTime.now());
 
-        // when & then
-        assertThatThrownBy(() -> auction.findWinner(currentTime))
-                .isInstanceOf(WinnerNotFoundException.class)
-                .hasMessage("입찰자가 존재하지 않아 낙찰자가 없습니다.");
+        // then
+        assertThat(actual).isEmpty();
     }
 }
