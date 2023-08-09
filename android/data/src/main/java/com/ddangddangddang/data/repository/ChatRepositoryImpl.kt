@@ -8,7 +8,7 @@ import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.Service
+import com.ddangddangddang.data.remote.AuctionService
 
 class ChatRepositoryImpl private constructor(
     private val chatRemoteDataSource: ChatRemoteDataSource,
@@ -38,13 +38,13 @@ class ChatRepositoryImpl private constructor(
         @Volatile
         private var instance: ChatRepositoryImpl? = null
 
-        fun getInstance(service: Service): ChatRepositoryImpl {
+        fun getInstance(service: AuctionService): ChatRepositoryImpl {
             return instance ?: synchronized(this) {
                 instance ?: createInstance(service)
             }
         }
 
-        private fun createInstance(service: Service): ChatRepositoryImpl {
+        private fun createInstance(service: AuctionService): ChatRepositoryImpl {
             val remoteDataSource = ChatRemoteDataSource(service)
             return ChatRepositoryImpl(remoteDataSource)
                 .also { instance = it }

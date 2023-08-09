@@ -11,17 +11,17 @@ import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
+import com.ddangddangddang.android.feature.splash.SplashViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
-import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
 import com.ddangddangddang.data.repository.ChatRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
 
-val auctionRepository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
-val categoryRepository = CategoryRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
-val regionRepository = RegionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
-val chatRepository = ChatRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
+val auctionRepository = AuctionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
+val categoryRepository = CategoryRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
+val regionRepository = RegionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
+val chatRepository = ChatRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -30,10 +30,10 @@ val viewModelFactory = object : ViewModelProvider.Factory {
             // 레포지토리 싱글톤 객체 얻어옴
             when {
                 isAssignableFrom(MainViewModel::class.java) -> MainViewModel()
-
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(auctionRepository)
                 isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(
                     auctionRepository,
+                    chatRepository,
                 )
 
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(
@@ -53,6 +53,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 )
 
                 isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(DdangDdangDdang.authRepository)
+                isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(DdangDdangDdang.authRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T

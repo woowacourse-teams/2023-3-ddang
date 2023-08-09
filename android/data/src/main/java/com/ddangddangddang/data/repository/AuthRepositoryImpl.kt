@@ -5,9 +5,10 @@ import com.ddangddangddang.data.datasource.AuthLocalDataSource
 import com.ddangddangddang.data.datasource.AuthRemoteDataSource
 import com.ddangddangddang.data.local.AuthSharedPreference
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
+import com.ddangddangddang.data.model.request.RefreshTokenRequest
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.Service
+import com.ddangddangddang.data.remote.AuthService
 
 class AuthRepositoryImpl private constructor(
     private val localDataSource: AuthLocalDataSource,
@@ -15,6 +16,15 @@ class AuthRepositoryImpl private constructor(
 ) : AuthRepository {
     override suspend fun loginByKakao(kakaoToken: KakaoLoginRequest): ApiResponse<TokenResponse> {
         val response = remoteDataSource.loginByKakao(kakaoToken)
+        if (response is ApiResponse.Success) {
+            localDataSource.saveToken(response.body)
+        }
+        return response
+    }
+
+    override suspend fun refreshToken(): ApiResponse<TokenResponse> {
+        val response =
+            remoteDataSource.refreshToken(RefreshTokenRequest(localDataSource.getRefreshToken()))
         if (response is ApiResponse.Success) {
             localDataSource.saveToken(response.body)
         }
@@ -29,13 +39,13 @@ class AuthRepositoryImpl private constructor(
         @Volatile
         private var instance: AuthRepositoryImpl? = null
 
-        fun getInstance(context: Context, service: Service): AuthRepositoryImpl {
+        fun getInstance(context: Context, service: AuthService): AuthRepositoryImpl {
             return instance ?: synchronized(this) {
                 instance ?: createInstance(context, service)
             }
         }
 
-        private fun createInstance(context: Context, service: Service): AuthRepositoryImpl {
+        private fun createInstance(context: Context, service: AuthService): AuthRepositoryImpl {
             val sharedPreferences = AuthSharedPreference(context)
             val localDataSource = AuthLocalDataSource(sharedPreferences)
             val remoteDataSource = AuthRemoteDataSource(service)

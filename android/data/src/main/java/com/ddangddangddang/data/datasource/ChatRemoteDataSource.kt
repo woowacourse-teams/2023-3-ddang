@@ -7,9 +7,9 @@ import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.Service
+import com.ddangddangddang.data.remote.AuctionService
 
-class ChatRemoteDataSource(private val service: Service) {
+class ChatRemoteDataSource(private val service: AuctionService) {
     suspend fun getChatRoomId(getChatRoomIdRequest: GetChatRoomIdRequest): ApiResponse<ChatRoomIdResponse> =
         service.getChatRoomId(getChatRoomIdRequest)
 
