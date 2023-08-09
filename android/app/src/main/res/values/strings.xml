@@ -91,4 +91,6 @@
 
     <!-- login -->
     <string name="login_kakao_login_button_description">카카오 로그인 버튼</string>
+    <string name="login_snackbar_login_failed_title">로그인에 실패했습니다</string>
+
 </resources>

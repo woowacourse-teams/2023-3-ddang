@@ -24,15 +24,15 @@ class LoginViewModel(
         viewModelScope.launch {
             val kakaoToken = KakaoLoginRequest(accessToken)
             when (repository.loginByKakao(kakaoToken)) {
-                is ApiResponse.Success -> {}
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Success -> _event.value = LoginEvent.CompleteLoginEvent
+                else -> _event.value = LoginEvent.FailureLoginEvent
             }
         }
     }
 
     sealed class LoginEvent {
         object KakaoLoginEvent : LoginEvent()
+        object CompleteLoginEvent : LoginEvent()
+        object FailureLoginEvent : LoginEvent()
     }
 }
