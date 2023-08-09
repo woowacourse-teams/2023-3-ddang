@@ -492,7 +492,7 @@ class AuctionServiceTest {
         auctionService.create(createAuctionDto2);
 
         // when
-        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(null, 1);
+        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(null,null, 1);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

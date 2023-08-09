@@ -22,7 +22,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
+    public Slice<Auction> findAuctionsAllByLastAuctionId(final Long userId, final Long lastAuctionId, final int size) {
         final List<Auction> auctions = queryFactory
                 .selectFrom(auction)
                 .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
@@ -32,7 +32,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 .leftJoin(auction.subCategory, category).fetchJoin()
                 .leftJoin(category.mainCategory).fetchJoin()
                 .leftJoin(auction.seller).fetchJoin()
-                .where(auction.deleted.isFalse(), lessThanLastAuctionId(lastAuctionId))
+                .where(auction.deleted.isFalse(), notEqualsUserId(userId), lessThanLastAuctionId(lastAuctionId))
                 .orderBy(auction.id.desc())
                 .limit(size + 1L)
                 .fetch();
@@ -46,6 +46,14 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         }
 
         return auction.id.lt(lastAuctionId);
+    }
+
+    private BooleanExpression notEqualsUserId(final Long userId) {
+        if (userId == null) {
+            return null;
+        }
+
+        return auction.id.negate().eq(userId);
     }
 
     @Override

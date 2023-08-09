@@ -101,8 +101,8 @@ public class AuctionService {
                                 ));
     }
 
-    public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final int size) {
-        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(lastAuctionId, size);
+    public ReadAuctionsDto readAllByLastAuctionId(final Long userId, final Long lastAuctionId, final int size) {
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(userId, lastAuctionId, size);
 
         return ReadAuctionsDto.from(auctions);
     }

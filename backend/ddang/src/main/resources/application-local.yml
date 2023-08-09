@@ -6,7 +6,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: none
     properties:
       hibernate:
         format_sql: true
@@ -22,8 +22,8 @@ spring:
 open:
   api:
     region:
-      service: service_secret
-      key: key_secret
+      service: e144de6e52eb4c60b020
+      key: 5bd02fdb76c24151b829
 
 data:
   init:

@@ -180,7 +180,11 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(null, 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+                null,
+                null,
+                1
+        );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -224,7 +228,12 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
+
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+                null,
+                auction3.getId(),
+                1
+        );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -270,7 +279,11 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+                null,
+                auction3.getId(),
+                1
+        );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

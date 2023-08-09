@@ -1,53 +1,17 @@
 package com.ddang.ddang.auction.presentation;
 
-import com.ddang.ddang.auction.application.AuctionService;
-import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
-import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
-import com.ddang.ddang.configuration.RestDocsConfiguration;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
-import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
-import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
-import com.ddang.ddang.region.application.exception.RegionNotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -63,7 +27,62 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {AuctionController.class})
+import com.ddang.ddang.auction.application.AuctionService;
+import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.PrivateClaims;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
+import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
+import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
+import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@WebMvcTest(controllers = {AuctionController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -82,12 +101,22 @@ class AuctionControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    TokenDecoder mockTokenDecoder;
+
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp(@Autowired RestDocumentationContextProvider provider) {
+        mockTokenDecoder = mock(TokenDecoder.class);
+
+        final AuthenticationStore store = new AuthenticationStore();
+        final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(mockTokenDecoder, store);
+        final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
+
         mockMvc = MockMvcBuilders.standaloneSetup(auctionController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
+                                 .addInterceptors(interceptor)
+                                 .setCustomArgumentResolvers(resolver)
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)
@@ -124,14 +153,17 @@ class AuctionControllerTest {
                 1L,
                 1_000
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(auctionService.create(any(CreateAuctionDto.class))).willReturn(createInfoAuctionDto);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         // when & then
         mockMvc.perform(multipart("/auctions")
                        .file(auctionImage)
                        .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isCreated(),
@@ -140,6 +172,9 @@ class AuctionControllerTest {
                )
                .andDo(
                        restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
                                requestParts(
                                        partWithName("images").description("이미지 파일(Array, 최대 10장)"),
                                        partWithName("request").description("요청 데이터")
@@ -180,7 +215,9 @@ class AuctionControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 objectMapper.writeValueAsBytes(createAuctionRequest)
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionService.create(any())).willThrow(new UserNotFoundException("지정한 판매자를 찾을 수 없습니다."));
 
         // when & then
@@ -188,6 +225,7 @@ class AuctionControllerTest {
                        .file(auctionImage)
                        .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -219,7 +257,9 @@ class AuctionControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 objectMapper.writeValueAsBytes(createAuctionRequest)
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionService.create(any())).willThrow(
                 new CategoryNotFoundException("지정한 판매자를 찾을 수 없습니다.")
         );
@@ -229,6 +269,7 @@ class AuctionControllerTest {
                        .file(auctionImage)
                        .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -260,7 +301,9 @@ class AuctionControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 objectMapper.writeValueAsBytes(createAuctionRequest)
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionService.create(any())).willThrow(
                 new RegionNotFoundException("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다.")
         );
@@ -270,6 +313,7 @@ class AuctionControllerTest {
                        .file(auctionImage)
                        .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -301,7 +345,9 @@ class AuctionControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 objectMapper.writeValueAsBytes(createAuctionRequest)
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionService.create(any())).willThrow(
                 new EmptyImageException("이미지 파일의 데이터가 비어 있습니다.")
         );
@@ -311,6 +357,7 @@ class AuctionControllerTest {
                        .file(auctionImage)
                        .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -342,7 +389,9 @@ class AuctionControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 objectMapper.writeValueAsBytes(createAuctionRequest)
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionService.create(any())).willThrow(
                 new StoreImageFailureException("이미지 저장에 실패했습니다.", null)
         );
@@ -352,6 +401,7 @@ class AuctionControllerTest {
                        .file(auctionImage)
                        .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isInternalServerError(),
@@ -383,7 +433,9 @@ class AuctionControllerTest {
                 MediaType.APPLICATION_JSON_VALUE,
                 objectMapper.writeValueAsBytes(createAuctionRequest)
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionService.create(any())).willThrow(
                 new UnsupportedImageFileExtensionException("지원하지 않는 확장자입니다. : ")
         );
@@ -393,6 +445,7 @@ class AuctionControllerTest {
                        .file(auctionImage)
                        .file(request)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -546,7 +599,7 @@ class AuctionControllerTest {
         );
 
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
-        given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
+        given(auctionService.readAllByLastAuctionId(any(), any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
         mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON)
@@ -591,10 +644,17 @@ class AuctionControllerTest {
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         willDoNothing().given(auctionService).deleteByAuctionId(anyLong(), anyLong());
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/auctions/{auctionId}", 1L).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(RestDocumentationRequestBuilders
+                       .delete("/auctions/{auctionId}", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
                .andExpectAll(status().isNoContent())
                .andDo(
                        restDocs.document(
@@ -609,12 +669,17 @@ class AuctionControllerTest {
     void 경매_삭제시_지정한_아이디에_해당하는_경매가_없다면_404를_반환한다() throws Exception {
         // given
         final Long invalidAuctionId = -999L;
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         willThrow(new AuctionNotFoundException("지정한 아이디에 대한 경매를 찾을 수 없습니다."))
                 .given(auctionService).deleteByAuctionId(anyLong(), anyLong());
 
         // when & then
-        mockMvc.perform(delete("/auctions/{auctionId}", invalidAuctionId).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(delete("/auctions/{auctionId}", invalidAuctionId)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message").exists()
@@ -625,13 +690,17 @@ class AuctionControllerTest {
     void 경매_삭제시_유효한_회원이_아니라면_404를_반환한다() throws Exception {
         // given
         final Long invalidAuctionId = -999L;
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         willThrow(new UserNotFoundException("회원 정보를 찾을 수 없습니다."))
                 .given(auctionService).deleteByAuctionId(anyLong(), anyLong());
 
         // when & then
         mockMvc.perform(delete("/auctions/{auctionId}", invalidAuctionId)
-                       .contentType(MediaType.APPLICATION_JSON))
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message").exists()
