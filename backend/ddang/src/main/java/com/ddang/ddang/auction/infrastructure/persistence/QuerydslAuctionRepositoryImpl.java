@@ -53,7 +53,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
             return null;
         }
 
-        return auction.id.negate().eq(userId);
+        return auction.seller.id.eq(userId).not();
     }
 
     @Override
