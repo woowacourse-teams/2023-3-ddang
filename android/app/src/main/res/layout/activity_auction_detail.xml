@@ -29,7 +29,7 @@
                 android:layout_height="24dp"
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:contentDescription="@string/all_app_bar_back_key_description"
-                android:onClick="@{()->viewModel.exitEvent()}"
+                android:onClick="@{()->viewModel.setExitEvent()}"
                 android:src="@drawable/ic_left_24"
                 app:tint="@color/black_900" />
 

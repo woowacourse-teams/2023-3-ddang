@@ -83,7 +83,7 @@ class AuctionDetailViewModel(
         }
     }
 
-    fun exitEvent() {
+    fun setExitEvent() {
         _event.value = AuctionDetailEvent.Exit
     }
 
