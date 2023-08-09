@@ -66,9 +66,13 @@ public class ChatRoomService {
     }
 
     private void checkUserCanParticipate(final User findUser, final Auction findAuction) {
-        if (!findAuction.isOwner(findUser) && !findAuction.isWinner(findUser, LocalDateTime.now())) {
+        if (!isSellerOrBuyer(findUser, findAuction)) {
             throw new UserNotAccessibleException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
         }
+    }
+
+    private boolean isSellerOrBuyer(final User findUser, final Auction findAuction) {
+        return findAuction.isOwner(findUser) || findAuction.isWinner(findUser, LocalDateTime.now());
     }
 
     private void checkAlreadyExist(final Auction findAuction) {
