@@ -1,5 +1,7 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -13,6 +15,8 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -20,11 +24,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -50,7 +49,12 @@ class JpaChatRoomRepositoryTest {
     @Test
     void 채팅방을_저장한다() {
         // given
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
@@ -73,7 +77,12 @@ class JpaChatRoomRepositoryTest {
     @Test
     void 지정한_아이디에_대한_채팅방을_조회한다() {
         // given
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
@@ -108,10 +117,30 @@ class JpaChatRoomRepositoryTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User merry = new User("메리", "이미지", 5.0);
-        final User encho = new User("엔초", "이미지", 5.0);
-        final User jamie = new User("제이미", "이미지", 5.0);
-        final User zeeto = new User("지토", "이미지", 5.0);
+        final User merry = User.builder()
+                               .name("메리")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
+        final User encho = User.builder()
+                               .name("엔초")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User jamie = User.builder()
+                               .name("제이미")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12347")
+                               .build();
+        final User zeeto = User.builder()
+                               .name("지토")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12348")
+                               .build();
         userRepository.save(merry);
         userRepository.save(encho);
         userRepository.save(jamie);
