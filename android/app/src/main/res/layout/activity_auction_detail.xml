@@ -312,7 +312,7 @@
             android:gravity="center"
             android:onClick="@{()->viewModel.handleAuctionDetailBottomButton()}"
             android:padding="0dp"
-            android:text="@{viewModel.auctionDetailBottomButtonStatus == null ? viewModel.text : context.getString(viewModel.auctionDetailBottomButtonStatus.text)}"
+            android:text="@{AuctionDetailFormatter.INSTANCE.getAuctionBottomButtonText(context,viewModel.auctionDetailBottomButtonStatus)}"
             android:textSize="@dimen/textsize_submit_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

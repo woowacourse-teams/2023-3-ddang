@@ -37,8 +37,6 @@ class AuctionDetailViewModel(
             return auction.lastBidPrice + auction.bidUnit
         }
 
-    val text = ""
-
     fun loadAuctionDetail(auctionId: Long) {
         viewModelScope.launch {
             when (val response = auctionRepository.getAuctionDetail(auctionId)) {
