@@ -12,7 +12,7 @@ public class Oauth2TypeConverterConfiguration implements WebMvcConfigurer {
     private final Oauth2TypeConverter oauth2TypeConverter;
 
     @Override
-    public void addFormatters(FormatterRegistry registry) {
+    public void addFormatters(final FormatterRegistry registry) {
         registry.addConverter(oauth2TypeConverter);
     }
 }

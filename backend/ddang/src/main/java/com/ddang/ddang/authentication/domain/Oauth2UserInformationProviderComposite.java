@@ -15,10 +15,10 @@ public class Oauth2UserInformationProviderComposite {
 
     public Oauth2UserInformationProviderComposite(final Set<OAuth2UserInformationProvider> providers) {
         this.mappings = providers.stream()
-                .collect(Collectors.toMap(
-                        OAuth2UserInformationProvider::supportsOauth2Type,
-                        provider -> provider
-                ));
+                                 .collect(Collectors.toMap(
+                                         OAuth2UserInformationProvider::supportsOauth2Type,
+                                         provider -> provider
+                                 ));
     }
 
     public OAuth2UserInformationProvider findProvider(final Oauth2Type oauth2Type) {
