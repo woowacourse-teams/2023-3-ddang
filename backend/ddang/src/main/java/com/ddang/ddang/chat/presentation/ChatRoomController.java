@@ -108,8 +108,7 @@ public class ChatRoomController {
         final List<ReadMessageResponse> responses = readMessageDtos.stream()
                                                                    .map(readMessageDto -> ReadMessageResponse.of(
                                                                            readMessageDto,
-                                                                           calculateMessageOwner(readMessageDto, userInfo))
-                                                                   )
+                                                                           calculateMessageOwner(readMessageDto, userInfo)))
                                                                    .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }

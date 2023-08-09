@@ -5,11 +5,8 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.user.domain.User;
 
-import java.time.LocalDateTime;
-
 public record CreateMessageDto(
         Long chatRoomId,
-        LocalDateTime createdAt,
         Long writerId,
         Long receiverId,
         String contents
@@ -18,7 +15,6 @@ public record CreateMessageDto(
     public static CreateMessageDto of(final Long writerId, final Long chatRoomId, final CreateMessageRequest request) {
         return new CreateMessageDto(
                 chatRoomId,
-                request.createdTime(),
                 writerId,
                 request.receiverId(),
                 request.contents()

@@ -32,15 +32,17 @@ public class MessageService {
     @Transactional
     public Long create(final CreateMessageDto dto) {
         final ChatRoom chatRoom = findChatRoom(dto.chatRoomId(), "지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        if (!chatRoom.isChatAvailableTime(dto.createdAt())) {
-            throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
-        }
         final User writer = findUser(dto.writerId(), "지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
         final User receiver = findUser(dto.receiverId(), "지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
         final Message message = dto.toEntity(chatRoom, writer, receiver);
 
-        return messageRepository.save(message)
-                                .getId();
+        final Message savedMessage = messageRepository.save(message);
+
+        if (!chatRoom.isChatAvailableTime(savedMessage.getCreatedTime())) {
+            throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
+        }
+
+        return message.getId();
     }
 
     private ChatRoom findChatRoom(final Long chatRoomId, final String message) {
