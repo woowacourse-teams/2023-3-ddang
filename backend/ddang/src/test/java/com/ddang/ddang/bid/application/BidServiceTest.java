@@ -1,5 +1,8 @@
 package com.ddang.ddang.bid.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
@@ -15,19 +18,15 @@ import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -46,7 +45,12 @@ class BidServiceTest {
     @Test
     void 입찰을_등록한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -55,7 +59,12 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12346")
+                              .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -78,7 +87,12 @@ class BidServiceTest {
     @Test
     void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액_이상의_금액으로_입찰을_등록할_수_있다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -87,8 +101,18 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user1 = new User("사용자1", "이미지1", 4.9);
-        final User user2 = new User("사용자2", "이미지2", 3.4);
+        final User user1 = User.builder()
+                               .name("사용자1")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User user2 = User.builder()
+                               .name("사용자2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12347")
+                               .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -112,7 +136,12 @@ class BidServiceTest {
     @Test
     void 첫_입찰자는_시작가를_입찰로_등록할_수_있다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -121,7 +150,12 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User buyer = new User("사용자2", "이미지2", 4.9);
+        final User buyer = User.builder()
+                               .name("사용자2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -142,7 +176,12 @@ class BidServiceTest {
         // given
         final Long invaliAuctionId = -9999L;
 
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         userRepository.save(user);
 
         final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
@@ -188,7 +227,12 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().minusDays(1))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         auctionRepository.save(auction);
         userRepository.save(user);
@@ -212,7 +256,12 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         auctionRepository.save(auction);
         userRepository.save(user);
@@ -229,7 +278,12 @@ class BidServiceTest {
 
     @Test
     void 판매자가_입찰하는_경우_예외가_발생한다() {
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final Auction auction = Auction.builder()
                                        .seller(user)
                                        .title("경매 상품 1")
@@ -254,7 +308,12 @@ class BidServiceTest {
     @Test
     void 첫_입찰자가_시작가_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -263,7 +322,12 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12346")
+                              .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -281,7 +345,12 @@ class BidServiceTest {
     @Test
     void 마지막_입찰자가_연속으로_입찰하는_경우_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -290,7 +359,12 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12346")
+                              .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -312,7 +386,12 @@ class BidServiceTest {
     @Test
     void 마지막_입찰액보다_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -321,8 +400,18 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user1 = new User("사용자1", "이미지1", 4.9);
-        final User user2 = new User("사용자2", "이미지2", 4.9);
+        final User user1 = User.builder()
+                               .name("사용자1")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User user2 = User.builder()
+                               .name("사용자2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12347")
+                               .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -345,7 +434,12 @@ class BidServiceTest {
     @Test
     void 최소_입찰_단위보다_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -354,8 +448,18 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user1 = new User("사용자1", "이미지1", 4.9);
-        final User user2 = new User("사용자2", "이미지2", 4.9);
+        final User user1 = User.builder()
+                               .name("사용자1")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User user2 = User.builder()
+                               .name("사용자2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12347")
+                               .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -386,7 +490,12 @@ class BidServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("사용자1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         auctionRepository.save(auction);
         userRepository.save(user);
@@ -403,7 +512,12 @@ class BidServiceTest {
     @Test
     void 특정_경매에_대한_입찰_목록을_조회한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction1 = Auction.builder()
                                         .seller(seller)
                                         .title("경매 상품 1")
@@ -420,8 +534,18 @@ class BidServiceTest {
                                         .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now().plusDays(7))
                                         .build();
-        final User user1 = new User("사용자1", "이미지1", 4.9);
-        final User user2 = new User("사용자2", "이미지2", 4.9);
+        final User user1 = User.builder()
+                               .name("사용자1")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User user2 = User.builder()
+                               .name("사용자2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12347")
+                               .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction1);
@@ -461,7 +585,12 @@ class BidServiceTest {
                                         .startPrice(new Price(1_000))
                                         .closingTime(LocalDateTime.now().plusDays(7))
                                         .build();
-        final User user1 = new User("사용자1", "이미지1", 4.9);
+        final User user1 = User.builder()
+                               .name("사용자1")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
 
         auctionRepository.save(auction1);
         userRepository.save(user1);
@@ -470,7 +599,7 @@ class BidServiceTest {
         final List<ReadBidDto> actual = bidService.readAllByAuctionId(auction1.getId());
 
         // then
-        assertThat(actual).hasSize(0);
+        assertThat(actual).isEmpty();
     }
 
     @Test

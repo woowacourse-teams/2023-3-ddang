@@ -1,21 +1,20 @@
 package com.ddang.ddang.auction.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.user.domain.User;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -115,7 +114,12 @@ class AuctionTest {
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("회원")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -149,7 +153,12 @@ class AuctionTest {
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = User.builder()
+                              .name("회원")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         auction.updateLastBid(bid);
@@ -164,7 +173,12 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하면_참을_반환한다() {
         // given
-        final User seller = new User("사용자1", "이미지1", 4.9);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
@@ -181,13 +195,23 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하지_않으면_거짓을_반환한다() {
         // given
-        final User seller = new User("사용자1", "이미지1", 4.9);
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
                                        .seller(seller)
                                        .build();
-        final User user = new User("사용자2", "이미지2", 4.9);
+        final User user = User.builder()
+                              .name("회원2")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         ReflectionTestUtils.setField(user, "id", 1L);
 

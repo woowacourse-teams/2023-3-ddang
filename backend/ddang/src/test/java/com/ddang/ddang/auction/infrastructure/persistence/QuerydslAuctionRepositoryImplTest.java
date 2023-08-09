@@ -61,7 +61,12 @@ class QuerydslAuctionRepositoryImplTest {
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
         // given
-        final User seller = new User("판매자", "https://profile.com", 3.5d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         userRepository.save(seller);
 
         final Category main = new Category("main");
