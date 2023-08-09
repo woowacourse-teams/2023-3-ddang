@@ -44,7 +44,12 @@ class AuctionReportServiceTest {
     @Test
     void 경매_신고를_등록한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -53,7 +58,12 @@ class AuctionReportServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                                .name("사용자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -73,7 +83,12 @@ class AuctionReportServiceTest {
     void 존재하지_않는_사용자가_신고하는_경우_예외가_발생한다() {
         // given
         final Long invalidUserId = -9999L;
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -98,7 +113,12 @@ class AuctionReportServiceTest {
     @Test
     void 존재하지_않는_경매를_신고하는_경우_예외가_발생한다() {
         final Long invalidAuctionId = -9999L;
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                                .name("사용자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
 
         userRepository.save(user);
 
@@ -114,7 +134,12 @@ class AuctionReportServiceTest {
     @Test
     void 본인이_등록한_경매를_신고하는_경우_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -139,7 +164,12 @@ class AuctionReportServiceTest {
     @Test
     void 삭제한_경매를_신고하는_경우_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -148,7 +178,12 @@ class AuctionReportServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                                .name("사용자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -168,7 +203,12 @@ class AuctionReportServiceTest {
     @Test
     void 이미_신고한_경매를_신고하는_경우_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -177,7 +217,12 @@ class AuctionReportServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user = new User("사용자", "이미지", 4.9);
+        final User user = User.builder()
+                                .name("사용자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -196,7 +241,12 @@ class AuctionReportServiceTest {
     @Test
     void 전체_신고_목록을_조회한다() {
         // given
-        final User seller = new User("판매자", "이미지", 4.9);
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .seller(seller)
                                        .title("경매 상품 1")
@@ -205,9 +255,24 @@ class AuctionReportServiceTest {
                                        .startPrice(new Price(1_000))
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
-        final User user1 = new User("사용자1", "이미지1", 4.9);
-        final User user2 = new User("사용자2", "이미지2", 4.9);
-        final User user3 = new User("사용자3", "이미지3", 4.9);
+        final User user1 = User.builder()
+                               .name("사용자1")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User user2 = User.builder()
+                               .name("사용자2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12347")
+                               .build();
+        final User user3 = User.builder()
+                               .name("사용자3")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12348")
+                               .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
