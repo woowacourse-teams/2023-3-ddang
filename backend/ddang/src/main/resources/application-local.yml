@@ -31,6 +31,8 @@ data:
       enabled: false
     auction:
       enabled: false
+    user:
+      enabled: false
 
 image:
   store:
