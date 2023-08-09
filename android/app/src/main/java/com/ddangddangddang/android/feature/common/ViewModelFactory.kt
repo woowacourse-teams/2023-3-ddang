@@ -15,11 +15,13 @@ import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
+import com.ddangddangddang.data.repository.ChatRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
 
 val auctionRepository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val categoryRepository = CategoryRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val regionRepository = RegionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
+val chatRepository = ChatRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -28,6 +30,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
             // 레포지토리 싱글톤 객체 얻어옴
             when {
                 isAssignableFrom(MainViewModel::class.java) -> MainViewModel()
+
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(auctionRepository)
                 isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(
                     auctionRepository,

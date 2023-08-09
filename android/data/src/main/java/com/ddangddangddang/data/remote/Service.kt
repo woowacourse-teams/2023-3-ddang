@@ -1,13 +1,21 @@
 package com.ddangddangddang.data.remote
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
+
+import com.ddangddangddang.data.model.request.ChatMessageRequest
+import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.ChatMessageIdResponse
+import com.ddangddangddang.data.model.response.ChatMessageResponse
+import com.ddangddangddang.data.model.response.ChatRoomIdResponse
+import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.model.response.TokenResponse
+
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -60,8 +68,32 @@ interface Service {
     @GET("/categories/{id}")
     suspend fun fetchSubCategories(@Path("id") mainId: Long): ApiResponse<List<EachCategoryResponse>>
 
+    @POST("/chattings")
+    suspend fun getChatRoomId(
+        @Body createChatRoomRequest: GetChatRoomIdRequest,
+    ): ApiResponse<ChatRoomIdResponse>
+
+    @GET("/chattings")
+    suspend fun getChatRoomPreviews(): ApiResponse<List<ChatRoomPreviewResponse>>
+
+    @GET("/chattings/{chatRoomId}")
+    suspend fun getChatRoomPreview(@Path("chatRoomId") chatRoomId: Long): ApiResponse<ChatRoomPreviewResponse>
+
+    @GET("/chattings/{chatRoomId}/messages")
+    suspend fun getMessages(
+        @Path("chatRoomId") chatRoomId: Long,
+        @Query("lastMessageId") lastMessageId: Long?,
+    ): ApiResponse<List<ChatMessageResponse>>
+
+    @POST("/chattings/{chatRoomId}/messages")
+    suspend fun sendMessage(
+        @Path("chatRoomId") chatRoomId: Long,
+        @Body chatMessageRequest: ChatMessageRequest,
+    ): ApiResponse<ChatMessageIdResponse>
+
     @POST("/oauth2/login/kakao")
     suspend fun loginByKakao(
         @Body kakaoLoginRequest: KakaoLoginRequest,
     ): ApiResponse<TokenResponse>
+
 }
