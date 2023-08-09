@@ -23,11 +23,11 @@ public class JwtEncoder implements TokenEncoder {
 
     @Override
     public String encode(
-            final LocalDateTime targetTime,
+            final LocalDateTime publishTime,
             final TokenType tokenType,
             final Map<String, Object> privateClaims
     ) {
-        final Date targetDate = convertDate(targetTime);
+        final Date targetDate = convertDate(publishTime);
         final String key = jwtConfigurationProperties.findTokenKey(tokenType);
         final Long expiredHours = jwtConfigurationProperties.findExpiredHours(tokenType);
 
