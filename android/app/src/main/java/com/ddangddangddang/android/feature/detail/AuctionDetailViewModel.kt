@@ -53,9 +53,9 @@ class AuctionDetailViewModel(
     fun handleAuctionDetailBottomButton() {
         auctionDetailBottomButtonStatus.value?.let {
             when (it) {
-                is AuctionDetailBottomButtonStatus.BidAuction -> popupAuctionBidEvent()
-                is AuctionDetailBottomButtonStatus.EnterAuctionChatRoom -> enterChatRoomEvent()
-                is AuctionDetailBottomButtonStatus.FinishAuction -> {}
+                AuctionDetailBottomButtonStatus.BidAuction -> popupAuctionBidEvent()
+                AuctionDetailBottomButtonStatus.EnterAuctionChatRoom -> enterChatRoomEvent()
+                AuctionDetailBottomButtonStatus.FinishAuction -> {}
             }
         }
     }

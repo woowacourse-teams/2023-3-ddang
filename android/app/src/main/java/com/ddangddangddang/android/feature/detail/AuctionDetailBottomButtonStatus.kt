@@ -6,17 +6,16 @@ import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.AuctionDetailStatusModel
 import com.ddangddangddang.android.model.ChatAuctionDetailModel
 
-sealed class AuctionDetailBottomButtonStatus(
+enum class AuctionDetailBottomButtonStatus(
     @StringRes val text: Int,
     val enabled: Boolean,
 ) {
-    object BidAuction : AuctionDetailBottomButtonStatus(R.string.detail_auction_submit, true)
+    BidAuction(R.string.detail_auction_submit, true),
 
-    object FinishAuction :
-        AuctionDetailBottomButtonStatus(R.string.detail_auction_finish, false)
+    FinishAuction(R.string.detail_auction_finish, false),
 
-    object EnterAuctionChatRoom :
-        AuctionDetailBottomButtonStatus(R.string.detail_auction_chat_room_entrance, true)
+    EnterAuctionChatRoom(R.string.detail_auction_chat_room_entrance, true),
+    ;
 
     companion object {
         fun find(
