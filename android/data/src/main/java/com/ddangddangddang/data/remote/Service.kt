@@ -2,6 +2,7 @@ package com.ddangddangddang.data.remote
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
+import com.ddangddangddang.data.model.request.RefreshTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -63,5 +64,10 @@ interface Service {
     @POST("/oauth2/login/kakao")
     suspend fun loginByKakao(
         @Body kakaoLoginRequest: KakaoLoginRequest,
+    ): ApiResponse<TokenResponse>
+
+    @POST("/oauth2/refresh-token")
+    suspend fun refreshToken(
+        @Body refreshTokenRequest: RefreshTokenRequest,
     ): ApiResponse<TokenResponse>
 }
