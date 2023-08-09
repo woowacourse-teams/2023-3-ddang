@@ -144,7 +144,6 @@ class AuthenticationControllerTest {
         final String invalidRefreshToken = "invalidRefreshToken";
         final RefreshTokenRequest request = new RefreshTokenRequest(invalidRefreshToken);
 
-        //given(authenticationService.refreshToken(anyString())).willThrow(new InvalidTokenException("유효한 토큰이 아닙니다."));
         willThrow(new InvalidTokenException("유효한 토큰이 아닙니다.")).given(authenticationService).refreshToken(anyString());
 
         // when & then
