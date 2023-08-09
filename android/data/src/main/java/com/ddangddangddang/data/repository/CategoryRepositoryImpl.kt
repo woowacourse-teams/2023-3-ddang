@@ -3,7 +3,7 @@ package com.ddangddangddang.data.repository
 import com.ddangddangddang.data.datasource.CategoryRemoteDataSource
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.Service
+import com.ddangddangddang.data.remote.AuctionService
 
 class CategoryRepositoryImpl private constructor(
     private val remoteDataSource: CategoryRemoteDataSource,
@@ -21,13 +21,13 @@ class CategoryRepositoryImpl private constructor(
         @Volatile
         private var instance: CategoryRepositoryImpl? = null
 
-        fun getInstance(service: Service): CategoryRepositoryImpl {
+        fun getInstance(service: AuctionService): CategoryRepositoryImpl {
             return instance ?: synchronized(this) {
                 instance ?: createInstance(service)
             }
         }
 
-        private fun createInstance(service: Service): CategoryRepositoryImpl {
+        private fun createInstance(service: AuctionService): CategoryRepositoryImpl {
             return CategoryRepositoryImpl(CategoryRemoteDataSource(service)).also { instance = it }
         }
     }

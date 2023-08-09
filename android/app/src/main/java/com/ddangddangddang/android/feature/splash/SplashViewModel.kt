@@ -24,7 +24,7 @@ class SplashViewModel(
 
     private fun verifyToken() {
         viewModelScope.launch {
-            // 액세스 토큰 유효성 검증 받아서, 만약 401 에러 나오면, RefreshTokenExpired
+            // 액세스 토큰 유효성 검증 받아서, 만약 401 에러 나오면, 토큰 리프레시 요청 다시 보내고 또 401 에러면, RefreshTokenExpired
             // 성공하면, AutoLoginSuccess
         }
     }

@@ -1,14 +1,11 @@
 package com.ddangddangddang.data.remote
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
-import com.ddangddangddang.data.model.request.KakaoLoginRequest
-import com.ddangddangddang.data.model.request.RefreshTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
-import com.ddangddangddang.data.model.response.TokenResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -20,7 +17,7 @@ import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-interface Service {
+interface AuctionService {
     @GET("/auctions")
     suspend fun fetchAuctionPreviews(
         @Query("lastAuctionId") id: Long?,
@@ -60,14 +57,4 @@ interface Service {
 
     @GET("/categories/{id}")
     suspend fun fetchSubCategories(@Path("id") mainId: Long): ApiResponse<List<EachCategoryResponse>>
-
-    @POST("/oauth2/login/kakao")
-    suspend fun loginByKakao(
-        @Body kakaoLoginRequest: KakaoLoginRequest,
-    ): ApiResponse<TokenResponse>
-
-    @POST("/oauth2/refresh-token")
-    suspend fun refreshToken(
-        @Body refreshTokenRequest: RefreshTokenRequest,
-    ): ApiResponse<TokenResponse>
 }

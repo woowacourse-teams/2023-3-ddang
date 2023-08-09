@@ -13,14 +13,13 @@ import com.ddangddangddang.android.feature.register.category.SelectCategoryViewM
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
 import com.ddangddangddang.android.feature.splash.SplashViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
-import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
 
-val auctionRepository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
-val categoryRepository = CategoryRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
-val regionRepository = RegionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
+val auctionRepository = AuctionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
+val categoryRepository = CategoryRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
+val regionRepository = RegionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
