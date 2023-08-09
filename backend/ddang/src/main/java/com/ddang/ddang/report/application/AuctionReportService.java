@@ -35,14 +35,14 @@ public class AuctionReportService {
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findById(auctionReportDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
-        invalidReportAuction(reporter, auction);
+        checkInvalidReportAuction(reporter, auction);
 
         final AuctionReport auctionReport = auctionReportDto.toEntity(reporter, auction);
         return auctionReportRepository.save(auctionReport)
                                       .getId();
     }
 
-    private void invalidReportAuction(final User reporter, final Auction auction) {
+    private void checkInvalidReportAuction(final User reporter, final Auction auction) {
         if (auction.isOwner(reporter)) {
             throw new InvalidReporterToAuctionException("본인 경매글입니다.");
         }
