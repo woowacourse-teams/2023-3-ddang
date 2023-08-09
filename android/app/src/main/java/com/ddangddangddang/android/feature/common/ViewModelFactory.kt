@@ -14,11 +14,13 @@ import com.ddangddangddang.android.feature.register.region.SelectRegionsViewMode
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
+import com.ddangddangddang.data.repository.ChatRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
 
 val repository = AuctionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val categoryRepository = CategoryRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 val regionRepository = RegionRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
+val chatRepository = ChatRepositoryImpl.getInstance(AuctionRetrofit.getInstance().service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -28,7 +30,10 @@ val viewModelFactory = object : ViewModelProvider.Factory {
             when {
                 isAssignableFrom(MainViewModel::class.java) -> MainViewModel()
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(repository)
-                isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(repository)
+                isAssignableFrom(AuctionDetailViewModel::class.java) -> AuctionDetailViewModel(
+                    repository,
+                    chatRepository,
+                )
                 isAssignableFrom(RegisterAuctionViewModel::class.java) -> RegisterAuctionViewModel(repository)
                 isAssignableFrom(AuctionBidViewModel::class.java) -> AuctionBidViewModel(repository)
                 isAssignableFrom(SelectCategoryViewModel::class.java) -> SelectCategoryViewModel(categoryRepository)

@@ -2,17 +2,19 @@ package com.ddangddangddang.data.repository
 
 import com.ddangddangddang.data.datasource.ChatRemoteDataSource
 import com.ddangddangddang.data.model.request.ChatMessageRequest
-import com.ddangddangddang.data.model.request.CreateChatRoomRequest
+import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.response.ChatMessageIdResponse
 import com.ddangddangddang.data.model.response.ChatMessageResponse
+import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.Service
 
-class ChatRepositoryImpl(
+class ChatRepositoryImpl private constructor(
     private val chatRemoteDataSource: ChatRemoteDataSource,
 ) : ChatRepository {
-    override suspend fun createChatRoom(createChatRoomRequest: CreateChatRoomRequest): ApiResponse<Unit> =
-        chatRemoteDataSource.createChatRoom(createChatRoomRequest)
+    override suspend fun getChatRoomId(getChatRoomIdRequest: GetChatRoomIdRequest): ApiResponse<ChatRoomIdResponse> =
+        chatRemoteDataSource.getChatRoomId(getChatRoomIdRequest)
 
     override suspend fun getChatRoomPreviews(): ApiResponse<List<ChatRoomPreviewResponse>> =
         chatRemoteDataSource.getChatRoomPreviews()
@@ -31,4 +33,21 @@ class ChatRepositoryImpl(
         chatMessageRequest: ChatMessageRequest,
     ): ApiResponse<ChatMessageIdResponse> =
         chatRemoteDataSource.sendMessage(chatRoomId, chatMessageRequest)
+
+    companion object {
+        @Volatile
+        private var instance: ChatRepositoryImpl? = null
+
+        fun getInstance(service: Service): ChatRepositoryImpl {
+            return instance ?: synchronized(this) {
+                instance ?: createInstance(service)
+            }
+        }
+
+        private fun createInstance(service: Service): ChatRepositoryImpl {
+            val remoteDataSource = ChatRemoteDataSource(service)
+            return ChatRepositoryImpl(remoteDataSource)
+                .also { instance = it }
+        }
+    }
 }

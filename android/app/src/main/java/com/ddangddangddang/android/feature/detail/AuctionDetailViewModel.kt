@@ -8,12 +8,15 @@ import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.mapper.AuctionDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
+import com.ddangddangddang.data.repository.ChatRepository
 import kotlinx.coroutines.launch
 
 class AuctionDetailViewModel(
-    private val repository: AuctionRepository,
+    private val auctionRepository: AuctionRepository,
+    private val chatRepository: ChatRepository,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<AuctionDetailEvent> = SingleLiveEvent()
     val event: LiveData<AuctionDetailEvent>
@@ -24,7 +27,7 @@ class AuctionDetailViewModel(
         get() = _auctionDetailModel
 
     val auctionDetailBottomButtonStatus: LiveData<AuctionDetailBottomButtonStatus> =
-        auctionDetailModel.map {
+        _auctionDetailModel.map {
             AuctionDetailBottomButtonStatus.find(it)
         }
 
@@ -34,9 +37,11 @@ class AuctionDetailViewModel(
             return auction.lastBidPrice + auction.bidUnit
         }
 
+    val text = ""
+
     fun loadAuctionDetail(auctionId: Long) {
         viewModelScope.launch {
-            when (val response = repository.getAuctionDetail(auctionId)) {
+            when (val response = auctionRepository.getAuctionDetail(auctionId)) {
                 is ApiResponse.Success -> _auctionDetailModel.value = response.body.toPresentation()
                 is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
@@ -49,7 +54,6 @@ class AuctionDetailViewModel(
         auctionDetailBottomButtonStatus.value?.let {
             when (it) {
                 is AuctionDetailBottomButtonStatus.BidAuction -> popupAuctionBidEvent()
-                is AuctionDetailBottomButtonStatus.CreateAuctionChatRoom -> createChatRoomEvent()
                 is AuctionDetailBottomButtonStatus.EnterAuctionChatRoom -> enterChatRoomEvent()
                 is AuctionDetailBottomButtonStatus.FinishAuction -> {}
             }
@@ -62,21 +66,19 @@ class AuctionDetailViewModel(
         }
     }
 
-    private fun createChatRoomEvent() {
-        _auctionDetailModel.value?.let {
-            _event.value = AuctionDetailEvent.CreateChatRoom
-        }
-    }
-
     private fun enterChatRoomEvent() {
-        _auctionDetailModel.value?.chatAuctionDetailModel?.id?.let {
-            _event.value = AuctionDetailEvent.EnterChatRoom(it)
-        }
-    }
-
-    fun createChatRoom() {
         _auctionDetailModel.value?.let {
             viewModelScope.launch {
+                val request = GetChatRoomIdRequest(it.id)
+                when (val response = chatRepository.getChatRoomId(request)) {
+                    is ApiResponse.Success -> {
+                        _event.value = AuctionDetailEvent.EnterChatRoom(response.body.chatRoomId)
+                    }
+
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
             }
         }
     }
@@ -88,7 +90,6 @@ class AuctionDetailViewModel(
     sealed class AuctionDetailEvent {
         object Exit : AuctionDetailEvent()
         object PopupAuctionBid : AuctionDetailEvent()
-        object CreateChatRoom : AuctionDetailEvent()
         data class EnterChatRoom(val chatId: Long) : AuctionDetailEvent()
     }
 }

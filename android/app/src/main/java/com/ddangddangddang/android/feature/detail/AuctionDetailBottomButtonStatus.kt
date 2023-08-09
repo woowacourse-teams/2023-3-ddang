@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.AuctionDetailStatusModel
+import com.ddangddangddang.android.model.ChatAuctionDetailModel
 
 sealed class AuctionDetailBottomButtonStatus(
     @StringRes val text: Int,
@@ -13,9 +14,6 @@ sealed class AuctionDetailBottomButtonStatus(
 
     object FinishAuction :
         AuctionDetailBottomButtonStatus(R.string.detail_auction_finish, false)
-
-    object CreateAuctionChatRoom :
-        AuctionDetailBottomButtonStatus(R.string.detail_auction_chat_room_create, true)
 
     object EnterAuctionChatRoom :
         AuctionDetailBottomButtonStatus(R.string.detail_auction_chat_room_entrance, true)
@@ -28,11 +26,18 @@ sealed class AuctionDetailBottomButtonStatus(
             val chatStatus = auctionDetailModel.chatAuctionDetailModel
 
             return when {
-                chatStatus.isChatParticipant && chatStatus.id != null -> EnterAuctionChatRoom
-                chatStatus.isChatParticipant -> CreateAuctionChatRoom
-                auctionStatus == AuctionDetailStatusModel.ONGOING || auctionStatus == AuctionDetailStatusModel.UNBIDDEN -> BidAuction
+                canEnterMessageRoom(chatStatus) -> EnterAuctionChatRoom
+                canBidAuction(auctionStatus) -> BidAuction
                 else -> FinishAuction
             }
+        }
+
+        private fun canEnterMessageRoom(chatStatus: ChatAuctionDetailModel): Boolean {
+            return chatStatus.isChatParticipant
+        }
+
+        private fun canBidAuction(auctionStatus: AuctionDetailStatusModel): Boolean {
+            return (auctionStatus == AuctionDetailStatusModel.ONGOING || auctionStatus == AuctionDetailStatusModel.UNBIDDEN)
         }
     }
 }

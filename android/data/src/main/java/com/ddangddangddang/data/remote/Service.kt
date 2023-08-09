@@ -2,12 +2,13 @@ package com.ddangddangddang.data.remote
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
-import com.ddangddangddang.data.model.request.CreateChatRoomRequest
+import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.ChatMessageIdResponse
 import com.ddangddangddang.data.model.response.ChatMessageResponse
+import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
@@ -64,9 +65,9 @@ interface Service {
     suspend fun fetchSubCategories(@Path("id") mainId: Long): ApiResponse<List<EachCategoryResponse>>
 
     @POST("/chattings")
-    suspend fun createChatRoom(
-        @Body createChatRoomRequest: CreateChatRoomRequest,
-    ): ApiResponse<Unit>
+    suspend fun getChatRoomId(
+        @Body createChatRoomRequest: GetChatRoomIdRequest,
+    ): ApiResponse<ChatRoomIdResponse>
 
     @GET("/chattings")
     suspend fun getChatRoomPreviews(): ApiResponse<List<ChatRoomPreviewResponse>>
