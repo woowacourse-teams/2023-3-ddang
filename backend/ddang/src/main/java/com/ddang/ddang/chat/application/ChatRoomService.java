@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -76,8 +75,8 @@ public class ChatRoomService {
     }
 
     private void checkAlreadyExist(final Auction findAuction) {
-        final Optional<ChatRoom> nullableChatRoom = chatRoomRepository.findByAuctionId(findAuction.getId());
-        if (nullableChatRoom.isPresent()) {
+        final boolean isChatRoomExists = chatRoomRepository.existsByAuctionId(findAuction.getId());
+        if (isChatRoomExists) {
             throw new ChatAlreadyExistException("해당 경매에 대한 채팅방이 이미 존재합니다.");
         }
     }

@@ -214,4 +214,55 @@ class JpaChatRoomRepositoryTest {
             softAssertions.assertThat(actual.get().getId()).isEqualTo(chatRoom.getId());
         });
     }
+
+    @Test
+    void 지정한_경매_아이디가_포함된_채팅방이_존재한다면_참을_반환한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0);
+        final User buyer = new User("구매자", "이미지", 5.0);
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 1")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .build();
+        auctionRepository.save(auction);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = chatRoomRepository.existsByAuctionId(auction.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 지정한_경매_아이디가_포함된_채팅방이_존재한다면_거짓을_반환한다() {
+        // given
+        final Long invalidAuctionId = -999L;
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = chatRoomRepository.existsByAuctionId(invalidAuctionId);
+
+        // then
+        assertThat(actual).isFalse();
+    }
 }
