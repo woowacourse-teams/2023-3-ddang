@@ -29,6 +29,7 @@ public class AuctionReportService {
     private final JpaUserRepository userRepository;
     private final JpaAuctionReportRepository auctionReportRepository;
 
+    @Transactional
     public Long create(final LoginUserDto userDto, final CreateAuctionReportDto auctionReportDto) {
         // TODO: 2023/08/08 추후 User 패키지 내에 UserNotFoundException이 생긴다면 해당 예외를 사용하도록 수정 하겠습니다.
         final User reporter = userRepository.findById(userDto.usedId())
