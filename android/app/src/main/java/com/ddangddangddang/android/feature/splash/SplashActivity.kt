@@ -11,5 +11,23 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     private val viewModel: SplashViewModel by viewModels { viewModelFactory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupObserve()
+        viewModel.checkTokenExist()
     }
+
+    private fun setupObserve() {
+        viewModel.event.observe(this) { handleEvent(it) }
+    }
+
+    private fun handleEvent(event: SplashViewModel.SplashEvent) {
+        when (event) {
+            SplashViewModel.SplashEvent.AutoLoginSuccess -> navigateToMain()
+            SplashViewModel.SplashEvent.RefreshTokenExpired -> navigateToLogin()
+            SplashViewModel.SplashEvent.TokenNotExist -> navigateToLogin()
+        }
+    }
+
+    private fun navigateToMain() {}
+
+    private fun navigateToLogin() {}
 }
