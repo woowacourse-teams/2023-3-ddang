@@ -179,7 +179,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("789321")
                                 .build();
 
         userRepository.save(seller);
@@ -229,7 +229,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("54321")
                                 .build();
 
         userRepository.save(seller);
