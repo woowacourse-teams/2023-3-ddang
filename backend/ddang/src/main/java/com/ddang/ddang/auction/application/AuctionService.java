@@ -3,14 +3,19 @@ package com.ddang.ddang.auction.application;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
@@ -28,6 +33,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,6 +41,7 @@ import java.util.List;
 public class AuctionService {
 
     private final JpaUserRepository userRepository;
+    private final JpaChatRoomRepository chatRoomRepository;
     private final JpaAuctionRepository auctionRepository;
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
@@ -89,10 +96,15 @@ public class AuctionService {
                              .toList();
     }
 
-    public ReadAuctionDto readByAuctionId(final Long auctionId) {
-        final Auction auction = findAuction(auctionId);
+    public ReadAuctionWithChatRoomIdDto readByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
+        final Auction findAuction = findAuction(auctionId);
+        final User findUser = findUser(userInfo.userId());
+        final Optional<ChatRoom> nullableChatRoom = chatRoomRepository.findByAuctionId(findAuction.getId());
 
-        return ReadAuctionDto.from(auction);
+        return new ReadAuctionWithChatRoomIdDto(
+                ReadAuctionDto.from(findAuction),
+                ReadChatRoomDto.of(nullableChatRoom, findAuction.isSellerOrWinner(findUser))
+        );
     }
 
     private Auction findAuction(final Long auctionId) {
@@ -122,6 +134,6 @@ public class AuctionService {
 
     private User findUser(final Long userId) {
         return userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+                             .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
     }
 }

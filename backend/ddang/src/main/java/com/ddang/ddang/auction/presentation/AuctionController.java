@@ -3,7 +3,7 @@ package com.ddang.ddang.auction.presentation;
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
@@ -12,8 +12,6 @@ import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import jakarta.validation.Valid;
-import java.net.URI;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/auctions")
@@ -54,8 +55,10 @@ public class AuctionController {
     }
 
     @GetMapping("/{auctionId}")
-    public ResponseEntity<ReadAuctionDetailResponse> read(@PathVariable final Long auctionId) {
-        final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
+    public ResponseEntity<ReadAuctionDetailResponse> read(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @PathVariable final Long auctionId) {
+        final ReadAuctionWithChatRoomIdDto readAuctionDto = auctionService.readByAuctionId(auctionId, userInfo);
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
                 calculateBaseImageUrl()

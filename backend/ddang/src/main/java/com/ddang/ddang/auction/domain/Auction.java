@@ -149,6 +149,10 @@ public class Auction extends BaseTimeEntity {
         return new BidPrice(nextMinimumBidPrice);
     }
 
+    public boolean isSellerOrWinner(final User user) {
+        return isOwner(user) || isWinner(user, LocalDateTime.now());
+    }
+
     public boolean isWinner(final User user, final LocalDateTime targetTime) {
         return findWinner(targetTime).filter(user::equals)
                                      .isPresent();

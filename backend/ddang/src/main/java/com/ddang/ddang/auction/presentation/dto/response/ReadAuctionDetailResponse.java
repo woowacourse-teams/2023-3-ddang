@@ -1,18 +1,19 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 
-public record ReadAuctionDetailResponse(AuctionDetailResponse auction, SellerResponse seller) {
+public record ReadAuctionDetailResponse(AuctionDetailResponse auction, SellerResponse seller, ChatRoomResponse chat) {
 
-    public static ReadAuctionDetailResponse of(final ReadAuctionDto dto, final String baseUrl) {
-        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(dto, baseUrl);
+    public static ReadAuctionDetailResponse of(final ReadAuctionWithChatRoomIdDto dto, final String baseUrl) {
+        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(dto.auctionDto(), baseUrl);
         final SellerResponse sellerResponse = new SellerResponse(
-                dto.sellerId(),
-                dto.sellerProfile(),
-                dto.sellerName(),
-                dto.sellerReliability()
+                dto.auctionDto().sellerId(),
+                dto.auctionDto().sellerProfile(),
+                dto.auctionDto().sellerName(),
+                dto.auctionDto().sellerReliability()
         );
+        final ChatRoomResponse chatRoomResponse = ChatRoomResponse.from(dto.chatRoomDto());
 
-        return new ReadAuctionDetailResponse(auctionDetailResponse, sellerResponse);
+        return new ReadAuctionDetailResponse(auctionDetailResponse, sellerResponse, chatRoomResponse);
     }
 }
