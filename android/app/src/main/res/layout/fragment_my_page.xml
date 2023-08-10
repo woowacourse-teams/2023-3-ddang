@@ -87,8 +87,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     android:text="@string/my_page_logout_button"
+                    android:background="?attr/selectableItemBackground"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/view_profile_divider" />
+                    app:layout_constraintTop_toBottomOf="@id/view_profile_divider"
+                    android:onClick="@{() -> viewModel.logout()}" />
 
                 <View
                     android:id="@+id/view_logout_divider"

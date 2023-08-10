@@ -57,7 +57,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
 
                 isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(DdangDdangDdang.authRepository)
                 isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(DdangDdangDdang.authRepository)
-                isAssignableFrom(MyPageViewModel::class.java) -> MyPageViewModel(userRepository)
+                isAssignableFrom(MyPageViewModel::class.java) -> MyPageViewModel(DdangDdangDdang.authRepository, userRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T

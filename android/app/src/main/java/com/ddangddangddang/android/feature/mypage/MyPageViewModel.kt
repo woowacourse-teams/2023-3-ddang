@@ -6,11 +6,16 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.model.mapper.ProfileModelMapper.toPresentation
+import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.repository.AuthRepository
 import com.ddangddangddang.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class MyPageViewModel(private val repository: UserRepository) : ViewModel() {
+class MyPageViewModel(
+    private val authRepository: AuthRepository,
+    private val userRepository: UserRepository,
+) : ViewModel() {
     private val _profile: MutableLiveData<ProfileModel> = MutableLiveData(
         ProfileModel(
             "글로",
@@ -21,9 +26,13 @@ class MyPageViewModel(private val repository: UserRepository) : ViewModel() {
     val profile: LiveData<ProfileModel>
         get() = _profile
 
+    private val _event: SingleLiveEvent<MyPageEvent> = SingleLiveEvent()
+    val event: LiveData<MyPageEvent>
+        get() = _event
+
     fun loadProfile() {
         viewModelScope.launch {
-            when (val response = repository.getProfile()) {
+            when (val response = userRepository.getProfile()) {
                 is ApiResponse.Success -> {
                     _profile.value = response.body.toPresentation()
                 }
@@ -33,5 +42,27 @@ class MyPageViewModel(private val repository: UserRepository) : ViewModel() {
                 is ApiResponse.Unexpected -> {}
             }
         }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            when (authRepository.logout()) {
+                is ApiResponse.Success -> {
+                    _event.value = MyPageEvent.LogoutSuccessfully
+                }
+
+                is ApiResponse.Failure -> {
+                    _event.value = MyPageEvent.LogoutFailed
+                }
+
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
+    }
+
+    sealed class MyPageEvent {
+        object LogoutSuccessfully : MyPageEvent()
+        object LogoutFailed : MyPageEvent()
     }
 }
