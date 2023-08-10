@@ -444,14 +444,14 @@ class ChatRoomControllerTest {
     @Test
     void 채팅방_아이디가_잘못된_경우_메시지를_조회하면_404를_반환한다() throws Exception {
         // given
-        final Long invalidChatRoomId = 1L;
+        final Long invalidChatRoomId = -999L;
         final ChatRoomNotFoundException chatRoomNotFoundException =
                 new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        new ReadMessageRequest(1L, invalidChatRoomId, 1L);
+
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(chatRoomNotFoundException);
 
         // when & then
-        mockMvc.perform(get("/chattings/1/messages")
+        mockMvc.perform(get("/chattings/" + invalidChatRoomId + "/messages")
                        .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON)
                        .queryParam("lastMessageId", "1"))
@@ -467,14 +467,14 @@ class ChatRoomControllerTest {
         final Long invalidMessageId = -999L;
         final MessageNotFoundException messageNotFoundException =
                 new MessageNotFoundException("조회한 마지막 메시지가 존재하지 않습니다.");
-        new ReadMessageRequest(1L, 1L, invalidMessageId);
+
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(messageNotFoundException);
 
         // when & then
         mockMvc.perform(get("/chattings/1/messages")
                        .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .queryParam("lastMessageId", "1")
+                       .queryParam("lastMessageId", invalidMessageId.toString())
                )
                .andExpectAll(
                        status().isNotFound(),
