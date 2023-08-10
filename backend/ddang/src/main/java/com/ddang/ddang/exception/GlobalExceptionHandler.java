@@ -12,7 +12,6 @@ import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
@@ -22,6 +21,7 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -81,14 +81,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final UserNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                             .body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler(com.ddang.ddang.bid.application.exception.UserNotFoundException.class)
-    public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final com.ddang.ddang.bid.application.exception.UserNotFoundException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
