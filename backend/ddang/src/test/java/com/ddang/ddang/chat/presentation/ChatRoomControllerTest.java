@@ -13,6 +13,8 @@ import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -159,60 +161,26 @@ class ChatRoomControllerTest {
     @Test
     void 사용자가_참여한_모든_채팅방을_조회한다() throws Exception {
         // given
-        final Category main = new Category("메인");
-        final Category sub = new Category("서브");
-        main.addSubCategory(sub);
-        final User user1 = User.builder()
-                               .name("상대1")
-                               .profileImage("profile.png")
-                               .reliability(4.7d)
-                               .oauthId("12345")
-                               .build();
-        final User user2 = User.builder()
-                               .name("상대2")
-                               .profileImage("profile.png")
-                               .reliability(4.7d)
-                               .oauthId("12346")
-                               .build();
-        final Auction auction1 = Auction.builder()
-                                        .title("경매 상품 1")
-                                        .seller(user1)
-                                        .subCategory(sub)
-                                        .description("이것은 경매 상품 1 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        auction1.addAuctionImages(List.of(new AuctionImage("사진", "image")));
-        auction1.updateLastBid(new Bid(auction1, user2, new BidPrice(3000)));
-
-        final Auction auction2 = Auction.builder()
-                                        .title("경매 상품 2")
-                                        .seller(user2)
-                                        .subCategory(sub)
-                                        .description("이것은 경매 상품 2 입니다.")
-                                        .bidUnit(new BidUnit(2_000))
-                                        .startPrice(new Price(2_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        auction2.addAuctionImages(List.of(new AuctionImage("사진", "image")));
-        auction2.updateLastBid(new Bid(auction2, user1, new BidPrice(5000)));
-
-        final ReadParticipatingChatRoomDto chatRoom1 = new ReadParticipatingChatRoomDto(
+        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", "profile.png", 5.0d);
+        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", "profile.png", 5.0d);
+        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", "profile.png", 5.0d);
+        final ReadChatRoomWithLastMessageDto dto1 = new ReadChatRoomWithLastMessageDto(
                 1L,
-                ReadAuctionInChatRoomDto.from(auction1),
-                ReadUserInChatRoomDto.from(user1),
+                new ReadAuctionInChatRoomDto(1L, "경매1", 10_000, List.of(1L, 2L), "main", "sub", seller.id(), seller.profileImage(), seller.name(), seller.reliability()),
+                buyer1,
+                new ReadLastMessageDto(1L, LocalDateTime.now(), seller, buyer1, "메시지1"),
                 true
         );
-        final ReadParticipatingChatRoomDto chatRoom2 = new ReadParticipatingChatRoomDto(
+        final ReadChatRoomWithLastMessageDto dto2 = new ReadChatRoomWithLastMessageDto(
                 2L,
-                ReadAuctionInChatRoomDto.from(auction2),
-                ReadUserInChatRoomDto.from(user2),
+                new ReadAuctionInChatRoomDto(2L, "경매2", 20_000, List.of(1L, 2L), "main", "sub", seller.id(), seller.profileImage(), seller.name(), seller.reliability()),
+                buyer2,
+                new ReadLastMessageDto(1L, LocalDateTime.now(), seller, buyer2, "메시지2"),
                 true
         );
 
         given(chatRoomService.readAllByUserId(anyLong()))
-                .willReturn(List.of(chatRoom1, chatRoom2));
+                .willReturn(List.of(dto1, dto2));
 
         // when & then
         mockMvc.perform(get("/chattings")
@@ -220,12 +188,14 @@ class ChatRoomControllerTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.[0].id", is(chatRoom1.id()), Long.class),
-                       jsonPath("$.[0].chatPartner.name", is(user1.getName())),
-                       jsonPath("$.[0].auction.title", is(auction1.getTitle())),
-                       jsonPath("$.[1].id", is(chatRoom2.id()), Long.class),
-                       jsonPath("$.[1].chatPartner.name", is(user2.getName())),
-                       jsonPath("$.[1].auction.title", is(auction2.getTitle()))
+                       jsonPath("$.[0].id", is(dto1.id()), Long.class),
+                       jsonPath("$.[0].chatPartner.name", is(dto1.partnerDto().name())),
+                       jsonPath("$.[0].auction.title", is(dto1.auctionDto().title())),
+                       jsonPath("$.[0].lastMessage.contents", is(dto1.lastMessageDto().contents())),
+                       jsonPath("$.[1].id", is(dto2.id()), Long.class),
+                       jsonPath("$.[1].chatPartner.name", is(dto2.partnerDto().name())),
+                       jsonPath("$.[1].auction.title", is(dto2.auctionDto().title())),
+                       jsonPath("$.[1].lastMessage.contents", is(dto2.lastMessageDto().contents()))
                );
     }
 

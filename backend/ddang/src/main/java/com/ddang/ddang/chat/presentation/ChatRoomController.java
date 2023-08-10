@@ -4,6 +4,7 @@ import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.presentation.auth.AuthenticateUser;
 import com.ddang.ddang.chat.presentation.auth.AuthenticateUserInfo;
@@ -11,6 +12,7 @@ import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
+import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomWithLastMessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -47,15 +49,15 @@ public class ChatRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadChatRoomResponse>> readAllParticipatingChatRooms(
+    public ResponseEntity<List<ReadChatRoomWithLastMessageResponse>> readAllParticipatingChatRooms(
             @AuthenticateUser final AuthenticateUserInfo userInfo
     ) {
-        final List<ReadParticipatingChatRoomDto> readParticipatingChatRoomDtos =
+        final List<ReadChatRoomWithLastMessageDto> readParticipatingChatRoomDtos =
                 chatRoomService.readAllByUserId(userInfo.id());
 
-        final List<ReadChatRoomResponse> responses =
+        final List<ReadChatRoomWithLastMessageResponse> responses =
                 readParticipatingChatRoomDtos.stream()
-                                             .map(dto -> ReadChatRoomResponse.of(dto, calculateBaseImageUrl()))
+                                             .map(dto -> ReadChatRoomWithLastMessageResponse.of(dto, calculateBaseImageUrl()))
                                              .toList();
 
         return ResponseEntity.ok(responses);
