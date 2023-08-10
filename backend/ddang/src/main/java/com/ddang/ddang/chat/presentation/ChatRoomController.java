@@ -2,10 +2,12 @@ package com.ddang.ddang.chat.presentation;
 
 import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
+import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.presentation.auth.AuthenticateUser;
 import com.ddang.ddang.chat.presentation.auth.AuthenticateUserInfo;
+import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
@@ -32,6 +34,17 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
     private final MessageService messageService;
+
+    @PostMapping
+    public ResponseEntity<Void> create(
+            @AuthenticateUser final AuthenticateUserInfo userInfo,
+            @RequestBody @Valid final CreateChatRoomRequest chatRoomRequest
+    ) {
+        final Long chatRoomId = chatRoomService.create(userInfo.id(), CreateChatRoomDto.from(chatRoomRequest));
+
+        return ResponseEntity.created(URI.create("/chattings/" + chatRoomId))
+                             .build();
+    }
 
     @GetMapping
     public ResponseEntity<List<ReadChatRoomResponse>> readAllParticipatingChatRooms(
