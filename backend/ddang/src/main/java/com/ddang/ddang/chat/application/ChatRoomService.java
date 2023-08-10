@@ -89,6 +89,10 @@ public class ChatRoomService {
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
 
+        return processChatRoomWithLastMessageAndSort(findUser, chatRooms);
+    }
+
+    private List<ReadChatRoomWithLastMessageDto> processChatRoomWithLastMessageAndSort(final User findUser, final List<ChatRoom> chatRooms) {
         List<ReadChatRoomWithLastMessageDto> chatRoomDtos = new ArrayList<>();
         for (final ChatRoom chatRoom : chatRooms) {
             messageRepository.findLastMessageByChatRoomId(chatRoom.getId())
