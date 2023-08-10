@@ -88,6 +88,8 @@ class MessageRoomViewModel(
     fun sendMessage() {
         _messageRoomInfo.value?.let {
             val message = inputMessage.value ?: return
+            if (message.isEmpty()) return
+
             val request = ChatMessageRequest(it.messagePartnerId, message)
             viewModelScope.launch {
                 when (val response = repository.sendMessage(it.roomId, request)) {
