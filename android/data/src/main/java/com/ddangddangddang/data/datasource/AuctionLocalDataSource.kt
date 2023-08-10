@@ -34,4 +34,8 @@ class AuctionLocalDataSource {
         }
         auctionPreviews.value = updatedList
     }
+
+    fun resetAuctionPreviews(auctions: List<AuctionPreviewResponse>) {
+        auctionPreviews.value = auctions
+    }
 }

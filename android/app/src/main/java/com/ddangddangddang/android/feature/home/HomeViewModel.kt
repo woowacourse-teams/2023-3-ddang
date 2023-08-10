@@ -60,6 +60,27 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         _event.value = HomeEvent.NavigateToRegisterAuction
     }
 
+    fun reloadAuctions() {
+        if (loadingAuctionInProgress.not()) {
+            _loadingAuctionsInProgress = true
+            viewModelScope.launch {
+                when (
+                    val response =
+                        repository.reloadAuctionPreviews(SIZE_AUCTION_LOAD)
+                ) {
+                    is ApiResponse.Success -> {
+                        _isLast = response.body.isLast
+                    }
+
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
+                _loadingAuctionsInProgress = false
+            }
+        }
+    }
+
     sealed class HomeEvent {
         data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
         object NavigateToRegisterAuction : HomeEvent()
