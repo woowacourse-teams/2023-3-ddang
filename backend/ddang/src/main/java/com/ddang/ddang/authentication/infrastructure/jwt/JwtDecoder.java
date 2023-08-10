@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtDecoder implements TokenDecoder {
 
-    private static final String TOKEN_TYPE = "Bearer ";
+    private static final String BEARER_TOKEN_PREFIX = "Bearer ";
     private static final String CLAIM_NAME = "userId";
     private static final int BEARER_END_INDEX = 7;
 
@@ -42,7 +42,7 @@ public class JwtDecoder implements TokenDecoder {
     }
 
     private void validateTokenType(final String tokenType) {
-        if (!TOKEN_TYPE.equals(tokenType)) {
+        if (!BEARER_TOKEN_PREFIX.equals(tokenType)) {
             throw new InvalidTokenException("Bearer 타입이 아닙니다.");
         }
     }
@@ -68,6 +68,6 @@ public class JwtDecoder implements TokenDecoder {
     }
 
     private String findPureToken(final String token) {
-        return token.substring(TOKEN_TYPE.length());
+        return token.substring(BEARER_TOKEN_PREFIX.length());
     }
 }
