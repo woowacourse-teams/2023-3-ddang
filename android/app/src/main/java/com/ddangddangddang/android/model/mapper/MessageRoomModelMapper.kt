@@ -15,8 +15,13 @@ object MessageRoomModelMapper : Mapper<MessageRoomModel, ChatRoomPreviewResponse
             chatPartner.profileImage,
             chatPartner.name,
             "마지막 메시지 내용", // 수정 필요
-            LocalDateTime.now(), // 변환 필요
+            formatLastMessageTime(LocalDateTime.now()), // 수정 필요
             isChatAvailable,
         )
+    }
+
+    private fun formatLastMessageTime(dateTime: LocalDateTime): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")
+        return dateTime.format(formatter)
     }
 }

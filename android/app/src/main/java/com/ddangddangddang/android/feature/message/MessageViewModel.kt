@@ -26,13 +26,12 @@ class MessageViewModel(
         viewModelScope.launch {
             when (val response = repository.getChatRoomPreviews()) {
                 is ApiResponse.Success -> {
-                    _messageRooms.value =
-                        response.body.map { it.toPresentation() }
+                    _messageRooms.value = response.body.map { it.toPresentation() }
                 }
 
-                is ApiResponse.Failure -> TODO()
-                is ApiResponse.NetworkError -> TODO()
-                is ApiResponse.Unexpected -> TODO()
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
             }
         }
     }

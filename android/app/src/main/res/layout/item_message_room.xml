@@ -76,7 +76,7 @@
             android:id="@+id/tv_datetime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{item.lastMessageDateTime.toString()}"
+            android:text="@{item.lastMessageDateTime}"
             android:textColor="@color/black_400"
             android:textSize="11sp"
             app:layout_constraintEnd_toStartOf="@id/gl_end"
