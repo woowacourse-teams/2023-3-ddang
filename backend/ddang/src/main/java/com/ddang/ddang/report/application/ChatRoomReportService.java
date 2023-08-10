@@ -37,7 +37,7 @@ public class ChatRoomReportService {
                                   .orElseThrow(() -> new ChatRoomNotFoundException("해당 채팅방을 찾을 수 없습니다."));
         checkInvalidChatRoomReport(reporter, chatRoom);
 
-        ChatRoomReport chatRoomReport = chatRoomReportDto.toEntity(reporter, chatRoom);
+        final ChatRoomReport chatRoomReport = chatRoomReportDto.toEntity(reporter, chatRoom);
 
         return chatRoomReportRepository.save(chatRoomReport)
                                        .getId();
