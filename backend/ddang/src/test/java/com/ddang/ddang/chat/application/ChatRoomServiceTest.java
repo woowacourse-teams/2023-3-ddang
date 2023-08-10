@@ -301,7 +301,7 @@ class ChatRoomServiceTest {
         final Long userId = buyer.getId();
         final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
 
-        final ChatRoom persistChatRoom = createChatRoomDto.toEntity(auction);
+        final ChatRoom persistChatRoom = new ChatRoom(auction, auction.findWinner(LocalDateTime.now()).get());
         chatRoomRepository.save(persistChatRoom);
 
         final Long expect = persistChatRoom.getId();
