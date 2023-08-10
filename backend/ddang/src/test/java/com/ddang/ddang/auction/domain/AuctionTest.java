@@ -273,7 +273,6 @@ class AuctionTest {
     @Test
     void 주어진_사용자가_낙찰자가_아니라면_거짓을_반환한다() {
         // given
-
         final User seller = User.builder()
                                 .name("회원1")
                                 .profileImage("profile.png")
