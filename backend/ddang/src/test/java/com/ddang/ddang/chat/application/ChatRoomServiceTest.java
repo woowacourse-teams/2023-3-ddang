@@ -4,6 +4,7 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
@@ -225,6 +226,38 @@ class ChatRoomServiceTest {
         assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
                 .isInstanceOf(InvalidAuctionToChatException.class)
                 .hasMessage("삭제된 경매입니다.");
+    }
+
+    @Test
+    void 낙찰자가_없는데_채팅방을_생성하면_예외가_발생한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = new User("판매자", "이미지", 5.0d);
+        userRepository.save(seller);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Long auctionId = auction.getId();
+        final Long userId = seller.getId();
+        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
+                .isInstanceOf(WinnerNotFoundException.class)
+                .hasMessage("낙찰자가 존재하지 않습니다");
     }
 
     @Test
