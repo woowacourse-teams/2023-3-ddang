@@ -3,9 +3,14 @@ package com.ddangddangddang.android.feature.mypage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.ProfileModel
+import com.ddangddangddang.android.model.mapper.ProfileModelMapper.toPresentation
+import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.repository.UserRepository
+import kotlinx.coroutines.launch
 
-class MyPageViewModel : ViewModel() {
+class MyPageViewModel(private val repository: UserRepository) : ViewModel() {
     private val _profile: MutableLiveData<ProfileModel> = MutableLiveData(
         ProfileModel(
             "글로",
@@ -15,4 +20,18 @@ class MyPageViewModel : ViewModel() {
     )
     val profile: LiveData<ProfileModel>
         get() = _profile
+
+    fun loadProfile() {
+        viewModelScope.launch {
+            when (val response = repository.getProfile()) {
+                is ApiResponse.Success -> {
+                    _profile.value = response.body.toPresentation()
+                }
+
+                is ApiResponse.Failure -> {}
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
+        }
+    }
 }
