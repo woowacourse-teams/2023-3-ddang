@@ -8,7 +8,7 @@ public record ReadAuctionReportDto(
         Long id,
         ReadReporterDto reporterDto,
         LocalDateTime createdTime,
-        ReadAuctionDto auctionDto,
+        ReadAuctionInReportDto auctionDto,
         String description
 ) {
 
@@ -18,7 +18,7 @@ public record ReadAuctionReportDto(
                 auctionReport.getId(),
                 ReadReporterDto.from(auctionReport.getReporter()),
                 auctionReport.getCreatedTime(),
-                ReadAuctionDto.from(auctionReport.getAuction()),
+                ReadAuctionInReportDto.from(auctionReport.getAuction()),
                 auctionReport.getDescription()
         );
     }

@@ -13,7 +13,7 @@ public record ReadAuctionReportResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime createdTime,
 
-        ReadAuctionResponse auction,
+        ReadAuctionInReportResponse auction,
 
         String description
 ) {
@@ -23,7 +23,7 @@ public record ReadAuctionReportResponse(
                 auctionReportDto.id(),
                 ReadReporterResponse.from(auctionReportDto.reporterDto()),
                 auctionReportDto.createdTime(),
-                ReadAuctionResponse.from(auctionReportDto.auctionDto()),
+                ReadAuctionInReportResponse.from(auctionReportDto.auctionDto()),
                 auctionReportDto.description()
         );
     }

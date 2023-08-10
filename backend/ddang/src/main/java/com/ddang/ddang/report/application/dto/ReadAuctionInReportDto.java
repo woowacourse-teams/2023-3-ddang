@@ -4,7 +4,7 @@ import com.ddang.ddang.auction.domain.Auction;
 
 import java.time.LocalDateTime;
 
-public record ReadAuctionDto(
+public record ReadAuctionInReportDto(
         Long id,
         String title,
         String description,
@@ -15,8 +15,8 @@ public record ReadAuctionDto(
         int auctioneerCount
 ) {
 
-    public static ReadAuctionDto from(final Auction auction) {
-        return new ReadAuctionDto(
+    public static ReadAuctionInReportDto from(final Auction auction) {
+        return new ReadAuctionInReportDto(
                 auction.getId(),
                 auction.getTitle(),
                 auction.getDescription(),
