@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Comparator.comparing;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -89,14 +91,16 @@ public class ChatRoomService {
 
         List<ReadChatRoomWithLastMessageDto> chatRoomDtos = new ArrayList<>();
         for (final ChatRoom chatRoom : chatRooms) {
-
             messageRepository.findLastMessageByChatRoomId(chatRoom.getId())
                              .ifPresent(message ->
                                      chatRoomDtos.add(ReadChatRoomWithLastMessageDto.of(findUser, chatRoom, message))
                              );
         }
 
-        return chatRoomDtos;
+        return chatRoomDtos.stream()
+                           .sorted(comparing((ReadChatRoomWithLastMessageDto dto) -> dto.lastMessageDto().createdTime())
+                                   .reversed())
+                           .toList();
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
