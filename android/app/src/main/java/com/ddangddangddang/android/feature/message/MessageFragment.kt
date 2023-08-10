@@ -12,8 +12,8 @@ import com.ddangddangddang.android.util.binding.BindingFragment
 
 class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragment_message) {
     private val viewModel: MessageViewModel by viewModels { viewModelFactory }
-    private val messageRoomAdapter: MessageRoomAdapter = MessageRoomAdapter { messageRoomModel ->
-        viewModel.navigateToMessageRoom(messageRoomModel.roomId)
+    private val messageRoomAdapter: MessageRoomAdapter = MessageRoomAdapter { roomId ->
+        viewModel.navigateToMessageRoom(roomId)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

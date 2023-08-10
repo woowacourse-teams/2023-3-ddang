@@ -10,14 +10,14 @@
             type="com.ddangddangddang.android.model.MessageRoomModel" />
 
         <variable
-            name="onClickListener"
+            name="onItemClickListener"
             type="kotlin.jvm.functions.Function1" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{()-> onClickListener.invoke(item)}"
+        android:onClick="@{()-> onItemClickListener.invoke(item.roomId)}"
         android:paddingTop="12dp"
         android:paddingBottom="16dp">
 

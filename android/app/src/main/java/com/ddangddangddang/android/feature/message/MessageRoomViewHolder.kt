@@ -8,10 +8,10 @@ import com.ddangddangddang.android.model.MessageRoomModel
 
 class MessageRoomViewHolder private constructor(
     private val biding: ItemMessageRoomBinding,
-    onClickListener: (MessageRoomModel) -> Unit,
+    onItemClickListener: (roomId: Long) -> Unit,
 ) : RecyclerView.ViewHolder(biding.root) {
     init {
-        biding.onClickListener = onClickListener
+        biding.onItemClickListener = onItemClickListener
     }
 
     fun bind(messageRoomModel: MessageRoomModel) {
@@ -21,11 +21,11 @@ class MessageRoomViewHolder private constructor(
     companion object {
         fun create(
             parent: ViewGroup,
-            onClickListener: (MessageRoomModel) -> Unit,
+            onItemClickListener: (roomId: Long) -> Unit,
         ): MessageRoomViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemMessageRoomBinding.inflate(layoutInflater, parent, false)
-            return MessageRoomViewHolder(binding, onClickListener)
+            return MessageRoomViewHolder(binding, onItemClickListener)
         }
     }
 }
