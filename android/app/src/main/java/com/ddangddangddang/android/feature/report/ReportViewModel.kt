@@ -27,11 +27,10 @@ class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
         viewModelScope.launch {
             repository.reportAuction(auctionId ?: return@launch, reportContents.value ?: "")
         }
-        _event.value = ReportEvent.SubmitEvent
+        setExitEvent()
     }
 
     sealed class ReportEvent {
         object ExitEvent : ReportEvent()
-        object SubmitEvent : ReportEvent()
     }
 }
