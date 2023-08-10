@@ -20,21 +20,17 @@ class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragmen
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
         setupMessageRoomsRecyclerView()
-        if (viewModel.messageRooms.value == null) {
-            viewModel.loadMessageRooms()
-        }
+        if (viewModel.messageRooms.value == null) viewModel.loadMessageRooms()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (hidden.not()) { viewModel.loadMessageRooms() }
+        if (hidden.not()) viewModel.loadMessageRooms()
     }
 
     private fun setupViewModel() {
         viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
-        viewModel.messageRooms.observe(viewLifecycleOwner) {
-            messageRoomAdapter.setMessageRooms(it)
-        }
+        viewModel.messageRooms.observe(viewLifecycleOwner) { messageRoomAdapter.setMessageRooms(it) }
     }
 
     private fun setupMessageRoomsRecyclerView() {
