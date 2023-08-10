@@ -102,6 +102,7 @@ class ChatRoomControllerTest {
 
         // when & then
         mockMvc.perform(post("/chattings/1/messages")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(request)))
                .andExpectAll(
@@ -125,6 +126,7 @@ class ChatRoomControllerTest {
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
                        .content(objectMapper.writeValueAsString(request))
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
