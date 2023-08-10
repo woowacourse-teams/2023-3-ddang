@@ -72,9 +72,15 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매").description("설명").seller(seller)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(3L)).subCategory(sub).build();
+        final Auction auction = Auction.builder().
+                                       title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
         auctionRepository.save(auction);
 
         final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
@@ -108,9 +114,14 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매").description("설명").seller(seller)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(3L)).subCategory(sub).build();
+        final Auction auction = Auction.builder().title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
         auctionRepository.save(auction);
 
         final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
@@ -159,9 +170,13 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매").description("설명").seller(seller)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().plusDays(3L)).subCategory(sub).build();
+        final Auction auction = Auction.builder().title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .subCategory(sub).build();
         auctionRepository.save(auction);
 
         final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
@@ -193,9 +208,15 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매").description("설명").seller(seller)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(3L)).subCategory(sub).build();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
         auctionRepository.save(auction);
 
         auction.delete();
@@ -221,9 +242,15 @@ class ChatRoomServiceTest {
                                 .build();
         userRepository.save(seller);
 
-        final Auction auction = Auction.builder().title("경매").description("설명").seller(seller)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(3L)).subCategory(sub).build();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
         auctionRepository.save(auction);
 
         final Long auctionId = auction.getId();
@@ -253,9 +280,14 @@ class ChatRoomServiceTest {
         userRepository.save(buyer);
         userRepository.save(stranger);
 
-        final Auction auction = Auction.builder().title("경매").description("설명").seller(seller)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(3L)).subCategory(sub).build();
+        final Auction auction = Auction.builder().title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
         auctionRepository.save(auction);
 
         final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
@@ -287,9 +319,14 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매").description("설명").seller(seller)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(3L)).subCategory(sub).build();
+        final Auction auction = Auction.builder().title("경매")
+                                       .description("설명")
+                                       .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .subCategory(sub)
+                                       .build();
         auctionRepository.save(auction);
 
         final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));

@@ -1,15 +1,19 @@
 package com.ddang.ddang.bid.presentation;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.bid.application.BidService;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
-import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -39,11 +43,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -80,13 +88,22 @@ class BidControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    TokenDecoder mockTokenDecoder;
+
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp(@Autowired RestDocumentationContextProvider provider) {
+        mockTokenDecoder = mock(TokenDecoder.class);
+
+        final AuthenticationStore store = new AuthenticationStore();
+        final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(mockTokenDecoder, store);
+        final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
+
         mockMvc = MockMvcBuilders.standaloneSetup(bidController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
-                                 .setCustomArgumentResolvers(new LoginUserArgumentResolver())
+                                 .addInterceptors(interceptor)
+                                 .setCustomArgumentResolvers(resolver)
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)
@@ -96,14 +113,18 @@ class BidControllerTest {
     @Test
     void 입찰을_등록한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
 
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class))).willReturn(1L);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/auctions/1"))
@@ -111,7 +132,7 @@ class BidControllerTest {
                .andDo(
                        restDocs.document(
                                requestHeaders(
-                                       headerWithName("Authorization").description("로그인한 사용자 ID")
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
                                ),
                                requestFields(
                                        fieldWithPath("auctionId").description("입찰할 경매 ID"),
@@ -125,16 +146,18 @@ class BidControllerTest {
     @Test
     void 해당_경매가_없는_경우_입찰시_404를_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final Long invalidAuctionId = 9999L;
-
         final CreateBidRequest bidRequest = new CreateBidRequest(invalidAuctionId, 10_000);
         final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(auctionNotFoundException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -148,15 +171,17 @@ class BidControllerTest {
     void 해당_사용자가_없는_경우_입찰시_404를_반환한다() throws Exception {
         // given
         final Long invalidUserId = 9999L;
-
+        final PrivateClaims privateClaims = new PrivateClaims(invalidUserId);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final UserNotFoundException userNotFoundException = new UserNotFoundException("해당 사용자를 찾을 수 없습니다.");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(userNotFoundException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", invalidUserId)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -169,14 +194,17 @@ class BidControllerTest {
     @Test
     void 이미_종료된_경매_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidAuctionToBidException invalidAuctionToBidException = new InvalidAuctionToBidException("이미 종료된 경매입니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidAuctionToBidException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -189,14 +217,17 @@ class BidControllerTest {
     @Test
     void 이미_삭제된_경매_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidAuctionToBidException invalidAuctionToBidException = new InvalidAuctionToBidException("삭제된 경매입니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidAuctionToBidException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -209,14 +240,17 @@ class BidControllerTest {
     @Test
     void 판매자가_본인_경매에_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidBidderException invalidBidderException = new InvalidBidderException("판매자는 입찰할 수 없습니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidBidderException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -229,14 +263,17 @@ class BidControllerTest {
     @Test
     void 첫_입찰자가_시작가_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidBidPriceException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest)))
                .andExpectAll(
@@ -248,14 +285,17 @@ class BidControllerTest {
     @Test
     void 마지막_입찰자가_연속으로_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidBidderException invalidBidderException = new InvalidBidderException("이미 최고 입찰자입니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidBidderException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -268,14 +308,17 @@ class BidControllerTest {
     @Test
     void 마지막_입찰액보다_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("가능 입찰액보다 낮은 금액을 입력했습니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidBidPriceException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -288,14 +331,17 @@ class BidControllerTest {
     @Test
     void 최소_입찰_단위보다_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("가능 입찰액보다 낮은 금액을 입력했습니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidBidPriceException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -308,14 +354,17 @@ class BidControllerTest {
     @Test
     void 범위_밖의_금액으로_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 2_100_000_001);
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
-        given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class)))
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(bidService.create(any(CreateBidDto.class)))
                 .willThrow(invalidBidPriceException);
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -328,11 +377,14 @@ class BidControllerTest {
     @Test
     void 경매_아이디가_없는_경우_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(null, 10_000);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         // when & then
         mockMvc.perform(post("/bids")
-                       .header("Authorization", 1L)
+                       .header("Authorization", "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(bidRequest))
                )
@@ -346,12 +398,16 @@ class BidControllerTest {
     @ValueSource(longs = {-1L, 0L})
     void 경매_아이디가_양수가_아닌_값으로_입찰시_400을_반환한다(final Long auctionId) throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(auctionId, 10_000);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -362,12 +418,16 @@ class BidControllerTest {
     @Test
     void 입찰_금액이_없는_경우_입찰시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, null);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -379,12 +439,16 @@ class BidControllerTest {
     @ValueSource(ints = {-1, 0})
     void 입찰_금액이_양수가_아닌_값으로_입찰시_400을_반환한다(final Integer bidPrice) throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, bidPrice);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -418,12 +482,9 @@ class BidControllerTest {
                .andDo(
                        restDocs.document(
                                responseFields(
-                                       fieldWithPath("bids.[]").type(JsonFieldType.ARRAY)
-                                                               .description("특정 경매의 모든 입찰 목록"),
-                                       fieldWithPath("bids.[].name").type(JsonFieldType.STRING)
-                                                                    .description("입찰한 사용자의 닉네임"),
-                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING)
-                                                                            .description("입찰한 사용자의 프로필 이미지 URL"),
+                                       fieldWithPath("bids.[]").type(JsonFieldType.ARRAY).description("특정 경매의 모든 입찰 목록"),
+                                       fieldWithPath("bids.[].name").type(JsonFieldType.STRING).description("입찰한 사용자의 닉네임"),
+                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING).description("입찰한 사용자의 프로필 이미지 URL"),
                                        fieldWithPath("bids.[].price").type(JsonFieldType.NUMBER).description("입찰한 금액"),
                                        fieldWithPath("bids.[].bidTime").type(JsonFieldType.STRING).description("입찰한 시간")
                                )
