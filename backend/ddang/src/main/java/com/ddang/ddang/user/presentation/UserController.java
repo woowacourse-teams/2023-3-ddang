@@ -19,7 +19,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<ReadUserResponse> readById(@AuthenticateUser AuthenticationUserInfo userInfo) {
+    public ResponseEntity<ReadUserResponse> readById(@AuthenticateUser final AuthenticationUserInfo userInfo) {
         final ReadUserDto readUserDto = userService.readById(userInfo.userId());
         final ReadUserResponse response = ReadUserResponse.from(readUserDto);
 
