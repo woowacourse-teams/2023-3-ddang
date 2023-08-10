@@ -498,12 +498,12 @@ class ChatRoomServiceTest {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).id()).isEqualTo(enchoZeeto.getId());
-            softAssertions.assertThat(actual.get(0).auctionDto().id()).isEqualTo(enchoZeeto.getAuction().getId());
-            softAssertions.assertThat(actual.get(0).partnerDto().id()).isEqualTo(zeeto.getId());
-            softAssertions.assertThat(actual.get(1).id()).isEqualTo(jamieEncho.getId());
-            softAssertions.assertThat(actual.get(1).auctionDto().id()).isEqualTo(jamieEncho.getAuction().getId());
-            softAssertions.assertThat(actual.get(1).partnerDto().id()).isEqualTo(jamie.getId());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(enchoZeeto.getId());
+            softAssertions.assertThat(actual.get(1).auctionDto().id()).isEqualTo(enchoZeeto.getAuction().getId());
+            softAssertions.assertThat(actual.get(1).partnerDto().id()).isEqualTo(zeeto.getId());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(jamieEncho.getId());
+            softAssertions.assertThat(actual.get(0).auctionDto().id()).isEqualTo(jamieEncho.getAuction().getId());
+            softAssertions.assertThat(actual.get(0).partnerDto().id()).isEqualTo(jamie.getId());
         });
     }
 
