@@ -1,11 +1,12 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -15,8 +16,6 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.List;
-import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -24,6 +23,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -45,6 +50,9 @@ class JpaChatRoomRepositoryTest {
 
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    JpaBidRepository bidRepository;
 
     @Test
     void 채팅방을_저장한다() {
@@ -117,6 +125,7 @@ class JpaChatRoomRepositoryTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
+
         final User merry = User.builder()
                                .name("메리")
                                .profileImage("profile.png")
@@ -141,6 +150,7 @@ class JpaChatRoomRepositoryTest {
                                .reliability(4.7d)
                                .oauthId("12348")
                                .build();
+
         userRepository.save(merry);
         userRepository.save(encho);
         userRepository.save(jamie);
@@ -188,8 +198,123 @@ class JpaChatRoomRepositoryTest {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).getId()).isEqualTo(enchoZeeto.getId());
-            softAssertions.assertThat(actual.get(1).getId()).isEqualTo(jamieEncho.getId());
+            softAssertions.assertThat(actual.get(1).getId()).isEqualTo(enchoZeeto.getId());
+            softAssertions.assertThat(actual.get(0).getId()).isEqualTo(jamieEncho.getId());
         });
+    }
+
+    @Test
+    void 지정한_경매_아이디가_포함된_채팅방을_조회한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 1")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .build();
+        auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+
+        auction.updateLastBid(bid);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final Optional<ChatRoom> actual = chatRoomRepository.findByAuctionId(auction.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isPresent();
+            softAssertions.assertThat(actual.get()).isEqualTo(chatRoom);
+        });
+    }
+
+    @Test
+    void 지정한_경매_아이디가_포함된_채팅방이_존재한다면_참을_반환한다() {
+        // given
+        final Category main = new Category("메인");
+        final Category sub = new Category("서브");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 1")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .build();
+        auctionRepository.save(auction);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = chatRoomRepository.existsByAuctionId(auction.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 지정한_경매_아이디가_포함된_채팅방이_존재한다면_거짓을_반환한다() {
+        // given
+        final Long invalidAuctionId = -999L;
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = chatRoomRepository.existsByAuctionId(invalidAuctionId);
+
+        // then
+        assertThat(actual).isFalse();
     }
 }
