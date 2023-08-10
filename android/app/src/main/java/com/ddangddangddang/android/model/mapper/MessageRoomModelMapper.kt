@@ -1,15 +1,15 @@
 package com.ddangddangddang.android.model.mapper
 
-import com.ddangddangddang.android.model.ChatRoomModel
+import com.ddangddangddang.android.model.MessageRoomModel
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-object ChatRoomModelMapper : Mapper<ChatRoomModel, ChatRoomPreviewResponse> {
+object MessageRoomModelMapper : Mapper<MessageRoomModel, ChatRoomPreviewResponse> {
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
 
-    override fun ChatRoomPreviewResponse.toPresentation(): ChatRoomModel {
-        return ChatRoomModel(
+    override fun ChatRoomPreviewResponse.toPresentation(): MessageRoomModel {
+        return MessageRoomModel(
             id,
             auction.title,
             chatPartner.profileImage,
