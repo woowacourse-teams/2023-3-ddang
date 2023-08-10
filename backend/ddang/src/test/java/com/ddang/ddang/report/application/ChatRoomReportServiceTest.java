@@ -9,6 +9,7 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
+import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -174,5 +175,55 @@ class ChatRoomReportServiceTest {
         assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
                 .isInstanceOf(ChatRoomNotFoundException.class)
                 .hasMessage("해당 채팅방을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 판매자와_구매자_외의_사용자가_채팅방을_신고할시_예외가_발생한다() {
+        // given
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final Auction auction = Auction.builder()
+                                       .seller(seller)
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+
+        userRepository.save(seller);
+        auctionRepository.save(auction);
+        userRepository.save(buyer);
+        chatRoomRepository.save(chatRoom);
+
+        final User invalidReporter = User.builder()
+                                         .name("사용자")
+                                         .profileImage("profile.png")
+                                         .reliability(4.7d)
+                                         .oauthId("12347")
+                                         .build();
+        userRepository.save(invalidReporter);
+
+        final CreateChatRoomReportDto createChatRoomReportDto = new CreateChatRoomReportDto(
+                chatRoom.getId(),
+                "신고합니다.",
+                invalidReporter.getId()
+        );
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
+                .isInstanceOf(ChatRoomReportNotAccessibleException.class)
+                .hasMessage("해당 채팅방을 신고할 권한이 없습니다.");
     }
 }
