@@ -7,7 +7,9 @@ import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.util.Optional;
+
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -31,11 +33,11 @@ class JpaUserRepositoryTest {
     void 존재하는_oauthId를_전달하면_해당_회원을_Optional로_반환한다() {
         // given
         final User user = User.builder()
-                                .name("회원")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
+                              .name("회원")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         userRepository.save(user);
 

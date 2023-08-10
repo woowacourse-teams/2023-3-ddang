@@ -3,7 +3,6 @@ package com.ddang.ddang.report.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
@@ -11,6 +10,7 @@ import com.ddang.ddang.report.application.exception.InvalidReportAuctionExceptio
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
