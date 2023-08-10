@@ -17,13 +17,13 @@ class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
         _event.value = ReportEvent.ExitEvent
     }
 
-    fun submitEvent() {
+    fun submit() {
         // 통신
-        _event.value = ReportEvent.submitEvent
+        _event.value = ReportEvent.SubmitEvent
     }
 
     sealed class ReportEvent {
         object ExitEvent : ReportEvent()
-        object submitEvent : ReportEvent()
+        object SubmitEvent : ReportEvent()
     }
 }
