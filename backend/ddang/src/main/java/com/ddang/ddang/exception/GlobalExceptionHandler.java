@@ -1,8 +1,9 @@
 package com.ddang.ddang.exception;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
+import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
@@ -19,6 +20,8 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
+import java.net.MalformedURLException;
+import java.util.stream.Collectors;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -29,9 +32,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.net.MalformedURLException;
-import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -109,11 +109,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(UserNotAuthorizationException.class)
+    @ExceptionHandler(UserForbiddenException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotAuthorizationException(
-            final UserNotAuthorizationException ex
+            final UserForbiddenException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserNotAuthorizationException.class), ex);
+        logger.warn(String.format(EXCEPTION_FORMAT, UserForbiddenException.class), ex);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -221,6 +221,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedSocialLoginException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserUnauthorizedException.class)
+    public ResponseEntity<ExceptionResponse> handleUserUnauthorizedException(final UserUnauthorizedException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 

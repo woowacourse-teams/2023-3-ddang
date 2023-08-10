@@ -88,7 +88,7 @@ jacocoTestReport {
                             '**/*Request*',
                             '**/*Dto*',
                             '**/*PrivateClaims*',
-                            '**/*Configuration*',
+                            '**/configuration/**',
                             '**/*Appender*',
                             '**/*Helper*'
                     ] + Qdomains)
@@ -126,7 +126,7 @@ jacocoTestCoverageVerification {
                     '*.*Application*',
                     '*.*Dto*',
                     '*.*PrivateClaims*',
-                    '*.*Configuration*',
+                    '*.configuration.*',
                     '*.*Appender*',
                     '*.*Helper*'
             ] + Qdomains

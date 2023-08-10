@@ -1,7 +1,6 @@
 package com.ddang.ddang.authentication.infrastructure.jwt;
 
 import com.ddang.ddang.authentication.configuration.JwtConfigurationProperties;
-import com.ddang.ddang.authentication.domain.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
