@@ -61,10 +61,14 @@ public class ChatRoom extends BaseCreateTimeEntity {
     }
 
     public boolean isParticipant(final User user) {
-        return auction.isSellerOrWinner(user);
+        return isSeller(user) || isBuyer(user);
     }
 
     private boolean isSeller(final User user) {
         return auction.isOwner(user);
+    }
+
+    private boolean isBuyer(final User user) {
+        return buyer.equals(user);
     }
 }
