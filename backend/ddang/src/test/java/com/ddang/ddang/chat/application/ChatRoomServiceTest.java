@@ -414,9 +414,9 @@ class ChatRoomServiceTest {
         chatRoomRepository.save(chatRoom);
 
         final ReadParticipatingChatRoomDto expect = ReadParticipatingChatRoomDto.of(
-                buyer,
+                seller,
                 chatRoom,
-                chatRoom.isChatAvailableTime(LocalDateTime.now())
+                LocalDateTime.now()
         );
 
         // when

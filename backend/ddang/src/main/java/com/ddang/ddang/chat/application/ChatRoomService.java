@@ -86,7 +86,7 @@ public class ChatRoomService {
         final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
 
         return chatRooms.stream()
-                        .map(chatRoom -> toDto(findUser, chatRoom))
+                        .map(chatRoom -> ReadParticipatingChatRoomDto.of(findUser, chatRoom, LocalDateTime.now()))
                         .toList();
     }
 
@@ -100,19 +100,12 @@ public class ChatRoomService {
                                                     );
         checkAccessible(findUser, chatRoom);
 
-        return toDto(findUser, chatRoom);
+        return ReadParticipatingChatRoomDto.of(findUser, chatRoom, LocalDateTime.now());
     }
 
     private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(findUser)) {
             throw new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
         }
-    }
-
-    private ReadParticipatingChatRoomDto toDto(final User findUser, final ChatRoom chatRoom) {
-        return ReadParticipatingChatRoomDto.of(
-                chatRoom.calculateChatPartnerOf(findUser),
-                chatRoom,
-                chatRoom.isChatAvailableTime(LocalDateTime.now()));
     }
 }
