@@ -5,6 +5,7 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
+import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
@@ -34,7 +35,7 @@ public class ChatRoomReportService {
         final ChatRoom chatRoom =
                 chatRoomRepository.findById(chatRoomReportDto.chatRoomId())
                                   .orElseThrow(() -> new ChatRoomNotFoundException("해당 채팅방을 찾을 수 없습니다."));
-        checkAccessible(reporter, chatRoom);
+        checkInvalidChatRoomReport(reporter, chatRoom);
 
         ChatRoomReport chatRoomReport = chatRoomReportDto.toEntity(reporter, chatRoom);
 
@@ -42,9 +43,12 @@ public class ChatRoomReportService {
                                        .getId();
     }
 
-    private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
-        if (!chatRoom.isParticipant(findUser)) {
+    private void checkInvalidChatRoomReport(final User reporter, final ChatRoom chatRoom) {
+        if (!chatRoom.isParticipant(reporter)) {
             throw new ChatRoomReportNotAccessibleException("해당 채팅방을 신고할 권한이 없습니다.");
+        }
+        if (chatRoomReportRepository.existsByChatRoomIdAndReporterId(chatRoom.getId(), reporter.getId())) {
+            throw new AlreadyReportChatRoomException("이미 신고한 채팅방입니다.");
         }
     }
 

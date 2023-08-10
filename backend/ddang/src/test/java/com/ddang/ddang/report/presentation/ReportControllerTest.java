@@ -21,6 +21,7 @@ import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
+import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
@@ -455,6 +456,28 @@ class ReportControllerTest {
                .andExpectAll(
                        status().isForbidden(),
                        jsonPath("$.message", is(chatRoomReportNotAccessibleException.getMessage()))
+               );
+    }
+
+    @Test
+    void 이미_신고한_사용자가_동일_채팅방을_신고할시_400을_반환한다() throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(1L, "신고합니다");
+        final AlreadyReportChatRoomException alreadyReportChatRoomException = new AlreadyReportChatRoomException("이미 신고한 채팅방입니다.");
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(alreadyReportChatRoomException);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(alreadyReportChatRoomException.getMessage()))
                );
     }
 

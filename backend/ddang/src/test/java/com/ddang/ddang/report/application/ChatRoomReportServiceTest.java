@@ -10,6 +10,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
+import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -232,6 +233,50 @@ class ChatRoomReportServiceTest {
         assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
                 .isInstanceOf(ChatRoomReportNotAccessibleException.class)
                 .hasMessage("해당 채팅방을 신고할 권한이 없습니다.");
+    }
+
+    @Test
+    void 이미_신고한_채팅방을_동일_사용자가_신고하는_경우_예외가_발생한다() {
+        // given
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final Auction auction = Auction.builder()
+                                       .seller(seller)
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+
+        userRepository.save(seller);
+        auctionRepository.save(auction);
+        userRepository.save(buyer);
+        chatRoomRepository.save(chatRoom);
+
+        final CreateChatRoomReportDto createChatRoomReportDto = new CreateChatRoomReportDto(
+                chatRoom.getId(),
+                "신고합니다.",
+                buyer.getId()
+        );
+
+        chatRoomReportService.create(createChatRoomReportDto);
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
+                .isInstanceOf(AlreadyReportChatRoomException.class)
+                .hasMessage("이미 신고한 채팅방입니다.");
     }
 
     @Test

@@ -80,6 +80,53 @@ class JpaChatRoomReportRepositoryTest {
     }
 
     @Test
+    void 특정_채팅방_아이디와_신고자_아이디가_동일한_레코드가_존재한다면_참을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .build();
+        final User buyer = User.builder()
+                               .name("사용자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        final ChatRoomReport chatRoomReport = new ChatRoomReport(buyer, chatRoom, "신고합니다.");
+
+        auctionRepository.save(auction);
+        userRepository.save(buyer);
+        chatRoomRepository.save(chatRoom);
+        chatRoomReportRepository.save(chatRoomReport);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = chatRoomReportRepository.existsByChatRoomIdAndReporterId(chatRoom.getId(), buyer.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_채팅방_아이디와_신고자_아이디가_동일한_레코드가_존재하지_않는다면_거짓을_반환한다() {
+        // given
+        final long invalidChatRoom = -9999L;
+        final long invalidUserId = -9999L;
+
+        // when
+        final boolean actual = chatRoomReportRepository.existsByChatRoomIdAndReporterId(invalidChatRoom, invalidUserId);
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void 전체_채팅방_신고_목록을_조회한다() {
         // given
         final User seller = User.builder()

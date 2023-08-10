@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface JpaChatRoomReportRepository extends JpaRepository<ChatRoomReport, Long> {
 
+    boolean existsByChatRoomIdAndReporterId(final Long chatRoomId, final Long reporterId);
+
     @Override
     @EntityGraph(attributePaths = {"reporter", "chatRoom", "chatRoom.buyer", "chatRoom.auction", "chatRoom.auction.seller"})
     List<ChatRoomReport> findAll();
