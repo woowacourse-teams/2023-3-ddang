@@ -16,6 +16,8 @@ import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
+import com.ddang.ddang.report.application.dto.ReadChatRoomInReportDto;
+import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
@@ -303,31 +305,34 @@ class ReportControllerTest {
     }
 
     @Test
-    void 전체_신고_목록을_조회한다() throws Exception {
+    void 전체_경매_신고_목록을_조회한다() throws Exception {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        final ReadUserInReportDto userDto = new ReadUserInReportDto(1L, "판매자", "profile.png", 4.0d);
+        final ReadUserInReportDto userDto = new ReadUserInReportDto(1L, "판매자", "profile.png", 4.0d, "12345");
         final ReadAuctionReportDto auctionReportDto1 = new ReadAuctionReportDto(
                 1L,
                 new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now()
+                                                                                                   .plusDays(2), 2),
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto2 = new ReadAuctionReportDto(
                 2L,
                 new ReadReporterDto(2L, "회원2", "이미지2", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now()
+                                                                                                   .plusDays(2), 2),
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto3 = new ReadAuctionReportDto(
                 3L,
                 new ReadReporterDto(3L, "회원3", "이미지3", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now()
+                                                                                                   .plusDays(2), 2),
                 "신고합니다."
         );
         given(auctionReportService.readAll())
@@ -515,6 +520,78 @@ class ReportControllerTest {
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is("신고 내용이 입력되지 않았습니다."))
+               );
+    }
+
+    @Test
+    void 전체_채팅방_신고_목록을_조회한다() throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
+        final ReadUserInReportDto sellerDto = new ReadUserInReportDto(1L, "판매자", "profile.png", 4.0d, "12345");
+        final ReadAuctionInReportDto auctionInReportDto = new ReadAuctionInReportDto(
+                1L,
+                sellerDto,
+                "제목",
+                "설명",
+                100,
+                1_00,
+                false,
+                LocalDateTime.now().plusDays(2),
+                2
+        );
+        final ReadUserInReportDto buyerDto1 = new ReadUserInReportDto(2L, "구매자1", "profile.png", 4.0d, "12346");
+        final ReadChatRoomReportDto chatRoomReportDto1 = new ReadChatRoomReportDto(
+                1L,
+                new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
+                LocalDateTime.now(),
+                new ReadChatRoomInReportDto(1L, auctionInReportDto, buyerDto1, false),
+                "신고합니다."
+        );
+        final ReadUserInReportDto buyerDto2 = new ReadUserInReportDto(3L, "구매자2", "profile.png", 4.0d, "12347");
+        final ReadChatRoomReportDto chatRoomReportDto2 = new ReadChatRoomReportDto(
+                2L,
+                new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
+                LocalDateTime.now(),
+                new ReadChatRoomInReportDto(1L, auctionInReportDto, buyerDto2, false),
+                "신고합니다."
+        );
+        final ReadUserInReportDto buyerDto3 = new ReadUserInReportDto(4L, "구매자3", "profile.png", 4.0d, "12348");
+        final ReadChatRoomReportDto chatRoomReportDto3 = new ReadChatRoomReportDto(
+                3L,
+                new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
+                LocalDateTime.now(),
+                new ReadChatRoomInReportDto(1L, auctionInReportDto, buyerDto3, false),
+                "신고합니다."
+        );
+        given(chatRoomReportService.readAll())
+                .willReturn(List.of(chatRoomReportDto1, chatRoomReportDto2, chatRoomReportDto3));
+
+        // when & then
+        mockMvc.perform(get("/reports/chat-rooms")
+                       .contentType(MediaType.APPLICATION_JSON)
+               )
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.reports.[0].id", is(chatRoomReportDto1.id()), Long.class),
+                       jsonPath("$.reports.[0].reporter.id", is(chatRoomReportDto1.reporterDto().id()), Long.class),
+                       jsonPath("$.reports.[0].reporter.name", is(chatRoomReportDto1.reporterDto().name())),
+                       jsonPath("$.reports.[0].createdTime").exists(),
+                       jsonPath("$.reports.[0].chatRoom.id", is(chatRoomReportDto1.chatRoomDto().id()), Long.class),
+                       jsonPath("$.reports.[0].description", is(chatRoomReportDto1.description())),
+                       jsonPath("$.reports.[1].id", is(chatRoomReportDto2.id()), Long.class),
+                       jsonPath("$.reports.[1].reporter.id", is(chatRoomReportDto2.reporterDto().id()), Long.class),
+                       jsonPath("$.reports.[1].reporter.name", is(chatRoomReportDto2.reporterDto().name())),
+                       jsonPath("$.reports.[1].createdTime").exists(),
+                       jsonPath("$.reports.[1].chatRoom.id", is(chatRoomReportDto2.chatRoomDto().id()), Long.class),
+                       jsonPath("$.reports.[1].description", is(chatRoomReportDto2.description())),
+                       jsonPath("$.reports.[2].id", is(chatRoomReportDto3.id()), Long.class),
+                       jsonPath("$.reports.[2].reporter.id", is(chatRoomReportDto3.reporterDto().id()), Long.class),
+                       jsonPath("$.reports.[2].reporter.name", is(chatRoomReportDto3.reporterDto().name())),
+                       jsonPath("$.reports.[2].createdTime").exists(),
+                       jsonPath("$.reports.[2].chatRoom.id", is(chatRoomReportDto3.chatRoomDto().id()), Long.class),
+                       jsonPath("$.reports.[2].description", is(chatRoomReportDto3.description()))
                );
     }
 }

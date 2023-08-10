@@ -2,14 +2,15 @@ package com.ddang.ddang.report.application.dto;
 
 import com.ddang.ddang.user.domain.User;
 
-public record ReadUserInReportDto(Long id, String name, String profileImage, double reliability) {
+public record ReadUserInReportDto(Long id, String name, String profileImage, double reliability, String oauthId) {
 
-    public static ReadUserInReportDto from(final User seller) {
+    public static ReadUserInReportDto from(final User user) {
         return new ReadUserInReportDto(
-                seller.getId(),
-                seller.getName(),
-                seller.getProfileImage(),
-                seller.getReliability()
+                user.getId(),
+                user.getName(),
+                user.getProfileImage(),
+                user.getReliability(),
+                user.getOauthId()
         );
     }
 }
