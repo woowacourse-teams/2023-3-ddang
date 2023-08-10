@@ -11,6 +11,6 @@ public interface JpaAuctionReportRepository extends JpaRepository<AuctionReport,
     boolean existsByAuctionIdAndReporterId(final Long auctionId, final Long reporterId);
 
     @Override
-    @EntityGraph(attributePaths = {"reporter", "auction"})
+    @EntityGraph(attributePaths = {"reporter", "auction", "auction.seller"})
     List<AuctionReport> findAll();
 }
