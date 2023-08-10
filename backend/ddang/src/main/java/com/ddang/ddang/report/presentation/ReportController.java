@@ -25,7 +25,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/reports")
 @RequiredArgsConstructor
-public class AuctionReportController {
+public class ReportController {
 
     private final AuctionReportService auctionReportService;
     private final ChatRoomReportService chatRoomReportService;

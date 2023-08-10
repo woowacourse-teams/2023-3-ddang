@@ -61,7 +61,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {AuctionReportController.class},
+@WebMvcTest(controllers = {ReportController.class},
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
@@ -71,7 +71,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuctionReportControllerTest {
+class ReportControllerTest {
 
     @MockBean
     AuctionReportService auctionReportService;
@@ -80,7 +80,7 @@ class AuctionReportControllerTest {
     ChatRoomReportService chatRoomReportService;
 
     @Autowired
-    AuctionReportController auctionReportController;
+    ReportController reportController;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -97,7 +97,7 @@ class AuctionReportControllerTest {
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(mockTokenDecoder, store);
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(auctionReportController)
+        mockMvc = MockMvcBuilders.standaloneSetup(reportController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver)
