@@ -71,7 +71,7 @@ class MessageRoomViewModel(
     }
 
     private fun addMessages(messages: List<MessageModel>) {
-        _messages.value = _messages.value?.plus(messages)
+        _messages.value = _messages.value?.plus(messages) ?: messages
     }
 
     fun sendMessage() {
