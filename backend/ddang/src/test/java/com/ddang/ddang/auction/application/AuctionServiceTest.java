@@ -708,6 +708,74 @@ class AuctionServiceTest {
     }
 
     @Test
+    void 요청을_한_회원의_정보를_찾을_수_없으면_예외가_발생한다() {
+        // given
+        final StoreImageDto storeImageDto = new StoreImageDto("upload.png", "store.png");
+
+        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(storeImageDto));
+
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1});
+        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
+                List.of(auctionImage),
+                1L
+        );
+
+        final Auction auction = createAuctionDto.toEntity(seller, sub);
+        auctionRepository.save(auction);
+
+        final Long auctionId = auction.getId();
+        final Long invalidUserId = -999L;
+        AuthenticationUserInfo userInfo = new AuthenticationUserInfo(invalidUserId);
+
+        // when & then
+        assertThatThrownBy(() -> auctionService.readByAuctionId(auctionId, userInfo))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("회원 정보를 찾을 수 없습니다.");
+    }
+
+    @Test
     void 첫번째_페이지의_경매_목록을_조회한다() {
         // given
         final StoreImageDto storeImageDto = new StoreImageDto("upload.png", "store.png");
