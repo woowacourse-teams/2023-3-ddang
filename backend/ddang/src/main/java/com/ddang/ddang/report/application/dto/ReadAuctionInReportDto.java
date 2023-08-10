@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 public record ReadAuctionInReportDto(
         Long id,
+        ReadUserInReportDto seller,
         String title,
         String description,
         int bidUnit,
@@ -18,6 +19,7 @@ public record ReadAuctionInReportDto(
     public static ReadAuctionInReportDto from(final Auction auction) {
         return new ReadAuctionInReportDto(
                 auction.getId(),
+                ReadUserInReportDto.from(auction.getSeller()),
                 auction.getTitle(),
                 auction.getDescription(),
                 auction.getBidUnit().getValue(),
