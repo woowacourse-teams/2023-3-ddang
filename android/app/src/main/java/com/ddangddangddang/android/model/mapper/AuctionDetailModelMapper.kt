@@ -7,11 +7,8 @@ import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.model.SellerModel
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 object AuctionDetailModelMapper : Mapper<AuctionDetailModel, AuctionDetailResponse> {
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-
     override fun AuctionDetailResponse.toPresentation(): AuctionDetailModel {
         return AuctionDetailModel(
             auction.id,
@@ -24,8 +21,8 @@ object AuctionDetailModelMapper : Mapper<AuctionDetailModel, AuctionDetailRespon
             auction.lastBidPrice ?: auction.startPrice,
             AuctionDetailStatusModel.find(auction.status),
             auction.bidUnit,
-            LocalDateTime.parse(auction.registerTime, formatter),
-            LocalDateTime.parse(auction.closingTime, formatter),
+            LocalDateTime.parse(auction.registerTime),
+            LocalDateTime.parse(auction.closingTime),
             auction.directRegions.map {
                 RegionModel(
                     it.first,
