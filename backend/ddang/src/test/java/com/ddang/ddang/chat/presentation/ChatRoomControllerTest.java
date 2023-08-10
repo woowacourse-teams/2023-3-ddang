@@ -18,12 +18,12 @@ import com.ddang.ddang.chat.application.dto.ReadUserDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,7 +115,7 @@ class ChatRoomControllerTest {
         final CreateMessageRequest request = new CreateMessageRequest(1L, 1L, contents);
 
         final ChatRoomNotFoundException chatRoomNotFoundException = new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        given(messageService.create(CreateMessageDto.from(invalidChatRoomId, request)))
+        given(messageService.create(CreateMessageDto.of(invalidChatRoomId, request)))
                 .willThrow(chatRoomNotFoundException);
 
         // when & then
