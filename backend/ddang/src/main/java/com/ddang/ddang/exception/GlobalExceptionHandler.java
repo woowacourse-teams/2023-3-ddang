@@ -10,6 +10,7 @@ import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
+import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
@@ -194,6 +195,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportAuctionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ChatRoomReportNotAccessibleException.class)
+    public ResponseEntity<ExceptionResponse> handleChatRoomReportNotAccessibleExceptionException(final ChatRoomReportNotAccessibleException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ChatRoomReportNotAccessibleException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 

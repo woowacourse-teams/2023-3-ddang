@@ -7,14 +7,18 @@ import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.report.application.AuctionReportService;
+import com.ddang.ddang.report.application.ChatRoomReportService;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
+import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
@@ -72,6 +76,9 @@ class AuctionReportControllerTest {
     @MockBean
     AuctionReportService auctionReportService;
 
+    @MockBean
+    ChatRoomReportService chatRoomReportService;
+
     @Autowired
     AuctionReportController auctionReportController;
 
@@ -101,8 +108,8 @@ class AuctionReportControllerTest {
     @Test
     void 경매_신고를_등록한다() throws Exception {
         // given
-        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
@@ -122,9 +129,9 @@ class AuctionReportControllerTest {
     @Test
     void 해당_사용자가_없는_경우_신고시_404를_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final UserNotFoundException userNotFoundException = new UserNotFoundException("해당 사용자를 찾을 수 없습니다.");
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(userNotFoundException);
@@ -144,9 +151,9 @@ class AuctionReportControllerTest {
     @Test
     void 해당_경매가_없는_경우_신고시_404를_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(auctionNotFoundException);
@@ -166,9 +173,9 @@ class AuctionReportControllerTest {
     @Test
     void 본인이_등록한_경매를_신고할_경우_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final InvalidReporterToAuctionException invalidReporterToAuctionException = new InvalidReporterToAuctionException("본인 경매글입니다.");
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(invalidReporterToAuctionException);
@@ -188,9 +195,9 @@ class AuctionReportControllerTest {
     @Test
     void 이미_삭제된_경매_신고시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final InvalidReportAuctionException invalidReportAuctionException = new InvalidReportAuctionException("이미 삭제된 경매입니다.");
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(invalidReportAuctionException);
@@ -210,9 +217,9 @@ class AuctionReportControllerTest {
     @Test
     void 이미_신고한_경매_신고시_400을_반환한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
         final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final AlreadyReportAuctionException alreadyReportAuctionException = new AlreadyReportAuctionException("이미 신고한 경매입니다.");
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(alreadyReportAuctionException);
@@ -232,8 +239,8 @@ class AuctionReportControllerTest {
     @Test
     void 경매_아이디가_없는_경우_신고시_400을_반환한다() throws Exception {
         // given
-        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(null, "신고합니다");
         final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(null, "신고합니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
@@ -253,9 +260,9 @@ class AuctionReportControllerTest {
     @Test
     void 경매_아이디가_음수인_경우_신고시_400을_반환한다() throws Exception {
         // given
-        final Long invalidId = -999L;
-        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(invalidId, "신고합니다");
+        final Long invalidAuctionId = -999L;
         final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(invalidAuctionId, "신고합니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
@@ -274,10 +281,10 @@ class AuctionReportControllerTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    void 신고_내용_없이_신고시_400을_반환한다(final String description) throws Exception {
+    void 신고_내용_없이_경매_신고시_400을_반환한다(final String description) throws Exception {
         // given
-        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, description);
         final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateAuctionReportRequest createAuctionReportRequest = new CreateAuctionReportRequest(1L, description);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
@@ -297,6 +304,9 @@ class AuctionReportControllerTest {
     @Test
     void 전체_신고_목록을_조회한다() throws Exception {
         // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
         final ReadAuctionReportDto auctionReportDto1 = new ReadAuctionReportDto(
                 1L,
                 new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
@@ -318,9 +328,6 @@ class AuctionReportControllerTest {
                 new ReadAuctionInReportDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
                 "신고합니다."
         );
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.readAll())
                 .willReturn(List.of(auctionReportDto1, auctionReportDto2, auctionReportDto3));
 
@@ -351,6 +358,161 @@ class AuctionReportControllerTest {
                        jsonPath("$.reports.[2].auction.id", is(auctionReportDto3.auctionDto().id()), Long.class),
                        jsonPath("$.reports.[2].auction.title", is(auctionReportDto3.auctionDto().title())),
                        jsonPath("$.reports.[2].description", is(auctionReportDto3.description()))
+               );
+    }
+
+    @Test
+    void 채팅방_신고를_등록한다() throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(1L, "신고합니다");
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isCreated(),
+                       header().string(HttpHeaders.LOCATION, is("/chattings/1"))
+               );
+    }
+
+    @Test
+    void 존재하지_않은_사용자가_채팅방을_신고할시_404를_반환한다() throws Exception {
+        // given
+        final Long invalidUserId = -999L;
+        final PrivateClaims privateClaims = new PrivateClaims(invalidUserId);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(1L, "신고합니다");
+        final UserNotFoundException userNotFoundException = new UserNotFoundException("해당 사용자를 찾을 수 없습니다.");
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(userNotFoundException);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 존재하지_않은_채팅방을_신고할시_404를_반환한다() throws Exception {
+        // given
+        final Long invalidChatRoomId = 999L;
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(invalidChatRoomId, "신고합니다");
+        final ChatRoomNotFoundException chatRoomNotFoundException = new ChatRoomNotFoundException("해당 채팅방을 찾을 수 없습니다.");
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(chatRoomNotFoundException);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(chatRoomNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 판매자_혹은_구매자가_아닌_사용자가_채팅방을_신고할시_403을_반환한다() throws Exception {
+        // given
+        final Long unaccessibleUserId = 999L;
+        final PrivateClaims privateClaims = new PrivateClaims(unaccessibleUserId);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(1L, "신고합니다");
+        final ChatRoomReportNotAccessibleException chatRoomReportNotAccessibleException = new ChatRoomReportNotAccessibleException("해당 채팅방을 신고할 권한이 없습니다.");
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(chatRoomReportNotAccessibleException);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isForbidden(),
+                       jsonPath("$.message", is(chatRoomReportNotAccessibleException.getMessage()))
+               );
+    }
+
+    @Test
+    void 채팅방_아이디가_없는_경우_신고시_400을_반환한다() throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(null, "신고합니다");
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is("채팅방 아이디가 입력되지 않았습니다."))
+               );
+    }
+
+    @Test
+    void 채팅방_아이디가_음수인_경우_신고시_400을_반환한다() throws Exception {
+        // given
+        final Long invalidAuctionId = -999L;
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(invalidAuctionId, "신고합니다");
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is("채팅방 아이디는 양수여야 합니다."))
+               );
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void 신고_내용_없이_채팅방_신고시_400을_반환한다(final String description) throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(1L, description);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+
+        // when & then
+        mockMvc.perform(post("/reports/chat-rooms")
+                       .header("Authorization", "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(createChatRoomReportRequest))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is("신고 내용이 입력되지 않았습니다."))
                );
     }
 }

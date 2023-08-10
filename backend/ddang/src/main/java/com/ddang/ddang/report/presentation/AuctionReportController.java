@@ -3,9 +3,12 @@ package com.ddang.ddang.report.presentation;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.report.application.AuctionReportService;
+import com.ddang.ddang.report.application.ChatRoomReportService;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.report.presentation.dto.response.ReadAuctionReportsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,7 @@ import java.util.List;
 public class AuctionReportController {
 
     private final AuctionReportService auctionReportService;
+    private final ChatRoomReportService chatRoomReportService;
 
     @PostMapping("/auctions")
     public ResponseEntity<Void> createAuctinReport(
@@ -43,5 +47,16 @@ public class AuctionReportController {
         final ReadAuctionReportsResponse response = ReadAuctionReportsResponse.from(readAuctionReportDtos);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/chat-rooms")
+    public ResponseEntity<Void> createChatRoomReport(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @RequestBody @Valid final CreateChatRoomReportRequest createChatRoomReportRequest
+    ) {
+        chatRoomReportService.create(CreateChatRoomReportDto.of(createChatRoomReportRequest, userInfo.userId()));
+
+        return ResponseEntity.created(URI.create("/chattings/" + createChatRoomReportRequest.chatRoomId()))
+                             .build();
     }
 }
