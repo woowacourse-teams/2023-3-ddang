@@ -9,6 +9,7 @@ import com.ddangddangddang.android.feature.home.HomeViewModel
 import com.ddangddangddang.android.feature.login.LoginViewModel
 import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.mypage.MyPageViewModel
+import com.ddangddangddang.android.feature.message.MessageViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
@@ -30,7 +31,6 @@ val userRepository = UserRepositoryImpl.getInstance(DdangDdangDdang.auctionRetro
 val viewModelFactory = object : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>, extras: CreationExtras): T =
         with(modelClass) {
-            // 레포지토리 싱글톤 객체 얻어옴
             when {
                 isAssignableFrom(MainViewModel::class.java) -> MainViewModel()
                 isAssignableFrom(HomeViewModel::class.java) -> HomeViewModel(auctionRepository)
@@ -54,6 +54,8 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(SelectRegionsViewModel::class.java) -> SelectRegionsViewModel(
                     regionRepository,
                 )
+
+                isAssignableFrom(MessageViewModel::class.java) -> MessageViewModel(chatRepository)
 
                 isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(DdangDdangDdang.authRepository)
                 isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(DdangDdangDdang.authRepository)
