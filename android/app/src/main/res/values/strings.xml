@@ -104,5 +104,7 @@
     <string name="message_room_profile_description">쪽지 상대 프로필입니다</string>
     <string name="message_room_refresh_description">채팅 목록 갱신 버튼입니다</string>
     <string name="message_room_report_description">쪽지 상대 신고 버튼입니다</string>
+    <string name="message_room_message_input_hint">메시지를 입력해주세요</string>
+    <string name="message_room_message_submit">전송</string>
 
 </resources>
