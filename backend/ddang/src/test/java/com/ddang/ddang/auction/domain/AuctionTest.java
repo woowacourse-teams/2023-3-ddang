@@ -127,7 +127,7 @@ class AuctionTest {
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = new User("사용자1", "이미지1", 4.9d);
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -161,7 +161,7 @@ class AuctionTest {
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9);
+        final User user = new User("사용자1", "이미지1", 4.9d);
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         auction.updateLastBid(bid);
@@ -176,7 +176,7 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하면_참을_반환한다() {
         // given
-        final User seller = new User("사용자1", "이미지1", 4.9);
+        final User seller = new User("사용자1", "이미지1", 4.9d);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
@@ -193,13 +193,13 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하지_않으면_거짓을_반환한다() {
         // given
-        final User seller = new User("사용자1", "이미지1", 4.9);
+        final User seller = new User("사용자1", "이미지1", 4.9d);
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
                                        .seller(seller)
                                        .build();
-        final User user = new User("사용자2", "이미지2", 4.9);
+        final User user = new User("사용자2", "이미지2", 4.9d);
 
         ReflectionTestUtils.setField(user, "id", 1L);
 
@@ -213,8 +213,8 @@ class AuctionTest {
     @Test
     void 주어진_사용자가_낙찰자라면_참을_반환한다() {
         // given
-        User seller = new User("판매자", "profileImage.png", 5.0);
-        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0d);
+        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -238,9 +238,9 @@ class AuctionTest {
     @Test
     void 주어진_사용자가_낙찰자가_아니라면_거짓을_반환한다() {
         // given
-        User seller = new User("판매자", "profileImage.png", 5.0);
-        User winner = new User("낙찰자", "profileImage.png", 5.0);
-        User stranger = new User("일반인", "profileImage.png", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0d);
+        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
+        final User stranger = new User("일반인", "profileImage.png", 5.0d);
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -266,8 +266,8 @@ class AuctionTest {
     @Test
     void 경매의_최종_낙찰자를_반환한다() {
         // given
-        User seller = new User("판매자", "profileImage.png", 5.0);
-        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0d);
+        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -294,8 +294,8 @@ class AuctionTest {
     @Test
     void 경매가_종료되지_않았다면_최종_낙찰자가_없다() {
         // given
-        User seller = new User("판매자", "profileImage.png", 5.0);
-        User winner = new User("낙찰자", "profileImage.png", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0d);
+        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -319,7 +319,7 @@ class AuctionTest {
     @Test
     void 입찰자가_존재하지_않는다면_최종_낙찰자가_없다() {
         // given
-        User seller = new User("판매자", "profileImage.png", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0d);
         userRepository.save(seller);
 
         final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);

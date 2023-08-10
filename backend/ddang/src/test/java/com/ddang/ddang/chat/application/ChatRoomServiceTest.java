@@ -65,8 +65,8 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User seller = new User("판매자", "이미지", 5.0d);
+        final User buyer = new User("구매자", "이미지", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -105,8 +105,8 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User seller = new User("판매자", "이미지", 5.0d);
+        final User buyer = new User("구매자", "이미지", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -139,7 +139,7 @@ class ChatRoomServiceTest {
     @Test
     void 채팅방_생성시_관련된_경매_정보를_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = new User("사용자", "이미지", 5.0);
+        final User user = new User("사용자", "이미지", 5.0d);
         userRepository.save(user);
 
         final Long userId = user.getId();
@@ -161,8 +161,8 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User seller = new User("판매자", "이미지", 5.0d);
+        final User buyer = new User("구매자", "이미지", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -200,8 +200,8 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User seller = new User("판매자", "이미지", 5.0d);
+        final User buyer = new User("구매자", "이미지", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -236,9 +236,9 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
-        final User stranger = new User("일반인", "이미지", 5.0);
+        final User seller = new User("판매자", "이미지", 5.0d);
+        final User buyer = new User("구매자", "이미지", 5.0d);
+        final User stranger = new User("일반인", "이미지", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
         userRepository.save(stranger);
@@ -277,8 +277,8 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = new User("판매자", "이미지", 5.0);
-        final User buyer = new User("구매자", "이미지", 5.0);
+        final User seller = new User("판매자", "이미지", 5.0d);
+        final User buyer = new User("구매자", "이미지", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -318,10 +318,10 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User merry = new User("메리", "이미지", 5.0);
-        final User encho = new User("엔초", "이미지", 5.0);
-        final User jamie = new User("제이미", "이미지", 5.0);
-        final User zeeto = new User("지토", "이미지", 5.0);
+        final User merry = new User("메리", "이미지", 5.0d);
+        final User encho = new User("엔초", "이미지", 5.0d);
+        final User jamie = new User("제이미", "이미지", 5.0d);
+        final User zeeto = new User("지토", "이미지", 5.0d);
         userRepository.save(merry);
         userRepository.save(encho);
         userRepository.save(jamie);
@@ -390,8 +390,8 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_조회한다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0d);
+        final User buyer = new User("구매자", "profileImage.png", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
 
@@ -429,7 +429,7 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_조회를_요청한_사용자의_정보를_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = new User("구매자", "profileImage.png", 5.0);
+        final User user = new User("구매자", "profileImage.png", 5.0d);
         userRepository.save(user);
 
         final Auction auction = Auction.builder()
@@ -453,7 +453,7 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = new User("구매자", "profileImage.png", 5.0);
+        final User user = new User("구매자", "profileImage.png", 5.0d);
         userRepository.save(user);
 
         final Long invalidChatRoomId = -999L;
@@ -469,9 +469,9 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_주어진_사용자가_채팅의_참여자가_아니라면_예외가_발생한다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0);
-        final User buyer = new User("구매자", "profileImage.png", 5.0);
-        final User stranger = new User("일반인", "profileImage.png", 5.0);
+        final User seller = new User("판매자", "profileImage.png", 5.0d);
+        final User buyer = new User("구매자", "profileImage.png", 5.0d);
+        final User stranger = new User("일반인", "profileImage.png", 5.0d);
         userRepository.save(seller);
         userRepository.save(buyer);
         userRepository.save(stranger);
