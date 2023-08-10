@@ -97,21 +97,18 @@ public class AuctionService {
     }
 
     public ReadAuctionWithChatRoomIdDto readByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
-        final Auction findAuction = findAuction(auctionId);
-        final User findUser = findUser(userInfo.userId());
+        final Auction findAuction = auctionRepository.findAuctionById(auctionId)
+                                                     .orElseThrow(() -> new AuctionNotFoundException(
+                                                             "지정한 아이디에 대한 경매를 찾을 수 없습니다."
+                                                     ));
+        final User findUser = userRepository.findById(userInfo.userId())
+                                            .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
         final Optional<ChatRoom> nullableChatRoom = chatRoomRepository.findByAuctionId(findAuction.getId());
 
         return new ReadAuctionWithChatRoomIdDto(
                 ReadAuctionDto.from(findAuction),
                 ReadChatRoomDto.of(nullableChatRoom, findAuction.isSellerOrWinner(findUser))
         );
-    }
-
-    private Auction findAuction(final Long auctionId) {
-        return auctionRepository.findAuctionById(auctionId)
-                                .orElseThrow(() -> new AuctionNotFoundException(
-                                        "지정한 아이디에 대한 경매를 찾을 수 없습니다."
-                                ));
     }
 
     public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final int size) {
@@ -122,18 +119,17 @@ public class AuctionService {
 
     @Transactional
     public void deleteByAuctionId(final Long auctionId, final Long userId) {
-        final Auction auction = findAuction(auctionId);
-        final User user = findUser(userId);
+        final Auction auction = auctionRepository.findAuctionById(auctionId)
+                                                 .orElseThrow(() -> new AuctionNotFoundException(
+                                                         "지정한 아이디에 대한 경매를 찾을 수 없습니다."
+                                                 ));
+        final User user = userRepository.findById(userId)
+                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
 
         if (!auction.isOwner(user)) {
             throw new UserForbiddenException("권한이 없습니다.");
         }
 
         auction.delete();
-    }
-
-    private User findUser(final Long userId) {
-        return userRepository.findById(userId)
-                             .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
     }
 }
