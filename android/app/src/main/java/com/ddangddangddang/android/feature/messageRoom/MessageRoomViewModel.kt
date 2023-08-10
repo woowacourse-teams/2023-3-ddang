@@ -24,8 +24,8 @@ class MessageRoomViewModel(
     val messageRoomInfo: LiveData<MessageRoomDetailModel>
         get() = _messageRoomInfo
 
-    private val _messages: MutableLiveData<List<MessageModel>> = MutableLiveData()
-    val messages: LiveData<List<MessageModel>>
+    private val _messages: MutableLiveData<List<MessageViewItem>> = MutableLiveData()
+    val messages: LiveData<List<MessageViewItem>>
         get() = _messages
     private val lastMessageId: Long?
         get() = _messages.value?.lastOrNull()?.id
@@ -58,7 +58,7 @@ class MessageRoomViewModel(
             viewModelScope.launch {
                 when (val response = repository.getMessages(it.roomId, lastMessageId)) {
                     is ApiResponse.Success -> {
-                        addMessages(response.body.map { it.toPresentation() })
+                        addMessages(response.body.map { it.toPresentation().toViewItem() })
                     }
 
                     is ApiResponse.Failure -> {}
@@ -70,8 +70,16 @@ class MessageRoomViewModel(
         }
     }
 
-    private fun addMessages(messages: List<MessageModel>) {
+    private fun addMessages(messages: List<MessageViewItem>) {
         _messages.value = _messages.value?.plus(messages) ?: messages
+    }
+
+    private fun MessageModel.toViewItem(): MessageViewItem {
+        return if (isMyMessage) {
+            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents)
+        } else {
+            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents)
+        }
     }
 
     fun sendMessage() {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.ConcatAdapter
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
@@ -17,6 +18,8 @@ class MessageRoomActivity :
     BindingActivity<ActivityMessageRoomBinding>(R.layout.activity_message_room),
     AnalyticsDelegate by AnalyticsDelegateImpl() {
     private val viewModel: MessageRoomViewModel by viewModels { viewModelFactory }
+    private val messageAdapter by lazy { MessageAdapter() }
+    private val adapter by lazy { ConcatAdapter(messageAdapter) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerAnalytics(javaClass.simpleName, lifecycle)
@@ -24,11 +27,16 @@ class MessageRoomActivity :
         val roomId: Long = intent.getLongExtra(ROOM_ID_KEY, -1L)
         if (viewModel.messageRoomInfo.value == null) viewModel.loadMessageRoomInfo(roomId)
         setupViewModel()
+        setupMessageRecyclerView()
     }
 
     private fun setupViewModel() {
         viewModel.event.observe(this) { handleEvent(it) }
-        viewModel.messages.observe(this) {}
+        viewModel.messages.observe(this) { messageAdapter.setMessages(it) }
+    }
+
+    private fun setupMessageRecyclerView() {
+        binding.rvMessageList.adapter = adapter
     }
 
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {

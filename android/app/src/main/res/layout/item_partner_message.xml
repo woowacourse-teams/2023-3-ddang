@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="message"
-            type="com.ddangddangddang.android.model.MessageModel" />
+            name="item"
+            type="com.ddangddangddang.android.feature.messageRoom.MessageViewItem.PartnerMessageViewItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
             android:background="#F2F7FB"
             android:maxWidth="310dp"
             android:padding="14dp"
-            android:text="@{message.contents}"
+            android:text="@{item.contents}"
             android:textColor="@color/black_600"
             android:textSize="@dimen/textsize_body"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_vertical_filter_chips"
-            android:text="@{message.createdDateTime}"
+            android:text="@{item.createdDateTime}"
             android:textColor="@color/black_400"
             android:textSize="12sp"
             android:textStyle="italic"
