@@ -27,8 +27,8 @@ public class AuctionReportController {
     private final AuctionReportService auctionReportService;
 
     @PostMapping("/auctions")
-    public ResponseEntity<Void> create(
-            @AuthenticateUser AuthenticationUserInfo userInfo,
+    public ResponseEntity<Void> createAuctinReport(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateAuctionReportRequest auctionReportRequest
     ) {
         auctionReportService.create(CreateAuctionReportDto.of(auctionReportRequest, userInfo.userId()));
@@ -38,7 +38,7 @@ public class AuctionReportController {
     }
 
     @GetMapping("/auctions")
-    public ResponseEntity<ReadAuctionReportsResponse> readAll() {
+    public ResponseEntity<ReadAuctionReportsResponse> readAllAuctionReport() {
         final List<ReadAuctionReportDto> readAuctionReportDtos = auctionReportService.readAll();
         final ReadAuctionReportsResponse response = ReadAuctionReportsResponse.from(readAuctionReportDtos);
 
