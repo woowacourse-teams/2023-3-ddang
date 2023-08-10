@@ -17,6 +17,9 @@ import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
+import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
+import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import java.net.MalformedURLException;
 import java.util.stream.Collectors;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -176,6 +179,30 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UserNotAccessibleException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidReporterToAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidReporterToAuctionException(final InvalidReporterToAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReporterToAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidReportAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidReportAuctionException(final InvalidReportAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReportAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyReportAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyReportAuctionException(final AlreadyReportAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
