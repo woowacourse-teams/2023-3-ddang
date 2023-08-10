@@ -32,8 +32,11 @@ public class ChatRoomService {
 
     @Transactional
     public Long create(final Long userId, final CreateChatRoomDto chatRoomDto) {
-        final User findUser = findUser(userId);
-        final Auction findAuction = findAuction(chatRoomDto);
+        final User findUser = userRepository.findById(userId)
+                                            .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
+        final Auction findAuction = auctionRepository.findById(chatRoomDto.auctionId())
+                                                     .orElseThrow(() ->
+                                                             new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
 
         final ChatRoom persistChatRoom = findOrCreateChatRoomByAuction(findUser, findAuction);
 
@@ -56,16 +59,6 @@ public class ChatRoomService {
         return chatRoomRepository.save(chatRoom);
     }
 
-    private User findUser(final Long userId) {
-        return userRepository.findById(userId)
-                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-    }
-
-    private Auction findAuction(final CreateChatRoomDto chatRoomDto) {
-        return auctionRepository.findById(chatRoomDto.auctionId())
-                                .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
-    }
-
     private void checkAuctionStatus(final Auction findAuction) {
         if (!findAuction.isClosed(LocalDateTime.now())) {
             throw new InvalidAuctionToChatException("경매가 아직 종료되지 않았습니다.");
@@ -86,7 +79,8 @@ public class ChatRoomService {
     }
 
     public List<ReadParticipatingChatRoomDto> readAllByUserId(final Long userId) {
-        final User findUser = findUser(userId);
+        final User findUser = userRepository.findById(userId)
+                                            .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
 
         return chatRooms.stream()
@@ -95,7 +89,8 @@ public class ChatRoomService {
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
-        final User findUser = findUser(userId);
+        final User findUser = userRepository.findById(userId)
+                                            .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
                                                     .orElseThrow(() ->
                                                             new ChatRoomNotFoundException(
