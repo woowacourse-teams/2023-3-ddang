@@ -28,7 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="안녕하세요, 이번 방탄 진 포카 낙찰자입니다!ㅎㅎ
-서울 사시던데 강남에서 직거래 어떠세요?🙏" />
+서울 사시던데 강남에서 직거래 어떠세요?" />
 
         <TextView
             android:layout_width="wrap_content"

@@ -33,7 +33,9 @@ class MessageRoomActivity :
 
     private fun setupViewModel() {
         viewModel.event.observe(this) { handleEvent(it) }
-        viewModel.messages.observe(this) { messageAdapter.setMessages(it) }
+        viewModel.messages.observe(this) {
+            messageAdapter.setMessages(it)
+        }
     }
 
     private fun setupMessageRecyclerView() {

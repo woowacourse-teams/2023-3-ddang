@@ -45,6 +45,7 @@
 
                 <ImageView
                     android:id="@+id/iv_profile"
+                    imageUrl="@{viewModel.messageRoomInfo.messagePartnerProfileUrl}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
@@ -60,6 +61,7 @@
 
             <TextView
                 android:id="@+id/tv_detail_title"
+                setTextOrEmpty="@{viewModel.messageRoomInfo.messagePartnerName}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -126,6 +128,7 @@
 
                 <ImageView
                     android:id="@+id/iv_auction_image"
+                    imageUrl="@{viewModel.messageRoomInfo.auctionImageUrl}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
@@ -141,6 +144,7 @@
 
             <TextView
                 android:id="@+id/tv_auction_title"
+                setTextOrEmpty="@{viewModel.messageRoomInfo.auctionTitle}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="19dp"
@@ -156,6 +160,7 @@
 
             <TextView
                 android:id="@+id/tv_auction_pirce"
+                setTextOrEmpty="@{viewModel.messageRoomInfo.auctionPrice == null ? null : @string/message_room_auction_bid_price(viewModel.messageRoomInfo.auctionPrice)}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
