@@ -38,6 +38,7 @@ public class AuctionReportService {
         checkInvalidReportAuction(reporter, auction);
 
         final AuctionReport auctionReport = auctionReportDto.toEntity(reporter, auction);
+
         return auctionReportRepository.save(auctionReport)
                                       .getId();
     }
