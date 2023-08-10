@@ -27,7 +27,7 @@ public class AuthenticationController {
 
     @PostMapping("/login/{oauth2Type}")
     public ResponseEntity<Object> validate(
-            @PathVariable Oauth2Type oauth2Type,
+            @PathVariable final Oauth2Type oauth2Type,
             @RequestBody final AccessTokenRequest request
     ) {
         final TokenDto tokenDto = authenticationService.login(oauth2Type, request.accessToken());
@@ -44,7 +44,7 @@ public class AuthenticationController {
 
     @GetMapping("/validate-token")
     public ResponseEntity<ValidatedTokenResponse> validateToken(
-            @RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken
+            @RequestHeader(HttpHeaders.AUTHORIZATION) final String accessToken
     ) {
         final boolean validated = authenticationService.validateToken(accessToken);
 
