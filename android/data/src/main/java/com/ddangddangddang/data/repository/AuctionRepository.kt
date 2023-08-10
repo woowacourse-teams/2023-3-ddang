@@ -26,4 +26,6 @@ interface AuctionRepository {
         auctionId: Long,
         bidPrice: Int,
     ): ApiResponse<Unit>
+
+    suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit>
 }

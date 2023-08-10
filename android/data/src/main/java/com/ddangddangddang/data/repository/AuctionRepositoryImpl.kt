@@ -5,6 +5,7 @@ import com.ddangddangddang.data.datasource.AuctionLocalDataSource
 import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.ReportRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -56,6 +57,10 @@ class AuctionRepositoryImpl private constructor(
         bidPrice: Int,
     ): ApiResponse<Unit> {
         return remoteDataSource.submitAuctionBid(AuctionBidRequest(auctionId, bidPrice))
+    }
+
+    override suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit> {
+        return remoteDataSource.reportAuction(ReportRequest(auctionId, description))
     }
 
     companion object {

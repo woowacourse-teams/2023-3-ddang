@@ -90,4 +90,7 @@ interface AuctionService {
 
     @GET("/users")
     suspend fun fetchProfile(): ApiResponse<ProfileResponse>
+
+    @POST("reports/auctions")
+    suspend fun reportAuction(reportRequest: Any): ApiResponse<Unit>
 }
