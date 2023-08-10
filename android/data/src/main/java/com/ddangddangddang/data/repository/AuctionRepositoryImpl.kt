@@ -9,7 +9,7 @@ import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.Service
+import com.ddangddangddang.data.remote.AuctionService
 import java.io.File
 
 class AuctionRepositoryImpl private constructor(
@@ -62,13 +62,13 @@ class AuctionRepositoryImpl private constructor(
         @Volatile
         private var instance: AuctionRepositoryImpl? = null
 
-        fun getInstance(service: Service): AuctionRepositoryImpl {
+        fun getInstance(service: AuctionService): AuctionRepositoryImpl {
             return instance ?: synchronized(this) {
                 instance ?: createInstance(service)
             }
         }
 
-        private fun createInstance(service: Service): AuctionRepositoryImpl {
+        private fun createInstance(service: AuctionService): AuctionRepositoryImpl {
             val localDataSource = AuctionLocalDataSource()
             val remoteDataSource = AuctionRemoteDataSource(service)
             return AuctionRepositoryImpl(localDataSource, remoteDataSource)

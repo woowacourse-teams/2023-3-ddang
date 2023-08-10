@@ -26,7 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            android:contentDescription="@string/login_logo_description" />
+            android:contentDescription="@string/all_logo_description" />
 
         <Space
             android:id="@+id/space_between_logo_and_login_button"

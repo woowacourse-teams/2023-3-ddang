@@ -23,15 +23,20 @@
         tools:targetApi="31">
         <activity
             android:name=".feature.report.ReportActivity"
-            android:exported="false" />
+            android:exported="false">
+        </activity>
         <activity
-            android:name=".feature.login.LoginActivity"
+            android:name=".feature.splash.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".feature.login.LoginActivity"
+            android:exported="false">
         </activity>
         <activity
             android:name=".feature.register.region.SelectRegionsActivity"

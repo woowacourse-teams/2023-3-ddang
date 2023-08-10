@@ -1,14 +1,17 @@
 package com.ddangddangddang.android.feature.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityLoginBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.main.MainActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.showSnackbar
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -31,6 +34,8 @@ class LoginActivity :
         viewModel.event.observe(this) {
             when (it) {
                 LoginViewModel.LoginEvent.KakaoLoginEvent -> loginByKakao()
+                LoginViewModel.LoginEvent.CompleteLoginEvent -> navigateToMain()
+                LoginViewModel.LoginEvent.FailureLoginEvent -> notifyLoginFailed()
             }
         }
     }
@@ -50,7 +55,7 @@ class LoginActivity :
                 }
                 loginByKakaoAccount()
             } else if (token != null) {
-                completeLogin(token)
+                completeLoginByKakao(token)
             }
         }
     }
@@ -63,7 +68,7 @@ class LoginActivity :
             if (error != null) {
                 logLoginError(error)
             } else if (token != null) {
-                completeLogin(token)
+                completeLoginByKakao(token)
             }
         }
     }
@@ -72,7 +77,16 @@ class LoginActivity :
         Log.d("test", "로그인 실패 $error")
     }
 
-    private fun completeLogin(token: OAuthToken) {
-        Log.d("test", "로그인 성공 ${token.accessToken}")
+    private fun completeLoginByKakao(token: OAuthToken) {
+        viewModel.completeLoginByKakao(token.accessToken)
+    }
+
+    private fun navigateToMain() {
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    private fun notifyLoginFailed() {
+        binding.root.showSnackbar(R.string.login_snackbar_login_failed_title)
     }
 }
