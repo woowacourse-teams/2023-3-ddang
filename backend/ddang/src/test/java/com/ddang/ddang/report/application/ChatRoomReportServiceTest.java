@@ -41,7 +41,7 @@ class ChatRoomReportServiceTest {
     JpaChatRoomRepository chatRoomRepository;
 
     @Test
-    void 쪽지방_신고를_등록한다() {
+    void 채팅방_신고를_등록한다() {
         // given
         final User seller = User.builder()
                                 .name("판매자")

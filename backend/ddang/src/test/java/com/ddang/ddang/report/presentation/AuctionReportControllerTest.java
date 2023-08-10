@@ -98,7 +98,7 @@ class AuctionReportControllerTest {
     }
 
     @Test
-    void 입찰을_등록한다() throws Exception {
+    void 경매_신고를_등록한다() throws Exception {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final PrivateClaims privateClaims = new PrivateClaims(1L);

@@ -45,7 +45,7 @@ class JpaChatRoomReportRepositoryTest {
     JpaUserRepository userRepository;
 
     @Test
-    void 쪽지방_신고를_저장한다() {
+    void 채팅방_신고를_저장한다() {
         // given
         final Auction auction = Auction.builder()
                                        .title("경매 상품 1")
