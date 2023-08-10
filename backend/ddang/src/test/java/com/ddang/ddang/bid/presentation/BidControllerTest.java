@@ -418,12 +418,9 @@ class BidControllerTest {
                .andDo(
                        restDocs.document(
                                responseFields(
-                                       fieldWithPath("bids.[]").type(JsonFieldType.ARRAY)
-                                                               .description("특정 경매의 모든 입찰 목록"),
-                                       fieldWithPath("bids.[].name").type(JsonFieldType.STRING)
-                                                                    .description("입찰한 사용자의 닉네임"),
-                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING)
-                                                                            .description("입찰한 사용자의 프로필 이미지 URL"),
+                                       fieldWithPath("bids.[]").type(JsonFieldType.ARRAY).description("특정 경매의 모든 입찰 목록"),
+                                       fieldWithPath("bids.[].name").type(JsonFieldType.STRING).description("입찰한 사용자의 닉네임"),
+                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING).description("입찰한 사용자의 프로필 이미지 URL"),
                                        fieldWithPath("bids.[].price").type(JsonFieldType.NUMBER).description("입찰한 금액"),
                                        fieldWithPath("bids.[].bidTime").type(JsonFieldType.STRING).description("입찰한 시간")
                                )

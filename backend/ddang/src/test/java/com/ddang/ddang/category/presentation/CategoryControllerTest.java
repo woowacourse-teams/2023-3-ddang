@@ -89,10 +89,8 @@ class CategoryControllerTest {
                .andDo(
                        restDocs.document(
                                responseFields(
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                                        .description("메인 카테고리 ID"),
-                                       fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                          .description("메인 카테고리 이름")
+                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메인 카테고리 ID"),
+                                       fieldWithPath("[].name").type(JsonFieldType.STRING).description("메인 카테고리 이름")
                                )
                        )
                );
@@ -134,10 +132,8 @@ class CategoryControllerTest {
                .andDo(
                        restDocs.document(
                                responseFields(
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                                        .description("서브 카테고리 ID"),
-                                       fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                          .description("서브 카테고리 이름")
+                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("서브 카테고리 ID"),
+                                       fieldWithPath("[].name").type(JsonFieldType.STRING).description("서브 카테고리 이름")
                                )
                        )
                );
