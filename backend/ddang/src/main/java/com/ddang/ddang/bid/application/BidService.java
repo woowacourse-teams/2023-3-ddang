@@ -9,7 +9,7 @@ import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;

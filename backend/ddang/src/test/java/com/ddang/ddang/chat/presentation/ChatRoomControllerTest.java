@@ -18,7 +18,7 @@ import com.ddang.ddang.chat.application.dto.ReadUserDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
-import com.ddang.ddang.chat.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;

@@ -14,12 +14,14 @@ import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

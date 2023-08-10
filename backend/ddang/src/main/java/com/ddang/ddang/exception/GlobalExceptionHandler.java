@@ -12,7 +12,7 @@ import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
-import com.ddang.ddang.chat.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
@@ -230,6 +230,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidTokenException(final InvalidTokenException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidTokenException.class), ex);
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
@@ -239,6 +240,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             final UnsupportedSocialLoginException ex
     ) {
         logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedSocialLoginException.class), ex);
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
@@ -246,6 +248,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(UserUnauthorizedException.class)
     public ResponseEntity<ExceptionResponse> handleUserUnauthorizedException(final UserUnauthorizedException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
+
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
     }

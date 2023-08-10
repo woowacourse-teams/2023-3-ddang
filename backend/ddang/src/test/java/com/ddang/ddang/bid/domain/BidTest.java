@@ -6,7 +6,9 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.user.domain.User;
+
 import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
