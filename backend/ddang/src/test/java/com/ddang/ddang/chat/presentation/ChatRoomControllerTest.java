@@ -19,6 +19,7 @@ import com.ddang.ddang.chat.application.dto.ReadUserDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
@@ -111,6 +112,28 @@ class ChatRoomControllerTest {
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/chattings/1")),
                        jsonPath("$.id", is(1L), Long.class)
+               );
+    }
+
+    @Test
+    void 채팅방이_만료된_경우_메시지를_생성하면_404를_반환한다() throws Exception {
+        // given
+        final UnableToChatException unableToChatException = new UnableToChatException("");
+
+        given(messageService.create(any(CreateMessageDto.class)))
+                .willThrow(unableToChatException);
+
+        final String contents = "메시지 내용";
+        final CreateMessageRequest request = new CreateMessageRequest(1L, contents);
+
+        // when & then
+        mockMvc.perform(post("/chattings/1/messages")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request)))
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message", is(unableToChatException.getMessage()))
                );
     }
 
