@@ -91,4 +91,9 @@
     <!-- login -->
     <string name="login_logo_description">땅땅땅 로고</string>
     <string name="login_kakao_login_button_description">카카오 로그인 버튼</string>
+
+    <!-- report -->
+    <string name="report">신고하기</string>
+    <string name="report_contents">신고 내용</string>
+    <string name="report_submit">신고 접수하기</string>
 </resources>
