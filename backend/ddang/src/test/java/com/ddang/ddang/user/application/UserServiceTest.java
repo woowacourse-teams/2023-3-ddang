@@ -1,18 +1,17 @@
 package com.ddang.ddang.user.application;
 
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -38,7 +37,7 @@ class UserServiceTest {
         userRepository.save(user);
 
         // when
-        final ReadUserDto actual = userService.readById(new LoginUserDto(user.getId()));
+        final ReadUserDto actual = userService.readById(user.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -54,7 +53,7 @@ class UserServiceTest {
         final Long invalidUserId = -999L;
 
         // when & then
-        assertThatThrownBy(() -> userService.readById(new LoginUserDto(invalidUserId)))
+        assertThatThrownBy(() -> userService.readById(invalidUserId))
                 .isInstanceOf(UserNotFoundException.class).hasMessage("사용자 정보를 사용할 수 없습니다.");
     }
 }

@@ -1,6 +1,5 @@
 package com.ddang.ddang.user.application;
 
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -16,8 +15,8 @@ public class UserService {
 
     private final JpaUserRepository userRepository;
 
-    public ReadUserDto readById(final LoginUserDto userDto) {
-        final User user = userRepository.findById(userDto.usedId())
+    public ReadUserDto readById(final Long userId) {
+        final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
 
         return ReadUserDto.from(user);

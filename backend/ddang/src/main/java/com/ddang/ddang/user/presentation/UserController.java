@@ -1,8 +1,7 @@
 package com.ddang.ddang.user.presentation;
 
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
-import com.ddang.ddang.bid.presentation.dto.request.LoginUserRequest;
-import com.ddang.ddang.bid.presentation.resolver.LoginUser;
+import com.ddang.ddang.authentication.configuration.AuthenticateUser;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.presentation.dto.ReadUserResponse;
@@ -20,10 +19,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<ReadUserResponse> readById(
-            @LoginUser final LoginUserRequest userRequest
-    ) {
-        final ReadUserDto readUserDto = userService.readById(LoginUserDto.from(userRequest));
+    public ResponseEntity<ReadUserResponse> readById(@AuthenticateUser AuthenticationUserInfo userInfo) {
+        final ReadUserDto readUserDto = userService.readById(userInfo.userId());
         final ReadUserResponse response = ReadUserResponse.from(readUserDto);
 
         return ResponseEntity.ok(response);
