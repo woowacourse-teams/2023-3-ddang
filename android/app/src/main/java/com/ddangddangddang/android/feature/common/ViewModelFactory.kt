@@ -9,6 +9,7 @@ import com.ddangddangddang.android.feature.home.HomeViewModel
 import com.ddangddangddang.android.feature.login.LoginViewModel
 import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.message.MessageViewModel
+import com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
@@ -53,6 +54,9 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 )
 
                 isAssignableFrom(MessageViewModel::class.java) -> MessageViewModel(chatRepository)
+                isAssignableFrom(MessageRoomViewModel::class.java) -> MessageRoomViewModel(
+                    chatRepository,
+                )
 
                 isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(DdangDdangDdang.authRepository)
                 isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(DdangDdangDdang.authRepository)
