@@ -66,15 +66,10 @@ public class AuctionController {
 
     @GetMapping
     public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
-            @AuthenticateUser(required = false) AuthenticationUserInfo userInfo,
             @RequestParam(required = false) final Long lastAuctionId,
             @RequestParam(required = false, defaultValue = "10") final int size
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(
-                userInfo.userId(),
-                lastAuctionId,
-                size
-        );
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(lastAuctionId, size);
         final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
 
         return ResponseEntity.ok(response);

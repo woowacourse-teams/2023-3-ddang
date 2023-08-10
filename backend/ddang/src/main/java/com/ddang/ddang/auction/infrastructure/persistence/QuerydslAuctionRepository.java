@@ -6,7 +6,7 @@ import org.springframework.data.domain.Slice;
 
 public interface QuerydslAuctionRepository {
 
-    Slice<Auction> findAuctionsAllByLastAuctionId(final Long userId, final Long lastAuctionId, final int size);
+    Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size);
 
     Optional<Auction> findAuctionById(final Long auctionId);
 }

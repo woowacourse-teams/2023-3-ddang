@@ -599,7 +599,7 @@ class AuctionControllerTest {
         );
 
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
-        given(auctionService.readAllByLastAuctionId(any(), any(), anyInt())).willReturn(readAuctionsDto);
+        given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
         mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON)
