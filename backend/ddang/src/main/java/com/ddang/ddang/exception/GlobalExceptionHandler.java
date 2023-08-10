@@ -6,7 +6,6 @@ import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
-import com.ddang.ddang.chat.application.exception.ChatAlreadyExistException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
@@ -193,16 +192,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             final InvalidAuctionToChatException ex
     ) {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidAuctionToChatException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                             .body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler(ChatAlreadyExistException.class)
-    public ResponseEntity<ExceptionResponse> handleChatAlreadyExistException(
-            final ChatAlreadyExistException ex
-    ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, ChatAlreadyExistException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));

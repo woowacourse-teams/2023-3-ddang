@@ -6,7 +6,6 @@ import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
-import com.ddang.ddang.chat.application.exception.ChatAlreadyExistException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
@@ -51,7 +50,6 @@ public class ChatRoomService {
         final User winner = auction.findWinner(LocalDateTime.now())
                                    .orElseThrow(() -> new WinnerNotFoundException("낙찰자가 존재하지 않습니다"));
         checkUserCanParticipate(user, auction);
-        checkAlreadyExist(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, winner);
 
@@ -85,13 +83,6 @@ public class ChatRoomService {
 
     private boolean isSellerOrBuyer(final User findUser, final Auction findAuction) {
         return findAuction.isOwner(findUser) || findAuction.isWinner(findUser, LocalDateTime.now());
-    }
-
-    private void checkAlreadyExist(final Auction findAuction) {
-        final boolean isChatRoomExists = chatRoomRepository.existsByAuctionId(findAuction.getId());
-        if (isChatRoomExists) {
-            throw new ChatAlreadyExistException("해당 경매에 대한 채팅방이 이미 존재합니다.");
-        }
     }
 
     public List<ReadParticipatingChatRoomDto> readAllByUserId(final Long userId) {
