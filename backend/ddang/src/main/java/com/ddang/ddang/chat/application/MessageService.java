@@ -57,22 +57,25 @@ public class MessageService {
         final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
-        Long lastMessageId = request.lastMessageId();
-        if (lastMessageId != null) {
-            lastMessageId = messageRepository.findById(request.lastMessageId())
-                                             .orElseThrow(() -> new MessageNotFoundException(
-                                                     "조회한 마지막 메시지가 존재하지 않습니다."))
-                                             .getId();
+
+        if (request.lastMessageId() != null) {
+            validateLastMessageId(request.lastMessageId());
         }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
                 user.getId(),
                 chatRoom.getId(),
-                lastMessageId
+                request.lastMessageId()
         );
 
         return readMessages.stream()
                            .map(ReadMessageDto::from)
                            .toList();
+    }
+
+    private void validateLastMessageId(final Long lastMessageId) {
+        if (!messageRepository.existsById(lastMessageId)) {
+            throw new MessageNotFoundException("조회한 마지막 메시지가 존재하지 않습니다.");
+        }
     }
 }

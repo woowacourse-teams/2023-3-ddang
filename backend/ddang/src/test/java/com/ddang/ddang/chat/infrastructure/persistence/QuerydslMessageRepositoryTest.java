@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Import;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -166,5 +167,12 @@ class QuerydslMessageRepositoryTest {
 
         // then
         assertThat(messages).hasSizeGreaterThanOrEqualTo(7);
+    }
+
+    @Test
+    void 조회하려는_메시지_아이디가_존재하지_않는_경우_거짓을_반환한다() {
+        final Long invalidMessageId = -999L;
+
+        assertThat(messageRepository.existsById(invalidMessageId)).isFalse();
     }
 }
