@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMessageBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
 
 class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragment_message) {
@@ -51,5 +52,6 @@ class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragmen
     }
 
     private fun navigateToMessageRoom(roomId: Long) {
+        startActivity(MessageRoomActivity.getIntent(requireContext(), roomId))
     }
 }

@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -181,13 +188,13 @@
                 android:id="@+id/btn_submit_message"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textSize="@dimen/textsize_body"
                 android:layout_marginStart="12dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:text="@string/message_room_message_submit" />
+                android:text="@string/message_room_message_submit"
+                android:textSize="@dimen/textsize_body" />
 
         </LinearLayout>
 

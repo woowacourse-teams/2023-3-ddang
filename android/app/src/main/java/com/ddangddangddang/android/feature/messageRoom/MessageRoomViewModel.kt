@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.MessageRoomDetailModel
 import com.ddangddangddang.android.model.mapper.MessageRoomDetailModelMapper.toPresentation
+import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import kotlinx.coroutines.launch
@@ -13,6 +14,10 @@ import kotlinx.coroutines.launch
 class MessageRoomViewModel(
     private val repository: ChatRepository,
 ) : ViewModel() {
+    private val _event: SingleLiveEvent<MessageRoomEvent> = SingleLiveEvent()
+    val event: LiveData<MessageRoomEvent>
+        get() = _event
+
     private val _messageRoomInfo: MutableLiveData<MessageRoomDetailModel> = MutableLiveData()
     val messageRoomInfo: LiveData<MessageRoomDetailModel>
         get() = _messageRoomInfo
@@ -25,7 +30,10 @@ class MessageRoomViewModel(
                     loadMessages()
                 }
 
-                is ApiResponse.Failure -> {}
+                is ApiResponse.Failure -> {
+                    _event.value = MessageRoomEvent.LoadRoomInfoFailed
+                }
+
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
@@ -33,5 +41,11 @@ class MessageRoomViewModel(
     }
 
     fun loadMessages() {
+    }
+
+    sealed class MessageRoomEvent {
+        object Exit : MessageRoomEvent()
+        data class Report(val roomId: Long) : MessageRoomEvent()
+        object LoadRoomInfoFailed : MessageRoomEvent()
     }
 }

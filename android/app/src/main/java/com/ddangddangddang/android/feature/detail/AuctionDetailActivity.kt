@@ -10,6 +10,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
+import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.google.android.material.tabs.TabLayoutMediator
@@ -41,12 +42,18 @@ class AuctionDetailActivity :
         when (event) {
             is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
             is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> showAuctionBidDialog()
-            is AuctionDetailViewModel.AuctionDetailEvent.EnterChatRoom -> {}
+            is AuctionDetailViewModel.AuctionDetailEvent.EnterMessageRoom -> navigateToMessageRoom(
+                event.roomId,
+            )
         }
     }
 
     private fun showAuctionBidDialog() {
         AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
+    }
+
+    private fun navigateToMessageRoom(roomId: Long) {
+        startActivity(MessageRoomActivity.getIntent(this, roomId))
     }
 
     private fun setupAuctionImages(images: List<String>) {
