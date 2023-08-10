@@ -68,7 +68,6 @@ public class AuthenticationService {
         return new TokenDto(accessToken, refreshToken);
     }
 
-    @Transactional(readOnly = true)
     public TokenDto refreshToken(final String refreshToken) {
         final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.REFRESH, refreshToken)
                                                         .orElseThrow(
@@ -81,5 +80,10 @@ public class AuthenticationService {
         );
 
         return new TokenDto(accessToken, refreshToken);
+    }
+
+    public boolean validateToken(final String accessToken) {
+        return tokenDecoder.decode(TokenType.ACCESS, accessToken)
+                           .isPresent();
     }
 }
