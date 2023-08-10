@@ -58,7 +58,7 @@ public class JwtDecoder implements TokenDecoder {
                         .parseClaimsJws(findPureToken(token))
                         .getBody()
             );
-        } catch (JwtException e) {
+        } catch (final JwtException ignored) {
             return Optional.empty();
         }
     }
