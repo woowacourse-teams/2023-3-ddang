@@ -18,8 +18,9 @@ class MessageRoomActivity :
     BindingActivity<ActivityMessageRoomBinding>(R.layout.activity_message_room),
     AnalyticsDelegate by AnalyticsDelegateImpl() {
     private val viewModel: MessageRoomViewModel by viewModels { viewModelFactory }
+    private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
     private val messageAdapter by lazy { MessageAdapter() }
-    private val adapter by lazy { ConcatAdapter(messageAdapter) }
+    private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerAnalytics(javaClass.simpleName, lifecycle)
