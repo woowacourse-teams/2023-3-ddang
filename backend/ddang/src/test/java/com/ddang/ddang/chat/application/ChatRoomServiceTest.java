@@ -12,7 +12,6 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
-import com.ddang.ddang.chat.application.exception.ChatAlreadyExistException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
@@ -270,7 +269,7 @@ class ChatRoomServiceTest {
     }
 
     @Test
-    void 해당_경매에_대한_채팅이_이미_존재할_경우_예외가_발생한다() {
+    void 해당_경매에_대한_채팅이_이미_존재할_경우_존재하는_채팅방의_아이디를_반환한다() {
         // given
         final Category main = new Category("메인");
         final Category sub = new Category("서브");
@@ -302,12 +301,16 @@ class ChatRoomServiceTest {
         final Long userId = buyer.getId();
         final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
 
-        chatRoomRepository.save(createChatRoomDto.toEntity(auction));
+        final ChatRoom persistChatRoom = createChatRoomDto.toEntity(auction);
+        chatRoomRepository.save(persistChatRoom);
 
-        // when & then
-        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
-                .isInstanceOf(ChatAlreadyExistException.class)
-                .hasMessage("해당 경매에 대한 채팅방이 이미 존재합니다.");
+        final Long expect = persistChatRoom.getId();
+
+        // when
+        final Long actual = chatRoomService.create(userId, createChatRoomDto);
+
+        // then
+        assertThat(actual).isEqualTo(expect);
     }
 
     @Test

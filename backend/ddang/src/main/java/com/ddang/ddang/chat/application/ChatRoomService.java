@@ -2,6 +2,7 @@ package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
@@ -35,14 +36,26 @@ public class ChatRoomService {
         final User findUser = findUser(userId);
         final Auction findAuction = findAuction(chatRoomDto);
 
-        checkAuctionStatus(findAuction);
-        checkUserCanParticipate(findUser, findAuction);
-        checkAlreadyExist(findAuction);
+        final ChatRoom persistChatRoom = findOrCreateChatRoomByAuction(findUser, findAuction);
 
-        final ChatRoom chatRoom = chatRoomDto.toEntity(findAuction);
+        return persistChatRoom.getId();
+    }
 
-        return chatRoomRepository.save(chatRoom)
-                                 .getId();
+    private ChatRoom findOrCreateChatRoomByAuction(final User user, final Auction auction) {
+        return chatRoomRepository.findByAuctionId(auction.getId())
+                                 .orElseGet(() -> createAndSaveChatRoom(user, auction));
+    }
+
+    private ChatRoom createAndSaveChatRoom(final User user, final Auction auction) {
+        checkAuctionStatus(auction);
+        final User winner = auction.findWinner(LocalDateTime.now())
+                                   .orElseThrow(() -> new WinnerNotFoundException("낙찰자가 존재하지 않습니다"));
+        checkUserCanParticipate(user, auction);
+        checkAlreadyExist(auction);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, winner);
+
+        return chatRoomRepository.save(chatRoom);
     }
 
     private User findUser(final Long userId) {

@@ -14,7 +14,6 @@ import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadAuctionDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserDto;
-import com.ddang.ddang.chat.application.exception.ChatAlreadyExistException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
@@ -451,27 +450,6 @@ class ChatRoomControllerTest {
                .andExpectAll(
                        status().isForbidden(),
                        jsonPath("$.message", is(userNotAccessibleException.getMessage()))
-               );
-    }
-
-    @Test
-    void 해당_경매에_대한_채팅이_이미_존재할_경우_400을_반환한다() throws Exception {
-        // given
-        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final ChatAlreadyExistException chatAlreadyExistException =
-                new ChatAlreadyExistException("해당 경매에 대한 채팅방이 이미 존재합니다.");
-
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
-                .willThrow(chatAlreadyExistException);
-
-        // when & then
-        mockMvc.perform(post("/chattings")
-                       .header(HttpHeaders.AUTHORIZATION, 1L)
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
-               .andExpectAll(
-                       status().isBadRequest(),
-                       jsonPath("$.message", is(chatAlreadyExistException.getMessage()))
                );
     }
 }
