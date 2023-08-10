@@ -1,8 +1,7 @@
 package com.ddang.ddang.report.presentation;
 
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
-import com.ddang.ddang.bid.presentation.dto.request.LoginUserRequest;
-import com.ddang.ddang.bid.presentation.resolver.LoginUser;
+import com.ddang.ddang.authentication.configuration.AuthenticateUser;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
@@ -29,10 +28,10 @@ public class AuctionReportController {
 
     @PostMapping("/auctions")
     public ResponseEntity<Void> create(
-            @LoginUser final LoginUserRequest userRequest,
+            @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateAuctionReportRequest auctionReportRequest
     ) {
-        auctionReportService.create(LoginUserDto.from(userRequest), CreateAuctionReportDto.from(auctionReportRequest));
+        auctionReportService.create(CreateAuctionReportDto.of(auctionReportRequest, userInfo.userId()));
 
         return ResponseEntity.created(URI.create("/auctions/" + auctionReportRequest.auctionId()))
                              .build();

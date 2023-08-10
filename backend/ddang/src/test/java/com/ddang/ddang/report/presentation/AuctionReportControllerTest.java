@@ -1,9 +1,13 @@
 package com.ddang.ddang.report.presentation;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
-import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.report.application.AuctionReportService;
@@ -26,18 +30,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -45,7 +56,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {AuctionReportController.class})
+@WebMvcTest(controllers = {AuctionReportController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -61,13 +77,22 @@ class AuctionReportControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    TokenDecoder mockTokenDecoder;
+
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
+        mockTokenDecoder = mock(TokenDecoder.class);
+
+        final AuthenticationStore store = new AuthenticationStore();
+        final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(mockTokenDecoder, store);
+        final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
+
         mockMvc = MockMvcBuilders.standaloneSetup(auctionReportController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
-                                 .setCustomArgumentResolvers(new LoginUserArgumentResolver())
+                                 .addInterceptors(interceptor)
+                                 .setCustomArgumentResolvers(resolver)
                                  .alwaysDo(print())
                                  .build();
     }
@@ -76,11 +101,13 @@ class AuctionReportControllerTest {
     void 입찰을_등록한다() throws Exception {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -94,12 +121,13 @@ class AuctionReportControllerTest {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final UserNotFoundException userNotFoundException = new UserNotFoundException("해당 사용자를 찾을 수 없습니다.");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class)))
-                .willThrow(userNotFoundException);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(userNotFoundException);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -113,12 +141,13 @@ class AuctionReportControllerTest {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class)))
-                .willThrow(auctionNotFoundException);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(auctionNotFoundException);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -132,12 +161,13 @@ class AuctionReportControllerTest {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final InvalidReporterToAuctionException invalidReporterToAuctionException = new InvalidReporterToAuctionException("본인 경매글입니다.");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class)))
-                .willThrow(invalidReporterToAuctionException);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(invalidReporterToAuctionException);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -151,12 +181,13 @@ class AuctionReportControllerTest {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final InvalidReportAuctionException invalidReportAuctionException = new InvalidReportAuctionException("이미 삭제된 경매입니다.");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class)))
-                .willThrow(invalidReportAuctionException);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(invalidReportAuctionException);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -170,12 +201,13 @@ class AuctionReportControllerTest {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, "신고합니다");
         final AlreadyReportAuctionException alreadyReportAuctionException = new AlreadyReportAuctionException("이미 신고한 경매입니다.");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class)))
-                .willThrow(alreadyReportAuctionException);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willThrow(alreadyReportAuctionException);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -188,11 +220,13 @@ class AuctionReportControllerTest {
     void 경매_아이디가_없는_경우_신고시_400을_반환한다() throws Exception {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(null, "신고합니다");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -206,11 +240,13 @@ class AuctionReportControllerTest {
         // given
         final Long invalidId = -999L;
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(invalidId, "신고합니다");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -224,11 +260,13 @@ class AuctionReportControllerTest {
     void 신고_내용_없이_신고시_400을_반환한다(final String description) throws Exception {
         // given
         final CreateAuctionReportRequest auctionReportRequest = new CreateAuctionReportRequest(1L, description);
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionReportService.create(any(LoginUserDto.class), any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/reports/auctions").header("Authorization", 1L)
+        mockMvc.perform(post("/reports/auctions").header("Authorization", "Bearer accessToken")
                                                  .contentType(MediaType.APPLICATION_JSON)
                                                  .content(objectMapper.writeValueAsString(auctionReportRequest)))
                .andExpectAll(
@@ -261,7 +299,9 @@ class AuctionReportControllerTest {
                 new ReadAuctionInReportDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
                 "신고합니다."
         );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.readAll())
                 .willReturn(List.of(auctionReportDto1, auctionReportDto2, auctionReportDto3));
 

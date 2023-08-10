@@ -5,7 +5,6 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
@@ -15,7 +14,7 @@ import com.ddang.ddang.report.application.exception.InvalidReportAuctionExceptio
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -59,21 +58,23 @@ class AuctionReportServiceTest {
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
         final User user = User.builder()
-                                .name("사용자")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12346")
-                                .build();
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12346")
+                              .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                user.getId());
 
         // when
-        final Long actual = auctionReportService.create(loginUserDto, createAuctionReportDto);
+        final Long actual = auctionReportService.create(createAuctionReportDto);
 
         // then
         assertThat(actual).isPositive();
@@ -101,11 +102,14 @@ class AuctionReportServiceTest {
         userRepository.save(seller);
         auctionRepository.save(auction);
 
-        final LoginUserDto loginUserDto = new LoginUserDto(invalidUserId);
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                invalidUserId
+        );
 
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }
@@ -114,19 +118,22 @@ class AuctionReportServiceTest {
     void 존재하지_않는_경매를_신고하는_경우_예외가_발생한다() {
         final Long invalidAuctionId = -9999L;
         final User user = User.builder()
-                                .name("사용자")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         userRepository.save(user);
 
-        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(invalidAuctionId, "신고합니다");
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
+                invalidAuctionId,
+                "신고합니다",
+                user.getId()
+        );
 
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
@@ -152,11 +159,14 @@ class AuctionReportServiceTest {
         userRepository.save(seller);
         auctionRepository.save(auction);
 
-        final LoginUserDto loginUserDto = new LoginUserDto(seller.getId());
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                seller.getId()
+        );
 
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
                 .isInstanceOf(InvalidReporterToAuctionException.class)
                 .hasMessage("본인 경매글입니다.");
     }
@@ -179,11 +189,11 @@ class AuctionReportServiceTest {
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
         final User user = User.builder()
-                                .name("사용자")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12346")
-                                .build();
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12346")
+                              .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
@@ -191,11 +201,14 @@ class AuctionReportServiceTest {
 
         auction.delete();
 
-        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                user.getId()
+        );
 
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
                 .isInstanceOf(InvalidReportAuctionException.class)
                 .hasMessage("이미 삭제된 경매입니다.");
     }
@@ -218,22 +231,25 @@ class AuctionReportServiceTest {
                                        .closingTime(LocalDateTime.now().plusDays(7))
                                        .build();
         final User user = User.builder()
-                                .name("사용자")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12346")
-                                .build();
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12346")
+                              .build();
 
         userRepository.save(seller);
         auctionRepository.save(auction);
         userRepository.save(user);
 
-        final LoginUserDto loginUserDto = new LoginUserDto(user.getId());
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
-        auctionReportService.create(loginUserDto, createAuctionReportDto);
+        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                user.getId()
+        );
+        auctionReportService.create(createAuctionReportDto);
 
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(loginUserDto, createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
                 .isInstanceOf(AlreadyReportAuctionException.class)
                 .hasMessage("이미 신고한 경매입니다.");
     }
@@ -280,17 +296,26 @@ class AuctionReportServiceTest {
         userRepository.save(user2);
         userRepository.save(user3);
 
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(auction.getId(), "신고합니다");
+        final CreateAuctionReportDto createAuctionReportDto1 = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                user1.getId()
+        );
+        auctionReportService.create(createAuctionReportDto1);
 
-        final LoginUserDto loginUserDto1 = new LoginUserDto(user1.getId());
-        auctionReportService.create(loginUserDto1, createAuctionReportDto);
+        final CreateAuctionReportDto createAuctionReportDto2 = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                user2.getId()
+        );
+        auctionReportService.create(createAuctionReportDto2);
 
-        final LoginUserDto loginUserDto2 = new LoginUserDto(user2.getId());
-        auctionReportService.create(loginUserDto2, createAuctionReportDto);
-
-        final LoginUserDto loginUserDto3 = new LoginUserDto(user3.getId());
-        auctionReportService.create(loginUserDto3, createAuctionReportDto);
-
+        final CreateAuctionReportDto createAuctionReportDto3 = new CreateAuctionReportDto(
+                auction.getId(),
+                "신고합니다",
+                user3.getId()
+        );
+        auctionReportService.create(createAuctionReportDto3);
 
 
         // when
