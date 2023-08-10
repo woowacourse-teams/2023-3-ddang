@@ -127,7 +127,12 @@ class AuctionTest {
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9d);
+        final User user = User.builder()
+                              .name("회원")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
@@ -161,7 +166,12 @@ class AuctionTest {
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
                                        .build();
-        final User user = new User("사용자1", "이미지1", 4.9d);
+        final User user = User.builder()
+                              .name("회원")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final Bid bid = new Bid(auction, user, new BidPrice(10_000));
 
         auction.updateLastBid(bid);
@@ -176,7 +186,12 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하면_참을_반환한다() {
         // given
-        final User seller = new User("사용자1", "이미지1", 4.9d);
+        final User seller = User.builder()
+                                .name("회원")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
@@ -193,13 +208,23 @@ class AuctionTest {
     @Test
     void 특정_회원이_경매_판매자와_일치하지_않으면_거짓을_반환한다() {
         // given
-        final User seller = new User("사용자1", "이미지1", 4.9d);
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .bidUnit(new BidUnit(1_000))
                                        .seller(seller)
                                        .build();
-        final User user = new User("사용자2", "이미지2", 4.9d);
+        final User user = User.builder()
+                              .name("회원2")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         ReflectionTestUtils.setField(user, "id", 1L);
 
@@ -213,8 +238,18 @@ class AuctionTest {
     @Test
     void 주어진_사용자가_낙찰자라면_참을_반환한다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0d);
-        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User winner = User.builder()
+                                .name("회원2")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -238,9 +273,25 @@ class AuctionTest {
     @Test
     void 주어진_사용자가_낙찰자가_아니라면_거짓을_반환한다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0d);
-        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
-        final User stranger = new User("일반인", "profileImage.png", 5.0d);
+
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User winner = User.builder()
+                                .name("회원2")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
+        final User stranger = User.builder()
+                                  .name("회원3")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId("12347")
+                                  .build();
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -266,8 +317,18 @@ class AuctionTest {
     @Test
     void 경매의_최종_낙찰자를_반환한다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0d);
-        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User winner = User.builder()
+                                .name("회원2")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -294,8 +355,18 @@ class AuctionTest {
     @Test
     void 경매가_종료되지_않았다면_최종_낙찰자가_없다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0d);
-        final User winner = new User("낙찰자", "profileImage.png", 5.0d);
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User winner = User.builder()
+                                .name("회원2")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
 
         userRepository.save(seller);
         userRepository.save(winner);
@@ -319,7 +390,12 @@ class AuctionTest {
     @Test
     void 입찰자가_존재하지_않는다면_최종_낙찰자가_없다() {
         // given
-        final User seller = new User("판매자", "profileImage.png", 5.0d);
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
         userRepository.save(seller);
 
         final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);

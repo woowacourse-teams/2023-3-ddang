@@ -1,9 +1,12 @@
 package com.ddang.ddang.exception;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
+import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -16,6 +19,9 @@ import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
+import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
+import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -105,11 +111,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(UserNotAuthorizationException.class)
+    @ExceptionHandler(UserForbiddenException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotAuthorizationException(
-            final UserNotAuthorizationException ex
+            final UserForbiddenException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserNotAuthorizationException.class), ex);
+        logger.warn(String.format(EXCEPTION_FORMAT, UserForbiddenException.class), ex);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -194,6 +200,53 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidAuctionToChatException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidReporterToAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidReporterToAuctionException(final InvalidReporterToAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReporterToAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidReportAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidReportAuctionException(final InvalidReportAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReportAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyReportAuctionException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyReportAuctionException(final AlreadyReportAuctionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportAuctionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidTokenException(final InvalidTokenException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidTokenException.class), ex);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UnsupportedSocialLoginException.class)
+    public ResponseEntity<ExceptionResponse> handleUnsupportedSocialLoginException(
+            final UnsupportedSocialLoginException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedSocialLoginException.class), ex);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(UserUnauthorizedException.class)
+    public ResponseEntity<ExceptionResponse> handleUserUnauthorizedException(final UserUnauthorizedException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 

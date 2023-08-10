@@ -9,6 +9,8 @@ import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
+import com.ddang.ddang.authentication.configuration.AuthenticateUser;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -36,14 +38,14 @@ public class AuctionController {
 
     @PostMapping
     public ResponseEntity<CreateAuctionResponse> create(
+            @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestPart final List<MultipartFile> images,
             @RequestPart @Valid final CreateAuctionRequest request
     ) {
         final CreateInfoAuctionDto createInfoAuctionDto = auctionService.create(CreateAuctionDto.of(
                 request,
                 images,
-                // TODO 3차 데모데이 이후 리펙토링 예정
-                1L
+                userInfo.userId()
         ));
         final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, calculateBaseImageUrl());
 
@@ -74,9 +76,11 @@ public class AuctionController {
     }
 
     @DeleteMapping("/{auctionId}")
-    public ResponseEntity<Void> delete(@PathVariable final Long auctionId) {
-        // TODO 3차 데모데이 이후 리펙토링 예정
-        auctionService.deleteByAuctionId(auctionId, 1L);
+    public ResponseEntity<Void> delete(
+            @AuthenticateUser AuthenticationUserInfo userInfo,
+            @PathVariable final Long auctionId
+    ) {
+        auctionService.deleteByAuctionId(auctionId, userInfo.userId());
 
         return ResponseEntity.noContent()
                              .build();
