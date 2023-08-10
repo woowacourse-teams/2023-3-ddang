@@ -63,11 +63,11 @@ public class JwtDecoder implements TokenDecoder {
         }
     }
 
-    private PrivateClaims convert(final Claims claims) {
-        return new PrivateClaims(claims.get(CLAIM_NAME, Long.class));
-    }
-
     private String findPureToken(final String token) {
         return token.substring(BEARER_TOKEN_PREFIX.length());
+    }
+
+    private PrivateClaims convert(final Claims claims) {
+        return new PrivateClaims(claims.get(CLAIM_NAME, Long.class));
     }
 }
