@@ -11,7 +11,6 @@ import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
-import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +47,7 @@ public class ChatRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<ReadChatRoomsResponse> readAllParticipatingChatRooms(
+    public ResponseEntity<List<ReadChatRoomResponse>> readAllParticipatingChatRooms(
             @AuthenticateUser final AuthenticateUserInfo userInfo
     ) {
         final List<ReadParticipatingChatRoomDto> readParticipatingChatRoomDtos =
@@ -58,9 +57,8 @@ public class ChatRoomController {
                 readParticipatingChatRoomDtos.stream()
                                              .map(dto -> ReadChatRoomResponse.of(dto, calculateBaseImageUrl()))
                                              .toList();
-        final ReadChatRoomsResponse response = new ReadChatRoomsResponse(responses);
 
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(responses);
     }
 
     private String calculateBaseImageUrl() {
