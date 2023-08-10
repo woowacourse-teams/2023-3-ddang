@@ -176,10 +176,13 @@ class JpaAuctionReportRepositoryTest {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.get(0).getReporter()).isEqualTo(user1);
             softAssertions.assertThat(actual.get(0).getAuction()).isEqualTo(auction);
+            softAssertions.assertThat(actual.get(0).getAuction().getSeller()).isEqualTo(seller);
             softAssertions.assertThat(actual.get(1).getReporter()).isEqualTo(user2);
             softAssertions.assertThat(actual.get(1).getAuction()).isEqualTo(auction);
+            softAssertions.assertThat(actual.get(1).getAuction().getSeller()).isEqualTo(seller);
             softAssertions.assertThat(actual.get(2).getReporter()).isEqualTo(user3);
             softAssertions.assertThat(actual.get(2).getAuction()).isEqualTo(auction);
+            softAssertions.assertThat(actual.get(2).getAuction().getSeller()).isEqualTo(seller);
         });
     }
 }

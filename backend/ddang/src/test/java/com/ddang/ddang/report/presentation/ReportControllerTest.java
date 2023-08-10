@@ -17,6 +17,7 @@ import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadReporterDto;
+import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
@@ -307,25 +308,26 @@ class ReportControllerTest {
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
+        final ReadUserInReportDto userDto = new ReadUserInReportDto(1L, "판매자", "profile.png", 4.0d);
         final ReadAuctionReportDto auctionReportDto1 = new ReadAuctionReportDto(
                 1L,
                 new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto2 = new ReadAuctionReportDto(
                 2L,
                 new ReadReporterDto(2L, "회원2", "이미지2", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto3 = new ReadAuctionReportDto(
                 3L,
                 new ReadReporterDto(3L, "회원3", "이미지3", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
+                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now().plusDays(2), 2),
                 "신고합니다."
         );
         given(auctionReportService.readAll())
