@@ -28,6 +28,7 @@ class MessageRoomActivity :
 
     private fun setupViewModel() {
         viewModel.event.observe(this) { handleEvent(it) }
+        viewModel.messages.observe(this) {}
     }
 
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {

@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.model.MessageModel
 import com.ddangddangddang.android.model.MessageRoomDetailModel
+import com.ddangddangddang.android.model.mapper.MessageModelMapper.toPresentation
 import com.ddangddangddang.android.model.mapper.MessageRoomDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
@@ -21,6 +23,12 @@ class MessageRoomViewModel(
     private val _messageRoomInfo: MutableLiveData<MessageRoomDetailModel> = MutableLiveData()
     val messageRoomInfo: LiveData<MessageRoomDetailModel>
         get() = _messageRoomInfo
+
+    private val _messages: MutableLiveData<List<MessageModel>> = MutableLiveData()
+    val messages: LiveData<List<MessageModel>>
+        get() = _messages
+    private val lastMessageId: Long?
+        get() = _messages.value?.lastOrNull()?.id
 
     private var isMessageLoading: Boolean = false
 
@@ -45,7 +53,25 @@ class MessageRoomViewModel(
     fun loadMessages() {
         _messageRoomInfo.value?.let {
             if (isMessageLoading) return
+
+            isMessageLoading = true
+            viewModelScope.launch {
+                when (val response = repository.getMessages(it.roomId, lastMessageId)) {
+                    is ApiResponse.Success -> {
+                        addMessages(response.body.map { it.toPresentation() })
+                    }
+
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
+                isMessageLoading = false
+            }
         }
+    }
+
+    private fun addMessages(messages: List<MessageModel>) {
+        _messages.value = _messages.value?.plus(messages)
     }
 
     fun sendMessage() {
