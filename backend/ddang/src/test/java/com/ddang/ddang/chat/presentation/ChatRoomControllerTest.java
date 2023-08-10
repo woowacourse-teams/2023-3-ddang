@@ -21,6 +21,7 @@ import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -248,12 +249,12 @@ class ChatRoomControllerTest {
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
-        final User buyer = User.builder()
-                               .name("구매자")
-                               .profileImage("profile.png")
-                               .reliability(4.7d)
-                               .oauthId("12346")
-                               .build();
+        final User receiver = User.builder()
+                                  .name("구매자")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId("12346")
+                                  .build();
 
         final Auction auction1 = Auction.builder()
                                         .title("경매 상품 1")
@@ -265,7 +266,8 @@ class ChatRoomControllerTest {
                                         .closingTime(LocalDateTime.now())
                                         .build();
         auction1.addAuctionImages(List.of(new AuctionImage("사진", "image")));
-        auction1.updateLastBid(new Bid(auction1, buyer, new BidPrice(3000)));
+        auction1.updateLastBid(new Bid(auction1, receiver, new BidPrice(3000)));
+
 
         final ReadParticipatingChatRoomDto chatRoom = new ReadParticipatingChatRoomDto(
                 1L,
@@ -289,13 +291,13 @@ class ChatRoomControllerTest {
     }
 
     @Test
-    void 지정한_아이디에_해당하는_채팅방_조회시_요청한_사용자_정보가_없다면_404를_반환한다() throws Exception {
+    void 잘못된_사용자가_메시지를_조회할_경우_404를_반환한다() throws Exception {
         // given
         final Long invalidUserId = -999L;
         final UserNotFoundException userNotFoundException =
-                new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong()))
-                .willThrow(userNotFoundException);
+                new UserNotFoundException("메시지 조회할 권한이 없는 사용자입니다.");
+        new ReadMessageRequest(invalidUserId, 1L, 1L);
+        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(userNotFoundException);
 
         // when & then
         mockMvc.perform(get("/chattings/1")

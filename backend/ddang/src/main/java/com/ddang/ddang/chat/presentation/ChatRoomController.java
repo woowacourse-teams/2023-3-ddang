@@ -100,22 +100,24 @@ public class ChatRoomController {
     @GetMapping("/{chatRoomId}/messages")
     public ResponseEntity<List<ReadMessageResponse>> readAllByLastMessageId(
             @AuthenticateUser final AuthenticateUserInfo userInfo,
-            @PathVariable final Long chatRoomId,
-            @RequestParam(required = false) final Long lastMessageId
+            @PathVariable final Long chatRoomId, @RequestParam(required = false) final Long lastMessageId
     ) {
         final ReadMessageRequest readMessageRequest = new ReadMessageRequest(userInfo.id(), chatRoomId, lastMessageId);
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(readMessageRequest);
         final List<ReadMessageResponse> responses = readMessageDtos.stream()
                                                                    .map(readMessageDto -> ReadMessageResponse.of(
                                                                            readMessageDto,
-                                                                           calculateMessageOwner(readMessageDto, userInfo)))
+                                                                           calculateMessageOwner(
+                                                                                   readMessageDto,
+                                                                                   userInfo
+                                                                           )))
                                                                    .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }
 
     private boolean calculateMessageOwner(final ReadMessageDto readMessageDto, final AuthenticateUserInfo userInfo) {
-        return readMessageDto.writer()
-                             .getId()
+        return readMessageDto.writerDto()
+                             .id()
                              .equals(userInfo.id());
     }
 }

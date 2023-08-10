@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 
 public record ReadMessageDto(
         Long id,
-        LocalDateTime createdAt,
-        ChatRoom chatRoom,
-        User writer,
-        User receiver,
+        LocalDateTime createdTime,
+        ReadParticipatingChatRoomDto chatRoomDto,
+        ReadUserDto writerDto,
+        ReadUserDto receiverDto,
         String contents
 ) {
 
@@ -19,10 +19,21 @@ public record ReadMessageDto(
         return new ReadMessageDto(
                 message.getId(),
                 message.getCreatedTime(),
-                message.getChatRoom(),
-                message.getWriter(),
-                message.getReceiver(),
+                toReadParticipatingChatRoomDto(message.getChatRoom(), message.getWriter()),
+                ReadUserDto.from(message.getWriter()),
+                ReadUserDto.from(message.getReceiver()),
                 message.getContents()
+        );
+    }
+
+    private static ReadParticipatingChatRoomDto toReadParticipatingChatRoomDto(
+            final ChatRoom chatRoom,
+            final User writer
+    ) {
+        return ReadParticipatingChatRoomDto.of(
+                chatRoom.calculateChatPartnerOf(writer),
+                chatRoom,
+                chatRoom.getCreatedTime()
         );
     }
 }
