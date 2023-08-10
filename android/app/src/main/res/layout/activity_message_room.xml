@@ -109,7 +109,8 @@
             android:id="@+id/cl_auction_item"
             android:layout_width="0dp"
             android:layout_height="96dp"
-            android:background="#F8F8F8"
+            android:background="@drawable/bg_stroke_gray_radius_1dp"
+            android:backgroundTint="#F8F8F8"
             android:onClick="@{()->viewModel.setNavigateToAuctionDetailEvent()}"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_begin"
@@ -160,7 +161,7 @@
 
             <TextView
                 android:id="@+id/tv_auction_pirce"
-                setTextOrEmpty="@{viewModel.messageRoomInfo.auctionPrice == null ? null : @string/message_room_auction_bid_price(viewModel.messageRoomInfo.auctionPrice)}"
+                setTextOrEmpty="@{viewModel.messageRoomInfo == null ? null : @string/message_room_auction_bid_price(viewModel.messageRoomInfo.auctionPrice)}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -199,16 +200,19 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#F3F6F6"
+                android:background="@drawable/bg_stroke_gray_radius_1dp"
+                android:backgroundTint="#F3F6F6"
                 android:hint="@string/message_room_message_input_hint"
                 android:padding="16dp"
                 android:singleLine="true"
+                android:text="@={viewModel.inputMessage}"
                 android:textSize="@dimen/textsize_body" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
+                android:background="@drawable/bg_stroke_gray_radius_1dp"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minWidth="0dp"

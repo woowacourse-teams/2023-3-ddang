@@ -9,6 +9,7 @@ import com.ddangddangddang.android.model.MessageRoomDetailModel
 import com.ddangddangddang.android.model.mapper.MessageModelMapper.toPresentation
 import com.ddangddangddang.android.model.mapper.MessageRoomDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import kotlinx.coroutines.launch
@@ -16,17 +17,19 @@ import kotlinx.coroutines.launch
 class MessageRoomViewModel(
     private val repository: ChatRepository,
 ) : ViewModel() {
+    val inputMessage: MutableLiveData<String> = MutableLiveData("")
+
     private val _event: SingleLiveEvent<MessageRoomEvent> = SingleLiveEvent()
     val event: LiveData<MessageRoomEvent>
         get() = _event
-
     private val _messageRoomInfo: MutableLiveData<MessageRoomDetailModel> = MutableLiveData()
+
     val messageRoomInfo: LiveData<MessageRoomDetailModel>
         get() = _messageRoomInfo
-
     private val _messages: MutableLiveData<List<MessageViewItem>> = MutableLiveData()
     val messages: LiveData<List<MessageViewItem>>
         get() = _messages
+
     private val lastMessageId: Long?
         get() = _messages.value?.lastOrNull()?.id
 
@@ -83,7 +86,22 @@ class MessageRoomViewModel(
     }
 
     fun sendMessage() {
-        _messageRoomInfo.value?.let { }
+        _messageRoomInfo.value?.let {
+            val message = inputMessage.value ?: return
+            val request = ChatMessageRequest(it.messagePartnerId, message)
+            viewModelScope.launch {
+                when (val response = repository.sendMessage(it.roomId, request)) {
+                    is ApiResponse.Success -> {
+                        inputMessage.value = ""
+                        loadMessages()
+                    }
+
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
+            }
+        }
     }
 
     fun setExitEvent() {
