@@ -224,6 +224,7 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
+
         final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
 
         // then

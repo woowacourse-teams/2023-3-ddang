@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.authentication.configuration.JwtConfigurationProperties;
-import com.ddang.ddang.authentication.domain.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import java.time.LocalDateTime;

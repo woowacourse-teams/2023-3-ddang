@@ -10,7 +10,7 @@ import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -609,7 +609,7 @@ class AuctionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> auctionService.deleteByAuctionId(auction.getId(), invalidSellerId))
-                .isInstanceOf(UserNotAuthorizationException.class)
+                .isInstanceOf(UserForbiddenException.class)
                 .hasMessage("권한이 없습니다.");
     }
 }
