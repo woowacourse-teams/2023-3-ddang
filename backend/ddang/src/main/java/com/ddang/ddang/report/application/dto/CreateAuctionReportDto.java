@@ -2,7 +2,7 @@ package com.ddang.ddang.report.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.report.domain.AuctionReport;
-import com.ddang.ddang.report.presentation.dto.CreateAuctionReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.user.domain.User;
 
 public record CreateAuctionReportDto(Long auctionId, String description) {

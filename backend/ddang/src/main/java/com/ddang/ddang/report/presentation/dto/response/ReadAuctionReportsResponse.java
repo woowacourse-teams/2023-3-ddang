@@ -1,4 +1,4 @@
-package com.ddang.ddang.report.presentation.dto;
+package com.ddang.ddang.report.presentation.dto.response;
 
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 

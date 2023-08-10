@@ -1,4 +1,4 @@
-package com.ddang.ddang.report.presentation.dto;
+package com.ddang.ddang.report.presentation.dto.request;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;

@@ -14,7 +14,7 @@ import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
-import com.ddang.ddang.report.presentation.dto.CreateAuctionReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
