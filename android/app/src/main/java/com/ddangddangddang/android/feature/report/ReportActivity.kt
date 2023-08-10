@@ -8,21 +8,45 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityReportBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.showSnackbar
 
 class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_report) {
     private val viewModel: ReportViewModel by viewModels { viewModelFactory }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        setupObserve()
+        setupViewModel()
     }
 
-    private fun setupObserve() {
+    private fun setupViewModel() {
+        loadAuctionId()
         viewModel.event.observe(this) { event ->
             when (event) {
                 ReportViewModel.ReportEvent.ExitEvent -> finish()
+                ReportViewModel.ReportEvent.SubmitEvent -> submit()
+                ReportViewModel.ReportEvent.BlankContentsEvent -> notifyBlankContents()
             }
         }
+    }
+
+    private fun loadAuctionId() {
+        val id = intent.getLongExtra(AUCTION_ID_KEY, -1L)
+        if (id == -1L) notifyAuctionIdNotDelivered()
+        viewModel.setAuctionId(id)
+    }
+
+    private fun submit() {
+        binding.root.showSnackbar(textId = R.string.report_snackbar_complete)
+    }
+
+    private fun notifyBlankContents() {
+        binding.root.showSnackbar(textId = R.string.report_snackbar_blank_contents)
+    }
+
+    private fun notifyAuctionIdNotDelivered() {
+        Toaster.showShort(this, getString(R.string.report_snackbar_auction_id_not_delivered))
+        finish()
     }
 
     companion object {

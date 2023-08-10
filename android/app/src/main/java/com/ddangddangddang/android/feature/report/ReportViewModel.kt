@@ -16,6 +16,10 @@ class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
     private var auctionId: Long? = null
     val reportContents = MutableLiveData<String>()
     fun setAuctionId(id: Long) {
+        if (id == -1L) {
+            setExitEvent()
+            return
+        }
         auctionId = id
     }
 
@@ -23,14 +27,23 @@ class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
         _event.value = ReportEvent.ExitEvent
     }
 
-    fun submit() {
-        viewModelScope.launch {
-            repository.reportAuction(auctionId ?: return@launch, reportContents.value ?: "")
-        }
-        setExitEvent()
+    private fun setBlankContentsEvent() {
+        _event.value = ReportEvent.BlankContentsEvent
     }
 
+    fun submit() {
+        viewModelScope.launch {
+            reportContents.value?.let { contents ->
+                repository.reportAuction(auctionId ?: return@launch, contents)
+                _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
+                return@launch
+            }
+            setBlankContentsEvent() // 내용이 비어있는 경우
+        }
+    }
     sealed class ReportEvent {
         object ExitEvent : ReportEvent()
+        object SubmitEvent : ReportEvent()
+        object BlankContentsEvent : ReportEvent()
     }
 }
