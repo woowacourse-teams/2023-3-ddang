@@ -47,8 +47,8 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:background="@color/black"
                 android:layout_gravity="end"
+                android:src="@drawable/ic_report_24"
                 android:layout_marginEnd="@dimen/margin_side_layout"/>
         </androidx.appcompat.widget.Toolbar>
 
