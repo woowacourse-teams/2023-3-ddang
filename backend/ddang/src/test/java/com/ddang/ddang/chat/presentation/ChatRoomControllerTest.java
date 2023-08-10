@@ -4,6 +4,7 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
@@ -429,6 +430,27 @@ class ChatRoomControllerTest {
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidAuctionToChatException.getMessage()))
+               );
+    }
+
+    @Test
+    void 채팅방_생성시_낙찰자가_없다면_404를_반환한다() throws Exception {
+        // given
+        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
+        final WinnerNotFoundException winnerNotFoundException =
+                new WinnerNotFoundException("낙찰자가 존재하지 않습니다");
+
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class)))
+                .willThrow(winnerNotFoundException);
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message", is(winnerNotFoundException.getMessage()))
                );
     }
 
