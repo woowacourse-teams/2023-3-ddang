@@ -22,8 +22,8 @@ spring:
 open:
   api:
     region:
-      service: e144de6e52eb4c60b020
-      key: 5bd02fdb76c24151b829
+      service: service
+      key: key
 
 data:
   init:
