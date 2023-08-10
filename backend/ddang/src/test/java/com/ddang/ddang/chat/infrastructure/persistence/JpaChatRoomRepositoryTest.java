@@ -166,8 +166,8 @@ class JpaChatRoomRepositoryTest {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).getId()).isEqualTo(enchoZeeto.getId());
-            softAssertions.assertThat(actual.get(1).getId()).isEqualTo(jamieEncho.getId());
+            softAssertions.assertThat(actual.get(0)).isEqualTo(enchoZeeto);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(jamieEncho);
         });
     }
 
@@ -211,7 +211,7 @@ class JpaChatRoomRepositoryTest {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get().getId()).isEqualTo(chatRoom.getId());
+            softAssertions.assertThat(actual.get()).isEqualTo(chatRoom);
         });
     }
 
