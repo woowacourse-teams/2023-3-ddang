@@ -93,14 +93,15 @@ public class ChatRoomController {
         final Long messageId = messageService.create(CreateMessageDto.of(userInfo.id(), chatRoomId, request));
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 
-        return ResponseEntity.created(URI.create("/chattings/" + chatRoomId + "/messages/" + messageId))
+        return ResponseEntity.created(URI.create("/chattings/" + chatRoomId))
                              .body(response);
     }
 
     @GetMapping("/{chatRoomId}/messages")
     public ResponseEntity<List<ReadMessageResponse>> readAllByLastMessageId(
             @AuthenticateUser final AuthenticateUserInfo userInfo,
-            @PathVariable final Long chatRoomId, @RequestParam(required = false) final Long lastMessageId
+            @PathVariable final Long chatRoomId,
+            @RequestParam(required = false) final Long lastMessageId
     ) {
         final ReadMessageRequest readMessageRequest = new ReadMessageRequest(userInfo.id(), chatRoomId, lastMessageId);
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(readMessageRequest);
