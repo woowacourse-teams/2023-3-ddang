@@ -93,7 +93,7 @@ public class ChatRoomController {
         final Long messageId = messageService.create(CreateMessageDto.of(userInfo.id(), chatRoomId, request));
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 
-        return ResponseEntity.created(URI.create("/chattings/" + chatRoomId + "/messages/" + messageId))
+        return ResponseEntity.created(URI.create("/chattings/" + chatRoomId))
                              .body(response);
     }
 
@@ -108,14 +108,17 @@ public class ChatRoomController {
         final List<ReadMessageResponse> responses = readMessageDtos.stream()
                                                                    .map(readMessageDto -> ReadMessageResponse.of(
                                                                            readMessageDto,
-                                                                           calculateMessageOwner(readMessageDto, userInfo)))
+                                                                           calculateMessageOwner(
+                                                                                   readMessageDto,
+                                                                                   userInfo
+                                                                           )))
                                                                    .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }
 
     private boolean calculateMessageOwner(final ReadMessageDto readMessageDto, final AuthenticateUserInfo userInfo) {
-        return readMessageDto.writer()
-                             .getId()
+        return readMessageDto.writerDto()
+                             .id()
                              .equals(userInfo.id());
     }
 }

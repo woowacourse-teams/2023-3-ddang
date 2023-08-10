@@ -48,11 +48,4 @@ public class User extends BaseTimeEntity {
         this.reliability = reliability;
         this.oauthId = oauthId;
     }
-
-    public User(final Long id, final String name, final String profileImage, final double reliability) {
-        this.id = id;
-        this.name = name;
-        this.profileImage = profileImage;
-        this.reliability = reliability;
-    }
 }

@@ -9,7 +9,7 @@ public record ReadMessageResponse(Long id, LocalDateTime createdAt, boolean isMy
     public static ReadMessageResponse of(final ReadMessageDto readMessageDto, final boolean isMyMessage) {
         return new ReadMessageResponse(
                 readMessageDto.id(),
-                readMessageDto.createdAt(),
+                readMessageDto.createdTime(),
                 isMyMessage,
                 readMessageDto.contents()
         );

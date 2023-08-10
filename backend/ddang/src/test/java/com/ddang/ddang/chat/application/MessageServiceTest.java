@@ -334,29 +334,11 @@ class MessageServiceTest {
     @Test
     void 마지막_조회_메시지가_없는_경우_모든_메시지를_조회한다() {
         // given
-        final BidUnit bidUnit = new BidUnit(1_000);
-        final Price startPrice = new Price(10_000);
-        final Category main = new Category("전자기기");
-        final Category sub = new Category("노트북");
-
-        main.addSubCategory(sub);
-
-        categoryRepository.save(main);
-        final Auction auction = Auction.builder()
-                                       .title("title")
-                                       .description("description")
-                                       .bidUnit(bidUnit)
-                                       .startPrice(startPrice)
-                                       .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .build();
-
-        auctionRepository.save(auction);
-
         final User writer = User.builder()
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
@@ -369,6 +351,25 @@ class MessageServiceTest {
                                   .build();
 
         userRepository.save(receiver);
+
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .seller(writer)
+                                       .subCategory(sub)
+                                       .build();
+
+        auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, writer);
 
@@ -401,29 +402,11 @@ class MessageServiceTest {
     @Test
     void 첫_번째_메시지_이후에_생성된_모든_메시지를_조회한다() {
         // given
-        final BidUnit bidUnit = new BidUnit(1_000);
-        final Price startPrice = new Price(10_000);
-        final Category main = new Category("전자기기");
-        final Category sub = new Category("노트북");
-
-        main.addSubCategory(sub);
-
-        categoryRepository.save(main);
-        final Auction auction = Auction.builder()
-                                       .title("title")
-                                       .description("description")
-                                       .bidUnit(bidUnit)
-                                       .startPrice(startPrice)
-                                       .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .build();
-
-        auctionRepository.save(auction);
-
         final User writer = User.builder()
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
@@ -436,6 +419,25 @@ class MessageServiceTest {
                                   .build();
 
         userRepository.save(receiver);
+
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .seller(writer)
+                                       .subCategory(sub)
+                                       .build();
+
+        auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, writer);
 
@@ -477,21 +479,12 @@ class MessageServiceTest {
         main.addSubCategory(sub);
 
         categoryRepository.save(main);
-        final Auction auction = Auction.builder()
-                                       .title("title")
-                                       .description("description")
-                                       .bidUnit(bidUnit)
-                                       .startPrice(startPrice)
-                                       .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .build();
-
-        auctionRepository.save(auction);
 
         final User writer = User.builder()
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
@@ -504,6 +497,18 @@ class MessageServiceTest {
                                   .build();
 
         userRepository.save(receiver);
+
+
+        final Auction auction = Auction.builder()
+                                       .seller(writer)
+                                       .title("경매 상품 1")
+                                       .description("이것은 경매 상품 1 입니다.")
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(1_000))
+                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                       .build();
+
+        auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, writer);
 
@@ -559,7 +564,7 @@ class MessageServiceTest {
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
@@ -622,7 +627,7 @@ class MessageServiceTest {
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
@@ -685,7 +690,7 @@ class MessageServiceTest {
                                 .name("발신자")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
