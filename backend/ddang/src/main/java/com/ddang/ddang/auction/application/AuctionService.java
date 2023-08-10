@@ -33,12 +33,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuctionService {
+
+    public static final Long DEFAULT_CHAT_ROOM_ID = null;
 
     private final JpaUserRepository userRepository;
     private final JpaChatRoomRepository chatRoomRepository;
@@ -70,9 +71,7 @@ public class AuctionService {
 
     private Category findSubCategory(final CreateAuctionDto dto) {
         return categoryRepository.findSubCategoryById(dto.subCategoryId())
-                                 .orElseThrow(() -> new CategoryNotFoundException(
-                                         "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
-                                 ));
+                                 .orElseThrow(() -> new CategoryNotFoundException("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."));
     }
 
     private List<AuctionRegion> convertAuctionRegions(final CreateAuctionDto dto) {
@@ -80,9 +79,7 @@ public class AuctionService {
 
         for (final Long thirdRegionId : dto.thirdRegionIds()) {
             final Region thirdRegion = regionRepository.findThirdRegionById(thirdRegionId)
-                                                       .orElseThrow(() -> new RegionNotFoundException(
-                                                               "지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다."
-                                                       ));
+                                                       .orElseThrow(() -> new RegionNotFoundException("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다."));
             auctionRegions.add(new AuctionRegion(thirdRegion));
         }
 
@@ -103,11 +100,13 @@ public class AuctionService {
                                                      ));
         final User findUser = userRepository.findById(userInfo.userId())
                                             .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
-        final Optional<ChatRoom> nullableChatRoom = chatRoomRepository.findByAuctionId(findAuction.getId());
+        final Long nullableChatRoomId = chatRoomRepository.findByAuctionId(findAuction.getId())
+                                                          .map(ChatRoom::getId)
+                                                          .orElse(DEFAULT_CHAT_ROOM_ID);
 
         return new ReadAuctionWithChatRoomIdDto(
                 ReadAuctionDto.from(findAuction),
-                ReadChatRoomDto.of(nullableChatRoom, findAuction.isSellerOrWinner(findUser))
+                new ReadChatRoomDto(nullableChatRoomId, findAuction.isSellerOrWinner(findUser))
         );
     }
 
