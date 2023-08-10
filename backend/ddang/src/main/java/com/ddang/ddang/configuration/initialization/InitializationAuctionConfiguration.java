@@ -1,4 +1,4 @@
-package com.ddang.ddang.configuration;
+package com.ddang.ddang.configuration.initialization;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;

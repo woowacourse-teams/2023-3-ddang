@@ -1,42 +1,5 @@
 package com.ddang.ddang.bid.presentation;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.bid.application.BidService;
-import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
-import com.ddang.ddang.bid.application.dto.ReadBidDto;
-import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
-import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
-import com.ddang.ddang.bid.application.exception.InvalidBidderException;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
-import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
-import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
-import com.ddang.ddang.configuration.RestDocsConfiguration;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -53,7 +16,51 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {BidController.class})
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.bid.application.BidService;
+import com.ddang.ddang.bid.application.dto.CreateBidDto;
+import com.ddang.ddang.bid.application.dto.LoginUserDto;
+import com.ddang.ddang.bid.application.dto.ReadBidDto;
+import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
+import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
+import com.ddang.ddang.bid.application.exception.InvalidBidderException;
+import com.ddang.ddang.bid.application.exception.UserNotFoundException;
+import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
+import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@WebMvcTest(controllers = {BidController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
