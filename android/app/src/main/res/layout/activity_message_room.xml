@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.messageRoom.MessageRoomActivity">
+
+        <LinearLayout
+            android:id="@+id/ll_top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:weightSum="1"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:contentDescription="@string/all_app_bar_back_key_description"
+                android:src="@drawable/ic_left_24"
+                app:tint="@color/black_900" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_profile"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="20dp"
+                app:cardCornerRadius="25dp"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toStartOf="@id/gl_begin"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/message_room_profile_description"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_launcher_background" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_detail_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/textsize_main_header"
+                android:textStyle="bold"
+                tools:text="쪽지 상대방 이름" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:contentDescription="@string/message_room_refresh_description"
+                android:src="@drawable/ic_refresh_24"
+                app:tint="@color/black_900" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:layout_marginEnd="20dp"
+                android:contentDescription="@string/message_room_report_description"
+                android:src="@drawable/ic_report_22" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_begin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="20dp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_auction_item"
+            android:layout_width="0dp"
+            android:layout_height="96dp"
+            android:background="#F8F8F8"
+            app:layout_constraintEnd_toEndOf="@id/gl_end"
+            app:layout_constraintStart_toStartOf="@id/gl_begin"
+            app:layout_constraintTop_toBottomOf="@id/ll_top_bar">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_auction_image"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="16dp"
+                app:cardCornerRadius="32dp"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/iv_auction_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/message_room_auction_item_description"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/ic_launcher_background" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_auction_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="19dp"
+                android:layout_marginTop="31dp"
+                android:layout_marginEnd="40dp"
+                android:maxLines="1"
+                android:textColor="#000E08"
+                android:textSize="@dimen/textsize_sub_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/cv_auction_image"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="맥북 14인치" />
+
+            <TextView
+                android:id="@+id/tv_auction_pirce"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:textColor="#797C7B"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="@id/tv_auction_title"
+                app:layout_constraintStart_toStartOf="@id/tv_auction_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_auction_title"
+                tools:text="12,000원" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

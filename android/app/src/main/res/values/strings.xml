@@ -99,4 +99,10 @@
     <!-- message -->
     <string name="message_profile_description">상대방 프로필입니다</string>
 
+    <!-- message_room -->
+    <string name="message_room_auction_item_description">경매 상품 이미지입니다</string>
+    <string name="message_room_profile_description">쪽지 상대 프로필입니다</string>
+    <string name="message_room_refresh_description">채팅 목록 갱신 버튼입니다</string>
+    <string name="message_room_report_description">쪽지 상대 신고 버튼입니다</string>
+
 </resources>
