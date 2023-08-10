@@ -12,18 +12,18 @@ import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadAuctionDto;
+import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadUserDto;
+import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.chat.presentation.auth.UserIdArgumentResolver;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -200,14 +200,14 @@ class ChatRoomControllerTest {
 
         final ReadParticipatingChatRoomDto chatRoom1 = new ReadParticipatingChatRoomDto(
                 1L,
-                ReadAuctionDto.from(auction1),
-                ReadUserDto.from(user1),
+                ReadAuctionInChatRoomDto.from(auction1),
+                ReadUserInChatRoomDto.from(user1),
                 true
         );
         final ReadParticipatingChatRoomDto chatRoom2 = new ReadParticipatingChatRoomDto(
                 2L,
-                ReadAuctionDto.from(auction2),
-                ReadUserDto.from(user2),
+                ReadAuctionInChatRoomDto.from(auction2),
+                ReadUserInChatRoomDto.from(user2),
                 true
         );
 
@@ -282,8 +282,8 @@ class ChatRoomControllerTest {
 
         final ReadParticipatingChatRoomDto chatRoom = new ReadParticipatingChatRoomDto(
                 1L,
-                ReadAuctionDto.from(auction1),
-                ReadUserDto.from(seller),
+                ReadAuctionInChatRoomDto.from(auction1),
+                ReadUserInChatRoomDto.from(seller),
                 true
         );
 

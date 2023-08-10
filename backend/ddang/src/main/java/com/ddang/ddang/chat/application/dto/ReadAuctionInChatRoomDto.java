@@ -8,7 +8,7 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ReadAuctionDto(
+public record ReadAuctionInChatRoomDto(
         Long id,
         String title,
         String description,
@@ -29,8 +29,8 @@ public record ReadAuctionDto(
         double sellerReliability
 ) {
 
-    public static ReadAuctionDto from(final Auction auction) {
-        return new ReadAuctionDto(
+    public static ReadAuctionInChatRoomDto from(final Auction auction) {
+        return new ReadAuctionInChatRoomDto(
                 auction.getId(),
                 auction.getTitle(),
                 auction.getDescription(),

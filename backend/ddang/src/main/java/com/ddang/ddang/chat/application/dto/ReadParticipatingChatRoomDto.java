@@ -7,8 +7,8 @@ import java.time.LocalDateTime;
 
 public record ReadParticipatingChatRoomDto(
         Long id,
-        ReadAuctionDto auctionDto,
-        ReadUserDto partnerDto,
+        ReadAuctionInChatRoomDto auctionDto,
+        ReadUserInChatRoomDto partnerDto,
         boolean isChatAvailable
 ) {
 
@@ -21,8 +21,8 @@ public record ReadParticipatingChatRoomDto(
 
         return new ReadParticipatingChatRoomDto(
                 chatRoom.getId(),
-                ReadAuctionDto.from(chatRoom.getAuction()),
-                ReadUserDto.from(partner),
+                ReadAuctionInChatRoomDto.from(chatRoom.getAuction()),
+                ReadUserInChatRoomDto.from(partner),
                 chatRoom.isChatAvailableTime(targetTime)
         );
     }
