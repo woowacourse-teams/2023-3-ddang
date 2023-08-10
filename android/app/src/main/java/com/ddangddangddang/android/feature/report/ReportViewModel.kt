@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.repository.AuctionRepository
 
-class ReportViewModel : ViewModel() {
+class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
     private val _event = SingleLiveEvent<ReportEvent>()
     val event: LiveData<ReportEvent>
         get() = _event
@@ -16,7 +17,13 @@ class ReportViewModel : ViewModel() {
         _event.value = ReportEvent.ExitEvent
     }
 
-    sealed class ReportEvent() {
+    fun submitEvent() {
+        // 통신
+        _event.value = ReportEvent.submitEvent
+    }
+
+    sealed class ReportEvent {
         object ExitEvent : ReportEvent()
+        object submitEvent : ReportEvent()
     }
 }
