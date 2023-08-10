@@ -19,6 +19,7 @@ data class AuctionDetailModel(
     val directRegions: List<RegionModel>,
     val auctioneerCount: Int,
     val sellerModel: SellerModel,
+    val chatAuctionDetailModel: ChatAuctionDetailModel,
 ) {
     val remainTime: String
         get() {

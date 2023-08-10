@@ -41,6 +41,7 @@ class AuctionDetailActivity :
         when (event) {
             is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
             is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> showAuctionBidDialog()
+            is AuctionDetailViewModel.AuctionDetailEvent.EnterChatRoom -> {}
         }
     }
 
