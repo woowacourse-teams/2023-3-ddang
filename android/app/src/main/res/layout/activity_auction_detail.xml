@@ -48,8 +48,9 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_report_24"
-                android:layout_marginEnd="@dimen/margin_side_layout"/>
+                android:layout_marginEnd="@dimen/margin_side_layout"
+                android:onClick="@{() -> viewModel.reportAuction()}"
+                android:src="@drawable/ic_report_24" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
@@ -299,11 +300,11 @@
                     android:id="@+id/tv_seller_reliability_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
                     android:text="@{@string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
                     app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
                     app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
                     app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"
-                    android:layout_marginStart="4dp"
                     tools:text="(9.7)" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
