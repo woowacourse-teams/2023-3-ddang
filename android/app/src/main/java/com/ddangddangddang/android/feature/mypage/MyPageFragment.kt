@@ -1,6 +1,8 @@
 package com.ddangddangddang.android.feature.mypage
 
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -37,17 +39,22 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 notifyLogoutSuccessfully()
                 navigateToLogin()
             }
+
             MyPageViewModel.MyPageEvent.LogoutFailed -> notifyLogoutFailed()
         }
     }
 
     private fun notifyLogoutSuccessfully() {
-        Toaster.showShort(requireContext(), getString(R.string.mypage_toast_logout_successfully_message))
+        Toaster.showShort(
+            requireContext(),
+            getString(R.string.mypage_toast_logout_successfully_message),
+        )
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(requireContext(), LoginActivity::class.java))
-        activity?.finish()
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = FLAG_ACTIVITY_CLEAR_TASK + FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     private fun notifyLogoutFailed() {
