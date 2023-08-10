@@ -248,7 +248,6 @@ class MessageServiceTest {
 
         userRepository.save(writer);
 
-
         final ChatRoom chatRoom = new ChatRoom(auction, writer);
 
         chatRoomRepository.save(chatRoom);
@@ -595,7 +594,7 @@ class MessageServiceTest {
         // when & then
         assertThatThrownBy(() -> messageService.readAllByLastMessageId(request))
                 .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("메시지 조회할 권한이 없는 사용자입니다.");
+                .hasMessageContaining("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
     }
 
     @Test
@@ -658,7 +657,7 @@ class MessageServiceTest {
         // when & then
         assertThatThrownBy(() -> messageService.readAllByLastMessageId(request))
                 .isInstanceOf(ChatRoomNotFoundException.class)
-                .hasMessageContaining("조회하고자 하는 채팅방이 존재하지 않습니다.");
+                .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
     }
 
     @Test
