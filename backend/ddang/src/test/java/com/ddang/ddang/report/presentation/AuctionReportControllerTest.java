@@ -7,7 +7,6 @@ import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.report.application.AuctionReportService;
@@ -19,6 +18,7 @@ import com.ddang.ddang.report.application.exception.AlreadyReportAuctionExceptio
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
