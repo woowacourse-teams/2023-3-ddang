@@ -79,7 +79,7 @@ class AuctionRetrofit private constructor(retrofit: Retrofit) {
 
         private fun Request.putTokenHeader(token: String): Request {
             return this.newBuilder()
-                .addHeader(AUTHORIZATION, token)
+                .addHeader(AUTHORIZATION, "Bearer $token")
                 .build()
         }
     }

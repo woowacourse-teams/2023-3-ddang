@@ -12,4 +12,6 @@ interface AuthRepository {
     fun getAccessToken(): String
 
     fun getRefreshToken(): String
+
+    suspend fun logout(): ApiResponse<Unit>
 }

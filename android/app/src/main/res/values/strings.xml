@@ -19,6 +19,9 @@
     <string name="all_dialog_default_positive_button">확인</string>
     <string name="all_snackbar_default_action">확인</string>
     <string name="all_logo_description">땅땅땅 로고</string>
+    <string name="all_profile_image_description">프로필 사진</string>
+    <string name="all_reliability_icon_description">유저 신뢰도</string>
+    <string name="all_reliability">(%.1f)</string>
 
     <!-- home -->
     <string name="home">경매 상품 목록</string>
@@ -38,7 +41,6 @@
     <string name="detail_direct_exchange_regions_description">직거래 가능 지역</string>
     <string name="detail_seller_info">판매자 정보</string>
     <string name="detail_seller_profile_description">유저 프로필</string>
-    <string name="detail_reliability_icon_description">판매자 신뢰성</string>
     <string name="detail_auction_submit">입찰하기</string>
     <string name="detail_auction_finish">경매 마감</string>
     <string name="detail_auction_chat_room_create">쪽지방 생성</string>
@@ -49,7 +51,6 @@
     <string name="detail_auction_remain_time">마감까지 %s</string>
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
-    <string name="detail_auction_seller_reliability">(%.1f)</string>
 
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>
@@ -95,8 +96,14 @@
     <!-- login -->
     <string name="login_kakao_login_button_description">카카오 로그인 버튼</string>
     <string name="login_snackbar_login_failed_title">로그인에 실패했습니다</string>
-
+  
     <!-- message -->
     <string name="message_profile_description">상대방 프로필입니다</string>
-
+                  
+    <!-- mypage -->
+    <string name="mypage">마이페이지</string>
+    <string name="mypage_logout_button">로그아웃</string>
+    <string name="mypage_delete_account_button">탈퇴하기</string>
+    <string name="mypage_toast_logout_successfully_message">성공적으로 로그아웃 되었습니다</string>
+    <string name="mypage_snackbar_logout_failed_title">로그아웃에 실패했습니다</string>  
 </resources>

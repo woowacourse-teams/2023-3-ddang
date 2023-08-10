@@ -283,20 +283,20 @@
                     android:id="@+id/iv_reliability_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/detail_reliability_icon_description"
-                    android:src="@drawable/ic_star_24"
+                    android:contentDescription="@string/all_reliability_icon_description"
+                    android:src="@drawable/ic_star_18"
                     app:layout_constraintStart_toStartOf="@id/tv_seller_nickname"
-                    app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname"
-                    app:tint="@color/yellow" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname" />
 
                 <TextView
                     android:id="@+id/tv_seller_reliability_score"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{@string/detail_auction_seller_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
+                    android:text="@{@string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
                     app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
                     app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
                     app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"
+                    android:layout_marginStart="4dp"
                     tools:text="(9.7)" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
