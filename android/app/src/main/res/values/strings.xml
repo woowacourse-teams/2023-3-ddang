@@ -106,4 +106,9 @@
     <string name="mypage_delete_account_button">탈퇴하기</string>
     <string name="mypage_toast_logout_successfully_message">성공적으로 로그아웃 되었습니다</string>
     <string name="mypage_snackbar_logout_failed_title">로그아웃에 실패했습니다</string>  
+  
+    <!-- report -->
+    <string name="report">신고하기</string>
+    <string name="report_contents">신고 내용</string>
+    <string name="report_submit">신고 접수하기</string>
 </resources>
