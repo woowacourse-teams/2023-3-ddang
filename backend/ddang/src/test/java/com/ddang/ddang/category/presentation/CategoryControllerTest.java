@@ -1,5 +1,32 @@
 package com.ddang.ddang.category.presentation;
 
+import com.ddang.ddang.category.application.CategoryService;
+import com.ddang.ddang.category.application.dto.ReadCategoryDto;
+import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -9,30 +36,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.category.application.CategoryService;
-import com.ddang.ddang.category.application.dto.ReadCategoryDto;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
-import com.ddang.ddang.configuration.RestDocsConfiguration;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-@WebMvcTest(controllers = {CategoryController.class})
+@WebMvcTest(controllers = {CategoryController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -82,9 +91,9 @@ class CategoryControllerTest {
                        restDocs.document(
                                responseFields(
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                                        .description("메인 카테고리 ID"),
+                                                             .description("메인 카테고리 ID"),
                                        fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                          .description("메인 카테고리 이름")
+                                                               .description("메인 카테고리 이름")
                                )
                        )
                );
@@ -127,9 +136,9 @@ class CategoryControllerTest {
                        restDocs.document(
                                responseFields(
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                                        .description("서브 카테고리 ID"),
+                                                             .description("서브 카테고리 ID"),
                                        fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                          .description("서브 카테고리 이름")
+                                                               .description("서브 카테고리 이름")
                                )
                        )
                );

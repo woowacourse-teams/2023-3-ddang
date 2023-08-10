@@ -1,5 +1,33 @@
 package com.ddang.ddang.region.presentation;
 
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.region.application.RegionService;
+import com.ddang.ddang.region.application.dto.ReadRegionDto;
+import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.List;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
@@ -11,31 +39,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.configuration.RestDocsConfiguration;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.region.application.RegionService;
-import com.ddang.ddang.region.application.dto.ReadRegionDto;
-import com.ddang.ddang.region.application.exception.RegionNotFoundException;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-@WebMvcTest(controllers = {RegionController.class})
+@WebMvcTest(controllers = {RegionController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -83,14 +92,14 @@ class RegionControllerTest {
                        jsonPath("$.[1].name", is(first2.name()))
                )
                .andDo(
-                        restDocs.document(
-                                responseFields(
-                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("모든 첫 번째 직거래 지역"),
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("첫 번째 직거래 지역 ID"),
-                                        fieldWithPath("[].name").type(JsonFieldType.STRING).description("첫 번째 직거래 지역 이름")
-                                )
-                        )
-                );
+                       restDocs.document(
+                               responseFields(
+                                       fieldWithPath("[]").type(JsonFieldType.ARRAY).description("모든 첫 번째 직거래 지역"),
+                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("첫 번째 직거래 지역 ID"),
+                                       fieldWithPath("[].name").type(JsonFieldType.STRING).description("첫 번째 직거래 지역 이름")
+                               )
+                       )
+               );
     }
 
     @Test
@@ -133,7 +142,8 @@ class RegionControllerTest {
                                        parameterWithName("firstId").description("첫 번째 지역 ID")
                                ),
                                responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY).description("첫 번째 지역에 해당하는 모든 두 번째 직거래 지역"),
+                                       fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                          .description("첫 번째 지역에 해당하는 모든 두 번째 직거래 지역"),
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("두 번째 직거래 지역 ID"),
                                        fieldWithPath("[].name").type(JsonFieldType.STRING).description("두 번째 직거래 지역 이름")
                                )
@@ -173,7 +183,7 @@ class RegionControllerTest {
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/regions/{firstId}/{secondId}", first.id(), second.id())
-                       .contentType(MediaType.APPLICATION_JSON))
+                                                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.[0].id", is(third1.id()), Long.class),
@@ -182,18 +192,19 @@ class RegionControllerTest {
                        jsonPath("$.[1].name", is(third2.name()))
                )
                .andDo(
-                        restDocs.document(
-                                pathParameters(
-                                    parameterWithName("firstId").description("첫 번째 지역 ID"),
-                                    parameterWithName("secondId").description("두 번째 지역 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("두 번째 지역에 해당하는 모든 세 번째 직거래 지역"),
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("세 번째 직거래 지역 ID"),
-                                        fieldWithPath("[].name").type(JsonFieldType.STRING).description("세 번째 직거래 지역 이름")
-                                )
-                        )
-                );
+                       restDocs.document(
+                               pathParameters(
+                                       parameterWithName("firstId").description("첫 번째 지역 ID"),
+                                       parameterWithName("secondId").description("두 번째 지역 ID")
+                               ),
+                               responseFields(
+                                       fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                          .description("두 번째 지역에 해당하는 모든 세 번째 직거래 지역"),
+                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("세 번째 직거래 지역 ID"),
+                                       fieldWithPath("[].name").type(JsonFieldType.STRING).description("세 번째 직거래 지역 이름")
+                               )
+                       )
+               );
     }
 
     @Test

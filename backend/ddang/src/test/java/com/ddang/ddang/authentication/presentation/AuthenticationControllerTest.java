@@ -17,21 +17,31 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {AuthenticationController.class})
+@WebMvcTest(controllers = {AuthenticationController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuthenticationControllerTest {
@@ -154,6 +164,38 @@ class AuthenticationControllerTest {
                .andExpectAll(
                        status().isUnauthorized(),
                        jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 유효한_accessToken을_검증하면_참을_반환한다() throws Exception {
+        // given
+        given(authenticationService.validateToken(anyString())).willReturn(true);
+
+        // when & then
+        mockMvc.perform(get("/oauth2/validate-token")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.validated").value(true)
+               );
+    }
+
+    @Test
+    void 만료된_accessToken을_검증하면_거짓을_반환한다() throws Exception {
+        // given
+        given(authenticationService.validateToken(anyString())).willReturn(false);
+
+        // when & then
+        mockMvc.perform(get("/oauth2/validate-token")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer invalidAccessToken")
+               )
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.validated").value(false)
                );
     }
 }

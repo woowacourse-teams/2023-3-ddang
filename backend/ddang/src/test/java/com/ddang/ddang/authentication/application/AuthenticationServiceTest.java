@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
@@ -197,5 +198,42 @@ class AuthenticationServiceTest {
         assertThatThrownBy(() -> authenticationService.refreshToken(invalidRefreshToken))
                 .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("Bearer 타입이 아닙니다.");
+    }
+
+    @Test
+    void 유효한_accessToken을_검증하면_참을_반환한다() {
+        // given
+        final Map<String, Object> privateClaims = Map.of("userId", 1L);
+        final String accessToken = "Bearer " + tokenEncoder.encode(
+                LocalDateTime.now(),
+                TokenType.ACCESS,
+                privateClaims
+        );
+
+        // when
+        final boolean actual = authenticationService.validateToken(accessToken);
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 만료된_accessToken을_검증하면_거짓을_반환한다() {
+        // given
+        final Instant instant = Instant.parse("2000-08-10T15:30:00Z");
+        final LocalDateTime expiredPublishTime = instant.atZone(ZoneId.of("UTC")).toLocalDateTime();
+
+        final Map<String, Object> privateClaims = Map.of("userId", 1L);
+        final String accessToken = "Bearer " + tokenEncoder.encode(
+                expiredPublishTime,
+                TokenType.ACCESS,
+                privateClaims
+        );
+
+        // when
+        final boolean actual = authenticationService.validateToken(accessToken);
+
+        // then
+        assertThat(actual).isFalse();
     }
 }

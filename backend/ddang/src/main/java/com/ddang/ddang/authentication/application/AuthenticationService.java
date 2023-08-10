@@ -2,12 +2,12 @@ package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
-import com.ddang.ddang.authentication.domain.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.user.domain.User;
@@ -69,7 +69,6 @@ public class AuthenticationService {
         return new TokenDto(accessToken, refreshToken);
     }
 
-    @Transactional(readOnly = true)
     public TokenDto refreshToken(final String refreshToken) {
         final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.REFRESH, refreshToken)
                                                         .orElseThrow(
@@ -82,5 +81,10 @@ public class AuthenticationService {
         );
 
         return new TokenDto(accessToken, refreshToken);
+    }
+
+    public boolean validateToken(final String accessToken) {
+        return tokenDecoder.decode(TokenType.ACCESS, accessToken)
+                           .isPresent();
     }
 }

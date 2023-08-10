@@ -29,6 +29,7 @@ public class BidController {
 
     private final BidService bidService;
 
+    // TODO: 2023/08/09 임시로 사용하는 argument resolver 추후 수정
     @PostMapping
     public ResponseEntity<Void> create(
             @LoginUser final LoginUserRequest userRequest,

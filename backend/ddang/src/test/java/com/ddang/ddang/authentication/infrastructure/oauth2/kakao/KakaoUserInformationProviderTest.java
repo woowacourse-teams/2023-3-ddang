@@ -1,7 +1,7 @@
 package com.ddang.ddang.authentication.infrastructure.oauth2.kakao;
 
 import com.ddang.ddang.authentication.configuration.KakaoProvidersConfigurationProperties;
-import com.ddang.ddang.authentication.configuration.Oauth2Configuration;
+import com.ddang.ddang.authentication.configuration.Oauth2PropertiesConfiguration;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.RestTemplateConfiguration;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest;
 
 @RestClientTest({KakaoUserInformationProvider.class})
-@Import({RestTemplateConfiguration.class, Oauth2Configuration.class})
+@Import({RestTemplateConfiguration.class, Oauth2PropertiesConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class KakaoUserInformationProviderTest {

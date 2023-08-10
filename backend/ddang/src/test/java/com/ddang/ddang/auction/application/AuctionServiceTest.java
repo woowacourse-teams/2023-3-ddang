@@ -5,12 +5,11 @@ import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.application.exception.UserNotAuthorizationException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -20,6 +19,7 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.SoftAssertions;
@@ -180,7 +180,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("789321")
                                 .build();
 
         userRepository.save(seller);
@@ -230,7 +230,7 @@ class AuctionServiceTest {
                                 .name("회원")
                                 .profileImage("profile.png")
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("54321")
                                 .build();
 
         userRepository.save(seller);
@@ -608,7 +608,7 @@ class AuctionServiceTest {
 
         // when & then
         assertThatThrownBy(() -> auctionService.deleteByAuctionId(auction.getId(), invalidSellerId))
-                .isInstanceOf(UserNotAuthorizationException.class)
+                .isInstanceOf(UserForbiddenException.class)
                 .hasMessage("권한이 없습니다.");
     }
 }

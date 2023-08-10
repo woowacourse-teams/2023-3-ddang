@@ -1,7 +1,6 @@
 package com.ddang.ddang.authentication.infrastructure.jwt;
 
 import com.ddang.ddang.authentication.configuration.JwtConfigurationProperties;
-import com.ddang.ddang.authentication.domain.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
@@ -19,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JwtDecoder implements TokenDecoder {
 
-    private static final String TOKEN_TYPE = "Bearer ";
+    private static final String BEARER_TOKEN_PREFIX = "Bearer ";
     private static final String CLAIM_NAME = "userId";
     private static final int BEARER_END_INDEX = 7;
 
@@ -44,7 +43,7 @@ public class JwtDecoder implements TokenDecoder {
     }
 
     private void validateTokenType(final String tokenType) {
-        if (!TOKEN_TYPE.equals(tokenType)) {
+        if (!BEARER_TOKEN_PREFIX.equals(tokenType)) {
             throw new InvalidTokenException("Bearer 타입이 아닙니다.");
         }
     }
@@ -60,16 +59,16 @@ public class JwtDecoder implements TokenDecoder {
                         .parseClaimsJws(findPureToken(token))
                         .getBody()
             );
-        } catch (JwtException e) {
+        } catch (final JwtException ignored) {
             return Optional.empty();
         }
     }
 
-    private PrivateClaims convert(final Claims claims) {
-        return new PrivateClaims(claims.get(CLAIM_NAME, Long.class));
+    private String findPureToken(final String token) {
+        return token.substring(BEARER_TOKEN_PREFIX.length());
     }
 
-    private String findPureToken(final String token) {
-        return token.substring(TOKEN_TYPE.length());
+    private PrivateClaims convert(final Claims claims) {
+        return new PrivateClaims(claims.get(CLAIM_NAME, Long.class));
     }
 }
