@@ -12,6 +12,7 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
 
 class AuctionDetailActivity :
@@ -42,11 +43,20 @@ class AuctionDetailActivity :
             is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
             is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> showAuctionBidDialog()
             is AuctionDetailViewModel.AuctionDetailEvent.EnterChatRoom -> {}
+            is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
         }
     }
 
     private fun showAuctionBidDialog() {
         AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
+    }
+
+    private fun notifyAuctionDoesNotExist() {
+        showDialog(
+            messageId = R.string.detail_auction_dialog_auction_does_not_exist_message,
+            actionPositive = { finish() },
+            isCancelable = false,
+        )
     }
 
     private fun setupAuctionImages(images: List<String>) {

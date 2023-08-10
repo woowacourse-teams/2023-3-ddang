@@ -58,6 +58,10 @@ class AuctionRepositoryImpl private constructor(
         return remoteDataSource.submitAuctionBid(AuctionBidRequest(auctionId, bidPrice))
     }
 
+    override fun removeAuction(auctionId: Long) {
+        localDataSource.removeAuctionPreview(auctionId)
+    }
+
     companion object {
         @Volatile
         private var instance: AuctionRepositoryImpl? = null
