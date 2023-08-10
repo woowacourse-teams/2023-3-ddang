@@ -22,6 +22,8 @@ class MessageRoomViewModel(
     val messageRoomInfo: LiveData<MessageRoomDetailModel>
         get() = _messageRoomInfo
 
+    private var isMessageLoading: Boolean = false
+
     fun loadMessageRoomInfo(roomId: Long) {
         viewModelScope.launch {
             when (val response = repository.getChatRoomPreview(roomId)) {
@@ -41,11 +43,33 @@ class MessageRoomViewModel(
     }
 
     fun loadMessages() {
+        _messageRoomInfo.value?.let {
+            if (isMessageLoading) return
+        }
+    }
+
+    fun sendMessage() {
+        _messageRoomInfo.value?.let { }
+    }
+
+    fun setExitEvent() {
+        _event.value = MessageRoomEvent.Exit
+    }
+
+    fun setReportEvent() {
+        _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.roomId) }
+    }
+
+    fun setNavigateToAuctionDetailEvent() {
+        _messageRoomInfo.value?.let {
+            _event.value = MessageRoomEvent.NavigateToAuctionDetail(it.auctionId)
+        }
     }
 
     sealed class MessageRoomEvent {
         object Exit : MessageRoomEvent()
         data class Report(val roomId: Long) : MessageRoomEvent()
+        data class NavigateToAuctionDetail(val auctionId: Long) : MessageRoomEvent()
         object LoadRoomInfoFailed : MessageRoomEvent()
     }
 }

@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -32,20 +33,27 @@ class MessageRoomActivity :
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {
         when (event) {
             is MessageRoomViewModel.MessageRoomEvent.Exit -> finish()
+            is MessageRoomViewModel.MessageRoomEvent.Report -> navigateToReport(event.roomId)
+            is MessageRoomViewModel.MessageRoomEvent.NavigateToAuctionDetail -> {
+                navigateToAuctionDetail(event.auctionId)
+            }
+
             is MessageRoomViewModel.MessageRoomEvent.LoadRoomInfoFailed -> {
                 notifyLoadRoomInfoFailed()
                 finish()
             }
-
-            is MessageRoomViewModel.MessageRoomEvent.Report -> navigateToReport(event.roomId)
         }
+    }
+
+    private fun navigateToReport(roomId: Long) {
+    }
+
+    private fun navigateToAuctionDetail(auctionId: Long) {
+        startActivity(AuctionDetailActivity.getIntent(this, auctionId))
     }
 
     private fun notifyLoadRoomInfoFailed() {
         Toaster.showShort(this, getString(R.string.message_room_toast_load_room_info_failed))
-    }
-
-    private fun navigateToReport(roomId: Long) {
     }
 
     companion object {
