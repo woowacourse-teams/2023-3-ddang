@@ -88,7 +88,7 @@
                 android:layout_marginEnd="20dp"
                 android:contentDescription="@string/message_room_report_description"
                 android:onClick="@{()->viewModel.setReportEvent()}"
-                android:src="@drawable/ic_report_22" />
+                android:src="@drawable/ic_report_24" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.Guideline
