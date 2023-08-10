@@ -10,5 +10,6 @@ public record CreateAuctionReportRequest(
         Long auctionId,
 
         @NotEmpty(message = "신고 내용이 입력되지 않았습니다.")
-        String description) {
+        String description
+) {
 }
