@@ -150,10 +150,8 @@ public class Auction extends BaseTimeEntity {
     }
 
     public boolean isWinner(final User user, final LocalDateTime targetTime) {
-        final Optional<User> nullableWinner = findWinner(targetTime);
-
-        return nullableWinner.filter(user::equals)
-                             .isPresent();
+        return findWinner(targetTime).filter(user::equals)
+                                     .isPresent();
     }
 
     public Optional<User> findWinner(final LocalDateTime targetTime) {
@@ -165,9 +163,6 @@ public class Auction extends BaseTimeEntity {
     }
 
     private boolean isWinnerExist(final LocalDateTime targetTime) {
-        if (auctioneerCount == 0) {
-            return false;
-        }
-        return isClosed(targetTime);
+        return auctioneerCount != 0 && isClosed(targetTime);
     }
 }
