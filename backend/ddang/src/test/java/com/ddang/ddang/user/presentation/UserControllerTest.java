@@ -92,7 +92,9 @@ class UserControllerTest {
         given(userService.readById(anyLong())).willReturn(readUserDto);
 
         // when & then
-        mockMvc.perform(get("/users").header(HttpHeaders.AUTHORIZATION, "Bearer accessToken"))
+        mockMvc.perform(get("/users")
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.name", is(readUserDto.name())),
@@ -111,7 +113,9 @@ class UserControllerTest {
         given(userService.readById(anyLong())).willThrow(userNotFoundException);
 
         // when & then
-        mockMvc.perform(get("/users").header(HttpHeaders.AUTHORIZATION, "Bearer accessToken"))
+        mockMvc.perform(get("/users")
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(userNotFoundException.getMessage()))

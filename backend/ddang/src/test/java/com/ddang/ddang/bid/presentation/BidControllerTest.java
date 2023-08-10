@@ -30,8 +30,10 @@ import com.ddang.ddang.bid.presentation.resolver.LoginUserArgumentResolver;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -100,9 +102,11 @@ class BidControllerTest {
         given(bidService.create(any(LoginUserDto.class), any(CreateBidDto.class))).willReturn(1L);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/auctions/1"))
@@ -132,9 +136,11 @@ class BidControllerTest {
                 .willThrow(auctionNotFoundException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(auctionNotFoundException.getMessage()))
@@ -152,9 +158,11 @@ class BidControllerTest {
                 .willThrow(userNotFoundException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", invalidUserId)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", invalidUserId)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(userNotFoundException.getMessage()))
@@ -170,9 +178,11 @@ class BidControllerTest {
                 .willThrow(invalidAuctionToBidException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidAuctionToBidException.getMessage()))
@@ -188,9 +198,11 @@ class BidControllerTest {
                 .willThrow(invalidAuctionToBidException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidAuctionToBidException.getMessage()))
@@ -206,9 +218,11 @@ class BidControllerTest {
                 .willThrow(invalidBidderException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidBidderException.getMessage()))
@@ -224,9 +238,10 @@ class BidControllerTest {
                 .willThrow(invalidBidPriceException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest)))
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidBidPriceException.getMessage()))
@@ -242,9 +257,11 @@ class BidControllerTest {
                 .willThrow(invalidBidderException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidBidderException.getMessage()))
@@ -260,9 +277,11 @@ class BidControllerTest {
                 .willThrow(invalidBidPriceException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidBidPriceException.getMessage()))
@@ -278,9 +297,11 @@ class BidControllerTest {
                 .willThrow(invalidBidPriceException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidBidPriceException.getMessage()))
@@ -296,9 +317,11 @@ class BidControllerTest {
                 .willThrow(invalidBidPriceException);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is(invalidBidPriceException.getMessage()))
@@ -311,9 +334,11 @@ class BidControllerTest {
         final CreateBidRequest bidRequest = new CreateBidRequest(null, 10_000);
 
         // when & then
-        mockMvc.perform(post("/bids").header("Authorization", 1L)
-                                     .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+        mockMvc.perform(post("/bids")
+                       .header("Authorization", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is("경매 아이디가 입력되지 않았습니다."))
@@ -329,7 +354,8 @@ class BidControllerTest {
         // when & then
         mockMvc.perform(post("/bids").header("Authorization", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+                                     .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is("경매 아이디는 양수입니다."))
@@ -344,7 +370,8 @@ class BidControllerTest {
         // when & then
         mockMvc.perform(post("/bids").header("Authorization", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+                                     .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is("입찰 금액이 입력되지 않았습니다."))
@@ -360,7 +387,8 @@ class BidControllerTest {
         // when & then
         mockMvc.perform(post("/bids").header("Authorization", 1L)
                                      .contentType(MediaType.APPLICATION_JSON)
-                                     .content(objectMapper.writeValueAsString(bidRequest)))
+                                     .content(objectMapper.writeValueAsString(bidRequest))
+               )
                .andExpectAll(
                        status().isBadRequest(),
                        jsonPath("$.message", is("입찰 금액은 양수입니다."))
@@ -376,7 +404,9 @@ class BidControllerTest {
         given(bidService.readAllByAuctionId(anyLong())).willReturn(List.of(bid1, bid2));
 
         // when & then
-        mockMvc.perform(get("/bids/{auctionId}", 1L).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/bids/{auctionId}", 1L)
+                       .contentType(MediaType.APPLICATION_JSON)
+               )
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.bids.[0].name", is(bid1.name())),
@@ -410,7 +440,9 @@ class BidControllerTest {
 
         // when & then
         final Long invalidAuctionId = -999L;
-        mockMvc.perform(get("/bids/{auctionId}", invalidAuctionId).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/bids/{auctionId}", invalidAuctionId)
+                       .contentType(MediaType.APPLICATION_JSON)
+               )
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(auctionNotFoundException.getMessage()))
