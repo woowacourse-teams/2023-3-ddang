@@ -41,6 +41,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
 
     private boolean isInvalidUserPrincipal(final AuthenticationUserInfo userInfo, final MethodParameter parameter) {
         return userInfo == null ||
-                userInfo.userId() == null && parameter.getParameterAnnotation(AuthenticateUser.class).required();
+                (userInfo.userId() == null &&
+                        parameter.getParameterAnnotation(AuthenticateUser.class).required());
     }
 }
