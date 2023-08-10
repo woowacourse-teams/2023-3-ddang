@@ -214,12 +214,12 @@ class ChatRoomControllerTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.chattings.[0].id", is(chatRoom1.id()), Long.class),
-                       jsonPath("$.chattings.[0].chatPartner.name", is(user1.getName())),
-                       jsonPath("$.chattings.[0].auction.title", is(auction1.getTitle())),
-                       jsonPath("$.chattings.[1].id", is(chatRoom2.id()), Long.class),
-                       jsonPath("$.chattings.[1].chatPartner.name", is(user2.getName())),
-                       jsonPath("$.chattings.[1].auction.title", is(auction2.getTitle()))
+                       jsonPath("$.[0].id", is(chatRoom1.id()), Long.class),
+                       jsonPath("$.[0].chatPartner.name", is(user1.getName())),
+                       jsonPath("$.[0].auction.title", is(auction1.getTitle())),
+                       jsonPath("$.[1].id", is(chatRoom2.id()), Long.class),
+                       jsonPath("$.[1].chatPartner.name", is(user2.getName())),
+                       jsonPath("$.[1].auction.title", is(auction2.getTitle()))
                );
     }
 
