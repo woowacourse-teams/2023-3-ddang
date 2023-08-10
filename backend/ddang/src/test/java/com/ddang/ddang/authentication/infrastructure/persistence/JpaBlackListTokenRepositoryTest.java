@@ -40,7 +40,7 @@ class JpaBlackListTokenRepositoryTest {
     }
 
     @Test
-    void 이미_블랙리스트로_등록된_토큰을_전달하면_참을_반환한다() {
+    void 블랙리스트로_등록된_토큰인지_확인할때_이미_블랙리스트로_등록된_토큰을_전달하면_참을_반환한다() {
         // given
         final BlackListToken blackListToken = new BlackListToken(TokenType.ACCESS, "accessToken");
 
@@ -58,7 +58,7 @@ class JpaBlackListTokenRepositoryTest {
     }
 
     @Test
-    void 블랙리스트로_등록되지_않은_토큰을_전달하면_거짓을_반환한다() {
+    void 블랙리스트로_등록된_토큰인지_확인할때_블랙리스트로_등록되지_않은_토큰을_전달하면_거짓을_반환한다() {
         // given
         final String invalidAccessToken = "invalidAccessToken";
 

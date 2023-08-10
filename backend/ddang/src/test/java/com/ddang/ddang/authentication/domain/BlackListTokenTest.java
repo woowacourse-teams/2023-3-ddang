@@ -21,7 +21,7 @@ class BlackListTokenTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"       ", ""})
-    void 비어_있는_토큰을_전달하면_예외가_발생한다(final String invalidToken) {
+    void 생성자에_비어_있는_토큰을_전달하면_예외가_발생한다(final String invalidToken) {
         // when & then
         assertThatThrownBy(() -> new BlackListToken(TokenType.ACCESS, invalidToken))
                 .isInstanceOf(EmptyTokenException.class)
