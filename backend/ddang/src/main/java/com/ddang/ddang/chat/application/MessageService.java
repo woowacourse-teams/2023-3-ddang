@@ -31,34 +31,40 @@ public class MessageService {
 
     @Transactional
     public Long create(final CreateMessageDto dto) {
-        final ChatRoom chatRoom = findChatRoom(dto.chatRoomId(), "지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-        final User writer = findUser(dto.writerId(), "지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
-        final User receiver = findUser(dto.receiverId(), "지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
+        final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
+                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
+                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
+        final User writer = userRepository.findById(dto.writerId())
+                                          .orElseThrow(() -> new UserNotFoundException(
+                                                  "지정한 아이디에 대한 발신자를 찾을 수 없습니다."));
+        final User receiver = userRepository.findById(dto.receiverId())
+                                            .orElseThrow(() -> new UserNotFoundException(
+                                                    "지정한 아이디에 대한 수신자를 찾을 수 없습니다."));
         final Message message = dto.toEntity(chatRoom, writer, receiver);
 
-        final Message savedMessage = messageRepository.save(message);
+        final Message persistMessage = messageRepository.save(message);
 
-        if (!chatRoom.isChatAvailableTime(savedMessage.getCreatedTime())) {
+        if (!chatRoom.isChatAvailableTime(persistMessage.getCreatedTime())) {
             throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
         }
 
         return message.getId();
     }
 
-    private ChatRoom findChatRoom(final Long chatRoomId, final String message) {
-        return chatRoomRepository.findById(chatRoomId)
-                                 .orElseThrow(() -> new ChatRoomNotFoundException(message));
-    }
-
-    private User findUser(final Long dto, final String message) {
-        return userRepository.findById(dto)
-                             .orElseThrow(() -> new UserNotFoundException(message));
-    }
-
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        final User user = findUser(request.userId(), "메시지 조회할 권한이 없는 사용자입니다.");
-        final ChatRoom chatRoom = findChatRoom(request.chatRoomId(), "조회하고자 하는 채팅방이 존재하지 않습니다.");
-        final Long lastMessageId = findLastMessageId(request.lastMessageId());
+        final User user = userRepository.findById(request.userId())
+                                        .orElseThrow(() -> new UserNotFoundException(
+                                                "지정한 아이디에 대한 사용자를 찾을 수 없습니다."));
+        final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
+                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
+                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
+        Long lastMessageId = request.lastMessageId();
+        if (lastMessageId != null) {
+            lastMessageId = messageRepository.findById(request.lastMessageId())
+                                             .orElseThrow(() -> new MessageNotFoundException(
+                                                     "조회한 마지막 메시지가 존재하지 않습니다."))
+                                             .getId();
+        }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
                 user.getId(),
@@ -69,18 +75,5 @@ public class MessageService {
         return readMessages.stream()
                            .map(ReadMessageDto::from)
                            .collect(Collectors.toList());
-    }
-
-    private Long findLastMessageId(final Long messageId) {
-        if (messageId != null) {
-            return findMessage(messageId, "조회한 마지막 메시지가 존재하지 않습니다.").getId();
-        }
-
-        return null;
-    }
-
-    private Message findMessage(final Long messageId, final String message) {
-        return messageRepository.findById(messageId)
-                                .orElseThrow(() -> new MessageNotFoundException(message));
     }
 }
