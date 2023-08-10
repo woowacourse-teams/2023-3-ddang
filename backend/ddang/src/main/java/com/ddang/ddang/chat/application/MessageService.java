@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,11 +45,15 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        if (!chatRoom.isChatAvailableTime(persistMessage.getCreatedTime())) {
+        validateChatRoomExpirationDate(chatRoom, persistMessage.getCreatedTime());
+
+        return persistMessage.getId();
+    }
+
+    private void validateChatRoomExpirationDate(final ChatRoom chatRoom, final LocalDateTime chatRoomCreatedTime) {
+        if (!chatRoom.isChatAvailableTime(chatRoomCreatedTime)) {
             throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
         }
-
-        return message.getId();
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
