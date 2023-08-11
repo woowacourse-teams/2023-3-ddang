@@ -14,7 +14,6 @@
     <string name="all_auction_success">낙찰 완료</string>
     <string name="all_auction_failure">경매 유찰</string>
     <string name="all_app_bar_back_key_description">뒤로가기 버튼</string>
-    <string name="all_dialog_default_title"></string>
     <string name="all_dialog_default_negative_button">취소</string>
     <string name="all_dialog_default_positive_button">확인</string>
     <string name="all_snackbar_default_action">확인</string>
@@ -51,6 +50,8 @@
     <string name="detail_auction_remain_time">마감까지 %s</string>
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
+    <string name="detail_auction_dialog_auction_does_not_exist_message">존재하지 않는 경매입니다.</string>
+
 
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>

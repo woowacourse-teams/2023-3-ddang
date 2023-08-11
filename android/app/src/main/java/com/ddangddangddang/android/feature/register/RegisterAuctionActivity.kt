@@ -15,10 +15,10 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.category.SelectCategoryActivity
 import com.ddangddangddang.android.feature.register.region.SelectRegionsActivity
-import com.ddangddangddang.android.model.CategoryModel
-import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
+import com.ddangddangddang.android.model.CategoryModel
+import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.RegisterImageModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.compat.getParcelableCompat
@@ -199,6 +199,7 @@ class RegisterAuctionActivity :
     private fun showDeleteImageDialog(image: RegisterImageModel) {
         showDialog(
             messageId = R.string.register_auction_dialog_delete_image_message,
+            negativeStringId = R.string.all_dialog_default_negative_button,
             positiveStringId = R.string.register_auction_dialog_delete_image_positive_button,
             actionPositive = { viewModel.deleteImage(image) },
         )

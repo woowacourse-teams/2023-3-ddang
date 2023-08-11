@@ -41,7 +41,12 @@ class AuctionDetailViewModel(
         viewModelScope.launch {
             when (val response = auctionRepository.getAuctionDetail(auctionId)) {
                 is ApiResponse.Success -> _auctionDetailModel.value = response.body.toPresentation()
-                is ApiResponse.Failure -> {}
+                is ApiResponse.Failure -> {
+                    if (response.responseCode == 404) {
+                        _event.value = AuctionDetailEvent.NotifyAuctionDoesNotExist
+                    }
+                }
+
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
@@ -89,5 +94,7 @@ class AuctionDetailViewModel(
         object Exit : AuctionDetailEvent()
         object PopupAuctionBid : AuctionDetailEvent()
         data class EnterMessageRoom(val roomId: Long) : AuctionDetailEvent()
+        data class EnterChatRoom(val chatId: Long) : AuctionDetailEvent()
+        object NotifyAuctionDoesNotExist : AuctionDetailEvent()
     }
 }
