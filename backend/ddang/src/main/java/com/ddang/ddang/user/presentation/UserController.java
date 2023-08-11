@@ -7,6 +7,7 @@ import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.presentation.dto.ReadUserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,5 +25,13 @@ public class UserController {
         final ReadUserResponse response = ReadUserResponse.from(readUserDto);
 
         return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/withdrawal")
+    public ResponseEntity<Void> delete(@AuthenticateUser final AuthenticationUserInfo userInfo) {
+        userService.deleteById(userInfo.userId());
+
+        return ResponseEntity.noContent()
+                             .build();
     }
 }

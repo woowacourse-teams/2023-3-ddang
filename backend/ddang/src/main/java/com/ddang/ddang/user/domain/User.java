@@ -22,6 +22,8 @@ import lombok.ToString;
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
+    private static final boolean DELETED_STATUS = true;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,6 +38,9 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String oauthId;
 
+    @Column(name = "is_deleted")
+    private boolean deleted = false;
+
     @Builder
     private User(
             final String name,
@@ -47,5 +52,9 @@ public class User extends BaseTimeEntity {
         this.profileImage = profileImage;
         this.reliability = reliability;
         this.oauthId = oauthId;
+    }
+
+    public void withdrawal() {
+        this.deleted = DELETED_STATUS;
     }
 }
