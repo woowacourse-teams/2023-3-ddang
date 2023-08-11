@@ -37,7 +37,8 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     }
 
     private fun submit() {
-        binding.root.showSnackbar(textId = R.string.report_snackbar_complete)
+        Toaster.showShort(this, getString(R.string.report_snackbar_complete))
+        finish()
     }
 
     private fun notifyBlankContents() {
