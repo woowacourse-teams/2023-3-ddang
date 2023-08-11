@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import com.ddangddangddang.android.BuildConfig
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMyPageBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
@@ -64,7 +65,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     }
 
     private fun showPrivacyPolicy() {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://rune-year-8e8.notion.site/9128651ccb67477980db8fb7300f0b5a"))
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PRIVACY_POLICY_URL))
         startActivity(intent)
     }
 }
