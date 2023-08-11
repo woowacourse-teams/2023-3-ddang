@@ -58,6 +58,14 @@ class AuctionRepositoryImpl private constructor(
         return remoteDataSource.submitAuctionBid(AuctionBidRequest(auctionId, bidPrice))
     }
 
+    override suspend fun reloadAuctionPreviews(size: Int): ApiResponse<AuctionPreviewsResponse> {
+        val response = remoteDataSource.getAuctionPreviews(null, size)
+        if (response is ApiResponse.Success) {
+            localDataSource.resetAuctionPreviews(response.body.auctions)
+        }
+        return response
+    }
+
     companion object {
         @Volatile
         private var instance: AuctionRepositoryImpl? = null
