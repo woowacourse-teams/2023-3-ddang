@@ -21,4 +21,12 @@ public class UserService {
 
         return ReadUserDto.from(user);
     }
+
+    @Transactional
+    public void deleteById(final Long userId) {
+        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+                                        .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
+
+        user.withdrawal();
+    }
 }
