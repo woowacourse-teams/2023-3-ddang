@@ -6,6 +6,11 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,9 +48,11 @@ import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportReques
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -61,6 +68,10 @@ import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -90,6 +101,9 @@ class ReportControllerTest {
     ReportController reportController;
 
     @Autowired
+    RestDocumentationResultHandler restDocs;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     TokenDecoder mockTokenDecoder;
@@ -97,7 +111,7 @@ class ReportControllerTest {
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         mockTokenDecoder = mock(TokenDecoder.class);
 
         final AuthenticationStore store = new AuthenticationStore();
@@ -112,7 +126,9 @@ class ReportControllerTest {
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver)
+                                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
+                                 .alwaysDo(restDocs)
                                  .build();
     }
 
@@ -134,6 +150,17 @@ class ReportControllerTest {
                .andExpectAll(
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/auctions/1"))
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               requestFields(
+                                       fieldWithPath("auctionId").description("신고할 경매 ID"),
+                                       fieldWithPath("description").description("신고 내용")
+                               )
+                       )
                );
     }
 
@@ -319,28 +346,36 @@ class ReportControllerTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final ReadUserInReportDto userDto = new ReadUserInReportDto(1L, "판매자", "profile.png", 4.0d, "12345");
+        final ReadAuctionInReportDto auctionDto = new ReadAuctionInReportDto(
+                1L,
+                userDto,
+                "제목",
+                "설명",
+                100,
+                1_00,
+                false,
+                LocalDateTime.now().plusDays(2),
+                2
+        );
         final ReadAuctionReportDto auctionReportDto1 = new ReadAuctionReportDto(
                 1L,
                 new ReadReporterDto(1L, "회원1", "이미지1", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now()
-                                                                                                   .plusDays(2), 2),
+                auctionDto,
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto2 = new ReadAuctionReportDto(
                 2L,
                 new ReadReporterDto(2L, "회원2", "이미지2", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now()
-                                                                                                   .plusDays(2), 2),
+                auctionDto,
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto3 = new ReadAuctionReportDto(
                 3L,
                 new ReadReporterDto(3L, "회원3", "이미지3", 5.0),
                 LocalDateTime.now(),
-                new ReadAuctionInReportDto(1L, userDto, "제목", "설명", 100, 1_00, false, LocalDateTime.now()
-                                                                                                   .plusDays(2), 2),
+                auctionDto,
                 "신고합니다."
         );
         given(auctionReportService.readAll())
@@ -373,6 +408,20 @@ class ReportControllerTest {
                        jsonPath("$.reports.[2].auction.id", is(auctionReportDto3.auctionDto().id()), Long.class),
                        jsonPath("$.reports.[2].auction.title", is(auctionReportDto3.auctionDto().title())),
                        jsonPath("$.reports.[2].description", is(auctionReportDto3.description()))
+               )
+               .andDo(
+                       restDocs.document(
+                               responseFields(
+                                       fieldWithPath("reports.[]").type(JsonFieldType.ARRAY).description("모든 경매 신고 목록"),
+                                       fieldWithPath("reports.[].id").type(JsonFieldType.NUMBER).description("경매 신고 글 ID"),
+                                       fieldWithPath("reports.[].reporter.id").type(JsonFieldType.NUMBER).description("경매 신고한 사용자의 ID"),
+                                       fieldWithPath("reports.[].reporter.name").type(JsonFieldType.STRING).description("경매 신고한 사용자의 이름"),
+                                       fieldWithPath("reports.[].createdTime").type(JsonFieldType.STRING).description("경매 신고 시간"),
+                                       fieldWithPath("reports.[].auction.id").type(JsonFieldType.NUMBER).description("신고한 경매 ID"),
+                                       fieldWithPath("reports.[].auction.title").type(JsonFieldType.STRING).description("신고한 경매 제목"),
+                                       fieldWithPath("reports.[].description").type(JsonFieldType.STRING).description("신고 내용")
+                               )
+                       )
                );
     }
 
@@ -394,6 +443,17 @@ class ReportControllerTest {
                .andExpectAll(
                        status().isCreated(),
                        header().string(HttpHeaders.LOCATION, is("/chattings/1"))
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               requestFields(
+                                       fieldWithPath("chatRoomId").description("신고할 채팅방 ID"),
+                                       fieldWithPath("description").description("신고 내용")
+                               )
+                       )
                );
     }
 
@@ -622,6 +682,19 @@ class ReportControllerTest {
                        jsonPath("$.reports.[2].createdTime").exists(),
                        jsonPath("$.reports.[2].chatRoom.id", is(chatRoomReportDto3.chatRoomDto().id()), Long.class),
                        jsonPath("$.reports.[2].description", is(chatRoomReportDto3.description()))
+               )
+               .andDo(
+                       restDocs.document(
+                               responseFields(
+                                       fieldWithPath("reports.[]").type(JsonFieldType.ARRAY).description("모든 채팅방 신고 목록"),
+                                       fieldWithPath("reports.[].id").type(JsonFieldType.NUMBER).description("채팅방 신고 글 ID"),
+                                       fieldWithPath("reports.[].reporter.id").type(JsonFieldType.NUMBER).description("채팅방을 신고한 사용자의 ID"),
+                                       fieldWithPath("reports.[].reporter.name").type(JsonFieldType.STRING).description("채팅방을 신고한 사용자의 이름"),
+                                       fieldWithPath("reports.[].createdTime").type(JsonFieldType.STRING).description("채팅방 신고 시간"),
+                                       fieldWithPath("reports.[].chatRoom.id").type(JsonFieldType.NUMBER).description("신고한 채팅방 ID"),
+                                       fieldWithPath("reports.[].description").type(JsonFieldType.STRING).description("신고 내용")
+                               )
+                       )
                );
     }
 }
