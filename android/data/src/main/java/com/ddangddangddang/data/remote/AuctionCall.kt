@@ -8,8 +8,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.lang.IllegalStateException
 import java.lang.UnsupportedOperationException
+import java.lang.reflect.Type
 
-class AuctionCall<T : Any>(private val call: Call<T>) : Call<ApiResponse<T>> {
+class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: Type) :
+    Call<ApiResponse<T>> {
     override fun enqueue(callback: Callback<ApiResponse<T>>) {
         call.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
@@ -19,7 +21,14 @@ class AuctionCall<T : Any>(private val call: Call<T>) : Call<ApiResponse<T>> {
                             this@AuctionCall,
                             Response.success(ApiResponse.Success(it)),
                         )
-                    } ?: {
+                    } ?: run {
+                        if (responseType == Unit::class.java) {
+                            @Suppress("UNCHECKED_CAST")
+                            return@run callback.onResponse(
+                                this@AuctionCall,
+                                Response.success(ApiResponse.Success(Unit as T)),
+                            )
+                        }
                         callback.onResponse(
                             this@AuctionCall,
                             Response.success(
@@ -55,7 +64,7 @@ class AuctionCall<T : Any>(private val call: Call<T>) : Call<ApiResponse<T>> {
         })
     }
 
-    override fun clone(): Call<ApiResponse<T>> = AuctionCall<T>(call.clone())
+    override fun clone(): Call<ApiResponse<T>> = AuctionCall<T>(call.clone(), responseType)
 
     override fun execute(): Response<ApiResponse<T>> {
         throw UnsupportedOperationException("AuctionCall은 execute를 지원하지 않습니다.")
