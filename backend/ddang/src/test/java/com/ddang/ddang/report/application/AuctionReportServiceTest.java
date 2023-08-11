@@ -214,7 +214,7 @@ class AuctionReportServiceTest {
     }
 
     @Test
-    void 이미_신고한_경매를_신고하는_경우_예외가_발생한다() {
+    void 이미_신고한_경매를_동일_사용자가_신고하는_경우_예외가_발생한다() {
         // given
         final User seller = User.builder()
                                 .name("판매자")
