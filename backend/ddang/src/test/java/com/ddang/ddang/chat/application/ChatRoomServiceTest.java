@@ -65,15 +65,23 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
                                 .build();
-        final User buyer = User.builder().name("회원2").profileImage("profile.png").reliability(4.7d).oauthId("12346")
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().
-                                       title("경매")
+        final Auction auction = Auction.builder()
+                                       .title("경매")
                                        .description("설명")
                                        .seller(seller)
                                        .bidUnit(new BidUnit(1_000))
@@ -107,9 +115,17 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
                                 .build();
-        final User buyer = User.builder().name("회원2").profileImage("profile.png").reliability(4.7d).oauthId("12346")
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -135,14 +151,19 @@ class ChatRoomServiceTest {
         final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.create(invalidUserId, createChatRoomDto)).isInstanceOf(UserNotFoundException.class)
-                                                                                          .hasMessage("사용자 정보를 찾을 수 없습니다.");
+        assertThatThrownBy(() -> chatRoomService.create(invalidUserId, createChatRoomDto))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("사용자 정보를 찾을 수 없습니다.");
     }
 
     @Test
     void 채팅방_생성시_관련된_경매_정보를_찾을_수_없다면_예외가_발생한다() {
         // given
-        final User user = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User user = User.builder()
+                              .name("회원1")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
                               .build();
         userRepository.save(user);
 
@@ -152,8 +173,9 @@ class ChatRoomServiceTest {
 
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.create(userId, invalidDto)).isInstanceOf(AuctionNotFoundException.class)
-                                                                            .hasMessage("해당 경매를 찾을 수 없습니다.");
+        assertThatThrownBy(() -> chatRoomService.create(userId, invalidDto))
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
 
     @Test
@@ -164,9 +186,17 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
                                 .build();
-        final User buyer = User.builder().name("회원2").profileImage("profile.png").reliability(4.7d).oauthId("12346")
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -192,8 +222,9 @@ class ChatRoomServiceTest {
         final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto)).isInstanceOf(InvalidAuctionToChatException.class)
-                                                                                   .hasMessage("경매가 아직 종료되지 않았습니다.");
+        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
+                .isInstanceOf(InvalidAuctionToChatException.class)
+                .hasMessage("경매가 아직 종료되지 않았습니다.");
     }
 
     @Test
@@ -204,9 +235,17 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
                                 .build();
-        final User buyer = User.builder().name("회원2").profileImage("profile.png").reliability(4.7d).oauthId("12346")
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -229,8 +268,9 @@ class ChatRoomServiceTest {
         final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto)).isInstanceOf(InvalidAuctionToChatException.class)
-                                                                                   .hasMessage("삭제된 경매입니다.");
+        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
+                .isInstanceOf(InvalidAuctionToChatException.class)
+                .hasMessage("삭제된 경매입니다.");
     }
 
     @Test
@@ -241,7 +281,11 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
                                 .build();
         userRepository.save(seller);
 
@@ -261,8 +305,9 @@ class ChatRoomServiceTest {
         final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto)).isInstanceOf(WinnerNotFoundException.class)
-                                                                                   .hasMessage("낙찰자가 존재하지 않습니다");
+        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
+                .isInstanceOf(WinnerNotFoundException.class)
+                .hasMessage("낙찰자가 존재하지 않습니다");
     }
 
     @Test
@@ -273,11 +318,23 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
                                 .build();
-        final User buyer = User.builder().name("회원2").profileImage("profile.png").reliability(4.7d).oauthId("12346")
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
                                .build();
-        final User stranger = User.builder().name("회원3").profileImage("profile.png").reliability(4.7d).oauthId("12347")
+        final User stranger = User.builder()
+                                  .name("회원3")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId("12347")
                                   .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -304,8 +361,9 @@ class ChatRoomServiceTest {
         final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.create(strangeUserId, createChatRoomDto)).isInstanceOf(UserNotAccessibleException.class)
-                                                                                          .hasMessage("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+        assertThatThrownBy(() -> chatRoomService.create(strangeUserId, createChatRoomDto))
+                .isInstanceOf(UserNotAccessibleException.class)
+                .hasMessage("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
     }
 
     @Test
@@ -316,9 +374,17 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final User seller = User.builder().name("회원1").profileImage("profile.png").reliability(4.7d).oauthId("12345")
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
                                 .build();
-        final User buyer = User.builder().name("회원2").profileImage("profile.png").reliability(4.7d).oauthId("12346")
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
                                .build();
         userRepository.save(seller);
         userRepository.save(buyer);
@@ -430,8 +496,9 @@ class ChatRoomServiceTest {
         final Long invalidUserId = -999L;
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.readAllByUserId(invalidUserId)).isInstanceOf(UserNotFoundException.class)
-                                                                                .hasMessageContaining("사용자 정보를 찾을 수 없습니다.");
+        assertThatThrownBy(() -> chatRoomService.readAllByUserId(invalidUserId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("사용자 정보를 찾을 수 없습니다.");
     }
 
     @Test
@@ -493,8 +560,9 @@ class ChatRoomServiceTest {
         final Long invalidUserId = -999L;
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, invalidUserId)).isInstanceOf(UserNotFoundException.class)
-                                                                                             .hasMessageContaining("사용자 정보를 찾을 수 없습니다.");
+        assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, invalidUserId))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessageContaining("사용자 정보를 찾을 수 없습니다.");
 
     }
 
@@ -509,8 +577,9 @@ class ChatRoomServiceTest {
         final Long userId = user.getId();
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.readByChatRoomId(invalidChatRoomId, userId)).isInstanceOf(ChatRoomNotFoundException.class)
-                                                                                             .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+        assertThatThrownBy(() -> chatRoomService.readByChatRoomId(invalidChatRoomId, userId))
+                .isInstanceOf(ChatRoomNotFoundException.class)
+                .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
 
     }
 
@@ -537,7 +606,8 @@ class ChatRoomServiceTest {
         final Long nonAuthorizedUserId = stranger.getId();
 
         // when & then
-        assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, nonAuthorizedUserId)).isInstanceOf(UserNotAccessibleException.class)
-                                                                                                   .hasMessageContaining("해당 채팅방에 접근할 권한이 없습니다.");
+        assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, nonAuthorizedUserId))
+                .isInstanceOf(UserNotAccessibleException.class)
+                .hasMessageContaining("해당 채팅방에 접근할 권한이 없습니다.");
     }
 }

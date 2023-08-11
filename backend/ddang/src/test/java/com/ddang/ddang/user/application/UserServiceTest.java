@@ -54,6 +54,7 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.readById(invalidUserId))
-                .isInstanceOf(UserNotFoundException.class).hasMessage("사용자 정보를 사용할 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("사용자 정보를 사용할 수 없습니다.");
     }
 }
