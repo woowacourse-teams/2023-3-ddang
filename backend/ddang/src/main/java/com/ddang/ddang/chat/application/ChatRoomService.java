@@ -5,12 +5,14 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -19,7 +21,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Comparator.comparing;
 
 @Service
 @Transactional(readOnly = true)
@@ -27,6 +32,7 @@ import java.util.List;
 public class ChatRoomService {
 
     private final JpaChatRoomRepository chatRoomRepository;
+    private final JpaMessageRepository messageRepository;
     private final JpaUserRepository userRepository;
     private final JpaAuctionRepository auctionRepository;
 
@@ -78,25 +84,39 @@ public class ChatRoomService {
         return findAuction.isOwner(findUser) || findAuction.isWinner(findUser, LocalDateTime.now());
     }
 
-    public List<ReadParticipatingChatRoomDto> readAllByUserId(final Long userId) {
+    public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(findUser.getId());
 
-        return chatRooms.stream()
-                        .map(chatRoom -> ReadParticipatingChatRoomDto.of(findUser, chatRoom, LocalDateTime.now()))
-                        .toList();
+        return processChatRoomWithLastMessageAndSort(findUser, chatRooms);
+    }
+
+    private List<ReadChatRoomWithLastMessageDto> processChatRoomWithLastMessageAndSort(
+            final User findUser,
+            final List<ChatRoom> chatRooms
+    ) {
+        final List<ReadChatRoomWithLastMessageDto> chatRoomDtos = new ArrayList<>();
+        for (final ChatRoom chatRoom : chatRooms) {
+            messageRepository.findLastMessageByChatRoomId(chatRoom.getId())
+                             .ifPresent(message ->
+                                     chatRoomDtos.add(ReadChatRoomWithLastMessageDto.of(findUser, chatRoom, message))
+                             );
+        }
+
+        return chatRoomDtos.stream()
+                           .sorted(comparing((ReadChatRoomWithLastMessageDto dto) -> dto.lastMessageDto().createdTime())
+                                   .reversed())
+                           .toList();
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-                                                    .orElseThrow(() ->
-                                                            new ChatRoomNotFoundException(
-                                                                    "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
-                                                            )
-                                                    );
+                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
+                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
+                                                    ));
         checkAccessible(findUser, chatRoom);
 
         return ReadParticipatingChatRoomDto.of(findUser, chatRoom, LocalDateTime.now());

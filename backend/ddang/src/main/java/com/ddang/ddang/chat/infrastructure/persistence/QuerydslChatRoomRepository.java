@@ -9,5 +9,7 @@ public interface QuerydslChatRoomRepository {
 
     List<ChatRoom> findAllByUserId(final Long userId);
 
+    Optional<ChatRoom> findChatRoomById(final Long chatRoomId);
+
     Optional<ChatRoom> findByAuctionId(final Long auctionId);
 }
