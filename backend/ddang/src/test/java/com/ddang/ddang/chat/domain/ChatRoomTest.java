@@ -1,9 +1,12 @@
 package com.ddang.ddang.chat.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.domain.BidUnit;
+import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
@@ -20,6 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.time.LocalDateTime;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -31,6 +38,9 @@ class ChatRoomTest {
 
     @Autowired
     JpaAuctionRepository auctionRepository;
+
+    @Autowired
+    JpaBidRepository bidRepository;
 
     @Autowired
     JpaUserRepository userRepository;
@@ -164,8 +174,15 @@ class ChatRoomTest {
         final Auction auction = Auction.builder()
                                        .title("경매")
                                        .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now())
                                        .build();
         auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+        auction.updateLastBid(bid);
 
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);
         chatRoomRepository.save(chatRoom);
@@ -208,8 +225,15 @@ class ChatRoomTest {
         final Auction auction = Auction.builder()
                                        .title("경매")
                                        .seller(seller)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now())
                                        .build();
         auctionRepository.save(auction);
+
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+        auction.updateLastBid(bid);
 
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);
         chatRoomRepository.save(chatRoom);

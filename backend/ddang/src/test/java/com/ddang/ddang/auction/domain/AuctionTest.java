@@ -236,6 +236,83 @@ class AuctionTest {
     }
 
     @Test
+    void 주어진_사용자가_판매자_또는_낙찰자라면_참을_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User winner = User.builder()
+                                .name("회원2")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
+
+        userRepository.save(seller);
+        userRepository.save(winner);
+
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+
+        // when
+        final boolean actual = auction.isSellerOrWinner(seller, LocalDateTime.now());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 주어진_사용자가_판매자_또는_낙찰자가_아니라면_거짓을_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User winner = User.builder()
+                                .name("회원2")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
+        final User stranger = User.builder()
+                                  .name("회원3")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId("12347")
+                                  .build();
+
+        userRepository.save(seller);
+        userRepository.save(winner);
+        userRepository.save(stranger);
+
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+        auction.updateLastBid(new Bid(auction, winner, new BidPrice(10_000)));
+
+        // when
+        final boolean actual = auction.isSellerOrWinner(stranger, LocalDateTime.now());
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void 주어진_사용자가_낙찰자라면_참을_반환한다() {
         // given
         final User seller = User.builder()
