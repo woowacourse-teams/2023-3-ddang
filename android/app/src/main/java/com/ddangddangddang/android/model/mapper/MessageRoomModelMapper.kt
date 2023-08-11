@@ -10,10 +10,10 @@ object MessageRoomModelMapper : Mapper<MessageRoomModel, ChatRoomPreviewResponse
         return MessageRoomModel(
             id,
             auction.title,
-            chatPartner.profileImage,
+            chatPartner.profileImage ?: "",
             chatPartner.name,
-            "마지막 메시지 내용", // 수정 필요
-            formatLastMessageTime(LocalDateTime.now()), // 수정 필요 LocalDateTimeFormatter.parse 사용할 것
+            lastMessage?.contents ?: "", // 수정 필요
+            formatLastMessageTime(LocalDateTime.parse(lastMessage?.createdAt ?: "2022-05-12T12:30:33")), // 수정 필요 LocalDateTimeFormatter.parse 사용할 것
             isChatAvailable,
         )
     }
