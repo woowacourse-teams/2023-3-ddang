@@ -31,6 +31,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,7 +107,7 @@ public class AuctionService {
 
         return new ReadAuctionWithChatRoomIdDto(
                 ReadAuctionDto.from(findAuction),
-                new ReadChatRoomDto(nullableChatRoomId, findAuction.isSellerOrWinner(findUser))
+                new ReadChatRoomDto(nullableChatRoomId, findAuction.isSellerOrWinner(findUser, LocalDateTime.now()))
         );
     }
 
