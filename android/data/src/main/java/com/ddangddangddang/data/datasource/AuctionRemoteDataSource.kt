@@ -2,6 +2,7 @@ package com.ddangddangddang.data.datasource
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.ReportRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -41,4 +42,6 @@ class AuctionRemoteDataSource(private val service: AuctionService) {
     suspend fun submitAuctionBid(
         auctionBidRequest: AuctionBidRequest,
     ): ApiResponse<Unit> = service.submitAuctionBid("3", auctionBidRequest)
+
+    suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit> = service.reportAuction(reportRequest)
 }

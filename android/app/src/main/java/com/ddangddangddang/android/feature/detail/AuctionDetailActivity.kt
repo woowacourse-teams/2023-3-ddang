@@ -10,6 +10,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
+import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showDialog
@@ -43,6 +44,7 @@ class AuctionDetailActivity :
             is AuctionDetailViewModel.AuctionDetailEvent.Exit -> finish()
             is AuctionDetailViewModel.AuctionDetailEvent.PopupAuctionBid -> showAuctionBidDialog()
             is AuctionDetailViewModel.AuctionDetailEvent.EnterChatRoom -> {}
+            is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
         }
     }
@@ -51,6 +53,11 @@ class AuctionDetailActivity :
         AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
     }
 
+
+    private fun navigateToReport(auctionId: Long) {
+        startActivity(ReportActivity.getIntent(this, auctionId))
+    }
+    
     private fun notifyAuctionDoesNotExist() {
         showDialog(
             messageId = R.string.detail_auction_dialog_auction_does_not_exist_message,
