@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
+import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
@@ -82,6 +83,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ChatRoomControllerTest {
 
     @MockBean
+    BlackListTokenService blackListTokenService;
+
+    @MockBean
     ChatRoomService chatRoomService;
 
     @MockBean
@@ -102,7 +106,7 @@ class ChatRoomControllerTest {
         mockTokenDecoder = mock(TokenDecoder.class);
 
         final AuthenticationStore store = new AuthenticationStore();
-        final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(mockTokenDecoder, store);
+        final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(blackListTokenService, mockTokenDecoder, store);
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
         mockMvc = MockMvcBuilders.standaloneSetup(chatRoomController)

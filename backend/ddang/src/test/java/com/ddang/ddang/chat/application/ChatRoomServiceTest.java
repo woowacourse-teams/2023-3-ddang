@@ -178,7 +178,8 @@ class ChatRoomServiceTest {
                                        .bidUnit(new BidUnit(1_000))
                                        .startPrice(new Price(10_000))
                                        .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .subCategory(sub).build();
+                                       .subCategory(sub)
+                                       .build();
         auctionRepository.save(auction);
 
         final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
@@ -526,10 +527,7 @@ class ChatRoomServiceTest {
         userRepository.save(buyer);
         userRepository.save(stranger);
 
-        final Auction auction = Auction.builder()
-                                       .title("경매")
-                                       .seller(seller)
-                                       .build();
+        final Auction auction = Auction.builder().title("경매").seller(seller).build();
         auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);

@@ -403,24 +403,6 @@ class MessageServiceTest {
     @Test
     void 첫_번째_메시지_이후에_생성된_모든_메시지를_조회한다() {
         // given
-        final BidUnit bidUnit = new BidUnit(1_000);
-        final Price startPrice = new Price(10_000);
-        final Category main = new Category("전자기기");
-        final Category sub = new Category("노트북");
-
-        main.addSubCategory(sub);
-
-        categoryRepository.save(main);
-        final Auction auction = Auction.builder()
-                                       .title("title")
-                                       .description("description")
-                                       .bidUnit(bidUnit)
-                                       .startPrice(startPrice)
-                                       .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .build();
-
-        auctionRepository.save(auction);
-
         final User writer = User.builder()
                                 .name("발신자")
                                 .profileImage("profile.png")
@@ -434,10 +416,35 @@ class MessageServiceTest {
                                   .name("수신자")
                                   .profileImage("profile.png")
                                   .reliability(4.7d)
-                                  .oauthId("12345")
+                                  .oauthId("56789")
                                   .build();
 
         userRepository.save(receiver);
+
+        final BidUnit bidUnit = new BidUnit(1_000);
+        final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .seller(writer)
+                                       .subCategory(sub)
+                                       .build();
+
+        auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, writer);
 
@@ -471,8 +478,6 @@ class MessageServiceTest {
     @Test
     void 마지막으로_조회된_메시지_이후에_추가된_메시지가_없는_경우_빈_리스트를_반환한다() {
         // given
-        final BidUnit bidUnit = new BidUnit(1_000);
-        final Price startPrice = new Price(10_000);
         final Category main = new Category("전자기기");
         final Category sub = new Category("노트북");
 
