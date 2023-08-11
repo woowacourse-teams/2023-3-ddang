@@ -41,19 +41,17 @@ public class MessageService {
         final User receiver = userRepository.findById(dto.receiverId())
                                             .orElseThrow(() -> new UserNotFoundException(
                                                     "지정한 아이디에 대한 수신자를 찾을 수 없습니다."));
+
+        if (!chatRoom.isChatAvailableTime(LocalDateTime.now())) {
+            throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
+        }
+
         final Message message = dto.toEntity(chatRoom, writer, receiver);
 
         final Message persistMessage = messageRepository.save(message);
 
-        validateChatRoomExpirationDate(chatRoom, persistMessage.getCreatedTime());
 
         return persistMessage.getId();
-    }
-
-    private void validateChatRoomExpirationDate(final ChatRoom chatRoom, final LocalDateTime chatRoomCreatedTime) {
-        if (!chatRoom.isChatAvailableTime(chatRoomCreatedTime)) {
-            throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
-        }
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
