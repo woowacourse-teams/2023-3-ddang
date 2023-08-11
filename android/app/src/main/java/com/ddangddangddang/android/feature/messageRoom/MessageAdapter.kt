@@ -38,10 +38,7 @@ class MessageAdapter : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDi
                 oldItem: MessageViewItem,
                 newItem: MessageViewItem,
             ): Boolean {
-                return oldItem.id == newItem.id &&
-                    oldItem.type == newItem.type &&
-                    oldItem.contents == newItem.contents &&
-                    oldItem.createdDateTime == newItem.createdDateTime
+                return oldItem == newItem
             }
         }
     }
