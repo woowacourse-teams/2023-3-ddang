@@ -16,10 +16,6 @@ class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
     private var auctionId: Long? = null
     val reportContents = MutableLiveData<String>()
     fun setAuctionId(id: Long) {
-        if (id == -1L) {
-            setExitEvent()
-            return
-        }
         auctionId = id
     }
 
