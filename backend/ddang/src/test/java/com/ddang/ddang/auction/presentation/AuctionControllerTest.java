@@ -38,6 +38,7 @@ import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
@@ -99,6 +100,9 @@ class AuctionControllerTest {
     @MockBean
     BlackListTokenService blackListTokenService;
 
+    @MockBean
+    AuthenticationUserService authenticationUserService;
+
     @Autowired
     AuctionController auctionController;
 
@@ -119,6 +123,7 @@ class AuctionControllerTest {
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
                 blackListTokenService,
+                authenticationUserService,
                 mockTokenDecoder,
                 store
         );

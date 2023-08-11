@@ -1,5 +1,6 @@
 package com.ddang.ddang.authentication.configuration;
 
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     private final BlackListTokenService blackListTokenService;
+    private final AuthenticationUserService authenticationUserService;
     private final TokenDecoder tokenDecoder;
     private final AuthenticationStore store;
 
@@ -41,6 +43,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                                                         .orElseThrow(() ->
                                                                 new InvalidTokenException("유효한 토큰이 아닙니다.")
                                                         );
+
+        if (authenticationUserService.isWithdrawal(privateClaims.userId())) {
+            throw new InvalidTokenException("유효한 토큰이 아닙니다.");
+        }
 
         store.set(new AuthenticationUserInfo(privateClaims.userId()));
         return true;

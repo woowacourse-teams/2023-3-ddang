@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
@@ -61,6 +62,9 @@ class UserControllerTest {
     @MockBean
     BlackListTokenService blackListTokenService;
 
+    @MockBean
+    AuthenticationUserService authenticationUserService;
+
     @Autowired
     UserController userController;
 
@@ -78,6 +82,7 @@ class UserControllerTest {
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
                 blackListTokenService,
+                authenticationUserService,
                 mockTokenDecoder,
                 store
         );
