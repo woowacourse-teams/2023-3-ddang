@@ -9,6 +9,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -58,6 +59,7 @@ class MessageRoomActivity :
     }
 
     private fun navigateToReport(roomId: Long) {
+        startActivity(ReportActivity.getIntent(this, roomId))
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
