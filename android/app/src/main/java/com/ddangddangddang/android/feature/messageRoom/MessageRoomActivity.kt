@@ -26,7 +26,7 @@ class MessageRoomActivity :
         registerAnalytics(javaClass.simpleName, lifecycle)
         binding.viewModel = viewModel
         val roomId: Long = intent.getLongExtra(ROOM_ID_KEY, -1L)
-        if (viewModel.messageRoomInfo.value == null) viewModel.loadMessageRoomInfo(roomId)
+        if (viewModel.messageRoomInfo.value == null) viewModel.loadMessageRoom(roomId)
         setupViewModel()
         setupMessageRecyclerView()
     }

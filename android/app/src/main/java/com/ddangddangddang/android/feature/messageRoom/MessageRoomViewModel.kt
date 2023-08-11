@@ -35,7 +35,7 @@ class MessageRoomViewModel(
 
     private var isMessageLoading: Boolean = false
 
-    fun loadMessageRoomInfo(roomId: Long) {
+    fun loadMessageRoom(roomId: Long) {
         viewModelScope.launch {
             when (val response = repository.getChatRoomPreview(roomId)) {
                 is ApiResponse.Success -> {
