@@ -499,7 +499,8 @@ class AuctionControllerTest {
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/{auctionId}", auction.id())
                                                         .contentType(MediaType.APPLICATION_JSON)
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken"))
+                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.auction.id", is(auction.id()), Long.class),
@@ -621,8 +622,9 @@ class AuctionControllerTest {
         given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
-        mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON)
-                                        .queryParam("size", "10")
+        mockMvc.perform(get("/auctions")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("size", "10")
                )
                .andExpectAll(
                        status().isOk(),
