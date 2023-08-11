@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.mypage
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -41,6 +42,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             }
 
             MyPageViewModel.MyPageEvent.LogoutFailed -> notifyLogoutFailed()
+            MyPageViewModel.MyPageEvent.ShowPrivacyPolicy -> showPrivacyPolicy()
         }
     }
 
@@ -59,5 +61,10 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     private fun notifyLogoutFailed() {
         binding.root.showSnackbar(R.string.mypage_snackbar_logout_failed_title)
+    }
+
+    private fun showPrivacyPolicy() {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://rune-year-8e8.notion.site/9128651ccb67477980db8fb7300f0b5a"))
+        startActivity(intent)
     }
 }

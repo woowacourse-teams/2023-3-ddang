@@ -61,8 +61,13 @@ class MyPageViewModel(
         }
     }
 
+    fun showPrivacyPolicy() {
+        _event.value = MyPageEvent.ShowPrivacyPolicy
+    }
+
     sealed class MyPageEvent {
         object LogoutSuccessfully : MyPageEvent()
         object LogoutFailed : MyPageEvent()
+        object ShowPrivacyPolicy : MyPageEvent()
     }
 }

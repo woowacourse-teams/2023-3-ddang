@@ -114,6 +114,7 @@
                   
     <!-- mypage -->
     <string name="mypage">마이페이지</string>
+    <string name="mypage_privacy_policy_button">개인정보처리방침</string>
     <string name="mypage_logout_button">로그아웃</string>
     <string name="mypage_delete_account_button">탈퇴하기</string>
     <string name="mypage_toast_logout_successfully_message">성공적으로 로그아웃 되었습니다</string>
@@ -126,5 +127,4 @@
     <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
     <string name="report_snackbar_auction_id_not_delivered">경매 정보가 넘어오지 않았습니다.</string>
-
 </resources>

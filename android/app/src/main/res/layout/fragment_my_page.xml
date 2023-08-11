@@ -80,6 +80,28 @@
                     android:layout_marginTop="16dp" />
 
                 <TextView
+                    android:id="@+id/tv_privacy_policy_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="@string/mypage_privacy_policy_button"
+                    android:background="?attr/selectableItemBackground"
+                    android:textSize="14sp"
+                    app:layout_constraintTop_toBottomOf="@id/view_profile_divider"
+                    android:onClick="@{() -> viewModel.showPrivacyPolicy()}" />
+
+                <View
+                    android:id="@+id/view_privacy_policy_divider"
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_privacy_policy_button"
+                    android:background="@color/black_400" />
+
+                <TextView
                     android:id="@+id/tv_logout_button"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -89,7 +111,7 @@
                     android:text="@string/mypage_logout_button"
                     android:background="?attr/selectableItemBackground"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/view_profile_divider"
+                    app:layout_constraintTop_toBottomOf="@id/view_privacy_policy_divider"
                     android:onClick="@{() -> viewModel.logout()}" />
 
                 <View
