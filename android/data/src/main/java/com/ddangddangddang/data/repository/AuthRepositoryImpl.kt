@@ -5,6 +5,7 @@ import com.ddangddangddang.data.datasource.AuthLocalDataSource
 import com.ddangddangddang.data.datasource.AuthRemoteDataSource
 import com.ddangddangddang.data.local.AuthSharedPreference
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
+import com.ddangddangddang.data.model.request.LogoutRequest
 import com.ddangddangddang.data.model.request.RefreshTokenRequest
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
@@ -34,6 +35,22 @@ class AuthRepositoryImpl private constructor(
     override fun getAccessToken(): String = localDataSource.getAccessToken()
 
     override fun getRefreshToken(): String = localDataSource.getRefreshToken()
+
+    override suspend fun logout(): ApiResponse<Unit> {
+        val response = remoteDataSource.logout(
+            localDataSource.getAccessToken(),
+            LogoutRequest(localDataSource.getRefreshToken()),
+        )
+
+        if (response is ApiResponse.Success) resetToken()
+
+        return response
+    }
+
+    private fun resetToken() {
+        val resetToken = TokenResponse(accessToken = "", refreshToken = "")
+        localDataSource.saveToken(resetToken)
+    }
 
     companion object {
         @Volatile

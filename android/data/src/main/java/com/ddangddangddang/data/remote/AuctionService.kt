@@ -11,6 +11,7 @@ import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
+import com.ddangddangddang.data.model.response.ProfileResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -86,4 +87,7 @@ interface AuctionService {
         @Path("chatRoomId") chatRoomId: Long,
         @Body chatMessageRequest: ChatMessageRequest,
     ): ApiResponse<ChatMessageIdResponse>
+
+    @GET("/users")
+    suspend fun fetchProfile(): ApiResponse<ProfileResponse>
 }

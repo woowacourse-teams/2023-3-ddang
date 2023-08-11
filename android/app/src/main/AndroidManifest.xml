@@ -26,6 +26,9 @@
             android:exported="false"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".feature.report.ReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.splash.SplashActivity"
             android:exported="true">
             <intent-filter>

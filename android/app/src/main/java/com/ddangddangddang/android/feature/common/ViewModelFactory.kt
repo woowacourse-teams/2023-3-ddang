@@ -10,20 +10,24 @@ import com.ddangddangddang.android.feature.login.LoginViewModel
 import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.message.MessageViewModel
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel
+import com.ddangddangddang.android.feature.mypage.MyPageViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
+import com.ddangddangddang.android.feature.report.ReportViewModel
 import com.ddangddangddang.android.feature.splash.SplashViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
 import com.ddangddangddang.data.repository.ChatRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
+import com.ddangddangddang.data.repository.UserRepositoryImpl
 
 val auctionRepository = AuctionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 val categoryRepository = CategoryRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 val regionRepository = RegionRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 val chatRepository = ChatRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
+val userRepository = UserRepositoryImpl.getInstance(DdangDdangDdang.auctionRetrofit.service)
 
 @Suppress("UNCHECKED_CAST")
 val viewModelFactory = object : ViewModelProvider.Factory {
@@ -60,6 +64,12 @@ val viewModelFactory = object : ViewModelProvider.Factory {
 
                 isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(DdangDdangDdang.authRepository)
                 isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(DdangDdangDdang.authRepository)
+                isAssignableFrom(MyPageViewModel::class.java) -> MyPageViewModel(
+                    DdangDdangDdang.authRepository,
+                    userRepository,
+                )
+
+                isAssignableFrom(ReportViewModel::class.java) -> ReportViewModel(auctionRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
