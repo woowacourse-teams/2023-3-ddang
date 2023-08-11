@@ -1,5 +1,17 @@
 package com.ddang.ddang.user.presentation;
 
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
@@ -12,6 +24,7 @@ import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -28,19 +41,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.Optional;
-
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(controllers = {UserController.class},
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
@@ -55,6 +55,9 @@ class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @MockBean
+    BlackListTokenService blackListTokenService;
 
     @Autowired
     UserController userController;
@@ -71,7 +74,11 @@ class UserControllerTest {
         mockTokenDecoder = mock(TokenDecoder.class);
 
         final AuthenticationStore store = new AuthenticationStore();
-        final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(mockTokenDecoder, store);
+        final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
+                blackListTokenService,
+                mockTokenDecoder,
+                store
+        );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
         mockMvc = MockMvcBuilders.standaloneSetup(userController)
