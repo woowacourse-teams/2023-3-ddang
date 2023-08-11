@@ -10,4 +10,6 @@ public interface JpaUserRepository extends JpaRepository<User, Long> {
     Optional<User> findByOauthId(final String oauthId);
 
     Optional<User> findByIdAndDeletedIsFalse(final Long id);
+
+    boolean existsByIdAndDeletedIsTrue(final Long id);
 }
