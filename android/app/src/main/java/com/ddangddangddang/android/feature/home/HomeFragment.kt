@@ -42,6 +42,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         if (viewModel.lastAuctionId.value == null) {
             viewModel.loadAuctions()
         }
+        setupReloadAuctions()
     }
 
     private fun setupViewModel() {
@@ -76,6 +77,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             adapter = auctionAdapter
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = 20))
             addOnScrollListener(auctionScrollListener)
+        }
+    }
+
+    private fun setupReloadAuctions() {
+        binding.srlReloadAuctions.setOnRefreshListener {
+            viewModel.reloadAuctions()
+            binding.srlReloadAuctions.isRefreshing = false
         }
     }
 }

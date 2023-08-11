@@ -8,11 +8,12 @@ import com.ddangddangddang.android.feature.detail.bid.AuctionBidViewModel
 import com.ddangddangddang.android.feature.home.HomeViewModel
 import com.ddangddangddang.android.feature.login.LoginViewModel
 import com.ddangddangddang.android.feature.main.MainViewModel
-import com.ddangddangddang.android.feature.mypage.MyPageViewModel
 import com.ddangddangddang.android.feature.message.MessageViewModel
+import com.ddangddangddang.android.feature.mypage.MyPageViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
+import com.ddangddangddang.android.feature.report.ReportViewModel
 import com.ddangddangddang.android.feature.splash.SplashViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
@@ -59,7 +60,12 @@ val viewModelFactory = object : ViewModelProvider.Factory {
 
                 isAssignableFrom(LoginViewModel::class.java) -> LoginViewModel(DdangDdangDdang.authRepository)
                 isAssignableFrom(SplashViewModel::class.java) -> SplashViewModel(DdangDdangDdang.authRepository)
-                isAssignableFrom(MyPageViewModel::class.java) -> MyPageViewModel(DdangDdangDdang.authRepository, userRepository)
+                isAssignableFrom(MyPageViewModel::class.java) -> MyPageViewModel(
+                    DdangDdangDdang.authRepository,
+                    userRepository,
+                )
+
+                isAssignableFrom(ReportViewModel::class.java) -> ReportViewModel(auctionRepository)
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
