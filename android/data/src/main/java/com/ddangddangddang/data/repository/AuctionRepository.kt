@@ -17,7 +17,7 @@ interface AuctionRepository {
     ): ApiResponse<AuctionPreviewsResponse>
 
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse>
-  
+
     suspend fun registerAuction(
         images: List<File>,
         auction: RegisterAuctionRequest,
@@ -29,6 +29,4 @@ interface AuctionRepository {
     ): ApiResponse<Unit>
 
     suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit>
-
-    suspend fun reloadAuctionPreviews(size: Int): ApiResponse<AuctionPreviewsResponse>
 }

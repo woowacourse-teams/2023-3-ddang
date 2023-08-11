@@ -39,7 +39,7 @@ class AuctionLocalDataSource {
         auctionPreviews.value = auctionPreviews.value?.filter { it.id != auctionId }
     }
 
-    fun resetAuctionPreviews(auctions: List<AuctionPreviewResponse>) {
-        auctionPreviews.value = auctions
+    fun clearAuctionPreviews() {
+        auctionPreviews.value = emptyList()
     }
 }

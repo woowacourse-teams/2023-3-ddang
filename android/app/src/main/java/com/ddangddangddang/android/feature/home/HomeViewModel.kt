@@ -66,7 +66,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
             viewModelScope.launch {
                 when (
                     val response =
-                        repository.reloadAuctionPreviews(SIZE_AUCTION_LOAD)
+                        repository.getAuctionPreviews(null, SIZE_AUCTION_LOAD)
                 ) {
                     is ApiResponse.Success -> {
                         _isLast = response.body.isLast

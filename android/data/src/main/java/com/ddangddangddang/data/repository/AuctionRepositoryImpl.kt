@@ -28,6 +28,7 @@ class AuctionRepositoryImpl private constructor(
     ): ApiResponse<AuctionPreviewsResponse> {
         val response = remoteDataSource.getAuctionPreviews(lastAuctionId, size)
         if (response is ApiResponse.Success) {
+            if (lastAuctionId == null) localDataSource.clearAuctionPreviews()
             localDataSource.addAuctionPreviews(response.body.auctions)
         }
         return response
@@ -64,14 +65,6 @@ class AuctionRepositoryImpl private constructor(
 
     override suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit> {
         return remoteDataSource.reportAuction(ReportRequest(auctionId, description))
-    }
-
-    override suspend fun reloadAuctionPreviews(size: Int): ApiResponse<AuctionPreviewsResponse> {
-        val response = remoteDataSource.getAuctionPreviews(null, size)
-        if (response is ApiResponse.Success) {
-            localDataSource.resetAuctionPreviews(response.body.auctions)
-        }
-        return response
     }
 
     companion object {
