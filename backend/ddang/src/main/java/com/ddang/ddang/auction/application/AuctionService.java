@@ -72,7 +72,9 @@ public class AuctionService {
 
     private Category findSubCategory(final CreateAuctionDto dto) {
         return categoryRepository.findSubCategoryById(dto.subCategoryId())
-                                 .orElseThrow(() -> new CategoryNotFoundException("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."));
+                                 .orElseThrow(() -> new CategoryNotFoundException(
+                                         "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
+                                 ));
     }
 
     private List<AuctionRegion> convertAuctionRegions(final CreateAuctionDto dto) {
@@ -80,7 +82,9 @@ public class AuctionService {
 
         for (final Long thirdRegionId : dto.thirdRegionIds()) {
             final Region thirdRegion = regionRepository.findThirdRegionById(thirdRegionId)
-                                                       .orElseThrow(() -> new RegionNotFoundException("지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다."));
+                                                       .orElseThrow(() -> new RegionNotFoundException(
+                                                               "지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다."
+                                                       ));
             auctionRegions.add(new AuctionRegion(thirdRegion));
         }
 
