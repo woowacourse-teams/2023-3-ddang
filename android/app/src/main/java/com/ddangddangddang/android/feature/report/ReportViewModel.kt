@@ -34,6 +34,7 @@ class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
     fun submit() {
         viewModelScope.launch {
             reportContents.value?.let { contents ->
+                if (contents.isEmpty()) return@let
                 repository.reportAuction(auctionId ?: return@launch, contents)
                 _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                 return@launch
