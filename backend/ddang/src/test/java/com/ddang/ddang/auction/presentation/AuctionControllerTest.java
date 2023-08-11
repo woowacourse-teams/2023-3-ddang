@@ -31,17 +31,21 @@ import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
@@ -96,6 +100,9 @@ class AuctionControllerTest {
     @MockBean
     BlackListTokenService blackListTokenService;
 
+    @MockBean
+    AuthenticationUserService authenticationUserService;
+
     @Autowired
     AuctionController auctionController;
 
@@ -116,6 +123,7 @@ class AuctionControllerTest {
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
                 blackListTokenService,
+                authenticationUserService,
                 mockTokenDecoder,
                 store
         );
@@ -489,12 +497,22 @@ class AuctionControllerTest {
                 "판매자",
                 3.5d
         );
+        final ReadChatRoomDto chatRoomDto = new ReadChatRoomDto(1L, true);
 
-        given(auctionService.readByAuctionId(anyLong())).willReturn(auction);
+        final ReadAuctionWithChatRoomIdDto auctionWithChatRoomIdDto =
+                new ReadAuctionWithChatRoomIdDto(auction, chatRoomDto);
+
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionService.readByAuctionId(anyLong(), any(AuthenticationUserInfo.class)))
+                .willReturn(auctionWithChatRoomIdDto);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/{auctionId}", auction.id())
-                                                        .contentType(MediaType.APPLICATION_JSON))
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.auction.id", is(auction.id()), Long.class),
@@ -535,7 +553,9 @@ class AuctionControllerTest {
                                        fieldWithPath("seller.id").type(JsonFieldType.NUMBER).description("판매자 ID"),
                                        fieldWithPath("seller.image").type(JsonFieldType.STRING).description("판매자 프로필 이미지 주소"),
                                        fieldWithPath("seller.nickname").type(JsonFieldType.STRING).description("판매자 닉네임"),
-                                       fieldWithPath("seller.reliability").type(JsonFieldType.NUMBER).description("판매자 신뢰도")
+                                       fieldWithPath("seller.reliability").type(JsonFieldType.NUMBER).description("판매자 신뢰도"),
+                                       fieldWithPath("chat.id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
+                                       fieldWithPath("chat.isChatParticipant").type(JsonFieldType.BOOLEAN).description("채팅방을 생성 가능 유저 여부")
                                )
                        )
                );
@@ -545,13 +565,16 @@ class AuctionControllerTest {
     void 경매_조회시_지정한_아이디에_해당하는_경매가_없다면_404를_반환한다() throws Exception {
         // given
         final Long invalidAuctionId = -999L;
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionService.readByAuctionId(anyLong())).willThrow(new AuctionNotFoundException(
-                "지정한 아이디에 대한 경매를 찾을 수 없습니다."
-        ));
+        given(auctionService.readByAuctionId(anyLong(), any(AuthenticationUserInfo.class)))
+                .willThrow(new AuctionNotFoundException("지정한 아이디에 대한 경매를 찾을 수 없습니다."));
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         // when & then
-        mockMvc.perform(get("/auctions/{auctionId}", invalidAuctionId).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/auctions/{auctionId}", invalidAuctionId)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken"))
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message").exists()
@@ -611,8 +634,9 @@ class AuctionControllerTest {
         given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
-        mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON)
-                                        .queryParam("size", "10")
+        mockMvc.perform(get("/auctions")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("size", "10")
                )
                .andExpectAll(
                        status().isOk(),
@@ -637,19 +661,13 @@ class AuctionControllerTest {
                                ),
                                responseFields(
                                        fieldWithPath("auctions").type(JsonFieldType.ARRAY).description("조회한 경매 목록"),
-                                       fieldWithPath("auctions.[]").type(JsonFieldType.ARRAY)
-                                                                   .description("조회한 단일 경매 정보"),
+                                       fieldWithPath("auctions.[]").type(JsonFieldType.ARRAY).description("조회한 단일 경매 정보"),
                                        fieldWithPath("auctions.[].id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("auctions.[].title").type(JsonFieldType.STRING)
-                                                                         .description("경매 글 제목"),
-                                       fieldWithPath("auctions.[].image").type(JsonFieldType.STRING)
-                                                                         .description("경매 대표 이미지"),
-                                       fieldWithPath("auctions.[].auctionPrice").type(JsonFieldType.NUMBER)
-                                                                                .description("경매가(시작가, 현재가, 낙찰가 중 하나)"),
-                                       fieldWithPath("auctions.[].status").type(JsonFieldType.STRING)
-                                                                          .description("경매 상태"),
-                                       fieldWithPath("auctions.[].auctioneerCount").type(JsonFieldType.NUMBER)
-                                                                                   .description("경매 참여자 수"),
+                                       fieldWithPath("auctions.[].title").type(JsonFieldType.STRING).description("경매 글 제목"),
+                                       fieldWithPath("auctions.[].image").type(JsonFieldType.STRING).description("경매 대표 이미지"),
+                                       fieldWithPath("auctions.[].auctionPrice").type(JsonFieldType.NUMBER).description("경매가(시작가, 현재가, 낙찰가 중 하나)"),
+                                       fieldWithPath("auctions.[].status").type(JsonFieldType.STRING).description("경매 상태"),
+                                       fieldWithPath("auctions.[].auctioneerCount").type(JsonFieldType.NUMBER).description("경매 참여자 수"),
                                        fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
                                )
                        )

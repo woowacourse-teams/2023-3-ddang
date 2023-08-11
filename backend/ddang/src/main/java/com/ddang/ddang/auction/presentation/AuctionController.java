@@ -3,7 +3,7 @@ package com.ddang.ddang.auction.presentation;
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
@@ -55,8 +55,11 @@ public class AuctionController {
     }
 
     @GetMapping("/{auctionId}")
-    public ResponseEntity<ReadAuctionDetailResponse> read(@PathVariable final Long auctionId) {
-        final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
+    public ResponseEntity<ReadAuctionDetailResponse> read(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @PathVariable final Long auctionId
+    ) {
+        final ReadAuctionWithChatRoomIdDto readAuctionDto = auctionService.readByAuctionId(auctionId, userInfo);
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
                 calculateBaseImageUrl()
@@ -83,14 +86,11 @@ public class AuctionController {
     ) {
         auctionService.deleteByAuctionId(auctionId, userInfo.userId());
 
-        return ResponseEntity.noContent()
-                             .build();
+        return ResponseEntity.noContent().build();
     }
 
     private String calculateBaseImageUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                                          .build()
-                                          .toUriString()
+        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
                                           .concat(AUCTIONS_IMAGE_BASE_URL);
     }
 }

@@ -5,12 +5,15 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
@@ -59,6 +62,9 @@ class UserControllerTest {
     @MockBean
     BlackListTokenService blackListTokenService;
 
+    @MockBean
+    AuthenticationUserService authenticationUserService;
+
     @Autowired
     UserController userController;
 
@@ -76,6 +82,7 @@ class UserControllerTest {
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
                 blackListTokenService,
+                authenticationUserService,
                 mockTokenDecoder,
                 store
         );
@@ -127,5 +134,21 @@ class UserControllerTest {
                        status().isNotFound(),
                        jsonPath("$.message", is(userNotFoundException.getMessage()))
                );
+    }
+
+    @Test
+    void 회원_탈퇴한다() throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        willDoNothing().given(userService).deleteById(anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/users/withdrawal")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+        ).andExpectAll(
+                status().isNoContent()
+        );
     }
 }
