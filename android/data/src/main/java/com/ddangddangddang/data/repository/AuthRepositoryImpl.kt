@@ -5,9 +5,8 @@ import com.ddangddangddang.data.datasource.AuthLocalDataSource
 import com.ddangddangddang.data.datasource.AuthRemoteDataSource
 import com.ddangddangddang.data.local.AuthSharedPreference
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
-import com.ddangddangddang.data.model.request.LogoutRequest
-import com.ddangddangddang.data.model.request.RefreshTokenRequest
 import com.ddangddangddang.data.model.response.TokenResponse
+import com.ddangddangddang.data.model.response.ValidateTokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuthService
 
@@ -25,7 +24,7 @@ class AuthRepositoryImpl private constructor(
 
     override suspend fun refreshToken(): ApiResponse<TokenResponse> {
         val response =
-            remoteDataSource.refreshToken(RefreshTokenRequest(localDataSource.getRefreshToken()))
+            remoteDataSource.refreshToken(localDataSource.getRefreshToken())
         if (response is ApiResponse.Success) {
             localDataSource.saveToken(response.body)
         }
@@ -39,11 +38,20 @@ class AuthRepositoryImpl private constructor(
     override suspend fun logout(): ApiResponse<Unit> {
         val response = remoteDataSource.logout(
             localDataSource.getAccessToken(),
-            LogoutRequest(localDataSource.getRefreshToken()),
+            localDataSource.getRefreshToken(),
         )
 
         if (response is ApiResponse.Success) resetToken()
 
+        return response
+    }
+
+    override suspend fun verifyToken(): ApiResponse<ValidateTokenResponse> {
+        val response = remoteDataSource.verifyToken(localDataSource.getAccessToken())
+        if (response is ApiResponse.Failure && response.responseCode == 401) {
+            refreshToken()
+            return remoteDataSource.verifyToken(localDataSource.getAccessToken())
+        }
         return response
     }
 

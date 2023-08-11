@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuthRepository
 import kotlinx.coroutines.launch
 
@@ -24,8 +25,15 @@ class SplashViewModel(
 
     private fun verifyToken() {
         viewModelScope.launch {
-            // 액세스 토큰 유효성 검증 받아서, 만약 401 에러 나오면, 토큰 리프레시 요청 다시 보내고 또 401 에러면, RefreshTokenExpired
-            // 성공하면, AutoLoginSuccess
+            when (val response = repository.verifyToken()) {
+                is ApiResponse.Success -> _event.value = SplashEvent.AutoLoginSuccess
+                is ApiResponse.Failure -> {
+                    if (response.responseCode == 401) _event.value = SplashEvent.RefreshTokenExpired
+                }
+
+                is ApiResponse.NetworkError -> {}
+                is ApiResponse.Unexpected -> {}
+            }
         }
     }
 
