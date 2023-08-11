@@ -26,6 +26,4 @@ interface AuctionRepository {
         auctionId: Long,
         bidPrice: Int,
     ): ApiResponse<Unit>
-
-    fun removeAuction(auctionId: Long)
 }

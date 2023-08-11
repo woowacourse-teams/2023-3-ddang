@@ -43,7 +43,6 @@ class AuctionDetailViewModel(
                 is ApiResponse.Success -> _auctionDetailModel.value = response.body.toPresentation()
                 is ApiResponse.Failure -> {
                     if (response.responseCode == 404) {
-                        auctionRepository.removeAuction(auctionId)
                         _event.value = AuctionDetailEvent.NotifyAuctionDoesNotExist
                     }
                 }

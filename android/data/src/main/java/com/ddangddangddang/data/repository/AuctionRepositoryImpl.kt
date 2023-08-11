@@ -37,6 +37,9 @@ class AuctionRepositoryImpl private constructor(
         if (response is ApiResponse.Success) {
             localDataSource.updateAuctionPreview(response.body)
         }
+        if (response is ApiResponse.Failure && response.responseCode == 404) {
+            localDataSource.removeAuctionPreview(id)
+        }
         return response
     }
 
@@ -56,10 +59,6 @@ class AuctionRepositoryImpl private constructor(
         bidPrice: Int,
     ): ApiResponse<Unit> {
         return remoteDataSource.submitAuctionBid(AuctionBidRequest(auctionId, bidPrice))
-    }
-
-    override fun removeAuction(auctionId: Long) {
-        localDataSource.removeAuctionPreview(auctionId)
     }
 
     companion object {
