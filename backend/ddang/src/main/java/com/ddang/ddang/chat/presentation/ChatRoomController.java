@@ -6,6 +6,7 @@ import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
@@ -13,6 +14,7 @@ import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
+import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomWithLastMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +30,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/chattings")
@@ -52,15 +53,15 @@ public class ChatRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadChatRoomResponse>> readAllParticipatingChatRooms(
+    public ResponseEntity<List<ReadChatRoomWithLastMessageResponse>> readAllParticipatingChatRooms(
             @AuthenticateUser final AuthenticationUserInfo userInfo
     ) {
-        final List<ReadParticipatingChatRoomDto> readParticipatingChatRoomDtos =
+        final List<ReadChatRoomWithLastMessageDto> readParticipatingChatRoomDtos =
                 chatRoomService.readAllByUserId(userInfo.userId());
 
-        final List<ReadChatRoomResponse> responses =
+        final List<ReadChatRoomWithLastMessageResponse> responses =
                 readParticipatingChatRoomDtos.stream()
-                                             .map(dto -> ReadChatRoomResponse.of(dto, calculateBaseImageUrl()))
+                                             .map(dto -> ReadChatRoomWithLastMessageResponse.of(dto, calculateBaseImageUrl()))
                                              .toList();
 
         return ResponseEntity.ok(responses);
@@ -113,7 +114,7 @@ public class ChatRoomController {
                                                                                    userInfo
                                                                            )
                                                                    ))
-                                                                   .collect(Collectors.toList());
+                                                                   .toList();
         return ResponseEntity.ok(responses);
     }
 

@@ -12,12 +12,15 @@ import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -44,6 +47,9 @@ class ChatRoomServiceTest {
 
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
+
+    @Autowired
+    JpaMessageRepository messageRepository;
 
     @Autowired
     JpaUserRepository userRepository;
@@ -422,7 +428,7 @@ class ChatRoomServiceTest {
     }
 
     @Test
-    void 사용자가_참여한_모든_채팅방을_조회한다() {
+    void 사용자가_참여한_모든_채팅방을_마지막에_전송된_메시지와_함께_조회하며_마지막_메시지가_최근인_순서로_정렬하여_조회한다() {
         // given
         final Category main = new Category("메인");
         final Category sub = new Category("서브");
@@ -475,18 +481,42 @@ class ChatRoomServiceTest {
         chatRoomRepository.save(enchoZeeto);
         chatRoomRepository.save(jamieEncho);
 
+        final Message message1 = Message.builder()
+                                        .chatRoom(jamieEncho)
+                                        .contents("jamieEncho message 1")
+                                        .writer(jamie)
+                                        .receiver(encho)
+                                        .build();
+        messageRepository.save(message1);
+        final Message lastMessage1 = Message.builder()
+                                            .chatRoom(enchoZeeto)
+                                            .writer(encho)
+                                            .receiver(zeeto)
+                                            .contents("enchoZeeto message 1")
+                                            .build();
+        messageRepository.save(lastMessage1);
+        final Message lastMessage2 = Message.builder()
+                                            .chatRoom(jamieEncho)
+                                            .contents("jamieEncho message 2")
+                                            .writer(jamie)
+                                            .receiver(encho)
+                                            .build();
+        messageRepository.save(lastMessage2);
+
         // when
-        final List<ReadParticipatingChatRoomDto> actual = chatRoomService.readAllByUserId(encho.getId());
+        final List<ReadChatRoomWithLastMessageDto> actual = chatRoomService.readAllByUserId(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(1).id()).isEqualTo(enchoZeeto.getId());
-            softAssertions.assertThat(actual.get(1).auctionDto().id()).isEqualTo(enchoZeeto.getAuction().getId());
-            softAssertions.assertThat(actual.get(1).partnerDto().id()).isEqualTo(zeeto.getId());
             softAssertions.assertThat(actual.get(0).id()).isEqualTo(jamieEncho.getId());
             softAssertions.assertThat(actual.get(0).auctionDto().id()).isEqualTo(jamieEncho.getAuction().getId());
             softAssertions.assertThat(actual.get(0).partnerDto().id()).isEqualTo(jamie.getId());
+            softAssertions.assertThat(actual.get(0).lastMessageDto().id()).isEqualTo(lastMessage2.getId());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(enchoZeeto.getId());
+            softAssertions.assertThat(actual.get(1).auctionDto().id()).isEqualTo(enchoZeeto.getAuction().getId());
+            softAssertions.assertThat(actual.get(1).partnerDto().id()).isEqualTo(zeeto.getId());
+            softAssertions.assertThat(actual.get(1).lastMessageDto().id()).isEqualTo(lastMessage1.getId());
         });
     }
 

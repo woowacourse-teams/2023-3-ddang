@@ -10,8 +10,8 @@ public record ReadMessageDto(
         Long id,
         LocalDateTime createdTime,
         ReadParticipatingChatRoomDto chatRoomDto,
-        ReadUserDto writerDto,
-        ReadUserDto receiverDto,
+        ReadUserInChatRoomDto writerDto,
+        ReadUserInChatRoomDto receiverDto,
         String contents
 ) {
 
@@ -20,8 +20,8 @@ public record ReadMessageDto(
                 message.getId(),
                 message.getCreatedTime(),
                 toReadParticipatingChatRoomDto(message.getChatRoom(), message.getWriter()),
-                ReadUserDto.from(message.getWriter()),
-                ReadUserDto.from(message.getReceiver()),
+                ReadUserInChatRoomDto.from(message.getWriter()),
+                ReadUserInChatRoomDto.from(message.getReceiver()),
                 message.getContents()
         );
     }
