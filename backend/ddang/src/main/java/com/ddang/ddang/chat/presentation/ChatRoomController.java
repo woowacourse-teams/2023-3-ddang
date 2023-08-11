@@ -30,7 +30,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/chattings")
@@ -54,10 +53,10 @@ public class ChatRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadChatRoomResponse>> readAllParticipatingChatRooms(
+    public ResponseEntity<List<ReadChatRoomWithLastMessageResponse>> readAllParticipatingChatRooms(
             @AuthenticateUser final AuthenticationUserInfo userInfo
     ) {
-        final List<ReadParticipatingChatRoomDto> readParticipatingChatRoomDtos =
+        final List<ReadChatRoomWithLastMessageDto> readParticipatingChatRoomDtos =
                 chatRoomService.readAllByUserId(userInfo.userId());
 
         final List<ReadChatRoomWithLastMessageResponse> responses =
@@ -115,7 +114,7 @@ public class ChatRoomController {
                                                                                    userInfo
                                                                            )
                                                                    ))
-                                                                   .collect(Collectors.toList());
+                                                                   .toList();
         return ResponseEntity.ok(responses);
     }
 
