@@ -24,8 +24,9 @@ class PriceTest {
         final int invalidPrice = -1;
 
         // when & then
-        assertThatThrownBy(() -> new Price(invalidPrice)).isInstanceOf(InvalidPriceValueException.class)
-                                                         .hasMessage("가격은 0원 이상이어야 합니다.");
+        assertThatThrownBy(() -> new Price(invalidPrice))
+                .isInstanceOf(InvalidPriceValueException.class)
+                .hasMessage("가격은 0원 이상이어야 합니다.");
     }
 
     @Test
@@ -34,7 +35,8 @@ class PriceTest {
         final int invalidPrice = Integer.MAX_VALUE;
 
         // when & then
-        assertThatThrownBy(() -> new Price(invalidPrice)).isInstanceOf(InvalidPriceValueException.class)
-                                                         .hasMessage("가격은 2100000000원 이하여야 합니다.");
+        assertThatThrownBy(() -> new Price(invalidPrice))
+                .isInstanceOf(InvalidPriceValueException.class)
+                .hasMessage("가격은 2100000000원 이하여야 합니다.");
     }
 }

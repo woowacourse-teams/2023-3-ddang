@@ -92,11 +92,9 @@ public class ChatRoomService {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
-                                                    .orElseThrow(() ->
-                                                            new ChatRoomNotFoundException(
-                                                                    "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
-                                                            )
-                                                    );
+                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
+                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
+                                                    ));
         checkAccessible(findUser, chatRoom);
 
         return ReadParticipatingChatRoomDto.of(findUser, chatRoom, LocalDateTime.now());

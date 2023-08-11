@@ -493,7 +493,8 @@ class AuctionControllerTest {
         given(auctionService.readByAuctionId(anyLong())).willReturn(auction);
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/{auctionId}", auction.id()).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/{auctionId}", auction.id())
+                                                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.auction.id", is(auction.id()), Long.class),
@@ -611,7 +612,7 @@ class AuctionControllerTest {
 
         // when & then
         mockMvc.perform(get("/auctions").contentType(MediaType.APPLICATION_JSON)
-                       .queryParam("size", "10")
+                                        .queryParam("size", "10")
                )
                .andExpectAll(
                        status().isOk(),
@@ -636,13 +637,19 @@ class AuctionControllerTest {
                                ),
                                responseFields(
                                        fieldWithPath("auctions").type(JsonFieldType.ARRAY).description("조회한 경매 목록"),
-                                       fieldWithPath("auctions.[]").type(JsonFieldType.ARRAY).description("조회한 단일 경매 정보"),
+                                       fieldWithPath("auctions.[]").type(JsonFieldType.ARRAY)
+                                                                   .description("조회한 단일 경매 정보"),
                                        fieldWithPath("auctions.[].id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("auctions.[].title").type(JsonFieldType.STRING).description("경매 글 제목"),
-                                       fieldWithPath("auctions.[].image").type(JsonFieldType.STRING).description("경매 대표 이미지"),
-                                       fieldWithPath("auctions.[].auctionPrice").type(JsonFieldType.NUMBER).description("경매가(시작가, 현재가, 낙찰가 중 하나)"),
-                                       fieldWithPath("auctions.[].status").type(JsonFieldType.STRING).description("경매 상태"),
-                                       fieldWithPath("auctions.[].auctioneerCount").type(JsonFieldType.NUMBER).description("경매 참여자 수"),
+                                       fieldWithPath("auctions.[].title").type(JsonFieldType.STRING)
+                                                                         .description("경매 글 제목"),
+                                       fieldWithPath("auctions.[].image").type(JsonFieldType.STRING)
+                                                                         .description("경매 대표 이미지"),
+                                       fieldWithPath("auctions.[].auctionPrice").type(JsonFieldType.NUMBER)
+                                                                                .description("경매가(시작가, 현재가, 낙찰가 중 하나)"),
+                                       fieldWithPath("auctions.[].status").type(JsonFieldType.STRING)
+                                                                          .description("경매 상태"),
+                                       fieldWithPath("auctions.[].auctioneerCount").type(JsonFieldType.NUMBER)
+                                                                                   .description("경매 참여자 수"),
                                        fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
                                )
                        )
