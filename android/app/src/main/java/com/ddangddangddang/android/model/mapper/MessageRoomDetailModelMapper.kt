@@ -13,7 +13,7 @@ object MessageRoomDetailModelMapper : Mapper<MessageRoomDetailModel, ChatRoomPre
             auction.price,
             chatPartner.id,
             chatPartner.name,
-            chatPartner.profileImage,
+            chatPartner.profileImage ?: "",
             isChatAvailable,
         )
     }

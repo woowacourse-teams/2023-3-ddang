@@ -100,7 +100,6 @@ class AuctionDetailViewModel(
         object Exit : AuctionDetailEvent()
         object PopupAuctionBid : AuctionDetailEvent()
         data class EnterMessageRoom(val roomId: Long) : AuctionDetailEvent()
-        data class EnterChatRoom(val chatId: Long) : AuctionDetailEvent()
         data class ReportAuction(val auctionId: Long) : AuctionDetailEvent()
         object NotifyAuctionDoesNotExist : AuctionDetailEvent()
     }

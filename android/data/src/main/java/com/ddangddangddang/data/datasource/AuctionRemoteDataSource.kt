@@ -41,7 +41,8 @@ class AuctionRemoteDataSource(private val service: AuctionService) {
 
     suspend fun submitAuctionBid(
         auctionBidRequest: AuctionBidRequest,
-    ): ApiResponse<Unit> = service.submitAuctionBid("3", auctionBidRequest)
+    ): ApiResponse<Unit> = service.submitAuctionBid(auctionBidRequest)
 
-    suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit> = service.reportAuction(reportRequest)
+    suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit> =
+        service.reportAuction(reportRequest)
 }

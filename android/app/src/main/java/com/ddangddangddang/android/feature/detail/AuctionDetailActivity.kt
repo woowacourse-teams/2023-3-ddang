@@ -48,7 +48,6 @@ class AuctionDetailActivity :
                 event.roomId,
             )
 
-            is AuctionDetailViewModel.AuctionDetailEvent.EnterChatRoom -> {}
             is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
         }
@@ -58,16 +57,14 @@ class AuctionDetailActivity :
         AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
     }
 
-
-
     private fun navigateToMessageRoom(roomId: Long) {
         startActivity(MessageRoomActivity.getIntent(this, roomId))
     }
-    
+
     private fun navigateToReport(auctionId: Long) {
         startActivity(ReportActivity.getIntent(this, auctionId))
     }
-    
+
     private fun notifyAuctionDoesNotExist() {
         showDialog(
             messageId = R.string.detail_auction_dialog_auction_does_not_exist_message,

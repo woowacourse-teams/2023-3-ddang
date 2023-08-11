@@ -111,7 +111,7 @@ class MessageRoomViewModel(
     }
 
     fun setReportEvent() {
-        _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.roomId) }
+        _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.auctionId) }
     }
 
     fun setNavigateToAuctionDetailEvent() {

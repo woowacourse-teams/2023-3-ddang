@@ -18,7 +18,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.Header
 import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
@@ -44,7 +43,6 @@ interface AuctionService {
 
     @POST("/bids")
     suspend fun submitAuctionBid(
-        @Header("Authorization") authorization: String,
         @Body auctionBidRequest: AuctionBidRequest,
     ): ApiResponse<Unit>
 
@@ -93,5 +91,5 @@ interface AuctionService {
     suspend fun fetchProfile(): ApiResponse<ProfileResponse>
 
     @POST("reports/auctions")
-    suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit>
+    suspend fun reportAuction(@Body reportRequest: ReportRequest): ApiResponse<Unit>
 }
