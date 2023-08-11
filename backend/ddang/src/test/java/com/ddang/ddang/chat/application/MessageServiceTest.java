@@ -268,69 +268,7 @@ class MessageServiceTest {
                 .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
     }
 
-    // TODO : BaseTimeEntity 시간 모킹하는 방법 찾아보고 수정 예정
-//    @Test
-//    void 채팅_가능한_날짜를_초과한_경우_메시지_생성시_예외가_발생한다() throws NoSuchFieldException, IllegalAccessException {
-//        // given
-//        final BidUnit bidUnit = new BidUnit(1_000);
-//        final Price startPrice = new Price(10_000);
-//        final Category main = new Category("전자기기");
-//        final Category sub = new Category("노트북");
-//
-//        main.addSubCategory(sub);
-//
-//        categoryRepository.save(main);
-//        final Auction auction = Auction.builder()
-//                                       .title("title")
-//                                       .description("description")
-//                                       .bidUnit(bidUnit)
-//                                       .startPrice(startPrice)
-//                                       .closingTime(LocalDateTime.now().plusDays(3L))
-//                                       .build();
-//
-//        auctionRepository.save(auction);
-//
-//        final User writer = new User(
-//                "발신자",
-//                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-//                0.8
-//        );
-//
-//        userRepository.save(writer);
-//
-//        final User receiver = new User(
-//                "수신자",
-//                "https://img1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/7r5X/image/9djEiPBPMLu_IvCYyvRPwmZkM1g.jpg",
-//                0.8
-//        );
-//
-//        userRepository.save(receiver);
-//
-//        final ChatRoom chatRoom = new ChatRoom(auction, writer);
-//        Class<ChatRoom> chatRoomClass = ChatRoom.class;
-//        final Field createdTime = chatRoomClass.getField("createdTime");
-//        createdTime.setAccessible(true);
-//        createdTime.set(chatRoom, LocalDate.of(2020,1,1));
-//
-//        given(mockChatRoomRepository.findById(any())).willReturn(Optional.of(chatRoom));
-//
-//        final String contents = "메시지 내용";
-//
-//        final long expirationDate = 11L;
-//        final CreateMessageDto createMessageDto = new CreateMessageDto(
-//                1L,
-//                writer.getId(),
-//                receiver.getId(),
-//                contents
-//        );
-//
-//        final MessageService mockChatRoomRepoService = new MessageService(messageRepository, mockChatRoomRepository, userRepository);
-//
-//        // when & then
-//        assertThatThrownBy(() -> mockChatRoomRepoService.create(createMessageDto))
-//                .isInstanceOf(UnableToChatException.class)
-//                .hasMessageContaining("현재 메시지 전송이 불가능합니다.");
-//    }
+    // TODO : [4차 데모 이후 리팩토링] BaseTimeEntity 시간 모킹하는 방법 찾아보고 수정 예정
 
     @Test
     void 마지막_조회_메시지가_없는_경우_모든_메시지를_조회한다() {
