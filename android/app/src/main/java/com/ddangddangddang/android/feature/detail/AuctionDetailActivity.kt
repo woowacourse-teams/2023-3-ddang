@@ -11,6 +11,7 @@ import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
+import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showDialog
@@ -48,6 +49,7 @@ class AuctionDetailActivity :
             )
 
             is AuctionDetailViewModel.AuctionDetailEvent.EnterChatRoom -> {}
+            is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
         }
     }
@@ -57,8 +59,13 @@ class AuctionDetailActivity :
     }
 
 
+
     private fun navigateToMessageRoom(roomId: Long) {
         startActivity(MessageRoomActivity.getIntent(this, roomId))
+    }
+    
+    private fun navigateToReport(auctionId: Long) {
+        startActivity(ReportActivity.getIntent(this, auctionId))
     }
     
     private fun notifyAuctionDoesNotExist() {

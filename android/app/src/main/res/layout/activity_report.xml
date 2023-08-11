@@ -86,6 +86,7 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
+            android:onClick="@{() -> viewModel.submit()}"
             android:text="@string/report_submit"
             android:textSize="18sp"
             android:textStyle="bold"

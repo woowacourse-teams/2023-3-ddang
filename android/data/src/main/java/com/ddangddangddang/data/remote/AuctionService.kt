@@ -3,6 +3,7 @@ package com.ddangddangddang.data.remote
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
+import com.ddangddangddang.data.model.request.ReportRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -90,4 +91,7 @@ interface AuctionService {
 
     @GET("/users")
     suspend fun fetchProfile(): ApiResponse<ProfileResponse>
+
+    @POST("reports/auctions")
+    suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit>
 }

@@ -123,5 +123,8 @@
     <string name="report">신고하기</string>
     <string name="report_contents">신고 내용</string>
     <string name="report_submit">신고 접수하기</string>
+    <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
+    <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
+    <string name="report_snackbar_auction_id_not_delivered">경매 정보가 넘어오지 않았습니다.</string>
 
 </resources>

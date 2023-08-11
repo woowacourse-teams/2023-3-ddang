@@ -90,11 +90,18 @@ class AuctionDetailViewModel(
         _event.value = AuctionDetailEvent.Exit
     }
 
+    fun reportAuction() {
+        auctionDetailModel.value?.let {
+            _event.value = AuctionDetailEvent.ReportAuction(it.id)
+        }
+    }
+
     sealed class AuctionDetailEvent {
         object Exit : AuctionDetailEvent()
         object PopupAuctionBid : AuctionDetailEvent()
         data class EnterMessageRoom(val roomId: Long) : AuctionDetailEvent()
         data class EnterChatRoom(val chatId: Long) : AuctionDetailEvent()
+        data class ReportAuction(val auctionId: Long) : AuctionDetailEvent()
         object NotifyAuctionDoesNotExist : AuctionDetailEvent()
     }
 }
