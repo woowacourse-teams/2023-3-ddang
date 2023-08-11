@@ -39,7 +39,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
         final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
                                                         .orElseThrow(() ->
-                                                                new InvalidTokenException("유효한 토큰이 아닙니다."));
+                                                                new InvalidTokenException("유효한 토큰이 아닙니다.")
+                                                        );
 
         store.set(new AuthenticationUserInfo(privateClaims.userId()));
         return true;
