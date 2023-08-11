@@ -108,7 +108,7 @@ public class ChatRoomController {
         final List<ReadMessageResponse> responses = readMessageDtos.stream()
                                                                    .map(readMessageDto -> ReadMessageResponse.of(
                                                                            readMessageDto,
-                                                                           calculateMessageOwner(
+                                                                           isMessageOwner(
                                                                                    readMessageDto,
                                                                                    userInfo
                                                                            )))
@@ -116,7 +116,7 @@ public class ChatRoomController {
         return ResponseEntity.ok(responses);
     }
 
-    private boolean calculateMessageOwner(final ReadMessageDto readMessageDto, final AuthenticateUserInfo userInfo) {
+    private boolean isMessageOwner(final ReadMessageDto readMessageDto, final AuthenticateUserInfo userInfo) {
         return readMessageDto.writerDto()
                              .id()
                              .equals(userInfo.id());
