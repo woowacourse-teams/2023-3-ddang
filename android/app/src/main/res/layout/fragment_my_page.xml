@@ -89,7 +89,8 @@
                     android:text="@string/mypage_privacy_policy_button"
                     android:background="?attr/selectableItemBackground"
                     android:textSize="14sp"
-                    app:layout_constraintTop_toBottomOf="@id/view_profile_divider" />
+                    app:layout_constraintTop_toBottomOf="@id/view_profile_divider"
+                    android:onClick="@{() -> viewModel.showPrivacyPolicy()}" />
 
                 <View
                     android:id="@+id/view_privacy_policy_divider"
