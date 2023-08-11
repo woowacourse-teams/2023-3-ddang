@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
 import static com.ddang.ddang.chat.domain.QMessage.message;
+import static com.ddang.ddang.user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,6 +27,7 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
     ) {
         return queryFactory
                 .selectFrom(message)
+                .leftJoin(message.chatRoom, chatRoom).fetchJoin()
                 .where(
                         message.writer.id.eq(userId)
                                          .or(message.receiver.id.eq(userId)),
