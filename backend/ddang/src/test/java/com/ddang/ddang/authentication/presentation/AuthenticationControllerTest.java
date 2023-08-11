@@ -3,6 +3,7 @@ package com.ddang.ddang.authentication.presentation;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,12 +12,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ddang.ddang.authentication.application.AuthenticationService;
+import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,6 +51,9 @@ class AuthenticationControllerTest {
 
     @MockBean
     AuthenticationService authenticationService;
+
+    @MockBean
+    BlackListTokenService blackListTokenService;
 
     @Autowired
     AuthenticationController authenticationController;
@@ -197,5 +203,22 @@ class AuthenticationControllerTest {
                        status().isOk(),
                        jsonPath("$.validated").value(false)
                );
+    }
+
+    @Test
+    void accessToken과_refreshToken을_전달하면_로그아웃한다() throws Exception {
+        // given
+        final LogoutRequest request = new LogoutRequest("Bearer refreshToken");
+
+        willDoNothing().given(blackListTokenService).registerBlackListToken(anyString(), anyString());
+
+        // when & then
+        mockMvc.perform(post("/oauth2/logout")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                ).andExpectAll(
+                        status().isNoContent()
+                );
     }
 }
