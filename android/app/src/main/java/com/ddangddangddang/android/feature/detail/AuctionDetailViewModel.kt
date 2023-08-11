@@ -75,7 +75,7 @@ class AuctionDetailViewModel(
                 val request = GetChatRoomIdRequest(it.id)
                 when (val response = chatRepository.getChatRoomId(request)) {
                     is ApiResponse.Success -> {
-                        _event.value = AuctionDetailEvent.EnterChatRoom(response.body.chatRoomId)
+                        _event.value = AuctionDetailEvent.EnterMessageRoom(response.body.chatRoomId)
                     }
 
                     is ApiResponse.Failure -> {}
@@ -99,6 +99,7 @@ class AuctionDetailViewModel(
     sealed class AuctionDetailEvent {
         object Exit : AuctionDetailEvent()
         object PopupAuctionBid : AuctionDetailEvent()
+        data class EnterMessageRoom(val roomId: Long) : AuctionDetailEvent()
         data class EnterChatRoom(val chatId: Long) : AuctionDetailEvent()
         data class ReportAuction(val auctionId: Long) : AuctionDetailEvent()
         object NotifyAuctionDoesNotExist : AuctionDetailEvent()

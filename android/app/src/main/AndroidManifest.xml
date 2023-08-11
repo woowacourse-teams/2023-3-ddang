@@ -22,9 +22,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".feature.messageRoom.MessageRoomActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name=".feature.report.ReportActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".feature.splash.SplashActivity"
             android:exported="true">
@@ -36,8 +39,7 @@
         </activity>
         <activity
             android:name=".feature.login.LoginActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".feature.register.region.SelectRegionsActivity"
             android:exported="false" />

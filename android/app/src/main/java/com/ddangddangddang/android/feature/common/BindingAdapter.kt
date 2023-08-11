@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.common
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
@@ -36,4 +37,9 @@ fun Chip.onCloseClick(onCloseClick: () -> Unit) {
     this.setOnCloseIconClickListener {
         onCloseClick()
     }
+}
+
+@BindingAdapter("setTextOrEmpty")
+fun TextView.setTextOrEmpty(text: String?) {
+    this.text = text ?: ""
 }
