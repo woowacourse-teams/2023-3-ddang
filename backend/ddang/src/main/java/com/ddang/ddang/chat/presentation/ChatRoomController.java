@@ -111,7 +111,8 @@ public class ChatRoomController {
                                                                            isMessageOwner(
                                                                                    readMessageDto,
                                                                                    userInfo
-                                                                           )))
+                                                                           )
+                                                                   ))
                                                                    .collect(Collectors.toList());
         return ResponseEntity.ok(responses);
     }

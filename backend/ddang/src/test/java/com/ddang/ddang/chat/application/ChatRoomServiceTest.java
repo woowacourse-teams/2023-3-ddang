@@ -114,7 +114,8 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매")
+        final Auction auction = Auction.builder()
+                                       .title("경매")
                                        .description("설명")
                                        .seller(seller)
                                        .bidUnit(new BidUnit(1_000))
@@ -170,7 +171,8 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매")
+        final Auction auction = Auction.builder()
+                                       .title("경매")
                                        .description("설명")
                                        .seller(seller)
                                        .bidUnit(new BidUnit(1_000))
@@ -280,7 +282,8 @@ class ChatRoomServiceTest {
         userRepository.save(buyer);
         userRepository.save(stranger);
 
-        final Auction auction = Auction.builder().title("경매")
+        final Auction auction = Auction.builder()
+                                       .title("경매")
                                        .description("설명")
                                        .seller(seller)
                                        .bidUnit(new BidUnit(1_000))
@@ -319,7 +322,8 @@ class ChatRoomServiceTest {
         userRepository.save(seller);
         userRepository.save(buyer);
 
-        final Auction auction = Auction.builder().title("경매")
+        final Auction auction = Auction.builder()
+                                       .title("경매")
                                        .description("설명")
                                        .seller(seller)
                                        .bidUnit(new BidUnit(1_000))
@@ -371,12 +375,27 @@ class ChatRoomServiceTest {
         userRepository.save(jamie);
         userRepository.save(zeeto);
 
-        final Auction merryAuction = Auction.builder().title("경매 1").seller(merry).subCategory(sub)
-                                            .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000)).build();
-        final Auction enchoAuction = Auction.builder().title("경매 2").seller(encho).subCategory(sub)
-                                            .bidUnit(new BidUnit(2_000)).startPrice(new Price(20_000)).build();
-        final Auction jamieAuction = Auction.builder().title("경매 3").seller(jamie).subCategory(sub)
-                                            .bidUnit(new BidUnit(3_000)).startPrice(new Price(30_000)).build();
+        final Auction merryAuction = Auction.builder()
+                                            .title("경매 1")
+                                            .seller(merry)
+                                            .subCategory(sub)
+                                            .bidUnit(new BidUnit(1_000))
+                                            .startPrice(new Price(10_000))
+                                            .build();
+        final Auction enchoAuction = Auction.builder()
+                                            .title("경매 2")
+                                            .seller(encho)
+                                            .subCategory(sub)
+                                            .bidUnit(new BidUnit(2_000))
+                                            .startPrice(new Price(20_000))
+                                            .build();
+        final Auction jamieAuction = Auction.builder()
+                                            .title("경매 3")
+                                            .seller(jamie)
+                                            .subCategory(sub)
+                                            .bidUnit(new BidUnit(3_000))
+                                            .startPrice(new Price(30_000))
+                                            .build();
 
         auctionRepository.save(merryAuction);
         auctionRepository.save(enchoAuction);
@@ -429,9 +448,14 @@ class ChatRoomServiceTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-        final Auction auction = Auction.builder().title("경매").seller(seller).subCategory(sub)
-                                       .bidUnit(new BidUnit(1_000)).startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(6)).build();
+        final Auction auction = Auction.builder().
+                                       title("경매")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(6))
+                                       .build();
         auctionRepository.save(auction);
         final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
         bidRepository.save(bid);
@@ -456,7 +480,9 @@ class ChatRoomServiceTest {
                               .build();
         userRepository.save(user);
 
-        final Auction auction = Auction.builder().title("경매").build();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .build();
         auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, user);
@@ -500,7 +526,10 @@ class ChatRoomServiceTest {
         userRepository.save(buyer);
         userRepository.save(stranger);
 
-        final Auction auction = Auction.builder().title("경매").seller(seller).build();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .build();
         auctionRepository.save(auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);
