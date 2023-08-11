@@ -34,4 +34,11 @@ class AuctionLocalDataSource {
         }
         auctionPreviews.value = updatedList
     }
+
+    fun removeAuctionPreview(auctionId: Long) {
+        auctionPreviews.value = auctionPreviews.value?.filter { it.id != auctionId }
+        
+    fun resetAuctionPreviews(auctions: List<AuctionPreviewResponse>) {
+        auctionPreviews.value = auctions
+    }
 }

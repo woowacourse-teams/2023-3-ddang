@@ -8,26 +8,30 @@ import com.ddangddangddang.android.R
 
 fun Activity.showDialog(
     @StringRes
-    titleId: Int = R.string.all_dialog_default_title,
+    titleId: Int? = null,
     @StringRes
     messageId: Int,
     @StringRes
-    negativeStringId: Int = R.string.all_dialog_default_negative_button,
+    negativeStringId: Int? = null,
     @StringRes
     positiveStringId: Int = R.string.all_dialog_default_positive_button,
     actionNegative: () -> Unit = {},
     actionPositive: () -> Unit = {},
+    isCancelable: Boolean = true,
 ) {
-    AlertDialog.Builder(this)
-        .setTitle(getString(titleId))
-        .setMessage(getString(messageId))
-        .setNegativeButton(negativeStringId) { _, _ ->
-            actionNegative()
+    AlertDialog.Builder(this).apply {
+        titleId?.let { setTitle(getString(it)) }
+        setMessage(getString(messageId))
+        negativeStringId?.let {
+            setNegativeButton(negativeStringId) { _, _ ->
+                actionNegative()
+            }
         }
-        .setPositiveButton(positiveStringId) { _, _ ->
+        setPositiveButton(positiveStringId) { _, _ ->
             actionPositive()
         }
-        .show()
+        setCancelable(isCancelable)
+    }.show()
 }
 
 fun Fragment.showDialog(
