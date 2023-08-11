@@ -1,5 +1,6 @@
 package com.ddang.ddang.authentication.configuration;
 
+import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
+    private final BlackListTokenService blackListTokenService;
     private final TokenDecoder tokenDecoder;
     private final AuthenticationStore store;
 
@@ -26,16 +28,19 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             final HttpServletResponse response,
             final Object handler
     ) {
-        final String token = request.getHeader(HttpHeaders.AUTHORIZATION);
+        final String accessToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (isNotRequiredAuthenticate(token)) {
+        if (isNotRequiredAuthenticate(accessToken)) {
             store.set(new AuthenticationUserInfo(null));
             return true;
         }
 
-        final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, token)
+        validateLogoutToken(accessToken);
+
+        final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
                                                         .orElseThrow(() ->
-                                                                new InvalidTokenException("유효한 토큰이 아닙니다."));
+                                                                new InvalidTokenException("유효한 토큰이 아닙니다.")
+                                                        );
 
         store.set(new AuthenticationUserInfo(privateClaims.userId()));
         return true;
@@ -43,6 +48,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     private boolean isNotRequiredAuthenticate(final String token) {
         return token == null || token.length() == 0;
+    }
+
+    private void validateLogoutToken(final String accessToken) {
+        if (blackListTokenService.existsBlackListToken(TokenType.ACCESS, accessToken)) {
+            throw new InvalidTokenException("유효한 토큰이 아닙니다.");
+        }
     }
 
     @Override

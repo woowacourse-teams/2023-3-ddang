@@ -1,14 +1,13 @@
 package com.ddang.ddang.bid.presentation;
 
+import com.ddang.ddang.authentication.configuration.AuthenticateUser;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.bid.application.BidService;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
-import com.ddang.ddang.bid.presentation.dto.request.LoginUserRequest;
 import com.ddang.ddang.bid.presentation.dto.response.ReadBidResponse;
 import com.ddang.ddang.bid.presentation.dto.response.ReadBidsResponse;
-import com.ddang.ddang.bid.presentation.resolver.LoginUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,13 +28,12 @@ public class BidController {
 
     private final BidService bidService;
 
-    // TODO: 2023/08/09 임시로 사용하는 argument resolver 추후 수정
     @PostMapping
     public ResponseEntity<Void> create(
-            @LoginUser final LoginUserRequest userRequest,
+            @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateBidRequest bidRequest
     ) {
-        bidService.create(LoginUserDto.from(userRequest), CreateBidDto.from(bidRequest));
+        bidService.create(CreateBidDto.of(bidRequest, userInfo.userId()));
 
         return ResponseEntity.created(URI.create("/auctions/" + bidRequest.auctionId()))
                              .build();

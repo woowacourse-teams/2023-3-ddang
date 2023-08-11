@@ -1,12 +1,15 @@
 package com.ddang.ddang.authentication.presentation;
 
 import com.ddang.ddang.authentication.application.AuthenticationService;
+import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.response.TokenResponse;
 import com.ddang.ddang.authentication.presentation.dto.response.ValidatedTokenResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final BlackListTokenService blackListTokenService;
 
     @PostMapping("/login/{oauth2Type}")
     public ResponseEntity<Object> validate(
@@ -49,5 +53,16 @@ public class AuthenticationController {
         final boolean validated = authenticationService.validateToken(accessToken);
 
         return ResponseEntity.ok(new ValidatedTokenResponse(validated));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @RequestHeader(HttpHeaders.AUTHORIZATION) final String accessToken,
+            @RequestBody @Valid final LogoutRequest request
+    ) {
+        blackListTokenService.registerBlackListToken(accessToken, request.refreshToken());
+
+        return ResponseEntity.noContent()
+                             .build();
     }
 }
