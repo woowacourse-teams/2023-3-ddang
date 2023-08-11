@@ -153,9 +153,59 @@ include::{snippets}/bid-controller-test/입찰을_등록한다/http-response.ado
 ==== 요청
 
 include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/http-request.adoc[]
-include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/request-headers.adoc[]
 
 ==== 응답
 
 include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/http-response.adoc[]
 include::{snippets}/bid-controller-test/특정_경매에_대한_입찰_목록을_조회한다/response-fields.adoc[]
+
+== 신고 API
+
+=== 경매 신고 등록
+
+==== 요청
+
+include::{snippets}/report-controller-test/경매_신고를_등록한다/http-request.adoc[]
+include::{snippets}/report-controller-test/경매_신고를_등록한다/request-headers.adoc[]
+include::{snippets}/report-controller-test/경매_신고를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/경매_신고를_등록한다/http-response.adoc[]
+
+
+=== 경매 신고 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/전체_경매_신고_목록을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/전체_경매_신고_목록을_조회한다/http-response.adoc[]
+include::{snippets}/report-controller-test/전체_경매_신고_목록을_조회한다/response-fields.adoc[]
+
+
+=== 채팅방 신고 등록
+
+==== 요청
+
+include::{snippets}/report-controller-test/채팅방_신고를_등록한다/http-request.adoc[]
+include::{snippets}/report-controller-test/채팅방_신고를_등록한다/request-headers.adoc[]
+include::{snippets}/report-controller-test/채팅방_신고를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/채팅방_신고를_등록한다/http-response.adoc[]
+
+
+=== 채팅방 신고 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/http-response.adoc[]
+include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/response-fields.adoc[]
