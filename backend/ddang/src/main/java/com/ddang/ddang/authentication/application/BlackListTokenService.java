@@ -21,7 +21,7 @@ public class BlackListTokenService {
 
     @Transactional
     public void registerBlackListToken(final String accessToken, final String refreshToken) {
-        validateToken(accessToken, refreshToken);
+        validateEmptyToken(accessToken, refreshToken);
 
         final List<BlackListToken> blackListTokens = new ArrayList<>();
 
@@ -35,8 +35,8 @@ public class BlackListTokenService {
         blackListTokenRepository.saveAll(blackListTokens);
     }
 
-    private void validateToken(final String accessToken, final String refreshToken) {
-        if (isInvalidToken(accessToken) || isInvalidToken(refreshToken)) {
+    private void validateEmptyToken(final String accessToken, final String refreshToken) {
+        if (isEmptyToken(accessToken) || isEmptyToken(refreshToken)) {
             throw new EmptyTokenException("비어있는 토큰입니다.");
         }
     }
@@ -45,7 +45,7 @@ public class BlackListTokenService {
         return tokenDecoder.decode(tokenType, targetToken).isPresent();
     }
 
-    private boolean isInvalidToken(final String targetToken) {
+    private boolean isEmptyToken(final String targetToken) {
         return targetToken == null || targetToken.isBlank();
     }
 
