@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
 
@@ -31,8 +32,13 @@ class ReportViewModel(private val repository: AuctionRepository) : ViewModel() {
         viewModelScope.launch {
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
-                repository.reportAuction(auctionId ?: return@launch, contents)
-                _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
+                val response = repository.reportAuction(auctionId ?: return@launch, contents)
+                when (response) {
+                    is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
             }
         }
     }
