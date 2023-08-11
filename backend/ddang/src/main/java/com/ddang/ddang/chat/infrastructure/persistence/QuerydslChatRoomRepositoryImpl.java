@@ -22,10 +22,9 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
 
     @Override
     public List<ChatRoom> findAllByUserId(final Long userId) {
-        return findChatRoomJPAQuery()
-                .where(isSellerOrWinner(userId))
-                .orderBy(chatRoom.id.desc())
-                .fetch();
+        return findChatRoomJPAQuery().where(isSellerOrWinner(userId))
+                                     .orderBy(chatRoom.id.desc())
+                                     .fetch();
     }
 
     private JPAQuery<ChatRoom> findChatRoomJPAQuery() {

@@ -11,6 +11,7 @@ public record ReadLastMessageDto(
         ReadUserInChatRoomDto receiverDto,
         String contents
 ) {
+
     public static ReadLastMessageDto from(final Message message) {
         return new ReadLastMessageDto(
                 message.getId(),

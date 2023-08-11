@@ -92,8 +92,11 @@ public class ChatRoomService {
         return processChatRoomWithLastMessageAndSort(findUser, chatRooms);
     }
 
-    private List<ReadChatRoomWithLastMessageDto> processChatRoomWithLastMessageAndSort(final User findUser, final List<ChatRoom> chatRooms) {
-        List<ReadChatRoomWithLastMessageDto> chatRoomDtos = new ArrayList<>();
+    private List<ReadChatRoomWithLastMessageDto> processChatRoomWithLastMessageAndSort(
+            final User findUser,
+            final List<ChatRoom> chatRooms
+    ) {
+        final List<ReadChatRoomWithLastMessageDto> chatRoomDtos = new ArrayList<>();
         for (final ChatRoom chatRoom : chatRooms) {
             messageRepository.findLastMessageByChatRoomId(chatRoom.getId())
                              .ifPresent(message ->

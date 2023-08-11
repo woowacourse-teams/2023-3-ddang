@@ -54,7 +54,6 @@ class QuerydslChatRoomRepositoryImplTest {
         main.addSubCategory(sub);
         categoryRepository.save(main);
 
-
         final User merry = User.builder()
                                .name("메리")
                                .profileImage("profile.png")
