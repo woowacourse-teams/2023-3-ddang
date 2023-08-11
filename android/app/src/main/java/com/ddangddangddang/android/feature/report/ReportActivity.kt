@@ -31,8 +31,8 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     }
 
     private fun loadAuctionId() {
-        val id = intent.getLongExtra(AUCTION_ID_KEY, -1L)
-        if (id == -1L) notifyAuctionIdNotDelivered()
+        val id = intent.getLongExtra(AUCTION_ID_KEY, DEFAULT_VALUE)
+        if (id == DEFAULT_VALUE) notifyAuctionIdNotDelivered()
         viewModel.setAuctionId(id)
     }
 
@@ -51,6 +51,7 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     }
 
     companion object {
+        private const val DEFAULT_VALUE = -1L
         private const val AUCTION_ID_KEY = "auction_id_key"
         fun getIntent(context: Context, auctionId: Long): Intent =
             Intent(context, ReportActivity::class.java).apply {
