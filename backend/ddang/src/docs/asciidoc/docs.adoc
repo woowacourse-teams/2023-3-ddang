@@ -24,6 +24,57 @@
 | 서버 에러
 |===
 
+== 인증 & 인가 API
+
+=== 로그인
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/path-parameters.adoc[]
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/http-response.adoc[]
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/response-fields.adoc[]
+
+=== AccessToken 재발급
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/http-response.adoc[]
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/response-fields.adoc[]
+
+=== AccessToken 유효성 검사
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/http-response.adoc[]
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/response-fields.adoc[]
+
+=== 로그아웃
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/request-headers.adoc[]
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-response.adoc[]
+
 == 카테고리 API
 
 === 메인 카테고리 조회

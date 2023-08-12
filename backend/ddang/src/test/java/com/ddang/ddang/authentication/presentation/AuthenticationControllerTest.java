@@ -5,6 +5,13 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -14,13 +21,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,13 +36,20 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -45,6 +60,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
         }
 )
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuthenticationControllerTest {
@@ -59,19 +76,24 @@ class AuthenticationControllerTest {
     AuthenticationController authenticationController;
 
     @Autowired
+    RestDocumentationResultHandler restDocs;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         final FormattingConversionService formattingConversionService = new FormattingConversionService();
         formattingConversionService.addConverter(new Oauth2TypeConverter());
 
         mockMvc = MockMvcBuilders.standaloneSetup(authenticationController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .setConversionService(formattingConversionService)
+                                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
+                                 .alwaysDo(restDocs)
                                  .build();
     }
 
@@ -84,14 +106,28 @@ class AuthenticationControllerTest {
         given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString())).willReturn(tokenDto);
 
         // when & then
-        mockMvc.perform(post("/oauth2/login/{oauth2Type}", "kakao")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(request))
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/login/{oauth2Type}", "kakao")
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .content(objectMapper.writeValueAsString(request))
                )
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.accessToken").exists(),
                        jsonPath("$.refreshToken").exists()
+               )
+               .andDo(
+                       restDocs.document(
+                               pathParameters(
+                                       parameterWithName("oauth2Type").description("소셜 로그인을 할 서비스 선택(kakao로 고정)")
+                               ),
+                               requestFields(
+                                       fieldWithPath("accessToken").description("소셜 로그인 AccessToken")
+                               ),
+                               responseFields(
+                                       fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Access Token"),
+                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("Refresh Token")
+                               )
+                       )
                );
     }
 
@@ -151,7 +187,19 @@ class AuthenticationControllerTest {
                        status().isOk(),
                        jsonPath("$.accessToken").exists(),
                        jsonPath("$.refreshToken").exists()
+               )
+               .andDo(
+                       restDocs.document(
+                               requestFields(
+                                       fieldWithPath("refreshToken").description("refreshToken")
+                               ),
+                               responseFields(
+                                       fieldWithPath("accessToken").type(JsonFieldType.STRING).description("재발급한 Access Token"),
+                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("기존 Refresh Token")
+                               )
+                       )
                );
+        ;
     }
 
     @Test
@@ -160,7 +208,8 @@ class AuthenticationControllerTest {
         final String invalidRefreshToken = "invalidRefreshToken";
         final RefreshTokenRequest request = new RefreshTokenRequest(invalidRefreshToken);
 
-        willThrow(new InvalidTokenException("유효한 토큰이 아닙니다.")).given(authenticationService).refreshToken(anyString());
+        willThrow(new InvalidTokenException("유효한 토큰이 아닙니다.")).given(authenticationService)
+                                                             .refreshToken(anyString());
 
         // when & then
         mockMvc.perform(post("/oauth2/refresh-token")
@@ -186,6 +235,16 @@ class AuthenticationControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.validated").value(true)
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               responseFields(
+                                       fieldWithPath("validated").type(JsonFieldType.BOOLEAN).description("Access Token이 유효한지 여부")
+                               )
+                       )
                );
     }
 
@@ -214,11 +273,22 @@ class AuthenticationControllerTest {
 
         // when & then
         mockMvc.perform(post("/oauth2/logout")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request))
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                ).andExpectAll(
-                        status().isNoContent()
-                );
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request))
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
+               .andExpectAll(
+                       status().isNoContent()
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               requestFields(
+                                       fieldWithPath("refreshToken").description("refreshToken")
+                               )
+                       )
+               );
     }
 }
