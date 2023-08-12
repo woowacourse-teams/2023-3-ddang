@@ -691,6 +691,9 @@ class AuctionControllerTest {
                .andExpectAll(status().isNoContent())
                .andDo(
                        restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
                                pathParameters(
                                        parameterWithName("auctionId").description("삭제할 경매 ID")
                                )
