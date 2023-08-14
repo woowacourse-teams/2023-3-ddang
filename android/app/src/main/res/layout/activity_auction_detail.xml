@@ -45,12 +45,22 @@
                 tools:text="M1 맥북 에어" />
 
             <ImageView
+                android:id="@+id/iv_report"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_side_layout"
                 android:onClick="@{() -> viewModel.reportAuction()}"
                 android:src="@drawable/ic_report_24" />
+
+            <ImageView
+                android:id="@+id/iv_delete"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/margin_side_layout"
+                android:onClick="@{() -> viewModel.setDeleteAuctionEvent()}"
+                android:src="@drawable/ic_delete_24" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView

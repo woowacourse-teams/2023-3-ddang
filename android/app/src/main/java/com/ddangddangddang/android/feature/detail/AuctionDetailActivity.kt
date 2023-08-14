@@ -50,6 +50,7 @@ class AuctionDetailActivity :
 
             is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
+            AuctionDetailViewModel.AuctionDetailEvent.DeleteAuction -> notifyCheckDelete()
         }
     }
 
@@ -69,6 +70,14 @@ class AuctionDetailActivity :
         showDialog(
             messageId = R.string.detail_auction_dialog_auction_does_not_exist_message,
             actionPositive = { finish() },
+            isCancelable = false,
+        )
+    }
+
+    private fun notifyCheckDelete() {
+        showDialog(
+            messageId = R.string.auction_detail_dialog_check_delete_message,
+            actionPositive = { viewModel.deleteAuction() },
             isCancelable = false,
         )
     }
