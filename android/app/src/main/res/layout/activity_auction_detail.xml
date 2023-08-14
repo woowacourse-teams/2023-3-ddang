@@ -62,7 +62,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_side_layout"
-                android:onClick="@{() -> viewModel.setDeleteAuctionEvent()}"
+                android:onClick="@{() -> viewModel.setRemoveAuctionEvent()}"
                 android:src="@drawable/ic_delete_24"
                 android:visibility="@{viewModel.auctionDetailModel.owner ? View.VISIBLE : View.GONE}" />
         </androidx.appcompat.widget.Toolbar>

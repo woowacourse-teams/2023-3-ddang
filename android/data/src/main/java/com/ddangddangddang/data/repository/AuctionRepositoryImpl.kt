@@ -67,8 +67,10 @@ class AuctionRepositoryImpl private constructor(
         return remoteDataSource.reportAuction(ReportRequest(auctionId, description))
     }
 
-    override suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit> {
-        return remoteDataSource.deleteAuction(auctionId)
+    override suspend fun removeAuction(auctionId: Long): ApiResponse<Unit> {
+        val response = remoteDataSource.removeAuction(auctionId)
+        if (response is ApiResponse.Success) localDataSource.removeAuctionPreview(auctionId)
+        return response
     }
 
     companion object {
