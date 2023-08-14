@@ -67,6 +67,10 @@ class AuctionRepositoryImpl private constructor(
         return remoteDataSource.reportAuction(ReportRequest(auctionId, description))
     }
 
+    override suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit> {
+        return remoteDataSource.deleteAuction(auctionId)
+    }
+
     companion object {
         @Volatile
         private var instance: AuctionRepositoryImpl? = null
