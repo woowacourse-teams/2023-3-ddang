@@ -33,6 +33,7 @@ object AuctionDetailModelMapper : Mapper<AuctionDetailModel, AuctionDetailRespon
             auction.auctioneerCount,
             SellerModel(seller.id, seller.image ?: "", seller.nickname, seller.reliability),
             ChatAuctionDetailModel(chat.id, chat.isChatParticipant),
+            isOwner,
         )
     }
 }
