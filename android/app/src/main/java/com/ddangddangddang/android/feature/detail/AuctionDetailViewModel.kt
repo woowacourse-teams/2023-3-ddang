@@ -1,6 +1,5 @@
 package com.ddangddangddang.android.feature.detail
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -97,13 +96,21 @@ class AuctionDetailViewModel(
         }
     }
 
-    fun setDeleteAuctionEvent() {
-        _event.value = AuctionDetailEvent.DeleteAuction
+    fun setRemoveAuctionEvent() {
+        _event.value = AuctionDetailEvent.RemoveAuction
     }
 
-    fun deleteAuction() {
-        // repository delete code
-        Log.d("test", "delete Auction execute")
+    fun removeAuction() {
+        _auctionDetailModel.value?.let {
+            viewModelScope.launch {
+                when (auctionRepository.removeAuction(it.id)) {
+                    is ApiResponse.Success -> _event.value = AuctionDetailEvent.NotifyAuctionRemoveComplete
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
+            }
+        }
     }
 
     sealed class AuctionDetailEvent {
@@ -111,7 +118,8 @@ class AuctionDetailViewModel(
         object PopupAuctionBid : AuctionDetailEvent()
         data class EnterMessageRoom(val roomId: Long) : AuctionDetailEvent()
         data class ReportAuction(val auctionId: Long) : AuctionDetailEvent()
-        object DeleteAuction : AuctionDetailEvent()
+        object RemoveAuction : AuctionDetailEvent()
         object NotifyAuctionDoesNotExist : AuctionDetailEvent()
+        object NotifyAuctionRemoveComplete : AuctionDetailEvent()
     }
 }
