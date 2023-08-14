@@ -7,6 +7,8 @@
 
         <import type="com.ddangddangddang.android.feature.detail.AuctionDetailFormatter" />
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="com.ddangddangddang.android.feature.detail.AuctionDetailViewModel" />
@@ -51,7 +53,8 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_side_layout"
                 android:onClick="@{() -> viewModel.reportAuction()}"
-                android:src="@drawable/ic_report_24" />
+                android:src="@drawable/ic_report_24"
+                android:visibility="@{viewModel.auctionDetailModel.owner ? View.GONE : View.VISIBLE}" />
 
             <ImageView
                 android:id="@+id/iv_delete"
@@ -60,7 +63,8 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/margin_side_layout"
                 android:onClick="@{() -> viewModel.setDeleteAuctionEvent()}"
-                android:src="@drawable/ic_delete_24" />
+                android:src="@drawable/ic_delete_24"
+                android:visibility="@{viewModel.auctionDetailModel.owner ? View.VISIBLE : View.GONE}" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
