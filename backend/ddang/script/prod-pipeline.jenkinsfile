@@ -23,7 +23,7 @@ pipeline {
         stage('github clone') {
             steps {
                 checkout scmGit(
-                    branches: [[name: '*/develop-be']],
+                    branches: [[name: '*/develop']],
                     extensions: [submodule(parentCredentials: true, reference: '', trackingSubmodules: true)],
                     userRemoteConfigs: [[credentialsId: 'ddang-dev-token', url: 'https://github.com/woowacourse-teams/2023-3-ddang']])
             }
