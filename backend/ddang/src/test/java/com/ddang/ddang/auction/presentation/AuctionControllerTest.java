@@ -555,7 +555,8 @@ class AuctionControllerTest {
                                        fieldWithPath("seller.nickname").type(JsonFieldType.STRING).description("판매자 닉네임"),
                                        fieldWithPath("seller.reliability").type(JsonFieldType.NUMBER).description("판매자 신뢰도"),
                                        fieldWithPath("chat.id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
-                                       fieldWithPath("chat.isChatParticipant").type(JsonFieldType.BOOLEAN).description("채팅방을 생성 가능 유저 여부")
+                                       fieldWithPath("chat.isChatParticipant").type(JsonFieldType.BOOLEAN).description("채팅방을 생성 가능 유저 여부"),
+                                       fieldWithPath("isOwner").type(JsonFieldType.BOOLEAN).description("유저가 해당 경매 글을 작성한 유저인지에 대한 여부")
                                )
                        )
                );

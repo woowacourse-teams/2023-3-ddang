@@ -62,7 +62,8 @@ public class AuctionController {
         final ReadAuctionWithChatRoomIdDto readAuctionDto = auctionService.readByAuctionId(auctionId, userInfo);
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
-                calculateBaseImageUrl()
+                calculateBaseImageUrl(),
+                userInfo
         );
 
         return ResponseEntity.ok(response);

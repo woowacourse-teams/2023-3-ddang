@@ -1208,7 +1208,7 @@ Content-Type: image/png
 Content-Disposition: form-data; name=request; filename=request
 Content-Type: application/json
 
-{"title":"경매 상품 1","description":"이것은 경매 상품 1 입니다.","bidUnit":1000,"startPrice":1000,"closingTime":"2023-08-15T19:33:39.946078","subCategoryId":2,"thirdRegionIds":[3]}
+{"title":"경매 상품 1","description":"이것은 경매 상품 1 입니다.","bidUnit":1000,"startPrice":1000,"closingTime":"2023-08-17T20:16:11.929787","subCategoryId":2,"thirdRegionIds":[3]}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -1494,8 +1494,8 @@ Content-Type: application/json
     "lastBidPrice" : null,
     "status" : "FAILURE",
     "bidUnit" : 1000,
-    "registerTime" : "2023-08-12T19:33:40",
-    "closingTime" : "2023-08-12T19:33:40",
+    "registerTime" : "2023-08-14T20:16:11",
+    "closingTime" : "2023-08-14T20:16:11",
     "directRegions" : [ {
       "first" : "서울특별시",
       "second" : "강서구",
@@ -1512,7 +1512,8 @@ Content-Type: application/json
   "chat" : {
     "id" : 1,
     "isChatParticipant" : true
-  }
+  },
+  "isOwner" : true
 }</code></pre>
 </div>
 </div>
@@ -1659,6 +1660,11 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>chat.isChatParticipant</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">채팅방을 생성 가능 유저 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isOwner</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">유저가 해당 경매 글을 작성한 유저인지에 대한 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -1821,12 +1827,12 @@ Content-Type: application/json
     "name" : "사용자1",
     "profileImage" : "이미지1",
     "price" : 10000,
-    "bidTime" : "2023-08-12T19:33:43"
+    "bidTime" : "2023-08-14T20:16:13"
   }, {
     "name" : "사용자2",
     "profileImage" : "이미지2",
     "price" : 12000,
-    "bidTime" : "2023-08-12T19:33:43"
+    "bidTime" : "2023-08-14T20:16:13"
   } ]
 }</code></pre>
 </div>
@@ -1975,7 +1981,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-12T19:33:47",
+    "createdTime" : "2023-08-14T20:16:15",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -1987,7 +1993,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "회원2"
     },
-    "createdTime" : "2023-08-12T19:33:47",
+    "createdTime" : "2023-08-14T20:16:15",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -1999,7 +2005,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "회원3"
     },
-    "createdTime" : "2023-08-12T19:33:47",
+    "createdTime" : "2023-08-14T20:16:15",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -2163,7 +2169,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-12T19:33:47",
+    "createdTime" : "2023-08-14T20:16:16",
     "chatRoom" : {
       "id" : 1
     },
@@ -2174,7 +2180,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-12T19:33:47",
+    "createdTime" : "2023-08-14T20:16:16",
     "chatRoom" : {
       "id" : 1
     },
@@ -2185,7 +2191,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-12T19:33:47",
+    "createdTime" : "2023-08-14T20:16:16",
     "chatRoom" : {
       "id" : 1
     },
@@ -2253,7 +2259,7 @@ Content-Type: application/json
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-12 19:33:15 +0900
+Last updated 2023-08-14 20:00:43 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
