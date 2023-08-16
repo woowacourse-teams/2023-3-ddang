@@ -96,17 +96,17 @@ class AuctionDetailViewModel(
         }
     }
 
-    fun setRemoveAuctionEvent() {
+    fun setDeleteAuctionEvent() {
         auctionDetailModel.value?.let {
-            _event.value = AuctionDetailEvent.RemoveAuction
+            _event.value = AuctionDetailEvent.DeleteAuction
         }
     }
 
-    fun removeAuction() {
+    fun deleteAuction() {
         _auctionDetailModel.value?.let {
             viewModelScope.launch {
-                when (auctionRepository.removeAuction(it.id)) {
-                    is ApiResponse.Success -> _event.value = AuctionDetailEvent.NotifyAuctionRemoveComplete
+                when (auctionRepository.deleteAuction(it.id)) {
+                    is ApiResponse.Success -> _event.value = AuctionDetailEvent.NotifyAuctionDeletionComplete
                     is ApiResponse.Failure -> {}
                     is ApiResponse.NetworkError -> {}
                     is ApiResponse.Unexpected -> {}
@@ -120,8 +120,8 @@ class AuctionDetailViewModel(
         object PopupAuctionBid : AuctionDetailEvent()
         data class EnterMessageRoom(val roomId: Long) : AuctionDetailEvent()
         data class ReportAuction(val auctionId: Long) : AuctionDetailEvent()
-        object RemoveAuction : AuctionDetailEvent()
+        object DeleteAuction : AuctionDetailEvent()
         object NotifyAuctionDoesNotExist : AuctionDetailEvent()
-        object NotifyAuctionRemoveComplete : AuctionDetailEvent()
+        object NotifyAuctionDeletionComplete : AuctionDetailEvent()
     }
 }

@@ -51,8 +51,8 @@ class AuctionDetailActivity :
 
             is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
-            AuctionDetailViewModel.AuctionDetailEvent.RemoveAuction -> notifyCheckRemove()
-            AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionRemoveComplete -> notifyRemoveComplete()
+            AuctionDetailViewModel.AuctionDetailEvent.DeleteAuction -> askDeletion()
+            AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDeletionComplete -> notifyRemoveComplete()
         }
     }
 
@@ -76,11 +76,11 @@ class AuctionDetailActivity :
         )
     }
 
-    private fun notifyCheckRemove() {
+    private fun askDeletion() {
         showDialog(
             messageId = R.string.auction_detail_dialog_check_remove_message,
             negativeStringId = R.string.all_dialog_default_negative_button,
-            actionPositive = { viewModel.removeAuction() },
+            actionPositive = { viewModel.deleteAuction() },
         )
     }
 
