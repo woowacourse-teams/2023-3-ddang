@@ -125,8 +125,7 @@ public class ChatRoomController {
     }
 
     private boolean isMessageOwner(final ReadMessageDto readMessageDto, final AuthenticationUserInfo userInfo) {
-        return readMessageDto.writerDto()
-                             .id()
+        return readMessageDto.writerId()
                              .equals(userInfo.userId());
     }
 }
