@@ -43,42 +43,43 @@
             app:layout_constraintTop_toBottomOf="@id/tb_home">
 
             <com.google.android.material.chip.ChipGroup
-                android:paddingHorizontal="@dimen/margin_side_layout"
-                app:chipSpacingHorizontal="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:singleLine="true"
+                android:paddingHorizontal="@dimen/margin_side_layout"
+                android:visibility="gone"
+                app:checkedChip="@id/chip_home_filter_new"
+                app:chipSpacingHorizontal="16dp"
                 app:selectionRequired="true"
-                app:singleSelection="true"
-                app:checkedChip="@id/chip_home_filter_new">
+                app:singleLine="true"
+                app:singleSelection="true">
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_home_filter_new"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
-                    android:text="@string/home_filter_new"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_new" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_home_filter_auctioneer"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
-                    android:text="@string/home_filter_auctioneer"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_auctioneer" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_home_filter_closing_time"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
-                    android:text="@string/home_filter_closing_time"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_closing_time" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_home_filter_reliability"
                     style="@style/App.Custom.HomeFilterChip"
                     android:layout_width="wrap_content"
-                    android:text="@string/home_filter_reliability"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_reliability" />
             </com.google.android.material.chip.ChipGroup>
         </HorizontalScrollView>
 
@@ -102,14 +103,14 @@
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_create_24"
+            android:layout_margin="16dp"
             android:backgroundTint="@color/red_100"
-            app:tint="@color/white"
             android:contentDescription="@string/home_register_auction_button_description"
+            android:onClick="@{() -> viewModel.navigateToRegisterAuction()}"
+            android:src="@drawable/ic_create_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_margin="16dp"
-            android:onClick="@{() -> viewModel.navigateToRegisterAuction()}" />
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
