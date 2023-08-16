@@ -114,7 +114,7 @@ public class AuctionService {
     }
 
     private boolean isChatParticipant(final Auction findAuction, final AuthenticationUserInfo userInfo) {
-        if (userInfo.userId() == null) {
+        if (userInfo.isEmpty()) {
             return false;
         }
         final User findUser = userRepository.findById(userInfo.userId())
