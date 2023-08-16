@@ -21,7 +21,9 @@ class MessageRoomActivity :
     AnalyticsDelegate by AnalyticsDelegateImpl() {
     private val viewModel: MessageRoomViewModel by viewModels { viewModelFactory }
     private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
-    private val messageAdapter by lazy { MessageAdapter() }
+    private val messageAdapter by lazy {
+        MessageAdapter { viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) } }
+    }
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
