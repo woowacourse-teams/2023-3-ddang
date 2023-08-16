@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
@@ -41,6 +42,7 @@ class MessageRoomActivity :
 
     private fun setupMessageRecyclerView() {
         binding.rvMessageList.adapter = adapter
+        (binding.rvMessageList.layoutManager as LinearLayoutManager).stackFromEnd = true
     }
 
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {
