@@ -52,7 +52,7 @@ class AuctionDetailActivity :
             is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
             AuctionDetailViewModel.AuctionDetailEvent.DeleteAuction -> askDeletion()
-            AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDeletionComplete -> notifyRemoveComplete()
+            AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDeletionComplete -> notifyDeleteComplete()
         }
     }
 
@@ -78,14 +78,14 @@ class AuctionDetailActivity :
 
     private fun askDeletion() {
         showDialog(
-            messageId = R.string.auction_detail_dialog_check_remove_message,
+            messageId = R.string.auction_detail_dialog_check_delete_message,
             negativeStringId = R.string.all_dialog_default_negative_button,
             actionPositive = { viewModel.deleteAuction() },
         )
     }
 
-    private fun notifyRemoveComplete() {
-        Toaster.showShort(this, getString(R.string.auction_detail_remove_complete))
+    private fun notifyDeleteComplete() {
+        Toaster.showShort(this, getString(R.string.auction_detail_delete_complete))
         finish()
     }
 

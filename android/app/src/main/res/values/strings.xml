@@ -65,8 +65,8 @@
     <string name="detail_auction_bid_dialog_failure_under_price">더 높은 금액을 제시해주세요</string>
     <string name="detail_auction_bid_dialog_failure_already_highest_bidder">이미 최고 입찰자입니다</string>
     <string name="detail_auction_bid_dialog_failure_else">잠시 후에 다시 시도해주세요</string>
-    <string name="auction_detail_dialog_check_remove_message">정말로 이 경매를 삭제하시겠습니까?</string>
-    <string name="auction_detail_remove_complete">삭제가 완료되었습니다.</string>
+    <string name="auction_detail_dialog_check_delete_message">정말로 이 경매를 삭제하시겠습니까?</string>
+    <string name="auction_detail_delete_complete">삭제가 완료되었습니다.</string>
 
     <!-- register -->
     <string name="register_auction">경매 상품 등록</string>
