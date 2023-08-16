@@ -19,3 +19,27 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep interface com.ddangddangddang.data.* { *; }
+-keep class com.ddangddangddang.data.model.** { *; }
+-keep class com.ddangddangddang.data.remote.** { *; }
+
+-keep interface com.ddangddangddang.android.* { *; }
+# Kakao SDK
+-keep interface com.kakao.sdk.**.*Api
+-keep class com.kakao.sdk.**.model.* { <fields>; }
+-keep class * extends com.google.gson.TypeAdapter
+# https://github.com/square/okhttp/pull/6792
+-dontwarn org.bouncycastle.jsse.**
+-dontwarn org.conscrypt.*
+-dontwarn org.openjsse.**
+# firebase-crashlytics
+-keepattributes SourceFile,LineNumberTable        # Keep file names and line numbers.
+-keep public class * extends java.lang.Exception  # Optional: Keep custom exceptions.
+# firebase-analytics
+-keep public class com.google.firebase.analytics.FirebaseAnalytics {
+    public *;
+}
+-keep public class com.google.android.gms.measurement.AppMeasurement {
+    public *;
+}
+
