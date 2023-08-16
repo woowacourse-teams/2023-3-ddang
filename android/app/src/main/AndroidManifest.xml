@@ -24,7 +24,7 @@
         <activity
             android:name=".feature.messageRoom.MessageRoomActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".feature.report.ReportActivity"
             android:exported="false" />

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
@@ -20,7 +21,9 @@ class MessageRoomActivity :
     AnalyticsDelegate by AnalyticsDelegateImpl() {
     private val viewModel: MessageRoomViewModel by viewModels { viewModelFactory }
     private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
-    private val messageAdapter by lazy { MessageAdapter() }
+    private val messageAdapter by lazy {
+        MessageAdapter { viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) } }
+    }
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +44,7 @@ class MessageRoomActivity :
 
     private fun setupMessageRecyclerView() {
         binding.rvMessageList.adapter = adapter
+        (binding.rvMessageList.layoutManager as LinearLayoutManager).stackFromEnd = true
     }
 
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {

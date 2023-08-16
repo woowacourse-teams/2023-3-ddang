@@ -15,81 +15,91 @@
         android:layout_height="match_parent"
         tools:context=".feature.messageRoom.MessageRoomActivity">
 
-        <LinearLayout
-            android:id="@+id/ll_top_bar"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_message_room"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:weightSum="1"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="@dimen/margin_side_layout"
-                android:contentDescription="@string/all_app_bar_back_key_description"
-                android:onClick="@{()->viewModel.setExitEvent()}"
-                android:src="@drawable/ic_left_24"
-                app:tint="@color/black_900" />
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_profile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="20dp"
-                app:cardCornerRadius="25dp"
-                app:cardElevation="0dp"
-                app:layout_constraintStart_toStartOf="@id/gl_begin"
-                app:layout_constraintTop_toTopOf="parent">
+            <LinearLayout
+                android:id="@+id/ll_top_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <ImageView
-                    android:id="@+id/iv_profile"
-                    imageUrl="@{viewModel.messageRoomInfo.messagePartnerProfileUrl}"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:contentDescription="@string/message_room_profile_description"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:src="@drawable/ic_launcher_background" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:contentDescription="@string/all_app_bar_back_key_description"
+                    android:onClick="@{()->viewModel.setExitEvent()}"
+                    android:src="@drawable/ic_left_24"
+                    app:tint="@color/black_900" />
 
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_profile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="20dp"
+                    app:cardCornerRadius="25dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tv_detail_title"
-                setTextOrEmpty="@{viewModel.messageRoomInfo.messagePartnerName}"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_weight="1"
-                android:maxLines="1"
-                android:textColor="@color/black_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold"
-                tools:text="쪽지 상대방 이름" />
+                    <ImageView
+                        android:id="@+id/iv_profile"
+                        imageUrl="@{viewModel.messageRoomInfo.messagePartnerProfileUrl}"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:adjustViewBounds="true"
+                        android:contentDescription="@string/message_room_profile_description"
+                        android:scaleType="centerCrop"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/ic_launcher_background" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="@dimen/margin_side_layout"
-                android:contentDescription="@string/message_room_refresh_description"
-                android:onClick="@{()->viewModel.loadMessages()}"
-                android:src="@drawable/ic_refresh_24"
-                app:tint="@color/black_900" />
+                </androidx.cardview.widget.CardView>
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginStart="@dimen/margin_side_layout"
-                android:layout_marginEnd="20dp"
-                android:contentDescription="@string/message_room_report_description"
-                android:onClick="@{()->viewModel.setReportEvent()}"
-                android:src="@drawable/ic_report_24" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/tv_detail_title"
+                    setTextOrEmpty="@{viewModel.messageRoomInfo.messagePartnerName}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/black_900"
+                    android:textSize="@dimen/textsize_main_header"
+                    android:textStyle="bold"
+                    tools:text="쪽지 상대방 이름" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:contentDescription="@string/message_room_refresh_description"
+                    android:onClick="@{()->viewModel.loadMessages()}"
+                    android:src="@drawable/ic_refresh_24"
+                    app:tint="@color/black_900" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginEnd="20dp"
+                    android:contentDescription="@string/message_room_report_description"
+                    android:onClick="@{()->viewModel.setReportEvent()}"
+                    android:src="@drawable/ic_report_24" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_begin"
@@ -114,7 +124,7 @@
             android:onClick="@{()->viewModel.setNavigateToAuctionDetailEvent()}"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_begin"
-            app:layout_constraintTop_toBottomOf="@id/ll_top_bar">
+            app:layout_constraintTop_toBottomOf="@id/tb_message_room">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_auction_image"

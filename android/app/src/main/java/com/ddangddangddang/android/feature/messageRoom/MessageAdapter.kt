@@ -4,7 +4,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 
-class MessageAdapter : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDiffUtil) {
+class MessageAdapter(
+    private val diffUtilCommitCallback: Runnable,
+) : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return MessageViewHolder.of(parent, MessageViewType.values()[viewType])
@@ -22,7 +24,7 @@ class MessageAdapter : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDi
     }
 
     fun setMessages(list: List<MessageViewItem>) {
-        submitList(list)
+        submitList(list, diffUtilCommitCallback)
     }
 
     companion object {
