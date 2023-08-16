@@ -24,6 +24,57 @@
 | 서버 에러
 |===
 
+== 인증 & 인가 API
+
+=== 로그인
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/path-parameters.adoc[]
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/http-response.adoc[]
+include::{snippets}/authentication-controller-test/소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_access-token과_refresh-token을_반환한다/response-fields.adoc[]
+
+=== AccessToken 재발급
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/http-response.adoc[]
+include::{snippets}/authentication-controller-test/유효한_refresh-token을_전달하면_새로운_access-token과_refresh-token을_반환한다/response-fields.adoc[]
+
+=== AccessToken 유효성 검사
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/http-response.adoc[]
+include::{snippets}/authentication-controller-test/유효한_access-token을_검증하면_참을_반환한다/response-fields.adoc[]
+
+=== 로그아웃
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/request-headers.adoc[]
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-response.adoc[]
+
 == 카테고리 API
 
 === 메인 카테고리 조회
@@ -93,6 +144,7 @@ include::{snippets}/region-controller-test/두번째_지역에_해당하는_모�
 
 include::{snippets}/auction-controller-test/경매를_등록한다/http-request.adoc[]
 include::{snippets}/auction-controller-test/경매를_등록한다/request-parts.adoc[]
+include::{snippets}/auction-controller-test/경매를_등록한다/request-headers.adoc[]
 
 ==== 응답
 
@@ -129,6 +181,7 @@ include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_
 
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/http-request.adoc[]
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/path-parameters.adoc[]
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/request-headers.adoc[]
 
 ==== 응답
 
@@ -240,7 +293,6 @@ include::{snippets}/report-controller-test/경매_신고를_등록한다/request
 
 include::{snippets}/report-controller-test/경매_신고를_등록한다/http-response.adoc[]
 
-
 === 경매 신고 조회
 
 ==== 요청
@@ -251,7 +303,6 @@ include::{snippets}/report-controller-test/전체_경매_신고_목록을_조회
 
 include::{snippets}/report-controller-test/전체_경매_신고_목록을_조회한다/http-response.adoc[]
 include::{snippets}/report-controller-test/전체_경매_신고_목록을_조회한다/response-fields.adoc[]
-
 
 === 채팅방 신고 등록
 
@@ -264,7 +315,6 @@ include::{snippets}/report-controller-test/채팅방_신고를_등록한다/requ
 ==== 응답
 
 include::{snippets}/report-controller-test/채팅방_신고를_등록한다/http-response.adoc[]
-
 
 === 채팅방 신고 조회
 
