@@ -97,7 +97,9 @@ class AuctionDetailViewModel(
     }
 
     fun setRemoveAuctionEvent() {
-        _event.value = AuctionDetailEvent.RemoveAuction
+        auctionDetailModel.value?.let {
+            _event.value = AuctionDetailEvent.RemoveAuction
+        }
     }
 
     fun removeAuction() {

@@ -81,7 +81,6 @@ class AuctionDetailActivity :
             messageId = R.string.auction_detail_dialog_check_remove_message,
             negativeStringId = R.string.all_dialog_default_negative_button,
             actionPositive = { viewModel.removeAuction() },
-            isCancelable = false,
         )
     }
 
