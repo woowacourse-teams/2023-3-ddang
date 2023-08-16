@@ -1,6 +1,6 @@
 #!/bin/bash
 
-ABSPATH=$(readlink -f $0) # /home/ubuntu/dev-deploy-script.sh
+ABSPATH=$(readlink -f $0) # /home/ubuntu/prod-deploy-script.sh
 ABSDIR=$(dirname $ABSPATH) # /home/ubuntu
 APPNAME="ddang-0.0.1-SNAPSHOT"
 APPDIR=${ABSDIR}/${APPNAME} # /home/ubuntu/ddang-0.0.1-SNAPSHOT
