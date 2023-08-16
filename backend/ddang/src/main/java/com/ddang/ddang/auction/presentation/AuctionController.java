@@ -56,7 +56,7 @@ public class AuctionController {
 
     @GetMapping("/{auctionId}")
     public ResponseEntity<ReadAuctionDetailResponse> read(
-            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @AuthenticateUser(required = false) final AuthenticationUserInfo userInfo,
             @PathVariable final Long auctionId
     ) {
         final ReadAuctionWithChatRoomIdDto readAuctionDto = auctionService.readByAuctionId(auctionId, userInfo);

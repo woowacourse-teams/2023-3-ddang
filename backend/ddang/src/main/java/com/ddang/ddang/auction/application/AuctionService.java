@@ -103,19 +103,23 @@ public class AuctionService {
                                                      .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                      ));
-        final User findUser = userRepository.findById(userInfo.userId())
-                                            .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
         final Long nullableChatRoomId = chatRoomRepository.findByAuctionId(findAuction.getId())
                                                           .map(ChatRoom::getId)
                                                           .orElse(DEFAULT_CHAT_ROOM_ID);
 
         return new ReadAuctionWithChatRoomIdDto(
                 ReadAuctionDto.from(findAuction),
-                new ReadChatRoomDto(nullableChatRoomId, isChatParticipant(findAuction, findUser))
+                new ReadChatRoomDto(nullableChatRoomId, isChatParticipant(findAuction, userInfo))
         );
     }
 
-    private boolean isChatParticipant(final Auction findAuction, final User findUser) {
+    private boolean isChatParticipant(final Auction findAuction, final AuthenticationUserInfo userInfo) {
+        if (userInfo.userId() == null) {
+            return false;
+        }
+        final User findUser = userRepository.findById(userInfo.userId())
+                                            .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+
         return findAuction.isClosed(LocalDateTime.now()) && findAuction.isSellerOrWinner(findUser, LocalDateTime.now());
     }
 

@@ -33,6 +33,9 @@ public record ReadAuctionDetailResponse(
     }
 
     private static boolean isOwner(final ReadAuctionWithChatRoomIdDto dto, final AuthenticationUserInfo userInfo) {
+        if (userInfo == null || userInfo.userId() == null) {
+            return false;
+        }
         return dto.auctionDto().sellerId().equals(userInfo.userId());
     }
 }
