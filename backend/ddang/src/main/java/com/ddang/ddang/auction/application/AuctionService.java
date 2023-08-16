@@ -111,8 +111,12 @@ public class AuctionService {
 
         return new ReadAuctionWithChatRoomIdDto(
                 ReadAuctionDto.from(findAuction),
-                new ReadChatRoomDto(nullableChatRoomId, findAuction.isSellerOrWinner(findUser, LocalDateTime.now()))
+                new ReadChatRoomDto(nullableChatRoomId, isChatParticipant(findAuction, findUser))
         );
+    }
+
+    private boolean isChatParticipant(final Auction findAuction, final User findUser) {
+        return findAuction.isClosed(LocalDateTime.now()) && findAuction.isSellerOrWinner(findUser, LocalDateTime.now());
     }
 
     public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final int size) {
