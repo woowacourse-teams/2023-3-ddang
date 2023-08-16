@@ -16,13 +16,7 @@ class MyPageViewModel(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
 ) : ViewModel() {
-    private val _profile: MutableLiveData<ProfileModel> = MutableLiveData(
-        ProfileModel(
-            "글로",
-            "https://img.freepik.com/free-photo/cute-ai-generated-cartoon-bunny_23-2150288870.jpg?q=10&h=200",
-            9.8,
-        ),
-    )
+    private val _profile: MutableLiveData<ProfileModel> = MutableLiveData()
     val profile: LiveData<ProfileModel>
         get() = _profile
 
