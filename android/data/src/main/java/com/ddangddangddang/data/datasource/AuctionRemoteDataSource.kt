@@ -45,4 +45,6 @@ class AuctionRemoteDataSource(private val service: AuctionService) {
 
     suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit> =
         service.reportAuction(reportRequest)
+
+    suspend fun deleteAuction(id: Long): ApiResponse<Unit> = service.deleteAuction(id)
 }

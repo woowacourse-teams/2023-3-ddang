@@ -20,6 +20,7 @@ data class AuctionDetailModel(
     val auctioneerCount: Int,
     val sellerModel: SellerModel,
     val chatAuctionDetailModel: ChatAuctionDetailModel,
+    val isOwner: Boolean,
 ) {
     val remainTime: String
         get() {

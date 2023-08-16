@@ -17,6 +17,7 @@ import com.ddangddangddang.data.model.response.RegionDetailResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -92,4 +93,7 @@ interface AuctionService {
 
     @POST("reports/auctions")
     suspend fun reportAuction(@Body reportRequest: ReportRequest): ApiResponse<Unit>
+
+    @DELETE("/auctions/{id}")
+    suspend fun deleteAuction(@Path("id") auctionId: Long): ApiResponse<Unit>
 }

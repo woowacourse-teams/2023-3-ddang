@@ -14,6 +14,7 @@ import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -50,6 +51,8 @@ class AuctionDetailActivity :
 
             is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
+            AuctionDetailViewModel.AuctionDetailEvent.DeleteAuction -> askDeletion()
+            AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDeletionComplete -> notifyDeleteComplete()
         }
     }
 
@@ -71,6 +74,19 @@ class AuctionDetailActivity :
             actionPositive = { finish() },
             isCancelable = false,
         )
+    }
+
+    private fun askDeletion() {
+        showDialog(
+            messageId = R.string.auction_detail_dialog_check_delete_message,
+            negativeStringId = R.string.all_dialog_default_negative_button,
+            actionPositive = { viewModel.deleteAuction() },
+        )
+    }
+
+    private fun notifyDeleteComplete() {
+        Toaster.showShort(this, getString(R.string.auction_detail_delete_complete))
+        finish()
     }
 
     private fun setupAuctionImages(images: List<String>) {
