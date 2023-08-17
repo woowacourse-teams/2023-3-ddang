@@ -60,6 +60,7 @@ class AuctionDetailViewModel(
                 AuctionDetailBottomButtonStatus.BidAuction -> popupAuctionBidEvent()
                 AuctionDetailBottomButtonStatus.EnterAuctionChatRoom -> enterChatRoomEvent()
                 AuctionDetailBottomButtonStatus.FinishAuction -> {}
+                AuctionDetailBottomButtonStatus.MyAuction -> {}
             }
         }
     }

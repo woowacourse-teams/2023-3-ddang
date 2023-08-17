@@ -15,18 +15,22 @@ enum class AuctionDetailBottomButtonStatus(
     FinishAuction(R.string.detail_auction_finish, false),
 
     EnterAuctionChatRoom(R.string.detail_auction_chat_room_entrance, true),
+
+    MyAuction(R.string.detail_auction_my_auction, false),
     ;
 
     companion object {
         fun find(
             auctionDetailModel: AuctionDetailModel,
         ): AuctionDetailBottomButtonStatus {
+            val isOwner = auctionDetailModel.isOwner
             val auctionStatus = auctionDetailModel.auctionDetailStatusModel
             val chatStatus = auctionDetailModel.chatAuctionDetailModel
 
             return when {
                 canEnterMessageRoom(chatStatus) -> EnterAuctionChatRoom
-                canBidAuction(auctionStatus) -> BidAuction
+                canBidAuction(auctionStatus, isOwner) -> BidAuction
+                isOwner -> MyAuction
                 else -> FinishAuction
             }
         }
@@ -35,8 +39,11 @@ enum class AuctionDetailBottomButtonStatus(
             return chatStatus.isChatParticipant
         }
 
-        private fun canBidAuction(auctionStatus: AuctionDetailStatusModel): Boolean {
-            return (auctionStatus == AuctionDetailStatusModel.ONGOING || auctionStatus == AuctionDetailStatusModel.UNBIDDEN)
+        private fun canBidAuction(
+            auctionStatus: AuctionDetailStatusModel,
+            isOwner: Boolean,
+        ): Boolean {
+            return (auctionStatus == AuctionDetailStatusModel.ONGOING || auctionStatus == AuctionDetailStatusModel.UNBIDDEN) && isOwner.not()
         }
     }
 }
