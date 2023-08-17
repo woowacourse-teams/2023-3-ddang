@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.message.MessageViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -27,6 +34,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_message_rooms"
+            isVisible="@{viewModel.messageRooms.size == 0 ? false : true}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
@@ -35,7 +43,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_message"
-            tools:listitem="@layout/item_message_room"/>
+            tools:listitem="@layout/item_message_room" />
+
+        <TextView
+            isVisible="@{viewModel.messageRooms.size == 0 ? true : false}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/message_not_exist_rooms"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_message"
+            tools:listitem="@layout/item_message_room"
+            tools:text="쪽지방이 존재하지 않습니다" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

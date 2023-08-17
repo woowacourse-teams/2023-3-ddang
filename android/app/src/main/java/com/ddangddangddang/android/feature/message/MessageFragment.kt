@@ -21,6 +21,7 @@ class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragmen
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
         setupMessageRoomsRecyclerView()
+        binding.viewModel = viewModel
         if (viewModel.messageRooms.value == null) viewModel.loadMessageRooms()
     }
 
