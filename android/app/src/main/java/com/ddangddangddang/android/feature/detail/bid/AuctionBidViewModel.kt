@@ -86,6 +86,10 @@ class AuctionBidViewModel(
                 _event.value = AuctionBidEvent.SubmitFailureEvent.AlreadyHighestBidder
             }
 
+            SubmitBidFailureResponse.SELLER_CAN_NOT_BID -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.SellerCanNotBid
+            }
+
             SubmitBidFailureResponse.ELSE -> {
                 _event.value = AuctionBidEvent.SubmitFailureEvent.Unknown
             }
@@ -103,6 +107,9 @@ class AuctionBidViewModel(
 
             object AlreadyHighestBidder :
                 SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_already_highest_bidder)
+
+            object SellerCanNotBid :
+                SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_seller_can_not_bid)
 
             object Unknown : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_else)
         }
