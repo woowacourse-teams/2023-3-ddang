@@ -61,7 +61,9 @@ class AuctionDetailActivity :
     }
 
     private fun navigateToMessageRoom(roomId: Long) {
-        startActivity(MessageRoomActivity.getIntent(this, roomId))
+        val intent = MessageRoomActivity.getIntent(this, roomId)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP + Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     private fun navigateToReport(auctionId: Long) {
