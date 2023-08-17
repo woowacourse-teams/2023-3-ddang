@@ -196,9 +196,8 @@
                     android:textColor="@color/red_100"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@id/tv_last_bid_price"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
-                    app:layout_constraintTop_toTopOf="@id/tv_last_bid_price"
+                    app:layout_constraintTop_toTopOf="@id/tv_start_price"
                     tools:text="마감까지 1시간 35분" />
 
                 <TextView
