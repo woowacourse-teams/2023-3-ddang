@@ -71,6 +71,7 @@ public class AuctionController {
 
     @GetMapping
     public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
+            @AuthenticateUser AuthenticationUserInfo ignored,
             @RequestParam(required = false) final Long lastAuctionId,
             @RequestParam(required = false, defaultValue = "10") final int size
     ) {
