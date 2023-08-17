@@ -55,7 +55,12 @@ class AuctionBidViewModel(
                 is ApiResponse.Failure -> {
                     val jsonObject = JSONObject(response.error)
                     val message = jsonObject.getString("message")
-                    handleSubmitBidFailure(SubmitBidFailureResponse.find(message))
+                    val errorType = SubmitBidFailureResponse.find(message)
+                    if (errorType == SubmitBidFailureResponse.ELSE) {
+                        _event.value = AuctionBidEvent.SubmitFailureCustomEvent(message)
+                    } else {
+                        handleSubmitBidFailure(errorType)
+                    }
                 }
 
                 is ApiResponse.NetworkError -> {}
@@ -104,6 +109,7 @@ class AuctionBidViewModel(
         object Cancel : AuctionBidEvent()
         object UnderPrice : AuctionBidEvent()
         data class SubmitSuccess(val price: Int) : AuctionBidEvent()
+        data class SubmitFailureCustomEvent(val message: String) : AuctionBidEvent()
         sealed class SubmitFailureEvent(@StringRes val messageId: Int) : AuctionBidEvent() {
             object Finish : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_finish)
             object Deleted : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_deleted)

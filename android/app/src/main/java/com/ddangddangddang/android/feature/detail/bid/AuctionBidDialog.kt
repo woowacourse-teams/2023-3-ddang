@@ -84,6 +84,10 @@ class AuctionBidDialog : DialogFragment() {
         when (event) {
             is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
             is AuctionBidViewModel.AuctionBidEvent.SubmitSuccess -> submitSuccess(event.price)
+            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureCustomEvent -> {
+                showMessage(event.message)
+                exit()
+            }
             is AuctionBidViewModel.AuctionBidEvent.UnderPrice -> notifyUnderPriceSubmitFailed()
             is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(
                 event,
