@@ -60,6 +60,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     val event: LiveData<RegisterAuctionEvent>
         get() = _event
 
+    private var isLoading: Boolean = false
+
     fun setClosingDate(year: Int, month: Int, dayOfMonth: Int) {
         _closingTime.value =
             LocalDateTime.of(
@@ -76,9 +78,11 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     }
 
     fun submitAuction(context: Context) {
+        if (isLoading) return
         val isValidInputs = judgeValidInputs()
         if (!isValidInputs) return
 
+        isLoading = true
         viewModelScope.launch {
             val files =
                 images.value?.mapNotNull { it.uri.toAdjustImageFile(context) } ?: emptyList()
@@ -91,6 +95,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
+            isLoading = false
         }
     }
 
