@@ -105,6 +105,10 @@ class RegisterAuctionActivity :
                 backActivity()
             }
 
+            is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitError -> {
+                showErrorSubmitMessage(event.message)
+            }
+
             is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitResult -> {
                 navigationToDetail(event.id)
                 finish()
@@ -177,6 +181,13 @@ class RegisterAuctionActivity :
         binding.root.showSnackbar(
             R.string.register_auction_invalid_input_error,
             R.string.register_auction_ok,
+        )
+    }
+
+    private fun showErrorSubmitMessage(message: String) {
+        binding.root.showSnackbar(
+            message,
+            getString(R.string.all_snackbar_default_action),
         )
     }
 

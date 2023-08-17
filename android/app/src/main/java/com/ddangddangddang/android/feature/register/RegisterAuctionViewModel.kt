@@ -18,6 +18,7 @@ import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -91,7 +92,16 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
                     _event.value = RegisterAuctionEvent.SubmitResult(response.body.id)
                 }
 
-                is ApiResponse.Failure -> {}
+                is ApiResponse.Failure -> {
+                    if (response.responseCode == 400) {
+                        response.error?.let {
+                            val jsonObject = JSONObject(it)
+                            val message = jsonObject.getString("message")
+                            _event.value = RegisterAuctionEvent.SubmitError(message)
+                        }
+                    }
+                }
+
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
@@ -240,6 +250,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     sealed class RegisterAuctionEvent {
         object Exit : RegisterAuctionEvent()
+        data class SubmitError(val message: String) : RegisterAuctionEvent()
         class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
         class SubmitResult(val id: Long) : RegisterAuctionEvent()
         sealed class InputErrorEvent : RegisterAuctionEvent() {

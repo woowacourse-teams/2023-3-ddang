@@ -18,3 +18,15 @@ fun View.showSnackbar(
         }
         .show()
 }
+
+fun View.showSnackbar(
+    message: String,
+    actionMessage: String,
+    action: () -> Unit = {},
+) {
+    Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
+        .setAction(actionMessage) {
+            action()
+        }
+        .show()
+}
