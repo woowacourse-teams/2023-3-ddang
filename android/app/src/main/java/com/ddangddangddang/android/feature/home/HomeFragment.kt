@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -64,6 +65,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun navigateToAuctionDetail(auctionId: Long) {
         val intent = AuctionDetailActivity.getIntent(requireContext(), auctionId)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
     }
 
