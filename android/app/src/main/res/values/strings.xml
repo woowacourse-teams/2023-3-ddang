@@ -60,9 +60,10 @@
     <string name="detail_auction_bid_dialog_cancel">취소</string>
     <string name="detail_auction_bid_dialog_submit">입찰</string>
     <string name="detail_auction_bid_dialog_success">%,d원에 입찰 성공!</string>
+    <string name="detail_auction_bid_dialog_toast_under_price">더 높은 금액을 제시해주세요</string>
     <string name="detail_auction_bid_dialog_failure_finish">이미 종료된 경매입니다</string>
     <string name="detail_auction_bid_dialog_failure_deleted">삭제된 경매입니다</string>
-    <string name="detail_auction_bid_dialog_failure_under_price">더 높은 금액을 제시해주세요</string>
+    <string name="detail_auction_bid_dialog_failure_already_exist_higher_bidder">더 높은 입찰자가 등장했습니다</string>
     <string name="detail_auction_bid_dialog_failure_already_highest_bidder">이미 최고 입찰자입니다</string>
     <string name="detail_auction_bid_dialog_failure_seller_can_not_bid">판매자는 입찰할 수 없습니다</string>
     <string name="detail_auction_bid_dialog_failure_else">잠시 후에 다시 시도해주세요</string>

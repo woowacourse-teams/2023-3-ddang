@@ -84,8 +84,15 @@ class AuctionBidDialog : DialogFragment() {
         when (event) {
             is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
             is AuctionBidViewModel.AuctionBidEvent.SubmitSuccess -> submitSuccess(event.price)
-            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(event)
+            is AuctionBidViewModel.AuctionBidEvent.UnderPrice -> notifyUnderPriceSubmitFailed()
+            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(
+                event,
+            )
         }
+    }
+
+    private fun notifyUnderPriceSubmitFailed() {
+        showMessage(getString(R.string.detail_auction_bid_dialog_toast_under_price))
     }
 
     private fun submitSuccess(price: Int) {
