@@ -61,6 +61,7 @@ class AuctionRetrofit private constructor(retrofit: Retrofit) {
                 val response = chain.proceed(tokenAddedRequest)
 
                 if (response.code == 401) {
+                    response.close()
                     refreshTokenRequest(authRepository)
 
                     val refreshedTokenAddedRequest =
