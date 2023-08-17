@@ -123,6 +123,6 @@ class AuctionBidViewModel(
     companion object {
         const val SUFFIX_INPUT_PRICE = " 원"
         private const val ZERO = 0
-        private const val MAX_PRICE = Int.MAX_VALUE
+        private const val MAX_PRICE = 2100000000
     }
 }
