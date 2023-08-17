@@ -296,6 +296,7 @@
                 <ImageView
                     android:id="@+id/iv_seller_profile"
                     imageUrl="@{viewModel.auctionDetailModel.sellerModel.profileUrl}"
+                    placeholder="@{@drawable/img_default_profile}"
                     android:layout_width="64dp"
                     android:layout_height="64dp"
                     android:layout_marginTop="8dp"
