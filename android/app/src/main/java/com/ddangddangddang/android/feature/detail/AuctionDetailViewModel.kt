@@ -34,6 +34,7 @@ class AuctionDetailViewModel(
     val minBidPrice: Int
         get() {
             val auction = auctionDetailModel.value ?: return 0
+            if (auction.auctioneerCount == 0) return auction.lastBidPrice
             return auction.lastBidPrice + auction.bidUnit
         }
 
@@ -59,6 +60,7 @@ class AuctionDetailViewModel(
                 AuctionDetailBottomButtonStatus.BidAuction -> popupAuctionBidEvent()
                 AuctionDetailBottomButtonStatus.EnterAuctionChatRoom -> enterChatRoomEvent()
                 AuctionDetailBottomButtonStatus.FinishAuction -> {}
+                AuctionDetailBottomButtonStatus.MyAuction -> {}
             }
         }
     }
@@ -106,7 +108,10 @@ class AuctionDetailViewModel(
         _auctionDetailModel.value?.let {
             viewModelScope.launch {
                 when (auctionRepository.deleteAuction(it.id)) {
-                    is ApiResponse.Success -> _event.value = AuctionDetailEvent.NotifyAuctionDeletionComplete
+                    is ApiResponse.Success ->
+                        _event.value =
+                            AuctionDetailEvent.NotifyAuctionDeletionComplete
+
                     is ApiResponse.Failure -> {}
                     is ApiResponse.NetworkError -> {}
                     is ApiResponse.Unexpected -> {}

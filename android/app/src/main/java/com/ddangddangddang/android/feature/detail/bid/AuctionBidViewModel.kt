@@ -47,8 +47,8 @@ class AuctionBidViewModel(
     }
 
     fun submit(auctionId: Long, minBidPrice: Int) {
-        val bidPrice = bidPrice.value ?: return
-        if (isBidAmountUnderMinimum(bidPrice, minBidPrice)) return
+        val bidPrice = bidPrice.value ?: return setUnderPriceEvent()
+        if (isBidAmountUnderMinimum(bidPrice, minBidPrice)) return setUnderPriceEvent()
         viewModelScope.launch {
             when (val response = repository.submitAuctionBid(auctionId, bidPrice)) {
                 is ApiResponse.Success -> _event.value = AuctionBidEvent.SubmitSuccess(bidPrice)
@@ -78,12 +78,16 @@ class AuctionBidViewModel(
                 _event.value = AuctionBidEvent.SubmitFailureEvent.Deleted
             }
 
-            SubmitBidFailureResponse.UNDER_PRICE -> {
-                _event.value = AuctionBidEvent.SubmitFailureEvent.UnderPrice
+            SubmitBidFailureResponse.EXIST_HIGHER_BIDDER -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.ExistHigherBidder
             }
 
             SubmitBidFailureResponse.ALREADY_HIGHEST_BIDDER -> {
                 _event.value = AuctionBidEvent.SubmitFailureEvent.AlreadyHighestBidder
+            }
+
+            SubmitBidFailureResponse.SELLER_CAN_NOT_BID -> {
+                _event.value = AuctionBidEvent.SubmitFailureEvent.SellerCanNotBid
             }
 
             SubmitBidFailureResponse.ELSE -> {
@@ -92,17 +96,25 @@ class AuctionBidViewModel(
         }
     }
 
+    private fun setUnderPriceEvent() {
+        _event.value = AuctionBidEvent.UnderPrice
+    }
+
     sealed class AuctionBidEvent {
         object Cancel : AuctionBidEvent()
+        object UnderPrice : AuctionBidEvent()
         data class SubmitSuccess(val price: Int) : AuctionBidEvent()
         sealed class SubmitFailureEvent(@StringRes val messageId: Int) : AuctionBidEvent() {
             object Finish : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_finish)
             object Deleted : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_deleted)
-            object UnderPrice :
-                SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_under_price)
+            object ExistHigherBidder :
+                SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_already_exist_higher_bidder)
 
             object AlreadyHighestBidder :
                 SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_already_highest_bidder)
+
+            object SellerCanNotBid :
+                SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_seller_can_not_bid)
 
             object Unknown : SubmitFailureEvent(R.string.detail_auction_bid_dialog_failure_else)
         }
