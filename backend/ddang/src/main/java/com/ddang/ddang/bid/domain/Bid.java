@@ -57,4 +57,9 @@ public class Bid extends BaseCreateTimeEntity {
     public boolean isNextBidPriceGreaterThan(final BidPrice bidPrice) {
         return auction.isNextBidPriceGreaterThan(bidPrice);
     }
+
+    public boolean isNextMaxBidPriceSmallerThan(final BidPrice bidPrice) {
+        final int maxBidUnit = 1_000_000;
+        return bidPrice.getValue() > auction.getLastBid().getPrice().getValue() + maxBidUnit;
+    }
 }

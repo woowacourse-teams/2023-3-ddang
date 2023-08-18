@@ -65,7 +65,7 @@ public class BidService {
         }
 
         checkIsNotLastBidder(lastBid, bidder);
-        checkInvalidBidPrice(lastBid, bidPrice);
+        checkInvalidBidPrice(auction, lastBid, bidPrice);
     }
 
     private BidPrice processBidPrice(final int value) {
@@ -94,9 +94,15 @@ public class BidService {
         }
     }
 
-    private void checkInvalidBidPrice(final Bid lastBid, final BidPrice bidPrice) {
+    private void checkInvalidBidPrice(final Auction auction, final Bid lastBid, final BidPrice bidPrice) {
         if (lastBid.isNextBidPriceGreaterThan(bidPrice)) {
             throw new InvalidBidPriceException("가능 입찰액보다 낮은 금액을 입력했습니다");
+        }
+        if (auction.getSeller().getId() != 4L && auction.getSeller().getId() != 5L) {
+            return;
+        }
+        if (lastBid.isNextMaxBidPriceSmallerThan(bidPrice)) {
+            throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
         }
     }
 
