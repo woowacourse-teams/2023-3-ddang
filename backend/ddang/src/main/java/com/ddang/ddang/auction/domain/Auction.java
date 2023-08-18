@@ -135,6 +135,11 @@ public class Auction extends BaseTimeEntity {
         return startBidPrice.isGreaterThan(bidPrice);
     }
 
+    public boolean isMaxFirstBidPriceSmallerThan(final BidPrice bidPrice) {
+        final BidPrice startBidPrice = new BidPrice(startPrice.getValue());
+        return startBidPrice.isGreaterThan(bidPrice);
+    }
+
     public void updateLastBid(final Bid lastBid) {
         this.lastBid = lastBid;
         this.auctioneerCount += 1;

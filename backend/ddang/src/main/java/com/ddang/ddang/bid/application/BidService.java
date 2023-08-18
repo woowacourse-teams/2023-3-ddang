@@ -86,6 +86,12 @@ public class BidService {
         if (auction.isInvalidFirstBidPrice(bidPrice)) {
             throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
         }
+        if (auction.getSeller().getId() != 4L && auction.getSeller().getId() != 5L) {
+            return;
+        }
+        if (auction.isMaxFirstBidPriceSmallerThan(bidPrice)) {
+            throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
+        }
     }
 
     private void checkIsNotLastBidder(final Bid lastBid, final User bidder) {
