@@ -46,20 +46,29 @@ public class ChatRoom extends BaseCreateTimeEntity {
         this.buyer = buyer;
     }
 
-    // TODO : 쪽지 비활성화 일수 리팩토링시 수정
-    public boolean isChatAvailable(final LocalDateTime targetTime) {
+    public boolean isChatAvailableTime(final LocalDateTime targetTime) {
         final LocalDateTime maxChatTime = getCreatedTime().plusDays(CHAT_EXPIRATION_DAY);
 
         return targetTime.isBefore(maxChatTime);
     }
 
     public User calculateChatPartnerOf(final User user) {
-        final User seller = auction.getSeller();
-
-        if (user.equals(seller)) {
+        if (isSeller(user)) {
             return buyer;
         }
 
-        return seller;
+        return auction.getSeller();
+    }
+
+    public boolean isParticipant(final User user) {
+        return isSeller(user) || isBuyer(user);
+    }
+
+    private boolean isSeller(final User user) {
+        return auction.isOwner(user);
+    }
+
+    private boolean isBuyer(final User user) {
+        return buyer.equals(user);
     }
 }

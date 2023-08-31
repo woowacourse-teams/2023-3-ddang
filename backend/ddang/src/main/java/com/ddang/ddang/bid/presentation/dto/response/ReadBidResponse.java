@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 
 public record ReadBidResponse(
         String name,
+
         String profileImage,
+
         int price,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")

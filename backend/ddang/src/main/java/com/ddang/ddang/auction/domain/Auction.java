@@ -31,6 +31,7 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -146,5 +147,26 @@ public class Auction extends BaseTimeEntity {
     private BidPrice calculateNextMinimumBidPrice() {
         final int nextMinimumBidPrice = this.lastBid.getPrice().getValue() + this.bidUnit.getValue();
         return new BidPrice(nextMinimumBidPrice);
+    }
+
+    public boolean isSellerOrWinner(final User user, final LocalDateTime targetTime) {
+        return isOwner(user) || isWinner(user, targetTime);
+    }
+
+    public boolean isWinner(final User user, final LocalDateTime targetTime) {
+        return findWinner(targetTime).filter(user::equals)
+                                     .isPresent();
+    }
+
+    public Optional<User> findWinner(final LocalDateTime targetTime) {
+        if (isWinnerExist(targetTime)) {
+            return Optional.of(lastBid.getBidder());
+        }
+
+        return Optional.empty();
+    }
+
+    private boolean isWinnerExist(final LocalDateTime targetTime) {
+        return auctioneerCount != 0 && isClosed(targetTime);
     }
 }

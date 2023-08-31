@@ -4,15 +4,14 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.dto.LoginUserDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
-import com.ddang.ddang.bid.application.exception.UserNotFoundException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,27 +31,16 @@ public class BidService {
     private final JpaBidRepository bidRepository;
 
     @Transactional
-    public Long create(final LoginUserDto userDto, final CreateBidDto bidDto) {
+    public Long create(final CreateBidDto bidDto) {
+        final User bidder = userRepository.findById(bidDto.userId())
+                                          .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findById(bidDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
         checkInvalidAuction(auction);
-
-        // TODO: 2023/07/28 추후 User 패키지 내에 UserNotFoundException이 생긴다면 해당 예외를 사용하도록 수정 하겠습니다.
-        final User bidder = userRepository.findById(userDto.usedId())
-                                          .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         checkInvalidBid(auction, bidder, bidDto);
 
         final Bid saveBid = saveBid(bidDto, auction, bidder);
         return saveBid.getId();
-    }
-
-    private Bid saveBid(final CreateBidDto bidDto, final Auction auction, final User bidder) {
-        final Bid createBid = bidDto.toEntity(auction, bidder);
-        final Bid saveBid = bidRepository.save(createBid);
-
-        auction.updateLastBid(saveBid);
-
-        return saveBid;
     }
 
     private void checkInvalidAuction(final Auction auction) {
@@ -80,6 +68,14 @@ public class BidService {
         checkInvalidBidPrice(lastBid, bidPrice);
     }
 
+    private BidPrice processBidPrice(final int value) {
+        try {
+            return new BidPrice(value);
+        } catch (final InvalidBidPriceException ex) {
+            throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
+        }
+    }
+
     private void checkIsSeller(final Auction auction, final User bidder) {
         if (auction.isOwner(bidder)) {
             throw new InvalidBidderException("판매자는 입찰할 수 없습니다");
@@ -104,12 +100,13 @@ public class BidService {
         }
     }
 
-    private BidPrice processBidPrice(final int value) {
-        try {
-            return new BidPrice(value);
-        } catch (final InvalidBidPriceException ex) {
-            throw new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
-        }
+    private Bid saveBid(final CreateBidDto bidDto, final Auction auction, final User bidder) {
+        final Bid createBid = bidDto.toEntity(auction, bidder);
+        final Bid saveBid = bidRepository.save(createBid);
+
+        auction.updateLastBid(saveBid);
+
+        return saveBid;
     }
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {

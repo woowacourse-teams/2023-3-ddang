@@ -1,0 +1,47 @@
+name: "\U0001F41E Bug Report"
+description: "버그를 제보하고 싶으신가요?"
+labels: "\U0001F41E Bug"
+body:
+  - type: textarea
+    attributes:
+      label: 🐞 설명
+      description: 버그에 대한 설명을 작성해 주세요.
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 📄 기대한 동작
+      description: 기대한 동작에 대해 작성해주세요.
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 📄 실제 동작
+      description: 실제로 동작한 내용에 대해 작성해주세요.
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 🙋🏻 재현 방법
+      description: 버그를 재현할 수 있는 방법을 알고 계신다면 작성해주세요.
+      placeholder: 자세히 적을수록 좋습니다!
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 🌏 버그 발생 환경
+      description: 버그가 발생한 환경에 대해 작성해 주세요.
+      placeholder: |
+        OS: macOS
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: 📄 비고
+      description: 추가적인 정보를 입력해주세요.
+      placeholder: 단순히 느낀 점, 하고 싶으신 말씀 등 아무 내용이나 상관 없습니다!
+    validations:
+      required: false

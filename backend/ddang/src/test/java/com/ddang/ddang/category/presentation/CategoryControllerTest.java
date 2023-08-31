@@ -23,6 +23,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
@@ -31,8 +33,14 @@ import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@WebMvcTest(controllers = {CategoryController.class})
+@WebMvcTest(controllers = {CategoryController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -81,10 +89,8 @@ class CategoryControllerTest {
                .andDo(
                        restDocs.document(
                                responseFields(
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                                        .description("메인 카테고리 ID"),
-                                       fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                          .description("메인 카테고리 이름")
+                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메인 카테고리 ID"),
+                                       fieldWithPath("[].name").type(JsonFieldType.STRING).description("메인 카테고리 이름")
                                )
                        )
                );
@@ -126,10 +132,8 @@ class CategoryControllerTest {
                .andDo(
                        restDocs.document(
                                responseFields(
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                                        .description("서브 카테고리 ID"),
-                                       fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                          .description("서브 카테고리 이름")
+                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("서브 카테고리 ID"),
+                                       fieldWithPath("[].name").type(JsonFieldType.STRING).description("서브 카테고리 이름")
                                )
                        )
                );
