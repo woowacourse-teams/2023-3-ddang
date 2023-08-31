@@ -55,9 +55,10 @@ public class MessageService {
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        final User user = userRepository.findById(request.userId())
-                                        .orElseThrow(() -> new UserNotFoundException(
-                                                "지정한 아이디에 대한 사용자를 찾을 수 없습니다."));
+        if (!userRepository.existsById(request.userId())) {
+            new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
+        }
+
         final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -67,7 +68,7 @@ public class MessageService {
         }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
-                user.getId(),
+                request.userId(),
                 chatRoom.getId(),
                 request.lastMessageId()
         );
