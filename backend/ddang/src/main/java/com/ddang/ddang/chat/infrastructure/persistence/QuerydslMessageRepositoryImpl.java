@@ -6,16 +6,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
-import static com.ddang.ddang.category.domain.QCategory.category;
-import static com.ddang.ddang.chat.domain.QMessage.message;
-import java.util.List;
-
 import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.category.domain.QCategory.category;
 import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
 import static com.ddang.ddang.chat.domain.QMessage.message;
-import static com.ddang.ddang.user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,13 +38,10 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
     ) {
         return queryFactory
                 .selectFrom(message)
-                .leftJoin(message.chatRoom, chatRoom).fetchJoin()
                 .leftJoin(chatRoom.auction, auction).fetchJoin()
                 .leftJoin(auction.subCategory, category).fetchJoin()
                 .leftJoin(category.mainCategory).fetchJoin()
                 .leftJoin(auction.auctionImages).fetchJoin()
-                .leftJoin(message.receiver, user).fetchJoin()
-                .leftJoin(message.writer).fetchJoin()
                 .where(
                         message.writer.id.eq(userId)
                                          .or(message.receiver.id.eq(userId)),
