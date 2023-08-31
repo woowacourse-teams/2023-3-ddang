@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.home.HomeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.home.HomeFragment">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_home"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:text="@string/home"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/textsize_main_header"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <HorizontalScrollView
+            android:id="@+id/sv_filter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="2dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_home">
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="@dimen/margin_side_layout"
+                android:visibility="gone"
+                app:checkedChip="@id/chip_home_filter_new"
+                app:chipSpacingHorizontal="16dp"
+                app:selectionRequired="true"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_new"
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_new" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_auctioneer"
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_auctioneer" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_closing_time"
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_closing_time" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_home_filter_reliability"
+                    style="@style/App.Custom.HomeFilterChip"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_filter_reliability" />
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_reload_auctions"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sv_filter">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_auction"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/red_100"
+            android:contentDescription="@string/home_register_auction_button_description"
+            android:onClick="@{() -> viewModel.navigateToRegisterAuction()}"
+            android:src="@drawable/ic_create_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@color/white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

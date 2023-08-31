@@ -1,0 +1,172 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.8'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'jacoco'
+    id "org.asciidoctor.jvm.convert" version "3.3.2"
+}
+
+configurations {
+    asciidoctorExt
+}
+
+group = 'com.ddang'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-mysql:9.16.0'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory = file("$projectDir/build/generated")
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs += "$projectDir/build/generated"
+        }
+    }
+}
+
+jacoco {
+    toolVersion = '0.8.8'
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+    }
+
+    def Qdomains = []
+
+    for(qPattern in "**/QA" .. "**/QZ"){
+        Qdomains.add(qPattern+"*")
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it,
+                    exclude: [
+                            '**/*Application*',
+                            '**/*Exception*',
+                            '**/*Response*',
+                            '**/*Request*',
+                            '**/*Dto*',
+                            '**/*PrivateClaims*',
+                            '**/configuration/**',
+                            '**/*Appender*',
+                            '**/*Helper*'
+                    ] + Qdomains)
+        }))
+    }
+}
+
+jacocoTestCoverageVerification {
+    def Qdomains = []
+
+    for (qPattern in '*.QA'..'*.QZ') {
+        Qdomains.add(qPattern + '*')
+    }
+
+    violationRules {
+        rule {
+            element = 'METHOD'
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.50
+            }
+
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.70
+            }
+
+            excludes = [
+                    '*.*Exception*',
+                    '*.*Response*',
+                    '*.*Request*',
+                    '*.*Application*',
+                    '*.*Dto*',
+                    '*.*PrivateClaims*',
+                    '*.configuration.*',
+                    '*.*Appender*',
+                    '*.*Helper*'
+            ] + Qdomains
+        }
+    }
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+task jacocoTestCoverage(type: Test) {
+    group 'verification'
+    description 'Runs the unit tests with coverage'
+
+    dependsOn(':test',
+            ':jacocoTestReport',
+            ':jacocoTestCoverageVerification')
+
+    tasks['jacocoTestReport'].mustRunAfter(tasks['test'])
+    tasks['jacocoTestCoverageVerification'].mustRunAfter(tasks['jacocoTestReport'])
+}
+
+asciidoctor {
+    dependsOn test
+    configurations 'asciidoctorExt'
+}
+
+tasks.register('copyApiDocument', Copy) {
+    dependsOn asciidoctor
+    doFirst {
+        delete file("src/main/resources/static/docs")
+    }
+    from asciidoctor.outputDir
+    into file("src/main/resources/static/docs")
+}
+
+build {
+    dependsOn copyApiDocument
+}
