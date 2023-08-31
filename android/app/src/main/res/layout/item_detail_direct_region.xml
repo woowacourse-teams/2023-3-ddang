@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="region"
+            type="com.ddangddangddang.android.model.RegionModel" />
+    </data>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_black_radius_24dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="10dp"
+        android:text="@{region.toRegionName()}"
+        android:textColor="@color/black_600"
+        tools:text="경기도 시흥시"
+        android:layout_marginEnd="8dp"/>
+
+</layout>
