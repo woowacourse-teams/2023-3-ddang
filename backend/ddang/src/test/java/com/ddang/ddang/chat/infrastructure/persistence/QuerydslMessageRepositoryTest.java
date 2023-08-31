@@ -3,6 +3,7 @@ package com.ddang.ddang.chat.infrastructure.persistence;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.chat.application.dto.ChatRoomInMessageDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.configuration.JpaConfiguration;
@@ -104,7 +105,7 @@ class QuerydslMessageRepositoryTest {
         final Long lastMessageId = 3L;
         final List<Message> messages = messageRepository.findMessagesAllByLastMessageId(
                 seller.getId(),
-                chatRoom.getId(),
+                ChatRoomInMessageDto.from(chatRoom),
                 lastMessageId
         );
 
@@ -160,7 +161,7 @@ class QuerydslMessageRepositoryTest {
         final Long lastMessageId = 3L;
         final List<Message> messages = messageRepository.findMessagesAllByLastMessageId(
                 receiver.getId(),
-                chatRoom.getId(),
+                ChatRoomInMessageDto.from(chatRoom),
                 lastMessageId
         );
 

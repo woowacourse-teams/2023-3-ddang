@@ -1,5 +1,6 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
+import com.ddang.ddang.chat.application.dto.ChatRoomInMessageDto;
 import com.ddang.ddang.chat.domain.Message;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -9,9 +10,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-import static com.ddang.ddang.auction.domain.QAuction.auction;
-import static com.ddang.ddang.category.domain.QCategory.category;
-import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
 import static com.ddang.ddang.chat.domain.QMessage.message;
 
 @Repository
@@ -33,19 +31,15 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
 
     public List<Message> findMessagesAllByLastMessageId(
             final Long userId,
-            final Long chatRoomId,
+            final ChatRoomInMessageDto chatRoomInMessageDto,
             final Long lastMessageId
     ) {
         return queryFactory
                 .selectFrom(message)
-                .leftJoin(chatRoom.auction, auction).fetchJoin()
-                .leftJoin(auction.subCategory, category).fetchJoin()
-                .leftJoin(category.mainCategory).fetchJoin()
-                .leftJoin(auction.auctionImages).fetchJoin()
                 .where(
                         message.writer.id.eq(userId)
                                          .or(message.receiver.id.eq(userId)),
-                        message.chatRoom.id.eq(chatRoomId),
+                        message.chatRoom.id.eq(chatRoomInMessageDto.id()),
                         isGreaterThanLastId(lastMessageId)
                 )
                 .orderBy(message.id.asc())

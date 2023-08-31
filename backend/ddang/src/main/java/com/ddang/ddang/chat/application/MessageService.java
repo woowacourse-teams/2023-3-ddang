@@ -1,5 +1,6 @@
 package com.ddang.ddang.chat.application;
 
+import com.ddang.ddang.chat.application.dto.ChatRoomInMessageDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -56,7 +57,7 @@ public class MessageService {
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
         if (!userRepository.existsById(request.userId())) {
-            new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
+            throw new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
         }
 
         final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
@@ -69,7 +70,7 @@ public class MessageService {
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
                 request.userId(),
-                chatRoom.getId(),
+                ChatRoomInMessageDto.from(chatRoom),
                 request.lastMessageId()
         );
 
