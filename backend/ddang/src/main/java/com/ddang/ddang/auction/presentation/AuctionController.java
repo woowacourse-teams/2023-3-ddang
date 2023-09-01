@@ -39,7 +39,7 @@ public class AuctionController {
 
     @PostMapping
     public ResponseEntity<CreateAuctionResponse> create(
-            @AuthenticateUser AuthenticationUserInfo userInfo,
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
             @RequestPart final List<MultipartFile> images,
             @RequestPart @Valid final CreateAuctionRequest request
     ) {
@@ -71,7 +71,7 @@ public class AuctionController {
 
     @GetMapping
     public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
-            @AuthenticateUser AuthenticationUserInfo ignored,
+            @AuthenticateUser final AuthenticationUserInfo ignored,
             @RequestParam(required = false) final Long lastAuctionId,
             @RequestParam(required = false, defaultValue = "10") final int size
     ) {
@@ -83,7 +83,7 @@ public class AuctionController {
 
     @DeleteMapping("/{auctionId}")
     public ResponseEntity<Void> delete(
-            @AuthenticateUser AuthenticationUserInfo userInfo,
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
             @PathVariable final Long auctionId
     ) {
         auctionService.deleteByAuctionId(auctionId, userInfo.userId());
