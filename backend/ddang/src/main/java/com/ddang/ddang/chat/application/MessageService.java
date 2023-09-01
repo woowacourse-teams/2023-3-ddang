@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.application;
 
-import com.ddang.ddang.chat.application.dto.ChatRoomInMessageDto;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -70,12 +69,12 @@ public class MessageService {
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
                 request.userId(),
-                ChatRoomInMessageDto.from(chatRoom),
+                chatRoom.getId(),
                 request.lastMessageId()
         );
 
         return readMessages.stream()
-                           .map(ReadMessageDto::from)
+                           .map(message -> ReadMessageDto.from(message, chatRoom))
                            .collect(Collectors.toList());
     }
 

@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.application.dto.ChatRoomInMessageDto;
 import com.ddang.ddang.chat.domain.Message;
 
 import java.util.List;
@@ -12,6 +11,6 @@ public interface QuerydslMessageRepository {
 
     List<Message> findMessagesAllByLastMessageId(
             final Long userId,
-            final ChatRoomInMessageDto chatRoomInMessageDto,
+            final Long chatRoomId,
             final Long lastMessageId);
 }

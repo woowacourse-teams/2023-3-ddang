@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.application.dto.ChatRoomInMessageDto;
 import com.ddang.ddang.chat.domain.Message;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,7 +30,7 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
 
     public List<Message> findMessagesAllByLastMessageId(
             final Long userId,
-            final ChatRoomInMessageDto chatRoomInMessageDto,
+            final Long chatRoomId,
             final Long lastMessageId
     ) {
         return queryFactory
@@ -39,7 +38,7 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
                 .where(
                         message.writer.id.eq(userId)
                                          .or(message.receiver.id.eq(userId)),
-                        message.chatRoom.id.eq(chatRoomInMessageDto.id()),
+                        message.chatRoom.id.eq(chatRoomId),
                         isGreaterThanLastId(lastMessageId)
                 )
                 .orderBy(message.id.asc())
