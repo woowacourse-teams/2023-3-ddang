@@ -19,11 +19,21 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository {
 
+    private static final long SLICE_OFFSET = 1L;
+
     private final JPAQueryFactory queryFactory;
 
     @Override
     public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
-        final List<Auction> auctions = queryFactory
+        final List<Long> findAuctionIds = queryFactory
+                .select(auction.id)
+                .from(auction)
+                .where(auction.deleted.isFalse(), lessThanLastAuctionId(lastAuctionId))
+                .orderBy(auction.id.desc())
+                .limit(size + SLICE_OFFSET)
+                .fetch();
+
+        final List<Auction> findAuctions = queryFactory
                 .selectFrom(auction)
                 .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
                 .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
@@ -32,12 +42,11 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 .leftJoin(auction.subCategory, category).fetchJoin()
                 .leftJoin(category.mainCategory).fetchJoin()
                 .leftJoin(auction.seller).fetchJoin()
-                .where(auction.deleted.isFalse(), lessThanLastAuctionId(lastAuctionId))
+                .where(auction.id.in(findAuctionIds.toArray(Long[]::new)))
                 .orderBy(auction.id.desc())
-                .limit(size + 1L)
                 .fetch();
 
-        return QuerydslSliceHelper.toSlice(auctions, size);
+        return QuerydslSliceHelper.toSlice(findAuctions, size);
     }
 
     private BooleanExpression lessThanLastAuctionId(final Long lastAuctionId) {
