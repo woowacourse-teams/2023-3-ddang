@@ -42,6 +42,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 .leftJoin(auction.subCategory, category).fetchJoin()
                 .leftJoin(category.mainCategory).fetchJoin()
                 .leftJoin(auction.seller).fetchJoin()
+                .leftJoin(auction.lastBid).fetchJoin()
                 .where(auction.id.in(findAuctionIds.toArray(Long[]::new)))
                 .orderBy(auction.id.desc())
                 .fetch();
@@ -68,6 +69,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 .leftJoin(auction.subCategory, category).fetchJoin()
                 .leftJoin(category.mainCategory).fetchJoin()
                 .leftJoin(auction.seller).fetchJoin()
+                .leftJoin(auction.lastBid).fetchJoin()
                 .where(auction.deleted.isFalse(), auction.id.eq(auctionId))
                 .fetchOne();
 
