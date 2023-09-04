@@ -132,4 +132,10 @@
     <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
     <string name="report_snackbar_auction_id_not_delivered">경매 정보가 넘어오지 않았습니다.</string>
+
+    <!-- search -->
+    <string name="search">경매 상품 검색</string>
+    <string name="search_keyword_hint">상품명 검색</string>
+    <string name="search_keyword">검색</string>
+    <string name="search_notice_no_auction">아이쿠! 올라온 경매가 없습니다!</string>
 </resources>
