@@ -231,7 +231,10 @@ class QuerydslAuctionRepositoryImplTest {
 
         // when
 
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), PageRequest.of(1, 1));
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+                auction3.getId(),
+                PageRequest.of(1, 1, Sort.by(Order.desc("id")))
+        );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

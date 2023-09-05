@@ -42,6 +42,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -916,7 +918,10 @@ class AuctionServiceTest {
         auctionService.create(createAuctionDto2);
 
         // when
-        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(null, PageRequest.of(1, 1));
+        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(
+                null,
+                PageRequest.of(1, 1, Sort.by(Order.desc("id")))
+        );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
