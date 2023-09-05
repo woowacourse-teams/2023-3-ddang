@@ -52,7 +52,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                        .leftJoin(auction.seller).fetchJoin()
                                                        .leftJoin(auction.lastBid).fetchJoin()
                                                        .where(auction.id.in(findAuctionIds.toArray(Long[]::new)))
-                                                       .orderBy(auction.id.desc())
+                                                       .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                                                        .fetch();
 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
