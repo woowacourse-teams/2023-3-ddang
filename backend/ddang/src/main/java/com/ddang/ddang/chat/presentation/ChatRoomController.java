@@ -106,7 +106,11 @@ public class ChatRoomController {
             @PathVariable final Long chatRoomId,
             @RequestParam(required = false) final Long lastMessageId
     ) {
-        final ReadMessageRequest readMessageRequest = new ReadMessageRequest(userInfo.userId(), chatRoomId, lastMessageId);
+        final ReadMessageRequest readMessageRequest = new ReadMessageRequest(
+                userInfo.userId(),
+                chatRoomId,
+                lastMessageId
+        );
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(readMessageRequest);
         final List<ReadMessageResponse> responses = readMessageDtos.stream()
                                                                    .map(readMessageDto -> ReadMessageResponse.of(
@@ -121,8 +125,7 @@ public class ChatRoomController {
     }
 
     private boolean isMessageOwner(final ReadMessageDto readMessageDto, final AuthenticationUserInfo userInfo) {
-        return readMessageDto.writerDto()
-                             .id()
+        return readMessageDto.writerId()
                              .equals(userInfo.userId());
     }
 }
