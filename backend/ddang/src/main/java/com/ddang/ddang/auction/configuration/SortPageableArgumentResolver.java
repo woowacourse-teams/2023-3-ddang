@@ -22,7 +22,7 @@ public class SortPageableArgumentResolver implements HandlerMethodArgumentResolv
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
         return parameter.getParameterType().equals(Pageable.class) &&
-                parameter.hasParameterAnnotation(DefaultDescendingSort.class);
+                parameter.hasParameterAnnotation(DescendingSort.class);
     }
 
     @Override

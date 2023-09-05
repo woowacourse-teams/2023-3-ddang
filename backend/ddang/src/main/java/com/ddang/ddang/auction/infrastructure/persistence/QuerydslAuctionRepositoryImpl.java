@@ -12,6 +12,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
@@ -24,7 +25,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
+    public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final Pageable pageable) {
         final List<Long> findAuctionIds = queryFactory.select(auction.id)
                                                       .from(auction)
                                                       .where(
@@ -32,7 +33,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                               lessThanLastAuctionId(lastAuctionId)
                                                       )
                                                       .orderBy(auction.id.desc())
-                                                      .limit(size + SLICE_OFFSET)
+                                                      .limit(pageable.getPageSize() + SLICE_OFFSET)
                                                       .fetch();
 
         final List<Auction> findAuctions = queryFactory.selectFrom(auction)
@@ -48,7 +49,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                        .orderBy(auction.id.desc())
                                                        .fetch();
 
-        return QuerydslSliceHelper.toSlice(findAuctions, size);
+        return QuerydslSliceHelper.toSlice(findAuctions, pageable);
     }
 
     private BooleanExpression lessThanLastAuctionId(final Long lastAuctionId) {

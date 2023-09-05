@@ -1,5 +1,7 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -15,6 +17,9 @@ import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,13 +28,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -181,7 +181,7 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(null, 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(null, PageRequest.of(1, 1));
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -226,7 +226,7 @@ class QuerydslAuctionRepositoryImplTest {
 
         // when
 
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), PageRequest.of(1, 1));
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -272,7 +272,7 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), 1);
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(auction3.getId(), PageRequest.of(1, 1));
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
