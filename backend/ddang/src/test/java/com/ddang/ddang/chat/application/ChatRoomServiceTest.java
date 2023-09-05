@@ -1,11 +1,13 @@
 package com.ddang.ddang.chat.application;
 
+import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
@@ -593,5 +595,184 @@ class ChatRoomServiceTest {
         assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, nonAuthorizedUserId))
                 .isInstanceOf(UserCannotAccessChatRoomException.class)
                 .hasMessageContaining("해당 채팅방에 접근할 권한이 없습니다.");
+    }
+
+    @Test
+    void 지정한_경매_아이디와_관련된_채팅방_정보를_조회할_때_조회한_사람이_해당_채팅방_참여자라면_채팅방_아이디와_참여가능여부_참을_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+        final Auction auction = Auction.builder().
+                                       title("경매")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(6))
+                                       .build();
+        auctionRepository.save(auction);
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+        auction.updateLastBid(bid);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        final AuthenticationUserInfo userInfo = new AuthenticationUserInfo(seller.getId());
+        final ReadChatRoomDto expect = new ReadChatRoomDto(chatRoom.getId(), true);
+
+        // when
+        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(auction.getId(), userInfo);
+
+        // then
+        assertThat(actual).isEqualTo(expect);
+    }
+
+    @Test
+    void 지정한_경매_아이디와_관련된_채팅방_정보를_조회할_때_조회한_사람이_해당_채팅방_참여자가_아니라면_채팅방_아이디와_참여가능여부_거짓을_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        final User stranger = User.builder()
+                                  .name("일반인")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId("12347")
+                                  .build();
+        userRepository.save(seller);
+        userRepository.save(buyer);
+        userRepository.save(stranger);
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+        final Auction auction = Auction.builder().
+                                       title("경매")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(6))
+                                       .build();
+        auctionRepository.save(auction);
+        final Bid bid = new Bid(auction, buyer, new BidPrice(15_000));
+        bidRepository.save(bid);
+        auction.updateLastBid(bid);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, buyer);
+        chatRoomRepository.save(chatRoom);
+
+        final AuthenticationUserInfo strangerInfo = new AuthenticationUserInfo(stranger.getId());
+        final ReadChatRoomDto expect = new ReadChatRoomDto(chatRoom.getId(), false);
+
+        // when
+        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(auction.getId(), strangerInfo);
+
+        // then
+        assertThat(actual).isEqualTo(expect);
+    }
+
+    @Test
+    void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_조회를_요청한_사용자_정보를_찾을_수_없다면_예외가_발생한다() {
+        // given
+        final Long invalidUserId = -999L;
+        final AuthenticationUserInfo invalidUserInfo = new AuthenticationUserInfo(invalidUserId);
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.readChatInfoByAuctionId(1L, invalidUserInfo))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("회원 정보를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_경매를_찾을_수_없다면_예외가_발생한다() {
+        // given
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12347")
+                              .build();
+        userRepository.save(user);
+
+        final AuthenticationUserInfo userInfo = new AuthenticationUserInfo(user.getId());
+
+        final Long invalidAuctionId = -999L;
+
+        // when & then
+        assertThatThrownBy(() -> chatRoomService.readChatInfoByAuctionId(invalidAuctionId, userInfo))
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_채팅방을_찾을_수_없다면_채팅방_아이디_null과_참여가능여부를_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("판매자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        userRepository.save(seller);
+        userRepository.save(buyer);
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+        final Auction auction = Auction.builder().
+                                       title("경매")
+                                       .seller(seller)
+                                       .subCategory(sub)
+                                       .bidUnit(new BidUnit(1_000))
+                                       .startPrice(new Price(10_000))
+                                       .closingTime(LocalDateTime.now().minusDays(6))
+                                       .build();
+        auctionRepository.save(auction);
+
+        final AuthenticationUserInfo userInfo = new AuthenticationUserInfo(seller.getId());
+
+        final ReadChatRoomDto expect = new ReadChatRoomDto(null, true);
+
+        // when
+        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(auction.getId(), userInfo);
+
+        // then
+        assertThat(actual).isEqualTo(expect);
     }
 }
