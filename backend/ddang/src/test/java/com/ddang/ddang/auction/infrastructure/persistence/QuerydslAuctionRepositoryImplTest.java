@@ -30,6 +30,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -181,7 +183,10 @@ class QuerydslAuctionRepositoryImplTest {
         em.clear();
 
         // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(null, PageRequest.of(1, 1));
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+                null,
+                PageRequest.of(1, 1, Sort.by(Order.desc("id")))
+        );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
