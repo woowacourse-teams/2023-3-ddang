@@ -16,7 +16,7 @@ import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
+import com.ddang.ddang.chat.application.exception.UserCannotAccessChatRoomException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -234,52 +234,6 @@ class ChatRoomServiceTest {
     }
 
     @Test
-    void 경매가_삭제된_상태에서_채팅방을_생성하면_예외가_발생한다() {
-        // given
-        final Category main = new Category("메인");
-        final Category sub = new Category("서브");
-        main.addSubCategory(sub);
-        categoryRepository.save(main);
-
-        final User seller = User.builder()
-                                .name("회원1")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
-        final User buyer = User.builder()
-                               .name("회원2")
-                               .profileImage("profile.png")
-                               .reliability(4.7d)
-                               .oauthId("12346")
-                               .build();
-        userRepository.save(seller);
-        userRepository.save(buyer);
-
-        final Auction auction = Auction.builder()
-                                       .title("경매")
-                                       .description("설명")
-                                       .seller(seller)
-                                       .bidUnit(new BidUnit(1_000))
-                                       .startPrice(new Price(10_000))
-                                       .closingTime(LocalDateTime.now().minusDays(3L))
-                                       .subCategory(sub)
-                                       .build();
-        auctionRepository.save(auction);
-
-        auction.delete();
-
-        final Long auctionId = auction.getId();
-        final Long userId = buyer.getId();
-        final CreateChatRoomDto createChatRoomDto = new CreateChatRoomDto(auctionId);
-
-        // when & then
-        assertThatThrownBy(() -> chatRoomService.create(userId, createChatRoomDto))
-                .isInstanceOf(InvalidAuctionToChatException.class)
-                .hasMessage("삭제된 경매입니다.");
-    }
-
-    @Test
     void 낙찰자가_없는데_채팅방을_생성하면_예외가_발생한다() {
         // given
         final Category main = new Category("메인");
@@ -368,7 +322,7 @@ class ChatRoomServiceTest {
 
         // when & then
         assertThatThrownBy(() -> chatRoomService.create(strangeUserId, createChatRoomDto))
-                .isInstanceOf(UserNotAccessibleException.class)
+                .isInstanceOf(UserCannotAccessChatRoomException.class)
                 .hasMessage("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
     }
 
@@ -637,7 +591,7 @@ class ChatRoomServiceTest {
 
         // when & then
         assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, nonAuthorizedUserId))
-                .isInstanceOf(UserNotAccessibleException.class)
+                .isInstanceOf(UserCannotAccessChatRoomException.class)
                 .hasMessageContaining("해당 채팅방에 접근할 권한이 없습니다.");
     }
 }

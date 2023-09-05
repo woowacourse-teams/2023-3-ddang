@@ -44,18 +44,16 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
 
     @Override
     public Optional<ChatRoom> findChatRoomById(final Long chatRoomId) {
-        final ChatRoom findChatRoom = findChatRoomJPAQuery()
-                .where(chatRoom.id.eq(chatRoomId))
-                .fetchOne();
+        final ChatRoom findChatRoom = findChatRoomJPAQuery().where(chatRoom.id.eq(chatRoomId))
+                                                            .fetchOne();
 
         return Optional.ofNullable(findChatRoom);
     }
 
     @Override
     public Optional<ChatRoom> findByAuctionId(final Long auctionId) {
-        final ChatRoom findChatRoom = findChatRoomJPAQuery()
-                .where(auction.id.eq(auctionId))
-                .fetchOne();
+        final ChatRoom findChatRoom = findChatRoomJPAQuery().where(auction.id.eq(auctionId))
+                                                            .fetchOne();
 
         return Optional.ofNullable(findChatRoom);
     }

@@ -9,7 +9,7 @@ import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
+import com.ddang.ddang.chat.application.exception.UserCannotAccessChatRoomException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
@@ -40,21 +40,18 @@ public class ChatRoomService {
     public Long create(final Long userId, final CreateChatRoomDto chatRoomDto) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        final Auction findAuction = auctionRepository.findById(chatRoomDto.auctionId())
+        final Auction findAuction = auctionRepository.findAuctionById(chatRoomDto.auctionId())
                                                      .orElseThrow(() ->
-                                                             new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+                                                             new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
+                                                     );
 
-        final ChatRoom persistChatRoom = findOrCreateChatRoomByAuction(findUser, findAuction);
+        final ChatRoom persistChatRoom = chatRoomRepository.findByAuctionId(findAuction.getId())
+                                                           .orElseGet(() -> persistChatRoom(findUser, findAuction));
 
         return persistChatRoom.getId();
     }
 
-    private ChatRoom findOrCreateChatRoomByAuction(final User user, final Auction auction) {
-        return chatRoomRepository.findByAuctionId(auction.getId())
-                                 .orElseGet(() -> createAndSaveChatRoom(user, auction));
-    }
-
-    private ChatRoom createAndSaveChatRoom(final User user, final Auction auction) {
+    private ChatRoom persistChatRoom(final User user, final Auction auction) {
         checkAuctionStatus(auction);
         final User winner = auction.findWinner(LocalDateTime.now())
                                    .orElseThrow(() -> new WinnerNotFoundException("낙찰자가 존재하지 않습니다"));
@@ -69,19 +66,16 @@ public class ChatRoomService {
         if (!findAuction.isClosed(LocalDateTime.now())) {
             throw new InvalidAuctionToChatException("경매가 아직 종료되지 않았습니다.");
         }
-        if (findAuction.isDeleted()) {
-            throw new InvalidAuctionToChatException("삭제된 경매입니다.");
-        }
     }
 
     private void checkUserCanParticipate(final User findUser, final Auction findAuction) {
-        if (!isSellerOrWinner(findUser, findAuction)) {
-            throw new UserNotAccessibleException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+        if (isNotSellerAndWinner(findUser, findAuction)) {
+            throw new UserCannotAccessChatRoomException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
         }
     }
 
-    private boolean isSellerOrWinner(final User findUser, final Auction findAuction) {
-        return findAuction.isOwner(findUser) || findAuction.isWinner(findUser, LocalDateTime.now());
+    private boolean isNotSellerAndWinner(final User findUser, final Auction findAuction) {
+        return !findAuction.isOwner(findUser) && !findAuction.isWinner(findUser, LocalDateTime.now());
     }
 
     public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
@@ -124,7 +118,7 @@ public class ChatRoomService {
 
     private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(findUser)) {
-            throw new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
+            throw new UserCannotAccessChatRoomException("해당 채팅방에 접근할 권한이 없습니다.");
         }
     }
 }
