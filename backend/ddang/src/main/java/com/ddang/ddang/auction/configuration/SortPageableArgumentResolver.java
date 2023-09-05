@@ -1,6 +1,6 @@
 package com.ddang.ddang.auction.configuration;
 
-import com.ddang.ddang.auction.configuration.util.SortProperties;
+import com.ddang.ddang.auction.configuration.util.SortPropertyConverter;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -51,6 +51,6 @@ public class SortPageableArgumentResolver implements HandlerMethodArgumentResolv
             return Sort.by(Direction.DESC, DEFAULT_SORT_PROPERTY);
         }
 
-        return Sort.by(Direction.DESC, SortProperties.findSortProperty(sortParameter));
+        return Sort.by(Direction.DESC, SortPropertyConverter.findSortProperty(sortParameter));
     }
 }
