@@ -97,4 +97,7 @@ dependencies {
 
     // 카카오 로그인
     implementation 'com.kakao.sdk:v2-user:2.11.1'
+
+    // lottie 애니메이션
+    implementation 'com.airbnb.android:lottie:6.1.0'
 }
