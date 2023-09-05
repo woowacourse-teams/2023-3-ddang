@@ -19,25 +19,36 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository {
 
+    private static final long SLICE_OFFSET = 1L;
+
     private final JPAQueryFactory queryFactory;
 
     @Override
     public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final int size) {
-        final List<Auction> auctions = queryFactory
-                .selectFrom(auction)
-                .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
-                .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
-                .leftJoin(region.firstRegion).fetchJoin()
-                .leftJoin(region.secondRegion).fetchJoin()
-                .leftJoin(auction.subCategory, category).fetchJoin()
-                .leftJoin(category.mainCategory).fetchJoin()
-                .leftJoin(auction.seller).fetchJoin()
-                .where(auction.deleted.isFalse(), lessThanLastAuctionId(lastAuctionId))
-                .orderBy(auction.id.desc())
-                .limit(size + 1L)
-                .fetch();
+        final List<Long> findAuctionIds = queryFactory.select(auction.id)
+                                                      .from(auction)
+                                                      .where(
+                                                              auction.deleted.isFalse(),
+                                                              lessThanLastAuctionId(lastAuctionId)
+                                                      )
+                                                      .orderBy(auction.id.desc())
+                                                      .limit(size + SLICE_OFFSET)
+                                                      .fetch();
 
-        return QuerydslSliceHelper.toSlice(auctions, size);
+        final List<Auction> findAuctions = queryFactory.selectFrom(auction)
+                                                       .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
+                                                       .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
+                                                       .leftJoin(region.firstRegion).fetchJoin()
+                                                       .leftJoin(region.secondRegion).fetchJoin()
+                                                       .leftJoin(auction.subCategory, category).fetchJoin()
+                                                       .leftJoin(category.mainCategory).fetchJoin()
+                                                       .leftJoin(auction.seller).fetchJoin()
+                                                       .leftJoin(auction.lastBid).fetchJoin()
+                                                       .where(auction.id.in(findAuctionIds.toArray(Long[]::new)))
+                                                       .orderBy(auction.id.desc())
+                                                       .fetch();
+
+        return QuerydslSliceHelper.toSlice(findAuctions, size);
     }
 
     private BooleanExpression lessThanLastAuctionId(final Long lastAuctionId) {
@@ -50,17 +61,17 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
 
     @Override
     public Optional<Auction> findAuctionById(final Long auctionId) {
-        final Auction findAuction = queryFactory
-                .selectFrom(auction)
-                .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
-                .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
-                .leftJoin(region.firstRegion).fetchJoin()
-                .leftJoin(region.secondRegion).fetchJoin()
-                .leftJoin(auction.subCategory, category).fetchJoin()
-                .leftJoin(category.mainCategory).fetchJoin()
-                .leftJoin(auction.seller).fetchJoin()
-                .where(auction.deleted.isFalse(), auction.id.eq(auctionId))
-                .fetchOne();
+        final Auction findAuction = queryFactory.selectFrom(auction)
+                                                .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
+                                                .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
+                                                .leftJoin(region.firstRegion).fetchJoin()
+                                                .leftJoin(region.secondRegion).fetchJoin()
+                                                .leftJoin(auction.subCategory, category).fetchJoin()
+                                                .leftJoin(category.mainCategory).fetchJoin()
+                                                .leftJoin(auction.seller).fetchJoin()
+                                                .leftJoin(auction.lastBid).fetchJoin()
+                                                .where(auction.deleted.isFalse(), auction.id.eq(auctionId))
+                                                .fetchOne();
 
         return Optional.ofNullable(findAuction);
     }
