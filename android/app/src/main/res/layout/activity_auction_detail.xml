@@ -16,9 +16,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_auction_detail_container"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         tools:context=".feature.detail.AuctionDetailActivity">
 
         <androidx.appcompat.widget.Toolbar
@@ -182,7 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@{AuctionDetailFormatter.INSTANCE.formatAuctionDetailStatus(viewModel.auctionDetailModel)}"
+                    android:text="@{AuctionDetailFormatter.INSTANCE.formatAuctionDetailStatus(context,viewModel.auctionDetailModel)}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_main_header"
                     android:textStyle="bold"

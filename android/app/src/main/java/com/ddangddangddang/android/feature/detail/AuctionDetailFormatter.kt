@@ -1,8 +1,8 @@
 package com.ddangddangddang.android.feature.detail
 
 import android.content.Context
+import com.ddangddangddang.android.R
 import com.ddangddangddang.android.model.AuctionDetailModel
-import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -14,16 +14,17 @@ object AuctionDetailFormatter {
         return dateTime.format(formatter)
     }
 
-    fun formatAuctionDetailStatus(auctionDetailModel: AuctionDetailModel?): String {
+    fun formatAuctionDetailStatus(
+        context: Context,
+        auctionDetailModel: AuctionDetailModel?,
+    ): String {
         if (auctionDetailModel == null) return emptyContent
         val priceStatus = auctionDetailModel.auctionDetailStatusModel.priceStatus
-        val progressStatus = auctionDetailModel.auctionDetailStatusModel.progressStatus
         val lastBidPrice = auctionDetailModel.lastBidPrice
-        val formatter = DecimalFormat("#,###")
-        return if (priceStatus == "입찰전") {
+        return if (priceStatus == context.getString(R.string.all_auction_unbidden)) {
             priceStatus
         } else {
-            "$priceStatus ${formatter.format(lastBidPrice)}원"
+            context.getString(R.string.detail_auction_price_status, priceStatus, lastBidPrice)
         }
     }
 
@@ -31,8 +32,7 @@ object AuctionDetailFormatter {
         context: Context,
         bottomButtonStatus: AuctionDetailBottomButtonStatus?,
     ): String {
-        return bottomButtonStatus?.let {
-            context.getString(it.text)
-        } ?: emptyContent
+        if (bottomButtonStatus == null) return emptyContent
+        return context.getString(bottomButtonStatus.text)
     }
 }
