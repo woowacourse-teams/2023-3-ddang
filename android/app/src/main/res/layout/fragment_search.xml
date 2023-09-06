@@ -44,6 +44,7 @@
             android:background="@drawable/bg_gray_radius_24dp"
             android:hint="@string/search_keyword_hint"
             android:maxLines="1"
+            android:inputType="text"
             android:paddingHorizontal="16dp"
             android:text="@={viewModel.keyword}"
             android:textCursorDrawable="@drawable/ic_edittext_cursor"
