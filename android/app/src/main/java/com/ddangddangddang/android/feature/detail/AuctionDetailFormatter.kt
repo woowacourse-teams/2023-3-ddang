@@ -8,12 +8,14 @@ import java.time.format.DateTimeFormatter
 
 object AuctionDetailFormatter {
     private const val emptyContent = ""
-    fun formatClosingTime(dateTime: LocalDateTime): String {
+    fun formatClosingTime(dateTime: LocalDateTime?): String {
+        if (dateTime == null) return emptyContent
         val formatter = DateTimeFormatter.ofPattern("'~ 'yyyy.MM.dd a hh:mm")
         return dateTime.format(formatter)
     }
 
-    fun formatAuctionDetailStatus(auctionDetailModel: AuctionDetailModel): String {
+    fun formatAuctionDetailStatus(auctionDetailModel: AuctionDetailModel?): String {
+        if (auctionDetailModel == null) return emptyContent
         val priceStatus = auctionDetailModel.auctionDetailStatusModel.priceStatus
         val progressStatus = auctionDetailModel.auctionDetailStatusModel.progressStatus
         val lastBidPrice = auctionDetailModel.lastBidPrice

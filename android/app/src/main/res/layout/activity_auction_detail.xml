@@ -15,6 +15,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_auction_detail_container"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".feature.detail.AuctionDetailActivity">
@@ -167,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
-                    android:text="@{viewModel.auctionDetailModel.closingTime==null ? null :AuctionDetailFormatter.INSTANCE.formatClosingTime(viewModel.auctionDetailModel.closingTime)}"
+                    android:text="@{AuctionDetailFormatter.INSTANCE.formatClosingTime(viewModel.auctionDetailModel.closingTime)}"
                     android:textColor="@color/black_900"
                     android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_auction_status"
@@ -180,7 +182,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="@{viewModel.auctionDetailModel==null ? null :AuctionDetailFormatter.INSTANCE.formatAuctionDetailStatus(viewModel.auctionDetailModel)}"
+                    android:text="@{AuctionDetailFormatter.INSTANCE.formatAuctionDetailStatus(viewModel.auctionDetailModel)}"
                     android:textColor="@color/black"
                     android:textSize="@dimen/textsize_main_header"
                     android:textStyle="bold"
@@ -353,7 +355,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
-            android:enabled="@{viewModel.auctionDetailBottomButtonStatus == null ? false :viewModel.auctionDetailBottomButtonStatus.enabled }"
+            android:enabled="@{viewModel.auctionDetailBottomButtonStatus.enabled}"
             android:gravity="center"
             android:onClick="@{()->viewModel.handleAuctionDetailBottomButton()}"
             android:padding="0dp"

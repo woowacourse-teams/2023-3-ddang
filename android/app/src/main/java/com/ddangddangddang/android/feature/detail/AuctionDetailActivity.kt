@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
@@ -15,6 +16,7 @@ import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -32,6 +34,12 @@ class AuctionDetailActivity :
     }
 
     private fun setupViewModel() {
+        observeLoadingWithDialog(
+            this,
+            viewModel.isLoading,
+            onLoadingStarted = { binding.clAuctionDetailContainer.visibility = View.GONE },
+            onLoadingFinished = { binding.clAuctionDetailContainer.visibility = View.VISIBLE },
+        )
         viewModel.event.observe(this) { event ->
             handleEvent(event)
         }

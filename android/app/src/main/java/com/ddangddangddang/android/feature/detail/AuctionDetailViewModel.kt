@@ -22,6 +22,10 @@ class AuctionDetailViewModel(
     val event: LiveData<AuctionDetailEvent>
         get() = _event
 
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
+
     private val _auctionDetailModel: MutableLiveData<AuctionDetailModel> = MutableLiveData()
     val auctionDetailModel: LiveData<AuctionDetailModel>
         get() = _auctionDetailModel
@@ -39,6 +43,8 @@ class AuctionDetailViewModel(
         }
 
     fun loadAuctionDetail(auctionId: Long) {
+        if (_isLoading.value == true) return
+        startLoading()
         viewModelScope.launch {
             when (val response = auctionRepository.getAuctionDetail(auctionId)) {
                 is ApiResponse.Success -> _auctionDetailModel.value = response.body.toPresentation()
@@ -51,6 +57,7 @@ class AuctionDetailViewModel(
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
+            stopLoading()
         }
     }
 
@@ -73,6 +80,8 @@ class AuctionDetailViewModel(
 
     private fun enterChatRoomEvent() {
         _auctionDetailModel.value?.let {
+            if (_isLoading.value == true) return@let
+            startLoading()
             viewModelScope.launch {
                 val request = GetChatRoomIdRequest(it.id)
                 when (val response = chatRepository.getChatRoomId(request)) {
@@ -84,6 +93,7 @@ class AuctionDetailViewModel(
                     is ApiResponse.NetworkError -> {}
                     is ApiResponse.Unexpected -> {}
                 }
+                stopLoading()
             }
         }
     }
@@ -106,6 +116,8 @@ class AuctionDetailViewModel(
 
     fun deleteAuction() {
         _auctionDetailModel.value?.let {
+            if (_isLoading.value == true) return@let
+            startLoading()
             viewModelScope.launch {
                 when (auctionRepository.deleteAuction(it.id)) {
                     is ApiResponse.Success ->
@@ -116,8 +128,17 @@ class AuctionDetailViewModel(
                     is ApiResponse.NetworkError -> {}
                     is ApiResponse.Unexpected -> {}
                 }
+                stopLoading()
             }
         }
+    }
+
+    private fun startLoading() {
+        _isLoading.value = true
+    }
+
+    private fun stopLoading() {
+        _isLoading.value = false
     }
 
     sealed class AuctionDetailEvent {
