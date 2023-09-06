@@ -20,9 +20,16 @@ public enum SortParameterConverter {
 
     public static String findSortProperty(final String targetSortParameter) {
         return Arrays.stream(SortParameterConverter.values())
-                .filter(sortParameterConverter -> sortParameterConverter.sortParameter.equalsIgnoreCase(targetSortParameter))
-                .map(sortParameterConverter -> sortParameterConverter.sortCondition)
-                .findAny()
-                .orElseThrow(() -> new UnsupportedSortParameterException("지원하지 않는 정렬 방식입니다."));
+                     .filter(sortParameterConverter -> verifyEquality(targetSortParameter, sortParameterConverter))
+                     .map(sortParameterConverter -> sortParameterConverter.sortCondition)
+                     .findAny()
+                     .orElseThrow(() -> new UnsupportedSortParameterException("지원하지 않는 정렬 방식입니다."));
+    }
+
+    private static boolean verifyEquality(
+            final String targetSortParameter,
+            final SortParameterConverter sortParameterConverter
+    ) {
+        return sortParameterConverter.sortParameter.equalsIgnoreCase(targetSortParameter);
     }
 }
