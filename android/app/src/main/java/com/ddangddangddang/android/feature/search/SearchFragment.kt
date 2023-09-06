@@ -60,7 +60,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                 ),
             )
         }
-        binding.rvSearchAuctions.addItemDecoration(AuctionSpaceItemDecoration(2, 20))
+        binding.rvSearchAuctions.addItemDecoration(AuctionSpaceItemDecoration(2, resources.getDimensionPixelSize(R.dimen.margin_side_layout)))
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
