@@ -42,6 +42,7 @@ public enum AuctionSortConditionConverter {
         if (order.isDescending()) {
             return sortCondition.sortExpression.desc();
         }
+
         return sortCondition.sortExpression.asc();
     }
 }
