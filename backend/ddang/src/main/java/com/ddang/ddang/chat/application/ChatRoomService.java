@@ -14,7 +14,7 @@ import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserCannotAccessChatRoomException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomWithLastMessageDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -23,9 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,7 +33,6 @@ public class ChatRoomService {
     private static final Long DEFAULT_CHAT_ROOM_ID = null;
 
     private final JpaChatRoomRepository chatRoomRepository;
-    private final JpaMessageRepository messageRepository;
     private final JpaUserRepository userRepository;
     private final JpaAuctionRepository auctionRepository;
 
@@ -84,29 +81,12 @@ public class ChatRoomService {
     public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        final List<ChatRoom> chatRooms = chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
+        final List<ChatRoomWithLastMessageDto> chatRoomWithLastMessageDtos =
+                chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
 
-        final List<ReadChatRoomWithLastMessageDto> chatRoomDtos = new ArrayList<>();
-        for (final ChatRoom chatRoom : chatRooms) {
-            messageRepository.findLastMessageByChatRoomId(chatRoom.getId())
-                             .ifPresent(message ->
-                                     chatRoomDtos.add(ReadChatRoomWithLastMessageDto.of(findUser, chatRoom, message))
-                             );
-        }
-
-        return chatRooms.stream()
-                        .map(chatRoom -> processDtoWithLastMessage(findUser, chatRoom))
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .toList();
-    }
-
-    private Optional<ReadChatRoomWithLastMessageDto> processDtoWithLastMessage(
-            final User findUser,
-            final ChatRoom chatRoom
-    ) {
-        return messageRepository.findLastMessageByChatRoomId(chatRoom.getId())
-                                .map(message -> ReadChatRoomWithLastMessageDto.of(findUser, chatRoom, message));
+        return chatRoomWithLastMessageDtos.stream()
+                                          .map(dto -> ReadChatRoomWithLastMessageDto.of(findUser, dto))
+                                          .toList();
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {

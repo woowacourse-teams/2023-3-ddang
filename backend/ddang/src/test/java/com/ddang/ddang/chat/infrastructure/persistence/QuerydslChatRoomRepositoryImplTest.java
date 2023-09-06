@@ -8,6 +8,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomWithLastMessageDto;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.User;
@@ -139,13 +140,15 @@ class QuerydslChatRoomRepositoryImplTest {
         em.clear();
 
         // when
-        final List<ChatRoom> actual = chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
+        final List<ChatRoomWithLastMessageDto> actual = chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).getId()).isEqualTo(chatRoom2.getId());
-            softAssertions.assertThat(actual.get(1).getId()).isEqualTo(chatRoom3.getId());
+            softAssertions.assertThat(actual.get(0).chatRoom()).isEqualTo(chatRoom2);
+            softAssertions.assertThat(actual.get(0).message()).isEqualTo(lastMessage2);
+            softAssertions.assertThat(actual.get(1).chatRoom()).isEqualTo(chatRoom3);
+            softAssertions.assertThat(actual.get(1).message()).isEqualTo(lastMessage1);
         });
     }
 

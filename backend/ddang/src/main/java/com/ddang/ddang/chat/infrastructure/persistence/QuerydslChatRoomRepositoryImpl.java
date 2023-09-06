@@ -1,7 +1,10 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomWithLastMessageDto;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -20,17 +23,23 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ChatRoom> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
+    public List<ChatRoomWithLastMessageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
         return queryFactory
-                .selectFrom(chatRoom)
+                .select(Projections.constructor(ChatRoomWithLastMessageDto.class, chatRoom, message))
+                .from(chatRoom)
                 .leftJoin(chatRoom.buyer).fetchJoin()
                 .leftJoin(chatRoom.auction, auction).fetchJoin()
                 .leftJoin(auction.seller).fetchJoin()
                 .leftJoin(auction.auctionImages).fetchJoin()
                 .leftJoin(auction.lastBid).fetchJoin()
+                .leftJoin(message).on(message.id.eq(
+                        JPAExpressions
+                                .select(message.id.max())
+                                .from(message)
+                                .where(message.chatRoom.id.eq(chatRoom.id))
+                ))
                 .where(isSellerOrWinner(userId))
                 .orderBy(message.id.max().desc())
-                .leftJoin(message).on(message.chatRoom.id.eq(chatRoom.id))
                 .groupBy(chatRoom.id)
                 .fetch();
     }
