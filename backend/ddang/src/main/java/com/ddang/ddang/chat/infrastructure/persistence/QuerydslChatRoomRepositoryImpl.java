@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.ddang.ddang.auction.domain.QAuction.auction;
-import static com.ddang.ddang.category.domain.QCategory.category;
 import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
+import static com.ddang.ddang.chat.domain.QMessage.message;
 
 @Repository
 @RequiredArgsConstructor
@@ -20,17 +20,19 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ChatRoom> findAllByUserId(final Long userId) {
-        return queryFactory.selectFrom(chatRoom)
-                           .leftJoin(chatRoom.buyer).fetchJoin()
-                           .leftJoin(chatRoom.auction, auction).fetchJoin()
-                           .leftJoin(auction.subCategory, category).fetchJoin()
-                           .leftJoin(category.mainCategory).fetchJoin()
-                           .leftJoin(auction.seller).fetchJoin()
-                           .leftJoin(auction.auctionImages).fetchJoin()
-                           .where(isSellerOrWinner(userId))
-                           .orderBy(chatRoom.id.desc())
-                           .fetch();
+    public List<ChatRoom> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
+        return queryFactory
+                .selectFrom(chatRoom)
+                .leftJoin(chatRoom.buyer).fetchJoin()
+                .leftJoin(chatRoom.auction, auction).fetchJoin()
+                .leftJoin(auction.seller).fetchJoin()
+                .leftJoin(auction.auctionImages).fetchJoin()
+                .leftJoin(auction.lastBid).fetchJoin()
+                .where(isSellerOrWinner(userId))
+                .orderBy(message.id.max().desc())
+                .leftJoin(message).on(message.chatRoom.id.eq(chatRoom.id))
+                .groupBy(chatRoom.id)
+                .fetch();
     }
 
     private BooleanExpression isSellerOrWinner(final Long userId) {
@@ -55,8 +57,8 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
     @Override
     public Optional<Long> findChatRoomIdByAuctionId(final Long auctionId) {
         final ChatRoom findChatRoom = queryFactory.selectFrom(chatRoom)
-                                               .where(chatRoom.auction.id.eq(auctionId))
-                                               .fetchFirst();
+                                                  .where(chatRoom.auction.id.eq(auctionId))
+                                                  .fetchFirst();
         if (findChatRoom == null) {
             return Optional.empty();
         }

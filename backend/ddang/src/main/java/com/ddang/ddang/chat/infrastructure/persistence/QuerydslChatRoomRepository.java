@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface QuerydslChatRoomRepository {
 
-    List<ChatRoom> findAllByUserId(final Long userId);
+    List<ChatRoom> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId);
 
     Optional<ChatRoom> findChatRoomById(final Long chatRoomId);
 

@@ -7,6 +7,7 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.User;
@@ -46,6 +47,9 @@ class QuerydslChatRoomRepositoryImplTest {
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
 
+    @Autowired
+    JpaMessageRepository messageRepository;
+
     @Test
     void 지정한_사용자_아이디가_포함된_채팅방을_조회한다() {
         // given
@@ -78,7 +82,6 @@ class QuerydslChatRoomRepositoryImplTest {
                                .reliability(4.7d)
                                .oauthId("12348")
                                .build();
-
         userRepository.save(merry);
         userRepository.save(encho);
         userRepository.save(jamie);
@@ -110,24 +113,39 @@ class QuerydslChatRoomRepositoryImplTest {
         auctionRepository.save(enchoAuction);
         auctionRepository.save(jamieAuction);
 
-        final ChatRoom merryZeeto = new ChatRoom(merryAuction, zeeto);
-        final ChatRoom enchoZeeto = new ChatRoom(enchoAuction, zeeto);
-        final ChatRoom jamieEncho = new ChatRoom(jamieAuction, encho);
-        chatRoomRepository.save(merryZeeto);
-        chatRoomRepository.save(enchoZeeto);
-        chatRoomRepository.save(jamieEncho);
+        final ChatRoom chatRoom1 = new ChatRoom(merryAuction, zeeto);
+        final ChatRoom chatRoom2 = new ChatRoom(enchoAuction, zeeto);
+        final ChatRoom chatRoom3 = new ChatRoom(jamieAuction, encho);
+        chatRoomRepository.save(chatRoom1);
+        chatRoomRepository.save(chatRoom2);
+        chatRoomRepository.save(chatRoom3);
+
+        final Message lastMessage1 = Message.builder()
+                                        .chatRoom(chatRoom3)
+                                        .contents("jamieEncho message 1")
+                                        .writer(jamie)
+                                        .receiver(encho)
+                                        .build();
+        messageRepository.save(lastMessage1);
+        final Message lastMessage2 = Message.builder()
+                                            .chatRoom(chatRoom2)
+                                            .writer(encho)
+                                            .receiver(zeeto)
+                                            .contents("enchoZeeto message 1")
+                                            .build();
+        messageRepository.save(lastMessage2);
 
         em.flush();
         em.clear();
 
         // when
-        final List<ChatRoom> actual = chatRoomRepository.findAllByUserId(encho.getId());
+        final List<ChatRoom> actual = chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(1).getId()).isEqualTo(enchoZeeto.getId());
-            softAssertions.assertThat(actual.get(0).getId()).isEqualTo(jamieEncho.getId());
+            softAssertions.assertThat(actual.get(0).getId()).isEqualTo(chatRoom2.getId());
+            softAssertions.assertThat(actual.get(1).getId()).isEqualTo(chatRoom3.getId());
         });
     }
 
