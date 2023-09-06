@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -70,7 +71,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         final Sort sort = pageable.getSort();
 
-        for (final Sort.Order order : sort) {
+        for (final Order order : sort) {
             orderSpecifiers.add(AuctionSortConditionConverter.convert(order));
         }
 
