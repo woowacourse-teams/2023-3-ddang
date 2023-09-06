@@ -25,7 +25,7 @@ public class QuerydslSliceHelper {
         return contents.size() > size;
     }
 
-    private static <T> List<T> subListLastContent(List<T> content, int size) {
+    private static <T> List<T> subListLastContent(final List<T> content, final int size) {
         return content.subList(0, size);
     }
 }
