@@ -36,7 +36,7 @@ import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.configuration.SortPageableArgumentResolver;
+import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
@@ -133,7 +133,7 @@ class AuctionControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(auctionController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
-                                 .setCustomArgumentResolvers(resolver, new SortPageableArgumentResolver())
+                                 .setCustomArgumentResolvers(resolver, new DescendingSortPageableArgumentResolver())
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)

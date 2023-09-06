@@ -13,7 +13,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 @Component
-public class SortPageableArgumentResolver implements HandlerMethodArgumentResolver {
+public class DescendingSortPageableArgumentResolver implements HandlerMethodArgumentResolver {
 
     private static final int IGNORED_PAGE_SIZE = 1;
     private static final int DEFAULT_SIZE = 10;
