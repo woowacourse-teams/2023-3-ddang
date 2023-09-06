@@ -3,10 +3,8 @@ package com.ddangddangddang.android.feature.search
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentSearchBinding
@@ -15,7 +13,6 @@ import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.model.AuctionHomeModel
-import com.ddangddangddang.android.model.AuctionHomeStatusModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search) {
@@ -41,8 +38,27 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
 
     private fun changeAuctions(auctions: List<AuctionHomeModel>) {
         hideKeyboard()
+        hideNoticeInputKeyword()
         auctionAdapter.submitList(auctions)
-        Log.d("test", "Click")
+
+        if (auctions.isEmpty()) showNoticeNoAuctions()
+        showAuctions()
+    }
+
+    private fun hideNoticeInputKeyword() {
+        if (binding.tvNoticeInputKeyword.visibility == View.VISIBLE) {
+            binding.tvNoticeInputKeyword.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun showNoticeNoAuctions() {
+        binding.tvNoticeNoAuctions.visibility = View.VISIBLE
+    }
+
+    private fun showAuctions() {
+        if (binding.rvSearchAuctions.visibility == View.INVISIBLE) {
+            binding.rvSearchAuctions.visibility = View.VISIBLE
+        }
     }
 
     private fun hideKeyboard() {
@@ -51,16 +67,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun setupAuctionRecyclerView() {
-        binding.rvSearchAuctions.adapter = auctionAdapter.apply {
-            submitList(
-                listOf(
-                    AuctionHomeModel(0, "ihi", "", 1000, AuctionHomeStatusModel.UNBIDDEN, 0),
-                    AuctionHomeModel(1, "ihi", "", 1000, AuctionHomeStatusModel.UNBIDDEN, 0),
-                    AuctionHomeModel(2, "ihi", "", 1000, AuctionHomeStatusModel.SUCCESS, 0),
-                ),
-            )
-        }
-        binding.rvSearchAuctions.addItemDecoration(AuctionSpaceItemDecoration(2, resources.getDimensionPixelSize(R.dimen.margin_side_layout)))
+        binding.rvSearchAuctions.adapter = auctionAdapter
+        binding.rvSearchAuctions.addItemDecoration(
+            AuctionSpaceItemDecoration(
+                2,
+                resources.getDimensionPixelSize(R.dimen.margin_side_layout),
+            ),
+        )
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {

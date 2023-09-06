@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.model.AuctionHomeModel
+import com.ddangddangddang.android.model.AuctionHomeStatusModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 
 class SearchViewModel : ViewModel() {
@@ -15,7 +16,12 @@ class SearchViewModel : ViewModel() {
 
     fun submitKeyword() {
         // repository에서 검색 결과 List를 가져오는 코드
-        _event.value = SearchEvent.KeywordSubmit(listOf())
+        val dummy = listOf(
+            AuctionHomeModel(0, "ihi", "", 1000, AuctionHomeStatusModel.UNBIDDEN, 0),
+            AuctionHomeModel(1, "ihi", "", 1000, AuctionHomeStatusModel.UNBIDDEN, 0),
+            AuctionHomeModel(2, "ihi", "", 1000, AuctionHomeStatusModel.SUCCESS, 0),
+        )
+        _event.value = SearchEvent.KeywordSubmit(dummy)
     }
 
     sealed class SearchEvent {

@@ -138,4 +138,5 @@
     <string name="search_keyword_hint">상품명 검색</string>
     <string name="search_keyword">검색</string>
     <string name="search_notice_no_auction">아이쿠! 올라온 경매가 없습니다!</string>
+    <string name="search_notice_input_keyword">검색창에 상품명을 입력해주세요.</string>
 </resources>

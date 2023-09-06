@@ -69,6 +69,7 @@
             app:layout_constraintTop_toTopOf="@id/et_search_keyword" />
 
         <TextView
+            android:id="@+id/tv_notice_no_auctions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/search_notice_no_auction"
@@ -80,10 +81,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/et_search_keyword" />
 
+        <TextView
+            android:id="@+id/tv_notice_input_keyword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_notice_input_keyword"
+            android:textColor="@color/black_400"
+            android:textSize="@dimen/textsize_sub_header"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_search_keyword" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search_auctions"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:visibility="invisible"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
