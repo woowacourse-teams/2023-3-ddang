@@ -17,7 +17,6 @@ public class DescendingSortPageableArgumentResolver implements HandlerMethodArgu
 
     private static final int IGNORED_PAGE_SIZE = 1;
     private static final int DEFAULT_SIZE = 10;
-    private static final String DEFAULT_SORT_PROPERTY = "id";
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
@@ -47,10 +46,6 @@ public class DescendingSortPageableArgumentResolver implements HandlerMethodArgu
     }
 
     private Sort processSortParameter(final String sortParameter) {
-        if (sortParameter == null) {
-            return Sort.by(Direction.DESC, DEFAULT_SORT_PROPERTY);
-        }
-
         return Sort.by(Direction.DESC, SortParameterConverter.findSortProperty(sortParameter));
     }
 }

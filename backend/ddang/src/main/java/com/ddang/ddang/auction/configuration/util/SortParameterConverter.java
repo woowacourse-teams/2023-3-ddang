@@ -19,11 +19,19 @@ public enum SortParameterConverter {
     }
 
     public static String findSortProperty(final String targetSortParameter) {
+        if (isDefaultSortCondition(targetSortParameter)) {
+            return SortParameterConverter.ID.sortCondition;
+        }
+
         return Arrays.stream(SortParameterConverter.values())
                      .filter(sortParameterConverter -> verifyEquality(targetSortParameter, sortParameterConverter))
                      .map(sortParameterConverter -> sortParameterConverter.sortCondition)
                      .findAny()
                      .orElseThrow(() -> new UnsupportedSortParameterException("지원하지 않는 정렬 방식입니다."));
+    }
+
+    private static boolean isDefaultSortCondition(final String targetSortParameter) {
+        return targetSortParameter == null || targetSortParameter.isEmpty() || targetSortParameter.isBlank();
     }
 
     private static boolean verifyEquality(

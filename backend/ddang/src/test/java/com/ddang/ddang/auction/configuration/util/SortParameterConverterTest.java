@@ -31,6 +31,13 @@ class SortParameterConverterTest {
     }
 
     @Test
+    void 페이징_정렬_조건으로_null을_전달하면_기본_정렬_조건인_id를_반환한다() {
+        final String actual = SortParameterConverter.findSortProperty(null);
+
+        assertThat(actual).isEqualTo("id");
+    }
+
+    @Test
     void 지원하지_않는_정렬_조건이면_예외가_발생한다() {
         final String invalidSortParameter = "invalid";
 
