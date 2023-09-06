@@ -15,7 +15,7 @@ public class QuerydslSliceHelper {
         final boolean hasNext = isContentSizeGreaterThanPageSize(contents, size);
 
         if (hasNext) {
-            return new SliceImpl<>(subListLastContent(contents, size), pageable, hasNext);
+            return new SliceImpl<>(getSubListAfterLastContent(contents, size), pageable, hasNext);
         }
 
         return new SliceImpl<>(contents, pageable, hasNext);
@@ -25,7 +25,7 @@ public class QuerydslSliceHelper {
         return contents.size() > size;
     }
 
-    private static <T> List<T> subListLastContent(final List<T> content, final int size) {
+    private static <T> List<T> getSubListAfterLastContent(final List<T> content, final int size) {
         return content.subList(0, size);
     }
 }
