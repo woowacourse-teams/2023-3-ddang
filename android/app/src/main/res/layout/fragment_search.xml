@@ -5,6 +5,10 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.search.SearchViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,18 +39,20 @@
             android:layout_height="42dp"
             android:layout_marginStart="@dimen/margin_side_layout"
             android:layout_marginTop="4dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/bg_gray_radius_24dp"
             android:hint="@string/search_keyword_hint"
+            android:maxLines="1"
             android:paddingHorizontal="16dp"
+            android:text="@={viewModel.keyword}"
             android:textCursorDrawable="@drawable/ic_edittext_cursor"
             android:textSize="@dimen/textsize_body"
+            app:layout_constraintBottom_toTopOf="@id/rv_search_auctions"
             app:layout_constraintEnd_toStartOf="@id/btn_search"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_search"
-            app:layout_constraintBottom_toTopOf="@id/rv_search_auctions"
             tools:text="맥북 에어" />
 
         <Button
@@ -55,6 +61,7 @@
             android:layout_height="42dp"
             android:layout_marginEnd="@dimen/margin_side_layout"
             android:background="@drawable/bg_red_radius_24dp"
+            android:onClick="@{() -> viewModel.submitKeyword()}"
             android:text="@string/search_keyword"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -67,22 +74,22 @@
             android:text="@string/search_notice_no_auction"
             android:textColor="@color/black_400"
             android:textSize="@dimen/textsize_sub_header"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_search_keyword"
-            android:visibility="gone" />
+            app:layout_constraintTop_toBottomOf="@id/et_search_keyword" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search_auctions"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/et_search_keyword"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_search_keyword"
             app:spanCount="2"
-            tools:listitem="@layout/item_home_auction"/>
+            tools:listitem="@layout/item_home_auction" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
