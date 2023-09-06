@@ -376,13 +376,7 @@ class ChatRoomControllerTest {
                 1L,
                 "경매1",
                 10_000,
-                List.of(1L, 2L),
-                "main",
-                "sub",
-                seller.id(),
-                seller.profileImage(),
-                seller.name(),
-                seller.reliability()
+                1L
         );
         final ReadChatRoomWithLastMessageDto dto1 = new ReadChatRoomWithLastMessageDto(
                 1L,
@@ -395,13 +389,7 @@ class ChatRoomControllerTest {
                 2L,
                 "경매2",
                 20_000,
-                List.of(1L, 2L),
-                "main",
-                "sub",
-                seller.id(),
-                seller.profileImage(),
-                seller.name(),
-                seller.reliability()
+                1L
         );
         final ReadChatRoomWithLastMessageDto dto2 = new ReadChatRoomWithLastMessageDto(
                 2L,
@@ -496,13 +484,7 @@ class ChatRoomControllerTest {
                 1L,
                 "경매 상품 1",
                 3_000,
-                List.of(1L, 2L),
-                "메인 카테고리",
-                "서브 카테고리",
-                1L,
-                "profile.png",
-                "판매자",
-                5.0d
+                1L
         );
         final ReadUserInChatRoomDto chatPartner = new ReadUserInChatRoomDto(
                 2L,

@@ -49,10 +49,10 @@ public class ChatRoomService {
                                                              new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
                                                      );
 
-        final ChatRoom persistChatRoom = chatRoomRepository.findByAuctionId(findAuction.getId())
-                                                           .orElseGet(() -> persistChatRoom(findUser, findAuction));
-
-        return persistChatRoom.getId();
+        return chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
+                                                           .orElseGet(() ->
+                                                                   persistChatRoom(findUser, findAuction).getId()
+                                                           );
     }
 
     private ChatRoom persistChatRoom(final User user, final Auction auction) {
@@ -111,7 +111,7 @@ public class ChatRoomService {
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        final ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId)
+        final ChatRoom chatRoom = chatRoomRepository.findChatRoomById(chatRoomId)
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
                                                     ));
@@ -133,8 +133,7 @@ public class ChatRoomService {
                                                      .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                      ));
-        final Long chatRoomId = chatRoomRepository.findByAuctionId(findAuction.getId())
-                                                  .map(ChatRoom::getId)
+        final Long chatRoomId = chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                                   .orElse(DEFAULT_CHAT_ROOM_ID);
 
         return new ReadChatRoomDto(chatRoomId, isChatParticipant(findAuction, findUser));

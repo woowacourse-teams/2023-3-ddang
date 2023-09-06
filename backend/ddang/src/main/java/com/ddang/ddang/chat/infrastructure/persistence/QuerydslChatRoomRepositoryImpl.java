@@ -2,7 +2,6 @@ package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,19 +21,16 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
 
     @Override
     public List<ChatRoom> findAllByUserId(final Long userId) {
-        return findChatRoomJPAQuery().where(isSellerOrWinner(userId))
-                                     .orderBy(chatRoom.id.desc())
-                                     .fetch();
-    }
-
-    private JPAQuery<ChatRoom> findChatRoomJPAQuery() {
         return queryFactory.selectFrom(chatRoom)
                            .leftJoin(chatRoom.buyer).fetchJoin()
                            .leftJoin(chatRoom.auction, auction).fetchJoin()
                            .leftJoin(auction.subCategory, category).fetchJoin()
                            .leftJoin(category.mainCategory).fetchJoin()
                            .leftJoin(auction.seller).fetchJoin()
-                           .leftJoin(auction.auctionImages).fetchJoin();
+                           .leftJoin(auction.auctionImages).fetchJoin()
+                           .where(isSellerOrWinner(userId))
+                           .orderBy(chatRoom.id.desc())
+                           .fetch();
     }
 
     private BooleanExpression isSellerOrWinner(final Long userId) {
@@ -44,17 +40,27 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
 
     @Override
     public Optional<ChatRoom> findChatRoomById(final Long chatRoomId) {
-        final ChatRoom findChatRoom = findChatRoomJPAQuery().where(chatRoom.id.eq(chatRoomId))
-                                                            .fetchOne();
+        final ChatRoom findChatRoom = queryFactory.selectFrom(chatRoom)
+                                                  .leftJoin(chatRoom.buyer).fetchJoin()
+                                                  .leftJoin(chatRoom.auction, auction).fetchJoin()
+                                                  .leftJoin(auction.seller).fetchJoin()
+                                                  .leftJoin(auction.auctionImages).fetchJoin()
+                                                  .leftJoin(auction.lastBid).fetchJoin()
+                                                  .where(chatRoom.id.eq(chatRoomId))
+                                                  .fetchFirst();
 
         return Optional.ofNullable(findChatRoom);
     }
 
     @Override
-    public Optional<ChatRoom> findByAuctionId(final Long auctionId) {
-        final ChatRoom findChatRoom = findChatRoomJPAQuery().where(auction.id.eq(auctionId))
-                                                            .fetchOne();
+    public Optional<Long> findChatRoomIdByAuctionId(final Long auctionId) {
+        final ChatRoom findChatRoom = queryFactory.selectFrom(chatRoom)
+                                               .where(chatRoom.auction.id.eq(auctionId))
+                                               .fetchFirst();
+        if (findChatRoom == null) {
+            return Optional.empty();
+        }
 
-        return Optional.ofNullable(findChatRoom);
+        return Optional.ofNullable(findChatRoom.getId());
     }
 }

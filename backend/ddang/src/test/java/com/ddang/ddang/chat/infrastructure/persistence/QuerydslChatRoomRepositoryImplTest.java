@@ -181,7 +181,7 @@ class QuerydslChatRoomRepositoryImplTest {
     }
 
     @Test
-    void 지정한_경매_아이디가_포함된_채팅방을_조회한다() {
+    void 지정한_경매_아이디가_포함된_채팅방의_아이디를_조회한다() {
         // given
         final Category main = new Category("메인");
         final Category sub = new Category("서브");
@@ -220,12 +220,12 @@ class QuerydslChatRoomRepositoryImplTest {
         em.clear();
 
         // when
-        final Optional<ChatRoom> actual = chatRoomRepository.findByAuctionId(auction.getId());
+        final Optional<Long> actual = chatRoomRepository.findChatRoomIdByAuctionId(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get()).isEqualTo(chatRoom);
+            softAssertions.assertThat(actual.get()).isEqualTo(chatRoom.getId());
         });
     }
 }
