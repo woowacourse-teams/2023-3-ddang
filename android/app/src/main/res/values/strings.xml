@@ -132,4 +132,8 @@
     <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
     <string name="report_snackbar_auction_id_not_delivered">경매 정보가 넘어오지 않았습니다.</string>
+
+    <!-- alarm -->
+    <string name="alarm_channel_name">전체 알림</string>
+    <string name="alarm_channel_description">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받습니다.</string>
 </resources>

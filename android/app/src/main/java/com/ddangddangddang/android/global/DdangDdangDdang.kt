@@ -2,6 +2,7 @@ package com.ddangddangddang.android.global
 
 import android.app.Application
 import com.ddangddangddang.android.BuildConfig
+import com.ddangddangddang.android.alarm.createNotificationChannel
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.remote.AuthRetrofit
 import com.ddangddangddang.data.repository.AuthRepositoryImpl
@@ -19,6 +20,8 @@ class DdangDdangDdang : Application() {
         _auctionRetrofit = AuctionRetrofit.getInstance(authRepository)
 
         KakaoSdk.init(this, BuildConfig.KEY_KAKAO)
+
+        createNotificationChannel(this)
     }
 
     companion object {
