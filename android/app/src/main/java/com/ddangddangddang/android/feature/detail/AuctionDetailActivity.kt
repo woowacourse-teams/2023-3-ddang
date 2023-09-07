@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
@@ -34,12 +33,7 @@ class AuctionDetailActivity :
     }
 
     private fun setupViewModel() {
-        observeLoadingWithDialog(
-            this,
-            viewModel.isLoading,
-            onLoadingStarted = { binding.clAuctionDetailContainer.visibility = View.GONE },
-            onLoadingFinished = { binding.clAuctionDetailContainer.visibility = View.VISIBLE },
-        )
+        observeLoadingWithDialog(this, viewModel.isLoading, binding.clAuctionDetailContainer)
         viewModel.event.observe(this) { event ->
             handleEvent(event)
         }
