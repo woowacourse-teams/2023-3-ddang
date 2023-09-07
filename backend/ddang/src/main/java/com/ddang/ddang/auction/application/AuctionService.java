@@ -10,6 +10,7 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.presentation.dto.request.SearchCondition;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
@@ -120,8 +121,15 @@ public class AuctionService {
         return findAuction.isClosed(LocalDateTime.now()) && findAuction.isSellerOrWinner(findUser, LocalDateTime.now());
     }
 
-    public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final Pageable pageable) {
-        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(lastAuctionId, pageable);
+    public ReadAuctionsDto readAllByLastAuctionId(
+            final Long lastAuctionId,
+            final Pageable pageable,
+            final SearchCondition searchCondition) {
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(
+                lastAuctionId,
+                pageable,
+                searchCondition
+        );
 
         return ReadAuctionsDto.from(auctions);
     }
