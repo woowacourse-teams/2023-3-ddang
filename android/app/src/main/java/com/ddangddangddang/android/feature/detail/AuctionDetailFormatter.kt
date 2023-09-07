@@ -14,6 +14,16 @@ object AuctionDetailFormatter {
         return dateTime.format(formatter)
     }
 
+    fun formatCategoryText(context: Context, mainCategory: String?, subCategory: String?): String {
+        if (mainCategory.isNullOrBlank() || subCategory.isNullOrBlank()) return emptyContent
+        return context.getString(R.string.detail_auction_category, mainCategory, subCategory)
+    }
+
+    fun formatAuctionStatusColor(context: Context, colorId: Int): Int {
+        if (colorId == 0) return context.getColor(R.color.white)
+        return context.getColor(colorId)
+    }
+
     fun formatAuctionDetailStatus(
         context: Context,
         auctionDetailModel: AuctionDetailModel?,
@@ -26,6 +36,12 @@ object AuctionDetailFormatter {
         } else {
             context.getString(R.string.detail_auction_price_status, priceStatus, lastBidPrice)
         }
+    }
+
+    fun formatClosingRemainDateText(context: Context, remainTime: String?): String {
+        if (remainTime == null) return emptyContent
+        if (remainTime.isEmpty()) return context.getString(R.string.detail_auction_remain_time_finish)
+        return context.getString(R.string.detail_auction_remain_time, remainTime)
     }
 
     fun getAuctionBottomButtonText(
