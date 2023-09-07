@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
@@ -25,6 +26,17 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         super.onViewCreated(view, savedInstanceState)
         setupAuctionRecyclerView()
         setupViewModel()
+        setupKeyboard()
+    }
+
+    private fun setupKeyboard() {
+        binding.etSearchKeyword.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                viewModel.submitKeyword()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
     }
 
     private fun setupViewModel() {
