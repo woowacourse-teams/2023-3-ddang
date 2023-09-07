@@ -5,10 +5,10 @@ import java.util.Arrays;
 
 public enum SortParameter {
 
-    ID("new", "id"),
-    AUCTIONEER_COUNT("auctioneer", "auctioneerCount"),
-    CLOSING_TIME("closingTime", "closingTime"),
-    RELIABILITY("reliability", "reliability");
+    ID("new", AuctionSortConditionConsts.ID),
+    AUCTIONEER_COUNT("auctioneer", AuctionSortConditionConsts.AUCTIONEER_COUNT),
+    CLOSING_TIME("closingTime", AuctionSortConditionConsts.CLOSING_TINE),
+    RELIABILITY("reliability", AuctionSortConditionConsts.RELIABILITY);
 
     private final String sortParameter;
     private final String sortCondition;

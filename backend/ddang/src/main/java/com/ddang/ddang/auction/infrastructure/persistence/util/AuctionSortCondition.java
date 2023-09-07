@@ -3,6 +3,7 @@ package com.ddang.ddang.auction.infrastructure.persistence.util;
 import static com.ddang.ddang.auction.domain.QAuction.auction;
 import static org.springframework.data.domain.Sort.Order;
 
+import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.infrastructure.persistence.util.exception.UnsupportedSortConditionException;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.ComparableExpressionBase;
@@ -10,10 +11,10 @@ import java.util.Arrays;
 
 public enum AuctionSortCondition {
 
-    ID("id", auction.id),
-    AUCTIONEER_COUNT("auctioneerCount", auction.auctioneerCount),
-    CLOSING_TIME("closingTime", auction.closingTime),
-    RELIABILITY("reliability", auction.seller.reliability);
+    ID(AuctionSortConditionConsts.ID, auction.id),
+    AUCTIONEER_COUNT(AuctionSortConditionConsts.AUCTIONEER_COUNT, auction.auctioneerCount),
+    CLOSING_TIME(AuctionSortConditionConsts.CLOSING_TINE, auction.closingTime),
+    RELIABILITY(AuctionSortConditionConsts.RELIABILITY, auction.seller.reliability);
 
     private final String sortCondition;
     private final ComparableExpressionBase<?> sortExpression;
