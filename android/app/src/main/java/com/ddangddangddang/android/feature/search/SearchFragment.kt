@@ -82,9 +82,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun showAuctions() {
-        if (binding.rvSearchAuctions.visibility == View.INVISIBLE) {
-            binding.rvSearchAuctions.visibility = View.VISIBLE
-        }
+        binding.tvNoticeNoAuctions.visibility = View.INVISIBLE
+        binding.rvSearchAuctions.visibility = View.VISIBLE
     }
 
     private fun hideKeyboard() {
