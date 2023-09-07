@@ -23,12 +23,10 @@ class AuctionDetailViewModel(
         get() = _event
 
     private val _isLoadingWithAnimation: MutableLiveData<Boolean> = MutableLiveData()
-    val isLoading: LiveData<Boolean>
+    val isLoadingWithAnimation: LiveData<Boolean>
         get() = _isLoadingWithAnimation
 
-    private val _isLoadingWithoutAnimation: MutableLiveData<Boolean> = MutableLiveData()
-    val isLoadingWithoutAnimation: LiveData<Boolean>
-        get() = _isLoadingWithoutAnimation
+    private var isLoadingWithoutAnimation: Boolean = false
 
     private val _auctionDetailModel: MutableLiveData<AuctionDetailModel> = MutableLiveData()
     val auctionDetailModel: LiveData<AuctionDetailModel>
@@ -84,8 +82,8 @@ class AuctionDetailViewModel(
 
     private fun enterChatRoomEvent() {
         _auctionDetailModel.value?.let {
-            if (_isLoadingWithoutAnimation.value == true) return@let
-            _isLoadingWithoutAnimation.value = true
+            if (isLoadingWithoutAnimation) return@let
+            isLoadingWithoutAnimation = true
             viewModelScope.launch {
                 val request = GetChatRoomIdRequest(it.id)
                 when (val response = chatRepository.getChatRoomId(request)) {
@@ -97,7 +95,7 @@ class AuctionDetailViewModel(
                     is ApiResponse.NetworkError -> {}
                     is ApiResponse.Unexpected -> {}
                 }
-                _isLoadingWithoutAnimation.value = false
+                isLoadingWithoutAnimation = false
             }
         }
     }
@@ -120,8 +118,8 @@ class AuctionDetailViewModel(
 
     fun deleteAuction() {
         _auctionDetailModel.value?.let {
-            if (_isLoadingWithoutAnimation.value == true) return@let
-            _isLoadingWithoutAnimation.value = true
+            if (isLoadingWithoutAnimation) return@let
+            isLoadingWithoutAnimation = true
             viewModelScope.launch {
                 when (auctionRepository.deleteAuction(it.id)) {
                     is ApiResponse.Success ->
@@ -132,7 +130,7 @@ class AuctionDetailViewModel(
                     is ApiResponse.NetworkError -> {}
                     is ApiResponse.Unexpected -> {}
                 }
-                _isLoadingWithoutAnimation.value = false
+                isLoadingWithoutAnimation = false
             }
         }
     }

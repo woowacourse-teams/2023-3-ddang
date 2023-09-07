@@ -33,7 +33,11 @@ class AuctionDetailActivity :
     }
 
     private fun setupViewModel() {
-        observeLoadingWithDialog(this, viewModel.isLoading, binding.clAuctionDetailContainer)
+        observeLoadingWithDialog(
+            this,
+            viewModel.isLoadingWithAnimation,
+            binding.clAuctionDetailContainer,
+        )
         viewModel.event.observe(this) { event ->
             handleEvent(event)
         }
