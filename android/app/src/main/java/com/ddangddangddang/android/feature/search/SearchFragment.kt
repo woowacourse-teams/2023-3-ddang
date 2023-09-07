@@ -70,6 +70,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         showAuctions()
     }
 
+    private fun hideKeyboard() {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.etSearchKeyword.windowToken, 0)
+    }
+
     private fun hideNoticeInputKeyword() {
         if (binding.tvNoticeInputKeyword.visibility == View.VISIBLE) {
             binding.tvNoticeInputKeyword.visibility = View.INVISIBLE
@@ -84,11 +89,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private fun showAuctions() {
         binding.tvNoticeNoAuctions.visibility = View.INVISIBLE
         binding.rvSearchAuctions.visibility = View.VISIBLE
-    }
-
-    private fun hideKeyboard() {
-        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(binding.etSearchKeyword.windowToken, 0)
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
