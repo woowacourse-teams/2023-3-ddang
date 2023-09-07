@@ -3,7 +3,7 @@ package com.ddang.ddang.auction.configuration.util;
 import com.ddang.ddang.auction.configuration.exception.UnsupportedSortParameterException;
 import java.util.Arrays;
 
-public enum SortParameterConverter {
+public enum SortParameter {
 
     ID("new", "id"),
     AUCTIONEER_COUNT("auctioneer", "auctioneerCount"),
@@ -13,19 +13,19 @@ public enum SortParameterConverter {
     private final String sortParameter;
     private final String sortCondition;
 
-    SortParameterConverter(final String sortParameter, final String sortCondition) {
+    SortParameter(final String sortParameter, final String sortCondition) {
         this.sortParameter = sortParameter;
         this.sortCondition = sortCondition;
     }
 
     public static String findSortProperty(final String targetSortParameter) {
         if (isDefaultSortCondition(targetSortParameter)) {
-            return SortParameterConverter.ID.sortCondition;
+            return SortParameter.ID.sortCondition;
         }
 
-        return Arrays.stream(SortParameterConverter.values())
-                     .filter(sortParameterConverter -> verifyEquality(targetSortParameter, sortParameterConverter))
-                     .map(sortParameterConverter -> sortParameterConverter.sortCondition)
+        return Arrays.stream(SortParameter.values())
+                     .filter(sortParameter -> verifyEquality(targetSortParameter, sortParameter))
+                     .map(sortParameter -> sortParameter.sortCondition)
                      .findAny()
                      .orElseThrow(() -> new UnsupportedSortParameterException("지원하지 않는 정렬 방식입니다."));
     }
@@ -36,8 +36,8 @@ public enum SortParameterConverter {
 
     private static boolean verifyEquality(
             final String targetSortParameter,
-            final SortParameterConverter sortParameterConverter
+            final SortParameter sortParameter
     ) {
-        return sortParameterConverter.sortParameter.equalsIgnoreCase(targetSortParameter);
+        return sortParameter.sortParameter.equalsIgnoreCase(targetSortParameter);
     }
 }

@@ -13,7 +13,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.data.domain.Sort.Order;
 
-class AuctionSortConditionConverterTest {
+class AuctionSortConditionTest {
 
     @ParameterizedTest(name = "condition이 {0}일 때 {1}을 반환한다.")
     @MethodSource("successConvertConditionArguments")
@@ -21,7 +21,7 @@ class AuctionSortConditionConverterTest {
             final String sortCondition,
             final OrderSpecifier<?> expected
     ) {
-        final OrderSpecifier<?> actual = AuctionSortConditionConverter.convert(Order.by(sortCondition));
+        final OrderSpecifier<?> actual = AuctionSortCondition.convert(Order.by(sortCondition));
 
         assertThat(actual).isEqualTo(expected);
     }
@@ -39,7 +39,7 @@ class AuctionSortConditionConverterTest {
     void 유효하지_않은_정렬_조건을_전달하면_예외가_발생한다() {
         final String invalidSortCondition = "invalidSortCondition";
 
-        assertThatThrownBy(() -> AuctionSortConditionConverter.convert(Order.asc(invalidSortCondition)))
+        assertThatThrownBy(() -> AuctionSortCondition.convert(Order.asc(invalidSortCondition)))
                 .isInstanceOf(UnsupportedSortConditionException.class)
                 .hasMessageContaining("지원하지 않는 정렬 방식입니다.");
     }

@@ -6,7 +6,7 @@ import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.util.AuctionSortConditionConverter;
+import com.ddang.ddang.auction.infrastructure.persistence.util.AuctionSortCondition;
 import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -72,7 +72,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         final Sort sort = pageable.getSort();
 
         for (final Order order : sort) {
-            orderSpecifiers.add(AuctionSortConditionConverter.convert(order));
+            orderSpecifiers.add(AuctionSortCondition.convert(order));
         }
 
         return orderSpecifiers;
