@@ -25,8 +25,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupAuctionRecyclerView()
-        setupViewModel()
         setupKeyboard()
+        setupViewModel()
+    }
+
+    private fun setupAuctionRecyclerView() {
+        binding.rvSearchAuctions.adapter = auctionAdapter
+        binding.rvSearchAuctions.addItemDecoration(
+            AuctionSpaceItemDecoration(
+                2,
+                resources.getDimensionPixelSize(R.dimen.margin_side_layout),
+            ),
+        )
     }
 
     private fun setupKeyboard() {
@@ -76,16 +86,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private fun hideKeyboard() {
         val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(binding.etSearchKeyword.windowToken, 0)
-    }
-
-    private fun setupAuctionRecyclerView() {
-        binding.rvSearchAuctions.adapter = auctionAdapter
-        binding.rvSearchAuctions.addItemDecoration(
-            AuctionSpaceItemDecoration(
-                2,
-                resources.getDimensionPixelSize(R.dimen.margin_side_layout),
-            ),
-        )
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
