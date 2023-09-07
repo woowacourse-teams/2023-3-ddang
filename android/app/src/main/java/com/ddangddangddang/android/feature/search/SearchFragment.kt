@@ -78,6 +78,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
 
     private fun showNoticeNoAuctions() {
         binding.tvNoticeNoAuctions.visibility = View.VISIBLE
+        binding.rvSearchAuctions.visibility = View.INVISIBLE
     }
 
     private fun showAuctions() {
