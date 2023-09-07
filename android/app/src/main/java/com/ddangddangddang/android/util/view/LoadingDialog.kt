@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.WindowManager
 import androidx.annotation.RawRes
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
@@ -18,6 +19,7 @@ class LoadingDialog(context: Context, @RawRes rawResId: Int) : Dialog(context) {
 
     init {
         window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        window?.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND) // dialog의 dim 처리 배경 제거
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(binding.root)
         setCancelable(false)
