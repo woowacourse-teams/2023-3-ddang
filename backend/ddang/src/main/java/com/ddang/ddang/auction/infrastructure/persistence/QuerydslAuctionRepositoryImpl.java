@@ -5,6 +5,7 @@ import static com.ddang.ddang.category.domain.QCategory.category;
 import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
 
+import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.util.AuctionSortCondition;
 import com.ddang.ddang.common.helper.QuerydslSliceHelper;
@@ -12,6 +13,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +33,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
 
     @Override
     public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = convertOrderSpecifiers(pageable);
+        final List<OrderSpecifier<?>> orderSpecifiers = calculateOrderSpecifiers(pageable);
 
         final List<Long> findAuctionIds = queryFactory.select(auction.id)
                                                       .from(auction)
@@ -67,11 +69,23 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         return auction.id.lt(lastAuctionId);
     }
 
+    private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
+
+        orderSpecifiers.add(auction.id.desc());
+
+        return orderSpecifiers;
+    }
+
     private List<OrderSpecifier<?>> convertOrderSpecifiers(final Pageable pageable) {
         final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         final Sort sort = pageable.getSort();
 
         for (final Order order : sort) {
+            if (AuctionSortConditionConsts.ID.equals(order.getProperty())) {
+                return Collections.emptyList();
+            }
+
             orderSpecifiers.add(AuctionSortCondition.convert(order));
         }
 

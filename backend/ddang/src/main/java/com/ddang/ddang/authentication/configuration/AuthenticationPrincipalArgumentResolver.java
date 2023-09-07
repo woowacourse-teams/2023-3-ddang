@@ -1,5 +1,6 @@
 package com.ddang.ddang.authentication.configuration;
 
+import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,7 @@ public class AuthenticationPrincipalArgumentResolver implements HandlerMethodArg
         final AuthenticationUserInfo userInfo = store.get();
 
         if (isInvalidUserPrincipal(userInfo, parameter)) {
-            return new AuthenticationUserInfo(1L);
+            throw new UserUnauthorizedException("로그인이 필요한 기능입니다.");
         }
 
         return userInfo;
