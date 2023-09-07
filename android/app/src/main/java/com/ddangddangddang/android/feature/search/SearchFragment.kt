@@ -41,7 +41,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
 
     private fun setupKeyboard() {
         binding.etSearchKeyword.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 viewModel.submitKeyword()
                 return@setOnEditorActionListener true
             }
