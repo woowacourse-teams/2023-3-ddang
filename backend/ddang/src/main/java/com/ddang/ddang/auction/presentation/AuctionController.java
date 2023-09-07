@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailResponse;
@@ -13,6 +14,7 @@ import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -32,8 +33,6 @@ import java.util.List;
 @RequestMapping("/auctions")
 @RequiredArgsConstructor
 public class AuctionController {
-
-    private static final String AUCTIONS_IMAGE_BASE_URL = "/auctions/images/";
 
     private final AuctionService auctionService;
 
@@ -48,7 +47,7 @@ public class AuctionController {
                 images,
                 userInfo.userId()
         ));
-        final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, calculateBaseImageUrl());
+        final CreateAuctionResponse response = CreateAuctionResponse.from(createInfoAuctionDto);
 
         return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
                              .body(response);
@@ -62,7 +61,6 @@ public class AuctionController {
         final ReadAuctionWithChatRoomIdDto readAuctionDto = auctionService.readByAuctionId(auctionId, userInfo);
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
-                calculateBaseImageUrl(),
                 userInfo
         );
 
@@ -73,10 +71,10 @@ public class AuctionController {
     public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
             @AuthenticateUser final AuthenticationUserInfo ignored,
             @RequestParam(required = false) final Long lastAuctionId,
-            @RequestParam(required = false, defaultValue = "10") final int size
+            @DescendingSort Pageable pageable
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(lastAuctionId, size);
-        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(lastAuctionId, pageable);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
 
         return ResponseEntity.ok(response);
     }
@@ -89,10 +87,5 @@ public class AuctionController {
         auctionService.deleteByAuctionId(auctionId, userInfo.userId());
 
         return ResponseEntity.noContent().build();
-    }
-
-    private String calculateBaseImageUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
-                                          .concat(AUCTIONS_IMAGE_BASE_URL);
     }
 }

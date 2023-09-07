@@ -23,7 +23,7 @@ public record ReadAuctionDto(
         String mainCategory,
         String subCategory,
         Long sellerId,
-        String sellerProfile,
+        Long sellerProfileId,
         String sellerName,
         double sellerReliability
 ) {
@@ -40,18 +40,19 @@ public record ReadAuctionDto(
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
                 convertReadRegionsDto(auction),
-                convertImageUrls(auction),
+                convertImageIds(auction),
                 auction.getAuctioneerCount(),
                 auction.getSubCategory().getMainCategory().getName(),
                 auction.getSubCategory().getName(),
                 auction.getSeller().getId(),
-                auction.getSeller().getProfileImage(),
+                auction.getSeller().getProfileImage().getId(),
                 auction.getSeller().getName(),
                 auction.getSeller().getReliability()
         );
     }
 
-    private static List<Long> convertImageUrls(final Auction auction) {
+    // TODO: 2023/09/09 [고민] convertImageUrls보다 convertImageIds가 적절하지 않을까 싶어 바꿨는데 어떨까요? 괜찮다면 다른 부분들도 수정하도록 하겠습니다.
+    private static List<Long> convertImageIds(final Auction auction) {
         return auction.getAuctionImages()
                       .stream()
                       .map(AuctionImage::getId)

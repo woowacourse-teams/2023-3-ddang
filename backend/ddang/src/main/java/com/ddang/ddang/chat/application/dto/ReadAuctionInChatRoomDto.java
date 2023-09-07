@@ -14,7 +14,7 @@ public record ReadAuctionInChatRoomDto(
         String mainCategory,
         String subCategory,
         Long sellerId,
-        String sellerProfile,
+        Long sellerProfileId,
         String sellerName,
         double sellerReliability
 ) {
@@ -28,7 +28,7 @@ public record ReadAuctionInChatRoomDto(
                 auction.getSubCategory().getMainCategory().getName(),
                 auction.getSubCategory().getName(),
                 auction.getSeller().getId(),
-                auction.getSeller().getProfileImage(),
+                auction.getSeller().getProfileImage().getId(),
                 auction.getSeller().getName(),
                 auction.getSeller().getReliability()
         );
