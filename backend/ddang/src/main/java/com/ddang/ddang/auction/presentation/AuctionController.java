@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailResponse;
@@ -13,6 +14,7 @@ import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -73,9 +75,9 @@ public class AuctionController {
     public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
             @AuthenticateUser final AuthenticationUserInfo ignored,
             @RequestParam(required = false) final Long lastAuctionId,
-            @RequestParam(required = false, defaultValue = "10") final int size
+            @DescendingSort Pageable pageable
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(lastAuctionId, size);
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(lastAuctionId, pageable);
         final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
 
         return ResponseEntity.ok(response);
