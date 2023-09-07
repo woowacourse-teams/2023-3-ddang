@@ -63,7 +63,10 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         hideNoticeInputKeyword()
         auctionAdapter.submitList(auctions)
 
-        if (auctions.isEmpty()) showNoticeNoAuctions()
+        if (auctions.isEmpty()) {
+            showNoticeNoAuctions()
+            return
+        }
         showAuctions()
     }
 
