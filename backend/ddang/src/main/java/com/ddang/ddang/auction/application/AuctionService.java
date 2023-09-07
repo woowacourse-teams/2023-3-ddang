@@ -27,6 +27,7 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -119,8 +120,8 @@ public class AuctionService {
         return findAuction.isClosed(LocalDateTime.now()) && findAuction.isSellerOrWinner(findUser, LocalDateTime.now());
     }
 
-    public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final int size) {
-        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(lastAuctionId, size);
+    public ReadAuctionsDto readAllByLastAuctionId(final Long lastAuctionId, final Pageable pageable) {
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(lastAuctionId, pageable);
 
         return ReadAuctionsDto.from(auctions);
     }
