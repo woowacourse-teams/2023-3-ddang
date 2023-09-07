@@ -86,7 +86,7 @@
                 android:value="" />
         </service>
         <service
-            android:name=".alarm.DdangDdangDdangFirebaseMessagingService"
+            android:name=".notification.DdangDdangDdangFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

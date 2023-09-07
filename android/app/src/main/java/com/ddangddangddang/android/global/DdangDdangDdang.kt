@@ -2,7 +2,7 @@ package com.ddangddangddang.android.global
 
 import android.app.Application
 import com.ddangddangddang.android.BuildConfig
-import com.ddangddangddang.android.alarm.createNotificationChannel
+import com.ddangddangddang.android.notification.createNotificationChannel
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.remote.AuthRetrofit
 import com.ddangddangddang.data.repository.AuthRepositoryImpl

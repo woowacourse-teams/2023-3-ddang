@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.alarm
+package com.ddangddangddang.android.notification
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
