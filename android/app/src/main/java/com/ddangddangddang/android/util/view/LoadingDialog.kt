@@ -29,7 +29,7 @@ fun Context.observeLoadingWithDialog(
     lifecycleOwner: LifecycleOwner,
     loadingLiveData: LiveData<Boolean>,
     containerViewGroup: ViewGroup? = null,
-    @RawRes loadingAnimationResId: Int = R.raw.loading,
+    @RawRes loadingAnimationResId: Int = R.raw.default_loading,
     onLoadingStarted: () -> Unit = {},
     onLoadingFinished: () -> Unit = {},
 ) {
