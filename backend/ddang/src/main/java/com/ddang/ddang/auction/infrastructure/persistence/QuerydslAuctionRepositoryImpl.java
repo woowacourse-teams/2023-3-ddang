@@ -8,7 +8,7 @@ import static com.ddang.ddang.region.domain.QRegion.region;
 import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.util.AuctionSortCondition;
-import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -36,7 +36,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     public Slice<Auction> findAuctionsAllByLastAuctionId(
             final Long lastAuctionId,
             final Pageable pageable,
-            final ReadAuctionSearchCondition readAuctionSearchCondition
+            final ReadAuctionCondition readAuctionCondition
     ) {
         final List<OrderSpecifier<?>> orderSpecifiers = calculateOrderSpecifiers(pageable);
 
@@ -45,7 +45,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                       .where(
                                                               auction.deleted.isFalse(),
                                                               lessThanLastAuctionId(lastAuctionId),
-                                                              convertTitleSearchCondition(readAuctionSearchCondition)
+                                                              convertTitleSearchCondition(readAuctionCondition)
                                                       )
                                                       .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                                                       .limit(pageable.getPageSize() + SLICE_OFFSET)
@@ -75,8 +75,8 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         return auction.id.lt(lastAuctionId);
     }
 
-    private BooleanExpression convertTitleSearchCondition(final ReadAuctionSearchCondition readAuctionSearchCondition) {
-        final String titleSearchCondition = readAuctionSearchCondition.title();
+    private BooleanExpression convertTitleSearchCondition(final ReadAuctionCondition readAuctionCondition) {
+        final String titleSearchCondition = readAuctionCondition.title();
 
         if (titleSearchCondition == null) {
             return null;

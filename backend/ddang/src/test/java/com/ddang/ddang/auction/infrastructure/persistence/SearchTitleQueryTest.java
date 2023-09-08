@@ -1,7 +1,7 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +16,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
                 null,
                 PageRequest.of(1, 3),
-                new ReadAuctionSearchCondition("우아한테크코스")
+                new ReadAuctionCondition("우아한테크코스")
         );
 
         // then
@@ -32,7 +32,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
                 15L,
                 PageRequest.of(1, 3),
-                new ReadAuctionSearchCondition("우아한테크코스")
+                new ReadAuctionCondition("우아한테크코스")
         );
 
         // then
@@ -48,7 +48,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
                 null,
                 PageRequest.of(1, 3),
-                new ReadAuctionSearchCondition("핫식스")
+                new ReadAuctionCondition("핫식스")
         );
 
         // then
@@ -65,7 +65,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
                 null,
                 PageRequest.of(1, 3),
-                new ReadAuctionSearchCondition("맥북")
+                new ReadAuctionCondition("맥북")
         );
 
         // then
@@ -84,7 +84,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
                 auction2.getId(),
                 PageRequest.of(2, 3),
-                new ReadAuctionSearchCondition("맥북")
+                new ReadAuctionCondition("맥북")
         );
 
         // then
@@ -101,7 +101,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
                 auction1.getId(),
                 PageRequest.of(2, 3),
-                new ReadAuctionSearchCondition("맥북")
+                new ReadAuctionCondition("맥북")
         );
 
         // then

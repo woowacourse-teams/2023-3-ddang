@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
@@ -187,7 +187,7 @@ class QuerydslAuctionRepositoryImplTest {
         final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
                 null,
                 PageRequest.of(1, 1, Sort.by(Order.desc("id"))),
-                new ReadAuctionSearchCondition(null)
+                new ReadAuctionCondition(null)
         );
 
         // then
@@ -236,7 +236,7 @@ class QuerydslAuctionRepositoryImplTest {
         final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
                 auction3.getId(),
                 PageRequest.of(1, 1, Sort.by(Order.desc("id"))),
-                new ReadAuctionSearchCondition(null)
+                new ReadAuctionCondition(null)
         );
 
         // then
@@ -286,7 +286,7 @@ class QuerydslAuctionRepositoryImplTest {
         final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
                 auction3.getId(),
                 PageRequest.of(1, 1),
-                new ReadAuctionSearchCondition(null)
+                new ReadAuctionCondition(null)
         );
 
         // then
@@ -334,7 +334,7 @@ class QuerydslAuctionRepositoryImplTest {
         final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
                 null,
                 PageRequest.of(1, 1, Sort.by(Order.desc("closingTime"))),
-                new ReadAuctionSearchCondition(null)
+                new ReadAuctionCondition(null)
         );
 
         // then

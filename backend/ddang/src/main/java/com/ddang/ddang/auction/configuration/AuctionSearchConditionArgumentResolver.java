@@ -1,7 +1,7 @@
 package com.ddang.ddang.auction.configuration;
 
 import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
-import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -17,7 +17,7 @@ public class AuctionSearchConditionArgumentResolver implements HandlerMethodArgu
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {
-        return parameter.getParameterType().equals(ReadAuctionSearchCondition.class);
+        return parameter.getParameterType().equals(ReadAuctionCondition.class);
     }
 
     @Override
@@ -30,12 +30,12 @@ public class AuctionSearchConditionArgumentResolver implements HandlerMethodArgu
         final String titleSearchCondition = webRequest.getParameter("title");
 
         if (titleSearchCondition == null) {
-            return new ReadAuctionSearchCondition(null);
+            return new ReadAuctionCondition(null);
         }
 
         validateSearchCondition(titleSearchCondition);
 
-        return new ReadAuctionSearchCondition(titleSearchCondition);
+        return new ReadAuctionCondition(titleSearchCondition);
     }
 
     private void validateSearchCondition(final String titleSearchCondition) {
