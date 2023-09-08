@@ -27,6 +27,8 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
     Auction auction4;
     Auction auction5;
     Auction auction6;
+    Auction auction7;
+    Auction auction8;
 
     @BeforeEach
     void setUp() {
@@ -127,8 +129,25 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .closingTime(LocalDateTime.now())
                           .seller(seller6)
                           .build();
+        auction7 = Auction.builder()
+                          .title("맥북1을 팝니다")
+                          .description("맥북1을 팝니다")
+                          .bidUnit(new BidUnit(1_000))
+                          .startPrice(new Price(1_000))
+                          .closingTime(LocalDateTime.now())
+                          .seller(seller1)
+                          .build();
+        auction8 = Auction.builder()
+                          .title("맥북2을 팝니다")
+                          .description("맥북2을 팝니다")
+                          .bidUnit(new BidUnit(1_000))
+                          .startPrice(new Price(1_000))
+                          .closingTime(LocalDateTime.now())
+                          .seller(seller2)
+                          .build();
 
-        final List<Auction> auctions = List.of(auction1, auction2, auction3, auction4, auction5);
+        final List<Auction> auctions = List.of(auction1, auction2, auction3, auction4, auction5, auction6, auction7,
+                auction8);
         auctionRepository.saveAll(auctions);
 
         em.flush();

@@ -71,9 +71,9 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
-            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction4);
-            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction3);
-            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction2);
+            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction8);
+            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction7);
+            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction4);
             softAssertions.assertThat(actual.hasNext()).isTrue();
         });
     }
