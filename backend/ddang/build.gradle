@@ -87,9 +87,7 @@ jacocoTestReport {
                     exclude: [
                             '**/*Application*',
                             '**/*Exception*',
-                            '**/*Response*',
-                            '**/*Request*',
-                            '**/*Dto*',
+                            '**/*dto*/*',
                             '**/*PrivateClaims*',
                             '**/configuration/**',
                             '**/*Appender*',
@@ -124,10 +122,8 @@ jacocoTestCoverageVerification {
 
             excludes = [
                     '*.*Exception*',
-                    '*.*Response*',
-                    '*.*Request*',
                     '*.*Application*',
-                    '*.*Dto*',
+                    '*.*dto*.*',
                     '*.*PrivateClaims*',
                     '*.configuration.*',
                     '*.*Appender*',
