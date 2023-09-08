@@ -26,7 +26,14 @@ class SplashViewModel(
     private fun verifyToken() {
         viewModelScope.launch {
             when (val response = repository.verifyToken()) {
-                is ApiResponse.Success -> _event.value = SplashEvent.AutoLoginSuccess
+                is ApiResponse.Success -> {
+                    if (response.body.validated) {
+                        _event.value = SplashEvent.AutoLoginSuccess
+                    } else {
+                        _event.value = SplashEvent.RefreshTokenExpired
+                    }
+                }
+
                 is ApiResponse.Failure -> {
                     if (response.responseCode == 401) _event.value = SplashEvent.RefreshTokenExpired
                 }

@@ -48,7 +48,7 @@ class AuthRepositoryImpl private constructor(
 
     override suspend fun verifyToken(): ApiResponse<ValidateTokenResponse> {
         val response = remoteDataSource.verifyToken(localDataSource.getAccessToken())
-        if (response is ApiResponse.Failure && response.responseCode == 401) {
+        if (response is ApiResponse.Success && !response.body.validated) {
             refreshToken()
             return remoteDataSource.verifyToken(localDataSource.getAccessToken())
         }
