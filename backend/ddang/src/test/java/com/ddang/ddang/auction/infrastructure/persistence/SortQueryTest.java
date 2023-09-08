@@ -274,7 +274,7 @@ class SortQueryTest extends InitializeCommonAuctionData {
     }
 
     /**
-     * 경매 참여자 수 기준 정렬 순서
+     * 마감 임박순 기준 정렬 순서
      *
      * Auction5 : 핫식스 / 5L / 1.5d / 4 / 1일 뒤
      * Auction4 : 맥북 / 4L / 5.0d / 7 / 2일 뒤
