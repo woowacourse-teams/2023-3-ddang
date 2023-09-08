@@ -7,7 +7,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.auction.presentation.dto.request.SearchCondition;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailResponse;
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
@@ -76,12 +76,12 @@ public class AuctionController {
             @AuthenticateUser final AuthenticationUserInfo ignored,
             @RequestParam(required = false) final Long lastAuctionId,
             @DescendingSort final Pageable pageable,
-            final SearchCondition searchCondition
+            final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {
         final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(
                 lastAuctionId,
                 pageable,
-                searchCondition
+                readAuctionSearchCondition
         );
         final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
 
