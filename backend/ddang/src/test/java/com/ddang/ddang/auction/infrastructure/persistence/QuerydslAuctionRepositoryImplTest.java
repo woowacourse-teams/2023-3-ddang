@@ -29,10 +29,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -183,12 +180,17 @@ class QuerydslAuctionRepositoryImplTest {
         em.flush();
         em.clear();
 
-        // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+        final ReadAuctionCondition readAuctionCondition = new ReadAuctionCondition(
+                "id",
                 null,
-                PageRequest.of(1, 1, Sort.by(Order.desc("id"))),
-                new ReadAuctionCondition(null)
+                null,
+                null,
+                null, null,
+                1
         );
+
+        // when
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(readAuctionCondition);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -231,13 +233,17 @@ class QuerydslAuctionRepositoryImplTest {
         em.flush();
         em.clear();
 
-        // when
-
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+        final ReadAuctionCondition readAuctionCondition = new ReadAuctionCondition(
+                "id",
                 auction3.getId(),
-                PageRequest.of(1, 1, Sort.by(Order.desc("id"))),
-                new ReadAuctionCondition(null)
+                null,
+                null,
+                null, null,
+                1
         );
+
+        // when
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(readAuctionCondition);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -282,12 +288,17 @@ class QuerydslAuctionRepositoryImplTest {
         em.flush();
         em.clear();
 
-        // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
+        final ReadAuctionCondition readAuctionCondition = new ReadAuctionCondition(
+                "id",
                 auction3.getId(),
-                PageRequest.of(1, 1),
-                new ReadAuctionCondition(null)
+                null,
+                null,
+                null, null,
+                1
         );
+
+        // when
+        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(readAuctionCondition);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -295,54 +306,6 @@ class QuerydslAuctionRepositoryImplTest {
 
             final List<Auction> actualAuctions = actual.getContent();
             softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction1.getTitle());
-        });
-    }
-
-    @Test
-    void 마감_시간을_기준으로_정렬한_경매_목록의_첫번째_페이지를_조회한다() {
-        // given
-        final Auction auction1 = Auction.builder()
-                                        .title("경매 상품 1")
-                                        .description("이것은 경매 상품 1 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction2 = Auction.builder()
-                                        .title("경매 상품 2")
-                                        .description("이것은 경매 상품 2 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction3 = Auction.builder()
-                                        .title("경매 상품 3")
-                                        .description("이것은 경매 상품 3 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-
-        auctionRepository.save(auction1);
-        auctionRepository.save(auction2);
-        auctionRepository.save(auction3);
-
-        em.flush();
-        em.clear();
-
-        // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(
-                null,
-                PageRequest.of(1, 1, Sort.by(Order.desc("closingTime"))),
-                new ReadAuctionCondition(null)
-        );
-
-        // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(1);
-
-            final List<Auction> actualAuctions = actual.getContent();
-            softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction3.getTitle());
         });
     }
 }

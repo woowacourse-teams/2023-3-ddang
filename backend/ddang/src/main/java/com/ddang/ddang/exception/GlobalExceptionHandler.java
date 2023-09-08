@@ -2,7 +2,7 @@ package com.ddang.ddang.exception;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
-import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
+import com.ddang.ddang.auction.configuration.exception.InvalidAuctionConditionException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
@@ -289,9 +289,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(InvalidSearchConditionException.class)
+    @ExceptionHandler(InvalidAuctionConditionException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidSearchConditionException(
-            final InvalidSearchConditionException ex) {
+            final InvalidAuctionConditionException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

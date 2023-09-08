@@ -4,7 +4,6 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -14,9 +13,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     void 검색_결과가_없을때_첫번째_페이지를_요청하면_빈_Slice를_반환한다() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
-                null,
-                PageRequest.of(1, 3),
-                new ReadAuctionCondition("우아한테크코스")
+                createReadAuctionCondition("우아한테크코스")
         );
 
         // then
@@ -30,9 +27,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     void 검색_결과가_없을때_두번째_페이지_이후의_페이지를_요청하면_빈_Slice를_반환한다() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
-                15L,
-                PageRequest.of(1, 3),
-                new ReadAuctionCondition("우아한테크코스")
+                createReadAuctionCondition("우아한테크코스")
         );
 
         // then
@@ -46,9 +41,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     void 검색_결과가_페이지_크기보다_작은_경우_첫번째_페이지에_모든_검색_결과를_가진_Slice를_반환한다() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
-                null,
-                PageRequest.of(1, 3),
-                new ReadAuctionCondition("핫식스")
+                createReadAuctionCondition("핫식스")
         );
 
         // then
@@ -63,9 +56,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     void 검색_결과가_페이지_크기보다_큰_경우_첫번째_페이지에는_페이지_크기만큼의_검색_결과를_가진_Slice를_반환한다() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
-                null,
-                PageRequest.of(1, 3),
-                new ReadAuctionCondition("맥북")
+                createReadAuctionCondition("맥북")
         );
 
         // then
@@ -82,9 +73,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     void 검색_결과가_페이지_크기보다_큰_경우_마지막_페이지를_요청하면_검색_결과를_페이지로_나눈_나머지만큼의_검색_결과를_가진_Slice를_반환한다() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
-                auction2.getId(),
-                PageRequest.of(2, 3),
-                new ReadAuctionCondition("맥북")
+                createReadAuctionCondition(auction2.getId(), "맥북")
         );
 
         // then
@@ -99,9 +88,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     void 검색_결과가_페이지_크기보다_큰_경우_마지막_페이지_이후_페이지를_요청하면_빈_Slice를_반환한다() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
-                auction1.getId(),
-                PageRequest.of(2, 3),
-                new ReadAuctionCondition("맥북")
+                createReadAuctionCondition(auction1.getId(), "맥북")
         );
 
         // then
@@ -109,5 +96,13 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
             softAssertions.assertThat(actual).hasSize(0);
             softAssertions.assertThat(actual.hasNext()).isFalse();
         });
+    }
+
+    private ReadAuctionCondition createReadAuctionCondition(final String title) {
+        return new ReadAuctionCondition("id", null, null, null, null, title, 3);
+    }
+
+    private ReadAuctionCondition createReadAuctionCondition(final Long lastAuctionId, final String title) {
+        return new ReadAuctionCondition("id", lastAuctionId, null, null, null, title, 3);
     }
 }

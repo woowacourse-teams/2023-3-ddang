@@ -27,15 +27,13 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -121,15 +119,8 @@ public class AuctionService {
         return findAuction.isClosed(LocalDateTime.now()) && findAuction.isSellerOrWinner(findUser, LocalDateTime.now());
     }
 
-    public ReadAuctionsDto readAllByLastAuctionId(
-            final Long lastAuctionId,
-            final Pageable pageable,
-            final ReadAuctionCondition readAuctionCondition) {
-        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(
-                lastAuctionId,
-                pageable,
-                readAuctionCondition
-        );
+    public ReadAuctionsDto readAllByLastAuctionId(final ReadAuctionCondition readAuctionCondition) {
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(readAuctionCondition);
 
         return ReadAuctionsDto.from(auctions);
     }

@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.infrastructure.persistence.util.exception;
+package com.ddang.ddang.auction.infrastructure.persistence.exception;
 
 public class UnsupportedSortConditionException extends IllegalArgumentException {
 

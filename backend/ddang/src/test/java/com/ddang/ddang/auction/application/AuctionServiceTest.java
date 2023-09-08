@@ -42,9 +42,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -891,7 +888,8 @@ class AuctionServiceTest {
                 "image.png",
                 "image.png",
                 MediaType.IMAGE_PNG.toString(),
-                new byte[]{1});
+                new byte[]{1}
+        );
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -918,12 +916,17 @@ class AuctionServiceTest {
         auctionService.create(createAuctionDto1);
         auctionService.create(createAuctionDto2);
 
-        // when
-        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(
+        final ReadAuctionCondition readAuctionCondition = new ReadAuctionCondition(
+                "id",
                 null,
-                PageRequest.of(1, 1, Sort.by(Order.desc("id"))),
-                new ReadAuctionCondition(null)
+                null,
+                null,
+                null, null,
+                1
         );
+
+        // when
+        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(readAuctionCondition);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

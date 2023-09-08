@@ -5,23 +5,17 @@ import static com.ddang.ddang.category.domain.QCategory.category;
 import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
 
-import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.util.AuctionSortCondition;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,22 +27,18 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<Auction> findAuctionsAllByLastAuctionId(
-            final Long lastAuctionId,
-            final Pageable pageable,
-            final ReadAuctionCondition readAuctionCondition
-    ) {
-        final List<OrderSpecifier<?>> orderSpecifiers = calculateOrderSpecifiers(pageable);
+    public Slice<Auction> findAuctionsAllByLastAuctionId(final ReadAuctionCondition readAuctionCondition) {
+        final List<OrderSpecifier<?>> orderSpecifiers = calculateOrderSpecifiers(readAuctionCondition);
 
         final List<Long> findAuctionIds = queryFactory.select(auction.id)
                                                       .from(auction)
                                                       .where(
                                                               auction.deleted.isFalse(),
-                                                              lessThanLastAuctionId(lastAuctionId),
+                                                              lessThanLastTarget(readAuctionCondition),
                                                               convertTitleSearchCondition(readAuctionCondition)
                                                       )
                                                       .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
-                                                      .limit(pageable.getPageSize() + SLICE_OFFSET)
+                                                      .limit(readAuctionCondition.size() + SLICE_OFFSET)
                                                       .fetch();
 
         final List<Auction> findAuctions = queryFactory.selectFrom(auction)
@@ -64,15 +54,24 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                        .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                                                        .fetch();
 
-        return QuerydslSliceHelper.toSlice(findAuctions, pageable);
+        return QuerydslSliceHelper.toSlice(findAuctions, readAuctionCondition);
     }
 
-    private BooleanExpression lessThanLastAuctionId(final Long lastAuctionId) {
-        if (lastAuctionId == null) {
+    private BooleanExpression lessThanLastTarget(final ReadAuctionCondition readAuctionCondition) {
+        if (readAuctionCondition.isFirstPageRequest()) {
             return null;
         }
+        if (readAuctionCondition.isSortByAuctioneerCount()) {
+            return auction.auctioneerCount.lt(readAuctionCondition.lastAuctioneerCount());
+        }
+        if (readAuctionCondition.isSortByClosingTime()) {
+            return auction.closingTime.gt(readAuctionCondition.lastClosingTime());
+        }
+        if (readAuctionCondition.isSortByReliability()) {
+            return auction.seller.reliability.lt(readAuctionCondition.lastReliability());
+        }
 
-        return auction.id.lt(lastAuctionId);
+        return auction.id.lt(readAuctionCondition.lastAuctionId());
     }
 
     private BooleanExpression convertTitleSearchCondition(final ReadAuctionCondition readAuctionCondition) {
@@ -85,27 +84,32 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         return auction.title.like("%" + titleSearchCondition + "%");
     }
 
-    private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
+    private List<OrderSpecifier<?>> calculateOrderSpecifiers(final ReadAuctionCondition readAuctionCondition) {
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+        final OrderSpecifier<?> orderSpecifier = convertOrderSpecifiers(readAuctionCondition);
 
         orderSpecifiers.add(auction.id.desc());
 
+        if (orderSpecifier == null) {
+            return orderSpecifiers;
+        }
+
+        orderSpecifiers.add(0, orderSpecifier);
         return orderSpecifiers;
     }
 
-    private List<OrderSpecifier<?>> convertOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-        final Sort sort = pageable.getSort();
-
-        for (final Order order : sort) {
-            if (AuctionSortConditionConsts.ID.equals(order.getProperty())) {
-                return Collections.emptyList();
-            }
-
-            orderSpecifiers.add(AuctionSortCondition.convert(order));
+    private OrderSpecifier<?> convertOrderSpecifiers(final ReadAuctionCondition readAuctionCondition) {
+        if (readAuctionCondition.isSortByReliability()) {
+            return auction.seller.reliability.desc();
+        }
+        if (readAuctionCondition.isSortByAuctioneerCount()) {
+            return auction.auctioneerCount.desc();
+        }
+        if (readAuctionCondition.isSortByClosingTime()) {
+            return auction.closingTime.asc();
         }
 
-        return orderSpecifiers;
+        return null;
     }
 
     @Override

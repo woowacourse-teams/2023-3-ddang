@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class AuctionWebConfiguration implements WebMvcConfigurer {
 
-    private final DescendingSortPageableArgumentResolver resolver;
+    private final ReadAuctionConditionArgumentResolver resolver;
 
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {

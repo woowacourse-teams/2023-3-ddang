@@ -36,7 +36,6 @@ import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
@@ -71,7 +70,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -134,7 +132,7 @@ class AuctionControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(auctionController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
-                                 .setCustomArgumentResolvers(resolver, new DescendingSortPageableArgumentResolver())
+                                 .setCustomArgumentResolvers(resolver)
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)
@@ -638,8 +636,7 @@ class AuctionControllerTest {
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(auctionService.readAllByLastAuctionId(any(), any(Pageable.class), any(ReadAuctionCondition.class)))
-                .willReturn(readAuctionsDto);
+        given(auctionService.readAllByLastAuctionId(any(ReadAuctionCondition.class))).willReturn(readAuctionsDto);
 
         // when & then
         mockMvc.perform(get("/auctions")

@@ -5,7 +5,6 @@ import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
@@ -17,14 +16,12 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,16 +71,14 @@ public class AuctionController {
     @GetMapping
     public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
             @AuthenticateUser final AuthenticationUserInfo ignored,
-            @RequestParam(required = false) final Long lastAuctionId,
-            @DescendingSort final Pageable pageable,
             final ReadAuctionCondition readAuctionCondition
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(
-                lastAuctionId,
-                pageable,
-                readAuctionCondition
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(readAuctionCondition);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(
+                readAuctionCondition,
+                readAuctionsDto,
+                calculateBaseImageUrl()
         );
-        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
 
         return ResponseEntity.ok(response);
     }
