@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionCondition;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
@@ -29,7 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Slice;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -146,166 +144,5 @@ class QuerydslAuctionRepositoryImplTest {
 
         // then
         assertThat(actual).isEmpty();
-    }
-
-    @Test
-    void 첫번째_페이지의_경매_목록을_조회한다() {
-        // given
-        final Auction auction1 = Auction.builder()
-                                        .title("경매 상품 1")
-                                        .description("이것은 경매 상품 1 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction2 = Auction.builder()
-                                        .title("경매 상품 2")
-                                        .description("이것은 경매 상품 2 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction3 = Auction.builder()
-                                        .title("경매 상품 3")
-                                        .description("이것은 경매 상품 3 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-
-        auctionRepository.save(auction1);
-        auctionRepository.save(auction2);
-        auctionRepository.save(auction3);
-
-        em.flush();
-        em.clear();
-
-        final ReadAuctionCondition readAuctionCondition = new ReadAuctionCondition(
-                "id",
-                null,
-                null,
-                null,
-                null, null,
-                1
-        );
-
-        // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(readAuctionCondition);
-
-        // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(1);
-
-            final List<Auction> actualAuctions = actual.getContent();
-            softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction3.getTitle());
-        });
-    }
-
-    @Test
-    void 두번째_페이지의_경매_목록을_조회한다() {
-        // given
-        final Auction auction1 = Auction.builder()
-                                        .title("경매 상품 1")
-                                        .description("이것은 경매 상품 1 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction2 = Auction.builder()
-                                        .title("경매 상품 2")
-                                        .description("이것은 경매 상품 2 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction3 = Auction.builder()
-                                        .title("경매 상품 3")
-                                        .description("이것은 경매 상품 3 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-
-        auctionRepository.save(auction1);
-        auctionRepository.save(auction2);
-        auctionRepository.save(auction3);
-
-        em.flush();
-        em.clear();
-
-        final ReadAuctionCondition readAuctionCondition = new ReadAuctionCondition(
-                "id",
-                auction3.getId(),
-                null,
-                null,
-                null, null,
-                1
-        );
-
-        // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(readAuctionCondition);
-
-        // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(1);
-
-            final List<Auction> actualAuctions = actual.getContent();
-            softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction2.getTitle());
-        });
-    }
-
-    @Test
-    void 두번째_페이지의_삭제된_경매를_제외한_목록을_조회한다() {
-        // given
-        final Auction auction1 = Auction.builder()
-                                        .title("경매 상품 1")
-                                        .description("이것은 경매 상품 1 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction2 = Auction.builder()
-                                        .title("경매 상품 2")
-                                        .description("이것은 경매 상품 2 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-        final Auction auction3 = Auction.builder()
-                                        .title("경매 상품 3")
-                                        .description("이것은 경매 상품 3 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-
-        auctionRepository.save(auction1);
-        auctionRepository.save(auction2);
-        auctionRepository.save(auction3);
-
-        auction2.delete();
-
-        em.flush();
-        em.clear();
-
-        final ReadAuctionCondition readAuctionCondition = new ReadAuctionCondition(
-                "id",
-                auction3.getId(),
-                null,
-                null,
-                null, null,
-                1
-        );
-
-        // when
-        final Slice<Auction> actual = auctionRepository.findAuctionsAllByLastAuctionId(readAuctionCondition);
-
-        // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(1);
-
-            final List<Auction> actualAuctions = actual.getContent();
-            softAssertions.assertThat(actualAuctions.get(0).getTitle()).isEqualTo(auction1.getTitle());
-        });
     }
 }
