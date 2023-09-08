@@ -20,7 +20,12 @@ import kotlinx.coroutines.withContext
 import java.net.URL
 
 class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
-    private val defaultProfileImageBitmap = BitmapFactory.decodeResource(resources, R.drawable.img_default_profile)
+    private lateinit var defaultImage: Bitmap
+
+    override fun onCreate() {
+        super.onCreate()
+        defaultImage = BitmapFactory.decodeResource(resources, R.drawable.img_default_profile)
+    }
 
     override fun onNewToken(token: String) {
         // TODO send FCM registration token to your app server.
@@ -42,7 +47,7 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             val image =
                 runCatching {
                     getBitmapFromUrl(remoteMessage.data["image"] ?: "")
-                }.getOrDefault(defaultProfileImageBitmap)
+                }.getOrDefault(defaultImage)
             val requestCode = System.currentTimeMillis().toInt()
             val roomId = remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
             val intent = MessageRoomActivity.getIntent(applicationContext, roomId)
