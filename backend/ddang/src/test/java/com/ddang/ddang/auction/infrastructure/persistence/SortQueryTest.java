@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Slice;
 
 /**
- * 사용하는 더미 데이터 (제목 키워드 / ID / 신뢰도 / 경매 참여자 수 / 경매 마감일
+ * 사용하는 더미 데이터 (제목 키워드 / ID / 신뢰도 / 경매 참여자 수 / 경매 마감일)
  *
  * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 뒤
  * Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤
