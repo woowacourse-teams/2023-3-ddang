@@ -15,6 +15,7 @@ import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
 import com.ddangddangddang.android.feature.report.ReportViewModel
+import com.ddangddangddang.android.feature.search.SearchViewModel
 import com.ddangddangddang.android.feature.splash.SplashViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
@@ -70,6 +71,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 )
 
                 isAssignableFrom(ReportViewModel::class.java) -> ReportViewModel(auctionRepository)
+                isAssignableFrom(SearchViewModel::class.java) -> SearchViewModel()
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
