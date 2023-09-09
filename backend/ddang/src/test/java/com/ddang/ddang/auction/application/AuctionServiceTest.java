@@ -16,6 +16,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
@@ -916,7 +917,8 @@ class AuctionServiceTest {
         // when
         final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(
                 null,
-                PageRequest.of(1, 1, Sort.by(Order.desc("id")))
+                PageRequest.of(1, 1, Sort.by(Order.desc("id"))),
+                new ReadAuctionSearchCondition(null)
         );
 
         // then

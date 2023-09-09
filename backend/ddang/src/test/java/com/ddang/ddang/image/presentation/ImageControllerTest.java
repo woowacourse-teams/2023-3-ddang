@@ -79,7 +79,7 @@ class ImageControllerTest {
         ));
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/user/images/{id}", invalidAuctionImageId))
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/users/images/{id}", invalidAuctionImageId))
                .andExpect(status().isNotFound())
                .andExpect(jsonPath("$.message").exists());
     }
