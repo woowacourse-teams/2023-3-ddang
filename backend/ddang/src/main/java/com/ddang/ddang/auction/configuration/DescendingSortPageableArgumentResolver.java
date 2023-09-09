@@ -1,5 +1,6 @@
 package com.ddang.ddang.auction.configuration;
 
+import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.configuration.util.SortParameter;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.PageRequest;
@@ -55,6 +56,10 @@ public class DescendingSortPageableArgumentResolver implements HandlerMethodArgu
     }
 
     private Sort processSortParameter(final String sortParameter) {
+        if (AuctionSortConditionConsts.CLOSING_TINE.equals(sortParameter)) {
+            return Sort.by(Direction.ASC, SortParameter.findSortProperty(sortParameter));
+        }
+
         return Sort.by(Direction.DESC, SortParameter.findSortProperty(sortParameter));
     }
 }
