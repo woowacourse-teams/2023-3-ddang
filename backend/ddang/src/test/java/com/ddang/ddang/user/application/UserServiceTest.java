@@ -108,6 +108,24 @@ class UserServiceTest {
     }
 
     @Test
+    void 사용자_정보_수정시_존재하지_않는_사용자라면_예외가_발생한다() {
+        // given
+        final Long invalidUserId = -999L;
+
+        final MockMultipartFile updateImage = new MockMultipartFile(
+                "updateImage.png",
+                "updateImage.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1}
+        );
+
+        // when & then
+        assertThatThrownBy(() -> userService.updateById(invalidUserId, new UpdateUserDto("updateName", updateImage)))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("사용자 정보를 사용할 수 없습니다.");
+    }
+
+    @Test
     void 회원_탈퇴한다() {
         // given
         final User user = User.builder()
