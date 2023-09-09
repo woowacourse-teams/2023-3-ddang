@@ -482,11 +482,11 @@ class BidControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.bids.[0].name", is(bid1.name())),
-                       jsonPath("$.bids.[0].profileImage").exists(),
+                       jsonPath("$.bids.[0].profileImageId", is(bid1.profileImageId()), Long.class),
                        jsonPath("$.bids.[0].price", is(bid1.price())),
                        jsonPath("$.bids.[0].bidTime").exists(),
                        jsonPath("$.bids.[1].name", is(bid2.name())),
-                       jsonPath("$.bids.[1].profileImage").exists(),
+                       jsonPath("$.bids.[1].profileImageId", is(bid2.profileImageId()), Long.class),
                        jsonPath("$.bids.[1].price", is(bid2.price())),
                        jsonPath("$.bids.[1].bidTime").exists()
                )
@@ -495,7 +495,7 @@ class BidControllerTest {
                                responseFields(
                                        fieldWithPath("bids.[]").type(JsonFieldType.ARRAY).description("특정 경매의 모든 입찰 목록"),
                                        fieldWithPath("bids.[].name").type(JsonFieldType.STRING).description("입찰한 사용자의 닉네임"),
-                                       fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING).description("입찰한 사용자의 프로필 이미지 URL"),
+                                       fieldWithPath("bids.[].profileImageId").type(JsonFieldType.NUMBER).description("입찰한 사용자의 프로필 이미지 ID"),
                                        fieldWithPath("bids.[].price").type(JsonFieldType.NUMBER).description("입찰한 금액"),
                                        fieldWithPath("bids.[].bidTime").type(JsonFieldType.STRING).description("입찰한 시간")
                                )

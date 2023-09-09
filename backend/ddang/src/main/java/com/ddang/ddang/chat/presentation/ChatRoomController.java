@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -36,8 +35,6 @@ import java.util.List;
 @RequestMapping("/chattings")
 @RequiredArgsConstructor
 public class ChatRoomController {
-
-    private static final String AUCTIONS_IMAGE_BASE_URL = "/auctions/images/";
 
     private final ChatRoomService chatRoomService;
     private final MessageService messageService;
@@ -63,17 +60,10 @@ public class ChatRoomController {
 
         final List<ReadChatRoomWithLastMessageResponse> responses =
                 readParticipatingChatRoomDtos.stream()
-                                             .map(dto -> ReadChatRoomWithLastMessageResponse.of(dto, calculateBaseImageUrl()))
+                                             .map(ReadChatRoomWithLastMessageResponse::from)
                                              .toList();
 
         return ResponseEntity.ok(responses);
-    }
-
-    private String calculateBaseImageUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                                          .build()
-                                          .toUriString()
-                                          .concat(AUCTIONS_IMAGE_BASE_URL);
     }
 
     @GetMapping("/{chatRoomId}")
@@ -82,7 +72,7 @@ public class ChatRoomController {
             @AuthenticateUser final AuthenticationUserInfo userInfo
     ) {
         final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(chatRoomId, userInfo.userId());
-        final ReadChatRoomResponse response = ReadChatRoomResponse.of(chatRoomDto, calculateBaseImageUrl());
+        final ReadChatRoomResponse response = ReadChatRoomResponse.from(chatRoomDto);
 
         return ResponseEntity.ok(response);
     }
