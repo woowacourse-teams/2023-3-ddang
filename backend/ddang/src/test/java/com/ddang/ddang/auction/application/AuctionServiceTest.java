@@ -891,7 +891,8 @@ class AuctionServiceTest {
                 "image.png",
                 "image.png",
                 MediaType.IMAGE_PNG.toString(),
-                new byte[]{1});
+                new byte[]{1}
+        );
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -921,7 +922,7 @@ class AuctionServiceTest {
         // when
         final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(
                 null,
-                PageRequest.of(1, 1, Sort.by(Order.desc("id"))),
+                PageRequest.of(0, 1, Sort.by(Order.desc("id"))),
                 new ReadAuctionSearchCondition(null)
         );
 
