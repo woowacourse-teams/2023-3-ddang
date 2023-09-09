@@ -99,7 +99,7 @@ class UserControllerTest {
     @Test
     void 사용자_정보를_조회한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", "profile.png", 4.6d, "12345");
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345");
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
@@ -112,7 +112,7 @@ class UserControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.name", is(readUserDto.name())),
-                       jsonPath("$.profileImage", is(readUserDto.profileImage())),
+                       jsonPath("$.profileImage").exists(),
                        jsonPath("$.reliability", is(readUserDto.reliability()))
                );
     }

@@ -369,9 +369,9 @@ class ChatRoomControllerTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", "profile.png", 5.0d);
-        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", "profile.png", 5.0d);
-        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", "profile.png", 5.0d);
+        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", 1L, 5.0d);
+        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", 2L, 5.0d);
+        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", 3L, 5.0d);
         final ReadAuctionInChatRoomDto auctionDto1 = new ReadAuctionInChatRoomDto(
                 1L,
                 "경매1",
@@ -380,7 +380,7 @@ class ChatRoomControllerTest {
                 "main",
                 "sub",
                 seller.id(),
-                seller.profileImage(),
+                seller.profileImageId(),
                 seller.name(),
                 seller.reliability()
         );
@@ -399,7 +399,7 @@ class ChatRoomControllerTest {
                 "main",
                 "sub",
                 seller.id(),
-                seller.profileImage(),
+                seller.profileImageId(),
                 seller.name(),
                 seller.reliability()
         );
@@ -500,14 +500,14 @@ class ChatRoomControllerTest {
                 "메인 카테고리",
                 "서브 카테고리",
                 1L,
-                "profile.png",
+                1L,
                 "판매자",
                 5.0d
         );
         final ReadUserInChatRoomDto chatPartner = new ReadUserInChatRoomDto(
                 2L,
                 "채팅 상대방",
-                "profile.png",
+                2L,
                 5.0
         );
 

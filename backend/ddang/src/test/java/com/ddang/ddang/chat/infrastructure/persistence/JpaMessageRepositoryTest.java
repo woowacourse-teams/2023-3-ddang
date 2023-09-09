@@ -8,6 +8,7 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -45,13 +46,13 @@ class JpaMessageRepositoryTest {
         // given
         final User participant1 = User.builder()
                                       .name("판매자")
-                                      .profileImage("profile.png")
+                                      .profileImage(new Image("upload.png", "store.png"))
                                       .reliability(4.7d)
                                       .oauthId("12345")
                                       .build();
         final User participant2 = User.builder()
                                       .name("구매자")
-                                      .profileImage("profile.png")
+                                      .profileImage(new Image("upload.png", "store.png"))
                                       .reliability(4.7d)
                                       .oauthId("12346")
                                       .build();

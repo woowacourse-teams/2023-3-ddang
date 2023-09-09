@@ -4,6 +4,7 @@ import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
@@ -129,7 +130,7 @@ class AuctionTest {
                                        .build();
         final User user = User.builder()
                               .name("회원")
-                              .profileImage("profile.png")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -168,7 +169,7 @@ class AuctionTest {
                                        .build();
         final User user = User.builder()
                               .name("회원")
-                              .profileImage("profile.png")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -188,7 +189,7 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -210,7 +211,7 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -221,7 +222,7 @@ class AuctionTest {
                                        .build();
         final User user = User.builder()
                               .name("회원2")
-                              .profileImage("profile.png")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -240,13 +241,13 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User winner = User.builder()
                                 .name("회원2")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12346")
                                 .build();
@@ -275,19 +276,19 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User winner = User.builder()
                                 .name("회원2")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12346")
                                 .build();
         final User stranger = User.builder()
                                   .name("회원3")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12347")
                                   .build();
@@ -317,13 +318,13 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User winner = User.builder()
                                 .name("회원2")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12346")
                                 .build();
@@ -352,19 +353,19 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User winner = User.builder()
                                 .name("회원2")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12346")
                                 .build();
         final User stranger = User.builder()
                                   .name("회원3")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12347")
                                   .build();
@@ -395,13 +396,13 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User winner = User.builder()
                                 .name("회원2")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12346")
                                 .build();
@@ -433,13 +434,13 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User winner = User.builder()
                                 .name("회원2")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12346")
                                 .build();
@@ -468,7 +469,7 @@ class AuctionTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();

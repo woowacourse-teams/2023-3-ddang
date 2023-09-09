@@ -9,6 +9,7 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -56,25 +57,25 @@ class QuerydslChatRoomRepositoryImplTest {
 
         final User merry = User.builder()
                                .name("메리")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();
         final User encho = User.builder()
                                .name("엔초")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User jamie = User.builder()
                                .name("제이미")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
         final User zeeto = User.builder()
                                .name("지토")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12348")
                                .build();
@@ -141,13 +142,13 @@ class QuerydslChatRoomRepositoryImplTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -190,13 +191,13 @@ class QuerydslChatRoomRepositoryImplTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();

@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -40,7 +41,7 @@ class JpaAuctionReportRepositoryTest {
 
     @Autowired
     JpaUserRepository userRepository;
-
+    
     @Test
     void 경매_신고를_저장한다() {
         // given
@@ -52,11 +53,11 @@ class JpaAuctionReportRepositoryTest {
                                        .closingTime(LocalDateTime.now())
                                        .build();
         final User user = User.builder()
-                                .name("사용자")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
+                              .name("사용자")
+                              .profileImage(new Image("upload.png", "store.png"))
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final AuctionReport auctionReport = new AuctionReport(user, auction, "신고합니다");
 
         auctionRepository.save(auction);
@@ -83,11 +84,11 @@ class JpaAuctionReportRepositoryTest {
                                        .closingTime(LocalDateTime.now())
                                        .build();
         final User user = User.builder()
-                                .name("사용자")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
+                              .name("사용자")
+                              .profileImage(new Image("upload.png", "store.png"))
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
         final AuctionReport auctionReport = new AuctionReport(user, auction, "신고합니다");
 
         auctionRepository.save(auction);
@@ -116,7 +117,7 @@ class JpaAuctionReportRepositoryTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage("profile.png")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -154,7 +155,7 @@ class JpaAuctionReportRepositoryTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -168,19 +169,19 @@ class JpaAuctionReportRepositoryTest {
                                        .build();
         final User user1 = User.builder()
                                .name("사용자1")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
         final User user3 = User.builder()
                                .name("사용자3")
-                               .profileImage("profile.png")
+                               .profileImage(new Image("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12348")
                                .build();

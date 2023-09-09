@@ -15,6 +15,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -49,7 +50,7 @@ class MessageServiceTest {
 
     @Autowired
     JpaUserRepository userRepository;
-
+    
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
 
@@ -79,18 +80,18 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
-                                  .oauthId("12346")
+                                  .oauthId("12345")
                                   .build();
 
         userRepository.save(receiver);
@@ -138,18 +139,18 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
-                                  .oauthId("12346")
+                                  .oauthId("12345")
                                   .build();
 
         userRepository.save(receiver);
@@ -194,7 +195,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -245,13 +246,12 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
-
 
         final ChatRoom chatRoom = new ChatRoom(auction, writer);
 
@@ -279,7 +279,7 @@ class MessageServiceTest {
         // given
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -288,7 +288,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -347,18 +347,18 @@ class MessageServiceTest {
         // given
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
-                                  .oauthId("56789")
+                                  .oauthId("12345")
                                   .build();
 
         userRepository.save(receiver);
@@ -429,7 +429,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -438,13 +438,12 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
 
         userRepository.save(receiver);
-
 
         final Auction auction = Auction.builder()
                                        .seller(writer)
@@ -483,7 +482,7 @@ class MessageServiceTest {
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(request);
 
         // then
-        assertThat(readMessageDtos).hasSize(0);
+        assertThat(readMessageDtos).isEmpty();
     }
 
     @Test
@@ -509,7 +508,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -518,7 +517,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -572,7 +571,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -581,7 +580,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -635,7 +634,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new Image("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -644,7 +643,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new Image("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();

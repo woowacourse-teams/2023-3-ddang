@@ -1,11 +1,15 @@
 package com.ddang.ddang.user.domain;
 
 import com.ddang.ddang.common.entity.BaseTimeEntity;
+import com.ddang.ddang.image.domain.Image;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -18,7 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString
+@ToString(of = {"id", "name", "reliability", "oauthId", "deleted"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
@@ -31,7 +35,8 @@ public class User extends BaseTimeEntity {
     @Column(unique = true)
     private String name;
 
-    private String profileImage;
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private Image profileImage;
 
     private double reliability;
 
@@ -44,7 +49,7 @@ public class User extends BaseTimeEntity {
     @Builder
     private User(
             final String name,
-            final String profileImage,
+            final Image profileImage,
             final double reliability,
             final String oauthId
     ) {
@@ -52,6 +57,11 @@ public class User extends BaseTimeEntity {
         this.profileImage = profileImage;
         this.reliability = reliability;
         this.oauthId = oauthId;
+    }
+
+    public void update(final String name, final Image profileImage) {
+        this.name = name;
+        this.profileImage = profileImage;
     }
 
     public void withdrawal() {

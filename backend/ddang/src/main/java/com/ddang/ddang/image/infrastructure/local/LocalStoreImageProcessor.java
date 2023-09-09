@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+// TODO: 2023/09/08 [고민] 제가 지토 코드 맘대로 수정했는데 괜찮을까요?
 @Component
 public class LocalStoreImageProcessor implements StoreImageProcessor {
 
@@ -27,29 +28,29 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
     public List<StoreImageDto> storeImageFiles(final List<MultipartFile> imageFiles) {
         final List<StoreImageDto> storeImageDtos = new ArrayList<>();
 
-        try {
-            for (MultipartFile imageFile : imageFiles) {
-                if (imageFile.isEmpty()) {
-                    throw new EmptyImageException("이미지 파일의 데이터가 비어 있습니다.");
-                }
-
-                storeImageDtos.add(storeImageFile(imageFile));
+        for (MultipartFile imageFile : imageFiles) {
+            if (imageFile.isEmpty()) {
+                throw new EmptyImageException("이미지 파일의 데이터가 비어 있습니다.");
             }
 
-            return storeImageDtos;
+            storeImageDtos.add(storeImageFile(imageFile));
+        }
+
+        return storeImageDtos;
+    }
+
+    public StoreImageDto storeImageFile(MultipartFile imageFile) {
+        try {
+            final String originalImageFileName = imageFile.getOriginalFilename();
+            final String storeImageFileName = createStoreImageFileName(originalImageFileName);
+            final String fullPath = findFullPath(storeImageFileName);
+
+            imageFile.transferTo(new File(fullPath));
+
+            return new StoreImageDto(originalImageFileName, storeImageFileName);
         } catch (IOException e) {
             throw new StoreImageFailureException("이미지 저장에 실패했습니다.", e);
         }
-    }
-
-    private StoreImageDto storeImageFile(MultipartFile imageFile) throws IOException {
-        final String originalImageFileName = imageFile.getOriginalFilename();
-        final String storeImageFileName = createStoreImageFileName(originalImageFileName);
-        final String fullPath = findFullPath(storeImageFileName);
-
-        imageFile.transferTo(new File(fullPath));
-
-        return new StoreImageDto(originalImageFileName, storeImageFileName);
     }
 
     private String findFullPath(String storeImageFileName) {

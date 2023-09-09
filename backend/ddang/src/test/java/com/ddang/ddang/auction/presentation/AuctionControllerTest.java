@@ -494,7 +494,7 @@ class AuctionControllerTest {
                 "main",
                 "sub",
                 1L,
-                "https://profile.com",
+                1L,
                 "판매자",
                 3.5d
         );
@@ -609,7 +609,7 @@ class AuctionControllerTest {
                 "main1",
                 "sub1",
                 1L,
-                "https://profile.com",
+                1L,
                 "판매자",
                 3.5d
         );
@@ -629,7 +629,7 @@ class AuctionControllerTest {
                 "main2",
                 "sub2",
                 1L,
-                "https://profile.com",
+                1L,
                 "판매자",
                 3.5d
         );

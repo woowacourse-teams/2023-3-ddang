@@ -1,30 +1,20 @@
 package com.ddang.ddang.authentication.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Map;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -32,6 +22,18 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -104,7 +106,7 @@ class AuthenticationServiceTest {
         // given
         final User user = User.builder()
                               .name("kakao12345")
-                              .profileImage("프로필")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(0.0d)
                               .oauthId("12345")
                               .build();

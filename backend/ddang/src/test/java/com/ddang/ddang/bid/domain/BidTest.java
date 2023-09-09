@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.user.domain.User;
 
 import java.time.LocalDateTime;
@@ -29,7 +30,7 @@ class BidTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage("profile.png")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -55,7 +56,7 @@ class BidTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage("profile.png")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -82,7 +83,7 @@ class BidTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage("profile.png")
+                              .profileImage(new Image("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
