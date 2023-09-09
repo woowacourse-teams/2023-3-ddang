@@ -122,11 +122,9 @@ public class AuctionService {
     }
 
     public ReadAuctionsDto readAllByLastAuctionId(
-            final Long lastAuctionId,
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition) {
         final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(
-                lastAuctionId,
                 pageable,
                 readAuctionSearchCondition
         );

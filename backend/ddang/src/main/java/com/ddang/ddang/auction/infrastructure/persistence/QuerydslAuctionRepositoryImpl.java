@@ -34,7 +34,6 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
 
     @Override
     public Slice<Auction> findAuctionsAllByLastAuctionId(
-            final Long lastAuctionId,
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {

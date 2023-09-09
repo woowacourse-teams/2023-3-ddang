@@ -921,7 +921,6 @@ class AuctionServiceTest {
 
         // when
         final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(
-                null,
                 PageRequest.of(0, 1, Sort.by(Order.desc("id"))),
                 new ReadAuctionSearchCondition(null)
         );
