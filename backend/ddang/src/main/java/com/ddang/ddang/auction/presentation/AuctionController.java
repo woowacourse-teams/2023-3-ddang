@@ -71,12 +71,12 @@ public class AuctionController {
     }
 
     @GetMapping
-    public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
+    public ResponseEntity<ReadAuctionsResponse> readAllByCondition(
             @AuthenticateUser final AuthenticationUserInfo ignored,
             @DescendingSort final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByCondition(
                 pageable,
                 readAuctionSearchCondition
         );

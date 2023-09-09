@@ -33,7 +33,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<Auction> findAuctionsAllByLastAuctionId(
+    public Slice<Auction> findAuctionsAllByCondition(
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {

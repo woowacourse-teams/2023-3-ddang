@@ -25,7 +25,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     @Test
     void 검색_결과가_없을때_첫번째_페이지를_요청하면_빈_Slice를_반환한다() {
         // when
-        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
+        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
                 PageRequest.of(1, 3),
                 new ReadAuctionSearchCondition("우아한테크코스")
         );
@@ -40,7 +40,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     @Test
     void 검색_결과가_없을때_두번째_페이지_이후의_페이지를_요청하면_빈_Slice를_반환한다() {
         // when
-        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
+        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
                 PageRequest.of(1, 3),
                 new ReadAuctionSearchCondition("우아한테크코스")
         );
@@ -55,7 +55,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     @Test
     void 검색_결과가_페이지_크기보다_작은_경우_첫번째_페이지에_모든_검색_결과를_가진_Slice를_반환한다() {
         // when
-        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
+        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
                 PageRequest.of(0, 3),
                 new ReadAuctionSearchCondition("핫식스")
         );
@@ -78,7 +78,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     @Test
     void 검색_결과가_페이지_크기보다_큰_경우_첫번째_페이지에는_페이지_크기만큼의_검색_결과를_가진_Slice를_반환한다() {
         // when
-        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
+        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
                 PageRequest.of(0, 3),
                 new ReadAuctionSearchCondition("맥북")
         );
@@ -96,7 +96,7 @@ class SearchTitleQueryTest extends InitializeCommonAuctionData {
     @Test
     void 검색_결과가_페이지_크기보다_큰_경우_마지막_페이지_이후_페이지를_요청하면_빈_Slice를_반환한다() {
         // when
-        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByLastAuctionId(
+        final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
                 PageRequest.of(2, 3),
                 new ReadAuctionSearchCondition("맥북")
         );

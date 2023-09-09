@@ -920,7 +920,7 @@ class AuctionServiceTest {
         auctionService.create(createAuctionDto2);
 
         // when
-        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(
+        final ReadAuctionsDto actual = auctionService.readAllByCondition(
                 PageRequest.of(0, 1, Sort.by(Order.desc("id"))),
                 new ReadAuctionSearchCondition(null)
         );
