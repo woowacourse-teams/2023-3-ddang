@@ -16,6 +16,12 @@ interface AuctionRepository {
         size: Int,
     ): ApiResponse<AuctionPreviewsResponse>
 
+    suspend fun getAuctionPreviews(
+        lastAuctionId: Long?,
+        size: Int,
+        title: String,
+    ): ApiResponse<AuctionPreviewsResponse>
+
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse>
 
     suspend fun registerAuction(
