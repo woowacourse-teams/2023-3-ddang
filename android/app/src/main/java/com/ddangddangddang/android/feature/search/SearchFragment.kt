@@ -1,10 +1,14 @@
 package com.ddangddangddang.android.feature.search
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentSearchBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
@@ -13,11 +17,28 @@ import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.util.binding.BindingFragment
+import com.ddangddangddang.android.util.view.showSnackbar
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search) {
     private val viewModel: SearchViewModel by viewModels { viewModelFactory }
     private val auctionAdapter = AuctionAdapter { auctionId ->
         navigateToAuctionDetail(auctionId)
+    }
+    private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+
+            if (viewModel.isLast) return
+
+            if (!viewModel.loadingAuctionInProgress) {
+                val lastVisibleItemPosition =
+                    (binding.rvSearchAuctions.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
+                val auctionsSize = viewModel.auctions.value?.size ?: 0
+                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                    viewModel.loadAuctions()
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -28,13 +49,16 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun setupAuctionRecyclerView() {
-        binding.rvSearchAuctions.adapter = auctionAdapter
-        binding.rvSearchAuctions.addItemDecoration(
-            AuctionSpaceItemDecoration(
-                2,
-                resources.getDimensionPixelSize(R.dimen.margin_side_layout),
-            ),
-        )
+        with(binding.rvSearchAuctions) {
+            adapter = auctionAdapter
+            addItemDecoration(
+                AuctionSpaceItemDecoration(
+                    2,
+                    resources.getDimensionPixelSize(R.dimen.margin_side_layout),
+                ),
+            )
+            addOnScrollListener(auctionScrollListener)
+        }
     }
 
     private fun setupKeyboard() {
@@ -52,10 +76,29 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         viewModel.auctions.observe(viewLifecycleOwner) {
             changeAuctions(it)
         }
+        viewModel.event.observe(viewLifecycleOwner) { event ->
+            when (event) {
+                SearchViewModel.SearchEvent.KeywordLimit -> showNoticeMessage(getString(R.string.search_notice_keyword_limit))
+                is SearchViewModel.SearchEvent.LoadFailureNotice -> showNoticeMessage(event.message)
+            }
+        }
     }
 
     private fun changeAuctions(auctions: List<AuctionHomeModel>) {
         auctionAdapter.submitList(auctions)
+        hideKeyboard()
+    }
+
+    private fun hideKeyboard() {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.etSearchKeyword.windowToken, 0)
+    }
+
+    private fun showNoticeMessage(message: String?) {
+        binding.root.showSnackbar(
+            message ?: getString(R.string.search_notice_default_error),
+            getString(R.string.all_snackbar_default_action),
+        )
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
