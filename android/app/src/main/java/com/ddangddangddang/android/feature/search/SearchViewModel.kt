@@ -14,6 +14,10 @@ class SearchViewModel : ViewModel() {
 
     val keyword: MutableLiveData<String> = MutableLiveData("")
 
+    private val _auctions: MutableLiveData<List<AuctionHomeModel>> = MutableLiveData()
+    val auctions: LiveData<List<AuctionHomeModel>>
+        get() = _auctions
+
     fun submitKeyword() {
         // repository에서 검색 결과 List를 가져오는 코드
         val dummy = listOf(
@@ -21,10 +25,10 @@ class SearchViewModel : ViewModel() {
             AuctionHomeModel(1, "ihi", "", 1000, AuctionHomeStatusModel.UNBIDDEN, 0),
             AuctionHomeModel(2, "ihi", "", 1000, AuctionHomeStatusModel.SUCCESS, 0),
         )
-        _event.value = SearchEvent.KeywordSubmit(dummy)
+
+        _auctions.value = dummy
     }
 
     sealed class SearchEvent {
-        data class KeywordSubmit(val auctions: List<AuctionHomeModel>) : SearchEvent()
     }
 }
