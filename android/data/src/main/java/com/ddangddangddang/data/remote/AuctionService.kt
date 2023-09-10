@@ -36,6 +36,13 @@ interface AuctionService {
         @Query("title") title: String?,
     ): ApiResponse<AuctionPreviewsResponse>
 
+    @GET("/auctions")
+    suspend fun fetchAuctionPreviews(
+        @Query("lastAuctionId") id: Long?,
+        @Query("size") size: Int,
+        @Query("title") title: String,
+    ): ApiResponse<AuctionPreviewsResponse>
+
     @GET("/auctions/{id}")
     suspend fun fetchAuctionDetail(@Path("id") id: Long): ApiResponse<AuctionDetailResponse>
 
