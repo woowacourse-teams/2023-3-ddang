@@ -166,7 +166,7 @@ public class SearchAndSortQueryTest extends InitializeCommonAuctionData {
             @Test
             void 마지막_페이지_이후_페이지_요청() {
                 // given
-                final PageRequest pageRequest = PageRequest.of(5, 3, Sort.by(Order.desc("reliability")));
+                final PageRequest pageRequest = PageRequest.of(5, 3, Sort.by(Order.desc("id")));
 
 
                 // when
@@ -310,7 +310,7 @@ public class SearchAndSortQueryTest extends InitializeCommonAuctionData {
             @Test
             void 마지막_페이지_이후_페이지_요청() {
                 // given
-                final PageRequest pageRequest = PageRequest.of(5, 3, Sort.by(Order.desc("reliability")));
+                final PageRequest pageRequest = PageRequest.of(5, 3, Sort.by(Order.desc("auctioneerCount")));
 
 
                 // when
