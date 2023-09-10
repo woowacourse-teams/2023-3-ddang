@@ -51,10 +51,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
 
     private fun setupViewModel() {
         binding.viewModel = viewModel
-        viewModel.event.observe(viewLifecycleOwner) { event ->
-            when (event) {
-                is SearchViewModel.SearchEvent.KeywordSubmit -> changeAuctions(event.auctions)
-            }
+        viewModel.auctions.observe(viewLifecycleOwner) {
+            changeAuctions(it)
         }
     }
 
