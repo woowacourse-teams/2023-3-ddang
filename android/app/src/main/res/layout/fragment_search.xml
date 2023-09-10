@@ -5,6 +5,9 @@
 
     <data>
 
+        <import type="android.view.View" />
+        <import type="com.ddangddangddang.android.feature.search.SearchViewModel.SearchStatus" />
+
         <variable
             name="viewModel"
             type="com.ddangddangddang.android.feature.search.SearchViewModel" />
@@ -77,7 +80,7 @@
             android:text="@string/search_notice_no_auction"
             android:textColor="@color/black_400"
             android:textSize="@dimen/textsize_sub_header"
-            android:visibility="gone"
+            android:visibility="@{viewModel.searchStatus instanceof SearchStatus.NoData ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -90,6 +93,7 @@
             android:text="@string/search_notice_input_keyword"
             android:textColor="@color/black_400"
             android:textSize="@dimen/textsize_sub_header"
+            android:visibility="@{viewModel.searchStatus instanceof SearchStatus.BeforeSearch ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -99,7 +103,7 @@
             android:id="@+id/rv_search_auctions"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:visibility="invisible"
+            android:visibility="@{viewModel.searchStatus instanceof SearchStatus.ExistData ? View.VISIBLE : View.INVISIBLE}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

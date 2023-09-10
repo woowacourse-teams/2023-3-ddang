@@ -18,6 +18,10 @@ class SearchViewModel : ViewModel() {
     val auctions: LiveData<List<AuctionHomeModel>>
         get() = _auctions
 
+    private val _searchStatus: MutableLiveData<SearchStatus> = MutableLiveData(SearchStatus.BeforeSearch)
+    val searchStatus: LiveData<SearchStatus>
+        get() = _searchStatus
+
     fun submitKeyword() {
         // repository에서 검색 결과 List를 가져오는 코드
         val dummy = listOf(
@@ -27,8 +31,19 @@ class SearchViewModel : ViewModel() {
         )
 
         _auctions.value = dummy
+
+        if (dummy.isEmpty()) {
+            _searchStatus.value = SearchStatus.NoData
+            return
+        }
+        _searchStatus.value = SearchStatus.ExistData
     }
 
-    sealed class SearchEvent {
+    sealed class SearchEvent
+
+    sealed class SearchStatus {
+        object BeforeSearch : SearchStatus()
+        object NoData : SearchStatus()
+        object ExistData : SearchStatus()
     }
 }
