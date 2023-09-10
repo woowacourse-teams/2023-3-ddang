@@ -34,7 +34,7 @@ public class DescendingSortPageableArgumentResolver implements HandlerMethodArgu
     ) {
         final int size = processSizeParameter(webRequest.getParameter("size"));
         final int page = processPageParameter(webRequest.getParameter("page"));
-        final Sort sort = processSortParameter(webRequest.getParameter("sort"));
+        final Sort sort = processSortParameter(webRequest.getParameter("sortType"));
 
         return PageRequest.of(page, size, sort);
     }
