@@ -140,4 +140,6 @@
     <string name="search_keyword">검색</string>
     <string name="search_notice_no_auction">아이쿠! 올라온 경매가 없습니다!</string>
     <string name="search_notice_input_keyword">검색창에 상품명을 입력해주세요.</string>
+    <string name="search_notice_keyword_limit">검색어를 2~20자 사이로 입력해주세요.</string>
+    <string name="search_notice_default_error">에러가 발생했습니다. 다시 시도해주세요.</string>
 </resources>
