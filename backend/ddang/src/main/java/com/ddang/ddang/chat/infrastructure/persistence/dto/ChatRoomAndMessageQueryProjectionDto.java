@@ -8,4 +8,8 @@ public record ChatRoomAndMessageQueryProjectionDto(ChatRoom chatRoom, Message me
     @QueryProjection
     public ChatRoomAndMessageQueryProjectionDto {
     }
+
+    public static ChatRoomAndMessageDto toSortedDto(final ChatRoomAndMessageQueryProjectionDto queryProjectionDto) {
+        return new ChatRoomAndMessageDto(queryProjectionDto.chatRoom, queryProjectionDto.message);
+    }
 }

@@ -1,6 +1,7 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageQueryProjectionDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageQueryProjectionDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import static com.ddang.ddang.auction.domain.QAuction.auction;
 import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
 import static com.ddang.ddang.chat.domain.QMessage.message;
+import static java.util.Comparator.comparing;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,8 +25,8 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ChatRoomAndMessageQueryProjectionDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
-        return queryFactory
+    public List<ChatRoomAndMessageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
+        final List<ChatRoomAndMessageQueryProjectionDto> unsortedDtos = queryFactory
                 .select(new QChatRoomAndMessageQueryProjectionDto(chatRoom, message))
                 .from(chatRoom)
                 .leftJoin(chatRoom.buyer).fetchJoin()
@@ -42,6 +44,19 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
                 .orderBy(message.id.max().desc())
                 .groupBy(chatRoom.id)
                 .fetch();
+
+        return sortByLastMessageIdDesc(unsortedDtos);
+    }
+
+    private List<ChatRoomAndMessageDto> sortByLastMessageIdDesc(
+            final List<ChatRoomAndMessageQueryProjectionDto> unsortedDtos
+    ) {
+        return unsortedDtos.stream()
+                           .sorted(comparing(
+                                   (ChatRoomAndMessageQueryProjectionDto unsortedDto) -> unsortedDto.message().getId()
+                                   ).reversed()
+                           ).map(ChatRoomAndMessageQueryProjectionDto::toSortedDto)
+                           .toList();
     }
 
     private BooleanExpression isSellerOrWinner(final Long userId) {

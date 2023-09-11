@@ -8,7 +8,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageQueryProjectionDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.User;
@@ -161,7 +161,7 @@ class QuerydslChatRoomRepositoryImplTest {
         em.clear();
 
         // when
-        final List<ChatRoomAndMessageQueryProjectionDto> actual = chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
+        final List<ChatRoomAndMessageDto> actual = chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
