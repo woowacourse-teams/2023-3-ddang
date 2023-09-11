@@ -114,27 +114,48 @@ class QuerydslChatRoomRepositoryImplTest {
         auctionRepository.save(enchoAuction);
         auctionRepository.save(jamieAuction);
 
-        final ChatRoom chatRoom1 = new ChatRoom(merryAuction, zeeto);
+        final ChatRoom chatRoom1 = new ChatRoom(merryAuction, encho);
         final ChatRoom chatRoom2 = new ChatRoom(enchoAuction, zeeto);
         final ChatRoom chatRoom3 = new ChatRoom(jamieAuction, encho);
         chatRoomRepository.save(chatRoom1);
         chatRoomRepository.save(chatRoom2);
         chatRoomRepository.save(chatRoom3);
 
-        final Message lastMessage1 = Message.builder()
+        final Message message1 = Message.builder()
                                         .chatRoom(chatRoom3)
                                         .contents("jamieEncho message 1")
                                         .writer(jamie)
                                         .receiver(encho)
                                         .build();
+        messageRepository.save(message1);
+        final Message message2 = Message.builder()
+                                        .chatRoom(chatRoom2)
+                                        .writer(encho)
+                                        .receiver(zeeto)
+                                        .contents("enchoZeeto message 1")
+                                        .build();
+        messageRepository.save(message2);
+        final Message lastMessage1 = Message.builder()
+                                            .chatRoom(chatRoom1)
+                                            .writer(encho)
+                                            .receiver(zeeto)
+                                            .contents("merryZeeto message 1")
+                                            .build();
         messageRepository.save(lastMessage1);
         final Message lastMessage2 = Message.builder()
+                                            .chatRoom(chatRoom3)
+                                            .writer(encho)
+                                            .receiver(zeeto)
+                                            .contents("jamieEncho message 2")
+                                            .build();
+        messageRepository.save(lastMessage2);
+        final Message lastMessage3 = Message.builder()
                                             .chatRoom(chatRoom2)
                                             .writer(encho)
                                             .receiver(zeeto)
-                                            .contents("enchoZeeto message 1")
+                                            .contents("enchoZeeto message 2")
                                             .build();
-        messageRepository.save(lastMessage2);
+        messageRepository.save(lastMessage3);
 
         em.flush();
         em.clear();
@@ -144,11 +165,13 @@ class QuerydslChatRoomRepositoryImplTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(2);
+            softAssertions.assertThat(actual).hasSize(3);
             softAssertions.assertThat(actual.get(0).chatRoom()).isEqualTo(chatRoom2);
-            softAssertions.assertThat(actual.get(0).message()).isEqualTo(lastMessage2);
+            softAssertions.assertThat(actual.get(0).message()).isEqualTo(lastMessage3);
             softAssertions.assertThat(actual.get(1).chatRoom()).isEqualTo(chatRoom3);
-            softAssertions.assertThat(actual.get(1).message()).isEqualTo(lastMessage1);
+            softAssertions.assertThat(actual.get(1).message()).isEqualTo(lastMessage2);
+            softAssertions.assertThat(actual.get(2).chatRoom()).isEqualTo(chatRoom1);
+            softAssertions.assertThat(actual.get(2).message()).isEqualTo(lastMessage1);
         });
     }
 
