@@ -33,8 +33,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<Auction> findAuctionsAllByLastAuctionId(
-            final Long lastAuctionId,
+    public Slice<Auction> findAuctionsAllByCondition(
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {
@@ -44,11 +43,11 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                       .from(auction)
                                                       .where(
                                                               auction.deleted.isFalse(),
-                                                              lessThanLastAuctionId(lastAuctionId),
                                                               convertTitleSearchCondition(readAuctionSearchCondition)
                                                       )
                                                       .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                                                       .limit(pageable.getPageSize() + SLICE_OFFSET)
+                                                      .offset(pageable.getOffset())
                                                       .fetch();
 
         final List<Auction> findAuctions = queryFactory.selectFrom(auction)
@@ -65,14 +64,6 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                        .fetch();
 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
-    }
-
-    private BooleanExpression lessThanLastAuctionId(final Long lastAuctionId) {
-        if (lastAuctionId == null) {
-            return null;
-        }
-
-        return auction.id.lt(lastAuctionId);
     }
 
     private BooleanExpression convertTitleSearchCondition(final ReadAuctionSearchCondition readAuctionSearchCondition) {
