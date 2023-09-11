@@ -166,12 +166,12 @@ class QuerydslChatRoomRepositoryImplTest {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
-            softAssertions.assertThat(actual.get(0).chatRoom()).isEqualTo(chatRoom2);
-            softAssertions.assertThat(actual.get(0).message()).isEqualTo(lastMessage3);
-            softAssertions.assertThat(actual.get(1).chatRoom()).isEqualTo(chatRoom3);
-            softAssertions.assertThat(actual.get(1).message()).isEqualTo(lastMessage2);
-            softAssertions.assertThat(actual.get(2).chatRoom()).isEqualTo(chatRoom1);
-            softAssertions.assertThat(actual.get(2).message()).isEqualTo(lastMessage1);
+            softAssertions.assertThat(actual.get(0).getChatRoom()).isEqualTo(chatRoom2);
+            softAssertions.assertThat(actual.get(0).getMessage()).isEqualTo(lastMessage3);
+            softAssertions.assertThat(actual.get(1).getChatRoom()).isEqualTo(chatRoom3);
+            softAssertions.assertThat(actual.get(1).getMessage()).isEqualTo(lastMessage2);
+            softAssertions.assertThat(actual.get(2).getChatRoom()).isEqualTo(chatRoom1);
+            softAssertions.assertThat(actual.get(2).getMessage()).isEqualTo(lastMessage1);
         });
     }
 
