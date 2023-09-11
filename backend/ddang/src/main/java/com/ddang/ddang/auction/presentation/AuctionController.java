@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -72,14 +71,12 @@ public class AuctionController {
     }
 
     @GetMapping
-    public ResponseEntity<ReadAuctionsResponse> readAllByLastAuctionId(
+    public ResponseEntity<ReadAuctionsResponse> readAllByCondition(
             @AuthenticateUser final AuthenticationUserInfo ignored,
-            @RequestParam(required = false) final Long lastAuctionId,
             @DescendingSort final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByLastAuctionId(
-                lastAuctionId,
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByCondition(
                 pageable,
                 readAuctionSearchCondition
         );

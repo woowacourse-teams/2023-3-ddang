@@ -638,7 +638,7 @@ class AuctionControllerTest {
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(auctionService.readAllByLastAuctionId(any(), any(Pageable.class), any(ReadAuctionSearchCondition.class)))
+        given(auctionService.readAllByCondition(any(Pageable.class), any(ReadAuctionSearchCondition.class)))
                 .willReturn(readAuctionsDto);
 
         // when & then
