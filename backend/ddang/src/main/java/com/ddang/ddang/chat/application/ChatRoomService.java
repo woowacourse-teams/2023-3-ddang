@@ -14,7 +14,7 @@ import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.UserCannotAccessChatRoomException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomWithLastMessageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageQueryProjectionDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -81,12 +81,12 @@ public class ChatRoomService {
     public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        final List<ChatRoomWithLastMessageDto> chatRoomWithLastMessageDtos =
+        final List<ChatRoomAndMessageQueryProjectionDto> chatRoomAndMessageQueryProjectionDtos =
                 chatRoomRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
 
-        return chatRoomWithLastMessageDtos.stream()
-                                          .map(dto -> ReadChatRoomWithLastMessageDto.of(findUser, dto))
-                                          .toList();
+        return chatRoomAndMessageQueryProjectionDtos.stream()
+                                                    .map(dto -> ReadChatRoomWithLastMessageDto.of(findUser, dto))
+                                                    .toList();
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {

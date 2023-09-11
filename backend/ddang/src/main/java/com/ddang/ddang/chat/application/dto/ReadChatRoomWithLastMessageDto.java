@@ -2,7 +2,7 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomWithLastMessageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageQueryProjectionDto;
 import com.ddang.ddang.user.domain.User;
 
 import java.time.LocalDateTime;
@@ -17,11 +17,11 @@ public record ReadChatRoomWithLastMessageDto(
 
     public static ReadChatRoomWithLastMessageDto of(
             final User findUser,
-            final ChatRoomWithLastMessageDto chatRoomWithLastMessageDto
+            final ChatRoomAndMessageQueryProjectionDto chatRoomAndMessageQueryProjectionDto
             ) {
-        final ChatRoom chatRoom = chatRoomWithLastMessageDto.getChatRoom();
+        final ChatRoom chatRoom = chatRoomAndMessageQueryProjectionDto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
-        final Message lastMessage = chatRoomWithLastMessageDto.getMessage();
+        final Message lastMessage = chatRoomAndMessageQueryProjectionDto.message();
 
         return new ReadChatRoomWithLastMessageDto(
                 chatRoom.getId(),

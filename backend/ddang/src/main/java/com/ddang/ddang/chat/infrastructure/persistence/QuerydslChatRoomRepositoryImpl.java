@@ -1,8 +1,8 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomWithLastMessageDto;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomWithLastMessageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageQueryProjectionDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageQueryProjectionDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,9 +23,9 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ChatRoomWithLastMessageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
+    public List<ChatRoomAndMessageQueryProjectionDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
         return queryFactory
-                .select(new QChatRoomWithLastMessageDto(chatRoom, message))
+                .select(new QChatRoomAndMessageQueryProjectionDto(chatRoom, message))
                 .from(chatRoom)
                 .leftJoin(chatRoom.buyer).fetchJoin()
                 .leftJoin(chatRoom.auction, auction).fetchJoin()
