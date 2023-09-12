@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.ddang.ddang.notification.util.NotificationProperty.BODY;
 import static com.ddang.ddang.notification.util.NotificationProperty.IMAGE;
+import static com.ddang.ddang.notification.util.NotificationProperty.NOTIFICATION_TYPE;
 import static com.ddang.ddang.notification.util.NotificationProperty.REDIRECT_URL;
 import static com.ddang.ddang.notification.util.NotificationProperty.TITLE;
 
@@ -47,6 +48,7 @@ public class FcmNotificationService implements NotificationService {
     ) {
         final Message message = Message.builder()
                                        .setToken(deviceToken.getDeviceToken())
+                                       .putData(NOTIFICATION_TYPE.getKeyName(), createNotificationDto.notificationType().getValue())
                                        .putData(IMAGE.getKeyName(), createNotificationDto.image())
                                        .putData(TITLE.getKeyName(), createNotificationDto.title())
                                        .putData(BODY.getKeyName(), createNotificationDto.body())

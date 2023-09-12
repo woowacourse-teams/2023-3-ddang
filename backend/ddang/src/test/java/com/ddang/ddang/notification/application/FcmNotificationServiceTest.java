@@ -5,6 +5,7 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
+import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.UserDeviceToken;
@@ -56,6 +57,7 @@ class FcmNotificationServiceTest {
         final UserDeviceToken deviceToken = new UserDeviceToken(user, "deviceToken");
         userDeviceTokenRepository.save(deviceToken);
         final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
+                NotificationType.MESSAGE,
                 user.getId(),
                 "제목",
                 "내용",
@@ -77,6 +79,7 @@ class FcmNotificationServiceTest {
         // given
         final Long invalidUserId = -999L;
         final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
+                NotificationType.MESSAGE,
                 invalidUserId,
                 "제목",
                 "내용",
@@ -105,6 +108,7 @@ class FcmNotificationServiceTest {
         userDeviceTokenRepository.save(deviceToken);
 
         final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
+                NotificationType.MESSAGE,
                 user.getId(),
                 "제목",
                 "내용",
@@ -132,6 +136,7 @@ class FcmNotificationServiceTest {
         userDeviceTokenRepository.save(deviceToken);
 
         final CreateNotificationDto invalidDto = new CreateNotificationDto(
+                NotificationType.MESSAGE,
                 user.getId(),
                 "제목",
                 "내용",
