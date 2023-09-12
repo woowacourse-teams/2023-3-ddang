@@ -1,30 +1,20 @@
 package com.ddang.ddang.authentication.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserDeviceTokenRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Map;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -32,6 +22,18 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -48,7 +50,13 @@ class AuthenticationServiceTest {
     JpaUserRepository userRepository;
 
     @Autowired
+    JpaUserDeviceTokenRepository userDeviceTokenRepository;
+
+    @Autowired
     TokenEncoder tokenEncoder;
+
+    @Autowired
+    TokenDecoder tokenDecoder;
 
     @Autowired
     JwtEncoder jwtEncoder;
@@ -59,6 +67,7 @@ class AuthenticationServiceTest {
     @BeforeEach
     void setUp(
             @Autowired JpaUserRepository userRepository,
+            @Autowired JpaUserDeviceTokenRepository userDeviceTokenRepository,
             @Autowired TokenEncoder tokenEncoder,
             @Autowired TokenDecoder tokenDecoder
     ) {
@@ -67,6 +76,7 @@ class AuthenticationServiceTest {
         authenticationService = new AuthenticationService(
                 mockProviderComposite,
                 userRepository,
+                userDeviceTokenRepository,
                 tokenEncoder,
                 tokenDecoder
         );
@@ -79,7 +89,7 @@ class AuthenticationServiceTest {
                 .willThrow(new UnsupportedSocialLoginException("지원하는 소셜 로그인 기능이 아닙니다."));
 
         // when & then
-        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, "accessToken"))
+        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken"))
                 .isInstanceOf(UnsupportedSocialLoginException.class)
                 .hasMessage("지원하는 소셜 로그인 기능이 아닙니다.");
     }
@@ -94,7 +104,7 @@ class AuthenticationServiceTest {
         final String invalidAccessToken = "invalidAccessToken";
 
         // when & then
-        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, invalidAccessToken))
+        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, invalidAccessToken, "deviceToken"))
                 .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("401 Unauthorized");
     }
@@ -117,7 +127,7 @@ class AuthenticationServiceTest {
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
 
         // when
-        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken");
+        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -135,13 +145,54 @@ class AuthenticationServiceTest {
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
 
         // when
-        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken");
+        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.accessToken()).isNotEmpty();
             softAssertions.assertThat(actual.refreshToken()).isNotEmpty();
         });
+    }
+
+    @Test
+    void 가입하지_않은_회원이_로그인_시_디바이스_토큰을_저장한다() {
+        // given
+        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
+
+        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
+        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
+
+        // when
+        authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
+
+        // then
+        assertThat(userDeviceTokenRepository.findByUserId(1L)).isNotEmpty();
+    }
+
+    @Test
+    void 가입하고_디바이스_토큰이_이미_있던_회원이_재로그인_시_디바이스_토큰이_변경되었다면_새로_저장한다() {
+        final User user = User.builder()
+                              .name("kakao12345")
+                              .profileImage("프로필")
+                              .reliability(0.0d)
+                              .oauthId("12345")
+                              .build();
+        userRepository.save(user);
+
+        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
+
+        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
+        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
+
+        authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
+
+        final String newDeviceToken = "newDeviceToken";
+
+        // when
+        authenticationService.login(Oauth2Type.KAKAO, "accessToken", "newDeviceToken");
+
+        // then
+        assertThat(userDeviceTokenRepository.findByUserId(1L).get().getDeviceToken()).isEqualTo(newDeviceToken);
     }
 
     @Test

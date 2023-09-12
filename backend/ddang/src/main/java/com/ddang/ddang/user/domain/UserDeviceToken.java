@@ -35,4 +35,12 @@ public class UserDeviceToken {
         this.user = user;
         this.deviceToken = deviceToken;
     }
+
+    public boolean isDifferentToken(final String targetDeviceToken) {
+        return !this.deviceToken.equals(targetDeviceToken);
+    }
+
+    public void updateDeviceToken(final String newDeviceToken) {
+        this.deviceToken = newDeviceToken;
+    }
 }
