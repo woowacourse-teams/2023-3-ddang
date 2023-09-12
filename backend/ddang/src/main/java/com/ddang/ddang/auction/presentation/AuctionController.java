@@ -96,6 +96,17 @@ public class AuctionController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/bids")
+    public ResponseEntity<ReadAuctionsResponse> readAllByBids(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @DescendingSort final Pageable pageable
+    ) {
+        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByBidderId(userInfo.userId(), pageable);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
+
+        return ResponseEntity.ok(response);
+    }
+
     @DeleteMapping("/{auctionId}")
     public ResponseEntity<Void> delete(
             @AuthenticateUser final AuthenticationUserInfo userInfo,

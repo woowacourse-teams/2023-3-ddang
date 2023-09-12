@@ -854,4 +854,104 @@ class AuctionControllerTest {
                        )
                );
     }
+
+    @Test
+    void 로그인한_회원이_참여한_경매_목록을_조회한다() throws Exception {
+        // given
+        final ReadRegionsDto readRegionsDto = new ReadRegionsDto(
+                new ReadRegionDto(1L, "서울특별시"),
+                new ReadRegionDto(2L, "강서구"),
+                new ReadRegionDto(3L, "역삼동")
+        );
+        final ReadAuctionDto auction1 = new ReadAuctionDto(
+                1L,
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                null,
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                List.of(readRegionsDto),
+                List.of(1L),
+                2,
+                "main1",
+                "sub1",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
+        );
+        final ReadAuctionDto auction2 = new ReadAuctionDto(
+                2L,
+                "경매 상품 2",
+                "이것은 경매 상품 2 입니다.",
+                1_000,
+                1_000,
+                null,
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                List.of(readRegionsDto),
+                List.of(1L),
+                2,
+                "main2",
+                "sub2",
+                1L,
+                "https://profile.com",
+                "판매자",
+                3.5d
+        );
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+        final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(auctionService.readAllByBidderId(anyLong(), any(Pageable.class))).willReturn(readAuctionsDto);
+
+        // when & then
+        mockMvc.perform(get("/auctions/bids")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("size", "10")
+                       .queryParam("page", "1")
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.auctions.[0].id", is(auction2.id()), Long.class),
+                       jsonPath("$.auctions.[0].title", is(auction2.title())),
+                       jsonPath("$.auctions.[0].image").exists(),
+                       jsonPath("$.auctions.[0].auctionPrice", is(auction2.startPrice())),
+                       jsonPath("$.auctions.[0].status").exists(),
+                       jsonPath("$.auctions.[0].auctioneerCount", is(auction2.auctioneerCount())),
+                       jsonPath("$.auctions.[1].id", is(auction1.id()), Long.class),
+                       jsonPath("$.auctions.[1].title", is(auction1.title())),
+                       jsonPath("$.auctions.[1].image").exists(),
+                       jsonPath("$.auctions.[1].auctionPrice", is(auction1.startPrice())),
+                       jsonPath("$.auctions.[1].status").exists(),
+                       jsonPath("$.auctions.[1].auctioneerCount", is(auction1.auctioneerCount()))
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               queryParameters(
+                                       parameterWithName("size").description("페이지 크기").optional(),
+                                       parameterWithName("page").description("페이지 번호")
+                               ),
+                               responseFields(
+                                       fieldWithPath("auctions").type(JsonFieldType.ARRAY).description("조회한 경매 목록"),
+                                       fieldWithPath("auctions.[]").type(JsonFieldType.ARRAY).description("조회한 단일 경매 정보"),
+                                       fieldWithPath("auctions.[].id").type(JsonFieldType.NUMBER).description("경매 ID"),
+                                       fieldWithPath("auctions.[].title").type(JsonFieldType.STRING).description("경매 글 제목"),
+                                       fieldWithPath("auctions.[].image").type(JsonFieldType.STRING).description("경매 대표 이미지"),
+                                       fieldWithPath("auctions.[].auctionPrice").type(JsonFieldType.NUMBER).description("경매가(시작가, 현재가, 낙찰가 중 하나)"),
+                                       fieldWithPath("auctions.[].status").type(JsonFieldType.STRING).description("경매 상태"),
+                                       fieldWithPath("auctions.[].auctioneerCount").type(JsonFieldType.NUMBER).description("경매 참여자 수"),
+                                       fieldWithPath("isLast").type(JsonFieldType.BOOLEAN).description("마지막 페이지 여부")
+                               )
+                       )
+               );
+    }
 }
