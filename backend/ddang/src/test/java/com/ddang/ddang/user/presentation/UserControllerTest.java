@@ -1,18 +1,5 @@
 package com.ddang.ddang.user.presentation;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.Mockito.mock;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
@@ -27,7 +14,6 @@ import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -43,6 +29,19 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {UserController.class},
         excludeFilters = {
@@ -134,21 +133,5 @@ class UserControllerTest {
                        status().isNotFound(),
                        jsonPath("$.message", is(userNotFoundException.getMessage()))
                );
-    }
-
-    @Test
-    void 회원_탈퇴한다() throws Exception {
-        // given
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        willDoNothing().given(userService).deleteById(anyLong());
-
-        // when & then
-        mockMvc.perform(delete("/users/withdrawal")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-        ).andExpectAll(
-                status().isNoContent()
-        );
     }
 }

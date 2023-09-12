@@ -1,6 +1,7 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.exception.AlreadyWithdrawalUserException;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
@@ -10,10 +11,13 @@ import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+
 import java.time.LocalDateTime;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -85,5 +89,20 @@ public class AuthenticationService {
     public boolean validateToken(final String accessToken) {
         return tokenDecoder.decode(TokenType.ACCESS, accessToken)
                            .isPresent();
+    }
+
+    @Transactional
+    public void withdrawal(final Oauth2Type oauth2Type, final String oauth2AccessToken) {
+        final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
+        final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
+        final User user = userRepository.findByOauthId(userInformationDto.findUserId())
+                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+
+        if (user.isDeleted()) {
+            throw new AlreadyWithdrawalUserException("이미 탈퇴한 회원입니다.");
+        }
+
+        provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());
+        user.withdrawal();
     }
 }

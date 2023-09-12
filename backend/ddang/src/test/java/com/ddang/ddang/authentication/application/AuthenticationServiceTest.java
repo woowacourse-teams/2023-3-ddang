@@ -1,18 +1,13 @@
 package com.ddang.ddang.authentication.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.application.exception.AlreadyWithdrawalUserException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
@@ -20,11 +15,6 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Map;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -32,6 +22,18 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -234,5 +236,70 @@ class AuthenticationServiceTest {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 가입한_회원이_탈퇴하는_경우_정상처리한다() {
+        // given
+        final User user = User.builder()
+                              .name("kakao12345")
+                              .profileImage("프로필")
+                              .reliability(0.0d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
+
+        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
+
+        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
+        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
+        given(mockProvider.unlinkUserBy(anyString(), anyString())).willReturn(userInformationDto);
+
+        // when
+        authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken");
+
+        // then
+        assertThat(user.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 이미_탈퇴한_회원이_탈퇴하는_경우_예외가_발생한다() {
+        // given
+        final User user = User.builder()
+                              .name("kakao12345")
+                              .profileImage("프로필")
+                              .reliability(0.0d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
+        user.withdrawal();
+
+        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
+
+        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
+        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
+        given(mockProvider.unlinkUserBy(anyString(), anyString())).willReturn(userInformationDto);
+
+        // when && then
+        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken"))
+                .isInstanceOf(AlreadyWithdrawalUserException.class)
+                .hasMessage("이미 탈퇴한 회원입니다.");
+    }
+
+    @Test
+    void 존재하지_않는_회원이_탈퇴하는_경우_예외가_발생한다() {
+        // given
+        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
+        given(mockProvider.findUserInformation(anyString()))
+                .willThrow(new InvalidTokenException("401 Unauthorized"));
+
+        final String invalidAccessToken = "invalidAccessToken";
+
+        // when & then
+        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, invalidAccessToken))
+                .isInstanceOf(InvalidTokenException.class)
+                .hasMessage("401 Unauthorized");
     }
 }
