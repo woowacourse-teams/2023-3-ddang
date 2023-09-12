@@ -2,6 +2,7 @@ package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.AlreadyWithdrawalUserException;
+import com.ddang.ddang.authentication.application.exception.WithdrawnUserException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
@@ -102,7 +103,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void 가입한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
+    void 가입한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() throws WithdrawnUserException {
         // given
         final User user = User.builder()
                               .name("kakao12345")
@@ -129,7 +130,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void 가입하지_않은_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
+    void 가입하지_않은_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() throws WithdrawnUserException {
         // given
         final UserInformationDto userInformationDto = new UserInformationDto(12345L);
 
@@ -285,7 +286,7 @@ class AuthenticationServiceTest {
         // when && then
         assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken"))
                 .isInstanceOf(AlreadyWithdrawalUserException.class)
-                .hasMessage("이미 탈퇴한 회원입니다.");
+                .hasMessage("이미 탈퇴한 사용자입니다.");
     }
 
     @Test

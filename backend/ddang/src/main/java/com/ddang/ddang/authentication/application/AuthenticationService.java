@@ -35,7 +35,7 @@ public class AuthenticationService {
     private final TokenDecoder tokenDecoder;
 
     @Transactional
-    public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken) {
+    public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken) throws WithdrawnUserException {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
         final User persistUser = findOrPersistUser(oauth2Type, userInformationDto);
@@ -96,10 +96,10 @@ public class AuthenticationService {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
         final User user = userRepository.findByOauthId(userInformationDto.findUserId())
-                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+                                        .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         if (user.isDeleted()) {
-            throw new AlreadyWithdrawalUserException("이미 탈퇴한 회원입니다.");
+            throw new AlreadyWithdrawalUserException("이미 탈퇴한 사용자입니다.");
         }
 
         provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());

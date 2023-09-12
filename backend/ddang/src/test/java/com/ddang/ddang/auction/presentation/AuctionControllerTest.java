@@ -209,6 +209,7 @@ class AuctionControllerTest {
                );
     }
 
+    // TODO: 2023/09/13 [고민] 회원과 사용자라는 용어를 통일할까요?
     @Test
     void 경매_등록시_유효한_회원이_아니라면_404을_반환한다() throws Exception {
         // given

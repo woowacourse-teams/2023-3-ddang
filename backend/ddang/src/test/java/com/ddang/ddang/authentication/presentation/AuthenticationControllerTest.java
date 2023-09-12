@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.exception.WithdrawnUserException;
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -98,7 +99,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void 소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_accessToken과_refreshToken을_반환한다() throws Exception {
+    void 소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_accessToken과_refreshToken을_반환한다() throws Exception, WithdrawnUserException {
         // given
         final TokenDto tokenDto = new TokenDto("accessToken", "refreshToken");
         final AccessTokenRequest request = new AccessTokenRequest("kakaoAccessToken");
@@ -132,7 +133,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void 소셜_로그인을_진행하지_않는_타입을_전달하면_400이_발생한다() throws Exception {
+    void 소셜_로그인을_진행하지_않는_타입을_전달하면_400이_발생한다() throws Exception, WithdrawnUserException {
         // given
         final AccessTokenRequest request = new AccessTokenRequest("kakaoAccessToken");
 
@@ -151,7 +152,7 @@ class AuthenticationControllerTest {
     }
 
     @Test
-    void 유효하지_않은_소셜_로그인_토큰을_전달하면_401이_발생한다() throws Exception {
+    void 유효하지_않은_소셜_로그인_토큰을_전달하면_401이_발생한다() throws Exception, WithdrawnUserException {
         // given
         final String invalidKakaoAccessToken = "invalidKakaoAccessToken";
         final AccessTokenRequest request = new AccessTokenRequest(invalidKakaoAccessToken);
@@ -199,7 +200,6 @@ class AuthenticationControllerTest {
                                )
                        )
                );
-        ;
     }
 
     @Test
