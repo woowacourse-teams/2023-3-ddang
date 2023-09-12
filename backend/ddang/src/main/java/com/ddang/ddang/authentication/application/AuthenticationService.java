@@ -10,9 +10,9 @@ import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
+import com.ddang.ddang.device.domain.DeviceToken;
+import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.domain.UserDeviceToken;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserDeviceTokenRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class AuthenticationService {
 
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final JpaUserRepository userRepository;
-    private final JpaUserDeviceTokenRepository deviceTokenRepository;
+    private final JpaDeviceTokenRepository deviceTokenRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
 
@@ -59,11 +59,11 @@ public class AuthenticationService {
     }
 
     private void updateOrPersistDeviceToken(final User persistedUser, final String newDeviceToken) {
-        final UserDeviceToken deviceToken =
+        final DeviceToken deviceToken =
                 deviceTokenRepository.findByUserId(persistedUser.getId())
                                      .orElseGet(() -> {
-                                         final UserDeviceToken newEntity =
-                                                 new UserDeviceToken(persistedUser, newDeviceToken);
+                                         final DeviceToken newEntity =
+                                                 new DeviceToken(persistedUser, newDeviceToken);
 
                                          return deviceTokenRepository.save(newEntity);
                                      });

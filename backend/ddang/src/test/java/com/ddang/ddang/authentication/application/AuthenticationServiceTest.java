@@ -12,8 +12,8 @@ import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserDeviceTokenRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +50,7 @@ class AuthenticationServiceTest {
     JpaUserRepository userRepository;
 
     @Autowired
-    JpaUserDeviceTokenRepository userDeviceTokenRepository;
+    JpaDeviceTokenRepository userDeviceTokenRepository;
 
     @Autowired
     TokenEncoder tokenEncoder;
@@ -67,7 +67,7 @@ class AuthenticationServiceTest {
     @BeforeEach
     void setUp(
             @Autowired JpaUserRepository userRepository,
-            @Autowired JpaUserDeviceTokenRepository userDeviceTokenRepository,
+            @Autowired JpaDeviceTokenRepository userDeviceTokenRepository,
             @Autowired TokenEncoder tokenEncoder,
             @Autowired TokenDecoder tokenDecoder
     ) {

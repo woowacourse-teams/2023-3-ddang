@@ -1,27 +1,28 @@
-package com.ddang.ddang.user.domain;
+package com.ddang.ddang.device.domain;
 
+import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserDeviceTokenTest {
+class DeviceTokenTest {
 
     @Test
     void 디바이스_토큰이_다르다면_참을_반환한다() {
         // given
-        final String deviceToken = "deviceToken";
+        final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
-        final UserDeviceToken userDeviceToken = new UserDeviceToken(user, deviceToken);
+        final DeviceToken deviceToken = new DeviceToken(user, deviceTokenValue);
 
-        final String targetDeviceToken = "differentDeviceToken";
+        final String targetDeviceTokenValue = "differentDeviceToken";
 
         // when
-        final boolean actual = userDeviceToken.isDifferentToken(targetDeviceToken);
+        final boolean actual = deviceToken.isDifferentToken(targetDeviceTokenValue);
 
         // then
         assertThat(actual).isTrue();
@@ -30,19 +31,19 @@ class UserDeviceTokenTest {
     @Test
     void 디바이스_토큰이_같다면_거짓을_반환한다() {
         // given
-        final String deviceToken = "deviceToken";
+        final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
-        final UserDeviceToken userDeviceToken = new UserDeviceToken(user, deviceToken);
+        final DeviceToken deviceToken = new DeviceToken(user, deviceTokenValue);
 
-        final String targetDeviceToken = deviceToken;
+        final String targetDeviceTokenValue = deviceTokenValue;
 
         // when
-        final boolean actual = userDeviceToken.isDifferentToken(targetDeviceToken);
+        final boolean actual = deviceToken.isDifferentToken(targetDeviceTokenValue);
 
         // then
         assertThat(actual).isFalse();
@@ -51,21 +52,21 @@ class UserDeviceTokenTest {
     @Test
     void 디바이스_토큰을_갱신한다() {
         // given
-        final String deviceToken = "deviceToken";
+        final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
                               .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
-        final UserDeviceToken userDeviceToken = new UserDeviceToken(user, deviceToken);
+        final DeviceToken deviceToken = new DeviceToken(user, deviceTokenValue);
 
-        final String newDeviceToken = "newDeviceToken";
+        final String newDeviceTokenValue = "newDeviceToken";
 
         // when
-        userDeviceToken.updateDeviceToken(newDeviceToken);
+        deviceToken.updateDeviceToken(newDeviceTokenValue);
 
         // then
-        assertThat(userDeviceToken.getDeviceToken()).isEqualTo(newDeviceToken);
+        assertThat(deviceToken.getDeviceToken()).isEqualTo(newDeviceTokenValue);
     }
 }

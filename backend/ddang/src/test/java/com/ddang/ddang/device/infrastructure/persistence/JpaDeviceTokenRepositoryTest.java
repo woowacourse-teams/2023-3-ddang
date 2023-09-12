@@ -1,9 +1,10 @@
-package com.ddang.ddang.user.infrastructure.persistence;
+package com.ddang.ddang.device.infrastructure.persistence;
 
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.domain.UserDeviceToken;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class JpaUserDeviceTokenRepositoryTest {
+class JpaDeviceTokenRepositoryTest {
 
     @PersistenceContext
     EntityManager em;
@@ -30,7 +31,7 @@ class JpaUserDeviceTokenRepositoryTest {
     JpaUserRepository userRepository;
 
     @Autowired
-    JpaUserDeviceTokenRepository userDeviceTokenRepository;
+    JpaDeviceTokenRepository userDeviceTokenRepository;
 
     @Test
     void 주어진_사용자_아이디에_해당하는_기기토큰을_조회한다() {
@@ -45,14 +46,14 @@ class JpaUserDeviceTokenRepositoryTest {
                               .build();
         userRepository.save(user);
 
-        final UserDeviceToken expect = new UserDeviceToken(user, deviceToken);
+        final DeviceToken expect = new DeviceToken(user, deviceToken);
         userDeviceTokenRepository.save(expect);
 
         em.flush();
         em.clear();
 
         // when
-        final Optional<UserDeviceToken> actual = userDeviceTokenRepository.findByUserId(user.getId());
+        final Optional<DeviceToken> actual = userDeviceTokenRepository.findByUserId(user.getId());
 
         // then
         assertThat(actual).contains(expect);

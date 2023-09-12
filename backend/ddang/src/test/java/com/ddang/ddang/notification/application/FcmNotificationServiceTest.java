@@ -1,15 +1,13 @@
 package com.ddang.ddang.notification.application;
 
-import com.ddang.ddang.configuration.FcmConfiguration;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.configuration.JpaConfiguration;
+import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
+import com.ddang.ddang.device.domain.DeviceToken;
+import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.notification.domain.NotificationType;
-import com.ddang.ddang.user.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.domain.UserDeviceToken;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserDeviceTokenRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -19,7 +17,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,7 +26,8 @@ import static org.mockito.BDDMockito.given;
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, FcmConfiguration.class})
+// TODO Import 안해도 될 듯
+//@Import({JpaConfiguration.class, FcmConfiguration.class})
 class FcmNotificationServiceTest {
 
     @MockBean
@@ -39,7 +37,7 @@ class FcmNotificationServiceTest {
     NotificationService notificationService;
 
     @Autowired
-    JpaUserDeviceTokenRepository userDeviceTokenRepository;
+    JpaDeviceTokenRepository userDeviceTokenRepository;
 
     @Autowired
     JpaUserRepository userRepository;
@@ -54,7 +52,7 @@ class FcmNotificationServiceTest {
                               .oauthId("12345")
                               .build();
         userRepository.save(user);
-        final UserDeviceToken deviceToken = new UserDeviceToken(user, "deviceToken");
+        final DeviceToken deviceToken = new DeviceToken(user, "deviceToken");
         userDeviceTokenRepository.save(deviceToken);
         final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                 NotificationType.MESSAGE,
@@ -104,7 +102,7 @@ class FcmNotificationServiceTest {
                               .build();
         userRepository.save(user);
 
-        final UserDeviceToken deviceToken = new UserDeviceToken(user, null);
+        final DeviceToken deviceToken = new DeviceToken(user, null);
         userDeviceTokenRepository.save(deviceToken);
 
         final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
@@ -132,7 +130,7 @@ class FcmNotificationServiceTest {
                               .oauthId("12345")
                               .build();
         userRepository.save(user);
-        final UserDeviceToken deviceToken = new UserDeviceToken(user, "deviceToken");
+        final DeviceToken deviceToken = new DeviceToken(user, "deviceToken");
         userDeviceTokenRepository.save(deviceToken);
 
         final CreateNotificationDto invalidDto = new CreateNotificationDto(

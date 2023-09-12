@@ -1,5 +1,6 @@
-package com.ddang.ddang.user.domain;
+package com.ddang.ddang.device.domain;
 
+import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +20,7 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(of = "id")
 @ToString
-public class UserDeviceToken {
+public class DeviceToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +32,7 @@ public class UserDeviceToken {
     @Column(name = "device_token", unique = true)
     private String deviceToken;
 
-    public UserDeviceToken(final User user, final String deviceToken) {
+    public DeviceToken(final User user, final String deviceToken) {
         this.user = user;
         this.deviceToken = deviceToken;
     }

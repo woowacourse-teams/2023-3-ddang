@@ -1,10 +1,10 @@
 package com.ddang.ddang.notification.application;
 
+import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
+import com.ddang.ddang.device.domain.DeviceToken;
+import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
-import com.ddang.ddang.user.application.exception.DeviceTokenNotFoundException;
-import com.ddang.ddang.user.domain.UserDeviceToken;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserDeviceTokenRepository;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
@@ -27,24 +27,24 @@ public class FcmNotificationService implements NotificationService {
     private static final String NOTIFICATION_SEND_FAIL = "알림 전송에 실패했습니다.";
 
     private final FirebaseMessaging firebaseMessaging;
-    private final JpaUserDeviceTokenRepository userDeviceTokenRepository;
+    private final JpaDeviceTokenRepository deviceTokenRepository;
 
     @Override
     public String send(final CreateNotificationDto createNotificationDto) {
-        final UserDeviceToken user = userDeviceTokenRepository.findById(createNotificationDto.targetUserId())
-                                                              .orElseThrow(() -> new DeviceTokenNotFoundException(
-                                                                      "사용자의 기기 토큰을 찾을 수 없습니다."
-                                                              ));
-        if (user.getDeviceToken() == null) {
+        final DeviceToken deviceToken = deviceTokenRepository.findById(createNotificationDto.targetUserId())
+                                                             .orElseThrow(() -> new DeviceTokenNotFoundException(
+                                                                     "사용자의 기기 토큰을 찾을 수 없습니다."
+                                                             ));
+        if (deviceToken.getDeviceToken() == null) {
             throw new DeviceTokenNotFoundException("사용자의 기기 토큰이 비어있습니다.");
         }
 
-        return makeAndSendMessage(createNotificationDto, user);
+        return makeAndSendMessage(createNotificationDto, deviceToken);
     }
 
     private String makeAndSendMessage(
             final CreateNotificationDto createNotificationDto,
-            final UserDeviceToken deviceToken
+            final DeviceToken deviceToken
     ) {
         final Message message = Message.builder()
                                        .setToken(deviceToken.getDeviceToken())

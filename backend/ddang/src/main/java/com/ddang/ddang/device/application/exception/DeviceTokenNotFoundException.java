@@ -1,4 +1,4 @@
-package com.ddang.ddang.user.application.exception;
+package com.ddang.ddang.device.application.exception;
 
 public class DeviceTokenNotFoundException extends IllegalArgumentException {
 
