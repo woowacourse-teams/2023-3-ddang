@@ -8,6 +8,7 @@ import static com.ddang.ddang.region.domain.QRegion.region;
 import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.util.AuctionSortCondition;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -32,17 +33,21 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<Auction> findAuctionsAllByLastAuctionId(final Long lastAuctionId, final Pageable pageable) {
+    public Slice<Auction> findAuctionsAllByCondition(
+            final Pageable pageable,
+            final ReadAuctionSearchCondition readAuctionSearchCondition
+    ) {
         final List<OrderSpecifier<?>> orderSpecifiers = calculateOrderSpecifiers(pageable);
 
         final List<Long> findAuctionIds = queryFactory.select(auction.id)
                                                       .from(auction)
                                                       .where(
                                                               auction.deleted.isFalse(),
-                                                              lessThanLastAuctionId(lastAuctionId)
+                                                              convertTitleSearchCondition(readAuctionSearchCondition)
                                                       )
                                                       .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                                                       .limit(pageable.getPageSize() + SLICE_OFFSET)
+                                                      .offset(pageable.getOffset())
                                                       .fetch();
 
         final List<Auction> findAuctions = queryFactory.selectFrom(auction)
@@ -61,12 +66,14 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
     }
 
-    private BooleanExpression lessThanLastAuctionId(final Long lastAuctionId) {
-        if (lastAuctionId == null) {
+    private BooleanExpression convertTitleSearchCondition(final ReadAuctionSearchCondition readAuctionSearchCondition) {
+        final String titleSearchCondition = readAuctionSearchCondition.title();
+
+        if (titleSearchCondition == null) {
             return null;
         }
 
-        return auction.id.lt(lastAuctionId);
+        return auction.title.like("%" + titleSearchCondition + "%");
     }
 
     private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {

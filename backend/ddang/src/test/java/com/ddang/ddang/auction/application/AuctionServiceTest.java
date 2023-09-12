@@ -16,6 +16,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
@@ -890,7 +891,8 @@ class AuctionServiceTest {
                 "image.png",
                 "image.png",
                 MediaType.IMAGE_PNG.toString(),
-                new byte[]{1});
+                new byte[]{1}
+        );
         final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -918,9 +920,9 @@ class AuctionServiceTest {
         auctionService.create(createAuctionDto2);
 
         // when
-        final ReadAuctionsDto actual = auctionService.readAllByLastAuctionId(
-                null,
-                PageRequest.of(1, 1, Sort.by(Order.desc("id")))
+        final ReadAuctionsDto actual = auctionService.readAllByCondition(
+                PageRequest.of(0, 1, Sort.by(Order.desc("id"))),
+                new ReadAuctionSearchCondition(null)
         );
 
         // then
