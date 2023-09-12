@@ -11,7 +11,7 @@ import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.UserCannotAccessChatRoomException;
+import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.ChatRoomAndMessageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -71,13 +71,13 @@ public class ChatRoomService {
     }
 
     private void checkUserCanParticipate(final User findUser, final Auction findAuction) {
-        if (isNotSellerAndWinner(findUser, findAuction)) {
-            throw new UserCannotAccessChatRoomException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+        if (isNotSellerAndNotWinner(findUser, findAuction)) {
+            throw new InvalidUserToChat("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
         }
     }
 
-    private boolean isNotSellerAndWinner(final User findUser, final Auction findAuction) {
-        return !findAuction.isOwner(findUser) && !findAuction.isWinner(findUser, LocalDateTime.now());
+    private boolean isNotSellerAndNotWinner(final User findUser, final Auction findAuction) {
+        return !(findAuction.isOwner(findUser) || findAuction.isWinner(findUser, LocalDateTime.now()));
     }
 
     public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
@@ -105,7 +105,7 @@ public class ChatRoomService {
 
     private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(findUser)) {
-            throw new UserCannotAccessChatRoomException("해당 채팅방에 접근할 권한이 없습니다.");
+            throw new InvalidUserToChat("해당 채팅방에 접근할 권한이 없습니다.");
         }
     }
 

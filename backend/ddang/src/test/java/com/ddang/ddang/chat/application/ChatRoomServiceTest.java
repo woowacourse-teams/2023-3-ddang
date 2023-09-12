@@ -18,7 +18,7 @@ import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.UserCannotAccessChatRoomException;
+import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -329,7 +329,7 @@ class ChatRoomServiceTest {
 
         // when & then
         assertThatThrownBy(() -> chatRoomService.create(strangeUserId, createChatRoomDto))
-                .isInstanceOf(UserCannotAccessChatRoomException.class)
+                .isInstanceOf(InvalidUserToChat.class)
                 .hasMessage("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
     }
 
@@ -650,7 +650,7 @@ class ChatRoomServiceTest {
 
         // when & then
         assertThatThrownBy(() -> chatRoomService.readByChatRoomId(chatRoomId, nonAuthorizedUserId))
-                .isInstanceOf(UserCannotAccessChatRoomException.class)
+                .isInstanceOf(InvalidUserToChat.class)
                 .hasMessageContaining("해당 채팅방에 접근할 권한이 없습니다.");
     }
 

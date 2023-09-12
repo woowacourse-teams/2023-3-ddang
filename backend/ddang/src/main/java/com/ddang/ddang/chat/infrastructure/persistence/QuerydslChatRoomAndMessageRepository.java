@@ -26,18 +26,12 @@ public class QuerydslChatRoomAndMessageRepository implements ChatRoomAndMessageR
     public List<ChatRoomAndMessageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
         final List<ChatRoomAndMessageQueryProjectionDto> unsortedDtos =
                 queryFactory.select(new QChatRoomAndMessageQueryProjectionDto(chatRoom, message))
-                            .from(chatRoom)
-                            .leftJoin(chatRoom.buyer)
-                            .fetchJoin()
-                            .leftJoin(chatRoom.auction, auction)
-                            .fetchJoin()
-                            .leftJoin(auction.seller)
-                            .fetchJoin()
-                            .leftJoin(auction.auctionImages)
-                            .fetchJoin()
-                            .leftJoin(auction.lastBid)
-                            .fetchJoin()
-                            .leftJoin(message).on(message.id.eq(
+                            .from(chatRoom).leftJoin(chatRoom.buyer)
+                            .fetchJoin().leftJoin(chatRoom.auction, auction)
+                            .fetchJoin().leftJoin(auction.seller)
+                            .fetchJoin().leftJoin(auction.auctionImages)
+                            .fetchJoin().leftJoin(auction.lastBid)
+                            .fetchJoin().leftJoin(message).on(message.id.eq(
                                     JPAExpressions
                                             .select(message.id.max())
                                             .from(message)

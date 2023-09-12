@@ -32,13 +32,11 @@ public class QuerydslChatRoomRepositoryImpl implements QuerydslChatRoomRepositor
 
     @Override
     public Optional<Long> findChatRoomIdByAuctionId(final Long auctionId) {
-        final ChatRoom findChatRoom = queryFactory.selectFrom(chatRoom)
-                                                  .where(chatRoom.auction.id.eq(auctionId))
-                                                  .fetchFirst();
-        if (findChatRoom == null) {
-            return Optional.empty();
-        }
+        final Long chatRoomId = queryFactory.select(chatRoom.id)
+                                            .from(chatRoom)
+                                            .where(chatRoom.auction.id.eq(auctionId))
+                                            .fetchFirst();
 
-        return Optional.ofNullable(findChatRoom.getId());
+        return Optional.ofNullable(chatRoomId);
     }
 }
