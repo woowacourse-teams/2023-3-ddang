@@ -38,6 +38,26 @@ class MyPageViewModel(
         }
     }
 
+    fun userInfoChange() {
+        _event.value = MyPageEvent.UserInfoChange
+    }
+
+    fun showMyAuctions() {
+        _event.value = MyPageEvent.ShowMyAuctions
+    }
+
+    fun showMyParticipateAuctions() {
+        _event.value = MyPageEvent.ShowMyParticipateAuctions
+    }
+
+    fun showAnnouncement() {
+        _event.value = MyPageEvent.ShowAnnouncement
+    }
+
+    fun showPrivacyPolicy() {
+        _event.value = MyPageEvent.ShowPrivacyPolicy
+    }
+
     fun logout() {
         viewModelScope.launch {
             when (authRepository.logout()) {
@@ -55,13 +75,13 @@ class MyPageViewModel(
         }
     }
 
-    fun showPrivacyPolicy() {
-        _event.value = MyPageEvent.ShowPrivacyPolicy
-    }
-
     sealed class MyPageEvent {
+        object UserInfoChange : MyPageEvent()
+        object ShowMyAuctions : MyPageEvent()
+        object ShowMyParticipateAuctions : MyPageEvent()
+        object ShowAnnouncement : MyPageEvent()
+        object ShowPrivacyPolicy : MyPageEvent()
         object LogoutSuccessfully : MyPageEvent()
         object LogoutFailed : MyPageEvent()
-        object ShowPrivacyPolicy : MyPageEvent()
     }
 }

@@ -120,6 +120,10 @@
 
     <!-- mypage -->
     <string name="mypage">마이페이지</string>
+    <string name="mypage_user_info_change_button">회원 정보 수정</string>
+    <string name="mypage_my_auction_list_button">나의 경매 목록</string>
+    <string name="mypage_my_participate_auction_list_button">내가 참여한 경매 목록</string>
+    <string name="mypage_announcement_button">공지사항</string>
     <string name="mypage_privacy_policy_button">개인정보처리방침</string>
     <string name="mypage_logout_button">로그아웃</string>
     <string name="mypage_delete_account_button">탈퇴하기</string>

@@ -42,8 +42,20 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 navigateToLogin()
             }
 
-            MyPageViewModel.MyPageEvent.LogoutFailed -> notifyLogoutFailed()
+            MyPageViewModel.MyPageEvent.UserInfoChange -> {
+            }
+
+            MyPageViewModel.MyPageEvent.ShowMyAuctions -> {
+            }
+
+            MyPageViewModel.MyPageEvent.ShowMyParticipateAuctions -> {
+            }
+
+            MyPageViewModel.MyPageEvent.ShowAnnouncement -> {
+            }
+
             MyPageViewModel.MyPageEvent.ShowPrivacyPolicy -> showPrivacyPolicy()
+            MyPageViewModel.MyPageEvent.LogoutFailed -> notifyLogoutFailed()
         }
     }
 
