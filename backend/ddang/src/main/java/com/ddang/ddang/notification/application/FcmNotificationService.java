@@ -31,7 +31,7 @@ public class FcmNotificationService implements NotificationService {
 
     @Override
     public String send(final CreateNotificationDto createNotificationDto) {
-        final DeviceToken deviceToken = deviceTokenRepository.findById(createNotificationDto.targetUserId())
+        final DeviceToken deviceToken = deviceTokenRepository.findByUserId(createNotificationDto.targetUserId())
                                                              .orElseThrow(() -> new DeviceTokenNotFoundException(
                                                                      "사용자의 기기 토큰을 찾을 수 없습니다."
                                                              ));
