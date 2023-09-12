@@ -14,4 +14,6 @@ public interface QuerydslAuctionRepository {
     );
 
     Optional<Auction> findAuctionById(final Long auctionId);
+
+    Slice<Auction> findAuctionsAllByUserId(final Long userId, final Pageable pageable);
 }
