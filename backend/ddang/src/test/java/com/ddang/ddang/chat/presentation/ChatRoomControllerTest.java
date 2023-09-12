@@ -309,13 +309,10 @@ class ChatRoomControllerTest {
                                        parameterWithName("lastMessageId").description("마지막으로 응답받은 메시지의 ID").optional()
                                ),
                                responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY)
-                                                          .description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
+                                       fieldWithPath("[]").type(JsonFieldType.ARRAY).description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
-                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
-                                                                    .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN)
-                                                                      .description("조회를 요청한 사람이 보낸 메시지인지 여부"),
+                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
+                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN).description("조회를 요청한 사람이 보낸 메시지인지 여부"),
                                        fieldWithPath("[].contents").type(JsonFieldType.STRING).description("메시지 내용")
                                )
                        )
@@ -467,28 +464,18 @@ class ChatRoomControllerTest {
                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
                                        fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                         .description("채팅 상대방 ID"),
-                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING)
-                                                                           .description("채팅 상대방 이름"),
-                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                   .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT)
-                                                                  .description("채팅방과 연관된 경매"),
+                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
+                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
+                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
+                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
                                        fieldWithPath("[].auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING)
-                                                                        .description("경매 제목"),
-                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING)
-                                                                        .description("경매 대표 사진"),
+                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING).description("경매 제목"),
+                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
                                        fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
-                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT)
-                                                                      .description("마지막으로 전송된 메시지"),
-                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING)
-                                                                                .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
-                                                                               .description("메시지 내용"),
-                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                          .description("채팅 가능 여부")
+                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT).description("마지막으로 전송된 메시지"),
+                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
+                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING).description("메시지 내용"),
+                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
                                )
                        )
                );
@@ -572,18 +559,13 @@ class ChatRoomControllerTest {
                                        fieldWithPath("auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
                                        fieldWithPath("auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
                                        fieldWithPath("auction.title").type(JsonFieldType.STRING).description("경매 제목"),
-                                       fieldWithPath("auction.image").type(JsonFieldType.STRING)
-                                                                     .description("경매 대표 사진"),
+                                       fieldWithPath("auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
                                        fieldWithPath("auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
                                        fieldWithPath("chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                      .description("채팅 상대방 ID"),
-                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING)
-                                                                        .description("채팅 상대방 이름"),
-                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                       .description("채팅 가능 여부")
+                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
+                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
+                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
+                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
                                )
                        )
                );

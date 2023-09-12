@@ -26,8 +26,6 @@ import static org.mockito.BDDMockito.given;
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-// TODO Import 안해도 될 듯
-//@Import({JpaConfiguration.class, FcmConfiguration.class})
 class FcmNotificationServiceTest {
 
     @MockBean
