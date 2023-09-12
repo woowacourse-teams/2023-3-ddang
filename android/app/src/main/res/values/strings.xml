@@ -144,4 +144,11 @@
     <string name="search_keyword">검색</string>
     <string name="search_notice_no_auction">아이쿠! 올라온 경매가 없습니다!</string>
     <string name="search_notice_input_keyword">검색창에 상품명을 입력해주세요.</string>
+
+    <!-- userInfoChange-->
+    <string name="user_info_change">회원 정보 수정</string>
+    <string name="user_info_change_profile_image_button_description">회원 프로필 수정 버튼</string>
+    <string name="user_info_change_nickname">닉네임</string>
+    <string name="user_info_change_nickname_text_hint">닉네임은 15자 이내입니다.</string>
+    <string name="user_info_change_profile_image_description">선택된 회원 프로필 이미지</string>
 </resources>
