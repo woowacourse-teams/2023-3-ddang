@@ -12,11 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.ddang.ddang.notification.util.NotificationProperty.BODY;
-import static com.ddang.ddang.notification.util.NotificationProperty.IMAGE;
-import static com.ddang.ddang.notification.util.NotificationProperty.NOTIFICATION_TYPE;
-import static com.ddang.ddang.notification.util.NotificationProperty.REDIRECT_URL;
-import static com.ddang.ddang.notification.util.NotificationProperty.TITLE;
+import static com.ddang.ddang.notification.application.util.NotificationProperty.BODY;
+import static com.ddang.ddang.notification.application.util.NotificationProperty.IMAGE;
+import static com.ddang.ddang.notification.application.util.NotificationProperty.NOTIFICATION_TYPE;
+import static com.ddang.ddang.notification.application.util.NotificationProperty.REDIRECT_URL;
+import static com.ddang.ddang.notification.application.util.NotificationProperty.TITLE;
 
 @Service
 @Transactional(readOnly = true)

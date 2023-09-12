@@ -1,4 +1,4 @@
-package com.ddang.ddang.notification.util;
+package com.ddang.ddang.notification.application.util;
 
 public enum NotificationProperty {
 
