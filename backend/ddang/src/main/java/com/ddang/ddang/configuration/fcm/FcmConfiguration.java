@@ -1,4 +1,4 @@
-package com.ddang.ddang.configuration;
+package com.ddang.ddang.configuration.fcm;
 
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -16,13 +16,25 @@ import java.util.List;
 @Configuration
 public class FcmConfiguration {
 
+    private static final FirebaseOptions TEST_OPTIONS = FirebaseOptions.builder()
+                                                                       .setCredentials(new MockGoogleCredentials("test-token"))
+                                                                       .setProjectId("test-project")
+                                                                       .build();
+    private static final FirebaseApp FIREBASE_APP = FirebaseApp.initializeApp(TEST_OPTIONS);
+
+    @Value("${fcm.enabled}")
+    private boolean enabled;
+
     @Value("${fcm.key.path}")
     private String FCM_PRIVATE_KEY_PATH;
 
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        final ClassPathResource resource = new ClassPathResource(FCM_PRIVATE_KEY_PATH);
+        if (!enabled) {
+            return FirebaseMessaging.getInstance(FIREBASE_APP);
+        }
 
+        final ClassPathResource resource = new ClassPathResource(FCM_PRIVATE_KEY_PATH);
         final InputStream refreshToken = resource.getInputStream();
 
         final List<FirebaseApp> firebaseApps = FirebaseApp.getApps();

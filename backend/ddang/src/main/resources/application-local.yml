@@ -52,5 +52,6 @@ oauth2:
         user-info-uri: https://kapi.kakao.com/v2/user/me
 
 fcm:
+  enabled: false
   key:
     path: firebase/private-key.json
