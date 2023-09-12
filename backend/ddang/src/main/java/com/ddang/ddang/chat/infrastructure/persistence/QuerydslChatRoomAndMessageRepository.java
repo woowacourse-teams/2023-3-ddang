@@ -39,7 +39,6 @@ public class QuerydslChatRoomAndMessageRepository implements ChatRoomAndMessageR
                                 .where(message.chatRoom.id.eq(chatRoom.id))
                 ))
                 .where(isSellerOrWinner(userId))
-                .orderBy(message.id.max().desc())
                 .groupBy(chatRoom.id)
                 .fetch();
 
