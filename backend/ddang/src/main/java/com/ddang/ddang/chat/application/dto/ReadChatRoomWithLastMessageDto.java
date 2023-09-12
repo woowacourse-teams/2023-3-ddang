@@ -18,7 +18,7 @@ public record ReadChatRoomWithLastMessageDto(
     public static ReadChatRoomWithLastMessageDto of(
             final User findUser,
             final ChatRoomAndMessageDto chatRoomAndMessageDto
-            ) {
+    ) {
         final ChatRoom chatRoom = chatRoomAndMessageDto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
         final Message lastMessage = chatRoomAndMessageDto.message();

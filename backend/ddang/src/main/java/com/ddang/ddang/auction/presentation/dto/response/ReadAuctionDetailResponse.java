@@ -16,7 +16,7 @@ public record ReadAuctionDetailResponse(
             final String baseUrl,
             final AuthenticationUserInfo userInfo,
             final ReadChatRoomDto chatRoomDto
-            ) {
+    ) {
         final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(auctionDto, baseUrl);
         final SellerResponse sellerResponse = new SellerResponse(
                 auctionDto.sellerId(),
