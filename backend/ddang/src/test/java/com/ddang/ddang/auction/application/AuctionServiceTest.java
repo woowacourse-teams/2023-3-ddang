@@ -1043,4 +1043,85 @@ class AuctionServiceTest {
                 .isInstanceOf(UserForbiddenException.class)
                 .hasMessage("권한이 없습니다.");
     }
+
+    @Test
+    void 회원이_등록한_경매_목록을_조회한다() {
+        // given
+        final StoreImageDto storeImageDto = new StoreImageDto("upload.png", "store.png");
+
+        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(storeImageDto));
+
+        final Region firstRegion = new Region("first");
+        final Region secondRegion = new Region("second");
+        final Region thirdRegion = new Region("third");
+
+        firstRegion.addSecondRegion(secondRegion);
+        secondRegion.addThirdRegion(thirdRegion);
+
+        regionRepository.save(firstRegion);
+
+        final Category main = new Category("main");
+        final Category sub = new Category("sub");
+
+        main.addSubCategory(sub);
+        categoryRepository.save(main);
+
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User buyer = User.builder()
+                               .name("회원2")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("123457")
+                               .build();
+
+        userRepository.saveAll(List.of(seller, buyer));
+
+        final MockMultipartFile auctionImage = new MockMultipartFile(
+                "image.png",
+                "image.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1}
+        );
+        final CreateAuctionDto createAuctionDto1 = new CreateAuctionDto(
+                "경매 상품 1",
+                "이것은 경매 상품 1 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
+                List.of(auctionImage),
+                seller.getId()
+        );
+        final CreateAuctionDto createAuctionDto2 = new CreateAuctionDto(
+                "경매 상품 2",
+                "이것은 경매 상품 2 입니다.",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(thirdRegion.getId()),
+                sub.getId(),
+                List.of(auctionImage),
+                seller.getId()
+        );
+
+        final CreateInfoAuctionDto createInfoAuctionDto1 = auctionService.create(createAuctionDto1);
+        final CreateInfoAuctionDto createInfoAuctionDto2 = auctionService.create(createAuctionDto2);
+        final PageRequest pageRequest = PageRequest.of(0, 3);
+
+        // when
+        final ReadAuctionsDto actual = auctionService.readAllByUserId(seller.getId(), pageRequest);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.readAuctionDtos()).hasSize(2);
+            softAssertions.assertThat(actual.readAuctionDtos().get(0).id()).isEqualTo(createInfoAuctionDto2.id());
+            softAssertions.assertThat(actual.readAuctionDtos().get(1).id()).isEqualTo(createInfoAuctionDto1.id());
+        });
+    }
 }
