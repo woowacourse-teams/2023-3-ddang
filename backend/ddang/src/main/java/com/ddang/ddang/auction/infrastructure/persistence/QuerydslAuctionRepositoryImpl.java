@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
 import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.bid.domain.QBid.bid;
 import static com.ddang.ddang.category.domain.QCategory.category;
 import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
@@ -150,6 +151,29 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 findAuctionIds,
                 List.of(auction.id.desc())
         );
+
+        return QuerydslSliceHelper.toSlice(findAuctions, pageable);
+    }
+
+    @Override
+    public Slice<Auction> findAuctionsAllByBidderId(final Long bidderId, final Pageable pageable) {
+        final List<Long> findAuctionIds = queryFactory.select(bid.auction.id)
+                                                      .from(bid)
+                                                      .where(bid.bidder.id.eq(bidderId))
+                                                      .groupBy(bid.auction.id)
+                                                      .orderBy(bid.id.max().desc())
+                                                      .limit(pageable.getPageSize() + SLICE_OFFSET)
+                                                      .offset(pageable.getOffset())
+                                                      .fetch();
+        final List<Auction> findAuctions = findAuctionsByIdsAndOrderSpecifiers(findAuctionIds, Collections.emptyList());
+
+        findAuctions.sort((firstAuction, secondAuction) -> {
+            int firstAuctionIndex = findAuctionIds.indexOf(firstAuction.getId());
+            int secondAuctionIndex = findAuctionIds.indexOf(secondAuction.getId());
+
+            return Integer.compare(firstAuctionIndex, secondAuctionIndex);
+        });
+
 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
     }
