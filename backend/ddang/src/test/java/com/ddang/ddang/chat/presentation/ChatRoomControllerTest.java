@@ -30,6 +30,7 @@ import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -233,6 +234,34 @@ class ChatRoomControllerTest {
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message", is(userNotFoundException.getMessage()))
+               );
+    }
+
+    @Test
+    void 알림_전송_실패_시_500을_반환한다() throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
+        final Long invalidWriterId = -999L;
+        final Long chatRoomId = 1L;
+        final CreateMessageRequest request = new CreateMessageRequest(invalidWriterId, "메시지 내용");
+
+        final NotificationFailedException notificationFailedException = new NotificationFailedException(
+                "알림 전송에 실패했습니다."
+        );
+
+        given(messageService.create(any(CreateMessageDto.class))).willThrow(notificationFailedException);
+
+        // when & then
+        mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .content(objectMapper.writeValueAsString(request))
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isInternalServerError(),
+                       jsonPath("$.message", is(notificationFailedException.getMessage()))
                );
     }
 
