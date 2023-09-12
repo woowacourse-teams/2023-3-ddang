@@ -12,6 +12,8 @@ import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.device.application.DeviceTokenService;
+import com.ddang.ddang.device.application.dto.UpdateDeviceTokenDto;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -22,6 +24,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -31,8 +34,11 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
 @IsolateDatabase
@@ -45,6 +51,9 @@ class AuthenticationServiceTest {
     OAuth2UserInformationProvider mockProvider;
 
     Oauth2UserInformationProviderComposite mockProviderComposite;
+
+    @MockBean
+    DeviceTokenService deviceTokenService;
 
     @Autowired
     JpaUserRepository userRepository;
@@ -67,19 +76,20 @@ class AuthenticationServiceTest {
     @BeforeEach
     void setUp(
             @Autowired JpaUserRepository userRepository,
-            @Autowired JpaDeviceTokenRepository userDeviceTokenRepository,
             @Autowired TokenEncoder tokenEncoder,
             @Autowired TokenDecoder tokenDecoder
     ) {
         mockProvider = mock(OAuth2UserInformationProvider.class);
         mockProviderComposite = mock(Oauth2UserInformationProviderComposite.class);
         authenticationService = new AuthenticationService(
+                deviceTokenService,
                 mockProviderComposite,
                 userRepository,
-                userDeviceTokenRepository,
                 tokenEncoder,
                 tokenDecoder
         );
+
+        doNothing().when(deviceTokenService).createOrUpdate(anyLong(), any(UpdateDeviceTokenDto.class));
     }
 
     @Test
@@ -152,47 +162,6 @@ class AuthenticationServiceTest {
             softAssertions.assertThat(actual.accessToken()).isNotEmpty();
             softAssertions.assertThat(actual.refreshToken()).isNotEmpty();
         });
-    }
-
-    @Test
-    void 가입하지_않은_회원이_로그인_시_디바이스_토큰을_저장한다() {
-        // given
-        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
-
-        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
-        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
-
-        // when
-        authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
-
-        // then
-        assertThat(userDeviceTokenRepository.findByUserId(1L)).isNotEmpty();
-    }
-
-    @Test
-    void 가입하고_디바이스_토큰이_이미_있던_회원이_재로그인_시_디바이스_토큰이_변경되었다면_새로_저장한다() {
-        final User user = User.builder()
-                              .name("kakao12345")
-                              .profileImage("프로필")
-                              .reliability(0.0d)
-                              .oauthId("12345")
-                              .build();
-        userRepository.save(user);
-
-        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
-
-        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
-        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
-
-        authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
-
-        final String newDeviceToken = "newDeviceToken";
-
-        // when
-        authenticationService.login(Oauth2Type.KAKAO, "accessToken", "newDeviceToken");
-
-        // then
-        assertThat(userDeviceTokenRepository.findByUserId(1L).get().getDeviceToken()).isEqualTo(newDeviceToken);
     }
 
     @Test

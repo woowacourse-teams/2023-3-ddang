@@ -10,8 +10,8 @@ import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.device.domain.DeviceToken;
-import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.device.application.DeviceTokenService;
+import com.ddang.ddang.device.application.dto.UpdateDeviceTokenDto;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +28,9 @@ public class AuthenticationService {
 
     private static final String PRIVATE_CLAIMS_KEY = "userId";
 
+    private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final JpaUserRepository userRepository;
-    private final JpaDeviceTokenRepository deviceTokenRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
 
@@ -39,9 +39,15 @@ public class AuthenticationService {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
         final User persistUser = findOrPersistUser(oauth2Type, userInformationDto);
-        updateOrPersistDeviceToken(persistUser, deviceToken);
+
+        updateOrPersistDeviceToken(deviceToken, persistUser);
 
         return convertTokenDto(persistUser);
+    }
+
+    private void updateOrPersistDeviceToken(final String deviceToken, final User persistUser) {
+        final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(deviceToken);
+        deviceTokenService.createOrUpdate(persistUser.getId(), updateDeviceTokenDto);
     }
 
     private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {
@@ -56,20 +62,6 @@ public class AuthenticationService {
 
                                  return userRepository.save(user);
                              });
-    }
-
-    private void updateOrPersistDeviceToken(final User persistedUser, final String newDeviceToken) {
-        final DeviceToken deviceToken =
-                deviceTokenRepository.findByUserId(persistedUser.getId())
-                                     .orElseGet(() -> {
-                                         final DeviceToken newEntity =
-                                                 new DeviceToken(persistedUser, newDeviceToken);
-
-                                         return deviceTokenRepository.save(newEntity);
-                                     });
-        if (deviceToken.isDifferentToken(newDeviceToken)) {
-            deviceToken.updateDeviceToken(newDeviceToken);
-        }
     }
 
     private TokenDto convertTokenDto(final User persistUser) {
