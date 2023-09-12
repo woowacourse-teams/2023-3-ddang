@@ -138,6 +138,12 @@ public class AuctionService {
         return ReadAuctionsDto.from(auctions);
     }
 
+    public ReadAuctionsDto readAllByBidderId(final Long userId, final Pageable pageable) {
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByBidderId(userId, pageable);
+
+        return ReadAuctionsDto.from(auctions);
+    }
+
     @Transactional
     public void deleteByAuctionId(final Long auctionId, final Long userId) {
         final Auction auction = auctionRepository.findAuctionById(auctionId)
