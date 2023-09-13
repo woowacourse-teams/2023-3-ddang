@@ -149,6 +149,7 @@
     <string name="user_info_change">회원 정보 수정</string>
     <string name="user_info_change_profile_image_button_description">회원 프로필 수정 버튼</string>
     <string name="user_info_change_nickname">닉네임</string>
-    <string name="user_info_change_nickname_text_hint">닉네임은 15자 이내입니다.</string>
+    <string name="user_info_change_nickname_text_hint">닉네임은 25자 이내입니다.</string>
     <string name="user_info_change_profile_image_description">선택된 회원 프로필 이미지</string>
+    <string name="user_info_change_confirm">확인</string>
 </resources>

@@ -44,7 +44,9 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             }
 
             MyPageViewModel.MyPageEvent.UserInfoChange -> {
-                startActivity(Intent(requireContext(), UserInfoChangeActivity::class.java))
+                viewModel.profile.value?.let {
+                    startActivity(UserInfoChangeActivity.getIntent(requireContext(), it))
+                }
             }
 
             MyPageViewModel.MyPageEvent.ShowMyAuctions -> {
