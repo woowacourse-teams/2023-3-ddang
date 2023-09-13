@@ -22,8 +22,9 @@ class LoginViewModel(
 
     fun completeLoginByKakao(accessToken: String) {
         viewModelScope.launch {
-            val kakaoToken = KakaoLoginRequest(accessToken)
-            when (repository.loginByKakao(kakaoToken)) {
+            val deviceToken = repository.getDeviceToken()
+            val request = KakaoLoginRequest(accessToken, deviceToken)
+            when (repository.loginByKakao(request)) {
                 is ApiResponse.Success -> _event.value = LoginEvent.CompleteLoginEvent
                 else -> _event.value = LoginEvent.FailureLoginEvent
             }

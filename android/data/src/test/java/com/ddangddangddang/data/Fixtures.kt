@@ -1,7 +1,6 @@
 package com.ddangddangddang.data
 
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
-import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.AuctionResponse
@@ -41,10 +40,10 @@ fun createRegisterAuctionRequest(
     thirdRegionIds,
 )
 
-fun createAuctionDetailResponse(
-    auction: AuctionResponse = createAuctionResponse(),
-    seller: SellerResponse = createSellerResponse(),
-) = AuctionDetailResponse(auction, seller)
+// fun createAuctionDetailResponse(
+//     auction: AuctionResponse = createAuctionResponse(),
+//     seller: SellerResponse = createSellerResponse(),
+// ) = AuctionDetailResponse(auction, seller)
 
 private fun createAuctionResponse(
     id: Long = 2,
