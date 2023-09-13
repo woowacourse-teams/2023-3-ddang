@@ -30,17 +30,29 @@ class SplashViewModel(
                     if (response.body.validated) {
                         _event.value = SplashEvent.AutoLoginSuccess
                     } else {
-                        _event.value = SplashEvent.RefreshTokenExpired
+                        refreshToken()
                     }
                 }
 
-                is ApiResponse.Failure -> {
-                    if (response.responseCode == 401) _event.value = SplashEvent.RefreshTokenExpired
-                }
-
+                is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
+        }
+    }
+
+    private suspend fun refreshToken() {
+        when (val response = repository.refreshToken()) {
+            is ApiResponse.Success -> {
+                _event.value = SplashEvent.AutoLoginSuccess
+            }
+
+            is ApiResponse.Failure -> {
+                if (response.responseCode == 401) _event.value = SplashEvent.RefreshTokenExpired
+            }
+
+            is ApiResponse.NetworkError -> {}
+            is ApiResponse.Unexpected -> {}
         }
     }
 
