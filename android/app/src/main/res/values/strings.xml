@@ -10,6 +10,7 @@
     <string name="all_current_price">현재가</string>
     <string name="all_start_price">시작가</string>
     <string name="all_winning_bid_price">낙찰가</string>
+    <string name="all_auction_unbidden">입찰전</string>
     <string name="all_auction_ongoing">경매중</string>
     <string name="all_auction_success">낙찰 완료</string>
     <string name="all_auction_failure">경매 유찰</string>
@@ -140,4 +141,11 @@
     <string name="alarm_dialog_check_permission_message">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받기 위해 알림 권한이 필요합니다.</string>
     <string name="alarm_dialog_check_permission_positive_button">알겠습니다</string>
     <string name="alarm_snackbar_how_to_grant_permission">알림을 수신하고 싶으신 경우, 앱 설정에서 알림 권한을 허용할 수 있습니다</string>
+
+    <!-- search -->
+    <string name="search">경매 상품 검색</string>
+    <string name="search_keyword_hint">상품명 검색</string>
+    <string name="search_keyword">검색</string>
+    <string name="search_notice_no_auction">아이쿠! 올라온 경매가 없습니다!</string>
+    <string name="search_notice_input_keyword">검색창에 상품명을 입력해주세요.</string>
 </resources>

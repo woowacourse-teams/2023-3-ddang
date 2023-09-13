@@ -1,17 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.search.SearchViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".feature.search.SearchFragment">
 
-        <TextView
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_search"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/bottom_navigation_search" />
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:text="@string/search"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/textsize_main_header"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
 
+        <EditText
+            android:id="@+id/et_search_keyword"
+            android:layout_width="0dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="@dimen/margin_side_layout"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/bg_gray_radius_24dp"
+            android:hint="@string/search_keyword_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingHorizontal="16dp"
+            android:text="@={viewModel.keyword}"
+            android:textCursorDrawable="@drawable/ic_edittext_cursor"
+            android:textSize="@dimen/textsize_body"
+            app:layout_constraintBottom_toTopOf="@id/rv_search_auctions"
+            app:layout_constraintEnd_toStartOf="@id/btn_search"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_search"
+            tools:text="맥북 에어" />
+
+        <Button
+            android:id="@+id/btn_search"
+            android:layout_width="80dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="@dimen/margin_side_layout"
+            android:background="@drawable/bg_red_radius_24dp"
+            android:onClick="@{() -> viewModel.submitKeyword()}"
+            android:text="@string/search_keyword"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/et_search_keyword"
+            app:layout_constraintTop_toTopOf="@id/et_search_keyword" />
+
+        <TextView
+            android:id="@+id/tv_notice_no_auctions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_notice_no_auction"
+            android:textColor="@color/black_400"
+            android:textSize="@dimen/textsize_sub_header"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_search_keyword" />
+
+        <TextView
+            android:id="@+id/tv_notice_input_keyword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_notice_input_keyword"
+            android:textColor="@color/black_400"
+            android:textSize="@dimen/textsize_sub_header"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_search_keyword" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_auctions"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/et_search_keyword"
+            app:spanCount="2"
+            tools:listitem="@layout/item_home_auction" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

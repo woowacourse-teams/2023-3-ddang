@@ -15,6 +15,7 @@ import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -32,6 +33,11 @@ class AuctionDetailActivity :
     }
 
     private fun setupViewModel() {
+        observeLoadingWithDialog(
+            this,
+            viewModel.isLoadingWithAnimation,
+            binding.clAuctionDetailContainer,
+        )
         viewModel.event.observe(this) { event ->
             handleEvent(event)
         }
