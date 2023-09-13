@@ -134,6 +134,14 @@
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
     <string name="report_snackbar_auction_id_not_delivered">경매 정보가 넘어오지 않았습니다.</string>
 
+    <!-- alarm -->
+    <string name="alarm_channel_name">전체 알림</string>
+    <string name="alarm_channel_description">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받습니다.</string>
+    <string name="alarm_dialog_check_permission_title">알림 수신 설정</string>
+    <string name="alarm_dialog_check_permission_message">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받기 위해 알림 권한이 필요합니다.</string>
+    <string name="alarm_dialog_check_permission_positive_button">알겠습니다</string>
+    <string name="alarm_snackbar_how_to_grant_permission">알림을 수신하고 싶으신 경우, 앱 설정에서 알림 권한을 허용할 수 있습니다</string>
+
     <!-- search -->
     <string name="search">경매 상품 검색</string>
     <string name="search_keyword_hint">상품명 검색</string>
