@@ -3,8 +3,9 @@ package com.ddang.ddang.auction.presentation;
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
@@ -13,6 +14,7 @@ import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailRespon
 import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.chat.application.ChatRoomService;
 import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -37,6 +39,7 @@ public class AuctionController {
     private static final String AUCTIONS_IMAGE_BASE_URL = "/auctions/images/";
 
     private final AuctionService auctionService;
+    private final ChatRoomService chatRoomService;
 
     @PostMapping
     public ResponseEntity<CreateAuctionResponse> create(
@@ -60,11 +63,13 @@ public class AuctionController {
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @PathVariable final Long auctionId
     ) {
-        final ReadAuctionWithChatRoomIdDto readAuctionDto = auctionService.readByAuctionId(auctionId, userInfo);
+        final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
+        final ReadChatRoomDto readChatRoomDto = chatRoomService.readChatInfoByAuctionId(auctionId, userInfo);
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
                 calculateBaseImageUrl(),
-                userInfo
+                userInfo,
+                readChatRoomDto
         );
 
         return ResponseEntity.ok(response);

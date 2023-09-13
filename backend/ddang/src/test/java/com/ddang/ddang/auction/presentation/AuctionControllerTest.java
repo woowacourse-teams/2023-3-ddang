@@ -1,5 +1,63 @@
 package com.ddang.ddang.auction.presentation;
 
+import com.ddang.ddang.auction.application.AuctionService;
+import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
+import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
+import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
+import com.ddang.ddang.authentication.application.BlackListTokenService;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
+import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.chat.application.ChatRoomService;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
+import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
+import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
+import com.ddang.ddang.region.application.exception.RegionNotFoundException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -26,64 +84,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.auction.application.AuctionService;
-import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
-import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
-import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-import com.ddang.ddang.authentication.application.AuthenticationUserService;
-import com.ddang.ddang.authentication.application.BlackListTokenService;
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
-import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
-import com.ddang.ddang.configuration.RestDocsConfiguration;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
-import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
-import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
-import com.ddang.ddang.region.application.exception.RegionNotFoundException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 @WebMvcTest(controllers = {AuctionController.class},
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
@@ -98,6 +98,9 @@ class AuctionControllerTest {
 
     @MockBean
     AuctionService auctionService;
+
+    @MockBean
+    ChatRoomService chatRoomService;
 
     @MockBean
     BlackListTokenService blackListTokenService;
@@ -479,7 +482,7 @@ class AuctionControllerTest {
                 new ReadRegionDto(2L, "강서구"),
                 new ReadRegionDto(3L, "역삼동")
         );
-        final ReadAuctionDto auction = new ReadAuctionDto(
+        final ReadAuctionDto auctionDto = new ReadAuctionDto(
                 1L,
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -501,29 +504,27 @@ class AuctionControllerTest {
         );
         final ReadChatRoomDto chatRoomDto = new ReadChatRoomDto(1L, true);
 
-        final ReadAuctionWithChatRoomIdDto auctionWithChatRoomIdDto =
-                new ReadAuctionWithChatRoomIdDto(auction, chatRoomDto);
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(auctionService.readByAuctionId(anyLong(), any(AuthenticationUserInfo.class)))
-                .willReturn(auctionWithChatRoomIdDto);
+        given(auctionService.readByAuctionId(anyLong())).willReturn(auctionDto);
+        given(chatRoomService.readChatInfoByAuctionId(anyLong(), any())).willReturn(chatRoomDto);
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/{auctionId}", auction.id())
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/{auctionId}", auctionDto.id())
                                                         .contentType(MediaType.APPLICATION_JSON)
                                                         .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.auction.id", is(auction.id()), Long.class),
-                       jsonPath("$.auction.title", is(auction.title())),
-                       jsonPath("$.auction.description", is(auction.description())),
-                       jsonPath("$.auction.bidUnit", is(auction.bidUnit())),
-                       jsonPath("$.auction.startPrice", is(auction.startPrice())),
+                       jsonPath("$.auction.id", is(auctionDto.id()), Long.class),
+                       jsonPath("$.auction.title", is(auctionDto.title())),
+                       jsonPath("$.auction.description", is(auctionDto.description())),
+                       jsonPath("$.auction.bidUnit", is(auctionDto.bidUnit())),
+                       jsonPath("$.auction.startPrice", is(auctionDto.startPrice())),
                        jsonPath("$.auction.registerTime").exists(),
                        jsonPath("$.auction.closingTime").exists(),
-                       jsonPath("$.auction.auctioneerCount", is(auction.auctioneerCount()))
+                       jsonPath("$.auction.auctioneerCount", is(auctionDto.auctioneerCount()))
                )
                .andDo(
                        restDocs.document(
@@ -572,7 +573,7 @@ class AuctionControllerTest {
         final Long invalidAuctionId = -999L;
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(auctionService.readByAuctionId(anyLong(), any(AuthenticationUserInfo.class)))
+        given(auctionService.readByAuctionId(anyLong()))
                 .willThrow(new AuctionNotFoundException("지정한 아이디에 대한 경매를 찾을 수 없습니다."));
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
