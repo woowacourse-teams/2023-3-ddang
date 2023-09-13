@@ -94,6 +94,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
 
     // 카카오 로그인
     implementation 'com.kakao.sdk:v2-user:2.11.1'

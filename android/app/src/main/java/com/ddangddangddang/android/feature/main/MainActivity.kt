@@ -1,7 +1,12 @@
 package com.ddangddangddang.android.feature.main
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.ddangddangddang.android.R
@@ -13,15 +18,33 @@ import com.ddangddangddang.android.feature.mypage.MyPageFragment
 import com.ddangddangddang.android.feature.search.SearchFragment
 import com.ddangddangddang.android.global.screenViewLogEvent
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.showDialog
+import com.ddangddangddang.android.util.view.showSnackbar
 
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel by viewModels<MainViewModel> { viewModelFactory }
     private var isInitialized = false
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private val requestNotificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission(),
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // FCM SDK (and your app) can post notifications.
+        } else {
+            if (isNotificationPermissionDenied()) {
+                binding.root.showSnackbar(R.string.alarm_snackbar_how_to_grant_permission)
+            }
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
 
         setupViewModel()
+
+        askNotificationPermission()
     }
 
     override fun onResume() {
@@ -61,5 +84,32 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             FragmentType.MESSAGE -> MessageFragment()
             FragmentType.MY_PAGE -> MyPageFragment()
         }
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+            } else if (!isNotificationPermissionDenied()) {
+                showRequestAlarmPermissionRationale()
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun isNotificationPermissionDenied(): Boolean =
+        shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun showRequestAlarmPermissionRationale() {
+        showDialog(
+            titleId = R.string.alarm_dialog_check_permission_title,
+            messageId = R.string.alarm_dialog_check_permission_message,
+            positiveStringId = R.string.alarm_dialog_check_permission_positive_button,
+            actionPositive = {
+                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            },
+            isCancelable = false,
+        )
     }
 }
