@@ -20,11 +20,11 @@ import kotlinx.coroutines.withContext
 import java.net.URL
 
 class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
-    private lateinit var defaultImage: Bitmap
-
-    override fun onCreate() {
-        super.onCreate()
-        defaultImage = BitmapFactory.decodeResource(resources, R.drawable.img_default_profile)
+    private val defaultImage: Bitmap by lazy {
+        BitmapFactory.decodeResource(
+            resources,
+            R.drawable.img_default_profile,
+        )
     }
 
     override fun onNewToken(token: String) {
