@@ -26,14 +26,33 @@ class SplashViewModel(
     private fun verifyToken() {
         viewModelScope.launch {
             when (val response = repository.verifyToken()) {
-                is ApiResponse.Success -> _event.value = SplashEvent.AutoLoginSuccess
-                is ApiResponse.Failure -> {
-                    if (response.responseCode == 401) _event.value = SplashEvent.RefreshTokenExpired
+                is ApiResponse.Success -> {
+                    if (response.body.validated) {
+                        _event.value = SplashEvent.AutoLoginSuccess
+                    } else {
+                        refreshToken()
+                    }
                 }
 
+                is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
             }
+        }
+    }
+
+    private suspend fun refreshToken() {
+        when (val response = repository.refreshToken()) {
+            is ApiResponse.Success -> {
+                _event.value = SplashEvent.AutoLoginSuccess
+            }
+
+            is ApiResponse.Failure -> {
+                if (response.responseCode == 401) _event.value = SplashEvent.RefreshTokenExpired
+            }
+
+            is ApiResponse.NetworkError -> {}
+            is ApiResponse.Unexpected -> {}
         }
     }
 
