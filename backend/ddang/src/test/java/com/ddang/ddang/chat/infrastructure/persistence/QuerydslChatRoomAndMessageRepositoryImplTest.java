@@ -31,7 +31,7 @@ import java.util.List;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class QuerydslChatRoomAndMessageRepositoryTest {
+class QuerydslChatRoomAndMessageRepositoryImplTest {
 
     @PersistenceContext
     EntityManager em;
@@ -47,14 +47,14 @@ class QuerydslChatRoomAndMessageRepositoryTest {
 
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
-    ChatRoomAndMessageRepository chatRoomAndMessageRepository;
+    QuerydslChatRoomAndMessageRepository querydslChatRoomAndMessageRepository;
 
     @Autowired
     JpaMessageRepository messageRepository;
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        chatRoomAndMessageRepository = new QuerydslChatRoomAndMessageRepository(queryFactory);
+        querydslChatRoomAndMessageRepository = new QuerydslChatRoomAndMessageRepositoryImpl(queryFactory);
     }
 
     @Test
@@ -168,7 +168,7 @@ class QuerydslChatRoomAndMessageRepositoryTest {
 
         // when
         final List<ChatRoomAndMessageDto> actual =
-                chatRoomAndMessageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
+                querydslChatRoomAndMessageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
