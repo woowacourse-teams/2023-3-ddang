@@ -9,7 +9,6 @@ import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuthService
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -60,15 +59,13 @@ class AuthRepositoryImpl private constructor(
 
     override suspend fun getDeviceToken(): String? {
         return suspendCancellableCoroutine { continuation ->
-            FirebaseMessaging.getInstance().token.addOnCompleteListener(
-                OnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        continuation.resume(task.result.toString())
-                    } else {
-                        continuation.resume(null)
-                    }
-                },
-            )
+            FirebaseMessaging.getInstance().token.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    continuation.resume(task.result.toString())
+                } else {
+                    continuation.resume(null)
+                }
+            }
         }
     }
 
