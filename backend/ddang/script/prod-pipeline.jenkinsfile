@@ -54,7 +54,7 @@ pipeline {
                 channel: '#빌드-결과',
                 color: '#00FF00',
                 message: """
-                    빌드 성공!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)
+                    빌드 성공!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.INFRA_EC2_PUBLIC_IP}/jenkins)
                 """
             )
         }
