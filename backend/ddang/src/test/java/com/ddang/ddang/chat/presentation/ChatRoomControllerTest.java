@@ -22,8 +22,8 @@ import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
+import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
-import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
@@ -376,13 +376,7 @@ class ChatRoomControllerTest {
                 1L,
                 "경매1",
                 10_000,
-                List.of(1L, 2L),
-                "main",
-                "sub",
-                seller.id(),
-                seller.profileImage(),
-                seller.name(),
-                seller.reliability()
+                1L
         );
         final ReadChatRoomWithLastMessageDto dto1 = new ReadChatRoomWithLastMessageDto(
                 1L,
@@ -395,13 +389,7 @@ class ChatRoomControllerTest {
                 2L,
                 "경매2",
                 20_000,
-                List.of(1L, 2L),
-                "main",
-                "sub",
-                seller.id(),
-                seller.profileImage(),
-                seller.name(),
-                seller.reliability()
+                1L
         );
         final ReadChatRoomWithLastMessageDto dto2 = new ReadChatRoomWithLastMessageDto(
                 2L,
@@ -496,13 +484,7 @@ class ChatRoomControllerTest {
                 1L,
                 "경매 상품 1",
                 3_000,
-                List.of(1L, 2L),
-                "메인 카테고리",
-                "서브 카테고리",
-                1L,
-                "profile.png",
-                "판매자",
-                5.0d
+                1L
         );
         final ReadUserInChatRoomDto chatPartner = new ReadUserInChatRoomDto(
                 2L,
@@ -611,10 +593,10 @@ class ChatRoomControllerTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        final UserNotAccessibleException userNotAccessibleException =
-                new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
+        final InvalidUserToChat invalidUserToChat =
+                new InvalidUserToChat("해당 채팅방에 접근할 권한이 없습니다.");
 
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(userNotAccessibleException);
+        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(invalidUserToChat);
 
         // when & then
         mockMvc.perform(get("/chattings/1")
@@ -622,7 +604,7 @@ class ChatRoomControllerTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is(userNotAccessibleException.getMessage()))
+                       jsonPath("$.message", is(invalidUserToChat.getMessage()))
                );
     }
 
@@ -734,30 +716,6 @@ class ChatRoomControllerTest {
     }
 
     @Test
-    void 경매가_삭제된_상태에서_채팅방을_생성하면_400을_반환한다() throws Exception {
-        // given
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-
-        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final InvalidAuctionToChatException invalidAuctionToChatException =
-                new InvalidAuctionToChatException("삭제된 경매입니다.");
-
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(invalidAuctionToChatException);
-
-        // when & then
-        mockMvc.perform(post("/chattings")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
-               .andExpectAll(
-                       status().isBadRequest(),
-                       jsonPath("$.message", is(invalidAuctionToChatException.getMessage()))
-               );
-    }
-
-    @Test
     void 채팅방_생성시_낙찰자가_없다면_404를_반환한다() throws Exception {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
@@ -788,10 +746,10 @@ class ChatRoomControllerTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final UserNotAccessibleException userNotAccessibleException =
-                new UserNotAccessibleException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+        final InvalidUserToChat invalidUserToChat =
+                new InvalidUserToChat("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
 
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(userNotAccessibleException);
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(invalidUserToChat);
 
         // when & then
         mockMvc.perform(post("/chattings")
@@ -800,7 +758,7 @@ class ChatRoomControllerTest {
                        .content(objectMapper.writeValueAsString(chatRoomRequest)))
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is(userNotAccessibleException.getMessage()))
+                       jsonPath("$.message", is(invalidUserToChat.getMessage()))
                );
     }
 }
