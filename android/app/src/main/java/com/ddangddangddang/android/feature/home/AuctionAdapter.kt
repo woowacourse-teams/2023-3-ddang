@@ -15,10 +15,6 @@ class AuctionAdapter(private val onItemClick: (Long) -> Unit) :
         holder.bind(currentList[position])
     }
 
-    fun setAuctions(list: List<AuctionHomeModel>) {
-        submitList(list)
-    }
-
     companion object {
         private val AuctionDiffUtil = object : DiffUtil.ItemCallback<AuctionHomeModel>() {
             override fun areItemsTheSame(
