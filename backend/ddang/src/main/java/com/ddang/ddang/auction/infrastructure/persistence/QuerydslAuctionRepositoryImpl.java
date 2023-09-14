@@ -46,6 +46,14 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
     }
 
+    private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
+
+        orderSpecifiers.add(auction.id.desc());
+
+        return orderSpecifiers;
+    }
+
     private List<BooleanExpression> calculateBooleanExpressions(final ReadAuctionSearchCondition searchCondition) {
         final List<BooleanExpression> booleanExpressions = new ArrayList<>();
 
@@ -82,14 +90,6 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         }
 
         return auction.title.like("%" + titleSearchCondition + "%");
-    }
-
-    private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
-
-        orderSpecifiers.add(auction.id.desc());
-
-        return orderSpecifiers;
     }
 
     private List<OrderSpecifier<?>> convertOrderSpecifiers(final Pageable pageable) {
