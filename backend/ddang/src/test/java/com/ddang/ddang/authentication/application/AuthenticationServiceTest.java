@@ -1,8 +1,7 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.AlreadyWithdrawalUserException;
-import com.ddang.ddang.authentication.application.exception.WithdrawnUserException;
+import com.ddang.ddang.authentication.application.exception.InaccessibleWithdrawalException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
@@ -103,7 +102,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void 가입한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() throws WithdrawnUserException {
+    void 가입한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
         final User user = User.builder()
                               .name("kakao12345")
@@ -130,8 +129,36 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void 가입하지_않은_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() throws WithdrawnUserException {
+    void 가입하지_않은_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
+        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
+
+        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
+        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
+
+        // when
+        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken");
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.accessToken()).isNotEmpty();
+            softAssertions.assertThat(actual.refreshToken()).isNotEmpty();
+        });
+    }
+
+    @Test
+    void 탈퇴한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
+        // given
+        final User user = User.builder()
+                              .name("kakao12345")
+                              .profileImage("프로필")
+                              .reliability(0.0d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
+        user.withdrawal();
+
         final UserInformationDto userInformationDto = new UserInformationDto(12345L);
 
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
@@ -240,7 +267,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void 가입한_회원이_탈퇴하는_경우_정상처리한다() {
+    void 가입한_회원이_탈퇴하는_경우_정상처리한다() throws InaccessibleWithdrawalException {
         // given
         final User user = User.builder()
                               .name("kakao12345")
@@ -285,8 +312,8 @@ class AuthenticationServiceTest {
 
         // when && then
         assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken"))
-                .isInstanceOf(AlreadyWithdrawalUserException.class)
-                .hasMessage("이미 탈퇴한 사용자입니다.");
+                .isInstanceOf(InaccessibleWithdrawalException.class)
+                .hasMessage("탈퇴에 대한 권한 없습니다.");
     }
 
     @Test

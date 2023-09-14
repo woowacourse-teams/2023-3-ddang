@@ -3,7 +3,6 @@ package com.ddang.ddang.authentication.presentation;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.WithdrawnUserException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
@@ -34,7 +33,7 @@ public class AuthenticationController {
     public ResponseEntity<Object> validate(
             @PathVariable final Oauth2Type oauth2Type,
             @RequestBody final AccessTokenRequest request
-    ) throws WithdrawnUserException {
+    ) {
         final TokenDto tokenDto = authenticationService.login(oauth2Type, request.accessToken());
 
         return ResponseEntity.ok(TokenResponse.from(tokenDto));

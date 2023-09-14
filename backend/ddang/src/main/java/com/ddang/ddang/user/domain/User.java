@@ -35,7 +35,6 @@ public class User extends BaseTimeEntity {
 
     private double reliability;
 
-    @Column(unique = true)
     private String oauthId;
 
     @Column(name = "is_deleted")
