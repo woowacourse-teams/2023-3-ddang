@@ -6,8 +6,7 @@ public enum NotificationProperty {
     IMAGE("image"),
     TITLE("title"),
     BODY("body"),
-    REDIRECT_URL("redirectUrl"),
-    ;
+    REDIRECT_URL("redirectUrl");
 
     private final String keyName;
 

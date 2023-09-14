@@ -56,6 +56,7 @@ public class FcmConfiguration {
         return firebaseApps.stream()
                            .filter(app -> app.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
                            .findAny()
-                           .map(FirebaseMessaging::getInstance).orElse(null);
+                           .map(FirebaseMessaging::getInstance)
+                           .orElse(null);
     }
 }

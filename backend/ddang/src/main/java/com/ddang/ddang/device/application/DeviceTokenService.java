@@ -35,7 +35,7 @@ public class DeviceTokenService {
 
     private DeviceToken createDeviceToken(final Long userId, final String newDeviceToken) {
         final User findUser = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+                                            .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final DeviceToken deviceToken = new DeviceToken(findUser, newDeviceToken);
 
         return deviceTokenRepository.save(deviceToken);
