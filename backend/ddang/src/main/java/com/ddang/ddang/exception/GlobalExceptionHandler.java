@@ -12,6 +12,7 @@ import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
+import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
@@ -190,11 +191,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse("이미지 조회에 실패했습니다."));
     }
 
-    @ExceptionHandler(UserNotAccessibleException.class)
+    @ExceptionHandler(InvalidUserToChat.class)
     public ResponseEntity<ExceptionResponse> handleUserNotAccessibleException(
-            final UserNotAccessibleException ex
+            final InvalidUserToChat ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserNotAccessibleException.class), ex);
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidUserToChat.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
