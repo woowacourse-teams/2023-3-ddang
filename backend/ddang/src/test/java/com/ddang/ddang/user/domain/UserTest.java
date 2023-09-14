@@ -23,4 +23,34 @@ class UserTest {
         // then
         assertThat(user.isDeleted()).isTrue();
     }
+
+    @Test
+    void 탈퇴하지_않음_회원의_이름은_저장된_이름으로_반환된다() {
+        // given
+        final User user = User.builder()
+                              .name("kakao12345")
+                              .build();
+
+        // when
+        final String actual = user.getName();
+
+        // then
+        assertThat(actual).isEqualTo("kakao12345");
+    }
+
+    @Test
+    void 탈퇴한_회원의_이름은_알_수_없음으로_반환된다() {
+        // given
+        final User user = User.builder()
+                              .name("kakao12345")
+                              .build();
+
+        user.withdrawal();
+
+        // when
+        final String actual = user.getName();
+
+        // then
+        assertThat(actual).isEqualTo("알 수 없음");
+    }
 }
