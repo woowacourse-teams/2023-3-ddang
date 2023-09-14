@@ -19,7 +19,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString
+@ToString(of = {"id", "deviceToken"})
 public class DeviceToken {
 
     @Id
