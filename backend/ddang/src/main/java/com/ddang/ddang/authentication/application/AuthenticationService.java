@@ -11,7 +11,7 @@ import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
-import com.ddang.ddang.device.application.dto.UpdateDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +46,8 @@ public class AuthenticationService {
     }
 
     private void updateOrPersistDeviceToken(final String deviceToken, final User persistUser) {
-        final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(deviceToken);
-        deviceTokenService.persist(persistUser.getId(), updateDeviceTokenDto);
+        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(deviceToken);
+        deviceTokenService.persist(persistUser.getId(), persistDeviceTokenDto);
     }
 
     private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {

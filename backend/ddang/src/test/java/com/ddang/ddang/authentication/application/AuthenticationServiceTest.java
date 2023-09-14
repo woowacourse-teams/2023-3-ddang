@@ -13,7 +13,7 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformatio
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
-import com.ddang.ddang.device.application.dto.UpdateDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -89,7 +89,7 @@ class AuthenticationServiceTest {
                 tokenDecoder
         );
 
-        doNothing().when(deviceTokenService).persist(anyLong(), any(UpdateDeviceTokenDto.class));
+        doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
     }
 
     @Test

@@ -1,7 +1,7 @@
 package com.ddang.ddang.device.application;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.device.application.dto.UpdateDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -42,10 +42,10 @@ class DeviceTokenServiceTest {
                               .build();
         userRepository.save(user);
 
-        final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(deviceTokenValue);
+        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(deviceTokenValue);
 
         // when & then
-        assertThatNoException().isThrownBy(() -> deviceTokenService.persist(user.getId(), updateDeviceTokenDto));
+        assertThatNoException().isThrownBy(() -> deviceTokenService.persist(user.getId(), persistDeviceTokenDto));
     }
 
     @Test
@@ -64,10 +64,10 @@ class DeviceTokenServiceTest {
         deviceTokenRepository.save(deviceToken);
 
         final String newDeviceTokenValue = "newDeviceToken";
-        final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(newDeviceTokenValue);
+        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(newDeviceTokenValue);
 
         // when
-        deviceTokenService.persist(user.getId(), updateDeviceTokenDto);
+        deviceTokenService.persist(user.getId(), persistDeviceTokenDto);
 
         // then
         assertThat(deviceToken.getDeviceToken()).isEqualTo(newDeviceTokenValue);
@@ -89,10 +89,10 @@ class DeviceTokenServiceTest {
         deviceTokenRepository.save(deviceToken);
 
         final String newDeviceTokenValue = deviceTokenValue;
-        final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(newDeviceTokenValue);
+        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(newDeviceTokenValue);
 
         // when
-        deviceTokenService.persist(user.getId(), updateDeviceTokenDto);
+        deviceTokenService.persist(user.getId(), persistDeviceTokenDto);
 
         // then
         assertThat(deviceToken.getDeviceToken()).isEqualTo(deviceTokenValue);
@@ -103,10 +103,10 @@ class DeviceTokenServiceTest {
         // given
         final Long invalidUserId = -999L;
         final String deviceTokenValue = "deviceToken";
-        final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(deviceTokenValue);
+        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(deviceTokenValue);
 
         // when & then
-        assertThatThrownBy(() -> deviceTokenService.persist(invalidUserId, updateDeviceTokenDto))
+        assertThatThrownBy(() -> deviceTokenService.persist(invalidUserId, persistDeviceTokenDto))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }

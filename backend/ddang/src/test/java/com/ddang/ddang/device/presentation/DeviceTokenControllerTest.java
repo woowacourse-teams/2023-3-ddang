@@ -11,7 +11,7 @@ import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.device.application.DeviceTokenService;
-import com.ddang.ddang.device.application.dto.UpdateDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.presentation.dto.request.UpdateDeviceTokenRequest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -123,7 +123,7 @@ class DeviceTokenControllerTest {
 
         final UpdateDeviceTokenRequest request = new UpdateDeviceTokenRequest("newDeviceToken");
 
-        doNothing().when(deviceTokenService).persist(anyLong(), any(UpdateDeviceTokenDto.class));
+        doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.put("/deviceToken")
@@ -160,7 +160,7 @@ class DeviceTokenControllerTest {
         );
 
         willThrow(userNotFoundException).given(deviceTokenService)
-                                        .persist(anyLong(), any(UpdateDeviceTokenDto.class));
+                                        .persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
         mockMvc.perform(put("/deviceToken")

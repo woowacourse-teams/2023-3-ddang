@@ -1,6 +1,6 @@
 package com.ddang.ddang.device.application;
 
-import com.ddang.ddang.device.application.dto.UpdateDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -19,7 +19,7 @@ public class DeviceTokenService {
     private final JpaUserRepository userRepository;
 
     @Transactional
-    public void persist(final Long userId, final UpdateDeviceTokenDto deviceTokenDto) {
+    public void persist(final Long userId, final PersistDeviceTokenDto deviceTokenDto) {
         final String newDeviceToken = deviceTokenDto.deviceToken();
         if (newDeviceToken.isBlank()) {
             return;
