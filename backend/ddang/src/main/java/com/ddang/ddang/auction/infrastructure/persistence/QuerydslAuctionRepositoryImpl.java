@@ -174,7 +174,6 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
             return Integer.compare(firstAuctionIndex, secondAuctionIndex);
         });
 
-
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
     }
 }
