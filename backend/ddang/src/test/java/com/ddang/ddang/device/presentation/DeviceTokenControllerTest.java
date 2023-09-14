@@ -31,7 +31,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -50,9 +49,9 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -126,10 +125,10 @@ class DeviceTokenControllerTest {
         doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.put("/deviceToken")
-                                                        .contentType(MediaType.APPLICATION_JSON)
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                                                        .content(objectMapper.writeValueAsString(request)))
+        mockMvc.perform(patch("/deviceToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .content(objectMapper.writeValueAsString(request)))
                .andExpectAll(
                        status().isOk()
                )
@@ -163,7 +162,7 @@ class DeviceTokenControllerTest {
                                         .persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
-        mockMvc.perform(put("/deviceToken")
+        mockMvc.perform(patch("/deviceToken")
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .content(objectMapper.writeValueAsString(request))
                        .contentType(MediaType.APPLICATION_JSON))

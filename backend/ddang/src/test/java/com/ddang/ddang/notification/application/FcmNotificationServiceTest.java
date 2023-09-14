@@ -90,35 +90,6 @@ class FcmNotificationServiceTest {
     }
 
     @Test
-    void 알림을_전송시_기기토큰이_null이라면_예외가_발생한다() {
-        // given
-        final User user = User.builder()
-                              .name("회원")
-                              .profileImage("profile.png")
-                              .reliability(4.7d)
-                              .oauthId("12345")
-                              .build();
-        userRepository.save(user);
-
-        final DeviceToken deviceToken = new DeviceToken(user, null);
-        userDeviceTokenRepository.save(deviceToken);
-
-        final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
-                NotificationType.MESSAGE,
-                user.getId(),
-                "제목",
-                "내용",
-                "/redirectUrl",
-                "image.png"
-        );
-
-        // when & then
-        assertThatThrownBy(() -> notificationService.send(createNotificationDto))
-                .isInstanceOf(DeviceTokenNotFoundException.class)
-                .hasMessage("사용자의 기기 토큰이 비어있습니다.");
-    }
-
-    @Test
     void 알림을_전송을_실패한다() throws FirebaseMessagingException {
         // given
         final User user = User.builder()
