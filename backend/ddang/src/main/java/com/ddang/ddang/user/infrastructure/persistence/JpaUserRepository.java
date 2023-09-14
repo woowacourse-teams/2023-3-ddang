@@ -7,9 +7,11 @@ import java.util.Optional;
 
 public interface JpaUserRepository extends JpaRepository<User, Long> {
 
-    Optional<User> findByOauthId(final String oauthId);
+    Optional<User> findByOauthIdAndDeletedIsFalse(final String oauthId);
 
     Optional<User> findByIdAndDeletedIsFalse(final Long id);
 
     boolean existsByIdAndDeletedIsTrue(final Long id);
+
+    boolean existsByNameEndingWith(final String name);
 }
