@@ -18,10 +18,12 @@ import java.io.File
 
 class AuctionRemoteDataSource(private val service: AuctionService) {
     suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int?,
+        sortType: String?,
+        title: String?,
     ): ApiResponse<AuctionPreviewsResponse> =
-        service.fetchAuctionPreviews(lastAuctionId, size)
+        service.fetchAuctionPreviews(page, size, sortType, title)
 
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> =
         service.fetchAuctionDetail(id)

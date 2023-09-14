@@ -28,8 +28,10 @@ import retrofit2.http.Query
 interface AuctionService {
     @GET("/auctions")
     suspend fun fetchAuctionPreviews(
-        @Query("lastAuctionId") id: Long?,
-        @Query("size") size: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int?,
+        @Query("sortType") sortType: String?,
+        @Query("title") title: String?,
     ): ApiResponse<AuctionPreviewsResponse>
 
     @GET("/auctions/{id}")

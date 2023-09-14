@@ -12,8 +12,10 @@ interface AuctionRepository {
     fun observeAuctionPreviews(): LiveData<List<AuctionPreviewResponse>>
 
     suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int? = null,
+        sortType: String? = null,
+        title: String? = null,
     ): ApiResponse<AuctionPreviewsResponse>
 
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse>

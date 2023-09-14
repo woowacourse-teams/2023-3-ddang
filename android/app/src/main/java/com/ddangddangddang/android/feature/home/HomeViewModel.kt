@@ -1,7 +1,6 @@
 package com.ddangddangddang.android.feature.home
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -15,15 +14,19 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     val auctions: LiveData<List<AuctionHomeModel>> =
         repository.observeAuctionPreviews().map { auctionPreviews ->
-            lastAuctionId.value = auctionPreviews.lastOrNull()?.id
+//            lastAuctionId.value = auctionPreviews.lastOrNull()?.id
             auctionPreviews.map { it.toPresentation() }
         }
 
-    val lastAuctionId: MutableLiveData<Long?> = MutableLiveData()
+//    val page: MutableLiveData<Int> = MutableLiveData(1)
 
     private var _loadingAuctionsInProgress: Boolean = false
     val loadingAuctionInProgress: Boolean
         get() = _loadingAuctionsInProgress
+
+    private var _page = 0
+    val page: Int
+        get() = _page
 
     private var _isLast = false
     val isLast: Boolean
@@ -36,9 +39,10 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     fun loadAuctions() {
         _loadingAuctionsInProgress = true
         viewModelScope.launch {
+            _page++
             when (
                 val response =
-                    repository.getAuctionPreviews(lastAuctionId.value, SIZE_AUCTION_LOAD)
+                    repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD)
             ) {
                 is ApiResponse.Success -> {
                     _isLast = response.body.isLast
@@ -64,9 +68,10 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         if (loadingAuctionInProgress.not()) {
             _loadingAuctionsInProgress = true
             viewModelScope.launch {
+                _page = 1
                 when (
                     val response =
-                        repository.getAuctionPreviews(null, SIZE_AUCTION_LOAD)
+                        repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD)
                 ) {
                     is ApiResponse.Success -> {
                         _isLast = response.body.isLast
@@ -87,6 +92,6 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     }
 
     companion object {
-        private val SIZE_AUCTION_LOAD = 10
+        private const val SIZE_AUCTION_LOAD = 10
     }
 }
