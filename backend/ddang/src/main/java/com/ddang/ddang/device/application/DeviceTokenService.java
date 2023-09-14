@@ -28,6 +28,10 @@ public class DeviceTokenService {
     }
 
     private void updateOrPersistDeviceToken(final User persistedUser, final String newDeviceToken) {
+        if (newDeviceToken.isBlank()) {
+            return;
+        }
+
         final DeviceToken deviceToken =
                 deviceTokenRepository.findByUserId(persistedUser.getId())
                                      .orElseGet(() -> {

@@ -35,9 +35,6 @@ public class FcmNotificationService implements NotificationService {
                                                              .orElseThrow(() -> new DeviceTokenNotFoundException(
                                                                      "사용자의 기기 토큰을 찾을 수 없습니다."
                                                              ));
-        if (deviceToken.getDeviceToken() == null) {
-            throw new DeviceTokenNotFoundException("사용자의 기기 토큰이 비어있습니다.");
-        }
 
         return makeAndSendMessage(createNotificationDto, deviceToken);
     }

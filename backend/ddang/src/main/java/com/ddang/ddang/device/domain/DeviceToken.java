@@ -29,7 +29,7 @@ public class DeviceToken {
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private User user;
 
-    @Column(name = "device_token", unique = true)
+    @Column(name = "device_token", unique = true, nullable = false)
     private String deviceToken;
 
     public DeviceToken(final User user, final String deviceToken) {
