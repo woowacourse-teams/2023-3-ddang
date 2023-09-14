@@ -45,7 +45,7 @@ class DeviceTokenServiceTest {
         final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(deviceTokenValue);
 
         // when & then
-        assertThatNoException().isThrownBy(() -> deviceTokenService.createOrUpdate(user.getId(), updateDeviceTokenDto));
+        assertThatNoException().isThrownBy(() -> deviceTokenService.persist(user.getId(), updateDeviceTokenDto));
     }
 
     @Test
@@ -67,7 +67,7 @@ class DeviceTokenServiceTest {
         final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(newDeviceTokenValue);
 
         // when
-        deviceTokenService.createOrUpdate(user.getId(), updateDeviceTokenDto);
+        deviceTokenService.persist(user.getId(), updateDeviceTokenDto);
 
         // then
         assertThat(deviceToken.getDeviceToken()).isEqualTo(newDeviceTokenValue);
@@ -92,7 +92,7 @@ class DeviceTokenServiceTest {
         final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(newDeviceTokenValue);
 
         // when
-        deviceTokenService.createOrUpdate(user.getId(), updateDeviceTokenDto);
+        deviceTokenService.persist(user.getId(), updateDeviceTokenDto);
 
         // then
         assertThat(deviceToken.getDeviceToken()).isEqualTo(deviceTokenValue);
@@ -106,7 +106,7 @@ class DeviceTokenServiceTest {
         final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(deviceTokenValue);
 
         // when & then
-        assertThatThrownBy(() -> deviceTokenService.createOrUpdate(invalidUserId, updateDeviceTokenDto))
+        assertThatThrownBy(() -> deviceTokenService.persist(invalidUserId, updateDeviceTokenDto))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }

@@ -25,7 +25,7 @@ public class DeviceTokenController {
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @RequestBody @Valid final UpdateDeviceTokenRequest updateDeviceTokenRequest
     ) {
-        deviceTokenService.createOrUpdate(userInfo.userId(), UpdateDeviceTokenDto.from(updateDeviceTokenRequest));
+        deviceTokenService.persist(userInfo.userId(), UpdateDeviceTokenDto.from(updateDeviceTokenRequest));
 
         return ResponseEntity.ok()
                              .build();

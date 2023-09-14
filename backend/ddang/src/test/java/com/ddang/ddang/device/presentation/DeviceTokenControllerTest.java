@@ -123,7 +123,7 @@ class DeviceTokenControllerTest {
 
         final UpdateDeviceTokenRequest request = new UpdateDeviceTokenRequest("newDeviceToken");
 
-        doNothing().when(deviceTokenService).createOrUpdate(anyLong(), any(UpdateDeviceTokenDto.class));
+        doNothing().when(deviceTokenService).persist(anyLong(), any(UpdateDeviceTokenDto.class));
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.put("/deviceToken")
@@ -160,7 +160,7 @@ class DeviceTokenControllerTest {
         );
 
         willThrow(userNotFoundException).given(deviceTokenService)
-                                        .createOrUpdate(anyLong(), any(UpdateDeviceTokenDto.class));
+                                        .persist(anyLong(), any(UpdateDeviceTokenDto.class));
 
         // when & then
         mockMvc.perform(put("/deviceToken")

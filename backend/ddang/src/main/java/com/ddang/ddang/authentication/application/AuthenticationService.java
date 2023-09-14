@@ -47,7 +47,7 @@ public class AuthenticationService {
 
     private void updateOrPersistDeviceToken(final String deviceToken, final User persistUser) {
         final UpdateDeviceTokenDto updateDeviceTokenDto = new UpdateDeviceTokenDto(deviceToken);
-        deviceTokenService.createOrUpdate(persistUser.getId(), updateDeviceTokenDto);
+        deviceTokenService.persist(persistUser.getId(), updateDeviceTokenDto);
     }
 
     private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {

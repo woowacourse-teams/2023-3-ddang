@@ -89,7 +89,7 @@ class AuthenticationServiceTest {
                 tokenDecoder
         );
 
-        doNothing().when(deviceTokenService).createOrUpdate(anyLong(), any(UpdateDeviceTokenDto.class));
+        doNothing().when(deviceTokenService).persist(anyLong(), any(UpdateDeviceTokenDto.class));
     }
 
     @Test

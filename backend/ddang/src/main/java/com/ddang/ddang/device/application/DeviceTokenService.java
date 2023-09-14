@@ -18,30 +18,26 @@ public class DeviceTokenService {
     private final JpaDeviceTokenRepository deviceTokenRepository;
     private final JpaUserRepository userRepository;
 
-    // TODO 메서드 이름이랑 반환값 어떻게 하는게 좋을까요?
     @Transactional
-    public void createOrUpdate(final Long userId, final UpdateDeviceTokenDto deviceTokenDto) {
-        final User findUser = userRepository.findById(userId)
-                                            .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-
-        updateOrPersistDeviceToken(findUser, deviceTokenDto.deviceToken());
-    }
-
-    private void updateOrPersistDeviceToken(final User persistedUser, final String newDeviceToken) {
+    public void persist(final Long userId, final UpdateDeviceTokenDto deviceTokenDto) {
+        final String newDeviceToken = deviceTokenDto.deviceToken();
         if (newDeviceToken.isBlank()) {
             return;
         }
 
         final DeviceToken deviceToken =
-                deviceTokenRepository.findByUserId(persistedUser.getId())
-                                     .orElseGet(() -> {
-                                         final DeviceToken newEntity =
-                                                 new DeviceToken(persistedUser, newDeviceToken);
-
-                                         return deviceTokenRepository.save(newEntity);
-                                     });
+                deviceTokenRepository.findByUserId(userId)
+                                     .orElseGet(() -> createDeviceToken(userId, newDeviceToken));
         if (deviceToken.isDifferentToken(newDeviceToken)) {
             deviceToken.updateDeviceToken(newDeviceToken);
         }
+    }
+
+    private DeviceToken createDeviceToken(final Long userId, final String newDeviceToken) {
+        final User findUser = userRepository.findById(userId)
+                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final DeviceToken deviceToken = new DeviceToken(findUser, newDeviceToken);
+
+        return deviceTokenRepository.save(deviceToken);
     }
 }
