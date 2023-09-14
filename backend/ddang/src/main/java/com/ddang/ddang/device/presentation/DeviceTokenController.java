@@ -8,7 +8,7 @@ import com.ddang.ddang.device.presentation.dto.request.UpdateDeviceTokenRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +20,7 @@ public class DeviceTokenController {
 
     private final DeviceTokenService deviceTokenService;
 
-    // TODO Put Patch 뭐로 할까요?
-    @PutMapping
+    @PatchMapping
     ResponseEntity<Void> update(
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @RequestBody @Valid final UpdateDeviceTokenRequest updateDeviceTokenRequest
