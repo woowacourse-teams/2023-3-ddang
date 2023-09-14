@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
@@ -14,15 +15,14 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     val auctions: LiveData<List<AuctionHomeModel>> =
         repository.observeAuctionPreviews().map { auctionPreviews ->
-//            lastAuctionId.value = auctionPreviews.lastOrNull()?.id
             auctionPreviews.map { it.toPresentation() }
         }
-
-//    val page: MutableLiveData<Int> = MutableLiveData(1)
 
     private var _loadingAuctionsInProgress: Boolean = false
     val loadingAuctionInProgress: Boolean
         get() = _loadingAuctionsInProgress
+
+    private var sortType: SortType = SortType.NEW
 
     private var _page = 0
     val page: Int
@@ -42,7 +42,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
             _page++
             when (
                 val response =
-                    repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD)
+                    repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD, sortType = sortType)
             ) {
                 is ApiResponse.Success -> {
                     _isLast = response.body.isLast
@@ -71,7 +71,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
                 _page = 1
                 when (
                     val response =
-                        repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD)
+                        repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD, sortType = sortType)
                 ) {
                     is ApiResponse.Success -> {
                         _isLast = response.body.isLast
@@ -84,6 +84,11 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
                 _loadingAuctionsInProgress = false
             }
         }
+    }
+
+    fun changeFilter(type: SortType) {
+        sortType = type
+        reloadAuctions()
     }
 
     sealed class HomeEvent {

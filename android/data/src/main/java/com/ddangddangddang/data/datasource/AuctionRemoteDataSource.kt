@@ -1,5 +1,6 @@
 package com.ddangddangddang.data.datasource
 
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.request.ReportRequest
@@ -20,10 +21,10 @@ class AuctionRemoteDataSource(private val service: AuctionService) {
     suspend fun getAuctionPreviews(
         page: Int,
         size: Int?,
-        sortType: String?,
+        sortType: SortType?,
         title: String?,
     ): ApiResponse<AuctionPreviewsResponse> =
-        service.fetchAuctionPreviews(page, size, sortType, title)
+        service.fetchAuctionPreviews(page, size, sortType?.name, title)
 
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> =
         service.fetchAuctionDetail(id)

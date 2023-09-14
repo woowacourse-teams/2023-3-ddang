@@ -1,6 +1,7 @@
 package com.ddangddangddang.data.repository
 
 import androidx.lifecycle.LiveData
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -14,7 +15,7 @@ interface AuctionRepository {
     suspend fun getAuctionPreviews(
         page: Int,
         size: Int? = null,
-        sortType: String? = null,
+        sortType: SortType? = null,
         title: String? = null,
     ): ApiResponse<AuctionPreviewsResponse>
 
