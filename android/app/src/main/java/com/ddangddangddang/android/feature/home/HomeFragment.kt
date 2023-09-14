@@ -12,6 +12,7 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
+import com.ddangddangddang.android.util.view.Toaster
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
@@ -64,6 +65,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             is HomeViewModel.HomeEvent.NavigateToRegisterAuction -> {
                 navigateToRegisterAuction()
             }
+
+            is HomeViewModel.HomeEvent.FailureLoadAuctions -> showErrorMessage(event.message)
         }
     }
 
@@ -76,6 +79,14 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private fun navigateToRegisterAuction() {
         val intent = RegisterAuctionActivity.getIntent(requireContext())
         startActivity(intent)
+    }
+
+    private fun showErrorMessage(message: String?) {
+        message?.let {
+            Toaster.showShort(requireContext(), it)
+            return@let
+        }
+        Toaster.showShort(requireContext(), getString(R.string.home_default_error_message))
     }
 
     private fun setupAuctionRecyclerView() {

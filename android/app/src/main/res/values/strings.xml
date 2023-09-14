@@ -34,6 +34,7 @@
     <string name="home_auctioneer_count">(%d)</string>
     <string name="home_auctioneer_count_description">경매 참여 인원수</string>
     <string name="home_register_auction_button_description">경매 등록 페이지로 이동하는 버튼</string>
+    <string name="home_default_error_message">경매 목록을 성공적으로 불러오지 못했습니다.</string>
 
     <!-- detail -->
     <string name="detail_auction_description">상품 설명</string>
