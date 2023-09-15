@@ -58,11 +58,11 @@ public class AuthenticationService {
     }
 
     private String calculateRandomNumber() {
-        String name;
+        String name = RandomNameGenerator.generate();
 
-        do {
+        while (isAlreadyExist(name)) {
             name = RandomNameGenerator.generate();
-        } while (isAlreadyExist(name));
+        }
 
         return name;
     }
