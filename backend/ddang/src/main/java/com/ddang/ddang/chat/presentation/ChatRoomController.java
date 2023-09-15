@@ -17,6 +17,7 @@ import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomWithLastMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
+import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -83,7 +84,10 @@ public class ChatRoomController {
             @PathVariable final Long chatRoomId,
             @RequestBody @Valid final CreateMessageRequest request
     ) {
-        final Long messageId = messageService.create(CreateMessageDto.of(userInfo.userId(), chatRoomId, request));
+
+        final Long messageId = messageService.create(
+                CreateMessageDto.of(userInfo.userId(), chatRoomId, request), ImageBaseUrl.USER.getBaseUrl()
+        );
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 
         return ResponseEntity.created(URI.create("/chattings/" + chatRoomId))

@@ -58,37 +58,37 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
     void setUp() {
         querydslAuctionRepository = new QuerydslAuctionRepositoryImpl(new JPAQueryFactory(em));
 
-        User seller1 = User.builder()
+        seller1 = User.builder()
                                  .name("회원1234543211")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(4.7d)
                                  .oauthId("1234543211")
                                  .build();
-        User seller2 = User.builder()
+        seller2 = User.builder()
                                  .name("회원1234543212")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(3.5d)
                                  .oauthId("1234543212")
                                  .build();
-        User seller3 = User.builder()
+        seller3 = User.builder()
                                  .name("회원1234543213")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(2.1d)
                                  .oauthId("1234543213")
                                  .build();
-        User seller4 = User.builder()
+        seller4 = User.builder()
                                  .name("회원1234543214")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(5.0d)
                                  .oauthId("1234543214")
                                  .build();
-        User seller5 = User.builder()
+        seller5 = User.builder()
                                  .name("회원1234543215")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(1.5d)
                                  .oauthId("1234543215")
                                  .build();
-        User seller6 = User.builder()
+        seller6 = User.builder()
                                  .name("회원1234543216")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(0.3d)

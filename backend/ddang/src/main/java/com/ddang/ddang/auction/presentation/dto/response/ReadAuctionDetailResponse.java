@@ -16,9 +16,9 @@ public record ReadAuctionDetailResponse(
             final AuthenticationUserInfo userInfo,
             final ReadChatRoomDto chatRoomDto
     ) {
-        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(auctionDto());
-        final SellerResponse sellerResponse = SellerResponse.from(auctionDto());
-        final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(chatRoomDto());
+        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(auctionDto);
+        final SellerResponse sellerResponse = SellerResponse.from(auctionDto);
+        final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(chatRoomDto);
 
         return new ReadAuctionDetailResponse(
                 auctionDetailResponse,

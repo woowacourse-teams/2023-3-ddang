@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-// TODO: 2023/09/08 [고민] 제가 지토 코드 맘대로 수정했는데 괜찮을까요?
 @Component
 public class LocalStoreImageProcessor implements StoreImageProcessor {
 
