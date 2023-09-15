@@ -22,6 +22,8 @@
     <string name="all_profile_image_description">프로필 사진</string>
     <string name="all_reliability_icon_description">유저 신뢰도</string>
     <string name="all_reliability">(%.1f)</string>
+    <string name="all_network_error_message">인터넷이 연결되어 있는지 확인해주세요.</string>
+    <string name="all_unexpected_error_message">예기치 못한 오류가 발생했습니다. 다시 시도해주세요.</string>
 
     <!-- home -->
     <string name="home">경매 상품 목록</string>

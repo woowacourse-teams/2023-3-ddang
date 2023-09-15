@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityLoginBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.main.MainActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
@@ -33,9 +34,9 @@ class LoginActivity :
     private fun setupViewModel() {
         viewModel.event.observe(this) {
             when (it) {
-                LoginViewModel.LoginEvent.KakaoLoginEvent -> loginByKakao()
-                LoginViewModel.LoginEvent.CompleteLoginEvent -> navigateToMain()
-                LoginViewModel.LoginEvent.FailureLoginEvent -> notifyLoginFailed()
+                is LoginViewModel.LoginEvent.KakaoLoginEvent -> loginByKakao()
+                is LoginViewModel.LoginEvent.CompleteLoginEvent -> navigateToMain()
+                is LoginViewModel.LoginEvent.FailureLoginEvent -> notifyLoginFailed(it.type)
             }
         }
     }
@@ -86,7 +87,17 @@ class LoginActivity :
         finish()
     }
 
-    private fun notifyLoginFailed() {
-        binding.root.showSnackbar(R.string.login_snackbar_login_failed_title)
+    private fun notifyLoginFailed(type: ErrorType) {
+        val defaultMessage = getString(R.string.login_snackbar_login_failed_title)
+        val actionMessage = getString(R.string.all_snackbar_default_action)
+        val message = when (type) {
+            is ErrorType.FAILURE -> type.message
+            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
+            is ErrorType.UNEXPECTED -> getString(type.messageId)
+        }
+        binding.root.showSnackbar(
+            message = message ?: defaultMessage,
+            actionMessage = actionMessage,
+        )
     }
 }

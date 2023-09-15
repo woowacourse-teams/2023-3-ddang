@@ -9,8 +9,8 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuthService
 
 class AuthRemoteDataSource(private val service: AuthService) {
-    suspend fun loginByKakao(kakaoToken: KakaoLoginRequest): ApiResponse<TokenResponse> =
-        service.loginByKakao(kakaoToken)
+    suspend fun loginByKakao(kakaoLoginRequest: KakaoLoginRequest): ApiResponse<TokenResponse> =
+        service.loginByKakao(kakaoLoginRequest)
 
     suspend fun refreshToken(refreshToken: String): ApiResponse<TokenResponse> =
         service.refreshToken(RefreshTokenRequest(formatToken(refreshToken)))
