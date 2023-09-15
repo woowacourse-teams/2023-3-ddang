@@ -3,8 +3,7 @@ package com.ddang.ddang.notification.domain;
 public enum NotificationType {
 
     MESSAGE("message"),
-    BID("bid"),
-    ;
+    BID("bid");
 
     private final String value;
 
