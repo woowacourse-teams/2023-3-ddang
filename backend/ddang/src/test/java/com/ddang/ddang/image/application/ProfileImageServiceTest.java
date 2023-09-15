@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.AuctionImage;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaImageRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ImageServiceTest {
+class ProfileImageServiceTest {
 
     @Autowired
     ImageService imageService;
@@ -35,12 +35,12 @@ class ImageServiceTest {
     @Test
     void 지정한_아이디에_해당하는_이미지를_조회한다() throws Exception {
         // given
-        final Image image = new Image("image.png", "image.png");
+        final ProfileImage profileImage = new ProfileImage("image.png", "image.png");
 
-        imageRepository.save(image);
+        imageRepository.save(profileImage);
 
         // when
-        final Resource actual = imageService.readImage(image.getId());
+        final Resource actual = imageService.readImage(profileImage.getId());
 
         // then
         assertThat(actual.getFilename()).isEqualTo("image.png");

@@ -1,7 +1,7 @@
 package com.ddang.ddang.user.application;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
@@ -44,7 +44,7 @@ class UserServiceTest {
         // given
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -78,7 +78,7 @@ class UserServiceTest {
         // given
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -101,7 +101,7 @@ class UserServiceTest {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.getName()).isEqualTo("updateName");
-            softAssertions.assertThat(user.getProfileImage().getStoreName()).isEqualTo("newStore.png");
+            softAssertions.assertThat(user.getProfileImage().getImage().getStoreName()).isEqualTo("newStore.png");
             softAssertions.assertThat(user.getReliability()).isEqualTo(4.7d);
             softAssertions.assertThat(user.getOauthId()).isEqualTo("12345");
         });
@@ -130,7 +130,7 @@ class UserServiceTest {
         // given
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -154,7 +154,7 @@ class UserServiceTest {
         // given
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

@@ -10,7 +10,7 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -57,7 +57,7 @@ class JpaChatRoomRepositoryTest {
         // given
         final User buyer = User.builder()
                                .name("구매자")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();
@@ -85,7 +85,7 @@ class JpaChatRoomRepositoryTest {
         // given
         final User buyer = User.builder()
                                .name("구매자")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();
@@ -125,13 +125,13 @@ class JpaChatRoomRepositoryTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();

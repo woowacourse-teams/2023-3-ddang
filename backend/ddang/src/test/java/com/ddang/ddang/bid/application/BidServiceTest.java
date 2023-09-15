@@ -11,7 +11,7 @@ import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -48,7 +48,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -62,7 +62,7 @@ class BidServiceTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12346")
                               .build();
@@ -89,7 +89,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -103,13 +103,13 @@ class BidServiceTest {
                                        .build();
         final User user1 = User.builder()
                                .name("사용자1")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
@@ -136,7 +136,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -150,7 +150,7 @@ class BidServiceTest {
                                        .build();
         final User buyer = User.builder()
                                .name("사용자2")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -175,7 +175,7 @@ class BidServiceTest {
 
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -224,7 +224,7 @@ class BidServiceTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -252,7 +252,7 @@ class BidServiceTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -274,7 +274,7 @@ class BidServiceTest {
         // given
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -303,7 +303,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -317,7 +317,7 @@ class BidServiceTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12346")
                               .build();
@@ -339,7 +339,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -353,7 +353,7 @@ class BidServiceTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12346")
                               .build();
@@ -378,7 +378,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -392,13 +392,13 @@ class BidServiceTest {
                                        .build();
         final User user1 = User.builder()
                                .name("사용자1")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
@@ -424,7 +424,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -438,13 +438,13 @@ class BidServiceTest {
                                        .build();
         final User user1 = User.builder()
                                .name("사용자1")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
@@ -478,7 +478,7 @@ class BidServiceTest {
                                        .build();
         final User user = User.builder()
                               .name("사용자1")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -499,7 +499,7 @@ class BidServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new Image("upload.png", "store.png"))
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -521,13 +521,13 @@ class BidServiceTest {
                                         .build();
         final User user1 = User.builder()
                                .name("사용자1")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
@@ -569,7 +569,7 @@ class BidServiceTest {
                                         .build();
         final User user = User.builder()
                                .name("사용자1")
-                               .profileImage(new Image("upload.png", "store.png"))
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();

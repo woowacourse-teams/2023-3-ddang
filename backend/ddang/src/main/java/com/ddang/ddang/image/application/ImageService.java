@@ -1,6 +1,6 @@
 package com.ddang.ddang.image.application;
 
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
@@ -26,11 +26,11 @@ public class ImageService {
     private final JpaAuctionImageRepository auctionImageRepository;
 
     public Resource readImage(final Long id) throws MalformedURLException {
-        final Image image = imageRepository.findById(id)
-                                           .orElseThrow(() -> new ImageNotFoundException(
+        final ProfileImage profileImage = imageRepository.findById(id)
+                                                         .orElseThrow(() -> new ImageNotFoundException(
                                                    "지정한 이미지를 찾을 수 없습니다."
                                            ));
-        final String fullPath = findFullPath(image.getStoreName());
+        final String fullPath = findFullPath(profileImage.getImage().getStoreName());
 
         return new UrlResource("file:" + fullPath);
     }
@@ -40,7 +40,7 @@ public class ImageService {
                                                                 .orElseThrow(() -> new ImageNotFoundException(
                                                                         "지정한 이미지를 찾을 수 없습니다."
                                                                 ));
-        final String fullPath = findFullPath(auctionImage.getStoreName());
+        final String fullPath = findFullPath(auctionImage.getImage().getStoreName());
 
         return new UrlResource("file:" + fullPath);
     }

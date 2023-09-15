@@ -2,7 +2,7 @@ package com.ddang.ddang.user.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -17,17 +17,17 @@ class UserTest {
         // given
         final User user = User.builder()
                               .name("kakao12345")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(5.0d)
                               .build();
 
         // when
-        user.update("newName", new Image("newUpload.png", "newStore.png"));
+        user.update("newName", new ProfileImage("newUpload.png", "newStore.png"));
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.getName()).isEqualTo("newName");
-            softAssertions.assertThat(user.getProfileImage()).isEqualTo(new Image("newUpload.png", "newStore.png"));
+            softAssertions.assertThat(user.getProfileImage()).isEqualTo(new ProfileImage("newUpload.png", "newStore.png"));
             softAssertions.assertThat(user.getReliability()).isEqualTo(5.0d);
         });
     }

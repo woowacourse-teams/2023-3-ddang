@@ -12,7 +12,7 @@ import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.SoftAssertions;
@@ -106,7 +106,7 @@ class AuthenticationServiceTest {
         // given
         final User user = User.builder()
                               .name("kakao12345")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(0.0d)
                               .oauthId("12345")
                               .build();

@@ -1,7 +1,7 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,7 +28,7 @@ class AuthenticationUserServiceTest {
         // given
         final User user = User.builder()
                               .name("회원")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -48,7 +48,7 @@ class AuthenticationUserServiceTest {
         // given
         final User user = User.builder()
                               .name("회원")
-                              .profileImage(new Image("upload.png", "store.png"))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

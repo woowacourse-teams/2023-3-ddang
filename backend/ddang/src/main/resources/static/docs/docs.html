@@ -323,11 +323,11 @@ td.hdlist2{word-wrap:anywhere}
 .imageblock>.title{margin-bottom:0}
 .imageblock.thumb,.imageblock.th{border-width:6px}
 .imageblock.thumb>.title,.imageblock.th>.title{padding:0 .125em}
-.image.left,.image.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
-.image.left{margin-right:.625em}
-.image.right{margin-left:.625em}
-a.image{text-decoration:none;display:inline-block}
-a.image object{pointer-events:none}
+.profileImage.left,.profileImage.right{margin-top:.25em;margin-bottom:.25em;display:inline-block;line-height:0}
+.profileImage.left{margin-right:.625em}
+.profileImage.right{margin-left:.625em}
+a.profileImage{text-decoration:none;display:inline-block}
+a.profileImage object{pointer-events:none}
 sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
 sup.footnote a,sup.footnoteref a{text-decoration:none}
 sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
@@ -1209,8 +1209,8 @@ Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
 Authorization: Bearer accessToken
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
-Content-Disposition: form-data; name=images; filename=image.png
-Content-Type: image/png
+Content-Disposition: form-data; name=images; filename=profileImage.png
+Content-Type: profileImage/png
 
 
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
@@ -1273,7 +1273,7 @@ Content-Type: application/json
 {
   "id" : 1,
   "title" : "title",
-  "image" : "http://localhost:8080/auctions/images1",
+  "profileImage" : "http://localhost:8080/auctions/images1",
   "auctionPrice" : 1000,
   "status" : "UNBIDDEN",
   "auctioneerCount" : 0
@@ -1305,7 +1305,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 글 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 대표 이미지</p></td>
 </tr>
@@ -1391,14 +1391,14 @@ Content-Type: application/json
   "auctions" : [ {
     "id" : 2,
     "title" : "경매 상품 2",
-    "image" : "http://localhost:8080/auctions/images1",
+    "profileImage" : "http://localhost:8080/auctions/images1",
     "auctionPrice" : 1000,
     "status" : "FAILURE",
     "auctioneerCount" : 2
   }, {
     "id" : 1,
     "title" : "경매 상품 1",
-    "image" : "http://localhost:8080/auctions/images1",
+    "profileImage" : "http://localhost:8080/auctions/images1",
     "auctionPrice" : 1000,
     "status" : "FAILURE",
     "auctioneerCount" : 2
@@ -1442,7 +1442,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 글 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].profileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 대표 이미지</p></td>
 </tr>
@@ -1551,7 +1551,7 @@ Content-Type: application/json
   },
   "seller" : {
     "id" : 1,
-    "image" : "http://localhost:8080/users/images/1",
+    "profileImage" : "http://localhost:8080/users/images/1",
     "nickname" : "판매자",
     "reliability" : 3.5
   },
@@ -1683,7 +1683,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>seller.image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>seller.profileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">판매자 프로필 이미지 주소</p></td>
 </tr>
@@ -1871,12 +1871,12 @@ Content-Type: application/json
 {
   "bids" : [ {
     "name" : "사용자1",
-    "profileImage" : "http://localhost:8080/users/images/1",
+    "profileProfileImage" : "http://localhost:8080/users/images/1",
     "price" : 10000,
     "bidTime" : "2023-09-09T22:16:37"
   }, {
     "name" : "사용자2",
-    "profileImage" : "http://localhost:8080/users/images/2",
+    "profileProfileImage" : "http://localhost:8080/users/images/2",
     "price" : 12000,
     "bidTime" : "2023-09-09T22:16:37"
   } ]
@@ -1908,7 +1908,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">입찰한 사용자의 닉네임</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bids.[].profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>bids.[].profileProfileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">입찰한 사용자의 프로필 이미지 URL</p></td>
 </tr>
@@ -2064,12 +2064,12 @@ Content-Type: application/json
   "chatPartner" : {
     "id" : 2,
     "name" : "사용자2",
-    "profileImage" : "http://localhost:8080/users/images/2"
+    "profileProfileImage" : "http://localhost:8080/users/images/2"
   },
   "auction" : {
     "id" : 1,
     "title" : "경매1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "profileImage" : "http://localhost:8080/auctions/images/1",
     "price" : 10000
   },
   "lastMessage" : {
@@ -2082,12 +2082,12 @@ Content-Type: application/json
   "chatPartner" : {
     "id" : 3,
     "name" : "사용자3",
-    "profileImage" : "http://localhost:8080/users/images/3"
+    "profileProfileImage" : "http://localhost:8080/users/images/3"
   },
   "auction" : {
     "id" : 2,
     "title" : "경매2",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "profileImage" : "http://localhost:8080/auctions/images/1",
     "price" : 20000
   },
   "lastMessage" : {
@@ -2138,7 +2138,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">채팅 상대방 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].chatPartner.profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].chatPartner.profileProfileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">채팅 상대방 프로필 사진</p></td>
 </tr>
@@ -2158,7 +2158,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].auction.image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].auction.profileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 대표 사진</p></td>
 </tr>
@@ -2252,12 +2252,12 @@ Content-Type: application/json
   "chatPartner" : {
     "id" : 2,
     "name" : "채팅 상대방",
-    "profileImage" : "http://localhost:8080/users/images/2"
+    "profileProfileImage" : "http://localhost:8080/users/images/2"
   },
   "auction" : {
     "id" : 1,
     "title" : "경매 상품 1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "profileImage" : "http://localhost:8080/auctions/images/1",
     "price" : 3000
   },
   "isChatAvailable" : true
@@ -2299,7 +2299,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 제목</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auction.image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auction.profileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 대표 사진</p></td>
 </tr>
@@ -2324,7 +2324,7 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock">채팅 상대방 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>chatPartner.profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>chatPartner.profileProfileImage</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">채팅 상대방 프로필 사진</p></td>
 </tr>

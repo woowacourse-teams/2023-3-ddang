@@ -2,7 +2,7 @@ package com.ddang.ddang.image.infrastructure.persistence;
 
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.SoftAssertions;
@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class JpaImageRepositoryTest {
+class JpaProfileImageRepositoryTest {
 
     @PersistenceContext
     EntityManager em;
@@ -32,20 +32,20 @@ class JpaImageRepositoryTest {
     @Test
     void 지정한_아이디에_해당하는_이미지를_조회한다() {
         // given
-        final Image image = new Image("uploadName", "storeName");
+        final ProfileImage profileImage = new ProfileImage("uploadName", "storeName");
 
-        imageRepository.save(image);
+        imageRepository.save(profileImage);
 
         em.flush();
         em.clear();
 
         // when
-        final Optional<Image> actual = imageRepository.findById(image.getId());
+        final Optional<ProfileImage> actual = imageRepository.findById(profileImage.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get()).isEqualTo(image);
+            softAssertions.assertThat(actual.get()).isEqualTo(profileImage);
         });
     }
 
@@ -55,7 +55,7 @@ class JpaImageRepositoryTest {
         final Long invalidImageId = -999L;
 
         // when
-        final Optional<Image> actual = imageRepository.findById(invalidImageId);
+        final Optional<ProfileImage> actual = imageRepository.findById(invalidImageId);
 
         // then
         assertThat(actual).isEmpty();

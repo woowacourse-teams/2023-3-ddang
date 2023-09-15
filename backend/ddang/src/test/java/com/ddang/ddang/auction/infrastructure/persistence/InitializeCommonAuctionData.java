@@ -6,7 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
@@ -37,37 +37,37 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
 
         final User seller1 = User.builder()
                                  .name("회원1234543211")
-                                 .profileImage(new Image("upload.png", "store.png"))
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(4.7d)
                                  .oauthId("1234543211")
                                  .build();
         final User seller2 = User.builder()
                                  .name("회원1234543212")
-                                 .profileImage(new Image("upload.png", "store.png"))
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(3.5d)
                                  .oauthId("1234543212")
                                  .build();
         final User seller3 = User.builder()
                                  .name("회원1234543213")
-                                 .profileImage(new Image("upload.png", "store.png"))
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(2.1d)
                                  .oauthId("1234543213")
                                  .build();
         final User seller4 = User.builder()
                                  .name("회원1234543214")
-                                 .profileImage(new Image("upload.png", "store.png"))
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(5.0d)
                                  .oauthId("1234543214")
                                  .build();
         final User seller5 = User.builder()
                                  .name("회원1234543215")
-                                 .profileImage(new Image("upload.png", "store.png"))
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(1.5d)
                                  .oauthId("1234543215")
                                  .build();
         final User seller6 = User.builder()
                                  .name("회원1234543216")
-                                 .profileImage(new Image("upload.png", "store.png"))
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(0.3d)
                                  .oauthId("1234543216")
                                  .build();

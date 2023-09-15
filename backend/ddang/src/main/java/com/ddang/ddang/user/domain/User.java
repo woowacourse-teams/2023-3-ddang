@@ -1,7 +1,7 @@
 package com.ddang.ddang.user.domain;
 
 import com.ddang.ddang.common.entity.BaseTimeEntity;
-import com.ddang.ddang.image.domain.Image;
+import com.ddang.ddang.image.domain.ProfileImage;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +36,7 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private Image profileImage;
+    private ProfileImage profileImage;
 
     private double reliability;
 
@@ -49,7 +49,7 @@ public class User extends BaseTimeEntity {
     @Builder
     private User(
             final String name,
-            final Image profileImage,
+            final ProfileImage profileImage,
             final double reliability,
             final String oauthId
     ) {
@@ -59,9 +59,9 @@ public class User extends BaseTimeEntity {
         this.oauthId = oauthId;
     }
 
-    public void update(final String name, final Image profileImage) {
+    public void update(final String name, final ProfileImage profileProfileImage) {
         this.name = name;
-        this.profileImage = profileImage;
+        this.profileImage = profileProfileImage;
     }
 
     public void withdrawal() {
