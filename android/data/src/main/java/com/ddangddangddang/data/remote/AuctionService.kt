@@ -4,6 +4,7 @@ import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.request.ReportRequest
+import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -20,6 +21,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -96,4 +98,7 @@ interface AuctionService {
 
     @DELETE("/auctions/{id}")
     suspend fun deleteAuction(@Path("id") auctionId: Long): ApiResponse<Unit>
+
+    @PATCH("/device-token")
+    suspend fun updateDeviceToken(@Body deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit>
 }

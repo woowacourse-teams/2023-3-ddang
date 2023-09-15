@@ -7,11 +7,12 @@ import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.ddangddangddang.android.R
+import com.ddangddangddang.android.feature.common.userRepository
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
+import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import kotlinx.coroutines.Dispatchers
@@ -28,8 +29,12 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     override fun onNewToken(token: String) {
-        // TODO send FCM registration token to your app server.
-        Log.d("test", "Refreshed token: $token")
+        runBlocking {
+            withContext(Dispatchers.IO) {
+                val deviceTokenRequest = UpdateDeviceTokenRequest(token)
+                userRepository.updateDeviceToken(deviceTokenRequest)
+            }
+        }
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
