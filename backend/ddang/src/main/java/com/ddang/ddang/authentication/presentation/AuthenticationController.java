@@ -68,7 +68,6 @@ public class AuthenticationController {
                              .build();
     }
 
-    // TODO: 2023/09/15 [고민] oauth2Type은 클라이언트를 통해서만 가져올 수 있나요?
     @DeleteMapping("/withdrawal/{oauth2Type}")
     public ResponseEntity<Void> withdrawal(
             @PathVariable final Oauth2Type oauth2Type,
