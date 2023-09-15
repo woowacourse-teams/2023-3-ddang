@@ -15,20 +15,27 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.notification.application.NotificationService;
+import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -55,6 +62,14 @@ class MessageServiceTest {
 
     @Autowired
     JpaCategoryRepository categoryRepository;
+
+    @MockBean
+    NotificationService notificationService;
+
+    @BeforeEach
+    void setUp() {
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn("성공");
+    }
 
     @Test
     void 메시지를_생성한다() {
@@ -113,6 +128,65 @@ class MessageServiceTest {
 
         // then
         assertThat(messageId).isPositive();
+    }
+
+    @Test
+    void 메시지를_생성하고_알림을_보낸다() {
+        // given
+        final BidUnit bidUnit = new BidUnit(1_000);
+        final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final User writer = User.builder()
+                                .name("발신자")
+                                .profileImage("profile.png")
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+
+        userRepository.save(writer);
+
+        final User receiver = User.builder()
+                                  .name("수신자")
+                                  .profileImage("profile.png")
+                                  .reliability(4.7d)
+                                  .oauthId("12346")
+                                  .build();
+
+        userRepository.save(receiver);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, writer);
+
+        chatRoomRepository.save(chatRoom);
+
+        final String contents = "메시지 내용";
+
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                chatRoom.getId(),
+                writer.getId(),
+                receiver.getId(),
+                contents
+        );
+
+        // when
+        messageService.create(createMessageDto);
+
+        // then
+        verify(notificationService).send(any());
     }
 
     @Test
@@ -483,7 +557,7 @@ class MessageServiceTest {
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(request);
 
         // then
-        assertThat(readMessageDtos).hasSize(0);
+        assertThat(readMessageDtos).isEmpty();
     }
 
     @Test
