@@ -1,64 +1,5 @@
 package com.ddang.ddang.chat.presentation;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
-import com.ddang.ddang.authentication.application.AuthenticationUserService;
-import com.ddang.ddang.authentication.application.BlackListTokenService;
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
-import com.ddang.ddang.chat.application.ChatRoomService;
-import com.ddang.ddang.chat.application.MessageService;
-import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
-import com.ddang.ddang.chat.application.exception.UserNotAccessibleException;
-import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
-import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
-import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
-import com.ddang.ddang.configuration.RestDocsConfiguration;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.RestDocumentationContextProvider;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -81,6 +22,65 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
+import com.ddang.ddang.authentication.application.BlackListTokenService;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
+import com.ddang.ddang.chat.application.ChatRoomService;
+import com.ddang.ddang.chat.application.MessageService;
+import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadLastMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
+import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
+import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
+import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.notification.application.exception.NotificationFailedException;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @WebMvcTest(controllers = {ChatRoomController.class},
         excludeFilters = {
@@ -237,6 +237,34 @@ class ChatRoomControllerTest {
     }
 
     @Test
+    void 알림_전송_실패_시_500을_반환한다() throws Exception {
+        // given
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
+        final Long invalidWriterId = -999L;
+        final Long chatRoomId = 1L;
+        final CreateMessageRequest request = new CreateMessageRequest(invalidWriterId, "메시지 내용");
+
+        final NotificationFailedException notificationFailedException = new NotificationFailedException(
+                "알림 전송에 실패했습니다."
+        );
+
+        given(messageService.create(any(CreateMessageDto.class))).willThrow(notificationFailedException);
+
+        // when & then
+        mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .content(objectMapper.writeValueAsString(request))
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isInternalServerError(),
+                       jsonPath("$.message", is(notificationFailedException.getMessage()))
+               );
+    }
+
+    @Test
     void 마지막_조회_메시지_이후_메시지를_조회한다() throws Exception {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
@@ -280,13 +308,10 @@ class ChatRoomControllerTest {
                                        parameterWithName("lastMessageId").description("마지막으로 응답받은 메시지의 ID").optional()
                                ),
                                responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY)
-                                                          .description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
+                                       fieldWithPath("[]").type(JsonFieldType.ARRAY).description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
-                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
-                                                                    .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN)
-                                                                      .description("조회를 요청한 사람이 보낸 메시지인지 여부"),
+                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
+                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN).description("조회를 요청한 사람이 보낸 메시지인지 여부"),
                                        fieldWithPath("[].contents").type(JsonFieldType.STRING).description("메시지 내용")
                                )
                        )
@@ -376,13 +401,7 @@ class ChatRoomControllerTest {
                 1L,
                 "경매1",
                 10_000,
-                List.of(1L, 2L),
-                "main",
-                "sub",
-                seller.id(),
-                seller.profileImageId(),
-                seller.name(),
-                seller.reliability()
+                1L
         );
         final ReadChatRoomWithLastMessageDto dto1 = new ReadChatRoomWithLastMessageDto(
                 1L,
@@ -395,13 +414,7 @@ class ChatRoomControllerTest {
                 2L,
                 "경매2",
                 20_000,
-                List.of(1L, 2L),
-                "main",
-                "sub",
-                seller.id(),
-                seller.profileImageId(),
-                seller.name(),
-                seller.reliability()
+                1L
         );
         final ReadChatRoomWithLastMessageDto dto2 = new ReadChatRoomWithLastMessageDto(
                 2L,
@@ -438,28 +451,18 @@ class ChatRoomControllerTest {
                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
                                        fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                         .description("채팅 상대방 ID"),
-                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING)
-                                                                           .description("채팅 상대방 이름"),
-                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                   .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT)
-                                                                  .description("채팅방과 연관된 경매"),
+                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
+                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
+                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
+                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
                                        fieldWithPath("[].auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING)
-                                                                        .description("경매 제목"),
-                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING)
-                                                                        .description("경매 대표 사진"),
+                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING).description("경매 제목"),
+                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
                                        fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
-                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT)
-                                                                      .description("마지막으로 전송된 메시지"),
-                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING)
-                                                                                .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
-                                                                               .description("메시지 내용"),
-                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                          .description("채팅 가능 여부")
+                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT).description("마지막으로 전송된 메시지"),
+                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
+                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING).description("메시지 내용"),
+                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
                                )
                        )
                );
@@ -496,13 +499,7 @@ class ChatRoomControllerTest {
                 1L,
                 "경매 상품 1",
                 3_000,
-                List.of(1L, 2L),
-                "메인 카테고리",
-                "서브 카테고리",
-                1L,
-                1L,
-                "판매자",
-                5.0d
+                1L
         );
         final ReadUserInChatRoomDto chatPartner = new ReadUserInChatRoomDto(
                 2L,
@@ -543,18 +540,13 @@ class ChatRoomControllerTest {
                                        fieldWithPath("auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
                                        fieldWithPath("auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
                                        fieldWithPath("auction.title").type(JsonFieldType.STRING).description("경매 제목"),
-                                       fieldWithPath("auction.image").type(JsonFieldType.STRING)
-                                                                     .description("경매 대표 사진"),
+                                       fieldWithPath("auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
                                        fieldWithPath("auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
                                        fieldWithPath("chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                      .description("채팅 상대방 ID"),
-                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING)
-                                                                        .description("채팅 상대방 이름"),
-                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                       .description("채팅 가능 여부")
+                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
+                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
+                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
+                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
                                )
                        )
                );
@@ -611,10 +603,10 @@ class ChatRoomControllerTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        final UserNotAccessibleException userNotAccessibleException =
-                new UserNotAccessibleException("해당 채팅방에 접근할 권한이 없습니다.");
+        final InvalidUserToChat invalidUserToChat =
+                new InvalidUserToChat("해당 채팅방에 접근할 권한이 없습니다.");
 
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(userNotAccessibleException);
+        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(invalidUserToChat);
 
         // when & then
         mockMvc.perform(get("/chattings/1")
@@ -622,7 +614,7 @@ class ChatRoomControllerTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is(userNotAccessibleException.getMessage()))
+                       jsonPath("$.message", is(invalidUserToChat.getMessage()))
                );
     }
 
@@ -734,30 +726,6 @@ class ChatRoomControllerTest {
     }
 
     @Test
-    void 경매가_삭제된_상태에서_채팅방을_생성하면_400을_반환한다() throws Exception {
-        // given
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-
-        final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final InvalidAuctionToChatException invalidAuctionToChatException =
-                new InvalidAuctionToChatException("삭제된 경매입니다.");
-
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(invalidAuctionToChatException);
-
-        // when & then
-        mockMvc.perform(post("/chattings")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
-               .andExpectAll(
-                       status().isBadRequest(),
-                       jsonPath("$.message", is(invalidAuctionToChatException.getMessage()))
-               );
-    }
-
-    @Test
     void 채팅방_생성시_낙찰자가_없다면_404를_반환한다() throws Exception {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
@@ -788,10 +756,10 @@ class ChatRoomControllerTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final UserNotAccessibleException userNotAccessibleException =
-                new UserNotAccessibleException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+        final InvalidUserToChat invalidUserToChat =
+                new InvalidUserToChat("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
 
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(userNotAccessibleException);
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(invalidUserToChat);
 
         // when & then
         mockMvc.perform(post("/chattings")
@@ -800,7 +768,7 @@ class ChatRoomControllerTest {
                        .content(objectMapper.writeValueAsString(chatRoomRequest)))
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is(userNotAccessibleException.getMessage()))
+                       jsonPath("$.message", is(invalidUserToChat.getMessage()))
                );
     }
 }

@@ -4,6 +4,7 @@ import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
+import com.ddang.ddang.user.presentation.dto.response.ReadUserResponse;
 import com.ddang.ddang.user.application.dto.UpdateUserDto;
 import com.ddang.ddang.user.presentation.dto.ReadUserResponse;
 import com.ddang.ddang.user.presentation.dto.request.UpdateUserRequest;

@@ -6,9 +6,9 @@ import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
 public record ReadAuctionInChatRoomResponse(Long id, String title, String image, int price) {
 
-    public static ReadAuctionInChatRoomResponse from(final ReadAuctionInChatRoomDto dto) {
-        final Long thumbNailImageId = dto.auctionImageIds().get(0);
-        final String imageUrl = ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, thumbNailImageId);
+    public static ReadAuctionInChatRoomResponse of(final ReadAuctionInChatRoomDto dto, final String baseUrl) {
+        final Long thumbNailImageId = ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, dto.thumbnailImageId());
+        final String imageUrl = baseUrl.concat(String.valueOf(thumbNailImageId));
 
         return new ReadAuctionInChatRoomResponse(dto.id(), dto.title(), imageUrl, dto.lastBidPrice());
     }

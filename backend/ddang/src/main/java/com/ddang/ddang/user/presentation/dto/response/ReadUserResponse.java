@@ -1,4 +1,4 @@
-package com.ddang.ddang.user.presentation.dto;
+package com.ddang.ddang.user.presentation.dto.response;
 
 import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
