@@ -1,12 +1,5 @@
 package com.ddang.ddang.authentication.infrastructure.oauth2.kakao;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.hamcrest.Matchers.matchesPattern;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-import static org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest;
-
 import com.ddang.ddang.authentication.configuration.KakaoProvidersConfigurationProperties;
 import com.ddang.ddang.authentication.configuration.Oauth2PropertiesConfiguration;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
@@ -23,6 +16,13 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.matchesPattern;
+import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest;
 
 @RestClientTest({KakaoUserInformationProvider.class})
 @Import({RestTemplateConfiguration.class, Oauth2PropertiesConfiguration.class})
@@ -90,5 +90,28 @@ class KakaoUserInformationProviderTest {
         assertThatThrownBy(() -> provider.findUserInformation(invalidAccessToken))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("401 Unauthorized");
+    }
+
+    @Test
+    void 유효한_카카오_토큰을_전달한_경우_카카오_연결을_끊는다() throws Exception {
+        // given
+        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
+
+        mockRestServiceServer.expect(requestTo(matchesPattern(kakaoProperties.userUnlinkUri())))
+                             .andRespond(
+                                     withSuccess(
+                                             objectMapper.writeValueAsString(userInformationDto),
+                                             MediaType.APPLICATION_JSON
+                                     )
+                             );
+
+        final String accessToken = "Bearer accessToken";
+        final String oauthId = "12345";
+
+        // when
+        final UserInformationDto actual = provider.unlinkUserBy(accessToken, oauthId);
+
+        // then
+        assertThat(actual.id()).isEqualTo(userInformationDto.id());
     }
 }

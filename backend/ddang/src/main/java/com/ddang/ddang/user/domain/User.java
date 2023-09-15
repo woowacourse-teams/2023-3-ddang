@@ -29,6 +29,7 @@ import lombok.ToString;
 public class User extends BaseTimeEntity {
 
     private static final boolean DELETED_STATUS = true;
+    private static final String UNKOWN_NAME = "알 수 없음";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,7 +44,6 @@ public class User extends BaseTimeEntity {
 
     private double reliability;
 
-    @Column(unique = true)
     private String oauthId;
 
     @Column(name = "is_deleted")

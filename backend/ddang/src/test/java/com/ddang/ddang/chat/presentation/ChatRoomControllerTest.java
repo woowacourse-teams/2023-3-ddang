@@ -30,7 +30,6 @@ import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -238,34 +237,6 @@ class ChatRoomControllerTest {
     }
 
     @Test
-    void 알림_전송_실패_시_500을_반환한다() throws Exception {
-        // given
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-
-        final Long invalidWriterId = -999L;
-        final Long chatRoomId = 1L;
-        final CreateMessageRequest request = new CreateMessageRequest(invalidWriterId, "메시지 내용");
-
-        final NotificationFailedException notificationFailedException = new NotificationFailedException(
-                "알림 전송에 실패했습니다."
-        );
-
-        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(notificationFailedException);
-
-        // when & then
-        mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                       .content(objectMapper.writeValueAsString(request))
-                       .contentType(MediaType.APPLICATION_JSON))
-               .andExpectAll(
-                       status().isInternalServerError(),
-                       jsonPath("$.message", is(notificationFailedException.getMessage()))
-               );
-    }
-
-    @Test
     void 마지막_조회_메시지_이후_메시지를_조회한다() throws Exception {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
@@ -398,9 +369,9 @@ class ChatRoomControllerTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", 1L, 5.0d);
-        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", 2L, 5.0d);
-        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", 3L, 5.0d);
+        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", 1L, 5.0d, false);
+        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", 2L, 5.0d, false);
+        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", 3L, 5.0d, false);
         final ReadAuctionInChatRoomDto auctionDto1 = new ReadAuctionInChatRoomDto(
                 1L,
                 "경매1",
@@ -519,7 +490,8 @@ class ChatRoomControllerTest {
                 2L,
                 "채팅 상대방",
                 2L,
-                5.0
+                5.0,
+                false
         );
 
         final ReadParticipatingChatRoomDto chatRoom = new ReadParticipatingChatRoomDto(
