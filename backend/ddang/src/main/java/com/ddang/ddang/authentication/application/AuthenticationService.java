@@ -116,11 +116,8 @@ public class AuthenticationService {
         final User user = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
                                         .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다."));
 
-        provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());
-
-        // TODO: 2023/09/15 [고민] 일단 해당 메서드로 모두 몰기로 해서 blackList로 만드는 것도 여기서 호출하도록 수정했습니다. 그런데 잘 모르곘네요...
-        blackListTokenService.registerBlackListToken(oauth2AccessToken, refreshToken);
-
         user.withdrawal();
+        blackListTokenService.registerBlackListToken(oauth2AccessToken, refreshToken);
+        provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());
     }
 }
