@@ -1,5 +1,6 @@
 package com.ddang.ddang.report.application.dto;
 
+import com.ddang.ddang.image.application.util.ImageIdProcessor;
 import com.ddang.ddang.user.domain.User;
 
 public record ReadUserInReportDto(
@@ -15,7 +16,7 @@ public record ReadUserInReportDto(
         return new ReadUserInReportDto(
                 user.getId(),
                 user.getName(),
-                user.getProfileImage().getId(),
+                ImageIdProcessor.process(user.getProfileImage()),
                 user.getReliability(),
                 user.getOauthId(),
                 user.isDeleted()

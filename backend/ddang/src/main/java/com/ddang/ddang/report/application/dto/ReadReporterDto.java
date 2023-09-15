@@ -1,5 +1,6 @@
 package com.ddang.ddang.report.application.dto;
 
+import com.ddang.ddang.image.application.util.ImageIdProcessor;
 import com.ddang.ddang.user.domain.User;
 
 public record ReadReporterDto(Long id, String name, Long profileImageId, double reliability, boolean isDeleted) {
@@ -8,7 +9,7 @@ public record ReadReporterDto(Long id, String name, Long profileImageId, double 
         return new ReadReporterDto(
                 reporter.getId(),
                 reporter.getName(),
-                reporter.getProfileImage().getId(),
+                ImageIdProcessor.process(reporter.getProfileImage()),
                 reporter.getReliability(),
                 reporter.isDeleted()
         );

@@ -9,7 +9,7 @@ import com.ddang.ddang.user.application.dto.UpdateUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -93,7 +93,12 @@ class UserServiceTest {
                 new byte[]{1}
         );
 
-        // when & then
+        final UpdateUserDto updateUserDto = new UpdateUserDto("updateName", updateImage);
+
+        // when
+        userService.updateById(user.getId(), updateUserDto);
+
+        // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.getName()).isEqualTo("updateName");
             softAssertions.assertThat(user.getProfileImage().getImage().getStoreName()).isEqualTo("newStore.png");
