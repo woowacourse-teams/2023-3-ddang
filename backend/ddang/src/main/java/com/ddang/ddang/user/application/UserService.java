@@ -27,13 +27,14 @@ public class UserService {
     }
 
     @Transactional
-    public void updateById(final Long userId, final UpdateUserDto userDto) {
+    public ReadUserDto updateById(final Long userId, final UpdateUserDto userDto) {
         final User user = userRepository.findByIdAndDeletedIsFalse(userId)
                                         .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
-
         final StoreImageDto storeImageDto = imageProcessor.storeImageFile(userDto.profileImage());
 
         user.update(userDto.name(), storeImageDto.toProfileImageEntity());
+
+        return ReadUserDto.from(user);
     }
 
     @Transactional

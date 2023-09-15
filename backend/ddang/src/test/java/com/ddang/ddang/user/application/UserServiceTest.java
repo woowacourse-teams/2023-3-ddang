@@ -96,7 +96,10 @@ class UserServiceTest {
         );
 
         // when
-        userService.updateById(user.getId(), new UpdateUserDto("updateName", updateImage));
+        final ReadUserDto updateName = userService.updateById(
+                user.getId(),
+                new UpdateUserDto("updateName", updateImage)
+        );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
