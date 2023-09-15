@@ -23,7 +23,6 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         get() = _loadingAuctionsInProgress
 
     private var sortType: SortType = SortType.NEW
-
     private var _page = 0
     val page: Int
         get() = _page

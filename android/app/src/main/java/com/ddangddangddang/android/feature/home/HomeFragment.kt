@@ -49,8 +49,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
     private fun setupViewModel() {
         viewModel.auctions.observe(viewLifecycleOwner) {
-            auctionAdapter.submitList(it) {
-                binding.rvAuction.scrollToPosition(0)
+            auctionAdapter.setAuctions(it) {
+                if (viewModel.page == 1) binding.rvAuction.scrollToPosition(0)
             }
         }
         viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
