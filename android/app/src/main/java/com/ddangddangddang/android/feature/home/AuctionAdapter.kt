@@ -8,14 +8,8 @@ import com.ddangddangddang.android.model.AuctionHomeModel
 class AuctionAdapter(private val onItemClick: (Long) -> Unit) :
     ListAdapter<AuctionHomeModel, AuctionViewHolder>(AuctionDiffUtil) {
 
-    fun setAuctions(list: List<AuctionHomeModel>) {
-        submitList(list)
-    }
-
-    fun setAuctions(list: List<AuctionHomeModel>, callback: () -> Unit) {
-        submitList(list) {
-            callback()
-        }
+    fun setAuctions(list: List<AuctionHomeModel>, callback: (() -> Unit)? = null) {
+        submitList(list, callback)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuctionViewHolder {
