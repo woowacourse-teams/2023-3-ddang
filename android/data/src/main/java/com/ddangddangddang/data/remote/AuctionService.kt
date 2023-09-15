@@ -99,6 +99,6 @@ interface AuctionService {
     @DELETE("/auctions/{id}")
     suspend fun deleteAuction(@Path("id") auctionId: Long): ApiResponse<Unit>
 
-    @PATCH("/deviceToken")
+    @PATCH("/device-token")
     suspend fun updateDeviceToken(@Body deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit>
 }
