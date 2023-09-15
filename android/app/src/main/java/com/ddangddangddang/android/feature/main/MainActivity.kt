@@ -1,12 +1,15 @@
 package com.ddangddangddang.android.feature.main
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.ddangddangddang.android.R
@@ -32,11 +35,15 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         if (isGranted) {
             // FCM SDK (and your app) can post notifications.
         } else {
-            if (isNotificationPermissionDenied()) {
+            if (shouldShowHowToGrantNotificationPermission()) {
                 binding.root.showSnackbar(R.string.alarm_snackbar_how_to_grant_permission)
             }
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun shouldShowHowToGrantNotificationPermission(): Boolean =
+        shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,26 +97,46 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
                 // FCM SDK (and your app) can post notifications.
-            } else if (!isNotificationPermissionDenied()) {
+            } else if (!shouldShowHowToGrantNotificationPermission()) {
+                showRequestAlarmPermissionRationale()
+            }
+        } else {
+            val notificationManager = NotificationManagerCompat.from(this)
+            if (!notificationManager.areNotificationsEnabled()) {
                 showRequestAlarmPermissionRationale()
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private fun isNotificationPermissionDenied(): Boolean =
-        shouldShowRequestPermissionRationale(Manifest.permission.POST_NOTIFICATIONS)
-
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private fun showRequestAlarmPermissionRationale() {
         showDialog(
             titleId = R.string.alarm_dialog_check_permission_title,
             messageId = R.string.alarm_dialog_check_permission_message,
             positiveStringId = R.string.alarm_dialog_check_permission_positive_button,
             actionPositive = {
-                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                } else {
+                    requestNotificationPermissionForUnderTiramisu()
+                }
             },
             isCancelable = false,
         )
+    }
+
+    private fun requestNotificationPermissionForUnderTiramisu() {
+        showDialog(
+            titleId = R.string.alarm_dialog_check_permission_title,
+            messageId = R.string.alarm_dialog_check_permission_under_tiramisu_message,
+            negativeStringId = R.string.all_dialog_default_negative_button,
+            positiveStringId = R.string.alarm_dialog_check_permission_under_tiramisu_positive_button,
+            actionNegative = ::openNotificationSettings,
+            isCancelable = false,
+        )
+    }
+
+    private fun openNotificationSettings() {
+        val intent = Intent(ACTION_APP_NOTIFICATION_SETTINGS)
+        startActivity(intent)
     }
 }
