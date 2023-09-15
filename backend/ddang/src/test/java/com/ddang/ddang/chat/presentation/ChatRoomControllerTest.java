@@ -151,7 +151,7 @@ class ChatRoomControllerTest {
 
         final CreateMessageRequest request = new CreateMessageRequest(1L, "메시지 내용");
 
-        given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willReturn(1L);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.post("/chattings/{chatRoomId}/messages", 1L)
@@ -195,7 +195,7 @@ class ChatRoomControllerTest {
         final ChatRoomNotFoundException chatRoomNotFoundException =
                 new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
 
-        given(messageService.create(any(CreateMessageDto.class))).willThrow(chatRoomNotFoundException);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(chatRoomNotFoundException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
@@ -223,7 +223,7 @@ class ChatRoomControllerTest {
                 "지정한 아이디에 대한 발신자를 찾을 수 없습니다."
         );
 
-        given(messageService.create(any(CreateMessageDto.class))).willThrow(userNotFoundException);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(userNotFoundException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
@@ -369,9 +369,9 @@ class ChatRoomControllerTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", 1L, 5.0d);
-        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", 2L, 5.0d);
-        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", 3L, 5.0d);
+        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", 1L, 5.0d, false);
+        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", 2L, 5.0d, false);
+        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", 3L, 5.0d, false);
         final ReadAuctionInChatRoomDto auctionDto1 = new ReadAuctionInChatRoomDto(
                 1L,
                 "경매1",
@@ -490,7 +490,8 @@ class ChatRoomControllerTest {
                 2L,
                 "채팅 상대방",
                 2L,
-                5.0
+                5.0,
+                false
         );
 
         final ReadParticipatingChatRoomDto chatRoom = new ReadParticipatingChatRoomDto(

@@ -40,6 +40,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
@@ -176,7 +177,7 @@ class AuthenticationServiceTest {
         // given
         final User user = User.builder()
                               .name("kakao12345")
-                              .profileImage("프로필")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(0.0d)
                               .oauthId("12345")
                               .build();
@@ -190,7 +191,7 @@ class AuthenticationServiceTest {
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
 
         // when
-        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken");
+        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -296,7 +297,7 @@ class AuthenticationServiceTest {
         // given
         final User user = User.builder()
                               .name("kakao12345")
-                              .profileImage("프로필")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(0.0d)
                               .oauthId("12345")
                               .build();
@@ -329,7 +330,7 @@ class AuthenticationServiceTest {
         // given
         final User user = User.builder()
                               .name("kakao12345")
-                              .profileImage("프로필")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(0.0d)
                               .oauthId("12345")
                               .build();

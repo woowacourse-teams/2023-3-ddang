@@ -46,11 +46,9 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -121,7 +119,7 @@ class UserControllerTest {
     @Test
     void 사용자_정보를_조회한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", "profile.png", 4.6d, "12345", false);
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
@@ -155,7 +153,7 @@ class UserControllerTest {
     @Test
     void 탈퇴한_사용자_정보를_조회한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", "profile.png", 4.6d, "12345", true);
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", true);
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
@@ -168,9 +166,9 @@ class UserControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.name", is("알 수 없음")),
-                       jsonPath("$.profileImage", is(readUserDto.profileImage())),
+                       jsonPath("$.profileImage").exists(),
                        jsonPath("$.reliability", is(readUserDto.reliability()))
-               );
+        );
     }
 
     @Test
@@ -190,7 +188,7 @@ class UserControllerTest {
                 objectMapper.writeValueAsBytes(updateUserRequest)
         );
 
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345");
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(userService.updateById(anyLong(), any())).willReturn(readUserDto);

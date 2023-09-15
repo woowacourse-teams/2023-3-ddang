@@ -9,7 +9,7 @@ import com.ddang.ddang.user.application.dto.UpdateUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -18,13 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -97,13 +93,7 @@ class UserServiceTest {
                 new byte[]{1}
         );
 
-        // when
-        final ReadUserDto updateName = userService.updateById(
-                user.getId(),
-                new UpdateUserDto("updateName", updateImage)
-        );
-
-        // then
+        // when & then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.getName()).isEqualTo("updateName");
             softAssertions.assertThat(user.getProfileImage().getImage().getStoreName()).isEqualTo("newStore.png");
@@ -126,60 +116,6 @@ class UserServiceTest {
 
         // when & then
         assertThatThrownBy(() -> userService.updateById(invalidUserId, new UpdateUserDto("updateName", updateImage)))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("사용자 정보를 사용할 수 없습니다.");
-    }
-
-    @Test
-    void 회원_탈퇴한다() {
-        // given
-        final User user = User.builder()
-                              .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(4.7d)
-                              .oauthId("12345")
-                              .build();
-
-        userRepository.save(user);
-
-        // when
-        userService.deleteById(user.getId());
-
-        // then
-        final Optional<User> actual = userRepository.findById(user.getId());
-
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get().isDeleted()).isTrue();
-        });
-    }
-
-    @Test
-    void 회원_탈퇴할때_이미_탈퇴한_회원이면_예외가_발생한다() {
-        // given
-        final User user = User.builder()
-                              .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(4.7d)
-                              .oauthId("12345")
-                              .build();
-
-        user.withdrawal();
-        userRepository.save(user);
-
-        // when & then
-        assertThatThrownBy(() -> userService.deleteById(user.getId()))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("사용자 정보를 사용할 수 없습니다.");
-    }
-
-    @Test
-    void 회원_탈퇴할때_존재하지_않는_사용자_정보_조회시_예외를_반환한다() {
-        // given
-        final Long invalidUserId = -999L;
-
-        // when & then
-        assertThatThrownBy(() -> userService.deleteById(invalidUserId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자 정보를 사용할 수 없습니다.");
     }

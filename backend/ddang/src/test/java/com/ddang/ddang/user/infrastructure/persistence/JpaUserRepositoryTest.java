@@ -184,7 +184,7 @@ class JpaUserRepositoryTest {
         final String randomNumber = "54321";
         final User user = User.builder()
                               .name("kakao".concat(randomNumber))
-                              .profileImage("profile.png")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

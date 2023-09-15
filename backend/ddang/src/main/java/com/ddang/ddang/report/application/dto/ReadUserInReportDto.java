@@ -5,7 +5,7 @@ import com.ddang.ddang.user.domain.User;
 public record ReadUserInReportDto(
         Long id,
         String name,
-        String profileImage,
+        Long profileImageId,
         double reliability,
         String oauthId,
         boolean isSellerDeleted
@@ -15,7 +15,7 @@ public record ReadUserInReportDto(
         return new ReadUserInReportDto(
                 user.getId(),
                 user.getName(),
-                user.getProfileImage(),
+                user.getProfileImage().getId(),
                 user.getReliability(),
                 user.getOauthId(),
                 user.isDeleted()
