@@ -10,7 +10,7 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.image.application.ImageService;
+import com.ddang.ddang.image.application.util.ImageIdProcessor;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -30,7 +30,6 @@ import java.util.List;
 public class MessageService {
 
     private final NotificationService notificationService;
-    private final ImageService imageService;
     private final JpaMessageRepository messageRepository;
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
@@ -61,7 +60,7 @@ public class MessageService {
     }
 
     private void sendNotification(final Message message, final String baseUrl)  {
-        final Long profileImageId = message.getWriter().getProfileImage().getId();
+        final Long profileImageId = ImageIdProcessor.process(message.getWriter().getProfileImage());
         final String profileImageUrl = baseUrl.concat(String.valueOf(profileImageId));
 
         final CreateNotificationDto dto = new CreateNotificationDto(

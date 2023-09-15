@@ -4,7 +4,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 public enum ImageBaseUrl {
 
-    AUCTION("/auctions/images"),
+    AUCTION("/auctions/images/"),
     USER("/users/images/");
 
     private final String value;

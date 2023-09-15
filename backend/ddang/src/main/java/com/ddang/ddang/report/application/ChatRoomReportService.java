@@ -6,7 +6,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
+import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -45,7 +45,7 @@ public class ChatRoomReportService {
 
     private void checkInvalidChatRoomReport(final User reporter, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(reporter)) {
-            throw new ChatRoomReportNotAccessibleException("해당 채팅방을 신고할 권한이 없습니다.");
+            throw new InvalidChatRoomReportException("해당 채팅방을 신고할 권한이 없습니다.");
         }
         if (chatRoomReportRepository.existsByChatRoomIdAndReporterId(chatRoom.getId(), reporter.getId())) {
             throw new AlreadyReportChatRoomException("이미 신고한 채팅방입니다.");
