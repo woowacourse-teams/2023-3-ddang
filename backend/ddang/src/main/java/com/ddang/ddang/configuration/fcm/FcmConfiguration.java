@@ -8,8 +8,8 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -35,8 +35,7 @@ public class FcmConfiguration {
             return FirebaseMessaging.getInstance(FIREBASE_APP);
         }
 
-        final ClassPathResource resource = new ClassPathResource(FCM_PRIVATE_KEY_PATH);
-        final InputStream refreshToken = resource.getInputStream();
+        final FileInputStream refreshToken = new FileInputStream(FCM_PRIVATE_KEY_PATH);
 
         final List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
         if (firebaseApps.isEmpty()) {
