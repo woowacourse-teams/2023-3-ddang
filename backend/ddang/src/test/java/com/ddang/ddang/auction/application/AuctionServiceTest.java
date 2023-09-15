@@ -8,7 +8,6 @@ import static org.mockito.BDDMockito.given;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
@@ -17,7 +16,6 @@ import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
@@ -430,22 +428,19 @@ class AuctionServiceTest {
         chatRoomRepository.save(chatRoom);
 
         // when
-        final ReadAuctionWithChatRoomIdDto actual =
-                auctionService.readByAuctionId(auction.getId(), new AuthenticationUserInfo(seller.getId()));
+        final ReadAuctionDto actual = auctionService.readByAuctionId(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.auctionDto().id()).isPositive();
-            softAssertions.assertThat(actual.auctionDto().title()).isEqualTo(auction.getTitle());
-            softAssertions.assertThat(actual.auctionDto().description()).isEqualTo(auction.getDescription());
-            softAssertions.assertThat(actual.auctionDto().bidUnit()).isEqualTo(auction.getBidUnit().getValue());
-            softAssertions.assertThat(actual.auctionDto().startPrice()).isEqualTo(auction.getStartPrice().getValue());
-            softAssertions.assertThat(actual.auctionDto().lastBidPrice()).isNull();
-            softAssertions.assertThat(actual.auctionDto().deleted()).isFalse();
-            softAssertions.assertThat(actual.auctionDto().closingTime()).isEqualTo(auction.getClosingTime());
-            softAssertions.assertThat(actual.auctionDto().auctioneerCount()).isEqualTo(0);
-            softAssertions.assertThat(actual.chatRoomDto().id()).isEqualTo(chatRoom.getId());
-            softAssertions.assertThat(actual.chatRoomDto().isChatParticipant()).isTrue();
+            softAssertions.assertThat(actual.id()).isPositive();
+            softAssertions.assertThat(actual.title()).isEqualTo(auction.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(auction.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(auction.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(auction.getStartPrice().getValue());
+            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.deleted()).isFalse();
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(auction.getClosingTime());
+            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
 
@@ -518,22 +513,19 @@ class AuctionServiceTest {
         chatRoomRepository.save(chatRoom);
 
         // when
-        final ReadAuctionWithChatRoomIdDto actual =
-                auctionService.readByAuctionId(auction.getId(), new AuthenticationUserInfo(stranger.getId()));
+        final ReadAuctionDto actual = auctionService.readByAuctionId(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.auctionDto().id()).isPositive();
-            softAssertions.assertThat(actual.auctionDto().title()).isEqualTo(auction.getTitle());
-            softAssertions.assertThat(actual.auctionDto().description()).isEqualTo(auction.getDescription());
-            softAssertions.assertThat(actual.auctionDto().bidUnit()).isEqualTo(auction.getBidUnit().getValue());
-            softAssertions.assertThat(actual.auctionDto().startPrice()).isEqualTo(auction.getStartPrice().getValue());
-            softAssertions.assertThat(actual.auctionDto().lastBidPrice()).isNull();
-            softAssertions.assertThat(actual.auctionDto().deleted()).isFalse();
-            softAssertions.assertThat(actual.auctionDto().closingTime()).isEqualTo(auction.getClosingTime());
-            softAssertions.assertThat(actual.auctionDto().auctioneerCount()).isEqualTo(0);
-            softAssertions.assertThat(actual.chatRoomDto().id()).isEqualTo(chatRoom.getId());
-            softAssertions.assertThat(actual.chatRoomDto().isChatParticipant()).isFalse();
+            softAssertions.assertThat(actual.id()).isPositive();
+            softAssertions.assertThat(actual.title()).isEqualTo(auction.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(auction.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(auction.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(auction.getStartPrice().getValue());
+            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.deleted()).isFalse();
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(auction.getClosingTime());
+            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
 
@@ -596,22 +588,19 @@ class AuctionServiceTest {
         auctionRepository.save(auction);
 
         // when
-        final ReadAuctionWithChatRoomIdDto actual =
-                auctionService.readByAuctionId(auction.getId(), new AuthenticationUserInfo(seller.getId()));
+        final ReadAuctionDto actual = auctionService.readByAuctionId(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.auctionDto().id()).isPositive();
-            softAssertions.assertThat(actual.auctionDto().title()).isEqualTo(auction.getTitle());
-            softAssertions.assertThat(actual.auctionDto().description()).isEqualTo(auction.getDescription());
-            softAssertions.assertThat(actual.auctionDto().bidUnit()).isEqualTo(auction.getBidUnit().getValue());
-            softAssertions.assertThat(actual.auctionDto().startPrice()).isEqualTo(auction.getStartPrice().getValue());
-            softAssertions.assertThat(actual.auctionDto().lastBidPrice()).isNull();
-            softAssertions.assertThat(actual.auctionDto().deleted()).isFalse();
-            softAssertions.assertThat(actual.auctionDto().closingTime()).isEqualTo(auction.getClosingTime());
-            softAssertions.assertThat(actual.auctionDto().auctioneerCount()).isEqualTo(0);
-            softAssertions.assertThat(actual.chatRoomDto().id()).isEqualTo(null);
-            softAssertions.assertThat(actual.chatRoomDto().isChatParticipant()).isFalse();
+            softAssertions.assertThat(actual.id()).isPositive();
+            softAssertions.assertThat(actual.title()).isEqualTo(auction.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(auction.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(auction.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(auction.getStartPrice().getValue());
+            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.deleted()).isFalse();
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(auction.getClosingTime());
+            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
 
@@ -674,22 +663,19 @@ class AuctionServiceTest {
         auctionRepository.save(auction);
 
         // when
-        final ReadAuctionWithChatRoomIdDto actual =
-                auctionService.readByAuctionId(auction.getId(), new AuthenticationUserInfo(seller.getId()));
+        final ReadAuctionDto actual = auctionService.readByAuctionId(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.auctionDto().id()).isPositive();
-            softAssertions.assertThat(actual.auctionDto().title()).isEqualTo(auction.getTitle());
-            softAssertions.assertThat(actual.auctionDto().description()).isEqualTo(auction.getDescription());
-            softAssertions.assertThat(actual.auctionDto().bidUnit()).isEqualTo(auction.getBidUnit().getValue());
-            softAssertions.assertThat(actual.auctionDto().startPrice()).isEqualTo(auction.getStartPrice().getValue());
-            softAssertions.assertThat(actual.auctionDto().lastBidPrice()).isNull();
-            softAssertions.assertThat(actual.auctionDto().deleted()).isFalse();
-            softAssertions.assertThat(actual.auctionDto().closingTime()).isEqualTo(auction.getClosingTime());
-            softAssertions.assertThat(actual.auctionDto().auctioneerCount()).isEqualTo(0);
-            softAssertions.assertThat(actual.chatRoomDto().id()).isEqualTo(null);
-            softAssertions.assertThat(actual.chatRoomDto().isChatParticipant()).isTrue();
+            softAssertions.assertThat(actual.id()).isPositive();
+            softAssertions.assertThat(actual.title()).isEqualTo(auction.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(auction.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(auction.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(auction.getStartPrice().getValue());
+            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.deleted()).isFalse();
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(auction.getClosingTime());
+            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
 
@@ -759,22 +745,20 @@ class AuctionServiceTest {
         auctionRepository.save(auction);
 
         // when
-        final ReadAuctionWithChatRoomIdDto actual =
-                auctionService.readByAuctionId(auction.getId(), new AuthenticationUserInfo(stranger.getId()));
+        final ReadAuctionDto actual =
+                auctionService.readByAuctionId(auction.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.auctionDto().id()).isPositive();
-            softAssertions.assertThat(actual.auctionDto().title()).isEqualTo(auction.getTitle());
-            softAssertions.assertThat(actual.auctionDto().description()).isEqualTo(auction.getDescription());
-            softAssertions.assertThat(actual.auctionDto().bidUnit()).isEqualTo(auction.getBidUnit().getValue());
-            softAssertions.assertThat(actual.auctionDto().startPrice()).isEqualTo(auction.getStartPrice().getValue());
-            softAssertions.assertThat(actual.auctionDto().lastBidPrice()).isNull();
-            softAssertions.assertThat(actual.auctionDto().deleted()).isFalse();
-            softAssertions.assertThat(actual.auctionDto().closingTime()).isEqualTo(auction.getClosingTime());
-            softAssertions.assertThat(actual.auctionDto().auctioneerCount()).isEqualTo(0);
-            softAssertions.assertThat(actual.chatRoomDto().id()).isEqualTo(null);
-            softAssertions.assertThat(actual.chatRoomDto().isChatParticipant()).isFalse();
+            softAssertions.assertThat(actual.id()).isPositive();
+            softAssertions.assertThat(actual.title()).isEqualTo(auction.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(auction.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(auction.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(auction.getStartPrice().getValue());
+            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.deleted()).isFalse();
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(auction.getClosingTime());
+            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
 
@@ -782,80 +766,11 @@ class AuctionServiceTest {
     void 지정한_아이디에_해당하는_경매가_없는_경매를_조회시_예외가_발생한다() {
         // given
         final Long invalidAuctionId = -999L;
-        final AuthenticationUserInfo userInfo = new AuthenticationUserInfo(1L);
 
         // when & then
-        assertThatThrownBy(() -> auctionService.readByAuctionId(invalidAuctionId, userInfo))
+        assertThatThrownBy(() -> auctionService.readByAuctionId(invalidAuctionId))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
-    }
-
-    @Test
-    void 요청을_한_회원의_정보를_찾을_수_없으면_예외가_발생한다() {
-        // given
-        final StoreImageDto storeImageDto = new StoreImageDto("upload.png", "store.png");
-
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(storeImageDto));
-
-        final Region firstRegion = new Region("first");
-        final Region secondRegion = new Region("second");
-        final Region thirdRegion = new Region("third");
-
-        firstRegion.addSecondRegion(secondRegion);
-        secondRegion.addThirdRegion(thirdRegion);
-
-        regionRepository.save(firstRegion);
-
-        final Category main = new Category("main");
-        final Category sub = new Category("sub");
-
-        main.addSubCategory(sub);
-        categoryRepository.save(main);
-
-        final User seller = User.builder()
-                                .name("회원1")
-                                .profileImage("profile.png")
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
-        final User buyer = User.builder()
-                               .name("회원2")
-                               .profileImage("profile.png")
-                               .reliability(4.7d)
-                               .oauthId("12346")
-                               .build();
-
-        userRepository.save(seller);
-        userRepository.save(buyer);
-
-        final MockMultipartFile auctionImage = new MockMultipartFile(
-                "image.png",
-                "image.png",
-                MediaType.IMAGE_PNG.toString(),
-                new byte[]{1});
-        final CreateAuctionDto createAuctionDto = new CreateAuctionDto(
-                "경매 상품 1",
-                "이것은 경매 상품 1 입니다.",
-                1_000,
-                1_000,
-                LocalDateTime.now(),
-                List.of(thirdRegion.getId()),
-                sub.getId(),
-                List.of(auctionImage),
-                1L
-        );
-
-        final Auction auction = createAuctionDto.toEntity(seller, sub);
-        auctionRepository.save(auction);
-
-        final Long auctionId = auction.getId();
-        final Long invalidUserId = -999L;
-        AuthenticationUserInfo userInfo = new AuthenticationUserInfo(invalidUserId);
-
-        // when & then
-        assertThatThrownBy(() -> auctionService.readByAuctionId(auctionId, userInfo))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("회원 정보를 찾을 수 없습니다.");
     }
 
     @Test
@@ -1128,7 +1043,7 @@ class AuctionServiceTest {
     }
 
     @Test
-    void 회원이_참여한_경매_목록_조회() {
+    void 회원이_참여한_경매_목록을_조회한다() {
         // given
         final StoreImageDto storeImageDto = new StoreImageDto("upload.png", "store.png");
 

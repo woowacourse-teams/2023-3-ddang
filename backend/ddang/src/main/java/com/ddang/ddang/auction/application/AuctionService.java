@@ -3,20 +3,15 @@ package com.ddang.ddang.auction.application;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
@@ -33,7 +28,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,10 +36,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuctionService {
 
-    public static final Long DEFAULT_CHAT_ROOM_ID = null;
-
     private final JpaUserRepository userRepository;
-    private final JpaChatRoomRepository chatRoomRepository;
     private final JpaAuctionRepository auctionRepository;
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
@@ -100,25 +91,13 @@ public class AuctionService {
                              .toList();
     }
 
-    public ReadAuctionWithChatRoomIdDto readByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
+    public ReadAuctionDto readByAuctionId(final Long auctionId) {
         final Auction findAuction = auctionRepository.findAuctionById(auctionId)
                                                      .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                      ));
-        final User findUser = userRepository.findById(userInfo.userId())
-                                            .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
-        final Long nullableChatRoomId = chatRoomRepository.findByAuctionId(findAuction.getId())
-                                                          .map(ChatRoom::getId)
-                                                          .orElse(DEFAULT_CHAT_ROOM_ID);
 
-        return new ReadAuctionWithChatRoomIdDto(
-                ReadAuctionDto.from(findAuction),
-                new ReadChatRoomDto(nullableChatRoomId, isChatParticipant(findAuction, findUser))
-        );
-    }
-
-    private boolean isChatParticipant(final Auction findAuction, final User findUser) {
-        return findAuction.isClosed(LocalDateTime.now()) && findAuction.isSellerOrWinner(findUser, LocalDateTime.now());
+        return ReadAuctionDto.from(findAuction);
     }
 
     public ReadAuctionsDto readAllByCondition(
