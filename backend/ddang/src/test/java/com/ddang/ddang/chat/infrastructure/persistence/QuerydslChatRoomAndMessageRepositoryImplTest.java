@@ -11,6 +11,7 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -67,25 +68,25 @@ class QuerydslChatRoomAndMessageRepositoryImplTest {
 
         final User merry = User.builder()
                                .name("메리")
-                               .profileImage("profile.png")
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();
         final User encho = User.builder()
                                .name("엔초")
-                               .profileImage("profile.png")
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User jamie = User.builder()
                                .name("제이미")
-                               .profileImage("profile.png")
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
         final User zeeto = User.builder()
                                .name("지토")
-                               .profileImage("profile.png")
+                               .profileImage(new ProfileImage("upload.png", "store.png"))
                                .reliability(4.7d)
                                .oauthId("12348")
                                .build();

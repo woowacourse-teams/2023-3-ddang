@@ -1,28 +1,5 @@
 package com.ddang.ddang.chat.presentation;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
@@ -56,10 +33,6 @@ import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -81,6 +54,34 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {ChatRoomController.class},
         excludeFilters = {
@@ -151,7 +152,7 @@ class ChatRoomControllerTest {
 
         final CreateMessageRequest request = new CreateMessageRequest(1L, "메시지 내용");
 
-        given(messageService.create(any(CreateMessageDto.class))).willReturn(1L);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willReturn(1L);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.post("/chattings/{chatRoomId}/messages", 1L)
@@ -195,7 +196,7 @@ class ChatRoomControllerTest {
         final ChatRoomNotFoundException chatRoomNotFoundException =
                 new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
 
-        given(messageService.create(any(CreateMessageDto.class))).willThrow(chatRoomNotFoundException);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(chatRoomNotFoundException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
@@ -223,7 +224,7 @@ class ChatRoomControllerTest {
                 "지정한 아이디에 대한 발신자를 찾을 수 없습니다."
         );
 
-        given(messageService.create(any(CreateMessageDto.class))).willThrow(userNotFoundException);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(userNotFoundException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
@@ -251,7 +252,7 @@ class ChatRoomControllerTest {
                 "알림 전송에 실패했습니다."
         );
 
-        given(messageService.create(any(CreateMessageDto.class))).willThrow(notificationFailedException);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(notificationFailedException);
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
@@ -308,10 +309,13 @@ class ChatRoomControllerTest {
                                        parameterWithName("lastMessageId").description("마지막으로 응답받은 메시지의 ID").optional()
                                ),
                                responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY).description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
+                                       fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                          .description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
-                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN).description("조회를 요청한 사람이 보낸 메시지인지 여부"),
+                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
+                                                                    .description("메시지를 보낸 시간"),
+                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN)
+                                                                      .description("조회를 요청한 사람이 보낸 메시지인지 여부"),
                                        fieldWithPath("[].contents").type(JsonFieldType.STRING).description("메시지 내용")
                                )
                        )
@@ -394,9 +398,9 @@ class ChatRoomControllerTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", "profile.png", 5.0d);
-        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", "profile.png", 5.0d);
-        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", "profile.png", 5.0d);
+        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", 1L, 5.0d);
+        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", 2L, 5.0d);
+        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", 3L, 5.0d);
         final ReadAuctionInChatRoomDto auctionDto1 = new ReadAuctionInChatRoomDto(
                 1L,
                 "경매1",
@@ -451,18 +455,28 @@ class ChatRoomControllerTest {
                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
                                        fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
-                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
-                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
+                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER)
+                                                                         .description("채팅 상대방 ID"),
+                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING)
+                                                                           .description("채팅 상대방 이름"),
+                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING)
+                                                                                   .description("채팅 상대방 프로필 사진"),
+                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT)
+                                                                  .description("채팅방과 연관된 경매"),
                                        fieldWithPath("[].auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING).description("경매 제목"),
-                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
+                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING)
+                                                                        .description("경매 제목"),
+                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING)
+                                                                        .description("경매 대표 사진"),
                                        fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
-                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT).description("마지막으로 전송된 메시지"),
-                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING).description("메시지 내용"),
-                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
+                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT)
+                                                                      .description("마지막으로 전송된 메시지"),
+                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING)
+                                                                                .description("메시지를 보낸 시간"),
+                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
+                                                                               .description("메시지 내용"),
+                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN)
+                                                                          .description("채팅 가능 여부")
                                )
                        )
                );
@@ -504,7 +518,7 @@ class ChatRoomControllerTest {
         final ReadUserInChatRoomDto chatPartner = new ReadUserInChatRoomDto(
                 2L,
                 "채팅 상대방",
-                "profile.png",
+                2L,
                 5.0
         );
 
@@ -540,13 +554,18 @@ class ChatRoomControllerTest {
                                        fieldWithPath("auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
                                        fieldWithPath("auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
                                        fieldWithPath("auction.title").type(JsonFieldType.STRING).description("경매 제목"),
-                                       fieldWithPath("auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
+                                       fieldWithPath("auction.image").type(JsonFieldType.STRING)
+                                                                     .description("경매 대표 사진"),
                                        fieldWithPath("auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
                                        fieldWithPath("chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
-                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
-                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
+                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER)
+                                                                      .description("채팅 상대방 ID"),
+                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING)
+                                                                        .description("채팅 상대방 이름"),
+                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING)
+                                                                                .description("채팅 상대방 프로필 사진"),
+                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN)
+                                                                       .description("채팅 가능 여부")
                                )
                        )
                );

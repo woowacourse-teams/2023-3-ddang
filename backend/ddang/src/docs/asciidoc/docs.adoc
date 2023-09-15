@@ -75,6 +75,29 @@ include::{snippets}/authentication-controller-test/access-token과_refresh-token
 
 include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-response.adoc[]
 
+== 사용자 정보 API
+=== 사용자 정보 조회
+
+==== 요청
+
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/http-response.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/response-fields.adoc[]
+
+=== 사용자 정보 수정
+
+==== 요청
+
+include::{snippets}/user-controller-test/사용자_정보를_수정한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/user-controller-test/사용자_정보를_수정한다/http-response.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_수정한다/response-fields.adoc[]
+
 == 카테고리 API
 
 === 메인 카테고리 조회

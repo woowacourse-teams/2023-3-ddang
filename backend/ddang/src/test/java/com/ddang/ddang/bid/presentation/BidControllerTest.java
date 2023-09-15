@@ -470,8 +470,8 @@ class BidControllerTest {
     @Test
     void 특정_경매에_대한_입찰_목록을_조회한다() throws Exception {
         // given
-        final ReadBidDto bid1 = new ReadBidDto("사용자1", "이미지1", 10_000, LocalDateTime.now());
-        final ReadBidDto bid2 = new ReadBidDto("사용자2", "이미지2", 12_000, LocalDateTime.now());
+        final ReadBidDto bid1 = new ReadBidDto("사용자1", 1L, 10_000, LocalDateTime.now());
+        final ReadBidDto bid2 = new ReadBidDto("사용자2", 2L, 12_000, LocalDateTime.now());
 
         given(bidService.readAllByAuctionId(anyLong())).willReturn(List.of(bid1, bid2));
 
@@ -482,11 +482,11 @@ class BidControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.bids.[0].name", is(bid1.name())),
-                       jsonPath("$.bids.[0].profileImage", is(bid1.profileImage())),
+                       jsonPath("$.bids.[0].profileImage").exists(),
                        jsonPath("$.bids.[0].price", is(bid1.price())),
                        jsonPath("$.bids.[0].bidTime").exists(),
                        jsonPath("$.bids.[1].name", is(bid2.name())),
-                       jsonPath("$.bids.[1].profileImage", is(bid2.profileImage())),
+                       jsonPath("$.bids.[1].profileImage").exists(),
                        jsonPath("$.bids.[1].price", is(bid2.price())),
                        jsonPath("$.bids.[1].bidTime").exists()
                )

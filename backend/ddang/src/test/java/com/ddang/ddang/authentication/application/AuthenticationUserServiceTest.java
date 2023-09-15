@@ -1,14 +1,15 @@
 package com.ddang.ddang.authentication.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -18,6 +19,7 @@ class AuthenticationUserServiceTest {
     @Autowired
     JpaUserRepository userRepository;
 
+
     @Autowired
     AuthenticationUserService authenticationUserService;
 
@@ -26,7 +28,7 @@ class AuthenticationUserServiceTest {
         // given
         final User user = User.builder()
                               .name("회원")
-                              .profileImage("profile.png")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -46,7 +48,7 @@ class AuthenticationUserServiceTest {
         // given
         final User user = User.builder()
                               .name("회원")
-                              .profileImage("profile.png")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

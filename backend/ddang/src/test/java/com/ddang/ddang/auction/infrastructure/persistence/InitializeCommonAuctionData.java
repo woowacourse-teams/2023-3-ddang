@@ -9,6 +9,7 @@ import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.LocalDateTime;
@@ -58,44 +59,44 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
         querydslAuctionRepository = new QuerydslAuctionRepositoryImpl(new JPAQueryFactory(em));
 
         seller1 = User.builder()
-                      .name("회원1234543211")
-                      .profileImage("profile.png")
-                      .reliability(4.7d)
-                      .oauthId("1234543211")
-                      .build();
+                                 .name("회원1234543211")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(4.7d)
+                                 .oauthId("1234543211")
+                                 .build();
         seller2 = User.builder()
-                      .name("회원1234543212")
-                      .profileImage("profile.png")
-                      .reliability(3.5d)
-                      .oauthId("1234543212")
-                      .build();
+                                 .name("회원1234543212")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(3.5d)
+                                 .oauthId("1234543212")
+                                 .build();
         seller3 = User.builder()
-                      .name("회원1234543213")
-                      .profileImage("profile.png")
-                      .reliability(2.1d)
-                      .oauthId("1234543213")
-                      .build();
+                                 .name("회원1234543213")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(2.1d)
+                                 .oauthId("1234543213")
+                                 .build();
         seller4 = User.builder()
-                      .name("회원1234543214")
-                      .profileImage("profile.png")
-                      .reliability(5.0d)
-                      .oauthId("1234543214")
-                      .build();
+                                 .name("회원1234543214")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(5.0d)
+                                 .oauthId("1234543214")
+                                 .build();
         seller5 = User.builder()
-                      .name("회원1234543215")
-                      .profileImage("profile.png")
-                      .reliability(1.5d)
-                      .oauthId("1234543215")
-                      .build();
+                                 .name("회원1234543215")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(1.5d)
+                                 .oauthId("1234543215")
+                                 .build();
         seller6 = User.builder()
-                      .name("회원1234543216")
-                      .profileImage("profile.png")
-                      .reliability(0.3d)
-                      .oauthId("1234543216")
-                      .build();
+                                 .name("회원1234543216")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(0.3d)
+                                 .oauthId("1234543216")
+                                 .build();
         seller7 = User.builder()
                       .name("회원1234543217")
-                      .profileImage("profile.png")
+                      .profileImage(new ProfileImage("upload.png", "store.png"))
                       .reliability(0.3d)
                       .oauthId("1234543217")
                       .build();
