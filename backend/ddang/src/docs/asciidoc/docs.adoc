@@ -164,6 +164,32 @@ include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/http-response.adoc[]
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/response-fields.adoc[]
 
+=== 자신이 등록한 경매 목록 조회
+
+==== 요청
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/http-request.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/query-parameters.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/http-response.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/response-fields.adoc[]
+
+=== 자신이 참여한 경매 목록 조회
+
+==== 요청
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/http-request.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/query-parameters.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/http-response.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/response-fields.adoc[]
+
 === 경매 상세 조회
 
 ==== 요청
