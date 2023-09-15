@@ -10,6 +10,7 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.WithdrawalRequest;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -281,6 +283,37 @@ class AuthenticationControllerTest {
                )
                .andDo(
                        restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               requestFields(
+                                       fieldWithPath("refreshToken").description("refreshToken")
+                               )
+                       )
+               );
+    }
+
+    @Test
+    void ouath2Type과_accessToken과_refreshToken을_전달하면_탈퇴한다() throws Exception {
+        // given
+        final WithdrawalRequest request = new WithdrawalRequest("Bearer refreshToken");
+
+        willDoNothing().given(authenticationService).withdrawal(any(), anyString(), anyString());
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/oauth2/withdrawal/{oauth2Type}", "kakao")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request))
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
+               .andExpectAll(
+                       status().isNoContent()
+               )
+               .andDo(
+                       restDocs.document(
+                               pathParameters(
+                                       parameterWithName("oauth2Type").description("소셜 로그인을 할 서비스 선택(kakao로 고정)")
+                               ),
                                requestHeaders(
                                        headerWithName("Authorization").description("회원 Bearer 인증 정보")
                                ),

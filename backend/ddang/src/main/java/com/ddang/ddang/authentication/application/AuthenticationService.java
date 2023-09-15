@@ -32,6 +32,7 @@ public class AuthenticationService {
     private final JpaUserRepository userRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
+    private final BlackListTokenService blackListTokenService;
 
     @Transactional
     public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken){
@@ -107,7 +108,8 @@ public class AuthenticationService {
     @Transactional
     public void withdrawal(
             final Oauth2Type oauth2Type,
-            final String oauth2AccessToken
+            final String oauth2AccessToken,
+            final String refreshToken
     ) throws InaccessibleWithdrawalException {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
@@ -115,6 +117,10 @@ public class AuthenticationService {
                                         .orElseThrow(() -> new InaccessibleWithdrawalException("탈퇴에 대한 권한 없습니다."));
 
         provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());
+
+        // TODO: 2023/09/15 [고민] 일단 해당 메서드로 모두 몰기로 해서 blackList로 만드는 것도 여기서 호출하도록 수정했습니다. 그런데 잘 모르곘네요...
+        blackListTokenService.registerBlackListToken(oauth2AccessToken, refreshToken);
+
         user.withdrawal();
     }
 }

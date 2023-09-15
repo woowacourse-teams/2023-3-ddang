@@ -53,6 +53,9 @@ class AuthenticationServiceTest {
     TokenEncoder tokenEncoder;
 
     @Autowired
+    BlackListTokenService blackListTokenService;
+
+    @Autowired
     JwtEncoder jwtEncoder;
 
     @Mock
@@ -70,7 +73,8 @@ class AuthenticationServiceTest {
                 mockProviderComposite,
                 userRepository,
                 tokenEncoder,
-                tokenDecoder
+                tokenDecoder,
+                blackListTokenService
         );
     }
 
@@ -278,6 +282,13 @@ class AuthenticationServiceTest {
 
         userRepository.save(user);
 
+        final Map<String, Object> privateClaims = Map.of("userId", user.getId());
+        final String refreshToken = "Bearer " + tokenEncoder.encode(
+                LocalDateTime.now(),
+                TokenType.REFRESH,
+                privateClaims
+        );
+
         final UserInformationDto userInformationDto = new UserInformationDto(12345L);
 
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
@@ -285,7 +296,7 @@ class AuthenticationServiceTest {
         given(mockProvider.unlinkUserBy(anyString(), anyString())).willReturn(userInformationDto);
 
         // when
-        authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken");
+        authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken", refreshToken);
 
         // then
         assertThat(user.isDeleted()).isTrue();
@@ -302,6 +313,14 @@ class AuthenticationServiceTest {
                               .build();
 
         userRepository.save(user);
+
+        final Map<String, Object> privateClaims = Map.of("userId", user.getId());
+        final String refreshToken = "Bearer " + tokenEncoder.encode(
+                LocalDateTime.now(),
+                TokenType.REFRESH,
+                privateClaims
+        );
+
         user.withdrawal();
 
         final UserInformationDto userInformationDto = new UserInformationDto(12345L);
@@ -311,7 +330,7 @@ class AuthenticationServiceTest {
         given(mockProvider.unlinkUserBy(anyString(), anyString())).willReturn(userInformationDto);
 
         // when && then
-        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken"))
+        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken", refreshToken))
                 .isInstanceOf(InaccessibleWithdrawalException.class)
                 .hasMessage("탈퇴에 대한 권한 없습니다.");
     }
@@ -324,9 +343,10 @@ class AuthenticationServiceTest {
                 .willThrow(new InvalidTokenException("401 Unauthorized"));
 
         final String invalidAccessToken = "invalidAccessToken";
+        final String invalidRefreshToken = "invalidRefreshToken";
 
         // when & then
-        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, invalidAccessToken))
+        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, invalidAccessToken, invalidRefreshToken))
                 .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("401 Unauthorized");
     }
