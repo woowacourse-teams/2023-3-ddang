@@ -5,7 +5,7 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
-import com.ddang.ddang.authentication.application.exception.InaccessibleWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -24,7 +24,7 @@ import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFile
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
+import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -135,11 +135,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(InaccessibleWithdrawalException.class)
+    @ExceptionHandler(InvalidWithdrawalException.class)
     public ResponseEntity<ExceptionResponse> handleInaccessibleWithdrawalException(
-            final InaccessibleWithdrawalException ex
+            final InvalidWithdrawalException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InaccessibleWithdrawalException.class), ex);
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidWithdrawalException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -256,10 +256,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(ChatRoomReportNotAccessibleException.class)
+    @ExceptionHandler(InvalidChatRoomReportException.class)
     public ResponseEntity<ExceptionResponse> handleChatRoomReportNotAccessibleExceptionException(
-            final ChatRoomReportNotAccessibleException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, ChatRoomReportNotAccessibleException.class), ex);
+            final InvalidChatRoomReportException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidChatRoomReportException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));

@@ -11,7 +11,7 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
+import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -231,7 +231,7 @@ class ChatRoomReportServiceTest {
 
         // when & then
         assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
-                .isInstanceOf(ChatRoomReportNotAccessibleException.class)
+                .isInstanceOf(InvalidChatRoomReportException.class)
                 .hasMessage("해당 채팅방을 신고할 권한이 없습니다.");
     }
 

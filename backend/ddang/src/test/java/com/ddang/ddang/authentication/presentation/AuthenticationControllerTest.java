@@ -3,7 +3,7 @@ package com.ddang.ddang.authentication.presentation;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.InaccessibleWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -335,8 +335,8 @@ class AuthenticationControllerTest {
         // given
         final WithdrawalRequest request = new WithdrawalRequest("Bearer refreshToken");
 
-        willThrow(new InaccessibleWithdrawalException("탈퇴에 대한 권한 없습니다.")).given(authenticationService)
-                                                                         .withdrawal(any(), anyString(), anyString());
+        willThrow(new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다.")).given(authenticationService)
+                                                                    .withdrawal(any(), anyString(), anyString());
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.delete("/oauth2/withdrawal/{oauth2Type}", "kakao")

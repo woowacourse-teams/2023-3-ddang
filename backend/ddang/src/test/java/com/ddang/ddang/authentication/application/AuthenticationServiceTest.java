@@ -1,7 +1,7 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.InaccessibleWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
@@ -273,7 +273,7 @@ class AuthenticationServiceTest {
     }
 
     @Test
-    void 가입한_회원이_탈퇴하는_경우_정상처리한다() throws InaccessibleWithdrawalException {
+    void 가입한_회원이_탈퇴하는_경우_정상처리한다() throws InvalidWithdrawalException {
         // given
         final User user = User.builder()
                               .name("kakao12345")
@@ -334,7 +334,7 @@ class AuthenticationServiceTest {
 
         // when && then
         assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken", refreshToken))
-                .isInstanceOf(InaccessibleWithdrawalException.class)
+                .isInstanceOf(InvalidWithdrawalException.class)
                 .hasMessage("탈퇴에 대한 권한 없습니다.");
     }
 

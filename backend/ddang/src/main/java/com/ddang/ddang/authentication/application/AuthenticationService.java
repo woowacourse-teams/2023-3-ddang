@@ -1,7 +1,7 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.InaccessibleWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.util.RandomNameGenerator;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
@@ -110,11 +110,11 @@ public class AuthenticationService {
             final Oauth2Type oauth2Type,
             final String oauth2AccessToken,
             final String refreshToken
-    ) throws InaccessibleWithdrawalException {
+    ) throws InvalidWithdrawalException {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
         final User user = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
-                                        .orElseThrow(() -> new InaccessibleWithdrawalException("탈퇴에 대한 권한 없습니다."));
+                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다."));
 
         provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());
 

@@ -24,7 +24,7 @@ import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
+import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
@@ -513,10 +513,10 @@ class ReportControllerTest {
         final Long unaccessibleUserId = 999L;
         final PrivateClaims privateClaims = new PrivateClaims(unaccessibleUserId);
         final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(1L, "신고합니다");
-        final ChatRoomReportNotAccessibleException chatRoomReportNotAccessibleException = new ChatRoomReportNotAccessibleException("해당 채팅방을 신고할 권한이 없습니다.");
+        final InvalidChatRoomReportException invalidChatRoomReportException = new InvalidChatRoomReportException("해당 채팅방을 신고할 권한이 없습니다.");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(chatRoomReportNotAccessibleException);
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(invalidChatRoomReportException);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
@@ -526,7 +526,7 @@ class ReportControllerTest {
                )
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is(chatRoomReportNotAccessibleException.getMessage()))
+                       jsonPath("$.message", is(invalidChatRoomReportException.getMessage()))
                );
     }
 
