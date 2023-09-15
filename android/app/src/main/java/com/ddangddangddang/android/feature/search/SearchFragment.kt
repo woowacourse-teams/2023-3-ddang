@@ -17,7 +17,7 @@ import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.util.binding.BindingFragment
-import com.ddangddangddang.android.util.view.showSnackbar
+import com.ddangddangddang.android.util.view.Toaster
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search) {
     private val viewModel: SearchViewModel by viewModels { viewModelFactory }
@@ -27,7 +27,6 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-
             if (viewModel.isLast) return
 
             if (!viewModel.loadingAuctionInProgress) {
@@ -95,9 +94,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun showNoticeMessage(message: String?) {
-        binding.root.showSnackbar(
+        Toaster.showShort(
+            requireContext(),
             message ?: getString(R.string.search_notice_default_error),
-            getString(R.string.all_snackbar_default_action),
         )
     }
 
