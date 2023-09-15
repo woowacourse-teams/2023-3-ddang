@@ -1,4 +1,4 @@
-package com.ddang.ddang.image.util;
+package com.ddang.ddang.image.presentation.util;
 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

@@ -1,8 +1,8 @@
 package com.ddang.ddang.bid.presentation.dto.response;
 
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
-import com.ddang.ddang.image.util.ImageBaseUrl;
-import com.ddang.ddang.image.util.ImageUrlBuilder;
+import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
+import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -23,6 +23,6 @@ public record ReadBidResponse(
     }
 
     private static String convertImageUrl(final Long id) {
-        return ImageUrlBuilder.calculate(ImageBaseUrl.USER, id);
+        return ImageUrlCalculator.calculate(ImageBaseUrl.USER, id);
     }
 }

@@ -1,9 +1,8 @@
-package com.ddang.ddang.image.util;
+package com.ddang.ddang.image.presentation.util;
 
-// TODO: 2023/09/08 [고민] 이미지 util의 패키지 위치는?
-public class ImageUrlBuilder {
+public class ImageUrlCalculator {
 
-    private ImageUrlBuilder() {
+    private ImageUrlCalculator() {
     }
 
     public static String calculate(final ImageBaseUrl imageBaseUrl, final Long id) {

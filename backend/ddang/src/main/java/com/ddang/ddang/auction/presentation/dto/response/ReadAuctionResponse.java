@@ -1,8 +1,8 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.image.util.ImageBaseUrl;
-import com.ddang.ddang.image.util.ImageUrlBuilder;
+import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
+import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
 import java.time.LocalDateTime;
 
@@ -28,7 +28,7 @@ public record ReadAuctionResponse(
 
 
     private static String convertImageUrl(final Long id) {
-        return ImageUrlBuilder.calculate(ImageBaseUrl.AUCTION, id);
+        return ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, id);
     }
 
     private static int processAuctionPrice(final Integer startPrice, final Integer lastBidPrice) {
