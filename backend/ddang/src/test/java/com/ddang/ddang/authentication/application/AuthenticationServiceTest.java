@@ -33,6 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 
 @IsolateDatabase
@@ -53,7 +54,7 @@ class AuthenticationServiceTest {
     TokenEncoder tokenEncoder;
 
     @Autowired
-    BlackListTokenService blackListTokenService;
+    BlackListTokenService mockBlackListTokenService;
 
     @Autowired
     JwtEncoder jwtEncoder;
@@ -69,12 +70,13 @@ class AuthenticationServiceTest {
     ) {
         mockProvider = mock(OAuth2UserInformationProvider.class);
         mockProviderComposite = mock(Oauth2UserInformationProviderComposite.class);
+        mockBlackListTokenService = mock(BlackListTokenService.class);
         authenticationService = new AuthenticationService(
                 mockProviderComposite,
                 userRepository,
                 tokenEncoder,
                 tokenDecoder,
-                blackListTokenService
+                mockBlackListTokenService
         );
     }
 
@@ -294,6 +296,7 @@ class AuthenticationServiceTest {
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
         given(mockProvider.unlinkUserBy(anyString(), anyString())).willReturn(userInformationDto);
+        willDoNothing().given(mockBlackListTokenService).registerBlackListToken(anyString(), anyString());
 
         // when
         authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken", refreshToken);
