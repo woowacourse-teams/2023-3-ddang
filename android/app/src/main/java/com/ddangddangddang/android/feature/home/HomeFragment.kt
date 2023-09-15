@@ -12,6 +12,7 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
+import com.ddangddangddang.android.util.view.Toaster
 
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
     private val viewModel: HomeViewModel by viewModels { viewModelFactory }
@@ -40,14 +41,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         binding.viewModel = viewModel
         setupViewModel()
         setupAuctionRecyclerView()
-        if (viewModel.lastAuctionId.value == null) {
-            viewModel.loadAuctions()
-        }
+        if (viewModel.page == 0) viewModel.loadAuctions()
         setupReloadAuctions()
     }
 
     private fun setupViewModel() {
-        viewModel.auctions.observe(viewLifecycleOwner) { auctionAdapter.setAuctions(it) }
+        viewModel.auctions.observe(viewLifecycleOwner) {
+            auctionAdapter.setAuctions(it) {
+                if (viewModel.page == 1) binding.rvAuction.scrollToPosition(0)
+            }
+        }
         viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
     }
 
@@ -60,6 +63,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             is HomeViewModel.HomeEvent.NavigateToRegisterAuction -> {
                 navigateToRegisterAuction()
             }
+
+            is HomeViewModel.HomeEvent.FailureLoadAuctions -> showErrorMessage(event.message)
         }
     }
 
@@ -72,6 +77,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private fun navigateToRegisterAuction() {
         val intent = RegisterAuctionActivity.getIntent(requireContext())
         startActivity(intent)
+    }
+
+    private fun showErrorMessage(message: String?) {
+        Toaster.showShort(
+            requireContext(),
+            message ?: getString(R.string.home_default_error_message),
+        )
     }
 
     private fun setupAuctionRecyclerView() {

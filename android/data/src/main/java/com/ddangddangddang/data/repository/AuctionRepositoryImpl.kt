@@ -3,6 +3,7 @@ package com.ddangddangddang.data.repository
 import androidx.lifecycle.LiveData
 import com.ddangddangddang.data.datasource.AuctionLocalDataSource
 import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.request.ReportRequest
@@ -23,12 +24,14 @@ class AuctionRepositoryImpl private constructor(
     }
 
     override suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int?,
+        sortType: SortType?,
+        title: String?,
     ): ApiResponse<AuctionPreviewsResponse> {
-        val response = remoteDataSource.getAuctionPreviews(lastAuctionId, size)
+        val response = remoteDataSource.getAuctionPreviews(page, size, sortType, title)
         if (response is ApiResponse.Success) {
-            if (lastAuctionId == null) localDataSource.clearAuctionPreviews()
+            if (page == 1) localDataSource.clearAuctionPreviews()
             localDataSource.addAuctionPreviews(response.body.auctions)
         }
         return response
