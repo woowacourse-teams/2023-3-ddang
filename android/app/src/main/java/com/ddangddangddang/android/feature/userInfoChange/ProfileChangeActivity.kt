@@ -9,14 +9,14 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
-import com.ddangddangddang.android.databinding.ActivityUserInfoChangeBinding
+import com.ddangddangddang.android.databinding.ActivityProfileChangeBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.compat.getParcelableCompat
 
-class UserInfoChangeActivity :
-    BindingActivity<ActivityUserInfoChangeBinding>(R.layout.activity_user_info_change) {
+class ProfileChangeActivity :
+    BindingActivity<ActivityProfileChangeBinding>(R.layout.activity_profile_change) {
     private val viewModel by viewModels<UserInfoChangeViewModel> { viewModelFactory }
 
     private val launcher =
@@ -61,7 +61,7 @@ class UserInfoChangeActivity :
         private const val PROFILE_MODEL_KEY = "profile_model_key"
 
         fun getIntent(context: Context, profileModel: ProfileModel): Intent =
-            Intent(context, UserInfoChangeActivity::class.java).apply {
+            Intent(context, ProfileChangeActivity::class.java).apply {
                 putExtra(PROFILE_MODEL_KEY, profileModel)
             }
     }

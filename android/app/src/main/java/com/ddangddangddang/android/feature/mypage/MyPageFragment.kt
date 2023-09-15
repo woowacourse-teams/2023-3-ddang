@@ -12,7 +12,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMyPageBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.login.LoginActivity
-import com.ddangddangddang.android.feature.userInfoChange.UserInfoChangeActivity
+import com.ddangddangddang.android.feature.userInfoChange.ProfileChangeActivity
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.view.Toaster
@@ -68,12 +68,6 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         }
     }
 
-    private fun navigateToUserInfoChange(profileModel: ProfileModel) {
-        requireContext().startActivity(
-            UserInfoChangeActivity.getIntent(requireContext(), profileModel),
-        )
-    }
-
     private fun notifyLogoutSuccessfully() {
         Toaster.showShort(
             requireContext(),
@@ -85,6 +79,12 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         val intent = Intent(requireContext(), LoginActivity::class.java)
         intent.flags = FLAG_ACTIVITY_CLEAR_TASK + FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
+    }
+
+    private fun navigateToUserInfoChange(profileModel: ProfileModel) {
+        requireContext().startActivity(
+            ProfileChangeActivity.getIntent(requireContext(), profileModel),
+        )
     }
 
     private fun notifyLogoutFailed() {
