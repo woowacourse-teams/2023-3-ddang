@@ -23,7 +23,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         get() = _loadingAuctionsInProgress
 
     private var sortType: SortType = SortType.NEW
-    private var _page = DEFAULT_PAGE
+    private var _page = 0
     val page: Int
         get() = _page
 
@@ -81,10 +81,6 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         sortType = type
         reloadAuctions()
     }
-
-//    private enum class LoadType {
-//        LOAD, RELOAD
-//    }
 
     sealed class HomeEvent {
         data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
