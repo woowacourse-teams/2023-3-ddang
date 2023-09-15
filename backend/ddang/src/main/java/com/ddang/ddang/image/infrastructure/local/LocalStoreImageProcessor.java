@@ -48,8 +48,8 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
             imageFile.transferTo(new File(fullPath));
 
             return new StoreImageDto(originalImageFileName, storeImageFileName);
-        } catch (IOException e) {
-            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", e);
+        } catch (IOException ex) {
+            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", ex);
         }
     }
 
