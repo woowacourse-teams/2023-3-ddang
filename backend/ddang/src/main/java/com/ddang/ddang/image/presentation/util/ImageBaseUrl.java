@@ -14,7 +14,9 @@ public enum ImageBaseUrl {
     }
 
     public String getBaseUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                                          .build()
+                                          .toUriString()
                                           .concat(value);
     }
 }
