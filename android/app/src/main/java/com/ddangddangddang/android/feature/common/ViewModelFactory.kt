@@ -11,13 +11,13 @@ import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.message.MessageViewModel
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel
 import com.ddangddangddang.android.feature.mypage.MyPageViewModel
+import com.ddangddangddang.android.feature.profile.ProfileChangeViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryViewModel
 import com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel
 import com.ddangddangddang.android.feature.report.ReportViewModel
 import com.ddangddangddang.android.feature.search.SearchViewModel
 import com.ddangddangddang.android.feature.splash.SplashViewModel
-import com.ddangddangddang.android.feature.userInfoChange.ProfileChangeViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl

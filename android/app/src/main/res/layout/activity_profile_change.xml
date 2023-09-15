@@ -7,13 +7,13 @@
 
         <variable
             name="viewModel"
-            type="com.ddangddangddang.android.feature.userInfoChange.ProfileChangeViewModel" />
+            type="com.ddangddangddang.android.feature.profile.ProfileChangeViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".feature.userInfoChange.ProfileChangeActivity">
+        tools:context=".feature.profile.ProfileChangeActivity">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/tb_user_info_change"

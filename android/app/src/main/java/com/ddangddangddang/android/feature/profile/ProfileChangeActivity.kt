@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.userInfoChange
+package com.ddangddangddang.android.feature.profile
 
 import android.content.ContentResolver
 import android.content.Context

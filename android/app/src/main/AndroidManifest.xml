@@ -22,7 +22,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".feature.userInfoChange.ProfileChangeActivity"
+            android:name=".feature.profile.ProfileChangeActivity"
             android:exported="false" />
         <activity
             android:name=".feature.messageRoom.MessageRoomActivity"

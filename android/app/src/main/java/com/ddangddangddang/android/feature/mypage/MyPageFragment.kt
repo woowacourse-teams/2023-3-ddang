@@ -15,7 +15,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMyPageBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.login.LoginActivity
-import com.ddangddangddang.android.feature.userInfoChange.ProfileChangeActivity
+import com.ddangddangddang.android.feature.profile.ProfileChangeActivity
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.compat.getParcelableCompat
@@ -47,7 +47,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (hidden.not()) viewModel.loadProfile()
+        if (hidden.not() && viewModel.profile.value == null) viewModel.loadProfile()
     }
 
     private fun setupObserve() {
