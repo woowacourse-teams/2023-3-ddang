@@ -23,6 +23,11 @@ class LoginViewModel(
     fun completeLoginByKakao(accessToken: String) {
         viewModelScope.launch {
             val deviceToken = repository.getDeviceToken()
+            if (deviceToken.isNullOrBlank()) {
+                LoginEvent.FailureLoginEvent(UNEXPECTED_ERROR_MESSAGE)
+                return@launch
+            }
+
             val request = KakaoLoginRequest(accessToken, deviceToken)
             when (val response = repository.loginByKakao(request)) {
                 is ApiResponse.Success -> _event.value = LoginEvent.CompleteLoginEvent
@@ -37,5 +42,9 @@ class LoginViewModel(
         object KakaoLoginEvent : LoginEvent()
         object CompleteLoginEvent : LoginEvent()
         data class FailureLoginEvent(val message: String?) : LoginEvent()
+    }
+
+    companion object {
+        private const val UNEXPECTED_ERROR_MESSAGE = "예기치 못한 오류가 발생했습니다. 다시 시도해주세요."
     }
 }
