@@ -80,11 +80,10 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun showErrorMessage(message: String?) {
-        message?.let {
-            Toaster.showShort(requireContext(), it)
-            return
-        }
-        Toaster.showShort(requireContext(), getString(R.string.home_default_error_message))
+        Toaster.showShort(
+            requireContext(),
+            message ?: getString(R.string.home_default_error_message),
+        )
     }
 
     private fun setupAuctionRecyclerView() {
