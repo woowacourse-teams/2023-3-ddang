@@ -17,7 +17,7 @@ public record CreateAuctionResponse(
         return new CreateAuctionResponse(
                 dto.id(),
                 dto.title(),
-                getAuctionImageUrl(dto.auctionImageId()),
+                convertAuctionImageUrl(dto.auctionImageId()),
                 dto.startPrice(),
                 // TODO 2차 데모데이 이후 enum으로 처리
                 "UNBIDDEN",
@@ -25,7 +25,7 @@ public record CreateAuctionResponse(
         );
     }
 
-    private static String getAuctionImageUrl(final Long id) {
+    private static String convertAuctionImageUrl(final Long id) {
         return ImageUrlBuilder.calculate(ImageBaseUrl.AUCTION, id);
     }
 }
