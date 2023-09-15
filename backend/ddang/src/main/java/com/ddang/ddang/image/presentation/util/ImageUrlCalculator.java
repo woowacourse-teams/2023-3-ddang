@@ -1,6 +1,6 @@
 package com.ddang.ddang.image.presentation.util;
 
-public class ImageUrlCalculator {
+public final class ImageUrlCalculator {
 
     private ImageUrlCalculator() {
     }

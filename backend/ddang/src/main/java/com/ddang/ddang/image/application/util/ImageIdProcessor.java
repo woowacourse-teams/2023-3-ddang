@@ -2,7 +2,7 @@ package com.ddang.ddang.image.application.util;
 
 import com.ddang.ddang.image.domain.ProfileImage;
 
-public class ImageIdProcessor {
+public final class ImageIdProcessor {
 
     private ImageIdProcessor() {
     }
