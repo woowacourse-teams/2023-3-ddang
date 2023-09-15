@@ -1,4 +1,4 @@
-package com.ddang.ddang.user.presentation.dto;
+package com.ddang.ddang.user.presentation.dto.response;
 
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 
