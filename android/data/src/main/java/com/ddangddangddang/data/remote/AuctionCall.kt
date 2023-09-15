@@ -34,7 +34,7 @@ class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: 
                             this@AuctionCall,
                             Response.success(
                                 ApiResponse.Unexpected(
-                                    IllegalStateException(UNEXPECTED_ERROR_MESSAGE),
+                                    IllegalStateException("Response body가 존재하지 않습니다."),
                                 ),
                             ),
                         )
@@ -59,15 +59,8 @@ class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: 
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 val response = when (t) {
-                    is IOException -> {
-                        val throwable = IOException(NETWORK_ERROR_MESSAGE, t)
-                        ApiResponse.NetworkError(throwable)
-                    }
-
-                    else -> {
-                        val throwable = Throwable(UNEXPECTED_ERROR_MESSAGE, t)
-                        ApiResponse.Unexpected(throwable)
-                    }
+                    is IOException -> ApiResponse.NetworkError(t)
+                    else -> ApiResponse.Unexpected(t)
                 }
                 callback.onResponse(
                     this@AuctionCall,
@@ -92,9 +85,4 @@ class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: 
     override fun request(): Request = call.request()
 
     override fun timeout(): Timeout = call.timeout()
-
-    companion object {
-        private const val NETWORK_ERROR_MESSAGE = "인터넷이 연결되어 있는지 확인해주세요."
-        private const val UNEXPECTED_ERROR_MESSAGE = "예기치 못한 오류가 발생했습니다. 다시 시도해주세요."
-    }
 }
