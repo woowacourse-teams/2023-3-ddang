@@ -61,7 +61,12 @@ public class MessageService {
 
     private void sendNotification(final Message message, final String baseUrl)  {
         final Long profileImageId = ImageIdProcessor.process(message.getWriter().getProfileImage());
-        final String profileImageUrl = baseUrl.concat(String.valueOf(profileImageId));
+
+        // TODO: 2023/09/15 5차데모데이 이후 수정 예정
+        String profileImageUrl = null;
+        if (profileImageId != null) {
+            profileImageUrl = baseUrl.concat(String.valueOf(profileImageId));
+        }
 
         final CreateNotificationDto dto = new CreateNotificationDto(
                 NotificationType.MESSAGE,
