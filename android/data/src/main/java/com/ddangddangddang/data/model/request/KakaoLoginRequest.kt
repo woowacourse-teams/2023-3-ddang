@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class KakaoLoginRequest(
     val accessToken: String,
-    val deviceToken: String?,
+    val deviceToken: String,
 )
