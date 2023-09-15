@@ -23,7 +23,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         get() = _loadingAuctionsInProgress
 
     private var sortType: SortType = SortType.NEW
-    private var _page = 0
+    private var _page = DEFAULT_PAGE
     val page: Int
         get() = _page
 
@@ -36,9 +36,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         get() = _event
 
     fun loadAuctions() {
-        if (!loadingAuctionInProgress) {
-            fetchAuctions()
-        }
+        if (!loadingAuctionInProgress) fetchAuctions(_page + 1)
     }
 
     fun navigateToAuctionDetail(auctionId: Long) {
@@ -50,35 +48,29 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     }
 
     fun reloadAuctions() {
-        if (!loadingAuctionInProgress) {
-            _page = 0
-            fetchAuctions()
-        }
+        if (!loadingAuctionInProgress) fetchAuctions(DEFAULT_PAGE)
     }
 
-    private fun fetchAuctions() {
+    private fun fetchAuctions(newPage: Int) {
         viewModelScope.launch {
             _loadingAuctionsInProgress = true
-            _page++
             when (
                 val response =
-                    repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD, sortType = sortType)
+                    repository.getAuctionPreviews(page = newPage, size = SIZE_AUCTION_LOAD, sortType = sortType)
             ) {
                 is ApiResponse.Success -> {
                     _isLast = response.body.isLast
+                    _page = newPage
                 }
 
                 is ApiResponse.Failure -> {
                     _event.value = HomeEvent.FailureLoadAuctions(response.error)
-                    _page--
                 }
                 is ApiResponse.NetworkError -> {
                     _event.value = HomeEvent.FailureLoadAuctions(response.exception.message)
-                    _page--
                 }
                 is ApiResponse.Unexpected -> {
                     _event.value = HomeEvent.FailureLoadAuctions(response.t?.message)
-                    _page--
                 }
             }
             _loadingAuctionsInProgress = false
@@ -90,6 +82,10 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         reloadAuctions()
     }
 
+//    private enum class LoadType {
+//        LOAD, RELOAD
+//    }
+
     sealed class HomeEvent {
         data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
         object NavigateToRegisterAuction : HomeEvent()
@@ -99,5 +95,6 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
 
     companion object {
         private const val SIZE_AUCTION_LOAD = 10
+        private const val DEFAULT_PAGE = 1
     }
 }
