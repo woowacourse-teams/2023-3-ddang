@@ -1,10 +1,6 @@
 package com.ddang.ddang.image.application;
 
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
@@ -16,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.net.MalformedURLException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
@@ -47,14 +47,15 @@ class ProfileImageServiceTest {
     }
 
     @Test
-    void 지정한_아이디에_해당하는_이미지가_없는_경우_예외가_발생한다() {
+    void 지정한_아이디에_해당하는_이미지가_없는_경우_null을_반환한다() throws MalformedURLException {
         // given
         final Long invalidImageId = -999L;
 
-        // when & then
-        assertThatThrownBy(() -> imageService.readProfileImage(invalidImageId))
-                .isInstanceOf(ImageNotFoundException.class)
-                .hasMessage("지정한 이미지를 찾을 수 없습니다.");
+        // when
+        final Resource actual = imageService.readProfileImage(invalidImageId);
+
+        // then
+        assertThat(actual).isNull();
     }
 
     @Test
@@ -72,13 +73,14 @@ class ProfileImageServiceTest {
     }
 
     @Test
-    void 지정한_아이디에_해당하는_경매_이미지가_없는_경우_예외가_발생한다() {
+    void 지정한_아이디에_해당하는_경매_이미지가_없는_경우_null을_반환한다() throws MalformedURLException {
         // given
         final Long invalidAuctionImageId = -999L;
 
-        // when & then
-        assertThatThrownBy(() -> imageService.readAuctionImage(invalidAuctionImageId))
-                .isInstanceOf(ImageNotFoundException.class)
-                .hasMessage("지정한 이미지를 찾을 수 없습니다.");
+        // when
+        final Resource actual = imageService.readAuctionImage(invalidAuctionImageId);
+
+        // then
+        assertThat(actual).isNull();
     }
 }
