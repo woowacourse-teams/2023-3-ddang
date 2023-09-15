@@ -5,7 +5,6 @@ import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -113,9 +112,10 @@ class FcmNotificationServiceTest {
 
         given(mockFirebaseMessaging.send(any(Message.class))).willThrow(FirebaseMessagingException.class);
 
-        // when & then
-        assertThatThrownBy(() -> notificationService.send(invalidDto))
-                .isInstanceOf(NotificationFailedException.class)
-                .hasMessage("알림 전송에 실패했습니다.");
+        // when
+        final String actual = notificationService.send(invalidDto);
+
+        // then
+        assertThat(actual).isEqualTo("알림 전송에 실패했습니다.");
     }
 }

@@ -4,7 +4,6 @@ import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
@@ -56,7 +55,7 @@ public class FcmNotificationService implements NotificationService {
             firebaseMessaging.send(message);
             return NOTIFICATION_SEND_SUCCESS;
         } catch (FirebaseMessagingException ex) {
-            throw new NotificationFailedException(NOTIFICATION_SEND_FAIL);
+            return NOTIFICATION_SEND_FAIL;
         }
     }
 }
