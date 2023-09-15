@@ -36,7 +36,9 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         get() = _event
 
     fun loadAuctions() {
-        fetchAuctions()
+        if (!loadingAuctionInProgress) {
+            fetchAuctions()
+        }
     }
 
     fun navigateToAuctionDetail(auctionId: Long) {
@@ -48,7 +50,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     }
 
     fun reloadAuctions() {
-        if (loadingAuctionInProgress.not()) {
+        if (!loadingAuctionInProgress) {
             _page = 0
             fetchAuctions()
         }
