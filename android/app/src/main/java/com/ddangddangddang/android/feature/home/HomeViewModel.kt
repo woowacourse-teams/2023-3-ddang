@@ -1,13 +1,13 @@
 package com.ddangddangddang.android.feature.home
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
@@ -15,15 +15,17 @@ import kotlinx.coroutines.launch
 class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     val auctions: LiveData<List<AuctionHomeModel>> =
         repository.observeAuctionPreviews().map { auctionPreviews ->
-            lastAuctionId.value = auctionPreviews.lastOrNull()?.id
             auctionPreviews.map { it.toPresentation() }
         }
-
-    val lastAuctionId: MutableLiveData<Long?> = MutableLiveData()
 
     private var _loadingAuctionsInProgress: Boolean = false
     val loadingAuctionInProgress: Boolean
         get() = _loadingAuctionsInProgress
+
+    private var sortType: SortType = SortType.NEW
+    private var _page = 0
+    val page: Int
+        get() = _page
 
     private var _isLast = false
     val isLast: Boolean
@@ -34,22 +36,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         get() = _event
 
     fun loadAuctions() {
-        _loadingAuctionsInProgress = true
-        viewModelScope.launch {
-            when (
-                val response =
-                    repository.getAuctionPreviews(lastAuctionId.value, SIZE_AUCTION_LOAD)
-            ) {
-                is ApiResponse.Success -> {
-                    _isLast = response.body.isLast
-                }
-
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
-            }
-            _loadingAuctionsInProgress = false
-        }
+        if (!loadingAuctionInProgress) fetchAuctions(_page + 1)
     }
 
     fun navigateToAuctionDetail(auctionId: Long) {
@@ -61,32 +48,49 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     }
 
     fun reloadAuctions() {
-        if (loadingAuctionInProgress.not()) {
-            _loadingAuctionsInProgress = true
-            viewModelScope.launch {
-                when (
-                    val response =
-                        repository.getAuctionPreviews(null, SIZE_AUCTION_LOAD)
-                ) {
-                    is ApiResponse.Success -> {
-                        _isLast = response.body.isLast
-                    }
+        if (!loadingAuctionInProgress) fetchAuctions(DEFAULT_PAGE)
+    }
 
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
+    private fun fetchAuctions(newPage: Int) {
+        viewModelScope.launch {
+            _loadingAuctionsInProgress = true
+            when (
+                val response =
+                    repository.getAuctionPreviews(page = newPage, size = SIZE_AUCTION_LOAD, sortType = sortType)
+            ) {
+                is ApiResponse.Success -> {
+                    _isLast = response.body.isLast
+                    _page = newPage
                 }
-                _loadingAuctionsInProgress = false
+
+                is ApiResponse.Failure -> {
+                    _event.value = HomeEvent.FailureLoadAuctions(response.error)
+                }
+                is ApiResponse.NetworkError -> {
+                    _event.value = HomeEvent.FailureLoadAuctions(response.exception.message)
+                }
+                is ApiResponse.Unexpected -> {
+                    _event.value = HomeEvent.FailureLoadAuctions(response.t?.message)
+                }
             }
+            _loadingAuctionsInProgress = false
         }
+    }
+
+    fun changeFilter(type: SortType) {
+        sortType = type
+        reloadAuctions()
     }
 
     sealed class HomeEvent {
         data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
         object NavigateToRegisterAuction : HomeEvent()
+
+        data class FailureLoadAuctions(val message: String?) : HomeEvent()
     }
 
     companion object {
-        private val SIZE_AUCTION_LOAD = 10
+        private const val SIZE_AUCTION_LOAD = 10
+        private const val DEFAULT_PAGE = 1
     }
 }

@@ -1,5 +1,6 @@
 package com.ddangddangddang.data.datasource
 
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.request.ReportRequest
@@ -18,10 +19,12 @@ import java.io.File
 
 class AuctionRemoteDataSource(private val service: AuctionService) {
     suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int?,
+        sortType: SortType?,
+        title: String?,
     ): ApiResponse<AuctionPreviewsResponse> =
-        service.fetchAuctionPreviews(lastAuctionId, size)
+        service.fetchAuctionPreviews(page, size, sortType?.nameBy, title)
 
     suspend fun getAuctionPreviews(
         lastAuctionId: Long?,
