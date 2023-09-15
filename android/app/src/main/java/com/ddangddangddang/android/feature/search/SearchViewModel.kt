@@ -32,54 +32,28 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
     val isLast: Boolean
         get() = _isLast
 
-    private var _lastAuctionId: Long? = null
-    val lastAuctionId: Long?
-        get() = _lastAuctionId
+    private var _page: Int = 0
 
     private val _searchStatus: MutableLiveData<SearchStatus> =
         MutableLiveData(SearchStatus.BeforeSearch)
     val searchStatus: LiveData<SearchStatus>
         get() = _searchStatus
 
-    fun submitKeyword() {
+    fun loadAuctions() { // 무한 스크롤
+        if (!_loadingAuctionInProgress) fetchAuctions(_page + 1)
+    }
+
+    fun submitKeyword() { // 검색
         if (!checkKeywordLimit()) return
         if (!_loadingAuctionInProgress) {
-            _loadingAuctionInProgress = true
-            viewModelScope.launch {
-                keyword.value?.let {
-                    when (
-                        val response =
-                            repository.getAuctionPreviews(_lastAuctionId, SIZE_AUCTION_LOAD, it)
-                    ) {
-                        is ApiResponse.Success -> {
-                            initAuctions()
-                            updateAuctions(response)
-                        }
-                        is ApiResponse.Failure -> {
-                            _event.value = SearchEvent.LoadFailureNotice(response.error)
-                        }
-                        is ApiResponse.NetworkError -> {
-                            _event.value = SearchEvent.LoadFailureNotice(response.exception.message)
-                        }
-                        is ApiResponse.Unexpected -> {
-                            _event.value = SearchEvent.LoadFailureNotice(response.t?.message)
-                        }
-                    }
-                    _loadingAuctionInProgress = false
-                }
-            }
+            initAuctions()
+            fetchAuctions(DEFAULT_PAGE)
         }
-
-        if (_auctions.value.isNullOrEmpty()) {
-            _searchStatus.value = SearchStatus.NoData
-            return
-        }
-        _searchStatus.value = SearchStatus.ExistData
     }
 
     private fun checkKeywordLimit(): Boolean {
         keyword.value?.let {
-            if (it.length !in 2..20) {
+            if (it.length !in KEYWORD_LENGTH_RANGE_MIN..KEYWORD_LENGTH_RANGE_MAX) {
                 _event.value = SearchEvent.KeywordLimit
                 return false
             }
@@ -88,45 +62,57 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
     }
 
     private fun initAuctions() {
-        _lastAuctionId = null
         _auctions.value = emptyList()
+    }
+
+    private fun fetchAuctions(newPage: Int) {
+        viewModelScope.launch {
+            keyword.value?.let {
+                _loadingAuctionInProgress = true
+                when (
+                    val response =
+                        repository.getAuctionPreviews(
+                            page = newPage,
+                            size = SIZE_AUCTION_LOAD,
+                            title = it,
+                        )
+                ) {
+                    is ApiResponse.Success -> {
+                        updateAuctions(response)
+                        _page = newPage
+                    }
+
+                    is ApiResponse.Failure -> {
+                        _event.value = SearchEvent.LoadFailureNotice(response.error)
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value = SearchEvent.LoadFailureNotice(response.exception.message)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value = SearchEvent.LoadFailureNotice(response.t?.message)
+                    }
+                }
+                _loadingAuctionInProgress = false
+
+                if (newPage == DEFAULT_PAGE) changeStatus() // 첫 검색인 경우 검색 상태 변경
+            }
+        }
+    }
+
+    private fun changeStatus() {
+        if (_auctions.value.isNullOrEmpty()) {
+            _searchStatus.value = SearchStatus.NoData
+            return
+        }
+        _searchStatus.value = SearchStatus.ExistData
     }
 
     private fun updateAuctions(response: ApiResponse.Success<AuctionPreviewsResponse>) {
         _auctions.value?.let { items ->
             _auctions.value = items + response.body.auctions.map { it.toPresentation() }
             _isLast = response.body.isLast
-            _lastAuctionId = response.body.auctions.maxOf { it.id }
-        }
-    }
-
-    fun loadAuctions() {
-        // repository에서 검색 결과 List를 가져오는 코드
-        if (!_loadingAuctionInProgress) {
-            _loadingAuctionInProgress = true
-            viewModelScope.launch {
-                keyword.value?.let {
-                    when (
-                        val response =
-                            repository.getAuctionPreviews(_lastAuctionId, SIZE_AUCTION_LOAD, it)
-                    ) {
-                        is ApiResponse.Success -> {
-                            updateAuctions(response)
-                        }
-
-                        is ApiResponse.Failure -> {
-                            _event.value = SearchEvent.LoadFailureNotice(response.error)
-                        }
-                        is ApiResponse.NetworkError -> {
-                            _event.value = SearchEvent.LoadFailureNotice(response.exception.message)
-                        }
-                        is ApiResponse.Unexpected -> {
-                            _event.value = SearchEvent.LoadFailureNotice(response.t?.message)
-                        }
-                    }
-                    _loadingAuctionInProgress = false
-                }
-            }
         }
     }
 
@@ -143,5 +129,8 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
 
     companion object {
         private const val SIZE_AUCTION_LOAD = 10
+        private const val DEFAULT_PAGE = 1
+        private const val KEYWORD_LENGTH_RANGE_MIN = 2
+        private const val KEYWORD_LENGTH_RANGE_MAX = 20
     }
 }
