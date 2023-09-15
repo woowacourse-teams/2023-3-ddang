@@ -3,6 +3,7 @@ package com.ddang.ddang.authentication.presentation;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.exception.InaccessibleWithdrawalException;
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -126,8 +127,10 @@ class AuthenticationControllerTest {
                                        fieldWithPath("accessToken").description("소셜 로그인 AccessToken")
                                ),
                                responseFields(
-                                       fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Access Token"),
-                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("Refresh Token")
+                                       fieldWithPath("accessToken").type(JsonFieldType.STRING)
+                                                                   .description("Access Token"),
+                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                                                    .description("Refresh Token")
                                )
                        )
                );
@@ -196,8 +199,10 @@ class AuthenticationControllerTest {
                                        fieldWithPath("refreshToken").description("refreshToken")
                                ),
                                responseFields(
-                                       fieldWithPath("accessToken").type(JsonFieldType.STRING).description("재발급한 Access Token"),
-                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("기존 Refresh Token")
+                                       fieldWithPath("accessToken").type(JsonFieldType.STRING)
+                                                                   .description("재발급한 Access Token"),
+                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                                                    .description("기존 Refresh Token")
                                )
                        )
                );
@@ -243,7 +248,8 @@ class AuthenticationControllerTest {
                                        headerWithName("Authorization").description("회원 Bearer 인증 정보")
                                ),
                                responseFields(
-                                       fieldWithPath("validated").type(JsonFieldType.BOOLEAN).description("Access Token이 유효한지 여부")
+                                       fieldWithPath("validated").type(JsonFieldType.BOOLEAN)
+                                                                 .description("Access Token이 유효한지 여부")
                                )
                        )
                );
@@ -302,9 +308,9 @@ class AuthenticationControllerTest {
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.delete("/oauth2/withdrawal/{oauth2Type}", "kakao")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(request))
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .content(objectMapper.writeValueAsString(request))
+                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isNoContent()
@@ -321,6 +327,26 @@ class AuthenticationControllerTest {
                                        fieldWithPath("refreshToken").description("refreshToken")
                                )
                        )
+               );
+    }
+
+    @Test
+    void ouath2Type과_accessToken과_refreshToken을_전달시_이미_탈퇴_혹은_존재하지_않아_권한이_없는_회원인_경우_403을_반환한다() throws Exception {
+        // given
+        final WithdrawalRequest request = new WithdrawalRequest("Bearer refreshToken");
+
+        willThrow(new InaccessibleWithdrawalException("탈퇴에 대한 권한 없습니다.")).given(authenticationService)
+                                                                         .withdrawal(any(), anyString(), anyString());
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.delete("/oauth2/withdrawal/{oauth2Type}", "kakao")
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .content(objectMapper.writeValueAsString(request))
+                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
+               .andExpectAll(
+                       status().isForbidden(),
+                       jsonPath("$.message").value("탈퇴에 대한 권한 없습니다.")
                );
     }
 }

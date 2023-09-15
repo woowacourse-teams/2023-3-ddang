@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
+import com.ddang.ddang.authentication.application.exception.InaccessibleWithdrawalException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -131,6 +132,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UserForbiddenException.class), ex);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InaccessibleWithdrawalException.class)
+    public ResponseEntity<ExceptionResponse> handleInaccessibleWithdrawalException(
+            final InaccessibleWithdrawalException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InaccessibleWithdrawalException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
