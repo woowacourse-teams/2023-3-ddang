@@ -13,17 +13,11 @@ public record ReadAuctionDetailResponse(
 
     public static ReadAuctionDetailResponse of(
             final ReadAuctionDto auctionDto,
-            final String baseUrl,
             final AuthenticationUserInfo userInfo,
             final ReadChatRoomDto chatRoomDto
     ) {
-        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(auctionDto, baseUrl);
-        final SellerResponse sellerResponse = new SellerResponse(
-                auctionDto.sellerId(),
-                auctionDto.sellerProfile(),
-                auctionDto.sellerName(),
-                auctionDto.sellerReliability()
-        );
+        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(auctionDto);
+        final SellerResponse sellerResponse = SellerResponse.from(auctionDto);
         final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(chatRoomDto);
 
         return new ReadAuctionDetailResponse(

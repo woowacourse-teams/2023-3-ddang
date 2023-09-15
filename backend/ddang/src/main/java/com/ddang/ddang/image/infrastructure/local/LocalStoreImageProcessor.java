@@ -27,29 +27,29 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
     public List<StoreImageDto> storeImageFiles(final List<MultipartFile> imageFiles) {
         final List<StoreImageDto> storeImageDtos = new ArrayList<>();
 
-        try {
-            for (MultipartFile imageFile : imageFiles) {
-                if (imageFile.isEmpty()) {
-                    throw new EmptyImageException("이미지 파일의 데이터가 비어 있습니다.");
-                }
-
-                storeImageDtos.add(storeImageFile(imageFile));
+        for (MultipartFile imageFile : imageFiles) {
+            if (imageFile.isEmpty()) {
+                throw new EmptyImageException("이미지 파일의 데이터가 비어 있습니다.");
             }
 
-            return storeImageDtos;
-        } catch (IOException e) {
-            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", e);
+            storeImageDtos.add(storeImageFile(imageFile));
         }
+
+        return storeImageDtos;
     }
 
-    private StoreImageDto storeImageFile(MultipartFile imageFile) throws IOException {
-        final String originalImageFileName = imageFile.getOriginalFilename();
-        final String storeImageFileName = createStoreImageFileName(originalImageFileName);
-        final String fullPath = findFullPath(storeImageFileName);
+    public StoreImageDto storeImageFile(MultipartFile imageFile) {
+        try {
+            final String originalImageFileName = imageFile.getOriginalFilename();
+            final String storeImageFileName = createStoreImageFileName(originalImageFileName);
+            final String fullPath = findFullPath(storeImageFileName);
 
-        imageFile.transferTo(new File(fullPath));
+            imageFile.transferTo(new File(fullPath));
 
-        return new StoreImageDto(originalImageFileName, storeImageFileName);
+            return new StoreImageDto(originalImageFileName, storeImageFileName);
+        } catch (IOException ex) {
+            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", ex);
+        }
     }
 
     private String findFullPath(String storeImageFileName) {

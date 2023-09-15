@@ -3,6 +3,7 @@ package com.ddang.ddang.device.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.device.domain.DeviceToken;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -40,7 +41,7 @@ class JpaDeviceTokenRepositoryTest {
 
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage("profile.png")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

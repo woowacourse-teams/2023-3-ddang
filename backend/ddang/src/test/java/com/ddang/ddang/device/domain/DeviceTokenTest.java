@@ -1,5 +1,6 @@
 package com.ddang.ddang.device.domain;
 
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,7 @@ class DeviceTokenTest {
         final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage("profile.png")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -34,7 +35,7 @@ class DeviceTokenTest {
         final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage("profile.png")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -55,7 +56,7 @@ class DeviceTokenTest {
         final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage("profile.png")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

@@ -1,9 +1,10 @@
 package com.ddang.ddang.image.application;
 
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
-import java.net.MalformedURLException;
+import com.ddang.ddang.image.infrastructure.persistence.JpaImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -11,27 +12,41 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.MalformedURLException;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class ImageService {
 
+    private static final String FILE_PROTOCOL_PREFIX = "file:";
     @Value("${image.store.dir}")
     private String imageStoreDir;
 
+    private final JpaImageRepository imageRepository;
     private final JpaAuctionImageRepository auctionImageRepository;
+
+    public Resource readProfileImage(final Long id) throws MalformedURLException {
+        final ProfileImage profileImage = imageRepository.findById(id)
+                                                         .orElseThrow(() -> new ImageNotFoundException(
+                                                   "지정한 이미지를 찾을 수 없습니다."
+                                           ));
+        final String fullPath = findFullPath(profileImage.getImage().getStoreName());
+
+        return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
+    }
 
     public Resource readAuctionImage(final Long id) throws MalformedURLException {
         final AuctionImage auctionImage = auctionImageRepository.findById(id)
                                                                 .orElseThrow(() -> new ImageNotFoundException(
                                                                         "지정한 이미지를 찾을 수 없습니다."
                                                                 ));
-        final String fullPath = findFullPath(auctionImage.getStoreName());
+        final String fullPath = findFullPath(auctionImage.getImage().getStoreName());
 
-        return new UrlResource("file:" + fullPath);
+        return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }
 
-    private String findFullPath(String storeImageFileName) {
+    private String findFullPath(final String storeImageFileName) {
         return imageStoreDir + storeImageFileName;
     }
 }

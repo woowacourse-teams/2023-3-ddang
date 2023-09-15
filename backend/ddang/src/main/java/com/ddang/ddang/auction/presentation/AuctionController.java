@@ -36,8 +36,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RequiredArgsConstructor
 public class AuctionController {
 
-    private static final String AUCTIONS_IMAGE_BASE_URL = "/auctions/images/";
-
     private final AuctionService auctionService;
     private final ChatRoomService chatRoomService;
 
@@ -52,7 +50,7 @@ public class AuctionController {
                 images,
                 userInfo.userId()
         ));
-        final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, calculateBaseImageUrl());
+        final CreateAuctionResponse response = CreateAuctionResponse.from(createInfoAuctionDto);
 
         return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
                              .body(response);
@@ -67,7 +65,6 @@ public class AuctionController {
         final ReadChatRoomDto readChatRoomDto = chatRoomService.readChatInfoByAuctionId(auctionId, userInfo);
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
-                calculateBaseImageUrl(),
                 userInfo,
                 readChatRoomDto
         );
@@ -85,7 +82,7 @@ public class AuctionController {
                 pageable,
                 readAuctionSearchCondition
         );
-        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, calculateBaseImageUrl());
+        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
 
         return ResponseEntity.ok(response);
     }
@@ -98,10 +95,5 @@ public class AuctionController {
         auctionService.deleteByAuctionId(auctionId, userInfo.userId());
 
         return ResponseEntity.noContent().build();
-    }
-
-    private String calculateBaseImageUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
-                                          .concat(AUCTIONS_IMAGE_BASE_URL);
     }
 }
