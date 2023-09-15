@@ -20,8 +20,8 @@ interface AuctionRepository {
     ): ApiResponse<AuctionPreviewsResponse>
 
     suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int?,
         title: String,
     ): ApiResponse<AuctionPreviewsResponse>
 
