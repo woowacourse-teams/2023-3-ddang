@@ -36,7 +36,6 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
         get() = _event
 
     fun loadAuctions() {
-        _page++
         fetchAuctions()
     }
 
@@ -50,7 +49,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
 
     fun reloadAuctions() {
         if (loadingAuctionInProgress.not()) {
-            _page = 1
+            _page = 0
             fetchAuctions()
         }
     }
@@ -58,6 +57,7 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     private fun fetchAuctions() {
         viewModelScope.launch {
             _loadingAuctionsInProgress = true
+            _page++
             when (
                 val response =
                     repository.getAuctionPreviews(page = _page, size = SIZE_AUCTION_LOAD, sortType = sortType)
@@ -68,12 +68,15 @@ class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
 
                 is ApiResponse.Failure -> {
                     _event.value = HomeEvent.FailureLoadAuctions(response.error)
+                    _page--
                 }
                 is ApiResponse.NetworkError -> {
                     _event.value = HomeEvent.FailureLoadAuctions(response.exception.message)
+                    _page--
                 }
                 is ApiResponse.Unexpected -> {
                     _event.value = HomeEvent.FailureLoadAuctions(response.t?.message)
+                    _page--
                 }
             }
             _loadingAuctionsInProgress = false
