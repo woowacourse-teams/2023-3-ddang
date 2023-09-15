@@ -13,6 +13,10 @@ import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.device.application.DeviceTokenService;
+import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.SoftAssertions;
@@ -22,6 +26,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.Clock;
 import java.time.Instant;
@@ -31,9 +36,11 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
 @IsolateDatabase
@@ -47,11 +54,20 @@ class AuthenticationServiceTest {
 
     Oauth2UserInformationProviderComposite mockProviderComposite;
 
+    @MockBean
+    DeviceTokenService deviceTokenService;
+
     @Autowired
     JpaUserRepository userRepository;
 
     @Autowired
+    JpaDeviceTokenRepository userDeviceTokenRepository;
+
+    @Autowired
     TokenEncoder tokenEncoder;
+
+    @Autowired
+    TokenDecoder tokenDecoder;
 
     @Autowired
     BlackListTokenService mockBlackListTokenService;
@@ -72,12 +88,15 @@ class AuthenticationServiceTest {
         mockProviderComposite = mock(Oauth2UserInformationProviderComposite.class);
         mockBlackListTokenService = mock(BlackListTokenService.class);
         authenticationService = new AuthenticationService(
+                deviceTokenService,
                 mockProviderComposite,
                 userRepository,
                 tokenEncoder,
                 tokenDecoder,
                 mockBlackListTokenService
         );
+
+        doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
     }
 
     @Test
@@ -87,7 +106,7 @@ class AuthenticationServiceTest {
                 .willThrow(new UnsupportedSocialLoginException("지원하는 소셜 로그인 기능이 아닙니다."));
 
         // when & then
-        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, "accessToken"))
+        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken"))
                 .isInstanceOf(UnsupportedSocialLoginException.class)
                 .hasMessage("지원하는 소셜 로그인 기능이 아닙니다.");
     }
@@ -102,7 +121,7 @@ class AuthenticationServiceTest {
         final String invalidAccessToken = "invalidAccessToken";
 
         // when & then
-        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, invalidAccessToken))
+        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, invalidAccessToken, "deviceToken"))
                 .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("401 Unauthorized");
     }
@@ -112,7 +131,7 @@ class AuthenticationServiceTest {
         // given
         final User user = User.builder()
                               .name("kakao12345")
-                              .profileImage("프로필")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(0.0d)
                               .oauthId("12345")
                               .build();
@@ -125,7 +144,7 @@ class AuthenticationServiceTest {
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
 
         // when
-        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken");
+        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -143,7 +162,7 @@ class AuthenticationServiceTest {
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
 
         // when
-        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken");
+        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken");
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

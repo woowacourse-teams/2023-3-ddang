@@ -15,20 +15,28 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.notification.application.NotificationService;
+import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -56,6 +64,14 @@ class MessageServiceTest {
     @Autowired
     JpaCategoryRepository categoryRepository;
 
+    @MockBean
+    NotificationService notificationService;
+
+    @BeforeEach
+    void setUp() {
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn("성공");
+    }
+
     @Test
     void 메시지를_생성한다() {
         // given
@@ -79,7 +95,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -88,7 +104,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12346")
                                   .build();
@@ -109,10 +125,69 @@ class MessageServiceTest {
         );
 
         // when
-        final Long messageId = messageService.create(createMessageDto);
+        final Long messageId = messageService.create(createMessageDto, "");
 
         // then
         assertThat(messageId).isPositive();
+    }
+
+    @Test
+    void 메시지를_생성하고_알림을_보낸다() {
+        // given
+        final BidUnit bidUnit = new BidUnit(1_000);
+        final Price startPrice = new Price(10_000);
+        final Category main = new Category("전자기기");
+        final Category sub = new Category("노트북");
+
+        main.addSubCategory(sub);
+
+        categoryRepository.save(main);
+        final Auction auction = Auction.builder()
+                                       .title("title")
+                                       .description("description")
+                                       .bidUnit(bidUnit)
+                                       .startPrice(startPrice)
+                                       .closingTime(LocalDateTime.now().plusDays(3L))
+                                       .build();
+
+        auctionRepository.save(auction);
+
+        final User writer = User.builder()
+                                .name("발신자")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+
+        userRepository.save(writer);
+
+        final User receiver = User.builder()
+                                  .name("수신자")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                                  .reliability(4.7d)
+                                  .oauthId("12346")
+                                  .build();
+
+        userRepository.save(receiver);
+
+        final ChatRoom chatRoom = new ChatRoom(auction, writer);
+
+        chatRoomRepository.save(chatRoom);
+
+        final String contents = "메시지 내용";
+
+        final CreateMessageDto createMessageDto = new CreateMessageDto(
+                chatRoom.getId(),
+                writer.getId(),
+                receiver.getId(),
+                contents
+        );
+
+        // when
+        messageService.create(createMessageDto, "");
+
+        // then
+        verify(notificationService).send(any());
     }
 
     @Test
@@ -138,18 +213,18 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
-                                  .oauthId("12346")
+                                  .oauthId("12345")
                                   .build();
 
         userRepository.save(receiver);
@@ -165,7 +240,7 @@ class MessageServiceTest {
         );
 
         // when & then
-        assertThatThrownBy(() -> messageService.create(createMessageDto))
+        assertThatThrownBy(() -> messageService.create(createMessageDto, ""))
                 .isInstanceOf(ChatRoomNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
     }
@@ -194,7 +269,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -216,7 +291,7 @@ class MessageServiceTest {
                 contents
         );
 
-        assertThatThrownBy(() -> messageService.create(createMessageDto))
+        assertThatThrownBy(() -> messageService.create(createMessageDto, ""))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
     }
@@ -245,13 +320,12 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
-                                .oauthId("12345")
+                                .oauthId("78923")
                                 .build();
 
         userRepository.save(writer);
-
 
         final ChatRoom chatRoom = new ChatRoom(auction, writer);
 
@@ -267,7 +341,7 @@ class MessageServiceTest {
                 contents
         );
 
-        assertThatThrownBy(() -> messageService.create(createMessageDto))
+        assertThatThrownBy(() -> messageService.create(createMessageDto, ""))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
     }
@@ -279,7 +353,7 @@ class MessageServiceTest {
         // given
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -288,7 +362,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -329,7 +403,7 @@ class MessageServiceTest {
 
         final int messagesCount = 10;
         for (int count = 0; count < messagesCount; count++) {
-            messageService.create(createMessageDto);
+            messageService.create(createMessageDto, "");
         }
 
         final Long lastMessageId = null;
@@ -347,7 +421,7 @@ class MessageServiceTest {
         // given
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -356,7 +430,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("56789")
                                   .build();
@@ -401,11 +475,11 @@ class MessageServiceTest {
                 contents
         );
 
-        final Long firstMessageId = messageService.create(createMessageDto);
+        final Long firstMessageId = messageService.create(createMessageDto, "");
 
         final int messagesCount = 10;
         for (int count = 0; count < messagesCount; count++) {
-            messageService.create(createMessageDto);
+            messageService.create(createMessageDto, "");
         }
 
         final ReadMessageRequest request = new ReadMessageRequest(writer.getId(), chatRoom.getId(), firstMessageId);
@@ -429,7 +503,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -438,13 +512,12 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
 
         userRepository.save(receiver);
-
 
         final Auction auction = Auction.builder()
                                        .seller(writer)
@@ -472,10 +545,10 @@ class MessageServiceTest {
 
         final int messagesCount = 10;
         for (int count = 0; count < messagesCount; count++) {
-            messageService.create(createMessageDto);
+            messageService.create(createMessageDto, "");
         }
 
-        final Long lastMessageId = messageService.create(createMessageDto);
+        final Long lastMessageId = messageService.create(createMessageDto, "");
 
         final ReadMessageRequest request = new ReadMessageRequest(writer.getId(), chatRoom.getId(), lastMessageId);
 
@@ -483,7 +556,7 @@ class MessageServiceTest {
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(request);
 
         // then
-        assertThat(readMessageDtos).hasSize(0);
+        assertThat(readMessageDtos).isEmpty();
     }
 
     @Test
@@ -509,7 +582,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -518,7 +591,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -538,7 +611,7 @@ class MessageServiceTest {
                 contents
         );
 
-        final Long lastMessageId = messageService.create(createMessageDto);
+        final Long lastMessageId = messageService.create(createMessageDto, "");
 
         final Long invalidUserId = -999L;
         final ReadMessageRequest request = new ReadMessageRequest(invalidUserId, chatRoom.getId(), lastMessageId);
@@ -572,7 +645,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -581,7 +654,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();
@@ -602,7 +675,7 @@ class MessageServiceTest {
                 contents
         );
 
-        final Long messageId = messageService.create(createMessageDto);
+        final Long messageId = messageService.create(createMessageDto, "");
 
         final ReadMessageRequest request = new ReadMessageRequest(writer.getId(), invalidChatRoomId, messageId);
 
@@ -635,7 +708,7 @@ class MessageServiceTest {
 
         final User writer = User.builder()
                                 .name("발신자")
-                                .profileImage("profile.png")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
@@ -644,7 +717,7 @@ class MessageServiceTest {
 
         final User receiver = User.builder()
                                   .name("수신자")
-                                  .profileImage("profile.png")
+                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();

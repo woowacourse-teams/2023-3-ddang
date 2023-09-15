@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class LocalStoreImageProcessorTest {
+class LocalStoreProfileImageProcessorTest {
 
     LocalStoreImageProcessor imageProcessor = new LocalStoreImageProcessor();
 

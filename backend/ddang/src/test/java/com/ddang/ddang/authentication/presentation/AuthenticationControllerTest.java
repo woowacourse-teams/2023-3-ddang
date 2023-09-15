@@ -8,7 +8,7 @@ import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.WithdrawalRequest;
@@ -104,9 +104,9 @@ class AuthenticationControllerTest {
     void 소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_accessToken과_refreshToken을_반환한다() throws Exception {
         // given
         final TokenDto tokenDto = new TokenDto("accessToken", "refreshToken");
-        final AccessTokenRequest request = new AccessTokenRequest("kakaoAccessToken");
+        final LoginTokenRequest request = new LoginTokenRequest("kakaoAccessToken", "deviceToken");
 
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString())).willReturn(tokenDto);
+        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString())).willReturn(tokenDto);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/login/{oauth2Type}", "kakao")
@@ -124,13 +124,12 @@ class AuthenticationControllerTest {
                                        parameterWithName("oauth2Type").description("소셜 로그인을 할 서비스 선택(kakao로 고정)")
                                ),
                                requestFields(
-                                       fieldWithPath("accessToken").description("소셜 로그인 AccessToken")
+                                       fieldWithPath("accessToken").description("소셜 로그인 AccessToken"),
+                                       fieldWithPath("deviceToken").description("기기 디바이스 토큰")
                                ),
                                responseFields(
-                                       fieldWithPath("accessToken").type(JsonFieldType.STRING)
-                                                                   .description("Access Token"),
-                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING)
-                                                                    .description("Refresh Token")
+                                       fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Access Token"),
+                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("Refresh Token")
                                )
                        )
                );
@@ -139,9 +138,9 @@ class AuthenticationControllerTest {
     @Test
     void 소셜_로그인을_진행하지_않는_타입을_전달하면_400이_발생한다() throws Exception {
         // given
-        final AccessTokenRequest request = new AccessTokenRequest("kakaoAccessToken");
+        final LoginTokenRequest request = new LoginTokenRequest("kakaoAccessToken", "deviceToken");
 
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString()))
+        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString()))
                 .willThrow(new UnsupportedSocialLoginException("지원하는 소셜 로그인 기능이 아닙니다."));
 
         // when & then
@@ -159,9 +158,9 @@ class AuthenticationControllerTest {
     void 유효하지_않은_소셜_로그인_토큰을_전달하면_401이_발생한다() throws Exception {
         // given
         final String invalidKakaoAccessToken = "invalidKakaoAccessToken";
-        final AccessTokenRequest request = new AccessTokenRequest(invalidKakaoAccessToken);
+        final LoginTokenRequest request = new LoginTokenRequest(invalidKakaoAccessToken, "deviceToken");
 
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString()))
+        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString()))
                 .willThrow(new InvalidTokenException("401 Unauthorized", new RuntimeException()));
 
         // when & then
@@ -199,13 +198,12 @@ class AuthenticationControllerTest {
                                        fieldWithPath("refreshToken").description("refreshToken")
                                ),
                                responseFields(
-                                       fieldWithPath("accessToken").type(JsonFieldType.STRING)
-                                                                   .description("재발급한 Access Token"),
-                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING)
-                                                                    .description("기존 Refresh Token")
+                                       fieldWithPath("accessToken").type(JsonFieldType.STRING).description("재발급한 Access Token"),
+                                       fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("기존 Refresh Token")
                                )
                        )
                );
+        ;
     }
 
     @Test
@@ -248,8 +246,7 @@ class AuthenticationControllerTest {
                                        headerWithName("Authorization").description("회원 Bearer 인증 정보")
                                ),
                                responseFields(
-                                       fieldWithPath("validated").type(JsonFieldType.BOOLEAN)
-                                                                 .description("Access Token이 유효한지 여부")
+                                       fieldWithPath("validated").type(JsonFieldType.BOOLEAN).description("Access Token이 유효한지 여부")
                                )
                        )
                );

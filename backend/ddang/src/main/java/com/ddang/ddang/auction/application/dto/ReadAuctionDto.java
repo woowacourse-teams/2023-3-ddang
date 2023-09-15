@@ -23,7 +23,7 @@ public record ReadAuctionDto(
         String mainCategory,
         String subCategory,
         Long sellerId,
-        String sellerProfile,
+        Long sellerProfileId,
         String sellerName,
         double sellerReliability,
         boolean isSellerDeleted
@@ -41,19 +41,19 @@ public record ReadAuctionDto(
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
                 convertReadRegionsDto(auction),
-                convertImageUrls(auction),
+                convertImageIds(auction),
                 auction.getAuctioneerCount(),
                 auction.getSubCategory().getMainCategory().getName(),
                 auction.getSubCategory().getName(),
                 auction.getSeller().getId(),
-                auction.getSeller().getProfileImage(),
+                auction.getSeller().getProfileImage().getId(),
                 auction.getSeller().getName(),
                 auction.getSeller().getReliability(),
                 auction.getSeller().isDeleted()
         );
     }
 
-    private static List<Long> convertImageUrls(final Auction auction) {
+    private static List<Long> convertImageIds(final Auction auction) {
         return auction.getAuctionImages()
                       .stream()
                       .map(AuctionImage::getId)

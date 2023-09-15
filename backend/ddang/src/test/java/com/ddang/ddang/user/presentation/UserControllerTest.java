@@ -13,6 +13,7 @@ import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.presentation.dto.request.UpdateUserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -26,6 +27,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -33,12 +41,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -68,6 +86,9 @@ class UserControllerTest {
     UserController userController;
 
     @Autowired
+    RestDocumentationResultHandler restDocs;
+
+    @Autowired
     ObjectMapper objectMapper;
 
     TokenDecoder mockTokenDecoder;
@@ -75,7 +96,7 @@ class UserControllerTest {
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         mockTokenDecoder = mock(TokenDecoder.class);
 
         final AuthenticationStore store = new AuthenticationStore();
@@ -91,7 +112,9 @@ class UserControllerTest {
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver)
+                                 .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
+                                 .alwaysDo(restDocs)
                                  .build();
     }
 
@@ -111,8 +134,21 @@ class UserControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.name", is(readUserDto.name())),
-                       jsonPath("$.profileImage", is(readUserDto.profileImage())),
+                       jsonPath("$.profileImage").exists(),
                        jsonPath("$.reliability", is(readUserDto.reliability()))
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               responseFields(
+                                       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 닉네임"),
+                                       fieldWithPath("profileImage").type(JsonFieldType.STRING)
+                                                                    .description("사용자 프로필 이미지"),
+                                       fieldWithPath("reliability").type(JsonFieldType.NUMBER).description("사용자 신뢰도")
+                               )
+                       )
                );
     }
 
@@ -134,6 +170,61 @@ class UserControllerTest {
                        jsonPath("$.name", is("알 수 없음")),
                        jsonPath("$.profileImage", is(readUserDto.profileImage())),
                        jsonPath("$.reliability", is(readUserDto.reliability()))
+               );
+    }
+
+    @Test
+    void 사용자_정보를_수정한다() throws Exception {
+        // given
+        final MockMultipartFile profileImage = new MockMultipartFile(
+                "profileImage",
+                "image.png",
+                MediaType.IMAGE_PNG_VALUE,
+                new byte[]{1}
+        );
+        final UpdateUserRequest updateUserRequest = new UpdateUserRequest("updateName");
+        final MockMultipartFile request = new MockMultipartFile(
+                "request",
+                "request",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsBytes(updateUserRequest)
+        );
+
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345");
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+
+        given(userService.updateById(anyLong(), any())).willReturn(readUserDto);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+
+        // when & then
+        mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
+                       .file(request)
+                       .file(profileImage)
+                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.name", is(readUserDto.name())),
+                       jsonPath("$.profileImage").exists(),
+                       jsonPath("$.reliability", is(readUserDto.reliability()))
+               )
+               .andDo(
+                       restDocs.document(
+                               requestHeaders(
+                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                               ),
+                               requestParts(
+                                       partWithName("profileImage").description("수정할 프로필 이미지 파일"),
+                                       partWithName("request").description("요청 데이터 - 수정할 이름")
+                               ),
+                               responseFields(
+                                       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 닉네임"),
+                                       fieldWithPath("profileImage").type(JsonFieldType.STRING)
+                                                                    .description("사용자 프로필 이미지"),
+                                       fieldWithPath("reliability").type(JsonFieldType.NUMBER).description("사용자 신뢰도")
+                               )
+                       )
                );
     }
 

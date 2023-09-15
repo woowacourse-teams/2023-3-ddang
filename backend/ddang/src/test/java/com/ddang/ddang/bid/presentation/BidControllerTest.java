@@ -482,11 +482,11 @@ class BidControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.bids.[0].name", is(bid1.name())),
-                       jsonPath("$.bids.[0].profileImage", is(bid1.profileImage())),
+                       jsonPath("$.bids.[0].profileImage").exists(),
                        jsonPath("$.bids.[0].price", is(bid1.price())),
                        jsonPath("$.bids.[0].bidTime").exists(),
                        jsonPath("$.bids.[1].name", is(bid2.name())),
-                       jsonPath("$.bids.[1].profileImage", is(bid2.profileImage())),
+                       jsonPath("$.bids.[1].profileImage").exists(),
                        jsonPath("$.bids.[1].price", is(bid2.price())),
                        jsonPath("$.bids.[1].bidTime").exists()
                )

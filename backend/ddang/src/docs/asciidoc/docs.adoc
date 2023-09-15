@@ -75,7 +75,7 @@ include::{snippets}/authentication-controller-test/access-token과_refresh-token
 
 include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-response.adoc[]
 
-=== 탈
+=== 탈퇴
 
 ==== 요청
 
@@ -87,6 +87,29 @@ include::{snippets}/authentication-controller-test/ouath2-type과_access-token�
 ==== 응답
 
 include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/http-response.adoc[]
+
+== 사용자 정보 API
+=== 사용자 정보 조회
+
+==== 요청
+
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/http-response.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/response-fields.adoc[]
+
+=== 사용자 정보 수정
+
+==== 요청
+
+include::{snippets}/user-controller-test/사용자_정보를_수정한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/user-controller-test/사용자_정보를_수정한다/http-response.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_수정한다/response-fields.adoc[]
 
 == 카테고리 API
 
@@ -176,6 +199,32 @@ include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록
 
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/http-response.adoc[]
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/response-fields.adoc[]
+
+=== 자신이 등록한 경매 목록 조회
+
+==== 요청
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/http-request.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/query-parameters.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/http-response.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/response-fields.adoc[]
+
+=== 자신이 참여한 경매 목록 조회
+
+==== 요청
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/http-request.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/query-parameters.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/http-response.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/response-fields.adoc[]
 
 === 경매 상세 조회
 
@@ -341,3 +390,17 @@ include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조
 
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/http-response.adoc[]
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/response-fields.adoc[]
+
+== 디바이스 토큰 API
+
+=== 디바이스 토큰 갱신
+
+==== 요청
+
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/http-request.adoc[]
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/request-headers.adoc[]
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/http-response.adoc[]
