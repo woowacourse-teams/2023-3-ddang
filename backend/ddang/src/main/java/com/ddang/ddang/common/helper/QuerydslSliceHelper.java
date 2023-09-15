@@ -7,11 +7,13 @@ import org.springframework.data.domain.SliceImpl;
 
 public class QuerydslSliceHelper {
 
+    private static final int PAGE_OFFSET = 1;
+
     private QuerydslSliceHelper() {
     }
 
     public static <T> Slice<T> toSlice(final List<T> contents, final Pageable pageable) {
-        final int size = pageable.getPageSize();
+        final int size = pageable.getPageSize() * (pageable.getPageNumber() + PAGE_OFFSET);
         final boolean hasNext = isContentSizeGreaterThanPageSize(contents, size);
 
         if (hasNext) {
