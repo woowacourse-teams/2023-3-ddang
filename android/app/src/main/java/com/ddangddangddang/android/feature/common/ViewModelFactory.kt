@@ -17,7 +17,7 @@ import com.ddangddangddang.android.feature.register.region.SelectRegionsViewMode
 import com.ddangddangddang.android.feature.report.ReportViewModel
 import com.ddangddangddang.android.feature.search.SearchViewModel
 import com.ddangddangddang.android.feature.splash.SplashViewModel
-import com.ddangddangddang.android.feature.userInfoChange.UserInfoChangeViewModel
+import com.ddangddangddang.android.feature.userInfoChange.ProfileChangeViewModel
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
@@ -73,7 +73,7 @@ val viewModelFactory = object : ViewModelProvider.Factory {
 
                 isAssignableFrom(ReportViewModel::class.java) -> ReportViewModel(auctionRepository)
                 isAssignableFrom(SearchViewModel::class.java) -> SearchViewModel()
-                isAssignableFrom(UserInfoChangeViewModel::class.java) -> UserInfoChangeViewModel(
+                isAssignableFrom(ProfileChangeViewModel::class.java) -> ProfileChangeViewModel(
                     userRepository,
                 )
 

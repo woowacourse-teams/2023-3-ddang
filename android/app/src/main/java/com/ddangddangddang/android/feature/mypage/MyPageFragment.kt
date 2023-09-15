@@ -6,6 +6,9 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.BuildConfig
 import com.ddangddangddang.android.R
@@ -15,22 +18,31 @@ import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.userInfoChange.ProfileChangeActivity
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
+import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showSnackbar
 
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val viewModel: MyPageViewModel by viewModels { viewModelFactory }
+    private val profileChangeActivityLauncher = setupChangeProfileLauncher()
+
+    private fun setupChangeProfileLauncher(): ActivityResultLauncher<Intent> {
+        return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == AppCompatActivity.RESULT_OK) {
+                val profile =
+                    it.data?.getParcelableCompat<ProfileModel>(ProfileChangeActivity.PROFILE_RESULT)
+                        ?: return@registerForActivityResult
+                viewModel.updateProfile(profile)
+            }
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
+        if (viewModel.profile.value == null) viewModel.loadProfile()
         setupObserve()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadProfile()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -82,8 +94,11 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     }
 
     private fun navigateToUserInfoChange(profileModel: ProfileModel) {
-        requireContext().startActivity(
-            ProfileChangeActivity.getIntent(requireContext(), profileModel),
+        profileChangeActivityLauncher.launch(
+            ProfileChangeActivity.getIntent(
+                requireContext(),
+                profileModel,
+            ),
         )
     }
 

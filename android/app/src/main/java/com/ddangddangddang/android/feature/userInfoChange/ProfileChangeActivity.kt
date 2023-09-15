@@ -17,11 +17,11 @@ import com.ddangddangddang.android.util.compat.getParcelableCompat
 
 class ProfileChangeActivity :
     BindingActivity<ActivityProfileChangeBinding>(R.layout.activity_profile_change) {
-    private val viewModel by viewModels<UserInfoChangeViewModel> { viewModelFactory }
+    private val viewModel by viewModels<ProfileChangeViewModel> { viewModelFactory }
 
     private val launcher =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            if (uri != null) viewModel.setImage(uri)
+            if (uri != null) viewModel.setProfileImageUri(uri)
         }
 
     private val defaultUri by lazy {
@@ -38,7 +38,7 @@ class ProfileChangeActivity :
         binding.viewModel = viewModel
         val profileModel =
             intent.getParcelableCompat<ProfileModel>(PROFILE_MODEL_KEY) ?: return finish()
-        if (viewModel.profile.value == null) viewModel.setInitUserInfo(profileModel, defaultUri)
+        if (viewModel.profile.value == null) viewModel.setupProfile(profileModel, defaultUri)
         setupViewModel()
     }
 
@@ -46,19 +46,26 @@ class ProfileChangeActivity :
         viewModel.event.observe(this) { handleEvent(it) }
     }
 
-    private fun handleEvent(event: UserInfoChangeViewModel.Event) {
+    private fun handleEvent(event: ProfileChangeViewModel.Event) {
         when (event) {
-            UserInfoChangeViewModel.Event.Exit -> finish()
-            UserInfoChangeViewModel.Event.NavigateToSelectProfileImage -> {
+            ProfileChangeViewModel.Event.Exit -> finish()
+            ProfileChangeViewModel.Event.NavigateToSelectProfileImage -> {
                 launcher.launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly),
                 )
+            }
+
+            is ProfileChangeViewModel.Event.SuccessProfileChange -> {
+                intent.putExtra(PROFILE_RESULT, event.profileModel)
+                setResult(RESULT_OK, intent)
+                finish()
             }
         }
     }
 
     companion object {
         private const val PROFILE_MODEL_KEY = "profile_model_key"
+        const val PROFILE_RESULT = "profile_result"
 
         fun getIntent(context: Context, profileModel: ProfileModel): Intent =
             Intent(context, ProfileChangeActivity::class.java).apply {

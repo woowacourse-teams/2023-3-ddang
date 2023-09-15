@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.ProfileModel
+import com.ddangddangddang.android.model.mapper.ProfileModelMapper.toPresentation
 import com.ddangddangddang.android.util.image.toAdjustImageFile
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ProfileUpdateRequest
@@ -14,7 +15,7 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
-class UserInfoChangeViewModel(
+class ProfileChangeViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<Event> = SingleLiveEvent()
@@ -27,7 +28,7 @@ class UserInfoChangeViewModel(
 
     val userNickname: MutableLiveData<String> = MutableLiveData()
 
-    fun setInitUserInfo(profileModel: ProfileModel, defaultUri: Uri) {
+    fun setupProfile(profileModel: ProfileModel, defaultUri: Uri) {
         _profile.value = profileModel.profileImage?.let { Uri.parse(it) } ?: defaultUri
         userNickname.value = profileModel.name
     }
@@ -40,7 +41,7 @@ class UserInfoChangeViewModel(
         _event.value = Event.NavigateToSelectProfileImage
     }
 
-    fun setImage(uri: Uri) {
+    fun setProfileImageUri(uri: Uri) {
         _profile.value = uri
     }
 
@@ -48,9 +49,14 @@ class UserInfoChangeViewModel(
         val name = userNickname.value ?: return
         val profileImageUri = profile.value ?: return
         viewModelScope.launch {
-            val file = profileImageUri.toAdjustImageFile(context) ?: return@launch
-            when (userRepository.updateProfile(file, ProfileUpdateRequest(name))) {
-                is ApiResponse.Success -> {}
+            val file = runCatching { profileImageUri.toAdjustImageFile(context) }
+                .getOrNull() ?: return@launch
+
+            when (val response = userRepository.updateProfile(file, ProfileUpdateRequest(name))) {
+                is ApiResponse.Success -> {
+                    _event.value = Event.SuccessProfileChange(response.body.toPresentation())
+                }
+
                 is ApiResponse.Failure -> {}
                 is ApiResponse.NetworkError -> {}
                 is ApiResponse.Unexpected -> {}
@@ -61,5 +67,6 @@ class UserInfoChangeViewModel(
     sealed class Event {
         object Exit : Event()
         object NavigateToSelectProfileImage : Event()
+        data class SuccessProfileChange(val profileModel: ProfileModel) : Event()
     }
 }
