@@ -5,5 +5,5 @@ create table profile_image (
        primary key (id)
 );
 
-alter table profile_image drop users;
+alter table users drop profile_image;
 alter table users add constraint fk_user_profile_image foreign key (profile_image_id) references profile_image (id);
