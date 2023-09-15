@@ -33,7 +33,7 @@ public class UserService {
 
         final StoreImageDto storeImageDto = imageProcessor.storeImageFile(userDto.profileImage());
 
-        user.update(userDto.name(), storeImageDto.toEntity());
+        user.update(userDto.name(), storeImageDto.toProfileImageEntity());
     }
 
     @Transactional

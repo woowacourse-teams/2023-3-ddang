@@ -96,7 +96,7 @@ public class AuctionService {
     private List<AuctionImage> convertAuctionImages(final CreateAuctionDto dto) {
         return imageProcessor.storeImageFiles(dto.auctionImages())
                              .stream()
-                             .map(StoreImageDto::toAuctionEntity)
+                             .map(StoreImageDto::toAuctionImageEntity)
                              .toList();
     }
 

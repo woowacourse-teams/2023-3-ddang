@@ -5,11 +5,11 @@ import com.ddang.ddang.image.domain.AuctionImage;
 
 public record StoreImageDto(String uploadName, String storeName) {
 
-    public ProfileImage toEntity() {
+    public ProfileImage toProfileImageEntity() {
         return new ProfileImage(uploadName, storeName);
     }
 
-    public AuctionImage toAuctionEntity() {
+    public AuctionImage toAuctionImageEntity() {
         return new AuctionImage(uploadName, storeName);
     }
 }
