@@ -13,8 +13,9 @@ import com.ddang.ddang.category.application.CategoryService;
 import com.ddang.ddang.category.application.dto.ReadCategoryDto;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
 import java.util.List;
+
+import com.ddang.ddang.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

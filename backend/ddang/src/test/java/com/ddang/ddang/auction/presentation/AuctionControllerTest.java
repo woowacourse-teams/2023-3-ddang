@@ -211,6 +211,7 @@ class AuctionControllerTest {
                );
     }
 
+    // TODO: 2023/09/13 [고민] 회원과 사용자라는 용어를 통일할까요?
     @Test
     void 경매_등록시_유효한_회원이_아니라면_404을_반환한다() throws Exception {
         // given
@@ -499,7 +500,8 @@ class AuctionControllerTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d
+                3.5d,
+                false
         );
         final ReadChatRoomDto chatRoomDto = new ReadChatRoomDto(1L, true);
 
@@ -612,7 +614,8 @@ class AuctionControllerTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d
+                3.5d,
+                false
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -632,7 +635,8 @@ class AuctionControllerTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d
+                3.5d,
+                true
         );
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);

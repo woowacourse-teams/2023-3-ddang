@@ -46,7 +46,7 @@ class JpaUserRepositoryTest {
         em.clear();
 
         // when
-        final Optional<User> actual = userRepository.findByOauthId(user.getOauthId());
+        final Optional<User> actual = userRepository.findByOauthIdAndDeletedIsFalse(user.getOauthId());
 
         // then
         assertThat(actual).isPresent();
@@ -58,7 +58,7 @@ class JpaUserRepositoryTest {
         final String invalidOauthId = "invalidOauthId";
 
         // when
-        final Optional<User> actual = userRepository.findByOauthId(invalidOauthId);
+        final Optional<User> actual = userRepository.findByOauthIdAndDeletedIsFalse(invalidOauthId);
 
         // then
         assertThat(actual).isEmpty();
@@ -164,5 +164,40 @@ class JpaUserRepositoryTest {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 이름이_아직_없다면_거짓을_반환한다() {
+        // given
+        final String name = "12345";
+
+        // when
+        final boolean actual = userRepository.existsByNameEndingWith(name);
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 이름이_있다면_참을_반환한다() {
+        // given
+        final String randomNumber = "54321";
+        final User user = User.builder()
+                              .name("kakao".concat(randomNumber))
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final boolean actual = userRepository.existsByNameEndingWith(randomNumber);
+
+        // then
+        assertThat(actual).isTrue();
     }
 }
