@@ -10,6 +10,7 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
+import com.ddang.ddang.image.application.ImageService;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -29,12 +30,13 @@ import java.util.List;
 public class MessageService {
 
     private final NotificationService notificationService;
+    private final ImageService imageService;
     private final JpaMessageRepository messageRepository;
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
 
     @Transactional
-    public Long create(final CreateMessageDto dto) {
+    public Long create(final CreateMessageDto dto, final String baseUrl) {
         final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -53,19 +55,22 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        sendNotification(persistMessage);
+        sendNotification(persistMessage, baseUrl);
 
         return persistMessage.getId();
     }
 
-    private void sendNotification(final Message message) {
+    private void sendNotification(final Message message, final String baseUrl)  {
+        final Long profileImageId = message.getWriter().getProfileImage().getId();
+        final String profileImageUrl = baseUrl.concat(String.valueOf(profileImageId));
+
         final CreateNotificationDto dto = new CreateNotificationDto(
                 NotificationType.MESSAGE,
                 message.getReceiver().getId(),
                 message.getWriter().getName(),
                 message.getContents(),
                 calculateRedirectUrl(message.getChatRoom().getId()),
-                message.getWriter().getProfileImage()
+                profileImageUrl
         );
         notificationService.send(dto);
     }

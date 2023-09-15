@@ -30,7 +30,6 @@ public class AuctionReportService {
 
     @Transactional
     public Long create(final CreateAuctionReportDto auctionReportDto) {
-        // TODO: 2023/08/08 추후 User 패키지 내에 UserNotFoundException이 생긴다면 해당 예외를 사용하도록 수정 하겠습니다.
         final User reporter = userRepository.findById(auctionReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findById(auctionReportDto.auctionId())
