@@ -1,5 +1,6 @@
 package com.ddang.ddang.configuration.fcm;
 
+import com.ddang.ddang.configuration.fcm.exception.FcmNotFoundException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
@@ -57,6 +58,6 @@ public class FcmConfiguration {
                            .filter(app -> app.getName().equals(FirebaseApp.DEFAULT_APP_NAME))
                            .findAny()
                            .map(FirebaseMessaging::getInstance)
-                           .orElse(null);
+                           .orElseThrow(FcmNotFoundException::new);
     }
 }
