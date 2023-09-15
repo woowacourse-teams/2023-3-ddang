@@ -19,20 +19,21 @@ import java.net.MalformedURLException;
 @Transactional(readOnly = true)
 public class ImageService {
 
+    private static final String FILE_PREFIX = "file:";
     @Value("${image.store.dir}")
     private String imageStoreDir;
 
     private final JpaImageRepository imageRepository;
     private final JpaAuctionImageRepository auctionImageRepository;
 
-    public Resource readImage(final Long id) throws MalformedURLException {
+    public Resource readProfileImage(final Long id) throws MalformedURLException {
         final ProfileImage profileImage = imageRepository.findById(id)
                                                          .orElseThrow(() -> new ImageNotFoundException(
                                                    "지정한 이미지를 찾을 수 없습니다."
                                            ));
         final String fullPath = findFullPath(profileImage.getImage().getStoreName());
 
-        return new UrlResource("file:" + fullPath);
+        return new UrlResource(fullPath);
     }
 
     public Resource readAuctionImage(final Long id) throws MalformedURLException {
@@ -42,10 +43,10 @@ public class ImageService {
                                                                 ));
         final String fullPath = findFullPath(auctionImage.getImage().getStoreName());
 
-        return new UrlResource("file:" + fullPath);
+        return new UrlResource(fullPath);
     }
 
-    private String findFullPath(String storeImageFileName) {
-        return imageStoreDir + storeImageFileName;
+    private String findFullPath(final String storeImageFileName) {
+        return FILE_PREFIX + imageStoreDir + storeImageFileName;
     }
 }

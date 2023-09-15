@@ -40,7 +40,7 @@ class ProfileImageServiceTest {
         imageRepository.save(profileImage);
 
         // when
-        final Resource actual = imageService.readImage(profileImage.getId());
+        final Resource actual = imageService.readProfileImage(profileImage.getId());
 
         // then
         assertThat(actual.getFilename()).isEqualTo("image.png");
@@ -52,7 +52,7 @@ class ProfileImageServiceTest {
         final Long invalidImageId = -999L;
 
         // when & then
-        assertThatThrownBy(() -> imageService.readImage(invalidImageId))
+        assertThatThrownBy(() -> imageService.readProfileImage(invalidImageId))
                 .isInstanceOf(ImageNotFoundException.class)
                 .hasMessage("지정한 이미지를 찾을 수 없습니다.");
     }

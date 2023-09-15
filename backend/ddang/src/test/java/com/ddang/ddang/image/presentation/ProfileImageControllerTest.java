@@ -60,7 +60,7 @@ class ProfileImageControllerTest {
         final byte[] imageBytes = "이것은 이미지 파일의 바이트 코드입니다.".getBytes();
         final Resource mockResource = new ByteArrayResource(imageBytes);
 
-        given(imageService.readImage(anyLong())).willReturn(mockResource);
+        given(imageService.readProfileImage(anyLong())).willReturn(mockResource);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/users/images/{id}", 1L))
@@ -74,7 +74,7 @@ class ProfileImageControllerTest {
         // given
         final Long invalidAuctionImageId = 1L;
 
-        given(imageService.readImage(anyLong())).willThrow(new ImageNotFoundException(
+        given(imageService.readProfileImage(anyLong())).willThrow(new ImageNotFoundException(
                 "지정한 이미지를 찾을 수 없습니다."
         ));
 
@@ -89,7 +89,7 @@ class ProfileImageControllerTest {
         // given
         final Long invalidAuctionImageId = 1L;
 
-        given(imageService.readImage(anyLong())).willThrow(new MalformedURLException());
+        given(imageService.readProfileImage(anyLong())).willThrow(new MalformedURLException());
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/users/images/{id}", invalidAuctionImageId))
