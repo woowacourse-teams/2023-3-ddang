@@ -40,7 +40,7 @@
                     app:tint="@color/black_900" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_weight="1"
@@ -54,8 +54,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginEnd="16dp"
-                    android:gravity="right"
-                    android:onClick="@{()->viewModel.confirm()}"
+                    android:gravity="end"
+                    android:onClick="@{()->viewModel.submitProfile(context)}"
                     android:text="@string/user_info_change_confirm"
                     android:textColor="@color/black_900"
                     android:textSize="@dimen/textsize_body" />
@@ -73,8 +73,7 @@
             app:layout_constraintTop_toBottomOf="@id/tb_user_info_change">
 
             <ImageView
-                imageUri="@{viewModel.profile.profileImage}"
-                placeholder="@{@drawable/img_default_profile}"
+                imageUri="@{viewModel.profile}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/register_auction_image_description"

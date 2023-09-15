@@ -20,6 +20,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -90,6 +91,13 @@ interface AuctionService {
 
     @GET("/users")
     suspend fun fetchProfile(): ApiResponse<ProfileResponse>
+
+    @Multipart
+    @PATCH("/users")
+    suspend fun updateProfile(
+        @Part image: MultipartBody.Part,
+        @Part("request") name: RequestBody,
+    ): ApiResponse<ProfileResponse>
 
     @POST("reports/auctions")
     suspend fun reportAuction(@Body reportRequest: ReportRequest): ApiResponse<Unit>
