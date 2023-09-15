@@ -16,6 +16,7 @@ import com.ddangddangddang.android.feature.userInfoChange.UserInfoChangeActivity
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showSnackbar
 
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
@@ -25,7 +26,11 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
         setupObserve()
-        if (viewModel.profile.value == null) viewModel.loadProfile()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadProfile()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -35,6 +40,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     private fun setupObserve() {
         viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
+        requireContext().observeLoadingWithDialog(viewLifecycleOwner, viewModel.isLoading)
     }
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) {
@@ -63,7 +69,9 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     }
 
     private fun navigateToUserInfoChange(profileModel: ProfileModel) {
-        startActivity(UserInfoChangeActivity.getIntent(requireContext(), profileModel))
+        requireContext().startActivity(
+            UserInfoChangeActivity.getIntent(requireContext(), profileModel),
+        )
     }
 
     private fun notifyLogoutSuccessfully() {
