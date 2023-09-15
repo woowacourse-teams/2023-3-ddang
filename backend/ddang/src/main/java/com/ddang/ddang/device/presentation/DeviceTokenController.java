@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/deviceToken")
+@RequestMapping("/device-token")
 @RequiredArgsConstructor
 public class DeviceTokenController {
 

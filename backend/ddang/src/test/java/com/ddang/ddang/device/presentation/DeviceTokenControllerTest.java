@@ -125,7 +125,7 @@ class DeviceTokenControllerTest {
         doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
-        mockMvc.perform(patch("/deviceToken")
+        mockMvc.perform(patch("/device-token")
                        .contentType(MediaType.APPLICATION_JSON)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .content(objectMapper.writeValueAsString(request)))
@@ -162,7 +162,7 @@ class DeviceTokenControllerTest {
                                         .persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
-        mockMvc.perform(patch("/deviceToken")
+        mockMvc.perform(patch("/device-token")
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .content(objectMapper.writeValueAsString(request))
                        .contentType(MediaType.APPLICATION_JSON))
