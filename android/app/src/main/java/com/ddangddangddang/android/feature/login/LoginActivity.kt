@@ -33,9 +33,9 @@ class LoginActivity :
     private fun setupViewModel() {
         viewModel.event.observe(this) {
             when (it) {
-                LoginViewModel.LoginEvent.KakaoLoginEvent -> loginByKakao()
-                LoginViewModel.LoginEvent.CompleteLoginEvent -> navigateToMain()
-                LoginViewModel.LoginEvent.FailureLoginEvent -> notifyLoginFailed()
+                is LoginViewModel.LoginEvent.KakaoLoginEvent -> loginByKakao()
+                is LoginViewModel.LoginEvent.CompleteLoginEvent -> navigateToMain()
+                is LoginViewModel.LoginEvent.FailureLoginEvent -> notifyLoginFailed(it.message)
             }
         }
     }
@@ -86,7 +86,9 @@ class LoginActivity :
         finish()
     }
 
-    private fun notifyLoginFailed() {
-        binding.root.showSnackbar(R.string.login_snackbar_login_failed_title)
+    private fun notifyLoginFailed(message: String?) {
+        val defaultMessage = getString(R.string.login_snackbar_login_failed_title)
+        val actionMessage = getString(R.string.all_snackbar_default_action)
+        binding.root.showSnackbar(message = message ?: defaultMessage, actionMessage = actionMessage)
     }
 }

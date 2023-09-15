@@ -24,9 +24,11 @@ class LoginViewModel(
         viewModelScope.launch {
             val deviceToken = repository.getDeviceToken()
             val request = KakaoLoginRequest(accessToken, deviceToken)
-            when (repository.loginByKakao(request)) {
+            when (val response = repository.loginByKakao(request)) {
                 is ApiResponse.Success -> _event.value = LoginEvent.CompleteLoginEvent
-                else -> _event.value = LoginEvent.FailureLoginEvent
+                is ApiResponse.Failure -> _event.value = LoginEvent.FailureLoginEvent(response.error)
+                is ApiResponse.NetworkError -> _event.value = LoginEvent.FailureLoginEvent(response.exception.message)
+                is ApiResponse.Unexpected -> _event.value = LoginEvent.FailureLoginEvent(response.t?.message)
             }
         }
     }
@@ -34,6 +36,6 @@ class LoginViewModel(
     sealed class LoginEvent {
         object KakaoLoginEvent : LoginEvent()
         object CompleteLoginEvent : LoginEvent()
-        object FailureLoginEvent : LoginEvent()
+        data class FailureLoginEvent(val message: String?) : LoginEvent()
     }
 }
