@@ -41,9 +41,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         binding.viewModel = viewModel
         setupViewModel()
         setupAuctionRecyclerView()
-        if (viewModel.page == 0) {
-            viewModel.loadAuctions()
-        }
+        if (viewModel.page == 0) viewModel.loadAuctions()
         setupReloadAuctions()
     }
 
