@@ -2,6 +2,7 @@ package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.user.presentation.util.NameProcessor;
 
 public record ReadAuctionDetailResponse(
         AuctionDetailResponse auction,
@@ -16,10 +17,12 @@ public record ReadAuctionDetailResponse(
             final AuthenticationUserInfo userInfo
     ) {
         final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(dto.auctionDto(), baseUrl);
+        final boolean isDeleted = dto.auctionDto().isSellerDeleted();
+        final String name = dto.auctionDto().sellerName();
         final SellerResponse sellerResponse = new SellerResponse(
                 dto.auctionDto().sellerId(),
                 dto.auctionDto().sellerProfile(),
-                dto.auctionDto().sellerName(),
+                NameProcessor.process(isDeleted, name),
                 dto.auctionDto().sellerReliability()
         );
         final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(dto.chatRoomDto());

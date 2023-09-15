@@ -470,8 +470,8 @@ class BidControllerTest {
     @Test
     void 특정_경매에_대한_입찰_목록을_조회한다() throws Exception {
         // given
-        final ReadBidDto bid1 = new ReadBidDto("사용자1", "이미지1", 10_000, LocalDateTime.now());
-        final ReadBidDto bid2 = new ReadBidDto("사용자2", "이미지2", 12_000, LocalDateTime.now());
+        final ReadBidDto bid1 = new ReadBidDto("사용자1", "이미지1", false, 10_000, LocalDateTime.now());
+        final ReadBidDto bid2 = new ReadBidDto("사용자2", "이미지2", false, 12_000, LocalDateTime.now());
 
         given(bidService.readAllByAuctionId(anyLong())).willReturn(List.of(bid1, bid2));
 

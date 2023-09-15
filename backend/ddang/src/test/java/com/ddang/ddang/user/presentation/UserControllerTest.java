@@ -98,7 +98,7 @@ class UserControllerTest {
     @Test
     void 사용자_정보를_조회한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", "profile.png", 4.6d, "12345");
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", "profile.png", 4.6d, "12345", false);
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
@@ -111,6 +111,27 @@ class UserControllerTest {
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.name", is(readUserDto.name())),
+                       jsonPath("$.profileImage", is(readUserDto.profileImage())),
+                       jsonPath("$.reliability", is(readUserDto.reliability()))
+               );
+    }
+
+    @Test
+    void 탈퇴한_사용자_정보를_조회한다() throws Exception {
+        // given
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", "profile.png", 4.6d, "12345", true);
+        final PrivateClaims privateClaims = new PrivateClaims(1L);
+
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(userService.readById(anyLong())).willReturn(readUserDto);
+
+        // when & then
+        mockMvc.perform(get("/users")
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+               )
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("$.name", is("알 수 없음")),
                        jsonPath("$.profileImage", is(readUserDto.profileImage())),
                        jsonPath("$.reliability", is(readUserDto.reliability()))
                );

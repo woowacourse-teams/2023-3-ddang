@@ -16,7 +16,8 @@ public record ReadAuctionInChatRoomDto(
         Long sellerId,
         String sellerProfile,
         String sellerName,
-        double sellerReliability
+        double sellerReliability,
+        boolean isSellerDeleted
 ) {
 
     public static ReadAuctionInChatRoomDto from(final Auction auction) {
@@ -30,7 +31,8 @@ public record ReadAuctionInChatRoomDto(
                 auction.getSeller().getId(),
                 auction.getSeller().getProfileImage(),
                 auction.getSeller().getName(),
-                auction.getSeller().getReliability()
+                auction.getSeller().getReliability(),
+                auction.getSeller().isDeleted()
         );
     }
 

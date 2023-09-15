@@ -498,7 +498,8 @@ class AuctionControllerTest {
                 1L,
                 "https://profile.com",
                 "판매자",
-                3.5d
+                3.5d,
+                false
         );
         final ReadChatRoomDto chatRoomDto = new ReadChatRoomDto(1L, true);
 
@@ -613,7 +614,8 @@ class AuctionControllerTest {
                 1L,
                 "https://profile.com",
                 "판매자",
-                3.5d
+                3.5d,
+                false
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -633,7 +635,8 @@ class AuctionControllerTest {
                 1L,
                 "https://profile.com",
                 "판매자",
-                3.5d
+                3.5d,
+                true
         );
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);

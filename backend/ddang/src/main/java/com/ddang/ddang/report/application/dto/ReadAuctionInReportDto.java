@@ -20,6 +20,7 @@ public record ReadAuctionInReportDto(
         return new ReadAuctionInReportDto(
                 auction.getId(),
                 ReadUserInReportDto.from(auction.getSeller()),
+
                 auction.getTitle(),
                 auction.getDescription(),
                 auction.getBidUnit().getValue(),

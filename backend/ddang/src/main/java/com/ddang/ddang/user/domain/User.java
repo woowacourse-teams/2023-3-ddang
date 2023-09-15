@@ -57,14 +57,4 @@ public class User extends BaseTimeEntity {
     public void withdrawal() {
         this.deleted = DELETED_STATUS;
     }
-
-    // TODO: 2023/09/15 [고민] getName() 메서드를 통해 가져오게 된다면 헷갈릴까요?
-    // TODO: 2023/09/15 [고민] 출력을 위한 로직이 여기 있다면 어색할까요? 사실 귀찮아서 여기 두긴 했습니다.
-    public String getName() {
-        if (isDeleted()) {
-            return UNKOWN_NAME;
-        }
-
-        return name;
-    }
 }

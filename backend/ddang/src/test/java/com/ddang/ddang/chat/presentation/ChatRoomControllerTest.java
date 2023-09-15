@@ -369,9 +369,9 @@ class ChatRoomControllerTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", "profile.png", 5.0d);
-        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", "profile.png", 5.0d);
-        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", "profile.png", 5.0d);
+        ReadUserInChatRoomDto seller = new ReadUserInChatRoomDto(1L, "사용자1", "profile.png", 5.0d, false);
+        final ReadUserInChatRoomDto buyer1 = new ReadUserInChatRoomDto(2L, "사용자2", "profile.png", 5.0d, false);
+        final ReadUserInChatRoomDto buyer2 = new ReadUserInChatRoomDto(3L, "사용자3", "profile.png", 5.0d, false);
         final ReadAuctionInChatRoomDto auctionDto1 = new ReadAuctionInChatRoomDto(
                 1L,
                 "경매1",
@@ -382,7 +382,8 @@ class ChatRoomControllerTest {
                 seller.id(),
                 seller.profileImage(),
                 seller.name(),
-                seller.reliability()
+                seller.reliability(),
+                false
         );
         final ReadChatRoomWithLastMessageDto dto1 = new ReadChatRoomWithLastMessageDto(
                 1L,
@@ -401,7 +402,8 @@ class ChatRoomControllerTest {
                 seller.id(),
                 seller.profileImage(),
                 seller.name(),
-                seller.reliability()
+                seller.reliability(),
+                false
         );
         final ReadChatRoomWithLastMessageDto dto2 = new ReadChatRoomWithLastMessageDto(
                 2L,
@@ -502,13 +504,15 @@ class ChatRoomControllerTest {
                 1L,
                 "profile.png",
                 "판매자",
-                5.0d
+                5.0d,
+                false
         );
         final ReadUserInChatRoomDto chatPartner = new ReadUserInChatRoomDto(
                 2L,
                 "채팅 상대방",
                 "profile.png",
-                5.0
+                5.0,
+                false
         );
 
         final ReadParticipatingChatRoomDto chatRoom = new ReadParticipatingChatRoomDto(

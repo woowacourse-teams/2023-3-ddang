@@ -25,7 +25,8 @@ public record ReadAuctionDto(
         Long sellerId,
         String sellerProfile,
         String sellerName,
-        double sellerReliability
+        double sellerReliability,
+        boolean isSellerDeleted
 ) {
 
     public static ReadAuctionDto from(final Auction auction) {
@@ -47,7 +48,8 @@ public record ReadAuctionDto(
                 auction.getSeller().getId(),
                 auction.getSeller().getProfileImage(),
                 auction.getSeller().getName(),
-                auction.getSeller().getReliability()
+                auction.getSeller().getReliability(),
+                auction.getSeller().isDeleted()
         );
     }
 

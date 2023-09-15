@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public record ReadBidDto(
         String name,
         String profileImage,
+        boolean isDeletedUser,
         int price,
         LocalDateTime bidTime
 ) {
@@ -18,6 +19,7 @@ public record ReadBidDto(
         return new ReadBidDto(
                 bidder.getName(),
                 bidder.getProfileImage(),
+                bidder.isDeleted(),
                 bid.getPrice().getValue(),
                 bid.getCreatedTime()
         );

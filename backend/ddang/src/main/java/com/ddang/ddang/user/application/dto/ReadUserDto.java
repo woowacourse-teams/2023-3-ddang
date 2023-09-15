@@ -2,7 +2,14 @@ package com.ddang.ddang.user.application.dto;
 
 import com.ddang.ddang.user.domain.User;
 
-public record ReadUserDto(Long id, String name, String profileImage, double reliability, String oauthId) {
+public record ReadUserDto(
+        Long id,
+        String name,
+        String profileImage,
+        double reliability,
+        String oauthId,
+        boolean isDeleted
+) {
 
     public static ReadUserDto from(final User user) {
         return new ReadUserDto(
@@ -10,7 +17,8 @@ public record ReadUserDto(Long id, String name, String profileImage, double reli
                 user.getName(),
                 user.getProfileImage(),
                 user.getReliability(),
-                user.getOauthId()
+                user.getOauthId(),
+                user.isDeleted()
         );
     }
 }
