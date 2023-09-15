@@ -3,6 +3,7 @@ package com.ddangddangddang.data.remote
 import okhttp3.Request
 import okio.IOException
 import okio.Timeout
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,18 +34,23 @@ class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: 
                             this@AuctionCall,
                             Response.success(
                                 ApiResponse.Unexpected(
-                                    IllegalStateException("Response body가 존재하지 않습니다."),
+                                    IllegalStateException(UNEXPECTED_ERROR_MESSAGE),
                                 ),
                             ),
                         )
                     }
                 } else {
+                    val message = runCatching {
+                        response.errorBody()?.let {
+                            JSONObject(it.string()).getString("message")
+                        }
+                    }.getOrNull()
                     callback.onResponse(
                         this@AuctionCall,
                         Response.success(
                             ApiResponse.Failure(
                                 response.code(),
-                                response.errorBody()?.string(),
+                                message,
                             ),
                         ),
                     )
@@ -53,8 +59,15 @@ class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: 
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 val response = when (t) {
-                    is IOException -> ApiResponse.NetworkError(t)
-                    else -> ApiResponse.Unexpected(t)
+                    is IOException -> {
+                        val throwable = IOException(NETWORK_ERROR_MESSAGE, t)
+                        ApiResponse.NetworkError(throwable)
+                    }
+
+                    else -> {
+                        val throwable = Throwable(UNEXPECTED_ERROR_MESSAGE, t)
+                        ApiResponse.Unexpected(throwable)
+                    }
                 }
                 callback.onResponse(
                     this@AuctionCall,
@@ -79,4 +92,9 @@ class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: 
     override fun request(): Request = call.request()
 
     override fun timeout(): Timeout = call.timeout()
+
+    companion object {
+        private const val NETWORK_ERROR_MESSAGE = "인터넷이 연결되어 있는지 확인해주세요."
+        private const val UNEXPECTED_ERROR_MESSAGE = "예기치 못한 오류가 발생했습니다. 다시 시도해주세요."
+    }
 }
