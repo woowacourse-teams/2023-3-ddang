@@ -38,7 +38,7 @@ class UserInfoChangeActivity :
         binding.viewModel = viewModel
         val profileModel =
             intent.getParcelableCompat<ProfileModel>(PROFILE_MODEL_KEY) ?: return finish()
-        if (viewModel.profile.value != null) viewModel.setInitUserInfo(profileModel, defaultUri)
+        if (viewModel.profile.value == null) viewModel.setInitUserInfo(profileModel, defaultUri)
         setupViewModel()
     }
 

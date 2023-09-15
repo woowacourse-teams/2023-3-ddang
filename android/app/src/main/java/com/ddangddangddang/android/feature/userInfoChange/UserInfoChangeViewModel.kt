@@ -16,8 +16,7 @@ class UserInfoChangeViewModel(
     val event: LiveData<Event>
         get() = _event
 
-    private val _profile: MutableLiveData<ProfileChangeModel> =
-        MutableLiveData(ProfileChangeModel("고명진", Uri.parse(""), 0.4))
+    private val _profile: MutableLiveData<ProfileChangeModel> = MutableLiveData()
     val profile: LiveData<ProfileChangeModel>
         get() = _profile
 

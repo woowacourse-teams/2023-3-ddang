@@ -13,6 +13,7 @@ import com.ddangddangddang.android.databinding.FragmentMyPageBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.userInfoChange.UserInfoChangeActivity
+import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.showSnackbar
@@ -44,9 +45,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             }
 
             MyPageViewModel.MyPageEvent.UserInfoChange -> {
-                viewModel.profile.value?.let {
-                    startActivity(UserInfoChangeActivity.getIntent(requireContext(), it))
-                }
+                viewModel.profile.value?.let { navigateToUserInfoChange(it) }
             }
 
             MyPageViewModel.MyPageEvent.ShowMyAuctions -> {
@@ -61,6 +60,10 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             MyPageViewModel.MyPageEvent.ShowPrivacyPolicy -> showPrivacyPolicy()
             MyPageViewModel.MyPageEvent.LogoutFailed -> notifyLogoutFailed()
         }
+    }
+
+    private fun navigateToUserInfoChange(profileModel: ProfileModel) {
+        startActivity(UserInfoChangeActivity.getIntent(requireContext(), profileModel))
     }
 
     private fun notifyLogoutSuccessfully() {
