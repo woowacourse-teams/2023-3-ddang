@@ -51,7 +51,6 @@ public record ReadAuctionDto(
         );
     }
 
-    // TODO: 2023/09/09 [고민] convertImageUrls보다 convertImageIds가 적절하지 않을까 싶어 바꿨는데 어떨까요? 괜찮다면 다른 부분들도 수정하도록 하겠습니다.
     private static List<Long> convertImageIds(final Auction auction) {
         return auction.getAuctionImages()
                       .stream()
