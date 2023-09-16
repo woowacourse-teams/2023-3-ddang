@@ -1,8 +1,12 @@
 spring:
+  main:
+    allow-bean-definition-overriding: true
+
   datasource:
-    url: jdbc:h2:tcp://localhost/~/test
-    username: sa
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/3ddang?serverTimezone=Asia/Seoul
+    username: root
+    password: TmflEkd7!
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -10,7 +14,6 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.H2Dialect
         show_sql: true
         use_sql_comments: true
         default_batch_fetch_size: 5000
@@ -36,7 +39,7 @@ data:
 
 image:
   store:
-    dir: ./
+    dir: /Users/jamie/test-3ddang/
 
 token:
   jwt:
@@ -55,4 +58,4 @@ oauth2:
 fcm:
   enabled: false
   key:
-    path: firebase/private-key.json
+    path: classpath:firebase/private-key.json

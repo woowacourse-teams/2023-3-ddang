@@ -22,7 +22,7 @@ import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
-import com.ddang.ddang.notification.application.exception.NotificationFailedException;
+//import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
@@ -311,13 +311,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(NotificationFailedException.class)
-    public ResponseEntity<ExceptionResponse> handleNotificationFailedException(final NotificationFailedException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, NotificationFailedException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body(new ExceptionResponse(ex.getMessage()));
-    }
+//    @ExceptionHandler(NotificationFailedException.class)
+//    public ResponseEntity<ExceptionResponse> handleNotificationFailedException(final NotificationFailedException ex) {
+//        logger.warn(String.format(EXCEPTION_FORMAT, NotificationFailedException.class), ex);
+//
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                             .body(new ExceptionResponse(ex.getMessage()));
+//    }
 
     @ExceptionHandler(DeviceTokenNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleDeviceTokenNotFoundException(final DeviceTokenNotFoundException ex) {
