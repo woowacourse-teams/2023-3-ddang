@@ -16,8 +16,8 @@ import java.util.List;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("!test")
-public class FcmConfiguration {
+@Profile("!test && !local")
+public class ProdFcmConfiguration {
 
     @Value("${fcm.key.path}")
     private String FCM_PRIVATE_KEY_PATH;
