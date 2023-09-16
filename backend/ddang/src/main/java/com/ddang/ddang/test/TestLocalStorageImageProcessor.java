@@ -42,19 +42,16 @@ public class TestLocalStorageImageProcessor implements StoreImageProcessor {
     }
 
     public StoreImageDto storeImageFile(MultipartFile imageFile) {
-        try {
-            final String originalImageFileName = imageFile.getOriginalFilename();
-            final String storeImageFileName = createStoreImageFileName(originalImageFileName);
-            final String fullPath = findFullPath(storeImageFileName);
+        final String originalImageFileName = imageFile.getOriginalFilename();
+        final String storeImageFileName = createStoreImageFileName(originalImageFileName);
+        final String fullPath = findFullPath(storeImageFileName);
 
-            System.out.println(fullPath);
+        System.out.println(fullPath);
 
-            imageFile.transferTo(new File(fullPath));
+//            imageFile.transferTo(new File(fullPath));
 
-            return new StoreImageDto(storeImageFileName, storeImageFileName);
-        } catch (IOException ex) {
-            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", ex);
-        }
+        return new StoreImageDto(storeImageFileName, storeImageFileName);
+
     }
 
     private String findFullPath(String storeImageFileName) {
