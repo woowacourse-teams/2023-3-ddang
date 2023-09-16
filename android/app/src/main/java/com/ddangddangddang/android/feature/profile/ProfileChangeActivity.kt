@@ -56,11 +56,15 @@ class ProfileChangeActivity :
             }
 
             is ProfileChangeViewModel.Event.SuccessProfileChange -> {
-                intent.putExtra(PROFILE_RESULT, event.profileModel)
-                setResult(RESULT_OK, intent)
-                finish()
+                changeSuccessProfile(event.profileModel)
             }
         }
+    }
+
+    private fun changeSuccessProfile(profileModel: ProfileModel) {
+        intent.putExtra(PROFILE_RESULT, profileModel)
+        setResult(RESULT_OK, intent)
+        finish()
     }
 
     companion object {

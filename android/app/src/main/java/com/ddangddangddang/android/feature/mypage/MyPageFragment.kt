@@ -47,7 +47,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (hidden.not() && viewModel.profile.value == null) viewModel.loadProfile()
+        if (hidden.not()) viewModel.loadProfile()
     }
 
     private fun setupObserve() {
