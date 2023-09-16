@@ -96,7 +96,7 @@ interface AuctionService {
     @PATCH("/users")
     suspend fun updateProfile(
         @Part image: MultipartBody.Part,
-        @Part("request") name: RequestBody,
+        @Part("request") body: RequestBody,
     ): ApiResponse<ProfileResponse>
 
     @POST("reports/auctions")

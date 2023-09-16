@@ -28,7 +28,7 @@
             tools:text="카테고리 종류" />
 
         <View
-            android:id="@+id/view_privacy_policy_divider"
+            android:id="@+id/view_my_page_category_divider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/black_400"

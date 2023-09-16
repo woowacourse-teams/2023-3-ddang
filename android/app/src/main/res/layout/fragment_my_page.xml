@@ -85,7 +85,7 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.userInfoChange()}"
+                    android:onClick="@{() -> viewModel.changeProfile()}"
                     app:layout_constraintTop_toBottomOf="@id/view_profile_divider"
                     bind:categoryName="@{@string/mypage_user_info_change_button}" />
 
@@ -94,7 +94,7 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.showMyAuctions()}"
+                    android:onClick="@{() -> viewModel.navigateToMyAuctions()}"
                     app:layout_constraintTop_toBottomOf="@id/tv_user_info_change_button"
                     bind:categoryName="@{@string/mypage_my_auction_list_button}" />
 
@@ -103,7 +103,7 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.showMyParticipateAuctions()}"
+                    android:onClick="@{() -> viewModel.navigateToMyParticipateAuctions()}"
                     app:layout_constraintTop_toBottomOf="@id/tv_my_auction_list_button"
                     bind:categoryName="@{@string/mypage_my_participate_auction_list_button}" />
 
@@ -112,7 +112,7 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.showAnnouncement()}"
+                    android:onClick="@{() -> viewModel.navigateToAnnouncement()}"
                     app:layout_constraintTop_toBottomOf="@id/tv_my_participate_auction_list_button"
                     bind:categoryName="@{@string/mypage_announcement_button}" />
 
@@ -121,7 +121,7 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> viewModel.showPrivacyPolicy()}"
+                    android:onClick="@{() -> viewModel.navigateToPrivacyPolicy()}"
                     app:layout_constraintTop_toBottomOf="@id/tv_announcement_button"
                     bind:categoryName="@{@string/mypage_privacy_policy_button}" />
 

@@ -49,24 +49,24 @@ class MyPageViewModel(
         _profile.value = profileModel
     }
 
-    fun userInfoChange() {
-        _event.value = MyPageEvent.UserInfoChange
+    fun changeProfile() {
+        _event.value = MyPageEvent.ProfileChange
     }
 
-    fun showMyAuctions() {
-        _event.value = MyPageEvent.ShowMyAuctions
+    fun navigateToMyAuctions() {
+        _event.value = MyPageEvent.NavigateToMyAuctions
     }
 
-    fun showMyParticipateAuctions() {
-        _event.value = MyPageEvent.ShowMyParticipateAuctions
+    fun navigateToMyParticipateAuctions() {
+        _event.value = MyPageEvent.NavigateToMyParticipateAuctions
     }
 
-    fun showAnnouncement() {
-        _event.value = MyPageEvent.ShowAnnouncement
+    fun navigateToAnnouncement() {
+        _event.value = MyPageEvent.NavigateToAnnouncement
     }
 
-    fun showPrivacyPolicy() {
-        _event.value = MyPageEvent.ShowPrivacyPolicy
+    fun navigateToPrivacyPolicy() {
+        _event.value = MyPageEvent.NavigateToPrivacyPolicy
     }
 
     fun logout() {
@@ -87,11 +87,11 @@ class MyPageViewModel(
     }
 
     sealed class MyPageEvent {
-        object UserInfoChange : MyPageEvent()
-        object ShowMyAuctions : MyPageEvent()
-        object ShowMyParticipateAuctions : MyPageEvent()
-        object ShowAnnouncement : MyPageEvent()
-        object ShowPrivacyPolicy : MyPageEvent()
+        object ProfileChange : MyPageEvent()
+        object NavigateToMyAuctions : MyPageEvent()
+        object NavigateToMyParticipateAuctions : MyPageEvent()
+        object NavigateToAnnouncement : MyPageEvent()
+        object NavigateToPrivacyPolicy : MyPageEvent()
         object LogoutSuccessfully : MyPageEvent()
         object LogoutFailed : MyPageEvent()
     }

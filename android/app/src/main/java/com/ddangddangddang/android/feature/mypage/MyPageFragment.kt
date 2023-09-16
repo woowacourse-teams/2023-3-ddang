@@ -62,20 +62,20 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 navigateToLogin()
             }
 
-            MyPageViewModel.MyPageEvent.UserInfoChange -> {
+            MyPageViewModel.MyPageEvent.ProfileChange -> {
                 viewModel.profile.value?.let { navigateToUserInfoChange(it) }
             }
 
-            MyPageViewModel.MyPageEvent.ShowMyAuctions -> {
+            MyPageViewModel.MyPageEvent.NavigateToMyAuctions -> {
             }
 
-            MyPageViewModel.MyPageEvent.ShowMyParticipateAuctions -> {
+            MyPageViewModel.MyPageEvent.NavigateToMyParticipateAuctions -> {
             }
 
-            MyPageViewModel.MyPageEvent.ShowAnnouncement -> {
+            MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
             }
 
-            MyPageViewModel.MyPageEvent.ShowPrivacyPolicy -> showPrivacyPolicy()
+            MyPageViewModel.MyPageEvent.NavigateToPrivacyPolicy -> showPrivacyPolicy()
             MyPageViewModel.MyPageEvent.LogoutFailed -> notifyLogoutFailed()
         }
     }
