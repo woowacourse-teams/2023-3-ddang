@@ -62,7 +62,7 @@ class ParticipateAuctionActivity :
                 navigateToAuctionDetail(event.auctionId)
             }
 
-            is ParticipateAuctionViewModel.Event.FailureLoginEvent -> {
+            is ParticipateAuctionViewModel.Event.FailureLoadEvent -> {
                 handleErrorEvent(event.type)
             }
         }

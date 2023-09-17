@@ -62,15 +62,15 @@ class ParticipateAuctionViewModel(
                 }
 
                 is ApiResponse.Failure -> {
-                    _event.value = Event.FailureLoginEvent(ErrorType.FAILURE(response.error))
+                    _event.value = Event.FailureLoadEvent(ErrorType.FAILURE(response.error))
                 }
 
                 is ApiResponse.NetworkError -> {
-                    _event.value = Event.FailureLoginEvent(ErrorType.NETWORK_ERROR)
+                    _event.value = Event.FailureLoadEvent(ErrorType.NETWORK_ERROR)
                 }
 
                 is ApiResponse.Unexpected -> {
-                    _event.value = Event.FailureLoginEvent(ErrorType.UNEXPECTED)
+                    _event.value = Event.FailureLoadEvent(ErrorType.UNEXPECTED)
                 }
             }
             _loadingAuctionsInProgress = false
@@ -92,7 +92,7 @@ class ParticipateAuctionViewModel(
     sealed class Event {
         object Exit : Event()
         data class NavigateToAuctionDetail(val auctionId: Long) : Event()
-        data class FailureLoginEvent(val type: ErrorType) : Event()
+        data class FailureLoadEvent(val type: ErrorType) : Event()
     }
 
     companion object {
