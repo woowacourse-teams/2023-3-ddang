@@ -13,7 +13,7 @@ import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.util.binding.BindingActivity
-import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.showSnackbar
 
 class ParticipateAuctionActivity :
     BindingActivity<ActivityParticipateAuctionBinding>(R.layout.activity_participate_auction) {
@@ -69,32 +69,23 @@ class ParticipateAuctionActivity :
     }
 
     private fun handleErrorEvent(errorType: ErrorType) {
-        when (errorType) {
-            is ErrorType.FAILURE -> {
-                showErrorMessage(errorType.message)
-            }
-
-            is ErrorType.NETWORK_ERROR -> {
-                showErrorMessage(getString(R.string.all_network_error_message))
-            }
-
-            is ErrorType.UNEXPECTED -> {
-                showErrorMessage(getString(R.string.all_unexpected_error_message))
-            }
+        val defaultMessage = getString(R.string.my_participate_auction_load_failed_title)
+        val actionMessage = getString(R.string.all_snackbar_default_action)
+        val message = when (errorType) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
         }
+        binding.root.showSnackbar(
+            message = message ?: defaultMessage,
+            actionMessage = actionMessage,
+        )
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
         val intent = AuctionDetailActivity.getIntent(this, auctionId)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
-    }
-
-    private fun showErrorMessage(message: String?) {
-        Toaster.showShort(
-            this,
-            message ?: getString(R.string.home_default_error_message),
-        )
     }
 
     private fun setupAuctionRecyclerView() {
