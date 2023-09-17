@@ -3,6 +3,7 @@ package com.ddang.ddang.test;
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
@@ -14,6 +15,8 @@ import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -24,8 +27,11 @@ import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.domain.AuctionReport;
+import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -58,6 +64,7 @@ public class InitDataController {
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
     private final JpaAuctionReportRepository auctionReportRepository;
+    private final JpaChatRoomReportRepository chatRoomReportRepository;
     private final StoreImageProcessor imageProcessor;
 
     @GetMapping("test/{auctionId}")
@@ -195,9 +202,9 @@ public class InitDataController {
 
         for (int i = 0; i < 10; i++) {
             final List<AuctionImage> image = imageProcessor.storeImageFiles(dto.auctionImages())
-                                                                    .stream()
-                                                                    .map(StoreImageDto::toAuctionImageEntity)
-                                                                    .toList();
+                                                           .stream()
+                                                           .map(StoreImageDto::toAuctionImageEntity)
+                                                           .toList();
             auctionImages.addAll(image);
         }
 
@@ -219,14 +226,16 @@ public class InitDataController {
             long randomAuction = random.nextLong(maxValue - minValue + 1) + minValue;
             System.out.println(randomAuction);
             final Auction auction = auctionRepository.findAuctionById(randomAuction)
-                                                     .orElseThrow(() -> new RegionNotFoundException(
+                                                     .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 경매가 없습니다."
                                                      ));
 
             long randomUser;
             do {
                 randomUser = random.nextLong(119 - 51 + 1) + minValue;
-            } while ((auction.getLastBid() != null && randomUser == auction.getLastBid().getBidder().getId()) || randomUser == auction.getSeller().getId());
+            } while ((auction.getLastBid() != null && randomUser == auction.getLastBid().getBidder()
+                                                                           .getId()) || randomUser == auction.getSeller()
+                                                                                                             .getId());
 
             System.out.println(randomUser);
             final User user = userRepository.findById(randomUser)
@@ -260,14 +269,16 @@ public class InitDataController {
             System.out.printf("%d 번째 입찰 저장\n", i);
 
             final Auction auction = auctionRepository.findAuctionById(250L)
-                                                     .orElseThrow(() -> new RegionNotFoundException(
+                                                     .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 경매가 없습니다."
                                                      ));
 
             long randomUser;
             do {
                 randomUser = random.nextLong(119 - 51 + 1) + minValue;
-            } while ((auction.getLastBid() != null && randomUser == auction.getLastBid().getBidder().getId()) || randomUser == auction.getSeller().getId());
+            } while ((auction.getLastBid() != null && randomUser == auction.getLastBid().getBidder()
+                                                                           .getId()) || randomUser == auction.getSeller()
+                                                                                                             .getId());
 
             final User user = userRepository.findById(randomUser)
                                             .orElseThrow(() -> new UserNotFoundException("지정한 사용자를 찾을 수 없습니다."));
@@ -299,29 +310,30 @@ public class InitDataController {
     public ResponseEntity<Void> auctionReports() {
         Random random = new Random();
 
-        int minValue = 1;
-        int maxValue = 30;
+        int minValue = 52;
+        int maxValue = 250;
 
         final List<AuctionReport> reports = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             System.out.printf("%d 번째 경매 신고 저장\n", i);
 
             long randomAuction = random.nextLong(maxValue - minValue + 1) + minValue;
             final Auction auction = auctionRepository.findAuctionById(randomAuction)
-                                                     .orElseThrow(() -> new RegionNotFoundException(
+                                                     .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 경매가 없습니다."
                                                      ));
 
             long randomUser;
             do {
-                randomUser = random.nextLong(maxValue - minValue + 1) + minValue;
+                randomUser = random.nextLong(119 - 51 + 1) + minValue;
             } while (randomUser == auction.getSeller().getId());
 
             final User user = userRepository.findById(randomUser)
                                             .orElseThrow(() -> new UserNotFoundException("지정한 사용자를 찾을 수 없습니다."));
 
-            final CreateAuctionReportDto dto = new CreateAuctionReportDto(randomAuction, "신고합니다...", randomUser);
+            final String description = UUID.randomUUID().toString().substring(0, 30);
+            final CreateAuctionReportDto dto = new CreateAuctionReportDto(randomAuction, description, randomUser);
             final AuctionReport auctionReport = dto.toEntity(user, auction);
 
             reports.add(auctionReport);
@@ -329,6 +341,35 @@ public class InitDataController {
         }
 
         auctionReportRepository.saveAll(reports);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/init/chat-room/reports")
+    public ResponseEntity<Void> chatRoomReports() {
+        final List<ChatRoomReport> reports = new ArrayList<>();
+
+        for (long chatRoomId = 52; chatRoomId < 102; chatRoomId++) {
+            System.out.printf("%d 번째 채팅룸 신고 저장\n", chatRoomId);
+
+            final ChatRoom chatRoom = chatRoomRepository.findChatRoomById(chatRoomId)
+                                                        .orElseThrow(() -> new ChatRoomNotFoundException(
+                                                                "지정한 경매가 없습니다."
+                                                        ));
+
+            long userId = chatRoom.getBuyer().getId();
+            final User user = userRepository.findById(userId)
+                                            .orElseThrow(() -> new UserNotFoundException("지정한 사용자를 찾을 수 없습니다."));
+
+            final String description = UUID.randomUUID().toString().substring(0, 30);
+            final CreateChatRoomReportDto dto = new CreateChatRoomReportDto(chatRoomId, description, userId);
+            final ChatRoomReport chatRoomReport = dto.toEntity(user, chatRoom);
+
+            reports.add(chatRoomReport);
+            System.out.println("chatRoomId = " + chatRoomId);
+        }
+
+        chatRoomReportRepository.saveAll(reports);
 
         return ResponseEntity.noContent().build();
     }
