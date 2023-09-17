@@ -156,7 +156,7 @@
     <string name="search_notice_no_auction">아이쿠! 올라온 경매가 없습니다!</string>
     <string name="search_notice_input_keyword">검색창에 상품명을 입력해주세요.</string>
 
-    <!-- profileChange-->
+    <!-- profile_change -->
     <string name="profile_change">회원 정보 수정</string>
     <string name="profile_change_profile_image_button_description">회원 프로필 수정 버튼</string>
     <string name="profile_change_nickname">닉네임</string>
@@ -164,4 +164,8 @@
     <string name="profile_change_profile_image_description">선택된 회원 프로필 이미지</string>
     <string name="profile_change_confirm">확인</string>
     <string name="profile_change_success">회원 정보 수정 성공</string>
+
+    <!-- my_participate_auction -->
+    <string name="my_participate_auction_list_title">내가 참여한 경매 목록</string>
+    <string name="my_participate_auction_list_not_exist">아직 참여한 경매가 없습니다</string>
 </resources>

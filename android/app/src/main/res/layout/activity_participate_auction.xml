@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.participateAuction.ParticipateAuctionViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.participateAuction.ParticipateAuctionActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_my_participate_auction"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:contentDescription="@string/all_app_bar_back_key_description"
+                android:onClick="@{() -> viewModel.setExitEvent()}"
+                android:src="@drawable/ic_left_24"
+                app:tint="@color/black_900" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:text="@string/my_participate_auction_list_title"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/textsize_main_header"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <TextView
+            isVisible="@{viewModel.isLast() &amp;&amp; (viewModel.auctions.size() == 0)}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/my_participate_auction_list_not_exist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_my_participate_auction" />
+
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/srl_reload_auctions"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_my_participate_auction">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_my_participate_auction"
+                isVisible="@{viewModel.auctions.size() != 0}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="2"
+                tools:listitem="@layout/item_home_auction" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
