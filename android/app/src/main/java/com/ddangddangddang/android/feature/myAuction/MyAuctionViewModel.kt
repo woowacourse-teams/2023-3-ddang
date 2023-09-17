@@ -60,9 +60,17 @@ class MyAuctionViewModel(
                     updateAuctions(response.body, newPage)
                 }
 
-                is ApiResponse.Failure -> TODO()
-                is ApiResponse.NetworkError -> TODO()
-                is ApiResponse.Unexpected -> TODO()
+                is ApiResponse.Failure -> {
+                    _event.value = Event.FailureLoadAuctions.FailureFromServer(response.error)
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value = Event.FailureLoadAuctions.NetworkError
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = Event.FailureLoadAuctions.UnexpectedError
+                }
             }
             _loadingAuctionsInProgress = false
         }
@@ -83,6 +91,12 @@ class MyAuctionViewModel(
     sealed class Event {
         object Exit : Event()
         data class NavigateToAuctionDetail(val auctionId: Long) : Event()
+
+        sealed class FailureLoadAuctions : Event() {
+            data class FailureFromServer(val message: String?) : FailureLoadAuctions()
+            object NetworkError : FailureLoadAuctions()
+            object UnexpectedError : FailureLoadAuctions()
+        }
     }
 
     companion object {

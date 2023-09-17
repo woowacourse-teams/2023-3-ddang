@@ -12,6 +12,7 @@ import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.Toaster
 
 class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.activity_my_auction) {
     private val viewModel: MyAuctionViewModel by viewModels { viewModelFactory }
@@ -58,6 +59,26 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
             is MyAuctionViewModel.Event.NavigateToAuctionDetail -> {
                 navigateToAuctionDetail(event.auctionId)
             }
+
+            is MyAuctionViewModel.Event.FailureLoadAuctions -> {
+                handleFailureLoadEvent(event)
+            }
+        }
+    }
+
+    private fun handleFailureLoadEvent(event: MyAuctionViewModel.Event.FailureLoadAuctions) {
+        when (event) {
+            is MyAuctionViewModel.Event.FailureLoadAuctions.FailureFromServer -> {
+                showErrorMessage(event.message)
+            }
+
+            is MyAuctionViewModel.Event.FailureLoadAuctions.NetworkError -> {
+                showErrorMessage(getString(R.string.all_network_error_message))
+            }
+
+            is MyAuctionViewModel.Event.FailureLoadAuctions.UnexpectedError -> {
+                showErrorMessage(getString(R.string.all_unexpected_error_message))
+            }
         }
     }
 
@@ -65,6 +86,13 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
         val intent = AuctionDetailActivity.getIntent(this, auctionId)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
         startActivity(intent)
+    }
+
+    private fun showErrorMessage(message: String?) {
+        Toaster.showShort(
+            this,
+            message ?: getString(R.string.home_default_error_message),
+        )
     }
 
     private fun setupAuctionRecyclerView() {
