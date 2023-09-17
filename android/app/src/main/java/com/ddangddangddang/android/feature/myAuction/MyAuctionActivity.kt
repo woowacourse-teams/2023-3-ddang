@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMyAuctionBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
@@ -60,23 +61,23 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
                 navigateToAuctionDetail(event.auctionId)
             }
 
-            is MyAuctionViewModel.Event.FailureLoadAuctions -> {
-                handleFailureLoadEvent(event)
+            is MyAuctionViewModel.Event.FailureLoadEvent -> {
+                handleErrorEvent(event.type)
             }
         }
     }
 
-    private fun handleFailureLoadEvent(event: MyAuctionViewModel.Event.FailureLoadAuctions) {
-        when (event) {
-            is MyAuctionViewModel.Event.FailureLoadAuctions.FailureFromServer -> {
-                showErrorMessage(event.message)
+    private fun handleErrorEvent(errorType: ErrorType) {
+        when (errorType) {
+            is ErrorType.FAILURE -> {
+                showErrorMessage(errorType.message)
             }
 
-            is MyAuctionViewModel.Event.FailureLoadAuctions.NetworkError -> {
+            is ErrorType.NETWORK_ERROR -> {
                 showErrorMessage(getString(R.string.all_network_error_message))
             }
 
-            is MyAuctionViewModel.Event.FailureLoadAuctions.UnexpectedError -> {
+            is ErrorType.UNEXPECTED -> {
                 showErrorMessage(getString(R.string.all_unexpected_error_message))
             }
         }

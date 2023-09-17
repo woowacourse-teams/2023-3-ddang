@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -61,15 +62,15 @@ class MyAuctionViewModel(
                 }
 
                 is ApiResponse.Failure -> {
-                    _event.value = Event.FailureLoadAuctions.FailureFromServer(response.error)
+                    _event.value = Event.FailureLoadEvent(ErrorType.FAILURE(response.error))
                 }
 
                 is ApiResponse.NetworkError -> {
-                    _event.value = Event.FailureLoadAuctions.NetworkError
+                    _event.value = Event.FailureLoadEvent(ErrorType.NETWORK_ERROR)
                 }
 
                 is ApiResponse.Unexpected -> {
-                    _event.value = Event.FailureLoadAuctions.UnexpectedError
+                    _event.value = Event.FailureLoadEvent(ErrorType.UNEXPECTED)
                 }
             }
             _loadingAuctionsInProgress = false
@@ -92,11 +93,7 @@ class MyAuctionViewModel(
         object Exit : Event()
         data class NavigateToAuctionDetail(val auctionId: Long) : Event()
 
-        sealed class FailureLoadAuctions : Event() {
-            data class FailureFromServer(val message: String?) : FailureLoadAuctions()
-            object NetworkError : FailureLoadAuctions()
-            object UnexpectedError : FailureLoadAuctions()
-        }
+        data class FailureLoadEvent(val type: ErrorType) : Event()
     }
 
     companion object {
