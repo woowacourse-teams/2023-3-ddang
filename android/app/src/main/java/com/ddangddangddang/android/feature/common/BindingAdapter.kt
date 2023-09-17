@@ -19,11 +19,12 @@ fun ImageView.setImageUrl(url: String?, placeholder: Drawable? = null) {
         .into(this)
 }
 
-@BindingAdapter("imageUri")
-fun ImageView.setImageUrl(uri: Uri?) {
+@BindingAdapter("imageUri", "placeholder", requireAll = false)
+fun ImageView.setImageUrl(uri: Uri?, placeholder: Drawable? = null) {
     uri?.let {
         Glide.with(context)
             .load(it)
+            .error(placeholder)
             .into(this)
     }
 }
