@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -75,15 +76,15 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
                     }
 
                     is ApiResponse.Failure -> {
-                        _event.value = SearchEvent.LoadFailureNotice(response.error)
+                        _event.value = SearchEvent.LoadFailureNotice(ErrorType.FAILURE(response.error))
                     }
 
                     is ApiResponse.NetworkError -> {
-                        _event.value = SearchEvent.LoadFailureNotice(response.exception.message)
+                        _event.value = SearchEvent.LoadFailureNotice(ErrorType.NETWORK_ERROR)
                     }
 
                     is ApiResponse.Unexpected -> {
-                        _event.value = SearchEvent.LoadFailureNotice(response.t?.message)
+                        _event.value = SearchEvent.LoadFailureNotice(ErrorType.UNEXPECTED)
                     }
                 }
                 _loadingAuctionInProgress = false
@@ -115,7 +116,7 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
 
     sealed class SearchEvent {
         object KeywordLimit : SearchEvent()
-        class LoadFailureNotice(val message: String?) : SearchEvent()
+        class LoadFailureNotice(val error: ErrorType) : SearchEvent()
     }
 
     sealed class SearchStatus {

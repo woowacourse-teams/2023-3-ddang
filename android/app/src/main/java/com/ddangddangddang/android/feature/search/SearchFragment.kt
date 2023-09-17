@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentSearchBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
@@ -77,8 +78,11 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         }
         viewModel.event.observe(viewLifecycleOwner) { event ->
             when (event) {
-                SearchViewModel.SearchEvent.KeywordLimit -> showNoticeMessage(getString(R.string.search_notice_keyword_limit))
-                is SearchViewModel.SearchEvent.LoadFailureNotice -> showNoticeMessage(event.message)
+                SearchViewModel.SearchEvent.KeywordLimit -> notifyFailureMessage(
+                    ErrorType.FAILURE(getString(R.string.search_notice_keyword_limit)),
+                )
+
+                is SearchViewModel.SearchEvent.LoadFailureNotice -> notifyFailureMessage(event.error)
             }
         }
     }
@@ -93,7 +97,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         imm.hideSoftInputFromWindow(binding.etSearchKeyword.windowToken, 0)
     }
 
-    private fun showNoticeMessage(message: String?) {
+    private fun notifyFailureMessage(type: ErrorType) {
+        val message = when (type) {
+            is ErrorType.FAILURE -> type.message
+            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
+            is ErrorType.UNEXPECTED -> getString(type.messageId)
+        }
         Toaster.showShort(
             requireContext(),
             message ?: getString(R.string.search_notice_default_error),
