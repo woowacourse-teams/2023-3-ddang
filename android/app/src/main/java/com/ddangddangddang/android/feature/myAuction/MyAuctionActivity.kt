@@ -19,7 +19,7 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
     private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
-            if (viewModel.isLast) return
+            if (viewModel.isLast.value == true) return
 
             if (!viewModel.loadingAuctionInProgress) {
                 val lastVisibleItemPosition =

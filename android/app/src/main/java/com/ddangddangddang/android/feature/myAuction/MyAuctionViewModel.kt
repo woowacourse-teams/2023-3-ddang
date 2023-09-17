@@ -31,8 +31,8 @@ class MyAuctionViewModel(
     val page: Int
         get() = _page
 
-    private var _isLast = false
-    val isLast: Boolean
+    private val _isLast = MutableLiveData(false)
+    val isLast: LiveData<Boolean>
         get() = _isLast
 
     fun setExitEvent() {
@@ -84,7 +84,7 @@ class MyAuctionViewModel(
             _auctions.value = items + response.auctions.map { it.toPresentation() }
         }
 
-        _isLast = response.isLast
+        _isLast.value = response.isLast
         _page = newPage
     }
 

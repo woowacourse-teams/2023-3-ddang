@@ -167,4 +167,5 @@
 
     <!-- my_auction -->
     <string name="my_auction_list_title">나의 경매 목록</string>
+    <string name="my_auction_list_not_exist">등록한 경매 상품이 아직 없습니다</string>
 </resources>

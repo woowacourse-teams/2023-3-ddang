@@ -41,6 +41,15 @@
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
+        <TextView
+            isVisible="@{viewModel.isLast() &amp;&amp; (viewModel.auctions.size() == 0)}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/my_auction_list_not_exist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_my_auction" />
+
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/srl_reload_auctions"
@@ -53,11 +62,12 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_my_auction"
+                isVisible="@{viewModel.auctions.size() != 0}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:listitem="@layout/item_home_auction"
-                app:spanCount="2" />
+                app:spanCount="2"
+                tools:listitem="@layout/item_home_auction" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
