@@ -1,10 +1,12 @@
 package com.ddangddangddang.android.feature.myAuction
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMyAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -34,8 +36,17 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
 
     private fun handleEvent(event: MyAuctionViewModel.Event) {
         when (event) {
-            MyAuctionViewModel.Event.Exit -> finish()
+            is MyAuctionViewModel.Event.Exit -> finish()
+            is MyAuctionViewModel.Event.NavigateToAuctionDetail -> {
+                navigateToAuctionDetail(event.auctionId)
+            }
         }
+    }
+
+    private fun navigateToAuctionDetail(auctionId: Long) {
+        val intent = AuctionDetailActivity.getIntent(this, auctionId)
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+        startActivity(intent)
     }
 
     private fun setupAuctionRecyclerView() {

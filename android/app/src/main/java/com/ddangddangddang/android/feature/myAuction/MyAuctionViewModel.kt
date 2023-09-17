@@ -27,6 +27,7 @@ class MyAuctionViewModel(
     }
 
     fun navigateToAuctionDetail(auctionId: Long) {
+        _event.value = Event.NavigateToAuctionDetail(auctionId)
     }
 
     fun loadMyAuctions() {
@@ -45,5 +46,6 @@ class MyAuctionViewModel(
 
     sealed class Event {
         object Exit : Event()
+        data class NavigateToAuctionDetail(val auctionId: Long) : Event()
     }
 }
