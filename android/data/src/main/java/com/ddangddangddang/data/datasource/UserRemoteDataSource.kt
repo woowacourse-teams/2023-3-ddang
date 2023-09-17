@@ -2,6 +2,7 @@ package com.ddangddangddang.data.datasource
 
 import com.ddangddangddang.data.model.request.ProfileUpdateRequest
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
+import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.ProfileResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
@@ -30,6 +31,9 @@ class UserRemoteDataSource(private val service: AuctionService) {
             .toRequestBody("application/json".toMediaType())
         return service.updateProfile(fileBody, body)
     }
+
+    suspend fun getMyParticipateAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> =
+        service.getMyParticipateAuctionPreviews(page)
 
     suspend fun updateDeviceToken(deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit> =
         service.updateDeviceToken(deviceTokenRequest)

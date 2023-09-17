@@ -102,6 +102,11 @@ interface AuctionService {
         @Part("request") body: RequestBody,
     ): ApiResponse<ProfileResponse>
 
+    @GET("/users/auctions/bids")
+    suspend fun getMyParticipateAuctionPreviews(
+        @Query("page") page: Int,
+    ): ApiResponse<AuctionPreviewsResponse>
+
     @POST("reports/auctions")
     suspend fun reportAuction(@Body reportRequest: ReportRequest): ApiResponse<Unit>
 

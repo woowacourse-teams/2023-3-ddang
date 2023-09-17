@@ -8,6 +8,7 @@ import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
@@ -54,23 +55,23 @@ class ParticipateAuctionViewModel(
         if (loadingAuctionInProgress) return
         _loadingAuctionsInProgress = true
         viewModelScope.launch {
-//            when (val response = userRepository.getMyAuctionPreviews(newPage)) {
-//                is ApiResponse.Success -> {
-//                    updateAuctions(response.body, newPage)
-//                }
-//
-//                is ApiResponse.Failure -> {
-//                    _event.value = Event.FailureLoadAuctions.FailureFromServer(response.error)
-//                }
-//
-//                is ApiResponse.NetworkError -> {
-//                    _event.value = Event.FailureLoadAuctions.NetworkError
-//                }
-//
-//                is ApiResponse.Unexpected -> {
-//                    _event.value = Event.FailureLoadAuctions.UnexpectedError
-//                }
-//            }
+            when (val response = userRepository.getMyParticipateAuctionPreviews(newPage)) {
+                is ApiResponse.Success -> {
+                    updateAuctions(response.body, newPage)
+                }
+
+                is ApiResponse.Failure -> {
+                    _event.value = Event.FailureLoadAuctions.FailureFromServer(response.error)
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value = Event.FailureLoadAuctions.NetworkError
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = Event.FailureLoadAuctions.UnexpectedError
+                }
+            }
             _loadingAuctionsInProgress = false
         }
     }
