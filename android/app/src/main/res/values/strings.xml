@@ -22,6 +22,8 @@
     <string name="all_profile_image_description">프로필 사진</string>
     <string name="all_reliability_icon_description">유저 신뢰도</string>
     <string name="all_reliability">(%.1f)</string>
+    <string name="all_network_error_message">인터넷이 연결되어 있는지 확인해주세요.</string>
+    <string name="all_unexpected_error_message">예기치 못한 오류가 발생했습니다. 다시 시도해주세요.</string>
 
     <!-- home -->
     <string name="home">경매 상품 목록</string>
@@ -34,6 +36,7 @@
     <string name="home_auctioneer_count">(%d)</string>
     <string name="home_auctioneer_count_description">경매 참여 인원수</string>
     <string name="home_register_auction_button_description">경매 등록 페이지로 이동하는 버튼</string>
+    <string name="home_default_error_message">경매 목록을 성공적으로 불러오지 못했습니다.</string>
 
     <!-- detail -->
     <string name="detail_auction_description">상품 설명</string>
@@ -137,6 +140,14 @@
     <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
     <string name="report_snackbar_auction_id_not_delivered">경매 정보가 넘어오지 않았습니다.</string>
+
+    <!-- alarm -->
+    <string name="alarm_channel_name">전체 알림</string>
+    <string name="alarm_channel_description">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받습니다.</string>
+    <string name="alarm_dialog_check_permission_title">알림 수신 설정</string>
+    <string name="alarm_dialog_check_permission_message">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받기 위해 알림 권한이 필요합니다.</string>
+    <string name="alarm_dialog_check_permission_positive_button">알겠습니다</string>
+    <string name="alarm_snackbar_how_to_grant_permission">알림을 수신하고 싶으신 경우, 앱 설정에서 알림 권한을 허용할 수 있습니다</string>
 
     <!-- search -->
     <string name="search">경매 상품 검색</string>

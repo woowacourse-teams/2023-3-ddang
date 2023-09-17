@@ -66,8 +66,12 @@ dependencies {
     // EncryptedSharedPreferences
     implementation 'androidx.security:security-crypto:1.0.0'
 
+    // Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
+
     // 테스트
     testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.assertj:assertj-core:3.22.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
 
     testImplementation 'io.mockk:mockk-android:1.13.5'

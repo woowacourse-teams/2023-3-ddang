@@ -4,6 +4,7 @@ import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.request.ReportRequest
+import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -29,8 +30,10 @@ import retrofit2.http.Query
 interface AuctionService {
     @GET("/auctions")
     suspend fun fetchAuctionPreviews(
-        @Query("lastAuctionId") id: Long?,
-        @Query("size") size: Int,
+        @Query("page") page: Int,
+        @Query("size") size: Int?,
+        @Query("sortType") sortType: String?,
+        @Query("title") title: String?,
     ): ApiResponse<AuctionPreviewsResponse>
 
     @GET("/auctions/{id}")
@@ -104,4 +107,7 @@ interface AuctionService {
 
     @DELETE("/auctions/{id}")
     suspend fun deleteAuction(@Path("id") auctionId: Long): ApiResponse<Unit>
+
+    @PATCH("/device-token")
+    suspend fun updateDeviceToken(@Body deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit>
 }
