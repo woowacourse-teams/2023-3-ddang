@@ -50,14 +50,14 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     }
 
     private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(processOrderSpecifiers(pageable));
 
         orderSpecifiers.add(auction.id.desc());
 
         return orderSpecifiers;
     }
 
-    private List<OrderSpecifier<?>> convertOrderSpecifiers(final Pageable pageable) {
+    private List<OrderSpecifier<?>> processOrderSpecifiers(final Pageable pageable) {
         final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         final Sort sort = pageable.getSort();
 
@@ -66,13 +66,13 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 return Collections.emptyList();
             }
 
-            orderSpecifiers.addAll(convertFinal(order));
+            orderSpecifiers.addAll(processOrderSpecifierByCondition(order));
         }
 
         return orderSpecifiers;
     }
 
-    private List<OrderSpecifier<?>> convertFinal(final Order order) {
+    private List<OrderSpecifier<?>> processOrderSpecifierByCondition(final Order order) {
         if (AuctionSortConditionConsts.RELIABILITY.equals(order.getProperty())) {
             return List.of(auction.seller.reliability.desc());
         }
