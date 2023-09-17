@@ -44,10 +44,7 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
 
     fun submitKeyword() { // 검색
         if (!checkKeywordLimit()) return
-        if (!_loadingAuctionInProgress) {
-            initAuctions()
-            fetchAuctions(DEFAULT_PAGE)
-        }
+        if (!_loadingAuctionInProgress) fetchAuctions(DEFAULT_PAGE)
     }
 
     private fun checkKeywordLimit(): Boolean {
@@ -58,10 +55,6 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
             }
         }
         return true
-    }
-
-    private fun initAuctions() {
-        _auctions.value = emptyList()
     }
 
     private fun fetchAuctions(newPage: Int) {
@@ -110,7 +103,12 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
 
     private fun updateAuctions(response: ApiResponse.Success<AuctionPreviewsResponse>) {
         _auctions.value?.let { items ->
-            _auctions.value = items + response.body.auctions.map { it.toPresentation() }
+            val newItems = response.body.auctions.map { it.toPresentation() }
+            _auctions.value = if (_page == DEFAULT_PAGE) {
+                newItems
+            } else {
+                items + newItems
+            }
             _isLast = response.body.isLast
         }
     }
