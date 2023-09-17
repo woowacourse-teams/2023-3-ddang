@@ -74,11 +74,11 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
             }
 
             is ErrorType.NETWORK_ERROR -> {
-                showErrorMessage(getString(R.string.all_network_error_message))
+                showErrorMessage(getString(errorType.messageId))
             }
 
             is ErrorType.UNEXPECTED -> {
-                showErrorMessage(getString(R.string.all_unexpected_error_message))
+                showErrorMessage(getString(errorType.messageId))
             }
         }
     }
