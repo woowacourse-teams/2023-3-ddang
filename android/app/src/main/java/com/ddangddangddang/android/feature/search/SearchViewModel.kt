@@ -63,7 +63,7 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
                 _loadingAuctionInProgress = true
                 when (
                     val response =
-                        repository.getAuctionPreviews(
+                        repository.getAuctionPreviewsByTitle(
                             page = newPage,
                             size = SIZE_AUCTION_LOAD,
                             title = it,

@@ -37,12 +37,12 @@ class AuctionRepositoryImpl private constructor(
         return response
     }
 
-    override suspend fun getAuctionPreviews(
+    override suspend fun getAuctionPreviewsByTitle(
         page: Int,
         size: Int?,
         title: String,
     ): ApiResponse<AuctionPreviewsResponse> {
-        return remoteDataSource.getAuctionPreviews(page = page, size = size, title = title)
+        return remoteDataSource.getAuctionPreviewsByTitle(page = page, size = size, title = title)
     }
 
     override suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> {

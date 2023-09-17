@@ -19,7 +19,7 @@ interface AuctionRepository {
         title: String? = null,
     ): ApiResponse<AuctionPreviewsResponse>
 
-    suspend fun getAuctionPreviews(
+    suspend fun getAuctionPreviewsByTitle(
         page: Int,
         size: Int?,
         title: String,

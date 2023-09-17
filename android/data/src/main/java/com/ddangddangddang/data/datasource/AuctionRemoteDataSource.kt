@@ -26,7 +26,7 @@ class AuctionRemoteDataSource(private val service: AuctionService) {
     ): ApiResponse<AuctionPreviewsResponse> =
         service.fetchAuctionPreviews(page, size, sortType?.nameBy, title)
 
-    suspend fun getAuctionPreviews(
+    suspend fun getAuctionPreviewsByTitle(
         page: Int,
         size: Int?,
         title: String,
