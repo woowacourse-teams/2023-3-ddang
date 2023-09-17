@@ -78,11 +78,11 @@ class MyAuctionViewModel(
     }
 
     private fun updateAuctions(response: AuctionPreviewsResponse, newPage: Int) {
-        if (newPage == 1) {
-            _auctions.value = response.auctions.map { it.toPresentation() }
+        val newItems = response.auctions.map { it.toPresentation() }
+        _auctions.value = if (newPage == DEFAULT_PAGE) {
+            newItems
         } else {
-            val items = _auctions.value ?: emptyList()
-            _auctions.value = items + response.auctions.map { it.toPresentation() }
+            (_auctions.value ?: emptyList()) + newItems
         }
 
         _isLast.value = response.isLast
