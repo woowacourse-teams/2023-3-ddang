@@ -10,6 +10,7 @@ import com.ddangddangddang.android.feature.login.LoginViewModel
 import com.ddangddangddang.android.feature.main.MainViewModel
 import com.ddangddangddang.android.feature.message.MessageViewModel
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel
+import com.ddangddangddang.android.feature.myAuction.MyAuctionViewModel
 import com.ddangddangddang.android.feature.mypage.MyPageViewModel
 import com.ddangddangddang.android.feature.profile.ProfileChangeViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
@@ -74,6 +75,9 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 isAssignableFrom(ReportViewModel::class.java) -> ReportViewModel(auctionRepository)
                 isAssignableFrom(SearchViewModel::class.java) -> SearchViewModel()
                 isAssignableFrom(ProfileChangeViewModel::class.java) -> ProfileChangeViewModel(
+                    userRepository,
+                )
+                isAssignableFrom(MyAuctionViewModel::class.java) -> MyAuctionViewModel(
                     userRepository,
                 )
 
