@@ -34,7 +34,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="@dimen/margin_side_layout"
-                    android:contentDescription="@string/user_info_change_profile_image_description"
+                    android:contentDescription="@string/profile_change_profile_image_description"
                     android:onClick="@{() -> viewModel.setExitEvent()}"
                     android:src="@drawable/ic_left_24"
                     app:tint="@color/black_900" />
@@ -44,7 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_weight="1"
-                    android:text="@string/user_info_change"
+                    android:text="@string/profile_change"
                     android:textColor="@color/black_900"
                     android:textSize="@dimen/textsize_main_header"
                     android:textStyle="bold" />
@@ -56,7 +56,7 @@
                     android:layout_marginEnd="16dp"
                     android:gravity="end"
                     android:onClick="@{()->viewModel.submitProfile(context)}"
-                    android:text="@string/user_info_change_confirm"
+                    android:text="@string/profile_change_confirm"
                     android:textColor="@color/black_900"
                     android:textSize="@dimen/textsize_body" />
             </LinearLayout>
@@ -101,7 +101,7 @@
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
-                android:contentDescription="@string/user_info_change_profile_image_button_description"
+                android:contentDescription="@string/profile_change_profile_image_button_description"
                 android:scaleType="center"
                 android:src="@drawable/ic_camera_24" />
 
@@ -112,7 +112,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="@string/user_info_change_nickname"
+            android:text="@string/profile_change_nickname"
             android:textColor="@color/black_900"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -126,7 +126,7 @@
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="12dp"
             android:background="@drawable/bg_white_black_radius_10dp"
-            android:hint="@string/user_info_change_nickname_text_hint"
+            android:hint="@string/profile_change_nickname_text_hint"
             android:inputType="text"
             android:maxLength="25"
             android:maxLines="1"

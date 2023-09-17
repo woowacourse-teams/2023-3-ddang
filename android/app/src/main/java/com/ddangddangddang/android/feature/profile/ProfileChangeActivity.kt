@@ -14,6 +14,7 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.compat.getParcelableCompat
+import com.ddangddangddang.android.util.view.Toaster
 
 class ProfileChangeActivity :
     BindingActivity<ActivityProfileChangeBinding>(R.layout.activity_profile_change) {
@@ -56,20 +57,18 @@ class ProfileChangeActivity :
             }
 
             is ProfileChangeViewModel.Event.SuccessProfileChange -> {
-                changeSuccessProfile(event.profileModel)
+                changeSuccessProfile()
             }
         }
     }
 
-    private fun changeSuccessProfile(profileModel: ProfileModel) {
-        intent.putExtra(PROFILE_RESULT, profileModel)
-        setResult(RESULT_OK, intent)
+    private fun changeSuccessProfile() {
+        Toaster.showShort(this, getString(R.string.profile_change_success))
         finish()
     }
 
     companion object {
         private const val PROFILE_MODEL_KEY = "profile_model_key"
-        const val PROFILE_RESULT = "profile_result"
 
         fun getIntent(context: Context, profileModel: ProfileModel): Intent =
             Intent(context, ProfileChangeActivity::class.java).apply {

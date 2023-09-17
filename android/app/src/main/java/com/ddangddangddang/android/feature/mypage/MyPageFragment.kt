@@ -18,7 +18,6 @@ import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.profile.ProfileChangeActivity
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
-import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showSnackbar
@@ -30,10 +29,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     private fun setupChangeProfileLauncher(): ActivityResultLauncher<Intent> {
         return registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == AppCompatActivity.RESULT_OK) {
-                val profile =
-                    it.data?.getParcelableCompat<ProfileModel>(ProfileChangeActivity.PROFILE_RESULT)
-                        ?: return@registerForActivityResult
-                viewModel.updateProfile(profile)
+                viewModel.loadProfile()
             }
         }
     }

@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.model.ProfileModel
-import com.ddangddangddang.android.model.mapper.ProfileModelMapper.toPresentation
 import com.ddangddangddang.android.util.image.toAdjustImageFile
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ProfileUpdateRequest
@@ -52,9 +51,9 @@ class ProfileChangeViewModel(
             val file = runCatching { profileImageUri.toAdjustImageFile(context) }
                 .getOrNull() ?: return@launch
 
-            when (val response = userRepository.updateProfile(file, ProfileUpdateRequest(name))) {
+            when (userRepository.updateProfile(file, ProfileUpdateRequest(name))) {
                 is ApiResponse.Success -> {
-                    _event.value = Event.SuccessProfileChange(response.body.toPresentation())
+                    _event.value = Event.SuccessProfileChange
                 }
 
                 is ApiResponse.Failure -> {}
@@ -67,6 +66,6 @@ class ProfileChangeViewModel(
     sealed class Event {
         object Exit : Event()
         object NavigateToSelectProfileImage : Event()
-        data class SuccessProfileChange(val profileModel: ProfileModel) : Event()
+        object SuccessProfileChange : Event()
     }
 }

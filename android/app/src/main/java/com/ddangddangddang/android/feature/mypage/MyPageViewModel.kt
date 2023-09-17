@@ -45,10 +45,6 @@ class MyPageViewModel(
         }
     }
 
-    fun updateProfile(profileModel: ProfileModel) {
-        _profile.value = profileModel
-    }
-
     fun changeProfile() {
         _event.value = MyPageEvent.ProfileChange
     }
