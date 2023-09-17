@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -73,20 +74,18 @@ public class InitDataController {
     public ResponseEntity<Void> users(
             @RequestPart final MultipartFile image
     ) throws IOException {
-        long startTime = System.currentTimeMillis();
-
         final List<User> users = new ArrayList<>();
 
         Random random = new Random();
         double minValue = 0.0d;
         double maxValue = 5.0d;
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 120; i++) {
             final double randomValue = minValue + (maxValue - minValue) * random.nextDouble();
             final String uuid = UUID.randomUUID().toString();
 
             final User user = User.builder()
-                                  .name("사용자 " + uuid)
+                                  .name("user " + uuid)
                                   .profileImage(null)
                                   .reliability(randomValue)
                                   .oauthId(uuid)
@@ -97,18 +96,12 @@ public class InitDataController {
             if (i % 2 == 0) {
                 user.update(user.getName(), convertProfileImage(image));
             }
+            if (i < 21) {
+                user.withdrawal();
+            }
         }
 
         userRepository.saveAll(users);
-
-        long endTime = System.currentTimeMillis();
-        long executionTime = endTime - startTime;
-
-        long hours = executionTime / 3600000;
-        long minutes = (executionTime % 3600000) / 60000;
-        long seconds = (executionTime % 60000) / 1000;
-
-        System.out.println("메서드 실행 시간: " + hours + " 시간 " + minutes + " 분 " + seconds + " 초");
 
         return ResponseEntity.noContent().build();
     }
@@ -119,25 +112,43 @@ public class InitDataController {
 
     @PostMapping("/init/auctions")
     public ResponseEntity<Void> auctions(
-            @RequestPart final List<MultipartFile> images,
-            @RequestPart @Valid final CreateAuctionRequest requests
+            @RequestPart final List<MultipartFile> images
     ) {
         Random random = new Random();
+        LocalDateTime localDateTime = LocalDateTime.now();
 
         int minValue = 1;
-        int maxValue = 100;
+        int maxValue = 120;
 
         final List<Auction> auctions = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 250; i++) {
             System.out.printf("%d 번째 경매 저장\n", i);
 
-            long randomValue = random.nextLong(maxValue - minValue + 1) + minValue;
+            long sellerId = random.nextLong(maxValue - minValue + 1) + minValue;
+
+            final String title = UUID.randomUUID().toString().substring(0, 30);
+            final String description = title;
+
+            // 삭제
+            LocalDateTime closingTime = localDateTime;
+            // 51번 ~ 150번 :
+            if (51 <= i && i <= 150) {
+                long randomDay = random.nextInt(10) + 1;
+                closingTime = localDateTime.minusDays(randomDay);
+            }
+            // 151 ~ 200
+            if (151 <= i && i <= 200) {
+                long randomDay = random.nextInt(10) + 50;
+                closingTime = localDateTime.plusDays(randomDay);
+            }
+
+            final CreateAuctionRequest request = new CreateAuctionRequest(title, description, 100, 10_000, closingTime, 19L, List.of(3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L));
 
             final CreateAuctionDto dto = CreateAuctionDto.of(
-                    requests,
+                    request,
                     images,
-                    randomValue
+                    sellerId
             );
             final User user = userRepository.findById(dto.sellerId())
                                             .orElseThrow(() -> new UserNotFoundException("지정한 판매자를 찾을 수 없습니다."));
@@ -147,10 +158,14 @@ public class InitDataController {
                                                            ));
             final Auction auction = dto.toEntity(user, subCategory);
             final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
-            final List<AuctionImage> auctionImages = convertAuctionImages(dto);
-
             auction.addAuctionRegions(auctionRegions);
+
+            final List<AuctionImage> auctionImages = convertAuctionImages(dto);
             auction.addAuctionImages(auctionImages);
+
+            if (i < 51) {
+                auction.delete();
+            }
 
             auctions.add(auction);
             System.out.println("i = " + i);
@@ -176,25 +191,33 @@ public class InitDataController {
     }
 
     private List<AuctionImage> convertAuctionImages(final CreateAuctionDto dto) {
-        return imageProcessor.storeImageFiles(dto.auctionImages())
-                             .stream()
-                             .map(StoreImageDto::toAuctionImageEntity)
-                             .toList();
+        List<AuctionImage> auctionImages = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            final List<AuctionImage> image = imageProcessor.storeImageFiles(dto.auctionImages())
+                                                                    .stream()
+                                                                    .map(StoreImageDto::toAuctionImageEntity)
+                                                                    .toList();
+            auctionImages.addAll(image);
+        }
+
+        return auctionImages;
     }
 
     @PostMapping("/init/bids")
     public ResponseEntity<Void> bids() {
         Random random = new Random();
 
-        int minValue = 1;
-        int maxValue = 30;
+        int minValue = 52;
+        int maxValue = 250;
 
         final List<Bid> bids = new ArrayList<>();
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 400; i++) {
             System.out.printf("%d 번째 입찰 저장\n", i);
 
             long randomAuction = random.nextLong(maxValue - minValue + 1) + minValue;
+            System.out.println(randomAuction);
             final Auction auction = auctionRepository.findAuctionById(randomAuction)
                                                      .orElseThrow(() -> new RegionNotFoundException(
                                                              "지정한 경매가 없습니다."
@@ -202,9 +225,10 @@ public class InitDataController {
 
             long randomUser;
             do {
-                randomUser = random.nextLong(maxValue - minValue + 1) + minValue;
-            } while (randomUser == auction.getLastBid().getBidder().getId());
+                randomUser = random.nextLong(119 - 51 + 1) + minValue;
+            } while ((auction.getLastBid() != null && randomUser == auction.getLastBid().getBidder().getId()) || randomUser == auction.getSeller().getId());
 
+            System.out.println(randomUser);
             final User user = userRepository.findById(randomUser)
                                             .orElseThrow(() -> new UserNotFoundException("지정한 사용자를 찾을 수 없습니다."));
             final int bidPrice = convertNextBidPrice(auction, randomAuction);
@@ -212,6 +236,47 @@ public class InitDataController {
             final CreateBidDto dto = new CreateBidDto(randomAuction, bidPrice, randomUser);
 
             final Bid bid = dto.toEntity(auction, user);
+            auction.updateLastBid(bid);
+
+            bids.add(bid);
+            System.out.println("i = " + i);
+        }
+
+        bidRepository.saveAll(bids);
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/init/bids/250")
+    public ResponseEntity<Void> bidsTarget() {
+        Random random = new Random();
+
+        int minValue = 51;
+        int maxValue = 250;
+
+        final List<Bid> bids = new ArrayList<>();
+
+        for (int i = 0; i < 50; i++) {
+            System.out.printf("%d 번째 입찰 저장\n", i);
+
+            final Auction auction = auctionRepository.findAuctionById(250L)
+                                                     .orElseThrow(() -> new RegionNotFoundException(
+                                                             "지정한 경매가 없습니다."
+                                                     ));
+
+            long randomUser;
+            do {
+                randomUser = random.nextLong(119 - 51 + 1) + minValue;
+            } while ((auction.getLastBid() != null && randomUser == auction.getLastBid().getBidder().getId()) || randomUser == auction.getSeller().getId());
+
+            final User user = userRepository.findById(randomUser)
+                                            .orElseThrow(() -> new UserNotFoundException("지정한 사용자를 찾을 수 없습니다."));
+            final int bidPrice = convertNextBidPrice(auction, 250L);
+
+            final CreateBidDto dto = new CreateBidDto(250L, bidPrice, randomUser);
+
+            final Bid bid = dto.toEntity(auction, user);
+            auction.updateLastBid(bid);
 
             bids.add(bid);
             System.out.println("i = " + i);
