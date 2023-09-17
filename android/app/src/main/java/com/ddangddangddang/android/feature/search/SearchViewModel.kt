@@ -11,11 +11,10 @@ import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
-import com.ddangddangddang.android.feature.search.SearchViewModel.SearchEvent as SearchEvent1
 
 class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
-    private val _event: SingleLiveEvent<SearchEvent1> = SingleLiveEvent()
-    val event: LiveData<SearchEvent1>
+    private val _event: SingleLiveEvent<SearchEvent> = SingleLiveEvent()
+    val event: LiveData<SearchEvent>
         get() = _event
 
     val keyword: MutableLiveData<String> = MutableLiveData("")
