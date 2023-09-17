@@ -70,7 +70,7 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
                         )
                 ) {
                     is ApiResponse.Success -> {
-                        updateAuctions(response)
+                        updateAuctions(response.body)
                         _page = newPage
                     }
 
@@ -101,15 +101,15 @@ class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
         _searchStatus.value = SearchStatus.ExistData
     }
 
-    private fun updateAuctions(response: ApiResponse.Success<AuctionPreviewsResponse>) {
+    private fun updateAuctions(response: AuctionPreviewsResponse) {
         _auctions.value?.let { items ->
-            val newItems = response.body.auctions.map { it.toPresentation() }
+            val newItems = response.auctions.map { it.toPresentation() }
             _auctions.value = if (_page == DEFAULT_PAGE) {
                 newItems
             } else {
                 items + newItems
             }
-            _isLast = response.body.isLast
+            _isLast = response.isLast
         }
     }
 
