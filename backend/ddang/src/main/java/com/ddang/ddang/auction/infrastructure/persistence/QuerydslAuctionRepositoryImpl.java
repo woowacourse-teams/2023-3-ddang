@@ -8,7 +8,7 @@ import static com.ddang.ddang.region.domain.QRegion.region;
 
 import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.util.exception.UnsupportedSortConditionException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.UnsupportedSortConditionException;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.OrderSpecifier;
