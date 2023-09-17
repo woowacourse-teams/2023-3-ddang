@@ -102,6 +102,9 @@ interface AuctionService {
         @Part("request") body: RequestBody,
     ): ApiResponse<ProfileResponse>
 
+    @GET("/users/auctions/mine")
+    suspend fun fetchMyAuctionPreviews(): ApiResponse<AuctionPreviewsResponse>
+
     @POST("reports/auctions")
     suspend fun reportAuction(@Body reportRequest: ReportRequest): ApiResponse<Unit>
 
