@@ -32,8 +32,8 @@ class UserRemoteDataSource(private val service: AuctionService) {
         return service.updateProfile(fileBody, body)
     }
 
-    suspend fun getMyAuctionPreviews(): ApiResponse<AuctionPreviewsResponse> =
-        service.fetchMyAuctionPreviews()
+    suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> =
+        service.fetchMyAuctionPreviews(page)
 
     suspend fun updateDeviceToken(deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit> =
         service.updateDeviceToken(deviceTokenRequest)

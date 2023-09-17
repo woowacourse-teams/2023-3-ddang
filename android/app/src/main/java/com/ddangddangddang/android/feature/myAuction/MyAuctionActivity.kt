@@ -3,6 +3,8 @@ package com.ddangddangddang.android.feature.myAuction
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMyAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
@@ -13,6 +15,21 @@ import com.ddangddangddang.android.util.binding.BindingActivity
 
 class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.activity_my_auction) {
     private val viewModel: MyAuctionViewModel by viewModels { viewModelFactory }
+    private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (viewModel.isLast) return
+
+            if (!viewModel.loadingAuctionInProgress) {
+                val lastVisibleItemPosition =
+                    (binding.rvMyAuction.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
+                val auctionsSize = viewModel.auctions.value?.size ?: 0
+                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                    viewModel.loadMyAuctions()
+                }
+            }
+        }
+    }
     private val auctionAdapter = AuctionAdapter { auctionId ->
         viewModel.navigateToAuctionDetail(auctionId)
     }
@@ -20,9 +37,10 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        if (viewModel.auctions.value == null) viewModel.loadMyAuctions()
+        if (viewModel.page == 0) viewModel.loadMyAuctions()
         setupViewMdoel()
         setupAuctionRecyclerView()
+        setupReloadAuctions()
     }
 
     private fun setupViewMdoel() {
@@ -55,6 +73,14 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
 
             val space = resources.getDimensionPixelSize(R.dimen.margin_side_layout)
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = space))
+            addOnScrollListener(auctionScrollListener)
+        }
+    }
+
+    private fun setupReloadAuctions() {
+        binding.srlReloadAuctions.setOnRefreshListener {
+            viewModel.reloadAuctions()
+            binding.srlReloadAuctions.isRefreshing = false
         }
     }
 }
