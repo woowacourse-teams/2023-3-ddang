@@ -203,7 +203,6 @@ class AuthenticationControllerTest {
                                )
                        )
                );
-        ;
     }
 
     @Test
@@ -304,7 +303,7 @@ class AuthenticationControllerTest {
         willDoNothing().given(authenticationService).withdrawal(any(), anyString(), anyString());
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/oauth2/withdrawal/{oauth2Type}", "kakao")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", "kakao")
                                                         .contentType(MediaType.APPLICATION_JSON)
                                                         .content(objectMapper.writeValueAsString(request))
                                                         .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
@@ -336,7 +335,7 @@ class AuthenticationControllerTest {
                                                                     .withdrawal(any(), anyString(), anyString());
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.delete("/oauth2/withdrawal/{oauth2Type}", "kakao")
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", "kakao")
                                                         .contentType(MediaType.APPLICATION_JSON)
                                                         .content(objectMapper.writeValueAsString(request))
                                                         .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
