@@ -35,13 +35,15 @@ public class UserController {
     @PatchMapping
     public ResponseEntity<ReadUserResponse> updateById(
             @AuthenticateUser final AuthenticationUserInfo userInfo,
-            @RequestPart @Valid final UpdateUserRequest request,
-            @RequestPart final MultipartFile profileImage
+            @RequestPart(required = false) @Valid final UpdateUserRequest request,
+            @RequestPart(required = false) final MultipartFile profileImage
     ) {
-        final ReadUserDto readUserDto = userService.updateById(
-                userInfo.userId(),
-                UpdateUserDto.of(request, profileImage)
-        );
+        UpdateUserDto updateUserDto = null;
+        if (request != null) {
+            updateUserDto = UpdateUserDto.of(request, profileImage);
+        }
+
+        final ReadUserDto readUserDto = userService.updateById(userInfo.userId(), updateUserDto);
         final ReadUserResponse response = ReadUserResponse.from(readUserDto);
 
         return ResponseEntity.ok(response);

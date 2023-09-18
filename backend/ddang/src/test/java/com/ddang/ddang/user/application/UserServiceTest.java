@@ -134,6 +134,42 @@ class UserServiceTest {
     }
 
     @Test
+    void 사용자_정보를_수정시_이미지만_수정한다() {
+        // given
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
+
+        final StoreImageDto storeImageDto = new StoreImageDto("newUpload.png", "newStore.png");
+        given(imageProcessor.storeImageFile(any())).willReturn(storeImageDto);
+
+        final MockMultipartFile updateImage = new MockMultipartFile(
+                "updateImage.png",
+                "updateImage.png",
+                MediaType.IMAGE_PNG.toString(),
+                new byte[]{1}
+        );
+
+        final UpdateUserDto updateUserDto = new UpdateUserDto(null, updateImage);
+
+        // when
+        userService.updateById(user.getId(), updateUserDto);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(user.getName()).isEqualTo("name");
+            softAssertions.assertThat(user.getProfileImage().getImage().getStoreName()).isEqualTo("newStore.png");
+            softAssertions.assertThat(user.getReliability()).isEqualTo(4.7d);
+            softAssertions.assertThat(user.getOauthId()).isEqualTo("12345");
+        });
+    }
+
+    @Test
     void 사용자_정보_수정시_존재하지_않는_사용자라면_예외가_발생한다() {
         // given
         final Long invalidUserId = -999L;
