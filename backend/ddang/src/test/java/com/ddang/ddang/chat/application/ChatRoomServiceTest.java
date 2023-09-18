@@ -23,6 +23,7 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -559,7 +560,10 @@ class ChatRoomServiceTest {
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);
         chatRoomRepository.save(chatRoom);
 
-        final ReadParticipatingChatRoomDto expect = ReadParticipatingChatRoomDto.of(seller, chatRoom, LocalDateTime.now());
+        final ChatRoomAndImageDto chatRoomAndImageDto = new ChatRoomAndImageDto(chatRoom, auctionImage);
+
+        final ReadParticipatingChatRoomDto expect =
+                ReadParticipatingChatRoomDto.of(seller, chatRoomAndImageDto, LocalDateTime.now());
 
         // when
         final ReadParticipatingChatRoomDto actual = chatRoomService.readByChatRoomId(chatRoom.getId(), seller.getId());
