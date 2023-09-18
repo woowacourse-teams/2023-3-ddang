@@ -108,6 +108,32 @@ class UserServiceTest {
     }
 
     @Test
+    void 사용자_정보를_수정시_이름만_수정한다() {
+        // given
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
+
+        final UpdateUserDto updateUserDto = new UpdateUserDto("updateName", null);
+
+        // when
+        userService.updateById(user.getId(), updateUserDto);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(user.getName()).isEqualTo("updateName");
+            softAssertions.assertThat(user.getProfileImage().getImage().getStoreName()).isEqualTo("store.png");
+            softAssertions.assertThat(user.getReliability()).isEqualTo(4.7d);
+            softAssertions.assertThat(user.getOauthId()).isEqualTo("12345");
+        });
+    }
+
+    @Test
     void 사용자_정보_수정시_존재하지_않는_사용자라면_예외가_발생한다() {
         // given
         final Long invalidUserId = -999L;

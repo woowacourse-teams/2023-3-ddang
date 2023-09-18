@@ -62,8 +62,11 @@ public class User extends BaseTimeEntity {
         this.oauthId = oauthId;
     }
 
-    public void update(final String name, final ProfileImage profileProfileImage) {
+    public void updateName(final String name) {
         this.name = name;
+    }
+
+    public void updateProfileImage(final ProfileImage profileProfileImage) {
         this.profileImage = profileProfileImage;
     }
 
