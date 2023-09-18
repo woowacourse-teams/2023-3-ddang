@@ -26,6 +26,9 @@
             android:name=".feature.participateAuction.ParticipateAuctionActivity"
             android:exported="false" />
         <activity
+            android:name=".feature.myAuction.MyAuctionActivity"
+            android:exported="false" />
+        <activity
             android:name=".feature.profile.ProfileChangeActivity"
             android:exported="false" />
         <activity

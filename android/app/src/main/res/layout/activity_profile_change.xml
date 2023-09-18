@@ -34,7 +34,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="@dimen/margin_side_layout"
-                    android:contentDescription="@string/profile_change_profile_image_description"
+                    android:contentDescription="@string/all_app_bar_back_key_description"
                     android:onClick="@{() -> viewModel.setExitEvent()}"
                     android:src="@drawable/ic_left_24"
                     app:tint="@color/black_900" />

@@ -19,5 +19,7 @@ interface UserRepository {
         page: Int,
     ): ApiResponse<AuctionPreviewsResponse>
 
+    suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse>
+
     suspend fun updateDeviceToken(deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit>
 }

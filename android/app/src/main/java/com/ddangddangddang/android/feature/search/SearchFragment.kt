@@ -7,19 +7,38 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentSearchBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.util.binding.BindingFragment
+import com.ddangddangddang.android.util.view.Toaster
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search) {
     private val viewModel: SearchViewModel by viewModels { viewModelFactory }
     private val auctionAdapter = AuctionAdapter { auctionId ->
         navigateToAuctionDetail(auctionId)
+    }
+    private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            if (viewModel.isLast) return
+
+            if (!viewModel.loadingAuctionInProgress) {
+                val lastVisibleItemPosition =
+                    (binding.rvSearchAuctions.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
+                val auctionsSize = viewModel.auctions.value?.size ?: 0
+                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                    viewModel.loadAuctions()
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -30,13 +49,16 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun setupAuctionRecyclerView() {
-        binding.rvSearchAuctions.adapter = auctionAdapter
-        binding.rvSearchAuctions.addItemDecoration(
-            AuctionSpaceItemDecoration(
-                2,
-                resources.getDimensionPixelSize(R.dimen.margin_side_layout),
-            ),
-        )
+        with(binding.rvSearchAuctions) {
+            adapter = auctionAdapter
+            addItemDecoration(
+                AuctionSpaceItemDecoration(
+                    2,
+                    resources.getDimensionPixelSize(R.dimen.margin_side_layout),
+                ),
+            )
+            addOnScrollListener(auctionScrollListener)
+        }
     }
 
     private fun setupKeyboard() {
@@ -51,23 +73,23 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
 
     private fun setupViewModel() {
         binding.viewModel = viewModel
+        viewModel.auctions.observe(viewLifecycleOwner) {
+            changeAuctions(it)
+        }
         viewModel.event.observe(viewLifecycleOwner) { event ->
             when (event) {
-                is SearchViewModel.SearchEvent.KeywordSubmit -> changeAuctions(event.auctions)
+                SearchViewModel.SearchEvent.KeywordLimit -> notifyFailureMessage(
+                    ErrorType.FAILURE(getString(R.string.search_notice_keyword_limit)),
+                )
+
+                is SearchViewModel.SearchEvent.LoadFailureNotice -> notifyFailureMessage(event.error)
             }
         }
     }
 
     private fun changeAuctions(auctions: List<AuctionHomeModel>) {
-        hideKeyboard()
-        hideNoticeInputKeyword()
         auctionAdapter.submitList(auctions)
-
-        if (auctions.isEmpty()) {
-            showNoticeNoAuctions()
-            return
-        }
-        showAuctions()
+        hideKeyboard()
     }
 
     private fun hideKeyboard() {
@@ -75,20 +97,16 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
         imm.hideSoftInputFromWindow(binding.etSearchKeyword.windowToken, 0)
     }
 
-    private fun hideNoticeInputKeyword() {
-        if (binding.tvNoticeInputKeyword.visibility == View.VISIBLE) {
-            binding.tvNoticeInputKeyword.visibility = View.INVISIBLE
+    private fun notifyFailureMessage(type: ErrorType) {
+        val message = when (type) {
+            is ErrorType.FAILURE -> type.message
+            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
+            is ErrorType.UNEXPECTED -> getString(type.messageId)
         }
-    }
-
-    private fun showNoticeNoAuctions() {
-        binding.tvNoticeNoAuctions.visibility = View.VISIBLE
-        binding.rvSearchAuctions.visibility = View.INVISIBLE
-    }
-
-    private fun showAuctions() {
-        binding.tvNoticeNoAuctions.visibility = View.INVISIBLE
-        binding.rvSearchAuctions.visibility = View.VISIBLE
+        Toaster.showShort(
+            requireContext(),
+            message ?: getString(R.string.search_notice_default_error),
+        )
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {

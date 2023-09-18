@@ -22,6 +22,10 @@ class UserRepositoryImpl(private val remoteDataSource: UserRemoteDataSource) : U
         return remoteDataSource.getMyParticipateAuctionPreviews(page)
     }
 
+    override suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> {
+        return remoteDataSource.getMyAuctionPreviews(page)
+    }
+
     override suspend fun updateDeviceToken(deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit> {
         return remoteDataSource.updateDeviceToken(deviceTokenRequest)
     }
