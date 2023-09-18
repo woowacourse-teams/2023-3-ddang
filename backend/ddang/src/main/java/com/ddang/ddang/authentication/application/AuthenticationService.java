@@ -31,7 +31,7 @@ import java.util.Map;
 public class AuthenticationService {
 
     private static final String PRIVATE_CLAIMS_KEY = "userId";
-    private static final long DEFAULT_PROFILE_IMAGE_ID = 1L;
+    private static final String DEFAULT_PROFILE_IMAGE_STORE_NAME = "img_default_profile";
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
@@ -72,7 +72,7 @@ public class AuthenticationService {
     }
 
     private ProfileImage findDefaultProfileImage() {
-        return imageRepository.findById(DEFAULT_PROFILE_IMAGE_ID)
+        return imageRepository.findByStoreName(DEFAULT_PROFILE_IMAGE_STORE_NAME)
                               .orElse(null);
     }
 
