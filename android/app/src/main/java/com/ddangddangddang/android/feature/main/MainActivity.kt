@@ -130,7 +130,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
             messageId = R.string.alarm_dialog_check_permission_under_tiramisu_message,
             negativeStringId = R.string.all_dialog_default_negative_button,
             positiveStringId = R.string.alarm_dialog_check_permission_under_tiramisu_positive_button,
-            actionNegative = ::openNotificationSettings,
+            actionPositive = ::openNotificationSettings,
             isCancelable = false,
         )
     }
