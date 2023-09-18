@@ -27,7 +27,7 @@ class JpaProfileImageRepositoryTest {
     EntityManager em;
 
     @Autowired
-    JpaImageRepository imageRepository;
+    JpaProfileImageRepository imageRepository;
 
     @Test
     void 지정한_아이디에_해당하는_이미지를_조회한다() {
