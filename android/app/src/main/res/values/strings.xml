@@ -134,6 +134,7 @@
     <string name="mypage_snackbar_logout_failed_title">로그아웃에 실패했습니다</string>
     <string name="mypage_toast_withdrawal_successfully_message">성공적으로 탈퇴 되었습니다</string>
     <string name="mypage_snackbar_withdrawal_failed_title">탈퇴에 실패했습니다</string>
+    <string name="mypage_snackbar_load_profile_failed_title">프로필 정보를 불러오는데 실패했습니다</string>
 
     <!-- report -->
     <string name="report">신고하기</string>

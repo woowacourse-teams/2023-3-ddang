@@ -56,21 +56,21 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) {
         when (event) {
+            is MyPageViewModel.MyPageEvent.LoadProfileFailed -> {
+                val defaultMessage = getString(R.string.mypage_snackbar_load_profile_failed_title)
+                notifyRequestFailed(event.type, defaultMessage)
+            }
             MyPageViewModel.MyPageEvent.ProfileChange -> {
                 viewModel.profile.value?.let { navigateToUserInfoChange(it) }
             }
-
             MyPageViewModel.MyPageEvent.NavigateToMyAuctions -> {
                 navigateToMyAuction()
             }
-
             MyPageViewModel.MyPageEvent.NavigateToMyParticipateAuctions -> {
                 navigateToMyParticipateAuction()
             }
-
             MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
             }
-
             MyPageViewModel.MyPageEvent.NavigateToPrivacyPolicy -> showPrivacyPolicy()
             MyPageViewModel.MyPageEvent.LogoutSuccessfully -> {
                 notifyLogoutSuccessfully()

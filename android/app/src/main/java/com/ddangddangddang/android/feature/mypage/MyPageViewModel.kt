@@ -37,10 +37,15 @@ class MyPageViewModel(
                 is ApiResponse.Success -> {
                     _profile.value = response.body.toPresentation()
                 }
-
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Failure -> {
+                    _event.value = MyPageEvent.LoadProfileFailed(ErrorType.FAILURE(response.error))
+                }
+                is ApiResponse.NetworkError -> {
+                    _event.value = MyPageEvent.LoadProfileFailed(ErrorType.NETWORK_ERROR)
+                }
+                is ApiResponse.Unexpected -> {
+                    _event.value = MyPageEvent.LoadProfileFailed(ErrorType.UNEXPECTED)
+                }
             }
             _isLoading.value = false
         }
@@ -105,6 +110,7 @@ class MyPageViewModel(
     }
 
     sealed class MyPageEvent {
+        data class LoadProfileFailed(val type: ErrorType) : MyPageEvent()
         object ProfileChange : MyPageEvent()
         object NavigateToMyAuctions : MyPageEvent()
         object NavigateToMyParticipateAuctions : MyPageEvent()
