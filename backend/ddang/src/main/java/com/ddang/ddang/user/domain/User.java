@@ -39,7 +39,7 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "profile_image_id", foreignKey = @ForeignKey(name = "fk_user_profile_image"))
+    @JoinColumn(name = "profile_image_id", foreignKey = @ForeignKey(name = "fk_user_profile_image"), nullable = false)
     private ProfileImage profileImage;
 
     private double reliability;
