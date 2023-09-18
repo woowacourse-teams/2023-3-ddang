@@ -32,6 +32,9 @@ class UserRemoteDataSource(private val service: AuctionService) {
         return service.updateProfile(fileBody, body)
     }
 
+    suspend fun getMyParticipateAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> =
+        service.getMyParticipateAuctionPreviews(page)
+
     suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> =
         service.fetchMyAuctionPreviews(page)
 

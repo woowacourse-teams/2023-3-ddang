@@ -16,6 +16,7 @@ import com.ddangddangddang.android.databinding.FragmentMyPageBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.myAuction.MyAuctionActivity
+import com.ddangddangddang.android.feature.participateAuction.ParticipateAuctionActivity
 import com.ddangddangddang.android.feature.profile.ProfileChangeActivity
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
@@ -68,6 +69,7 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             }
 
             MyPageViewModel.MyPageEvent.NavigateToMyParticipateAuctions -> {
+                navigateToMyParticipateAuction()
             }
 
             MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
@@ -102,6 +104,10 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 profileModel,
             ),
         )
+    }
+
+    private fun navigateToMyParticipateAuction() {
+        startActivity(Intent(requireContext(), ParticipateAuctionActivity::class.java))
     }
 
     private fun notifyLogoutFailed() {

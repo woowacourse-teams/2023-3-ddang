@@ -18,6 +18,10 @@ class UserRepositoryImpl(private val remoteDataSource: UserRemoteDataSource) : U
         return remoteDataSource.updateProfile(image, profileUpdateRequest)
     }
 
+    override suspend fun getMyParticipateAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> {
+        return remoteDataSource.getMyParticipateAuctionPreviews(page)
+    }
+
     override suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> {
         return remoteDataSource.getMyAuctionPreviews(page)
     }

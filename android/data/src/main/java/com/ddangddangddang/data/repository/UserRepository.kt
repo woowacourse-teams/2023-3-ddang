@@ -15,6 +15,10 @@ interface UserRepository {
         profileUpdateRequest: ProfileUpdateRequest,
     ): ApiResponse<ProfileResponse>
 
+    suspend fun getMyParticipateAuctionPreviews(
+        page: Int,
+    ): ApiResponse<AuctionPreviewsResponse>
+
     suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse>
 
     suspend fun updateDeviceToken(deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit>
