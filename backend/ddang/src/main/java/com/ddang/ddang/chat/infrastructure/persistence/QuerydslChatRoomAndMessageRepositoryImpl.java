@@ -14,6 +14,7 @@ import java.util.List;
 import static com.ddang.ddang.auction.domain.QAuction.auction;
 import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
 import static com.ddang.ddang.chat.domain.QMessage.message;
+import static com.ddang.ddang.image.domain.QAuctionImage.auctionImage;
 import static java.util.Comparator.comparing;
 
 @Repository
@@ -25,19 +26,26 @@ public class QuerydslChatRoomAndMessageRepositoryImpl implements QuerydslChatRoo
     @Override
     public List<ChatRoomAndMessageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
         final List<ChatRoomAndMessageQueryProjectionDto> unsortedDtos =
-                queryFactory.select(new QChatRoomAndMessageQueryProjectionDto(chatRoom, message))
-                            .from(chatRoom).leftJoin(chatRoom.buyer)
-                            .fetchJoin().leftJoin(chatRoom.auction, auction)
-                            .fetchJoin().leftJoin(auction.seller)
-                            .fetchJoin().leftJoin(auction.auctionImages)
-                            .fetchJoin().leftJoin(auction.lastBid)
-                            .fetchJoin().leftJoin(message).on(message.id.eq(
+                queryFactory.select(new QChatRoomAndMessageQueryProjectionDto(chatRoom, message, auctionImage))
+                            .from(chatRoom)
+                            .leftJoin(chatRoom.buyer).fetchJoin()
+                            .leftJoin(chatRoom.auction, auction).fetchJoin()
+                            .leftJoin(auction.seller).fetchJoin()
+                            .leftJoin(auctionImage).on(auctionImage.id.eq(
+                                    JPAExpressions
+                                            .select(auctionImage.id.min())
+                                            .from(auctionImage)
+                                            .where(auctionImage.auction.id.eq(auction.id))
+                                            .groupBy(auctionImage.auction.id)
+                            )).fetchJoin()
+                            .leftJoin(auction.lastBid).fetchJoin()
+                            .leftJoin(message).on(message.id.eq(
                                     JPAExpressions
                                             .select(message.id.max())
                                             .from(message)
                                             .where(message.chatRoom.id.eq(chatRoom.id))
-                                            .groupBy(chatRoom.id)
-                            ))
+                                            .groupBy(message.chatRoom.id)
+                            )).fetchJoin()
                             .where(isSellerOrWinner(userId))
                             .fetch();
 

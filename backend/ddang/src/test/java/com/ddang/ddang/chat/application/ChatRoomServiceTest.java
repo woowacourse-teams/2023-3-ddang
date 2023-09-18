@@ -447,11 +447,14 @@ class ChatRoomServiceTest {
                                             .bidUnit(new BidUnit(3_000))
                                             .startPrice(new Price(30_000))
                                             .build();
-        final AuctionImage auctionImage = new AuctionImage("image.png", "image.png");
-        auctionImageRepository.save(auctionImage);
-        merryAuction.addAuctionImages(List.of(auctionImage));
-        enchoAuction.addAuctionImages(List.of(auctionImage));
-        jamieAuction.addAuctionImages(List.of(auctionImage));
+
+        final AuctionImage auctionImage1 = new AuctionImage("image1.png", "image1.png");
+        final AuctionImage auctionImage2 = new AuctionImage("image2.png", "image2.png");
+        final AuctionImage auctionImage3 = new AuctionImage("image3.png", "image3.png");
+        merryAuction.addAuctionImages(List.of(auctionImage1));
+        enchoAuction.addAuctionImages(List.of(auctionImage2));
+        jamieAuction.addAuctionImages(List.of(auctionImage3));
+        auctionImageRepository.saveAll(List.of(auctionImage1, auctionImage2, auctionImage3));
 
         auctionRepository.save(merryAuction);
         auctionRepository.save(enchoAuction);

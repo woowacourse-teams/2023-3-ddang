@@ -2,6 +2,7 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.image.domain.AuctionImage;
 
 public record ReadAuctionInChatRoomDto(
         Long id,
@@ -26,5 +27,14 @@ public record ReadAuctionInChatRoomDto(
 
         return bid.getPrice()
                   .getValue();
+    }
+
+    public static ReadAuctionInChatRoomDto of(final Auction auction, final AuctionImage thumbnailImage) {
+        return new ReadAuctionInChatRoomDto(
+                auction.getId(),
+                auction.getTitle(),
+                convertPrice(auction.getLastBid()),
+                thumbnailImage.getId()
+        );
     }
 }

@@ -11,7 +11,9 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -39,6 +41,9 @@ class QuerydslChatRoomAndMessageRepositoryImplTest {
 
     @Autowired
     JpaAuctionRepository auctionRepository;
+
+    @Autowired
+    JpaAuctionImageRepository auctionImageRepository;
 
     @Autowired
     JpaUserRepository userRepository;
@@ -117,6 +122,14 @@ class QuerydslChatRoomAndMessageRepositoryImplTest {
                                             .startPrice(new Price(30_000))
                                             .build();
 
+        final AuctionImage auctionImage1 = new AuctionImage("image1.png", "image1.png");
+        final AuctionImage auctionImage2 = new AuctionImage("image2.png", "image2.png");
+        final AuctionImage auctionImage3 = new AuctionImage("image3.png", "image3.png");
+        merryAuction.addAuctionImages(List.of(auctionImage1));
+        enchoAuction.addAuctionImages(List.of(auctionImage2));
+        jamieAuction.addAuctionImages(List.of(auctionImage3));
+        auctionImageRepository.saveAll(List.of(auctionImage1, auctionImage2, auctionImage3));
+
         auctionRepository.save(merryAuction);
         auctionRepository.save(enchoAuction);
         auctionRepository.save(jamieAuction);
@@ -176,10 +189,13 @@ class QuerydslChatRoomAndMessageRepositoryImplTest {
             softAssertions.assertThat(actual).hasSize(3);
             softAssertions.assertThat(actual.get(0).chatRoom()).isEqualTo(chatRoom2);
             softAssertions.assertThat(actual.get(0).message()).isEqualTo(lastMessage3);
+            softAssertions.assertThat(actual.get(0).thumbnailImage()).isEqualTo(auctionImage2);
             softAssertions.assertThat(actual.get(1).chatRoom()).isEqualTo(chatRoom3);
             softAssertions.assertThat(actual.get(1).message()).isEqualTo(lastMessage2);
+            softAssertions.assertThat(actual.get(1).thumbnailImage()).isEqualTo(auctionImage3);
             softAssertions.assertThat(actual.get(2).chatRoom()).isEqualTo(chatRoom1);
             softAssertions.assertThat(actual.get(2).message()).isEqualTo(lastMessage1);
+            softAssertions.assertThat(actual.get(2).thumbnailImage()).isEqualTo(auctionImage1);
         });
     }
 }
