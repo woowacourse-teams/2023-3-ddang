@@ -345,6 +345,103 @@ public class InitDataController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/init/chatRooms")
+    public ResponseEntity<Void> chatRooms(
+            @RequestPart final List<MultipartFile> images
+    ) {
+        Random random = new Random();
+
+        int minValue = 52;
+        int maxValue = 150;
+
+        final List<ChatRoom> chatRooms = new ArrayList<>();
+
+        for (int i = 0; i < 49; i++) {
+            System.out.printf("%d 번째 채팅방 저장\n", i);
+
+            long randomAuction = random.nextLong(maxValue - minValue + 1) + minValue;
+            System.out.println(randomAuction);
+            final Auction auction = auctionRepository.findAuctionById(randomAuction)
+                                                     .orElseThrow(() -> new AuctionNotFoundException(
+                                                             "지정한 경매가 없습니다."
+                                                     ));
+
+            User buyer;
+            while (true) {
+                if (auction.getLastBid() != null) {
+                    buyer = auction.getLastBid().getBidder();
+                    break;
+                }
+            }
+
+            ChatRoom chatRoom = new ChatRoom(auction, buyer);
+            chatRooms.add(chatRoom);
+        }
+
+        // 한 사람이 50개의 채팅방
+        LocalDateTime localDateTime = LocalDateTime.now();
+        minValue = 1;
+        maxValue = 120;
+
+        for (int i = 0; i < 50; i++) {
+            System.out.printf("%d 번째 경매 저장\n", i);
+
+            long sellerId;
+            do {
+                sellerId = random.nextLong(maxValue - minValue + 1) + minValue;
+            } while (sellerId == 100l);
+
+
+            final String title = UUID.randomUUID().toString().substring(0, 30);
+            final String description = title;
+
+            long randomDay = random.nextInt(10) + 1;
+            LocalDateTime closingTime = localDateTime.minusDays(randomDay);
+
+            final CreateAuctionRequest request = new CreateAuctionRequest(title, description, 100, 10_000, closingTime, 19L, List.of(3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L, 12L));
+
+            final CreateAuctionDto dto = CreateAuctionDto.of(
+                    request,
+                    images,
+                    sellerId
+            );
+            final User user = userRepository.findById(dto.sellerId())
+                                            .orElseThrow(() -> new UserNotFoundException("지정한 판매자를 찾을 수 없습니다."));
+            final Category subCategory = categoryRepository.findSubCategoryById(dto.subCategoryId())
+                                                           .orElseThrow(() -> new CategoryNotFoundException(
+                                                                   "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
+                                                           ));
+            final Auction auction = dto.toEntity(user, subCategory);
+            final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
+            auction.addAuctionRegions(auctionRegions);
+
+            final List<AuctionImage> auctionImages = convertAuctionImages(dto);
+            auction.addAuctionImages(auctionImages);
+
+            auctionRepository.save(auction);
+
+            long bidderId = 100l;
+            final User bidder = userRepository.findById(bidderId)
+                                              .orElseThrow(() -> new UserNotFoundException("지정한 사용자를 찾을 수 없습니다."));
+            final int bidPrice = convertNextBidPrice(auction, auction.getId());
+
+            final CreateBidDto bidDto = new CreateBidDto(auction.getId(), bidPrice, 100l);
+
+            final Bid bid = bidDto.toEntity(auction, user);
+            auction.updateLastBid(bid);
+            bidRepository.save(bid);
+
+            final User buyer = bidder;
+
+            ChatRoom chatRoom = new ChatRoom(auction, buyer);
+            chatRooms.add(chatRoom);
+        }
+
+        chatRoomRepository.saveAll(chatRooms);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/init/chat-room/reports")
     public ResponseEntity<Void> chatRoomReports() {
         final List<ChatRoomReport> reports = new ArrayList<>();
