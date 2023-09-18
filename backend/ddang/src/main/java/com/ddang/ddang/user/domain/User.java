@@ -66,8 +66,8 @@ public class User extends BaseTimeEntity {
         this.name = name;
     }
 
-    public void updateProfileImage(final ProfileImage profileProfileImage) {
-        this.profileImage = profileProfileImage;
+    public void updateProfileImage(final ProfileImage profileImage) {
+        this.profileImage = profileImage;
     }
 
     public void withdrawal() {
