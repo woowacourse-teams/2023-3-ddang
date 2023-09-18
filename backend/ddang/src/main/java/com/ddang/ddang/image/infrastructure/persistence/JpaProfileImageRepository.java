@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.Optional;
 
-public interface JpaImageRepository extends JpaRepository<ProfileImage, Long> {
+public interface JpaProfileImageRepository extends JpaRepository<ProfileImage, Long> {
 
     @Query("select i from ProfileImage i where i.image.storeName = :storeName")
     Optional<ProfileImage> findByStoreName(final String storeName);

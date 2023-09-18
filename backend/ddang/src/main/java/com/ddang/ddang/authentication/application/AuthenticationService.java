@@ -15,7 +15,7 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.infrastructure.persistence.JpaImageRepository;
+import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +31,12 @@ import java.util.Map;
 public class AuthenticationService {
 
     private static final String PRIVATE_CLAIMS_KEY = "userId";
-    private static final String DEFAULT_PROFILE_IMAGE_STORE_NAME = "img_default_profile";
+    private static final String DEFAULT_PROFILE_IMAGE_STORE_NAME = "default_profile_image.png";
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final JpaUserRepository userRepository;
-    private final JpaImageRepository imageRepository;
+    private final JpaProfileImageRepository profileImageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
@@ -72,8 +72,8 @@ public class AuthenticationService {
     }
 
     private ProfileImage findDefaultProfileImage() {
-        return imageRepository.findByStoreName(DEFAULT_PROFILE_IMAGE_STORE_NAME)
-                              .orElse(null);
+        return profileImageRepository.findByStoreName(DEFAULT_PROFILE_IMAGE_STORE_NAME)
+                                     .orElse(null);
     }
 
     private String calculateRandomNumber() {

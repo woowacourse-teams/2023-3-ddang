@@ -13,22 +13,22 @@ import org.springframework.data.domain.Sort.Order;
 /**
  * 사용하는 더미 데이터 (제목 키워드 / ID / 신뢰도 / 경매 참여자 수 / 경매 마감일)
  *
- * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 뒤
+ * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 전
  * Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤
  * Auction3 : 맥북 / 3L / 2.1d / 4 / 3일 뒤
  * Auction4 : 맥북 / 4L / 5.0d / 7 / 2일 뒤
  * Auction5 : 핫식스 / 5L / 1.5d / 4 / 1일 뒤
- * Auction6 : 레드불 / 6L / 0.3d / 8 / 2일 뒤
- * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 뒤
- * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 뒤
- * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 뒤
+ * Auction6 : 레드불 / 6L / 0.3d / 8 / 2일 전
+ * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 전
+ * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 전
+ * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 전
  * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤
  * Auction11 : 맥북 / 11L / 3.5d / 6 / 4일 뒤
  * Auction12 : 맥북 / 12L / 3.5d / 6 / 4일 뒤
- * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 뒤
+ * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 전
  * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤
  * Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤
- * Auction16 : 맥북 / 15L / 3.5d / 6 / 4일 뒤
+ * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 전
  */
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
@@ -44,17 +44,17 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
          * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 뒤
          * Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤
          * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤
-         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 뒤
+         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 전
          * Auction12 : 맥북 / 12L / 3.5d / 6 / 4일 뒤
          * Auction11 : 맥북 / 11L / 3.5d / 6 / 4일 뒤
          * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤
-         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 뒤
-         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 뒤
-         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 뒤
+         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 전
+         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 전
+         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 전
          * Auction4 : 맥북 / 4L / 5.0d / 7 / 2일 뒤
          * Auction3 : 맥북 / 3L / 2.1d / 4 / 3일 뒤
          * Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤
-         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 뒤
+         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 전
          */
         @Nested
         class Id_기준_정렬_조회_테스트 {
@@ -189,15 +189,15 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
          * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 뒤
          * Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤
          * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤
-         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 뒤
+         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 전
          * Auction12 : 맥북 / 12L / 3.5d / 6 / 4일 뒤
          * Auction11 : 맥북 / 11L / 3.5d / 6 / 4일 뒤
          * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤
-         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 뒤
-         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 뒤
+         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 전
+         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 전
          * Auction3 : 맥북 / 3L / 2.1d / 4 / 3일 뒤
-         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 뒤
-         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 뒤
+         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 전
+         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 전
          * Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤
          */
         @Nested
@@ -330,17 +330,17 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
          * 신뢰도 기준 정렬 순서
          *
          * Auction4 : 맥북 / 4L / 5.0d / 7 / 2일 뒤
-         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 뒤
-         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 뒤
+         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 전
+         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 전
          * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 뒤
          * Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤
          * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤
-         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 뒤
+         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 전
          * Auction12 : 맥북 / 12L / 3.5d / 6 / 4일 뒤
          * Auction11 : 맥북 / 11L / 3.5d / 6 / 4일 뒤
          * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤
-         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 뒤
-         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 뒤
+         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 전
+         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 전
          * Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤
          * Auction3 : 맥북 / 3L / 2.1d / 4 / 3일 뒤
          *
@@ -475,19 +475,19 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
          * 마감 임박순 기준 정렬 순서
          *
          * Auction4 : 맥북 / 4L / 5.0d / 7 / 2일 뒤
-         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 뒤
          * Auction3 : 맥북 / 3L / 2.1d / 4 / 3일 뒤
-         * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 뒤
          * Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤
          * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤
-         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 뒤
          * Auction12 : 맥북 / 12L / 3.5d / 6 / 4일 뒤
          * Auction11 : 맥북 / 11L / 3.5d / 6 / 4일 뒤
          * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤
-         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 뒤
-         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 뒤
          * Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤
-         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 뒤
+         * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 전
+         * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 전
+         * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 전
+         * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 전
+         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 전
+         * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 전
          */
         @Nested
         class 마감_임박순_정렬_조회_테스트 {
@@ -507,8 +507,8 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
                 SoftAssertions.assertSoftly(softAssertions -> {
                     softAssertions.assertThat(actual).hasSize(3);
                     softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction4);
-                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction7);
-                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction3);
+                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction3);
+                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction15);
                     softAssertions.assertThat(actual.hasNext()).isTrue();
                 });
             }
@@ -527,9 +527,9 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
                 // then
                 SoftAssertions.assertSoftly(softAssertions -> {
                     softAssertions.assertThat(actual).hasSize(3);
-                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction16);
-                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction15);
-                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction14);
+                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction14);
+                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction12);
+                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction11);
                     softAssertions.assertThat(actual.hasNext()).isTrue();
                 });
             }
@@ -548,9 +548,9 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
                 // then
                 SoftAssertions.assertSoftly(softAssertions -> {
                     softAssertions.assertThat(actual).hasSize(3);
-                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction13);
-                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction12);
-                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction11);
+                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction10);
+                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction2);
+                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction1);
                     softAssertions.assertThat(actual.hasNext()).isTrue();
                 });
             }
@@ -569,9 +569,9 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
                 // then
                 SoftAssertions.assertSoftly(softAssertions -> {
                     softAssertions.assertThat(actual).hasSize(3);
-                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction10);
-                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction9);
-                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction8);
+                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction16);
+                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction13);
+                    softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction9);
                     softAssertions.assertThat(actual.hasNext()).isTrue();
                 });
             }
@@ -590,8 +590,8 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
                 // then
                 SoftAssertions.assertSoftly(softAssertions -> {
                     softAssertions.assertThat(actual).hasSize(2);
-                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction2);
-                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction1);
+                    softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction8);
+                    softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction7);
                     softAssertions.assertThat(actual.hasNext()).isFalse();
                 });
             }
