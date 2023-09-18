@@ -14,6 +14,8 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformatio
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.image.infrastructure.persistence.JpaImageRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +31,12 @@ import java.util.Map;
 public class AuthenticationService {
 
     private static final String PRIVATE_CLAIMS_KEY = "userId";
+    private static final long DEFAULT_PROFILE_IMAGE_ID = 1L;
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final JpaUserRepository userRepository;
+    private final JpaImageRepository imageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
@@ -58,13 +62,18 @@ public class AuthenticationService {
                              .orElseGet(() -> {
                                  final User user = User.builder()
                                                        .name(oauth2Type.calculateNickname(calculateRandomNumber()))
-                                                       .profileImage(null)
+                                                       .profileImage(findDefaultProfileImage())
                                                        .reliability(0.0d)
                                                        .oauthId(userInformationDto.findUserId())
                                                        .build();
 
                                  return userRepository.save(user);
                              });
+    }
+
+    private ProfileImage findDefaultProfileImage() {
+        return imageRepository.findById(DEFAULT_PROFILE_IMAGE_ID)
+                              .orElse(null);
     }
 
     private String calculateRandomNumber() {

@@ -17,6 +17,7 @@ import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.image.infrastructure.persistence.JpaImageRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.SoftAssertions;
@@ -62,6 +63,9 @@ class AuthenticationServiceTest {
     JpaUserRepository userRepository;
 
     @Autowired
+    JpaImageRepository imageRepository;
+
+    @Autowired
     JpaDeviceTokenRepository userDeviceTokenRepository;
 
     @Autowired
@@ -92,11 +96,13 @@ class AuthenticationServiceTest {
                 deviceTokenService,
                 mockProviderComposite,
                 userRepository,
+                imageRepository,
                 tokenEncoder,
                 tokenDecoder,
                 mockBlackListTokenService
         );
 
+        imageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
         doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
     }
 
