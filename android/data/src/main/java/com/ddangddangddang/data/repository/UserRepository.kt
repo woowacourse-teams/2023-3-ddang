@@ -11,7 +11,7 @@ interface UserRepository {
     suspend fun getProfile(): ApiResponse<ProfileResponse>
 
     suspend fun updateProfile(
-        image: File,
+        image: File?,
         profileUpdateRequest: ProfileUpdateRequest,
     ): ApiResponse<ProfileResponse>
 
