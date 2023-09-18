@@ -170,7 +170,10 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
 
     @Override
     public Slice<Auction> findAuctionsAllByUserId(final Long userId, final Pageable pageable) {
-        final List<BooleanExpression> booleanExpressions = List.of(auction.seller.id.eq(userId));
+        final List<BooleanExpression> booleanExpressions = List.of(
+                auction.seller.id.eq(userId),
+                auction.deleted.isFalse()
+        );
         final List<OrderSpecifier<?>> orderSpecifiers = List.of(auction.id.desc());
         final List<Long> findAuctionIds = findAuctionIds(booleanExpressions, orderSpecifiers, pageable);
         final List<Auction> findAuctions = findAuctionsByIdsAndOrderSpecifiers(
