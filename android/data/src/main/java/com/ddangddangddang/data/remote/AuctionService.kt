@@ -95,6 +95,13 @@ interface AuctionService {
     @GET("/users")
     suspend fun fetchProfile(): ApiResponse<ProfileResponse>
 
+    @Multipart
+    @PATCH("/users")
+    suspend fun updateProfile(
+        @Part image: MultipartBody.Part,
+        @Part("request") body: RequestBody,
+    ): ApiResponse<ProfileResponse>
+
     @POST("reports/auctions")
     suspend fun reportAuction(@Body reportRequest: ReportRequest): ApiResponse<Unit>
 
