@@ -14,8 +14,8 @@ import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndMessageRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndMessageAndImageRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -34,7 +34,7 @@ public class ChatRoomService {
     private static final Long DEFAULT_CHAT_ROOM_ID = null;
 
     private final JpaChatRoomRepository chatRoomRepository;
-    private final QuerydslChatRoomAndMessageRepository querydslChatRoomAndMessageRepository;
+    private final QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
     private final JpaUserRepository userRepository;
     private final JpaAuctionRepository auctionRepository;
 
@@ -83,12 +83,12 @@ public class ChatRoomService {
     public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        final List<ChatRoomAndMessageDto> chatRoomAndMessageQueryProjectionDtos =
-                querydslChatRoomAndMessageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
+        final List<ChatRoomAndMessageAndImageDto> chatRoomAndMessageAndImageQueryProjectionDtos =
+                querydslChatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
 
-        return chatRoomAndMessageQueryProjectionDtos.stream()
-                                                    .map(dto -> ReadChatRoomWithLastMessageDto.of(findUser, dto))
-                                                    .toList();
+        return chatRoomAndMessageAndImageQueryProjectionDtos.stream()
+                                                            .map(dto -> ReadChatRoomWithLastMessageDto.of(findUser, dto))
+                                                            .toList();
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {

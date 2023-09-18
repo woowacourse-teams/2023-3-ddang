@@ -1,8 +1,8 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageQueryProjectionDto;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageQueryProjectionDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageQueryProjectionDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageAndImageQueryProjectionDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -19,14 +19,14 @@ import static java.util.Comparator.comparing;
 
 @Repository
 @RequiredArgsConstructor
-public class QuerydslChatRoomAndMessageRepositoryImpl implements QuerydslChatRoomAndMessageRepository {
+public class QuerydslChatRoomAndMessageAndImageRepositoryImpl implements QuerydslChatRoomAndMessageAndImageRepository {
 
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ChatRoomAndMessageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
-        final List<ChatRoomAndMessageQueryProjectionDto> unsortedDtos =
-                queryFactory.select(new QChatRoomAndMessageQueryProjectionDto(chatRoom, message, auctionImage))
+    public List<ChatRoomAndMessageAndImageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
+        final List<ChatRoomAndMessageAndImageQueryProjectionDto> unsortedDtos =
+                queryFactory.select(new QChatRoomAndMessageAndImageQueryProjectionDto(chatRoom, message, auctionImage))
                             .from(chatRoom)
                             .leftJoin(chatRoom.buyer).fetchJoin()
                             .leftJoin(chatRoom.auction, auction).fetchJoin()
@@ -52,14 +52,14 @@ public class QuerydslChatRoomAndMessageRepositoryImpl implements QuerydslChatRoo
         return sortByLastMessageIdDesc(unsortedDtos);
     }
 
-    private List<ChatRoomAndMessageDto> sortByLastMessageIdDesc(
-            final List<ChatRoomAndMessageQueryProjectionDto> unsortedDtos
+    private List<ChatRoomAndMessageAndImageDto> sortByLastMessageIdDesc(
+            final List<ChatRoomAndMessageAndImageQueryProjectionDto> unsortedDtos
     ) {
         return unsortedDtos.stream()
                            .sorted(comparing(
-                                           (ChatRoomAndMessageQueryProjectionDto unsortedDto) -> unsortedDto.message().getId()
+                                           (ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) -> unsortedDto.message().getId()
                                    ).reversed()
-                           ).map(ChatRoomAndMessageQueryProjectionDto::toSortedDto)
+                           ).map(ChatRoomAndMessageAndImageQueryProjectionDto::toSortedDto)
                            .toList();
     }
 

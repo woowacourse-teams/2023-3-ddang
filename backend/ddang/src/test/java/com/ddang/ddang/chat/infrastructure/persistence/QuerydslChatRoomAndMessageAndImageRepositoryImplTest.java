@@ -8,7 +8,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -34,7 +34,7 @@ import java.util.List;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class QuerydslChatRoomAndMessageRepositoryImplTest {
+class QuerydslChatRoomAndMessageAndImageRepositoryImplTest {
 
     @PersistenceContext
     EntityManager em;
@@ -53,14 +53,14 @@ class QuerydslChatRoomAndMessageRepositoryImplTest {
 
     @Autowired
     JpaChatRoomRepository chatRoomRepository;
-    QuerydslChatRoomAndMessageRepository querydslChatRoomAndMessageRepository;
+    QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
 
     @Autowired
     JpaMessageRepository messageRepository;
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslChatRoomAndMessageRepository = new QuerydslChatRoomAndMessageRepositoryImpl(queryFactory);
+        querydslChatRoomAndMessageAndImageRepository = new QuerydslChatRoomAndMessageAndImageRepositoryImpl(queryFactory);
     }
 
     @Test
@@ -181,8 +181,8 @@ class QuerydslChatRoomAndMessageRepositoryImplTest {
         em.clear();
 
         // when
-        final List<ChatRoomAndMessageDto> actual =
-                querydslChatRoomAndMessageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
+        final List<ChatRoomAndMessageAndImageDto> actual =
+                querydslChatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(encho.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
