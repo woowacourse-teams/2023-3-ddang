@@ -17,7 +17,9 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
@@ -65,6 +67,7 @@ public class InitDataController {
     private final JpaCategoryRepository categoryRepository;
     private final JpaAuctionReportRepository auctionReportRepository;
     private final JpaChatRoomReportRepository chatRoomReportRepository;
+    private final JpaMessageRepository messageRepository;
     private final StoreImageProcessor imageProcessor;
 
     @GetMapping("test/{auctionId}")
@@ -359,16 +362,17 @@ public class InitDataController {
         for (int i = 0; i < 50; i++) {
             System.out.printf("%d 번째 채팅방 저장\n", i);
 
-            long randomAuction = random.nextLong(maxValue - minValue + 1) + minValue;
-            System.out.println(randomAuction);
-            final Auction auction = auctionRepository.findAuctionById(randomAuction)
-                                                     .orElseThrow(() -> new AuctionNotFoundException(
-                                                             "지정한 경매가 없습니다."
-                                                     ));
-
             User buyer;
+            Auction auction;
             while (true) {
-                if (chatRoomRepository.findChatRoomIdByAuctionId(auction.getId()) == null) {
+                long randomAuction = random.nextLong(maxValue - minValue + 1) + minValue;
+                System.out.println(randomAuction);
+                auction = auctionRepository.findAuctionById(randomAuction)
+                                           .orElseThrow(() -> new AuctionNotFoundException(
+                                                   "지정한 경매가 없습니다."
+                                           ));
+
+                if (chatRoomRepository.findChatRoomIdByAuctionId(auction.getId()).isEmpty()) {
                     if (auction.getLastBid() != null) {
                         buyer = auction.getLastBid().getBidder();
                         break;
@@ -444,16 +448,70 @@ public class InitDataController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/init/chat-room/1/messages/")
+    public ResponseEntity<Void> createMessagesForChatRoom1() {
+        // chatRoomId = 1에 해당하는 메시지 100개, auctionId = 99
+        final int messageCountForChatRoom1 = 100;
+        final ChatRoom findChatRoom1 = chatRoomRepository.findById(1L)
+                                                         .orElseThrow(() -> new IllegalArgumentException("첫 번째 채팅방이 존재하지 않습니다."));
+        final User receiver = findChatRoom1.getAuction().getSeller();
+        final User writer = findChatRoom1.getBuyer();
+
+        for (int i = 0; i < messageCountForChatRoom1; i++) {
+            final String contents = UUID.randomUUID().toString().substring(0, 30);
+            final Message messageForChatRoom1 = Message.builder()
+                                                       .chatRoom(findChatRoom1)
+                                                       .writer(writer)
+                                                       .receiver(receiver)
+                                                       .contents(contents)
+                                                       .build();
+            messageRepository.save(messageForChatRoom1);
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/init/5messages/")
+    public ResponseEntity<Void> create5Messages() {
+        int chatroomMinValue = 2;
+        int chatroomMaxValue = 100;
+
+        for (int i = chatroomMinValue; i <= chatroomMaxValue; i++) {
+            final long chatRoomId = i;
+            final ChatRoom findChatRoom = chatRoomRepository.findById(chatRoomId)
+                                                             .orElseThrow(() -> new IllegalArgumentException(chatRoomId + " 번째 채팅방이 존재하지 않습니다."));
+            final User receiver = findChatRoom.getBuyer();
+            final User writer = findChatRoom.getAuction().getSeller();
+
+            create5MessagesPerChatRoom(findChatRoom, receiver, writer);
+        }
+
+        return ResponseEntity.noContent().build();
+    }
+
+    private void create5MessagesPerChatRoom(final ChatRoom findChatRoom1, final User receiver, final User writer) {
+        for (int i = 0; i < 5; i++) {
+            final String contents = UUID.randomUUID().toString().substring(0, 30);
+            final Message messageForChatRoom1 = Message.builder()
+                                                       .chatRoom(findChatRoom1)
+                                                       .writer(writer)
+                                                       .receiver(receiver)
+                                                       .contents(contents)
+                                                       .build();
+            messageRepository.save(messageForChatRoom1);
+        }
+    }
+
     @PostMapping("/init/chat-room/reports")
     public ResponseEntity<Void> chatRoomReports() {
         final List<ChatRoomReport> reports = new ArrayList<>();
 
-        for (long chatRoomId = 52; chatRoomId < 102; chatRoomId++) {
+        for (long chatRoomId = 51; chatRoomId < 101; chatRoomId++) {
             System.out.printf("%d 번째 채팅룸 신고 저장\n", chatRoomId);
 
             final ChatRoom chatRoom = chatRoomRepository.findChatRoomById(chatRoomId)
                                                         .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                                "지정한 경매가 없습니다."
+                                                                "지정한 채팅방이 없습니다."
                                                         ));
 
             long userId = chatRoom.getBuyer().getId();
