@@ -356,7 +356,7 @@ public class InitDataController {
 
         final List<ChatRoom> chatRooms = new ArrayList<>();
 
-        for (int i = 0; i < 49; i++) {
+        for (int i = 0; i < 50; i++) {
             System.out.printf("%d 번째 채팅방 저장\n", i);
 
             long randomAuction = random.nextLong(maxValue - minValue + 1) + minValue;
@@ -368,9 +368,11 @@ public class InitDataController {
 
             User buyer;
             while (true) {
-                if (auction.getLastBid() != null) {
-                    buyer = auction.getLastBid().getBidder();
-                    break;
+                if (chatRoomRepository.findChatRoomIdByAuctionId(auction.getId()) == null) {
+                    if (auction.getLastBid() != null) {
+                        buyer = auction.getLastBid().getBidder();
+                        break;
+                    }
                 }
             }
 
