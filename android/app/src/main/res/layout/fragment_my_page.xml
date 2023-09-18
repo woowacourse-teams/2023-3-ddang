@@ -142,7 +142,8 @@
                     android:textColor="@color/black_400"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
-                    app:layout_constraintTop_toBottomOf="@id/tv_logout_button" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_logout_button"
+                    android:onClick="@{() -> viewModel.withdrawal()}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

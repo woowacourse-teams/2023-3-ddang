@@ -69,6 +69,17 @@ class AuthRepositoryImpl private constructor(
         }
     }
 
+    override suspend fun withdrawal(): ApiResponse<Unit> {
+        val response = remoteDataSource.withdrawal(
+            localDataSource.getAccessToken(),
+            localDataSource.getRefreshToken(),
+        )
+
+        if (response is ApiResponse.Success) resetToken()
+
+        return response
+    }
+
     companion object {
         @Volatile
         private var instance: AuthRepositoryImpl? = null
