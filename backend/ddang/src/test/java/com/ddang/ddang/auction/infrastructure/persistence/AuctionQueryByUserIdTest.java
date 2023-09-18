@@ -10,22 +10,22 @@ import org.springframework.data.domain.Slice;
 /**
  * 사용하는 더미 데이터 (제목 키워드 / ID / 신뢰도 / 경매 참여자 수 / 경매 마감일 / 판매자)
  *
- * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 뒤 / seller 1
+ * Auction1 : 맥북 / 1L / 4.7d / 2 / 5일 전 / seller 1
  * Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤 / seller 2
  * Auction3 : 맥북 / 3L / 2.1d / 4 / 3일 뒤 / seller 3
  * Auction4 : 맥북 / 4L / 5.0d / 7 / 2일 뒤 / seller 4
  * Auction5 : 핫식스 / 5L / 1.5d / 4 / 1일 뒤 / seller 5
- * Auction6 : 레드불 / 6L / 0.3d / 8 / 2일 뒤 / seller 6
- * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 뒤 / seller 1
- * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 뒤 / seller 2
- * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 뒤 / seller 2
+ * Auction6 : 레드불 / 6L / 0.3d / 8 / 2일 전 / seller 6
+ * Auction7 : 맥북 / 7L / 4.7d / 3 / 3일 전 / seller 1
+ * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 전 / seller 2
+ * Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 전 / seller 2
  * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤 / seller 2
  * Auction11 : 맥북 / 11L / 3.5d / 6 / 4일 뒤 / seller 2
  * Auction12 : 맥북 / 12L / 3.5d / 6 / 4일 뒤 / seller 2
- * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 뒤 / seller 2
+ * Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 전 / seller 2
  * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤 / seller 2
  * Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤 / seller 2
- * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 뒤 / seller 2
+ * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 전 / seller 2
  */
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionQueryByUserIdTest extends InitializeCommonAuctionData {
@@ -36,11 +36,11 @@ public class AuctionQueryByUserIdTest extends InitializeCommonAuctionData {
         /**
          * seller 2 기반 경매 목록
          *
-         * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 뒤 / seller 2 Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤 / seller 2
-         * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤 / seller 2 Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 뒤 / seller 2
+         * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 전 / seller 2 Auction15 : 맥북 / 15L / 3.5d / 6 / 4일 뒤 / seller 2
+         * Auction14 : 맥북 / 14L / 3.5d / 6 / 4일 뒤 / seller 2 Auction13 : 맥북 / 13L / 3.5d / 6 / 4일 전 / seller 2
          * Auction12 : 맥북 / 12L / 3.5d / 6 / 4일 뒤 / seller 2 Auction11 : 맥북 / 11L / 3.5d / 6 / 4일 뒤 / seller 2
-         * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤 / seller 2 Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 뒤 / seller 2
-         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 뒤 / seller 2 Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤 / seller 2
+         * Auction10 : 맥북 / 10L / 3.5d / 6 / 4일 뒤 / seller 2 Auction9 : 맥북 / 9L / 3.5d / 6 / 4일 전 / seller 2
+         * Auction8 : 맥북 / 8L / 3.5d / 6 / 4일 전 / seller 2 Auction2 : 맥북 / 2L / 3.5d / 1 / 4일 뒤 / seller 2
          */
         @Nested
         class Seller2_요청_테스트 {
