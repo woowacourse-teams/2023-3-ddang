@@ -162,7 +162,7 @@ class UserServiceTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(user.getName()).isEqualTo("name");
+            softAssertions.assertThat(user.getName()).isEqualTo("사용자");
             softAssertions.assertThat(user.getProfileImage().getImage().getStoreName()).isEqualTo("newStore.png");
             softAssertions.assertThat(user.getReliability()).isEqualTo(4.7d);
             softAssertions.assertThat(user.getOauthId()).isEqualTo("12345");
