@@ -158,7 +158,7 @@
     <string name="search_notice_keyword_limit">검색어를 2~20자 사이로 입력해주세요.</string>
     <string name="search_notice_default_error">에러가 발생했습니다. 다시 시도해주세요.</string>
 
-    <!-- profileChange-->
+    <!-- profileChange -->
     <string name="profile_change">회원 정보 수정</string>
     <string name="profile_change_profile_image_button_description">회원 프로필 수정 버튼</string>
     <string name="profile_change_nickname">닉네임</string>
@@ -166,4 +166,9 @@
     <string name="profile_change_profile_image_description">선택된 회원 프로필 이미지</string>
     <string name="profile_change_confirm">확인</string>
     <string name="profile_change_success">회원 정보 수정 성공</string>
+
+    <!-- my_auction -->
+    <string name="my_auction_list_title">나의 경매 목록</string>
+    <string name="my_auction_list_not_exist">등록한 경매 상품이 아직 없습니다</string>
+    <string name="my_auction_load_failed_title">내 경매 목록을 불러오는데 실패했습니다</string>
 </resources>
