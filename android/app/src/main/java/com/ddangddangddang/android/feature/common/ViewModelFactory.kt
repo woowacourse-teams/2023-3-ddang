@@ -72,11 +72,10 @@ val viewModelFactory = object : ViewModelProvider.Factory {
                 )
 
                 isAssignableFrom(ReportViewModel::class.java) -> ReportViewModel(auctionRepository)
-                isAssignableFrom(SearchViewModel::class.java) -> SearchViewModel()
+                isAssignableFrom(SearchViewModel::class.java) -> SearchViewModel(auctionRepository)
                 isAssignableFrom(ProfileChangeViewModel::class.java) -> ProfileChangeViewModel(
                     userRepository,
                 )
-
                 else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
             }
         } as T
