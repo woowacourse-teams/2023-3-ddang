@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface JpaBidRepository extends JpaRepository<Bid, Long> {
 
-    List<Bid> findByAuctionId(final Long id);
+    List<Bid> findByAuctionIdOrderByIdAsc(final Long id);
 
     @Query("select b from Bid b where b.auction.id = :auctionId order by b.id desc limit 1")
     Bid findLastBidByAuctionId(@Param("auctionId") final Long id);
