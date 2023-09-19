@@ -12,7 +12,7 @@ import java.io.File
 class UserRepositoryImpl(private val remoteDataSource: UserRemoteDataSource) : UserRepository {
     override suspend fun getProfile(): ApiResponse<ProfileResponse> = remoteDataSource.getProfile()
     override suspend fun updateProfile(
-        image: File,
+        image: File?,
         profileUpdateRequest: ProfileUpdateRequest,
     ): ApiResponse<ProfileResponse> {
         return remoteDataSource.updateProfile(image, profileUpdateRequest)

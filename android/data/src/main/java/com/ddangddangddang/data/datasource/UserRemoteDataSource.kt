@@ -18,14 +18,16 @@ class UserRemoteDataSource(private val service: AuctionService) {
     suspend fun getProfile(): ApiResponse<ProfileResponse> = service.fetchProfile()
 
     suspend fun updateProfile(
-        image: File,
+        image: File?,
         profileUpdateRequest: ProfileUpdateRequest,
     ): ApiResponse<ProfileResponse> {
-        val fileBody = MultipartBody.Part.createFormData(
-            "profileImage",
-            image.name,
-            image.asRequestBody("image/*".toMediaTypeOrNull()),
-        )
+        val fileBody = image?.let {
+            MultipartBody.Part.createFormData(
+                "profileImage",
+                it.name,
+                it.asRequestBody("image/*".toMediaTypeOrNull()),
+            )
+        }
 
         val body = Json.encodeToString(ProfileUpdateRequest.serializer(), profileUpdateRequest)
             .toRequestBody("application/json".toMediaType())

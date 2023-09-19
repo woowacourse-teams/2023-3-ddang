@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.profile
 
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
@@ -64,6 +65,7 @@ class ProfileChangeActivity :
 
     private fun changeSuccessProfile() {
         Toaster.showShort(this, getString(R.string.profile_change_success))
+        setResult(Activity.RESULT_OK)
         finish()
     }
 
