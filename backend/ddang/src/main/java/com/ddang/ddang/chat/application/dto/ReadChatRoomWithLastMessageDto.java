@@ -2,7 +2,8 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.user.domain.User;
 
 import java.time.LocalDateTime;
@@ -17,15 +18,16 @@ public record ReadChatRoomWithLastMessageDto(
 
     public static ReadChatRoomWithLastMessageDto of(
             final User findUser,
-            final ChatRoomAndMessageDto chatRoomAndMessageDto
+            final ChatRoomAndMessageAndImageDto chatRoomAndMessageAndImageDto
     ) {
-        final ChatRoom chatRoom = chatRoomAndMessageDto.chatRoom();
+        final ChatRoom chatRoom = chatRoomAndMessageAndImageDto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
-        final Message lastMessage = chatRoomAndMessageDto.message();
+        final Message lastMessage = chatRoomAndMessageAndImageDto.message();
+        final AuctionImage thumbnailImage = chatRoomAndMessageAndImageDto.thumbnailImage();
 
         return new ReadChatRoomWithLastMessageDto(
                 chatRoom.getId(),
-                ReadAuctionInChatRoomDto.from(chatRoom.getAuction()),
+                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), thumbnailImage),
                 ReadUserInChatRoomDto.from(partner),
                 ReadLastMessageDto.from(lastMessage),
                 chatRoom.isChatAvailableTime(LocalDateTime.now())
