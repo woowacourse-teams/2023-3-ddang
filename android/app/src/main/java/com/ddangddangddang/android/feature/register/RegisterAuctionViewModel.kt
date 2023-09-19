@@ -1,6 +1,7 @@
 package com.ddangddangddang.android.feature.register
 
 import android.content.Context
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -182,7 +183,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     private fun convertStringPriceToInt(text: String): BigInteger {
         val originalValue = text.replace(",", "") // 문자열 내 들어있는 콤마를 모두 제거
-        val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE) // " 원"
+        val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE).trim() // " 원"
+        Log.d("test - v", priceValue)
         val parsedValue =
             priceValue.toBigIntegerOrNull() ?: return ZERO.toBigInteger() // 입력에 문자가 섞인 경우
         if (parsedValue > MAX_PRICE.toBigInteger()) return MAX_PRICE.toBigInteger()

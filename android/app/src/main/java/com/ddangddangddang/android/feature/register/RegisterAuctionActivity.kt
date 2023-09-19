@@ -5,6 +5,7 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.EditText
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -98,8 +99,12 @@ class RegisterAuctionActivity :
     private fun setupViewModel() {
         viewModel.images.observe(this) { imageAdapter.setImages(it) }
         viewModel.event.observe(this) { handleEvent(it) }
-        viewModel.startPrice.observe(this) { setStartPrice(it.toInt()) }
-        viewModel.bidUnit.observe(this) { setBidUnit(it.toInt()) }
+        viewModel.startPrice.observe(this) {
+            setPrice(binding.etStartPrice, startPriceWatcher, it.toInt())
+        }
+        viewModel.bidUnit.observe(this) {
+            setPrice(binding.etBidUnit, bidUnitWatcher, it.toInt())
+        }
     }
 
     private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
@@ -214,20 +219,12 @@ class RegisterAuctionActivity :
         regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
     }
 
-    private fun setStartPrice(price: Int) {
+    private fun setPrice(editText: EditText, watcher: PriceTextWatcher, price: Int) {
         val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
-        binding.etStartPrice.removeTextChangedListener(startPriceWatcher)
-        binding.etStartPrice.setText(displayPrice)
-        binding.etStartPrice.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
-        binding.etStartPrice.addTextChangedListener(startPriceWatcher)
-    }
-
-    private fun setBidUnit(price: Int) {
-        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
-        binding.etBidUnit.removeTextChangedListener(bidUnitWatcher)
-        binding.etBidUnit.setText(displayPrice)
-        binding.etBidUnit.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
-        binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
+        editText.removeTextChangedListener(watcher)
+        editText.setText(displayPrice)
+        editText.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
+        editText.addTextChangedListener(watcher)
     }
 
     private fun showDeleteImageDialog(image: RegisterImageModel) {
