@@ -14,6 +14,7 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformatio
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.User;
@@ -73,7 +74,7 @@ public class AuthenticationService {
 
     private ProfileImage findDefaultProfileImage() {
         return profileImageRepository.findByStoreName(DEFAULT_PROFILE_IMAGE_STORE_NAME)
-                                     .orElse(null);
+                                     .orElseThrow(() -> new ImageNotFoundException("기본 이미지를 찾을 수 없습니다."));
     }
 
     private String calculateRandomNumber() {

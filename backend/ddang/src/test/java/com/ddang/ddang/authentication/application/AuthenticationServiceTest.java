@@ -16,6 +16,7 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.User;
@@ -102,7 +103,6 @@ class AuthenticationServiceTest {
                 mockBlackListTokenService
         );
 
-        profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
         doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
     }
 
@@ -136,6 +136,8 @@ class AuthenticationServiceTest {
     @Test
     void 가입한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
+        profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
+
         final User user = User.builder()
                               .name("kakao12345")
                               .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -161,8 +163,24 @@ class AuthenticationServiceTest {
     }
 
     @Test
+    void 가입하지_않은_회원이_소셜_로그인을_할_때_기본_프로필_이미지를_찾을_수_없으면_예외가_발생한다() {
+        // given
+        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
+
+        given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
+        given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
+
+        // when & then
+        assertThatThrownBy(() -> authenticationService.login(Oauth2Type.KAKAO, "accessToken", "deviceToken"))
+                .isInstanceOf(ImageNotFoundException.class)
+                .hasMessage("기본 이미지를 찾을 수 없습니다.");
+    }
+
+    @Test
     void 가입하지_않은_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
+        profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
+
         final UserInformationDto userInformationDto = new UserInformationDto(12345L);
 
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
@@ -181,6 +199,8 @@ class AuthenticationServiceTest {
     @Test
     void 탈퇴한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
+        profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
+
         final User user = User.builder()
                               .name("kakao12345")
                               .profileImage(new ProfileImage("upload.png", "store.png"))
