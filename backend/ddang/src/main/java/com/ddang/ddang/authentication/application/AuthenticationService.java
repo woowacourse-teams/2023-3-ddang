@@ -26,13 +26,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthenticationService {
 
     private static final String PRIVATE_CLAIMS_KEY = "userId";
-    private static final String DEFAULT_PROFILE_IMAGE_STORE_NAME = "default_profile_image.png";
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
