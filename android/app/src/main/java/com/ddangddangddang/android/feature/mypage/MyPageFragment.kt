@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.BuildConfig
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMyPageBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.myAuction.MyAuctionActivity
@@ -55,28 +56,38 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     private fun handleEvent(event: MyPageViewModel.MyPageEvent) {
         when (event) {
+            is MyPageViewModel.MyPageEvent.LoadProfileFailed -> {
+                val defaultMessage = getString(R.string.mypage_snackbar_load_profile_failed_title)
+                notifyRequestFailed(event.type, defaultMessage)
+            }
+            MyPageViewModel.MyPageEvent.ProfileChange -> {
+                viewModel.profile.value?.let { navigateToUserInfoChange(it) }
+            }
+            MyPageViewModel.MyPageEvent.NavigateToMyAuctions -> {
+                navigateToMyAuction()
+            }
+            MyPageViewModel.MyPageEvent.NavigateToMyParticipateAuctions -> {
+                navigateToMyParticipateAuction()
+            }
+            MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
+            }
+            MyPageViewModel.MyPageEvent.NavigateToPrivacyPolicy -> showPrivacyPolicy()
             MyPageViewModel.MyPageEvent.LogoutSuccessfully -> {
                 notifyLogoutSuccessfully()
                 navigateToLogin()
             }
-
-            MyPageViewModel.MyPageEvent.ProfileChange -> {
-                viewModel.profile.value?.let { navigateToUserInfoChange(it) }
+            is MyPageViewModel.MyPageEvent.LogoutFailed -> {
+                val defaultMessage = getString(R.string.mypage_snackbar_logout_failed_title)
+                notifyRequestFailed(event.type, defaultMessage)
             }
-
-            MyPageViewModel.MyPageEvent.NavigateToMyAuctions -> {
-                navigateToMyAuction()
+            MyPageViewModel.MyPageEvent.WithdrawalSuccessfully -> {
+                notifyWithdrawalSuccessfully()
+                navigateToLogin()
             }
-
-            MyPageViewModel.MyPageEvent.NavigateToMyParticipateAuctions -> {
-                navigateToMyParticipateAuction()
+            is MyPageViewModel.MyPageEvent.WithdrawalFailed -> {
+                val defaultMessage = getString(R.string.mypage_snackbar_withdrawal_failed_title)
+                notifyRequestFailed(event.type, defaultMessage)
             }
-
-            MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
-            }
-
-            MyPageViewModel.MyPageEvent.NavigateToPrivacyPolicy -> showPrivacyPolicy()
-            MyPageViewModel.MyPageEvent.LogoutFailed -> notifyLogoutFailed()
         }
     }
 
@@ -110,12 +121,28 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
         startActivity(Intent(requireContext(), ParticipateAuctionActivity::class.java))
     }
 
-    private fun notifyLogoutFailed() {
-        binding.root.showSnackbar(R.string.mypage_snackbar_logout_failed_title)
-    }
-
     private fun showPrivacyPolicy() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PRIVACY_POLICY_URL))
         startActivity(intent)
+    }
+
+    private fun notifyWithdrawalSuccessfully() {
+        Toaster.showShort(
+            requireContext(),
+            getString(R.string.mypage_toast_withdrawal_successfully_message),
+        )
+    }
+
+    private fun notifyRequestFailed(type: ErrorType, defaultMessage: String) {
+        val actionMessage = getString(R.string.all_snackbar_default_action)
+        val message = when (type) {
+            is ErrorType.FAILURE -> type.message
+            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
+            is ErrorType.UNEXPECTED -> getString(type.messageId)
+        }
+        binding.root.showSnackbar(
+            message = message ?: defaultMessage,
+            actionMessage = actionMessage,
+        )
     }
 }

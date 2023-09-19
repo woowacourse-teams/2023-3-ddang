@@ -19,4 +19,6 @@ interface AuthRepository {
     suspend fun verifyToken(): ApiResponse<ValidateTokenResponse>
 
     suspend fun getDeviceToken(): String?
+
+    suspend fun withdrawal(): ApiResponse<Unit>
 }
