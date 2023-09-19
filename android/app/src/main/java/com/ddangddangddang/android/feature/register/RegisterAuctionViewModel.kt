@@ -16,6 +16,7 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -24,8 +25,12 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     // EditText Values - Two Way Binding
     val title: MutableLiveData<String> = MutableLiveData("")
     val description: MutableLiveData<String> = MutableLiveData("")
-    val startPrice: MutableLiveData<String> = MutableLiveData()
-    val bidUnit: MutableLiveData<String> = MutableLiveData()
+    private val _startPrice: MutableLiveData<BigInteger> = MutableLiveData()
+    val startPrice: LiveData<BigInteger>
+        get() = _startPrice
+    private val _bidUnit: MutableLiveData<BigInteger> = MutableLiveData()
+    val bidUnit: LiveData<BigInteger>
+        get() = _bidUnit
 
     // Images
     private val _images: MutableLiveData<List<RegisterImageModel>> = MutableLiveData()
@@ -108,7 +113,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val title = title.value
         val category = _category.value?.id
         val description = description.value
-        val startPrice = startPrice.value
+        val startPrice = _startPrice.value
         val bidUnit = bidUnit.value
         val closingTime = closingTime.value
         val directRegion = _directRegion.value?.size ?: 0
@@ -117,17 +122,12 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             title.isNullOrBlank() ||
             category == null ||
             description.isNullOrBlank() ||
-            startPrice.isNullOrBlank() ||
-            bidUnit.isNullOrBlank() ||
+            startPrice != null ||
+            bidUnit != null ||
             closingTime == null ||
             directRegion == 0
         ) {
             setBlankExistEvent()
-            return false
-        }
-
-        if (startPrice.toIntOrNull() == null || bidUnit.toIntOrNull() == null) {
-            setInvalidValueInputEvent()
             return false
         }
         return true
@@ -137,7 +137,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val title = title.value ?: ""
         val category = _category.value?.id ?: -1
         val description = description.value ?: ""
-        val startPrice = startPrice.value?.toInt() ?: 0
+        val startPrice = _startPrice.value?.toInt() ?: 0
         val bidUnit = bidUnit.value?.toInt() ?: 0
         val closingTime = closingTime.value.toString() + ":00" // seconds
         val regions = _directRegion.value?.map { it.id } ?: emptyList()
@@ -168,6 +168,25 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
     fun setClosingTimeEvent() {
         _event.value =
             RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
+    }
+
+    fun setStartPrice(text: String) {
+        val convertedPrice = convertStringPriceToInt(text)
+        _startPrice.value = convertedPrice
+    }
+
+    fun setBidUnit(text: String) {
+        val convertedPrice = convertStringPriceToInt(text)
+        _bidUnit.value = convertedPrice
+    }
+
+    private fun convertStringPriceToInt(text: String): BigInteger {
+        val originalValue = text.replace(",", "") // 문자열 내 들어있는 콤마를 모두 제거
+        val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE) // " 원"
+        val parsedValue =
+            priceValue.toBigIntegerOrNull() ?: return ZERO.toBigInteger() // 입력에 문자가 섞인 경우
+        if (parsedValue > MAX_PRICE.toBigInteger()) return MAX_PRICE.toBigInteger()
+        return parsedValue
     }
 
     fun setExitEvent() {
@@ -221,5 +240,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     companion object {
         const val MAXIMUM_IMAGE_SIZE = 10
+        const val SUFFIX_INPUT_PRICE = " 원"
+        private const val ZERO = 0
+        private const val MAX_PRICE = 2100000000
     }
 }

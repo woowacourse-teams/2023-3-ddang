@@ -13,6 +13,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.detail.bid.AuctionBidViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryActivity
 import com.ddangddangddang.android.feature.register.region.SelectRegionsActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
@@ -36,6 +37,8 @@ class RegisterAuctionActivity :
     private val pickMultipleMediaLaunchers = setupMultipleMediaLaunchers()
     private val categoryActivityLauncher = setupCategoryLauncher()
     private val regionActivityLauncher = setupRegionLauncher()
+    private val startPriceWatcher by lazy { PriceTextWatcher(viewModel::setStartPrice) }
+    private val bidUnitWatcher by lazy { PriceTextWatcher(viewModel::setBidUnit) }
 
     private fun setupMultipleMediaLaunchers(): List<ActivityResultLauncher<PickVisualMediaRequest>> {
         return List(RegisterAuctionViewModel.MAXIMUM_IMAGE_SIZE) { index ->
@@ -88,11 +91,15 @@ class RegisterAuctionActivity :
         setupViewModel()
         setupLinearLayoutRegisterImage()
         setupImageRecyclerView()
+        setupStartPriceTextWatcher()
+        setupBidUnitTextWatcher()
     }
 
     private fun setupViewModel() {
         viewModel.images.observe(this) { imageAdapter.setImages(it) }
         viewModel.event.observe(this) { handleEvent(it) }
+        viewModel.startPrice.observe(this) { setStartPrice(it.toInt()) }
+        viewModel.bidUnit.observe(this) { setBidUnit(it.toInt()) }
     }
 
     private fun handleEvent(event: RegisterAuctionViewModel.RegisterAuctionEvent) {
@@ -207,6 +214,22 @@ class RegisterAuctionActivity :
         regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
     }
 
+    private fun setStartPrice(price: Int) {
+        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
+        binding.etStartPrice.removeTextChangedListener(startPriceWatcher)
+        binding.etStartPrice.setText(displayPrice)
+        binding.etStartPrice.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
+        binding.etStartPrice.addTextChangedListener(startPriceWatcher)
+    }
+
+    private fun setBidUnit(price: Int) {
+        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
+        binding.etBidUnit.removeTextChangedListener(bidUnitWatcher)
+        binding.etBidUnit.setText(displayPrice)
+        binding.etBidUnit.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
+        binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
+    }
+
     private fun showDeleteImageDialog(image: RegisterImageModel) {
         showDialog(
             messageId = R.string.register_auction_dialog_delete_image_message,
@@ -231,6 +254,24 @@ class RegisterAuctionActivity :
             adapter = imageAdapter
             addItemDecoration(RegisterAuctionImageSpaceItemDecoration(space = 24))
         }
+    }
+
+    private fun setupStartPriceTextWatcher() {
+        binding.etStartPrice.addTextChangedListener(startPriceWatcher)
+        binding.etStartPrice.setOnClickListener {
+            binding.etStartPrice.setSelection(getCursorPositionFrontSuffix(binding.etStartPrice.text.toString()))
+        }
+    }
+
+    private fun setupBidUnitTextWatcher() {
+        binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
+        binding.etBidUnit.setOnClickListener {
+            binding.etBidUnit.setSelection(getCursorPositionFrontSuffix(binding.etBidUnit.text.toString()))
+        }
+    }
+
+    private fun getCursorPositionFrontSuffix(content: String): Int {
+        return content.length - AuctionBidViewModel.SUFFIX_INPUT_PRICE.length
     }
 
     companion object {
