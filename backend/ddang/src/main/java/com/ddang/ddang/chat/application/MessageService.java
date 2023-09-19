@@ -10,7 +10,8 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.image.application.util.ImageIdProcessor;
+import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -67,6 +68,7 @@ public class MessageService {
     }
 
     private String sendNotification(final Message message, final String baseUrl)  {
+        final ProfileImage writerProfileImage = message.getWriter().getProfileImage();
 
         final CreateNotificationDto dto = new CreateNotificationDto(
                 NotificationType.MESSAGE,
@@ -74,18 +76,14 @@ public class MessageService {
                 message.getWriter().getName(),
                 message.getContents(),
                 calculateRedirectUrl(message.getChatRoom().getId()),
-                calculateProfileImageUrl(message, baseUrl)
+                ImageUrlCalculator.calculateProfileImageUrl(writerProfileImage, baseUrl)
         );
+
         return notificationService.send(dto);
     }
 
     private String calculateRedirectUrl(final Long id) {
         return "/chattings/" + id;
-    }
-
-    private String calculateProfileImageUrl(final Message message, final String baseUrl) {
-        final Long profileImageId = ImageIdProcessor.process(message.getWriter().getProfileImage());
-        return baseUrl.concat(String.valueOf(profileImageId));
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {

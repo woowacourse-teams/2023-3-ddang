@@ -1,5 +1,8 @@
 package com.ddang.ddang.image.presentation.util;
 
+import com.ddang.ddang.image.application.util.ImageIdProcessor;
+import com.ddang.ddang.image.domain.ProfileImage;
+
 public final class ImageUrlCalculator {
 
     private ImageUrlCalculator() {
@@ -13,5 +16,10 @@ public final class ImageUrlCalculator {
         final String baseUrl = imageBaseUrl.getBaseUrl();
 
         return baseUrl.concat(String.valueOf(id));
+    }
+
+    public static String calculateProfileImageUrl(final ProfileImage profileImage, final String baseUrl) {
+        final Long profileImageId = ImageIdProcessor.process(profileImage);
+        return baseUrl.concat(String.valueOf(profileImageId));
     }
 }
