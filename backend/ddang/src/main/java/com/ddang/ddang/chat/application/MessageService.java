@@ -10,7 +10,8 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.image.application.util.ImageIdProcessor;
+import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -18,6 +19,7 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class MessageService {
 
     private final NotificationService notificationService;
@@ -54,19 +57,18 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        sendNotification(persistMessage, baseUrl);
+        try {
+            final String sendNotificationMessage = sendNotification(persistMessage, baseUrl);
+            log.info(sendNotificationMessage);
+        } catch (Exception ex) {
+            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
+        }
 
         return persistMessage.getId();
     }
 
-    private void sendNotification(final Message message, final String baseUrl)  {
-        final Long profileImageId = ImageIdProcessor.process(message.getWriter().getProfileImage());
-
-        // TODO: 2023/09/15 5차데모데이 이후 수정 예정
-        String profileImageUrl = null;
-        if (profileImageId != null) {
-            profileImageUrl = baseUrl.concat(String.valueOf(profileImageId));
-        }
+    private String sendNotification(final Message message, final String baseUrl)  {
+        final ProfileImage writerProfileImage = message.getWriter().getProfileImage();
 
         final CreateNotificationDto dto = new CreateNotificationDto(
                 NotificationType.MESSAGE,
@@ -74,9 +76,10 @@ public class MessageService {
                 message.getWriter().getName(),
                 message.getContents(),
                 calculateRedirectUrl(message.getChatRoom().getId()),
-                profileImageUrl
+                ImageUrlCalculator.calculateProfileImageUrl(writerProfileImage, baseUrl)
         );
-        notificationService.send(dto);
+
+        return notificationService.send(dto);
     }
 
     private String calculateRedirectUrl(final Long id) {
