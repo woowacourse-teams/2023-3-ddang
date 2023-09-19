@@ -1,6 +1,7 @@
 package com.ddang.ddang.authentication.presentation;
 
 import com.ddang.ddang.authentication.application.AuthenticationService;
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
@@ -77,6 +78,9 @@ class AuthenticationControllerTest {
 
     @Autowired
     AuthenticationController authenticationController;
+
+    @MockBean
+    AuthenticationUserService authenticationUserService;
 
     @Autowired
     RestDocumentationResultHandler restDocs;
@@ -336,9 +340,9 @@ class AuthenticationControllerTest {
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", "kakao")
+                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                                                         .contentType(MediaType.APPLICATION_JSON)
                                                         .content(objectMapper.writeValueAsString(request))
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isForbidden(),
