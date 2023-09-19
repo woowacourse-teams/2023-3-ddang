@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentAuctionBidDialogBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.view.Toaster
@@ -84,14 +85,10 @@ class AuctionBidDialog : DialogFragment() {
         when (event) {
             is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
             is AuctionBidViewModel.AuctionBidEvent.SubmitSuccess -> submitSuccess(event.price)
-            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureCustomEvent -> {
-                showMessage(event.message)
-                exit()
-            }
             is AuctionBidViewModel.AuctionBidEvent.UnderPrice -> notifyUnderPriceSubmitFailed()
-            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(
-                event,
-            )
+            is AuctionBidViewModel.AuctionBidEvent.FailureSubmitEvent -> {
+                handleSubmitFailureEvent(event.type)
+            }
         }
     }
 
@@ -104,8 +101,14 @@ class AuctionBidDialog : DialogFragment() {
         exit()
     }
 
-    private fun handleSubmitFailureEvent(event: AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent) {
-        showMessage(getString(event.messageId))
+    private fun handleSubmitFailureEvent(errorType: ErrorType) {
+        val defaultMessage = getString(R.string.detail_auction_bid_dialog_failure_default_message)
+        val message = when (errorType) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
+        }
+        Toaster.showShort(requireContext(), message ?: defaultMessage)
         exit()
     }
 

@@ -194,7 +194,7 @@
                     android:id="@+id/tv_remain_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{AuctionDetailFormatter.INSTANCE.formatClosingRemainDateText(context,viewModel.auctionDetailModel.remainTime)}"
+                    android:text="@{AuctionDetailFormatter.INSTANCE.formatClosingRemainDateText(context,viewModel.auctionDetailModel.closingTime)}"
                     android:textColor="@color/red_100"
                     android:textSize="@dimen/textsize_sub_header"
                     android:textStyle="bold"
