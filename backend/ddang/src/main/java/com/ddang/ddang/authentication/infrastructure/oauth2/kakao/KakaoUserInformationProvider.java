@@ -58,10 +58,10 @@ public class KakaoUserInformationProvider implements OAuth2UserInformationProvid
     }
 
     @Override
-    public UserInformationDto unlinkUserBy(final String accessToken, final String oauthId) {
+    public UserInformationDto unlinkUserBy(final String oauthId) {
         final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + accessToken);
+        headers.set(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + providersConfigurationProperties.adminKey());
 
         final MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("target_id_type", "user_id");

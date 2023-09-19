@@ -111,7 +111,7 @@ public class BidService {
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
         if (auctionRepository.existsById(auctionId)) {
-            final List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+            final List<Bid> bids = bidRepository.findByAuctionIdOrderByIdAsc(auctionId);
 
             return bids.stream()
                        .map(ReadBidDto::from)

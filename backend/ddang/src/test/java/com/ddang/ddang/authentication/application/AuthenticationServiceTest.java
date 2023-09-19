@@ -304,7 +304,12 @@ class AuthenticationServiceTest {
 
         userRepository.save(user);
 
-        final Map<String, Object> privateClaims = Map.of("userId", user.getId());
+        final Map<String, Object> privateClaims = Map.of("userId", 1L);
+        final String accessToken = "Bearer " + tokenEncoder.encode(
+                LocalDateTime.now(),
+                TokenType.ACCESS,
+                privateClaims
+        );
         final String refreshToken = "Bearer " + tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.REFRESH,
@@ -315,11 +320,10 @@ class AuthenticationServiceTest {
 
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
-        given(mockProvider.unlinkUserBy(anyString(), anyString())).willReturn(userInformationDto);
         willDoNothing().given(mockBlackListTokenService).registerBlackListToken(anyString(), anyString());
 
         // when
-        authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken", refreshToken);
+        authenticationService.withdrawal(Oauth2Type.KAKAO, accessToken, refreshToken);
 
         // then
         assertThat(user.isDeleted()).isTrue();
@@ -337,23 +341,28 @@ class AuthenticationServiceTest {
 
         userRepository.save(user);
 
-        final Map<String, Object> privateClaims = Map.of("userId", user.getId());
+        user.withdrawal();
+
+        final Map<String, Object> privateClaims = Map.of("userId", 1L);
+        final String accessToken = "Bearer " + tokenEncoder.encode(
+                LocalDateTime.now(),
+                TokenType.ACCESS,
+                privateClaims
+        );
         final String refreshToken = "Bearer " + tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.REFRESH,
                 privateClaims
         );
 
-        user.withdrawal();
-
         final UserInformationDto userInformationDto = new UserInformationDto(12345L);
 
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
-        given(mockProvider.unlinkUserBy(anyString(), anyString())).willReturn(userInformationDto);
+        given(mockProvider.unlinkUserBy(anyString())).willReturn(userInformationDto);
 
         // when && then
-        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, "accessToken", refreshToken))
+        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, accessToken, refreshToken))
                 .isInstanceOf(InvalidWithdrawalException.class)
                 .hasMessage("탈퇴에 대한 권한 없습니다.");
     }
@@ -365,12 +374,12 @@ class AuthenticationServiceTest {
         given(mockProvider.findUserInformation(anyString()))
                 .willThrow(new InvalidTokenException("401 Unauthorized"));
 
-        final String invalidAccessToken = "invalidAccessToken";
-        final String invalidRefreshToken = "invalidRefreshToken";
+        final String invalidAccessToken = "Bearer invalidAccessToken";
+        final String invalidRefreshToken = "Bearer invalidRefreshToken";
 
         // when & then
         assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, invalidAccessToken, invalidRefreshToken))
                 .isInstanceOf(InvalidTokenException.class)
-                .hasMessage("401 Unauthorized");
+                .hasMessage("유효한 토큰이 아닙니다.");
     }
 }
