@@ -1,7 +1,7 @@
 package com.ddang.ddang.notification.application.dto;
 
 import com.ddang.ddang.notification.domain.NotificationType;
-import org.springframework.lang.NonNull;
+import lombok.NonNull;
 
 public record CreateNotificationDto(
         @NonNull
