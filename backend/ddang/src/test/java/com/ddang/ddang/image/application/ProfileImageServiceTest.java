@@ -4,7 +4,7 @@ package com.ddang.ddang.image.application;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
-import com.ddang.ddang.image.infrastructure.persistence.JpaImageRepository;
+import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ class ProfileImageServiceTest {
     ImageService imageService;
 
     @Autowired
-    JpaImageRepository imageRepository;
+    JpaProfileImageRepository imageRepository;
 
     @Autowired
     JpaAuctionImageRepository auctionImageRepository;
