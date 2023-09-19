@@ -129,16 +129,19 @@ public class AuthenticationService {
     @Transactional
     public void withdrawal(
             final Oauth2Type oauth2Type,
-            final String oauth2AccessToken,
+            final String accessToken,
             final String refreshToken
     ) throws InvalidWithdrawalException {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
-        final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
-        final User user = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
+        final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
+                                                        .orElseThrow(() ->
+                                                                new InvalidTokenException("유효한 토큰이 아닙니다.")
+                                                        );
+        final User user = userRepository.findByIdAndDeletedIsFalse(privateClaims.userId())
                                         .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다."));
 
         user.withdrawal();
-        blackListTokenService.registerBlackListToken(oauth2AccessToken, refreshToken);
-        provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());
+        blackListTokenService.registerBlackListToken(accessToken, refreshToken);
+        provider.unlinkUserBy(user.getOauthId());
     }
 }

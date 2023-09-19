@@ -8,5 +8,5 @@ public interface OAuth2UserInformationProvider {
 
     UserInformationDto findUserInformation(final String accessToken);
 
-    UserInformationDto unlinkUserBy(final String accessToken, final String oauthId);
+    UserInformationDto unlinkUserBy(final String oauthId);
 }
