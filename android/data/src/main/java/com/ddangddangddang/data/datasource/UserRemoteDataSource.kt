@@ -21,17 +21,11 @@ class UserRemoteDataSource(private val service: AuctionService) {
         image: File?,
         profileUpdateRequest: ProfileUpdateRequest,
     ): ApiResponse<ProfileResponse> {
-        val fileBody = if (image == null) {
+        val fileBody = image?.let {
             MultipartBody.Part.createFormData(
                 "profileImage",
-                "null",
-                "".toRequestBody(null),
-            )
-        } else {
-            MultipartBody.Part.createFormData(
-                "profileImage",
-                image.name,
-                image.asRequestBody("image/*".toMediaTypeOrNull()),
+                it.name,
+                it.asRequestBody("image/*".toMediaTypeOrNull()),
             )
         }
 

@@ -21,6 +21,10 @@ class ProfileChangeViewModel(
     val event: LiveData<Event>
         get() = _event
 
+    private var _originalProfileUri: Uri? = null
+    private val originalProfileUri: Uri
+        get() = _originalProfileUri!!
+
     private val _profile: MutableLiveData<Uri> = MutableLiveData()
     val profile: LiveData<Uri>
         get() = _profile
@@ -29,6 +33,7 @@ class ProfileChangeViewModel(
 
     fun setupProfile(profileModel: ProfileModel, defaultUri: Uri) {
         _profile.value = profileModel.profileImage?.let { Uri.parse(it) } ?: defaultUri
+        _originalProfileUri = _profile.value
         userNickname.value = profileModel.name
     }
 
@@ -46,11 +51,9 @@ class ProfileChangeViewModel(
 
     fun submitProfile(context: Context) {
         val name = userNickname.value ?: return
-        val profileImageUri = profile.value ?: return
+        val profileImageUri = profile.value?.takeIf { it.path != originalProfileUri.path }
         viewModelScope.launch {
-            val file = runCatching { profileImageUri.toAdjustImageFile(context) }
-                .getOrNull() ?: return@launch
-
+            val file = runCatching { profileImageUri?.toAdjustImageFile(context) }.getOrNull()
             when (userRepository.updateProfile(file, ProfileUpdateRequest(name))) {
                 is ApiResponse.Success -> {
                     _event.value = Event.SuccessProfileChange
