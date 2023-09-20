@@ -14,7 +14,6 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
-import com.ddangddangddang.android.feature.detail.bid.AuctionBidViewModel
 import com.ddangddangddang.android.feature.register.category.SelectCategoryActivity
 import com.ddangddangddang.android.feature.register.region.SelectRegionsActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
@@ -38,8 +37,8 @@ class RegisterAuctionActivity :
     private val pickMultipleMediaLaunchers = setupMultipleMediaLaunchers()
     private val categoryActivityLauncher = setupCategoryLauncher()
     private val regionActivityLauncher = setupRegionLauncher()
-    private val startPriceWatcher by lazy { PriceTextWatcher(viewModel::setStartPrice) }
-    private val bidUnitWatcher by lazy { PriceTextWatcher(viewModel::setBidUnit) }
+    private val startPriceWatcher by lazy { DefaultTextWatcher(viewModel::setStartPrice) }
+    private val bidUnitWatcher by lazy { DefaultTextWatcher(viewModel::setBidUnit) }
 
     private fun setupMultipleMediaLaunchers(): List<ActivityResultLauncher<PickVisualMediaRequest>> {
         return List(RegisterAuctionViewModel.MAXIMUM_IMAGE_SIZE) { index ->
@@ -219,7 +218,7 @@ class RegisterAuctionActivity :
         regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
     }
 
-    private fun setPrice(editText: EditText, watcher: PriceTextWatcher, price: Int) {
+    private fun setPrice(editText: EditText, watcher: DefaultTextWatcher, price: Int) {
         val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
         editText.removeTextChangedListener(watcher)
         editText.setText(displayPrice)
@@ -263,12 +262,12 @@ class RegisterAuctionActivity :
     private fun setupBidUnitTextWatcher() {
         binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
         binding.etBidUnit.setOnClickListener {
-            binding.etBidUnit.setSelection(getCursorPositionFrontSuffix(binding.etBidUnit.text.toString()))
+            binding.etBidUnit.setSelection(getCursorPositionFrontSuffix(binding.etStartPrice.text.toString()))
         }
     }
 
     private fun getCursorPositionFrontSuffix(content: String): Int {
-        return content.length - AuctionBidViewModel.SUFFIX_INPUT_PRICE.length
+        return content.length - RegisterAuctionViewModel.SUFFIX_INPUT_PRICE.length
     }
 
     companion object {
