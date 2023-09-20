@@ -11,10 +11,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityProfileChangeBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -61,6 +63,10 @@ class ProfileChangeActivity :
             is ProfileChangeViewModel.Event.SuccessProfileChange -> {
                 changeSuccessProfile()
             }
+
+            is ProfileChangeViewModel.Event.FailureChangeProfileEvent -> {
+                notifyProfileChangeFailed(event.errorType)
+            }
         }
     }
 
@@ -68,6 +74,20 @@ class ProfileChangeActivity :
         Toaster.showShort(this, getString(R.string.profile_change_success))
         setResult(Activity.RESULT_OK)
         finish()
+    }
+
+    private fun notifyProfileChangeFailed(type: ErrorType) {
+        val defaultMessage = getString(R.string.profile_change_failed)
+        val actionMessage = getString(R.string.all_snackbar_default_action)
+        val message = when (type) {
+            is ErrorType.FAILURE -> type.message
+            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
+            is ErrorType.UNEXPECTED -> getString(type.messageId)
+        }
+        binding.root.showSnackbar(
+            message = message ?: defaultMessage,
+            actionMessage = actionMessage,
+        )
     }
 
     companion object {
