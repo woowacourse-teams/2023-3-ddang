@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_vertical_filter_chips"
             android:text="@{item.createdDateTime}"
+            android:paddingHorizontal="4dp"
             android:textColor="@color/black_400"
             android:textSize="12sp"
             android:textStyle="italic"
