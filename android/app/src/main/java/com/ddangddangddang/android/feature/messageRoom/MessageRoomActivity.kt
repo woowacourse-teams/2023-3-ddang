@@ -85,16 +85,16 @@ class MessageRoomActivity :
 
     private fun getDefaultFailureMessageByFailureEvent(event: MessageRoomViewModel.MessageRoomEvent.FailureEvent): String {
         return when (event) {
-            is MessageRoomViewModel.MessageRoomEvent.FailureEvent.LoadMessages -> {
-                getString(R.string.all_unexpected_error_message)
+            is MessageRoomViewModel.MessageRoomEvent.FailureEvent.LoadRoomInfo -> {
+                getString(R.string.message_room_load_room_info_failed)
             }
 
-            is MessageRoomViewModel.MessageRoomEvent.FailureEvent.LoadRoomInfo -> {
-                getString(R.string.all_unexpected_error_message)
+            is MessageRoomViewModel.MessageRoomEvent.FailureEvent.LoadMessages -> {
+                getString(R.string.message_room_load_messages_failed)
             }
 
             is MessageRoomViewModel.MessageRoomEvent.FailureEvent.SendMessage -> {
-                getString(R.string.all_unexpected_error_message)
+                getString(R.string.message_room_send_message_failed)
             }
         }
     }
