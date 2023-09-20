@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
-import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -56,10 +57,7 @@ class MessageRoomActivity :
                 navigateToAuctionDetail(event.auctionId)
             }
 
-            is MessageRoomViewModel.MessageRoomEvent.LoadRoomInfoFailed -> {
-                notifyLoadRoomInfoFailed()
-                finish()
-            }
+            is MessageRoomViewModel.MessageRoomEvent.FailureEvent -> handleFailureEvent(event)
         }
     }
 
@@ -71,8 +69,34 @@ class MessageRoomActivity :
         startActivity(AuctionDetailActivity.getIntent(this, auctionId))
     }
 
-    private fun notifyLoadRoomInfoFailed() {
-        Toaster.showShort(this, getString(R.string.message_room_toast_load_room_info_failed))
+    private fun handleFailureEvent(event: MessageRoomViewModel.MessageRoomEvent.FailureEvent) {
+        val defaultMessage = getDefaultFailureMessageByFailureEvent(event)
+        val actionMessage = getString(R.string.all_snackbar_default_action)
+        val message = when (val errorType = event.type) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
+        }
+        binding.root.showSnackbar(
+            message = message ?: defaultMessage,
+            actionMessage = actionMessage,
+        )
+    }
+
+    private fun getDefaultFailureMessageByFailureEvent(event: MessageRoomViewModel.MessageRoomEvent.FailureEvent): String {
+        return when (event) {
+            is MessageRoomViewModel.MessageRoomEvent.FailureEvent.LoadMessages -> {
+                getString(R.string.all_unexpected_error_message)
+            }
+
+            is MessageRoomViewModel.MessageRoomEvent.FailureEvent.LoadRoomInfo -> {
+                getString(R.string.all_unexpected_error_message)
+            }
+
+            is MessageRoomViewModel.MessageRoomEvent.FailureEvent.SendMessage -> {
+                getString(R.string.all_unexpected_error_message)
+            }
+        }
     }
 
     companion object {
