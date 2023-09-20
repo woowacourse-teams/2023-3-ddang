@@ -6,8 +6,10 @@ import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuthRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class SplashViewModel(
     private val repository: AuthRepository,
 ) : ViewModel() {

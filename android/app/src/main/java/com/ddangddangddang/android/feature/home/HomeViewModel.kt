@@ -10,8 +10,10 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class HomeViewModel(private val repository: AuctionRepository) : ViewModel() {
     val auctions: LiveData<List<AuctionHomeModel>> =
         repository.observeAuctionPreviews().map { auctionPreviews ->

@@ -11,8 +11,10 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuthRepository
 import com.ddangddangddang.data.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class MyPageViewModel(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,

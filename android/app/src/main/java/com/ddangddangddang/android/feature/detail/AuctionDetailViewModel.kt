@@ -12,8 +12,10 @@ import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import com.ddangddangddang.data.repository.ChatRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class AuctionDetailViewModel(
     private val auctionRepository: AuctionRepository,
     private val chatRepository: ChatRepository,

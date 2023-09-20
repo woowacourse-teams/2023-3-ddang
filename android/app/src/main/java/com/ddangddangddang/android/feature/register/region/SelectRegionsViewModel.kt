@@ -9,11 +9,13 @@ import com.ddangddangddang.android.model.mapper.RegionModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.RegionRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
 private typealias FirstId = Long
 private typealias SecondId = Long
 
+@HiltViewModel
 class SelectRegionsViewModel(private val regionRepository: RegionRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectRegionsEvent> =
         SingleLiveEvent()

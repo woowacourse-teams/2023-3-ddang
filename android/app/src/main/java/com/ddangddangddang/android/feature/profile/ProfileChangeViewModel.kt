@@ -12,8 +12,10 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ProfileUpdateRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 
+@HiltViewModel
 class ProfileChangeViewModel(
     private val userRepository: UserRepository,
 ) : ViewModel() {
