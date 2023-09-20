@@ -10,7 +10,9 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SelectRegionsActivity :
     BindingActivity<ActivitySelectRegionsBinding>(R.layout.activity_select_regions) {
     private val viewModel by viewModels<SelectRegionsViewModel> { viewModelFactory }

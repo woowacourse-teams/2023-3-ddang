@@ -10,7 +10,9 @@ import com.ddangddangddang.android.databinding.FragmentMessageBinding
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragment_message) {
     private val viewModel: MessageViewModel by viewModels { viewModelFactory }
     private val messageRoomAdapter: MessageRoomAdapter = MessageRoomAdapter { roomId ->

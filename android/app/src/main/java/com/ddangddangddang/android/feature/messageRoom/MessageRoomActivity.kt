@@ -15,7 +15,9 @@ import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MessageRoomActivity :
     BindingActivity<ActivityMessageRoomBinding>(R.layout.activity_message_room),
     AnalyticsDelegate by AnalyticsDelegateImpl() {

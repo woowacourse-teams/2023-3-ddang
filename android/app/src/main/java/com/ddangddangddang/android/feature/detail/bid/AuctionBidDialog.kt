@@ -17,7 +17,9 @@ import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.view.Toaster
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuctionBidDialog : DialogFragment() {
     private var _binding: FragmentAuctionBidDialogBinding? = null
     private val binding: FragmentAuctionBidDialogBinding

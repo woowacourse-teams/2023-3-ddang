@@ -24,7 +24,9 @@ import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showSnackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
     private val viewModel: MyPageViewModel by viewModels { viewModelFactory }
     private val profileChangeActivityLauncher = setupChangeProfileLauncher()

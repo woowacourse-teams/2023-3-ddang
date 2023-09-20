@@ -17,7 +17,9 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LoginActivity :
     BindingActivity<ActivityLoginBinding>(R.layout.activity_login),
     AnalyticsDelegate by AnalyticsDelegateImpl() {

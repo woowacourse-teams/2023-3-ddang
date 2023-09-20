@@ -16,7 +16,9 @@ import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.Toaster
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileChangeActivity :
     BindingActivity<ActivityProfileChangeBinding>(R.layout.activity_profile_change) {
     private val viewModel by viewModels<ProfileChangeViewModel> { viewModelFactory }

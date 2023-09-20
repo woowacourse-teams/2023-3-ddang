@@ -14,7 +14,9 @@ import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ParticipateAuctionActivity :
     BindingActivity<ActivityParticipateAuctionBinding>(R.layout.activity_participate_auction) {
     private val viewModel: ParticipateAuctionViewModel by viewModels { viewModelFactory }

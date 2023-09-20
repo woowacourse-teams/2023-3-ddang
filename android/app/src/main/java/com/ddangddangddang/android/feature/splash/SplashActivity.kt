@@ -9,7 +9,9 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.main.MainActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_splash) {
     private val viewModel: SplashViewModel by viewModels { viewModelFactory }
     override fun onCreate(savedInstanceState: Bundle?) {

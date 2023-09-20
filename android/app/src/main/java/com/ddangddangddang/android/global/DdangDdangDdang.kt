@@ -8,7 +8,9 @@ import com.ddangddangddang.data.remote.AuthRetrofit
 import com.ddangddangddang.data.repository.AuthRepositoryImpl
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.kakao.sdk.common.KakaoSdk
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class DdangDdangDdang : Application() {
     override fun onCreate() {
         super.onCreate()

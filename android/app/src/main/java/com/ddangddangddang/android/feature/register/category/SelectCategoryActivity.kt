@@ -12,7 +12,9 @@ import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SelectCategoryActivity :
     BindingActivity<ActivitySelectCategoryBinding>(R.layout.activity_select_category) {
     private val viewModel by viewModels<SelectCategoryViewModel> { viewModelFactory }

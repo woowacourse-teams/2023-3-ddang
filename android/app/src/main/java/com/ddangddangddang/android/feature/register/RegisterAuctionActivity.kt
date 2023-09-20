@@ -26,9 +26,11 @@ import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.compat.getSerializableExtraCompat
 import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
+import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.LocalTime
 
+@AndroidEntryPoint
 class RegisterAuctionActivity :
     BindingActivity<ActivityRegisterAuctionBinding>(R.layout.activity_register_auction),
     AnalyticsDelegate by AnalyticsDelegateImpl() {

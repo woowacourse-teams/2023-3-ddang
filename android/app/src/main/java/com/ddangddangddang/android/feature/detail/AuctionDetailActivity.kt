@@ -18,7 +18,9 @@ import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuctionDetailActivity :
     BindingActivity<ActivityAuctionDetailBinding>(R.layout.activity_auction_detail) {
     private val viewModel: AuctionDetailViewModel by viewModels { viewModelFactory }
