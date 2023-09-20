@@ -254,16 +254,10 @@ class RegisterAuctionActivity :
 
     private fun setupStartPriceTextWatcher() {
         binding.etStartPrice.addTextChangedListener(startPriceWatcher)
-        binding.etStartPrice.setOnClickListener {
-            binding.etStartPrice.setSelection(getCursorPositionFrontSuffix(binding.etStartPrice.text.toString()))
-        }
     }
 
     private fun setupBidUnitTextWatcher() {
         binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
-        binding.etBidUnit.setOnClickListener {
-            binding.etBidUnit.setSelection(getCursorPositionFrontSuffix(binding.etStartPrice.text.toString()))
-        }
     }
 
     private fun getCursorPositionFrontSuffix(content: String): Int {
