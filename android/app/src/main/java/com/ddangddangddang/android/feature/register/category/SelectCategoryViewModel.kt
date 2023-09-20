@@ -11,11 +11,12 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.CategoryRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private typealias MainId = Long
 
 @HiltViewModel
-class SelectCategoryViewModel(private val categoryRepository: CategoryRepository) : ViewModel() {
+class SelectCategoryViewModel @Inject constructor(private val categoryRepository: CategoryRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectCategoryEvent> = SingleLiveEvent()
     val event: LiveData<SelectCategoryEvent>
         get() = _event

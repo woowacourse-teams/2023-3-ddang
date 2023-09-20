@@ -8,9 +8,10 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class SplashViewModel(
+class SplashViewModel @Inject constructor(
     private val repository: AuthRepository,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<SplashEvent> = SingleLiveEvent()

@@ -14,9 +14,10 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class ProfileChangeViewModel(
+class ProfileChangeViewModel @Inject constructor(
     private val userRepository: UserRepository,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<Event> = SingleLiveEvent()

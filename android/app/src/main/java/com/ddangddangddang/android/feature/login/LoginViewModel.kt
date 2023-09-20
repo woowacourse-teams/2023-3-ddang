@@ -10,9 +10,10 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuthRepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
     private val repository: AuthRepositoryImpl,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<LoginEvent> = SingleLiveEvent()

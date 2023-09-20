@@ -11,9 +11,10 @@ import com.ddangddangddang.data.repository.AuctionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.math.BigInteger
+import javax.inject.Inject
 
 @HiltViewModel
-class AuctionBidViewModel(
+class AuctionBidViewModel @Inject constructor(
     private val repository: AuctionRepository,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<AuctionBidEvent> = SingleLiveEvent()

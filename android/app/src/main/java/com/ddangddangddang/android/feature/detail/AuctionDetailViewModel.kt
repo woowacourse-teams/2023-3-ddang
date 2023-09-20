@@ -14,9 +14,10 @@ import com.ddangddangddang.data.repository.AuctionRepository
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class AuctionDetailViewModel(
+class AuctionDetailViewModel @Inject constructor(
     private val auctionRepository: AuctionRepository,
     private val chatRepository: ChatRepository,
 ) : ViewModel() {

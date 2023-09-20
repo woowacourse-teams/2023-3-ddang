@@ -11,12 +11,13 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.RegionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private typealias FirstId = Long
 private typealias SecondId = Long
 
 @HiltViewModel
-class SelectRegionsViewModel(private val regionRepository: RegionRepository) : ViewModel() {
+class SelectRegionsViewModel @Inject constructor(private val regionRepository: RegionRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SelectRegionsEvent> =
         SingleLiveEvent()
     val event: LiveData<SelectRegionsEvent>

@@ -11,9 +11,10 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class MessageViewModel(
+class MessageViewModel @Inject constructor(
     private val repository: ChatRepository,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<MessageEvent> = SingleLiveEvent()

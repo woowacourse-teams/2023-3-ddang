@@ -21,9 +21,10 @@ import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import javax.inject.Inject
 
 @HiltViewModel
-class RegisterAuctionViewModel(private val repository: AuctionRepository) : ViewModel() {
+class RegisterAuctionViewModel @Inject constructor(private val repository: AuctionRepository) : ViewModel() {
     // EditText Values - Two Way Binding
     val title: MutableLiveData<String> = MutableLiveData("")
     val description: MutableLiveData<String> = MutableLiveData("")
