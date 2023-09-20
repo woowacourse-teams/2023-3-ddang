@@ -12,31 +12,19 @@ import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class AuctionRetrofit private constructor(retrofit: Retrofit) {
-    val service: AuctionService = retrofit.create(AuctionService::class.java)
+class AuctionRetrofit {
 
     companion object {
         private const val HTTP_LOG_TAG = "HTTP_LOG"
         private const val AUTHORIZATION = "Authorization"
 
-        @Volatile
-        private var instance: AuctionRetrofit? = null
-
-        fun getInstance(authRepository: AuthRepository): AuctionRetrofit {
-            return instance ?: synchronized(this) {
-                instance ?: createInstance(authRepository)
-            }
-        }
-
-        private fun createInstance(authRepository: AuthRepository): AuctionRetrofit {
-            return AuctionRetrofit(
-                Retrofit.Builder()
-                    .baseUrl(BuildConfig.BASE_URL)
-                    .client(createOkHttpClient(authRepository))
-                    .addCallAdapterFactory(CallAdapterFactory())
-                    .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-                    .build(),
-            ).also { instance = it }
+        fun createInstance(authRepository: AuthRepository): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_URL)
+                .client(createOkHttpClient(authRepository))
+                .addCallAdapterFactory(CallAdapterFactory())
+                .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+                .build()
         }
 
         private fun createOkHttpClient(authRepository: AuthRepository): OkHttpClient {
