@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMainBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.home.HomeFragment
 import com.ddangddangddang.android.feature.message.MessageFragment
 import com.ddangddangddang.android.feature.mypage.MyPageFragment
@@ -27,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
-    private val viewModel by viewModels<MainViewModel> { viewModelFactory }
+    private val viewModel: MainViewModel by viewModels()
     private var isInitialized = false
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)

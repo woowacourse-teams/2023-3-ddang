@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
@@ -23,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class AuctionDetailActivity :
     BindingActivity<ActivityAuctionDetailBinding>(R.layout.activity_auction_detail) {
-    private val viewModel: AuctionDetailViewModel by viewModels { viewModelFactory }
+    private val viewModel: AuctionDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

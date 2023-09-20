@@ -6,9 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.R
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel : ViewModel() {
+class MainViewModel @Inject constructor() : ViewModel() {
     private val _currentFragmentType: MutableLiveData<FragmentType> =
         MutableLiveData(FragmentType.HOME)
     val currentFragmentType: LiveData<FragmentType>

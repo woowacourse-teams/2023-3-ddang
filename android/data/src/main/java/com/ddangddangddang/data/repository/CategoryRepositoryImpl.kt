@@ -4,8 +4,9 @@ import com.ddangddangddang.data.datasource.CategoryRemoteDataSource
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
+import javax.inject.Inject
 
-class CategoryRepositoryImpl private constructor(
+class CategoryRepositoryImpl @Inject constructor(
     private val remoteDataSource: CategoryRemoteDataSource,
 ) : CategoryRepository {
 

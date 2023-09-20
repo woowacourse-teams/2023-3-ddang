@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentSearchBinding
 import com.ddangddangddang.android.feature.common.ErrorType
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
@@ -23,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_search) {
-    private val viewModel: SearchViewModel by viewModels { viewModelFactory }
+    private val viewModel: SearchViewModel by viewModels()
     private val auctionAdapter = AuctionAdapter { auctionId ->
         navigateToAuctionDetail(auctionId)
     }

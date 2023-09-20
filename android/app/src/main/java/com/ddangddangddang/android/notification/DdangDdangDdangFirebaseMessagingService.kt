@@ -11,17 +11,23 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.ddangddangddang.android.R
-import com.ddangddangddang.android.feature.common.userRepository
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
+import com.ddangddangddang.data.repository.UserRepository
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.net.URL
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
+    @Inject
+    lateinit var userRepository: UserRepository
+
     private val notificationManager by lazy { NotificationManagerCompat.from(applicationContext) }
 
     private val defaultImage: Bitmap by lazy {

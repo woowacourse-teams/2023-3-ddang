@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentAuctionBidDialogBinding
 import com.ddangddangddang.android.feature.common.ErrorType
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,8 +24,8 @@ class AuctionBidDialog : DialogFragment() {
     private val binding: FragmentAuctionBidDialogBinding
         get() = _binding!!
 
-    private val viewModel: AuctionBidViewModel by viewModels { viewModelFactory }
-    private val activityViewModel: AuctionDetailViewModel by activityViewModels { viewModelFactory }
+    private val viewModel: AuctionBidViewModel by viewModels()
+    private val activityViewModel: AuctionDetailViewModel by activityViewModels()
 
     private val watcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}

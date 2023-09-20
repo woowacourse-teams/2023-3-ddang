@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityLoginBinding
 import com.ddangddangddang.android.feature.common.ErrorType
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.main.MainActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
@@ -23,7 +22,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class LoginActivity :
     BindingActivity<ActivityLoginBinding>(R.layout.activity_login),
     AnalyticsDelegate by AnalyticsDelegateImpl() {
-    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

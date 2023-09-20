@@ -4,8 +4,9 @@ import com.ddangddangddang.data.datasource.RegionRemoteDataSource
 import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
+import javax.inject.Inject
 
-class RegionRepositoryImpl private constructor(
+class RegionRepositoryImpl @Inject constructor(
     private val remoteDataSource: RegionRemoteDataSource,
 ) : RegionRepository {
 
