@@ -8,8 +8,9 @@ import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuthService
+import javax.inject.Inject
 
-class AuthRemoteDataSource(private val service: AuthService) {
+class AuthRemoteDataSource @Inject constructor(private val service: AuthService) {
     suspend fun loginByKakao(kakaoLoginRequest: KakaoLoginRequest): ApiResponse<TokenResponse> =
         service.loginByKakao(kakaoLoginRequest)
 

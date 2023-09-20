@@ -13,8 +13,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import javax.inject.Inject
 
-class UserRemoteDataSource(private val service: AuctionService) {
+class UserRemoteDataSource @Inject constructor(private val service: AuctionService) {
     suspend fun getProfile(): ApiResponse<ProfileResponse> = service.fetchProfile()
 
     suspend fun updateProfile(
