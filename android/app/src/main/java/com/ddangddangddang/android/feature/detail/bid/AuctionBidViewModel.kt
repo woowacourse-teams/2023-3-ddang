@@ -26,14 +26,18 @@ class AuctionBidViewModel(
         _bidPrice.value = price
     }
 
-    fun changeInputPriceText(string: String) {
-        val originalValue = string.replace(",", "") // 문자열 내 들어있는 콤마를 모두 제거
+    fun changeInputPriceText(text: String) {
+        setBidPrice(convertStringPriceToInt(text)) // 파싱에 성공한 금액으로 설정
+    }
+
+    private fun convertStringPriceToInt(text: String): Int {
+        val originalValue = text.replace(",", "") // 문자열 내 들어있는 콤마를 모두 제거
         val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE) // " 원"
         val parsedValue =
-            priceValue.toBigIntegerOrNull() ?: return setBidPrice(ZERO) // 입력에 문자가 섞인 경우
+            priceValue.toBigIntegerOrNull() ?: return ZERO // 입력에 문자가 섞인 경우
 
-        if (parsedValue.isOverMaxPrice()) return setBidPrice(MAX_PRICE)
-        setBidPrice(parsedValue.toInt()) // 파싱에 성공한 금액으로 설정
+        if (parsedValue.isOverMaxPrice()) return MAX_PRICE
+        return parsedValue.toInt()
     }
 
     private fun BigInteger.isOverMaxPrice(): Boolean {
