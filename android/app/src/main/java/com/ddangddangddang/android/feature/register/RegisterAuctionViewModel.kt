@@ -14,14 +14,17 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import javax.inject.Inject
 
-class RegisterAuctionViewModel(private val repository: AuctionRepository) : ViewModel() {
+@HiltViewModel
+class RegisterAuctionViewModel @Inject constructor(private val repository: AuctionRepository) : ViewModel() {
     // EditText Values - Two Way Binding
     val title: MutableLiveData<String> = MutableLiveData("")
     val description: MutableLiveData<String> = MutableLiveData("")

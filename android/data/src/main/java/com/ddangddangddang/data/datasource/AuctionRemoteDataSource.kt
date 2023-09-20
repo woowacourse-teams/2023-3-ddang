@@ -16,8 +16,9 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import javax.inject.Inject
 
-class AuctionRemoteDataSource(private val service: AuctionService) {
+class AuctionRemoteDataSource @Inject constructor(private val service: AuctionService) {
     suspend fun getAuctionPreviews(
         page: Int,
         size: Int?,

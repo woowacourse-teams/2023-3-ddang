@@ -8,18 +8,19 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MessageRoomActivity :
     BindingActivity<ActivityMessageRoomBinding>(R.layout.activity_message_room),
     AnalyticsDelegate by AnalyticsDelegateImpl() {
-    private val viewModel: MessageRoomViewModel by viewModels { viewModelFactory }
+    private val viewModel: MessageRoomViewModel by viewModels()
     private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
     private val messageAdapter by lazy {
         MessageAdapter { viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) } }

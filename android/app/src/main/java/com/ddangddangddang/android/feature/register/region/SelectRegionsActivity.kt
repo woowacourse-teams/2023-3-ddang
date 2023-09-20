@@ -6,14 +6,15 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectRegionsBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SelectRegionsActivity :
     BindingActivity<ActivitySelectRegionsBinding>(R.layout.activity_select_regions) {
-    private val viewModel by viewModels<SelectRegionsViewModel> { viewModelFactory }
+    private val viewModel: SelectRegionsViewModel by viewModels()
     private val firstRegionsAdapter by lazy {
         FirstRegionsAdapter {
             viewModel.setFirstRegionSelection(it)

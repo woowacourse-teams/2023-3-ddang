@@ -11,15 +11,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityProfileChangeBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.Toaster
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ProfileChangeActivity :
     BindingActivity<ActivityProfileChangeBinding>(R.layout.activity_profile_change) {
-    private val viewModel by viewModels<ProfileChangeViewModel> { viewModelFactory }
+    private val viewModel: ProfileChangeViewModel by viewModels()
 
     private val launcher =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->

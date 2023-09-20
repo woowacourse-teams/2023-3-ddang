@@ -8,8 +8,9 @@ import com.ddangddangddang.data.model.response.ProfileResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
 import java.io.File
+import javax.inject.Inject
 
-class UserRepositoryImpl(private val remoteDataSource: UserRemoteDataSource) : UserRepository {
+class UserRepositoryImpl @Inject constructor(private val remoteDataSource: UserRemoteDataSource) : UserRepository {
     override suspend fun getProfile(): ApiResponse<ProfileResponse> = remoteDataSource.getProfile()
     override suspend fun updateProfile(
         image: File?,

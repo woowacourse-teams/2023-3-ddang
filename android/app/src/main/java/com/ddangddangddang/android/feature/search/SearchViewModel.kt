@@ -11,9 +11,12 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(private val repository: AuctionRepository) : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor(private val repository: AuctionRepository) : ViewModel() {
     private val _event: SingleLiveEvent<SearchEvent> = SingleLiveEvent()
     val event: LiveData<SearchEvent>
         get() = _event

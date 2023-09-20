@@ -8,15 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMyAuctionBinding
 import com.ddangddangddang.android.feature.common.ErrorType
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.home.AuctionAdapter
 import com.ddangddangddang.android.feature.home.AuctionSpaceItemDecoration
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.activity_my_auction) {
-    private val viewModel: MyAuctionViewModel by viewModels { viewModelFactory }
+    private val viewModel: MyAuctionViewModel by viewModels()
     private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)

@@ -3,8 +3,9 @@ package com.ddangddangddang.data.datasource
 import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
+import javax.inject.Inject
 
-class RegionRemoteDataSource(private val service: AuctionService) {
+class RegionRemoteDataSource @Inject constructor(private val service: AuctionService) {
     suspend fun getFirstRegions(): ApiResponse<List<RegionDetailResponse>> =
         service.fetchFirstRegions()
 

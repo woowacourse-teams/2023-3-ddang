@@ -9,9 +9,12 @@ import com.ddangddangddang.android.model.mapper.MessageRoomModelMapper.toPresent
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MessageViewModel(
+@HiltViewModel
+class MessageViewModel @Inject constructor(
     private val repository: ChatRepository,
 ) : ViewModel() {
     private val _event: SingleLiveEvent<MessageEvent> = SingleLiveEvent()

@@ -11,9 +11,10 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuthService
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.suspendCancellableCoroutine
+import javax.inject.Inject
 import kotlin.coroutines.resume
 
-class AuthRepositoryImpl private constructor(
+class AuthRepositoryImpl @Inject constructor(
     private val localDataSource: AuthLocalDataSource,
     private val remoteDataSource: AuthRemoteDataSource,
 ) : AuthRepository {

@@ -6,13 +6,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityReportBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.showSnackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_report) {
-    private val viewModel: ReportViewModel by viewModels { viewModelFactory }
+    private val viewModel: ReportViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel

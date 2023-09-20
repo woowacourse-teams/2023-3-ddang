@@ -14,7 +14,6 @@ import com.ddangddangddang.android.BuildConfig
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMyPageBinding
 import com.ddangddangddang.android.feature.common.ErrorType
-import com.ddangddangddang.android.feature.common.viewModelFactory
 import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.myAuction.MyAuctionActivity
 import com.ddangddangddang.android.feature.participateAuction.ParticipateAuctionActivity
@@ -24,9 +23,11 @@ import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showSnackbar
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_my_page) {
-    private val viewModel: MyPageViewModel by viewModels { viewModelFactory }
+    private val viewModel: MyPageViewModel by viewModels()
     private val profileChangeActivityLauncher = setupChangeProfileLauncher()
 
     private fun setupChangeProfileLauncher(): ActivityResultLauncher<Intent> {
@@ -60,30 +61,38 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 val defaultMessage = getString(R.string.mypage_snackbar_load_profile_failed_title)
                 notifyRequestFailed(event.type, defaultMessage)
             }
+
             MyPageViewModel.MyPageEvent.ProfileChange -> {
                 viewModel.profile.value?.let { navigateToUserInfoChange(it) }
             }
+
             MyPageViewModel.MyPageEvent.NavigateToMyAuctions -> {
                 navigateToMyAuction()
             }
+
             MyPageViewModel.MyPageEvent.NavigateToMyParticipateAuctions -> {
                 navigateToMyParticipateAuction()
             }
+
             MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
             }
+
             MyPageViewModel.MyPageEvent.NavigateToPrivacyPolicy -> showPrivacyPolicy()
             MyPageViewModel.MyPageEvent.LogoutSuccessfully -> {
                 notifyLogoutSuccessfully()
                 navigateToLogin()
             }
+
             is MyPageViewModel.MyPageEvent.LogoutFailed -> {
                 val defaultMessage = getString(R.string.mypage_snackbar_logout_failed_title)
                 notifyRequestFailed(event.type, defaultMessage)
             }
+
             MyPageViewModel.MyPageEvent.WithdrawalSuccessfully -> {
                 notifyWithdrawalSuccessfully()
                 navigateToLogin()
             }
+
             is MyPageViewModel.MyPageEvent.WithdrawalFailed -> {
                 val defaultMessage = getString(R.string.mypage_snackbar_withdrawal_failed_title)
                 notifyRequestFailed(event.type, defaultMessage)

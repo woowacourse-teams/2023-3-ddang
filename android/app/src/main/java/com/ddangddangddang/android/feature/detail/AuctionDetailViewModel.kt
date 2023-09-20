@@ -12,9 +12,12 @@ import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import com.ddangddangddang.data.repository.ChatRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AuctionDetailViewModel(
+@HiltViewModel
+class AuctionDetailViewModel @Inject constructor(
     private val auctionRepository: AuctionRepository,
     private val chatRepository: ChatRepository,
 ) : ViewModel() {

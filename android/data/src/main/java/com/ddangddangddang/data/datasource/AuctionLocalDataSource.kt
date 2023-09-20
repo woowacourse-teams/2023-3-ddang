@@ -4,8 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
+import javax.inject.Inject
 
-class AuctionLocalDataSource {
+class AuctionLocalDataSource @Inject constructor() {
     private val auctionPreviews: MutableLiveData<List<AuctionPreviewResponse>> = MutableLiveData()
 
     fun observeAuctionPreviews(): LiveData<List<AuctionPreviewResponse>> {

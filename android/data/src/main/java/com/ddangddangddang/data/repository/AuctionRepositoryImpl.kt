@@ -13,8 +13,9 @@ import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
 import java.io.File
+import javax.inject.Inject
 
-class AuctionRepositoryImpl private constructor(
+class AuctionRepositoryImpl @Inject constructor(
     private val localDataSource: AuctionLocalDataSource,
     private val remoteDataSource: AuctionRemoteDataSource,
 ) : AuctionRepository {
