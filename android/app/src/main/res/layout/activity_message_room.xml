@@ -224,6 +224,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
+                android:enabled="@{viewModel.messageRoomInfo.chatAvailable}"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minWidth="0dp"
