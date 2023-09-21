@@ -106,6 +106,9 @@ dependencies {
     // hilt
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-compiler:2.44"
+
+    // app update manager
+    implementation 'com.google.android.play:app-update-ktx:2.1.0'
 }
 kapt {
     correctErrorTypes true
