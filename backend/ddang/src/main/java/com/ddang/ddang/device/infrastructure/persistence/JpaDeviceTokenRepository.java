@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface JpaDeviceTokenRepository extends JpaRepository<DeviceToken, Long> {
 
     Optional<DeviceToken> findByUserId(final Long userId);
+
+    void deleteByUserId(Long id);
 }
