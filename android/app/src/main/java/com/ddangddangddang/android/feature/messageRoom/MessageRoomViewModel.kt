@@ -114,7 +114,7 @@ class MessageRoomViewModel @Inject constructor(
     }
 
     fun setReportEvent() {
-        _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.auctionId) }
+        _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.roomId) }
     }
 
     fun setNavigateToAuctionDetailEvent() {
