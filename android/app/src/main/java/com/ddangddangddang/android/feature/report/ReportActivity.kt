@@ -3,13 +3,11 @@ package com.ddangddangddang.android.feature.report
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityReportBinding
 import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
-import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,11 +33,10 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     }
 
     private fun getReportInfo() {
-        val type = intent.getParcelableCompat<ReportType>(REPORT_TYPE_KEY)
-            ?: return notifyNavigateToReportPageFailed()
+        val typeIndex: Int = intent.getIntExtra(REPORT_TYPE_KEY, DEFAULT_VALUE.toInt())
         val id = intent.getLongExtra(REPORT_ID_KEY, DEFAULT_VALUE)
-        if (id == DEFAULT_VALUE) notifyNavigateToReportPageFailed()
-        viewModel.setReportInfo(type, id)
+        if (id == DEFAULT_VALUE || typeIndex == DEFAULT_VALUE.toInt()) notifyNavigateToReportPageFailed()
+        viewModel.setReportInfo(ReportType.values()[typeIndex], id)
     }
 
     private fun submit() {
@@ -60,9 +57,9 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         private const val DEFAULT_VALUE = -1L
         private const val REPORT_TYPE_KEY = "report_type_key"
         private const val REPORT_ID_KEY = "report_id_key"
-        fun getIntent(context: Context, reportType: ReportType, reportId: Long): Intent =
+        fun getIntent(context: Context, reportTypeIndex: Int, reportId: Long): Intent =
             Intent(context, ReportActivity::class.java).apply {
-                putExtra(REPORT_TYPE_KEY, reportType as Parcelable)
+                putExtra(REPORT_TYPE_KEY, reportTypeIndex)
                 putExtra(REPORT_ID_KEY, reportId)
             }
     }

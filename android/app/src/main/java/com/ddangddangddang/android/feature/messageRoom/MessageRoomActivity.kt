@@ -63,7 +63,7 @@ class MessageRoomActivity :
     }
 
     private fun navigateToReport(roomId: Long) {
-        startActivity(ReportActivity.getIntent(this, ReportType.MessageRoomReport, roomId))
+        startActivity(ReportActivity.getIntent(this, ReportType.MessageRoomReport.ordinal, roomId))
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {

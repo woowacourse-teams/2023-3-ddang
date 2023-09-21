@@ -75,7 +75,7 @@ class AuctionDetailActivity :
     }
 
     private fun navigateToReport(auctionId: Long) {
-        startActivity(ReportActivity.getIntent(this, ReportType.ArticleReport, auctionId))
+        startActivity(ReportActivity.getIntent(this, ReportType.ArticleReport.ordinal, auctionId))
     }
 
     private fun notifyAuctionDoesNotExist() {
