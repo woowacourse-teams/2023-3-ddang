@@ -36,9 +36,9 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
 
     private fun getReportInfo() {
         val type = intent.getParcelableCompat<ReportType>(REPORT_TYPE_KEY)
-            ?: return notifyReportTypeNotDelivered()
+            ?: return notifyNavigateToReportPageFailed()
         val id = intent.getLongExtra(REPORT_ID_KEY, DEFAULT_VALUE)
-        if (id == DEFAULT_VALUE) notifyReportIdNotDelivered()
+        if (id == DEFAULT_VALUE) notifyNavigateToReportPageFailed()
         viewModel.setReportInfo(type, id)
     }
 
@@ -51,13 +51,8 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         binding.root.showSnackbar(textId = R.string.report_snackbar_blank_contents)
     }
 
-    private fun notifyReportTypeNotDelivered() {
-        Toaster.showShort(this, getString(R.string.report_snackbar_report_type_not_delivered))
-        finish()
-    }
-
-    private fun notifyReportIdNotDelivered() {
-        Toaster.showShort(this, getString(R.string.report_snackbar_report_id_not_delivered))
+    private fun notifyNavigateToReportPageFailed() {
+        Toaster.showShort(this, getString(R.string.report_snackbar_navigate_to_report_page_failed))
         finish()
     }
 

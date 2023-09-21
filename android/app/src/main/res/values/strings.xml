@@ -137,8 +137,7 @@
     <string name="report_submit">신고 접수하기</string>
     <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
-    <string name="report_snackbar_report_type_not_delivered">신고 종류에 대한 정보가 넘어오지 않았습니다.</string>
-    <string name="report_snackbar_report_id_not_delivered">신고 id 정보가 넘어오지 않았습니다.</string>
+    <string name="report_snackbar_navigate_to_report_page_failed">신고 페이지로 이동하는데 실패했습니다</string>
 
 
     <!-- alarm -->
