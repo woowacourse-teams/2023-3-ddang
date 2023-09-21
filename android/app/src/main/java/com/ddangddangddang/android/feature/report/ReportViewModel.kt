@@ -21,6 +21,9 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
     private lateinit var reportType: ReportType
     private var reportId: Long? = null
     val reportContents = MutableLiveData<String>()
+
+    private var isLoading: Boolean = false
+
     fun setReportInfo(type: ReportType, id: Long) {
         reportType = type
         reportId = id
@@ -43,6 +46,8 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
     }
 
     private fun reportAuctionArticle(id: Long) {
+        if (isLoading) return
+        isLoading = true
         viewModelScope.launch {
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
@@ -53,10 +58,13 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                     is ApiResponse.Unexpected -> {}
                 }
             }
+            isLoading = false
         }
     }
 
     private fun reportMessageRoom(id: Long) {
+        if (isLoading) return
+        isLoading = true
         viewModelScope.launch {
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
@@ -67,6 +75,7 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                     is ApiResponse.Unexpected -> {}
                 }
             }
+            isLoading = false
         }
     }
 
