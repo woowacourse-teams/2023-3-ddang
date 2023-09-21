@@ -114,7 +114,7 @@
     <string name="message_room_message_submit">전송</string>
     <string name="message_room_load_room_info_failed">채팅방 정보를 불러오는데 실패했습니다\n잠시 후에 다시 시도해주세요</string>
     <string name="message_room_load_messages_failed">메시지 정보를 불러오는데 실패했습니다\n잠시 후에 다시 시도해주세요</string>
-    <string name="message_room_send_message_failed">메시지 전송 중 문제가 실패했습니다\n잠시 후에 다시 시도해주세요</string>
+    <string name="message_room_send_message_failed">메시지 전송에 실패했습니다\n잠시 후에 다시 시도해주세요</string>
     <string name="message_room_created_introduce_text">쪽지방이 생성됐습니다.</string>
     <string name="message_room_auction_bid_price">%,d원</string>
 
