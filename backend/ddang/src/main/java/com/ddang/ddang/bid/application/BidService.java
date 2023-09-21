@@ -3,6 +3,7 @@ package com.ddang.ddang.bid.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
@@ -42,8 +43,11 @@ public class BidService {
     public Long create(final CreateBidDto bidDto, final String baseUrl) {
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final Auction auction = auctionRepository.findById(bidDto.auctionId())
-                                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+        final AuctionAndImageDto auctionAndImageDto =
+                auctionRepository.findDtoByAuctionId(bidDto.auctionId())
+                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+
+        final Auction auction = auctionAndImageDto.auction();
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
@@ -56,7 +60,7 @@ public class BidService {
         }
 
         try {
-            final String sendNotificationMessage = sendNotification(auction, previousBidder.get(), baseUrl);
+            final String sendNotificationMessage = sendNotification(auctionAndImageDto, previousBidder.get(), baseUrl);
             log.info(sendNotificationMessage);
         } catch (Exception ex) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
@@ -131,14 +135,20 @@ public class BidService {
         return saveBid;
     }
 
-    private String sendNotification(final Auction auction, final User previousBidder, final String baseUrl) {
+    private String sendNotification(
+            final AuctionAndImageDto auctionAndImageDto,
+            final User previousBidder,
+            final String baseUrl
+    ) {
+        final Auction auction = auctionAndImageDto.auction();
+        final AuctionImage auctionImage = auctionAndImageDto.auctionImage();
         final CreateNotificationDto dto = new CreateNotificationDto(
                 NotificationType.BID,
                 previousBidder.getId(),
                 auction.getTitle(),
                 String.valueOf(auction.getLastBid().getPrice()),
                 calculateRedirectUrl(auction.getId()),
-                calculateAuctionImageUrl(auction.getAuctionImages().get(0), baseUrl)
+                calculateAuctionImageUrl(auctionImage, baseUrl)
         );
 
         return notificationService.send(dto);
