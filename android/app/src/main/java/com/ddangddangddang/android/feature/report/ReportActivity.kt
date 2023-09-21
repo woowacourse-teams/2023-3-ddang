@@ -9,6 +9,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityReportBinding
 import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.compat.getParcelableCompat
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,11 +20,11 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
+        getReportInfo()
         setupViewModel()
     }
 
     private fun setupViewModel() {
-        loadAuctionId()
         viewModel.event.observe(this) { event ->
             when (event) {
                 ReportViewModel.ReportEvent.ExitEvent -> finish()
@@ -33,10 +34,12 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         }
     }
 
-    private fun loadAuctionId() {
+    private fun getReportInfo() {
+        val type = intent.getParcelableCompat<ReportType>(REPORT_TYPE_KEY)
+            ?: return notifyReportTypeNotDelivered()
         val id = intent.getLongExtra(REPORT_ID_KEY, DEFAULT_VALUE)
-        if (id == DEFAULT_VALUE) notifyAuctionIdNotDelivered()
-        viewModel.setAuctionId(id)
+        if (id == DEFAULT_VALUE) notifyReportIdNotDelivered()
+        viewModel.setReportInfo(type, id)
     }
 
     private fun submit() {
@@ -48,7 +51,12 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         binding.root.showSnackbar(textId = R.string.report_snackbar_blank_contents)
     }
 
-    private fun notifyAuctionIdNotDelivered() {
+    private fun notifyReportTypeNotDelivered() {
+        Toaster.showShort(this, getString(R.string.report_snackbar_auction_id_not_delivered))
+        finish()
+    }
+
+    private fun notifyReportIdNotDelivered() {
         Toaster.showShort(this, getString(R.string.report_snackbar_auction_id_not_delivered))
         finish()
     }
