@@ -3,7 +3,8 @@ package com.ddangddangddang.data.remote
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
-import com.ddangddangddang.data.model.request.ReportRequest
+import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
+import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -113,7 +114,10 @@ interface AuctionService {
     ): ApiResponse<AuctionPreviewsResponse>
 
     @POST("reports/auctions")
-    suspend fun reportAuction(@Body reportRequest: ReportRequest): ApiResponse<Unit>
+    suspend fun reportAuction(@Body reportRequest: ReportAuctionArticleRequest): ApiResponse<Unit>
+
+    @POST("reports/chat-rooms")
+    suspend fun reportMessageRoom(@Body reportRequest: ReportMessageRoomRequest): ApiResponse<Unit>
 
     @DELETE("/auctions/{id}")
     suspend fun deleteAuction(@Path("id") auctionId: Long): ApiResponse<Unit>

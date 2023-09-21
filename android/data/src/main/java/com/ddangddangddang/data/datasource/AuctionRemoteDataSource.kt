@@ -3,7 +3,8 @@ package com.ddangddangddang.data.datasource
 import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
-import com.ddangddangddang.data.model.request.ReportRequest
+import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
+import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -54,8 +55,11 @@ class AuctionRemoteDataSource @Inject constructor(private val service: AuctionSe
         auctionBidRequest: AuctionBidRequest,
     ): ApiResponse<Unit> = service.submitAuctionBid(auctionBidRequest)
 
-    suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit> =
+    suspend fun reportAuction(reportRequest: ReportAuctionArticleRequest): ApiResponse<Unit> =
         service.reportAuction(reportRequest)
+
+    suspend fun reportMessageRoom(reportRequest: ReportMessageRoomRequest): ApiResponse<Unit> =
+        service.reportMessageRoom(reportRequest)
 
     suspend fun deleteAuction(id: Long): ApiResponse<Unit> = service.deleteAuction(id)
 }
