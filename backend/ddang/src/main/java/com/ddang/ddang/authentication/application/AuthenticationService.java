@@ -144,7 +144,7 @@ public class AuthenticationService {
 
         user.withdrawal();
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
-        deviceTokenRepository.deleteById(user.getId());
+        deviceTokenRepository.deleteByUserId(user.getId());
         provider.unlinkUserBy(user.getOauthId());
     }
 }
