@@ -14,6 +14,7 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformatio
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
@@ -42,6 +43,7 @@ public class AuthenticationService {
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
+    private final JpaDeviceTokenRepository deviceTokenRepository;
 
     @Transactional
     public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken, final String deviceToken) {
@@ -142,6 +144,7 @@ public class AuthenticationService {
 
         user.withdrawal();
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
+        deviceTokenRepository.deleteById(user.getId());
         provider.unlinkUserBy(user.getOauthId());
     }
 }
