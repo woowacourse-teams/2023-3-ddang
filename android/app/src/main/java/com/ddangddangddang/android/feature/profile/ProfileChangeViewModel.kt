@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.image.toAdjustImageFile
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -56,14 +57,22 @@ class ProfileChangeViewModel @Inject constructor(
         val profileImageUri = profile.value?.takeIf { it.path != originalProfileUri.path }
         viewModelScope.launch {
             val file = runCatching { profileImageUri?.toAdjustImageFile(context) }.getOrNull()
-            when (userRepository.updateProfile(file, ProfileUpdateRequest(name))) {
+            when (val response = userRepository.updateProfile(file, ProfileUpdateRequest(name))) {
                 is ApiResponse.Success -> {
                     _event.value = Event.SuccessProfileChange
                 }
 
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Failure -> {
+                    _event.value = Event.FailureChangeProfileEvent(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value = Event.FailureChangeProfileEvent(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = Event.FailureChangeProfileEvent(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
@@ -72,5 +81,6 @@ class ProfileChangeViewModel @Inject constructor(
         object Exit : Event()
         object NavigateToSelectProfileImage : Event()
         object SuccessProfileChange : Event()
+        data class FailureChangeProfileEvent(val errorType: ErrorType) : Event()
     }
 }

@@ -168,6 +168,7 @@
     <string name="profile_change_profile_image_description">선택된 회원 프로필 이미지</string>
     <string name="profile_change_confirm">확인</string>
     <string name="profile_change_success">회원 정보 수정 성공</string>
+    <string name="profile_change_failed">프로필 정보 수정에 실패했습니다</string>
 
     <!-- my_participate_auction -->
     <string name="my_participate_auction_list_title">내가 참여한 경매 목록</string>

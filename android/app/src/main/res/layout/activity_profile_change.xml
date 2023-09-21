@@ -86,8 +86,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cv_camera"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginTop="38dp"
             android:backgroundTint="#D9D9D9"
             android:onClick="@{()->viewModel.selectProfileImage()}"
@@ -97,13 +97,13 @@
 
             <ImageView
                 android:id="@+id/iv_delete_image"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/profile_change_profile_image_button_description"
-                android:scaleType="center"
-                android:src="@drawable/ic_camera_24" />
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_camera_20_18" />
 
         </androidx.cardview.widget.CardView>
 
