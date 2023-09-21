@@ -24,6 +24,7 @@
     <string name="all_reliability">(%.1f)</string>
     <string name="all_network_error_message">인터넷이 연결되어 있는지 확인해주세요.</string>
     <string name="all_unexpected_error_message">예기치 못한 오류가 발생했습니다. 다시 시도해주세요.</string>
+    <string name="all_must_update_to_latest_version">최신 버전으로 업데이트가 필요합니다.</string>
 
     <!-- home -->
     <string name="home">경매 상품 목록</string>

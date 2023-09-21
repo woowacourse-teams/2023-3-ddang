@@ -10,6 +10,7 @@ import com.ddangddangddang.android.databinding.ActivitySplashBinding
 import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.main.MainActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.Toaster
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
@@ -40,14 +41,20 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
             if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
                 appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
             ) {
+                Log.d("mendel", "업데이트 할거 있고, 지금 당장 할 수 있음")
                 appUpdateManager.startUpdateFlowForResult(
                     appUpdateInfo,
                     updateResultLauncher,
                     AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build(),
                 )
-                Log.d("mendel", "업데이트 해야함...")
+            } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE &&
+                !appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
+            ) {
+                Log.d("mendel", "업데이트 할게 있지만, 현재 즉시 업데이트 하지 못하는 상황")
+                Toaster.showShort(this, getString(R.string.all_must_update_to_latest_version))
+                finish()
             } else {
-                Log.d("mendel", "업데이트 통과")
+                Log.d("mendel", "업데이트 할거 없음. 통과")
                 viewModel.checkTokenExist()
             }
         }
