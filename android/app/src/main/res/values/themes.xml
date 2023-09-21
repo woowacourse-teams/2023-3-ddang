@@ -6,6 +6,7 @@
         <item name="android:datePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:timePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/white</item>
     </style>
 
     <style name="Theme.DdangDdangDdang" parent="Base.Theme.DdangDdangDdang" />
