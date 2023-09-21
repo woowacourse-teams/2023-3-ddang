@@ -12,6 +12,7 @@ import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
+import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,7 +65,7 @@ class MessageRoomActivity :
     }
 
     private fun navigateToReport(roomId: Long) {
-        startActivity(ReportActivity.getIntent(this, roomId))
+        startActivity(ReportActivity.getIntent(this, ReportType.MessageRoomReport, roomId))
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {

@@ -12,6 +12,7 @@ import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
+import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
@@ -74,7 +75,7 @@ class AuctionDetailActivity :
     }
 
     private fun navigateToReport(auctionId: Long) {
-        startActivity(ReportActivity.getIntent(this, auctionId))
+        startActivity(ReportActivity.getIntent(this, ReportType.ArticleReport, auctionId))
     }
 
     private fun notifyAuctionDoesNotExist() {
