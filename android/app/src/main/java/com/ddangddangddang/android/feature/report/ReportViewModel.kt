@@ -35,11 +35,32 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
     }
 
     fun submit() {
+        val reportId: Long = reportId ?: return
+        when (reportType) {
+            ReportType.ArticleReport -> reportAuctionArticle(reportId)
+            ReportType.MessageRoomReport -> reportMessageRoom(reportId)
+        }
+    }
+
+    private fun reportAuctionArticle(id: Long) {
         viewModelScope.launch {
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
-                val response = repository.reportAuction(reportId ?: return@launch, contents)
-                when (response) {
+                when (val response = repository.reportAuction(id, contents)) {
+                    is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
+                    is ApiResponse.Failure -> {}
+                    is ApiResponse.NetworkError -> {}
+                    is ApiResponse.Unexpected -> {}
+                }
+            }
+        }
+    }
+
+    private fun reportMessageRoom(id: Long) {
+        viewModelScope.launch {
+            reportContents.value?.let { contents ->
+                if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
+                when (val response = repository.reportAuction(id, contents)) {
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {}
                     is ApiResponse.NetworkError -> {}
