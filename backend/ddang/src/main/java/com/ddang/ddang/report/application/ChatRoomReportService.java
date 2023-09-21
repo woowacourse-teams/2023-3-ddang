@@ -53,7 +53,7 @@ public class ChatRoomReportService {
     }
 
     public List<ReadChatRoomReportDto> readAll() {
-        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAll();
+        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAllByOrderByIdAsc();
 
         return auctionReports.stream()
                              .map(auctionReport -> ReadChatRoomReportDto.from(auctionReport, LocalDateTime.now()))
