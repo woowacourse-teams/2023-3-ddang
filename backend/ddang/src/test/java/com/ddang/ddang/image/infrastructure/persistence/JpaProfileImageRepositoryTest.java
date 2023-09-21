@@ -60,4 +60,22 @@ class JpaProfileImageRepositoryTest {
         // then
         assertThat(actual).isEmpty();
     }
+
+    @Test
+    void 저장된_이름에_해당하는_이미지를_반환한다() {
+        // given
+        final String storeName = "storeName.png";
+        final ProfileImage expect = new ProfileImage("uploadName", storeName);
+
+        imageRepository.save(expect);
+
+        em.flush();
+        em.clear();
+
+        // when
+        final Optional<ProfileImage> actual = imageRepository.findByStoreName(storeName);
+
+        // then
+        assertThat(actual).contains(expect);
+    }
 }

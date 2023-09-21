@@ -55,7 +55,7 @@ public class AuctionReportService {
     }
 
     public List<ReadAuctionReportDto> readAll() {
-        final List<AuctionReport> auctionReports = auctionReportRepository.findAll();
+        final List<AuctionReport> auctionReports = auctionReportRepository.findAllByOrderByIdAsc();
 
         return auctionReports.stream()
                              .map(ReadAuctionReportDto::from)

@@ -105,11 +105,10 @@ class KakaoUserInformationProviderTest {
                                      )
                              );
 
-        final String accessToken = "Bearer accessToken";
         final String oauthId = "12345";
 
         // when
-        final UserInformationDto actual = provider.unlinkUserBy(accessToken, oauthId);
+        final UserInformationDto actual = provider.unlinkUserBy(oauthId);
 
         // then
         assertThat(actual.id()).isEqualTo(userInformationDto.id());

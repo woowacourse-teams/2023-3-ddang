@@ -18,6 +18,8 @@ import lombok.ToString;
 @ToString(of = {"id", "image"})
 public class ProfileImage {
 
+    public static final String DEFAULT_PROFILE_IMAGE_STORE_NAME = "default_profile_image.png";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
