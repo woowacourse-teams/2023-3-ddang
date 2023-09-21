@@ -38,5 +38,6 @@ interface AuctionRepository {
     ): ApiResponse<Unit>
 
     suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit>
+    suspend fun reportMessageRoom(roomId: Long, description: String): ApiResponse<Unit>
     suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit>
 }

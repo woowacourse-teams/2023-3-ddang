@@ -6,7 +6,8 @@ import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
 import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
-import com.ddangddangddang.data.model.request.ReportRequest
+import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
+import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -76,7 +77,11 @@ class AuctionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit> {
-        return remoteDataSource.reportAuction(ReportRequest(auctionId, description))
+        return remoteDataSource.reportAuction(ReportAuctionArticleRequest(auctionId, description))
+    }
+
+    override suspend fun reportMessageRoom(roomId: Long, description: String): ApiResponse<Unit> {
+        return remoteDataSource.reportMessageRoom(ReportMessageRoomRequest(roomId, description))
     }
 
     override suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit> {

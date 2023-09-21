@@ -68,7 +68,7 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
         viewModelScope.launch {
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
-                when (val response = repository.reportAuction(id, contents)) {
+                when (val response = repository.reportMessageRoom(id, contents)) {
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {}
                     is ApiResponse.NetworkError -> {}
