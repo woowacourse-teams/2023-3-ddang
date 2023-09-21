@@ -57,6 +57,9 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
                 Log.d("mendel", "업데이트 할거 없음. 통과")
                 viewModel.checkTokenExist()
             }
+        }.addOnFailureListener { e ->
+            Log.d("mendel", "업데이트 매니저 실패 다운 받은 전적이 없거나 등: $e")
+            viewModel.checkTokenExist()
         }
     }
 
