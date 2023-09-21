@@ -52,12 +52,12 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     }
 
     private fun notifyReportTypeNotDelivered() {
-        Toaster.showShort(this, getString(R.string.report_snackbar_auction_id_not_delivered))
+        Toaster.showShort(this, getString(R.string.report_snackbar_report_type_not_delivered))
         finish()
     }
 
     private fun notifyReportIdNotDelivered() {
-        Toaster.showShort(this, getString(R.string.report_snackbar_auction_id_not_delivered))
+        Toaster.showShort(this, getString(R.string.report_snackbar_report_id_not_delivered))
         finish()
     }
 
