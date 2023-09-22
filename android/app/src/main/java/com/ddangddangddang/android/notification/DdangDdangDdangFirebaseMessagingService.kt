@@ -11,6 +11,7 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.ddangddangddang.android.R
+import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.repository.UserRepository
@@ -49,7 +50,7 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if (remoteMessage.data.isNotEmpty()) {
             if (checkNotificationPermission()) {
-                val notification = createMessageReceivedNotification(remoteMessage)
+                val notification = createMessageReceivedNotification(remoteMessage) ?: return
                 notificationManager.notify(System.currentTimeMillis().toInt(), notification)
             }
         }
@@ -62,22 +63,18 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
         return notificationManager.areNotificationsEnabled()
     }
 
-    private fun createMessageReceivedNotification(remoteMessage: RemoteMessage): Notification {
+    private fun createMessageReceivedNotification(remoteMessage: RemoteMessage): Notification? {
         return runBlocking {
+            val type =
+                NotificationType.of(remoteMessage.data["type"] ?: "") ?: return@runBlocking null
+            val pendingIntent = when (type) {
+                NotificationType.MESSAGE -> getMessageRoomPendingIntent(remoteMessage)
+                NotificationType.BID -> getAuctionDetailPendingIntent(remoteMessage)
+            }
             val image =
                 runCatching {
                     getBitmapFromUrl(remoteMessage.data["image"] ?: "")
                 }.getOrDefault(defaultImage)
-            val requestCode = System.currentTimeMillis().toInt()
-            val roomId = remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
-            val intent = MessageRoomActivity.getIntent(applicationContext, roomId)
-            val pendingIntent =
-                PendingIntent.getActivity(
-                    applicationContext,
-                    requestCode,
-                    intent,
-                    FLAG_IMMUTABLE,
-                )
 
             NotificationCompat.Builder(applicationContext, CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.img_logo)
@@ -98,5 +95,29 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             val input = connection.getInputStream()
             BitmapFactory.decodeStream(input)
         }
+    }
+
+    private fun getMessageRoomPendingIntent(remoteMessage: RemoteMessage): PendingIntent? {
+        val requestCode = System.currentTimeMillis().toInt()
+        val roomId = remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
+        val intent = MessageRoomActivity.getIntent(applicationContext, roomId)
+        return PendingIntent.getActivity(
+            applicationContext,
+            requestCode,
+            intent,
+            FLAG_IMMUTABLE,
+        )
+    }
+
+    private fun getAuctionDetailPendingIntent(remoteMessage: RemoteMessage): PendingIntent? {
+        val requestCode = System.currentTimeMillis().toInt()
+        val auctionId = remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
+        val intent = AuctionDetailActivity.getIntent(applicationContext, auctionId)
+        return PendingIntent.getActivity(
+            applicationContext,
+            requestCode,
+            intent,
+            FLAG_IMMUTABLE,
+        )
     }
 }
