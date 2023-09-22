@@ -4,8 +4,8 @@ import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.user.domain.User;
@@ -485,6 +485,68 @@ class AuctionTest {
 
         // when
         final Optional<User> actual = auction.findWinner(LocalDateTime.now());
+
+        // then
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 마지막_입찰자를_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final User bidder = User.builder()
+                                .name("회원2")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12346")
+                                .build();
+        userRepository.save(seller);
+        userRepository.save(bidder);
+
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .startPrice(new Price(1_000))
+                                       .bidUnit(new BidUnit(1_000))
+                                       .build();
+        auction.updateLastBid(new Bid(auction, bidder, new BidPrice(10_000)));
+
+        // when
+        final Optional<User> actual = auction.findLastBidder();
+
+        // then
+        assertThat(actual).contains(bidder);
+    }
+
+    @Test
+    void 마지막_입찰자가_없다면_빈_Optional을_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        userRepository.save(seller);
+
+        final LocalDateTime pastTime = LocalDateTime.now().minusDays(3L);
+
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(pastTime)
+                                       .build();
+
+        // when
+        final Optional<User> actual = auction.findLastBidder();
 
         // then
         assertThat(actual).isEmpty();

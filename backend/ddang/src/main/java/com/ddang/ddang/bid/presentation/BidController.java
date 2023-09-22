@@ -8,6 +8,7 @@ import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
 import com.ddang.ddang.bid.presentation.dto.response.ReadBidResponse;
 import com.ddang.ddang.bid.presentation.dto.response.ReadBidsResponse;
+import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class BidController {
             @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateBidRequest bidRequest
     ) {
-        bidService.create(CreateBidDto.of(bidRequest, userInfo.userId()));
+        bidService.create(CreateBidDto.of(bidRequest, userInfo.userId()), ImageBaseUrl.AUCTION.getBaseUrl());
 
         return ResponseEntity.created(URI.create("/auctions/" + bidRequest.auctionId()))
                              .build();
