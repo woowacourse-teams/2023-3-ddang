@@ -13,6 +13,7 @@ import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -148,7 +149,7 @@ public class BidService {
                 auction.getTitle(),
                 String.valueOf(auction.getLastBid().getPrice()),
                 calculateRedirectUrl(auction.getId()),
-                calculateAuctionImageUrl(auctionImage, baseUrl)
+                ImageUrlCalculator.calculateAuctionImageUrl(auctionImage, baseUrl)
         );
 
         return notificationService.send(dto);
@@ -156,10 +157,6 @@ public class BidService {
 
     private String calculateRedirectUrl(final Long auctionId) {
         return "/auctions/" + auctionId;
-    }
-
-    private String calculateAuctionImageUrl(final AuctionImage thumbnailImage, final String baseUrl) {
-        return baseUrl.concat(String.valueOf(thumbnailImage.getId()));
     }
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
