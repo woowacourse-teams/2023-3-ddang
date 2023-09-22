@@ -1,6 +1,7 @@
 package com.ddang.ddang.image.presentation.util;
 
 import com.ddang.ddang.image.application.util.ImageIdProcessor;
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 
 public final class ImageUrlCalculator {
@@ -20,6 +21,13 @@ public final class ImageUrlCalculator {
 
     public static String calculateProfileImageUrl(final ProfileImage profileImage, final String baseUrl) {
         final Long profileImageId = ImageIdProcessor.process(profileImage);
+
         return baseUrl.concat(String.valueOf(profileImageId));
+    }
+
+    public static String calculateAuctionImageUrl(final AuctionImage auctionImage, final String baseUrl) {
+        final Long auctionImageId = ImageIdProcessor.process(auctionImage);
+
+        return baseUrl.concat(String.valueOf(auctionImageId));
     }
 }
