@@ -21,11 +21,13 @@ public final class ImageUrlCalculator {
 
     public static String calculateProfileImageUrl(final ProfileImage profileImage, final String baseUrl) {
         final Long profileImageId = ImageIdProcessor.process(profileImage);
+
         return baseUrl.concat(String.valueOf(profileImageId));
     }
 
     public static String calculateAuctionImageUrl(final AuctionImage auctionImage, final String baseUrl) {
-        final Long profileImageId = ImageIdProcessor.process(auctionImage);
-        return baseUrl.concat(String.valueOf(profileImageId));
+        final Long auctionImageId = ImageIdProcessor.process(auctionImage);
+
+        return baseUrl.concat(String.valueOf(auctionImageId));
     }
 }
