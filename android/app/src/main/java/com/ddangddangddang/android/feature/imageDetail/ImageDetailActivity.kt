@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityImageDetailBinding
-import com.ddangddangddang.android.feature.detail.AuctionImageAdapter
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
 import com.google.android.material.tabs.TabLayoutMediator
@@ -41,7 +40,7 @@ class ImageDetailActivity :
     private fun setupImages(images: List<String>) {
         binding.vpImageList.apply {
             offscreenPageLimit = 1
-            adapter = AuctionImageAdapter(images)
+            adapter = ImageDetailAdapter(images)
         }
 
         TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { _, _ -> }.attach()

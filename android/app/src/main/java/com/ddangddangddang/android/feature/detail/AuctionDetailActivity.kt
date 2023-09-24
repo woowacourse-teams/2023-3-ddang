@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
+import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
@@ -104,7 +105,11 @@ class AuctionDetailActivity :
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 1
-            adapter = AuctionImageAdapter(images)
+            adapter = AuctionImageAdapter(images) {
+                viewModel.auctionDetailModel.value?.images?.let {
+                    startActivity(ImageDetailActivity.getIntent(this@AuctionDetailActivity, it))
+                }
+            }
             setPageTransformer(MarginPageTransformer(convertDpToPx(20f)))
             setPadding(200, 0, 200, 0)
         }
