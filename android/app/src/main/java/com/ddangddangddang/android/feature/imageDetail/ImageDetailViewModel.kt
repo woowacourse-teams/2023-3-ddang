@@ -9,6 +9,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ImageDetailViewModel @Inject constructor() : ViewModel() {
+    private val _event: SingleLiveEvent<Event> = SingleLiveEvent()
+    val event: SingleLiveEvent<Event>
+        get() = _event
+
     private val _images: MutableLiveData<List<String>> = MutableLiveData()
     val images: LiveData<List<String>>
         get() = _images
@@ -23,5 +27,10 @@ class ImageDetailViewModel @Inject constructor() : ViewModel() {
     }
 
     fun setExitEvent() {
+        _event.value = Event.Exit
+    }
+
+    sealed class Event {
+        object Exit : Event()
     }
 }

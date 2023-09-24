@@ -25,7 +25,14 @@ class ImageDetailActivity :
     private fun setupViewModel() {
         viewModel.images.observe(this) { setupImages(it) }
         viewModel.focusPosition.observe(this) {
-            binding.vpImageList.currentItem = it
+            binding.vpImageList.setCurrentItem(it, false)
+        }
+        viewModel.event.observe(this) { handleEvent(it) }
+    }
+
+    private fun handleEvent(event: ImageDetailViewModel.Event) {
+        when (event) {
+            ImageDetailViewModel.Event.Exit -> finish()
         }
     }
 
