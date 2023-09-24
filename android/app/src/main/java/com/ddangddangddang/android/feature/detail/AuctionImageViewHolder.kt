@@ -7,10 +7,10 @@ import com.ddangddangddang.android.databinding.ItemDetailAuctionBinding
 
 class AuctionImageViewHolder private constructor(
     private val binding: ItemDetailAuctionBinding,
-    onClick: (image: String) -> Unit = {},
+    onImageClick: (image: String) -> Unit = {},
 ) : RecyclerView.ViewHolder(binding.root) {
     init {
-        binding.onItemClickListener = onClick
+        binding.onImageClickListener = onImageClick
     }
 
     fun bind(imageUrl: String) {
@@ -20,11 +20,11 @@ class AuctionImageViewHolder private constructor(
     companion object {
         fun create(
             parent: ViewGroup,
-            onClick: (image: String) -> Unit = {},
+            onImageClick: (image: String) -> Unit = {},
         ): AuctionImageViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemDetailAuctionBinding.inflate(layoutInflater, parent, false)
-            return AuctionImageViewHolder(binding, onClick)
+            return AuctionImageViewHolder(binding, onImageClick)
         }
     }
 }
