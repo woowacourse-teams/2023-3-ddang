@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.imageDetail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -12,8 +13,13 @@ class ImageDetailViewModel @Inject constructor() : ViewModel() {
     val images: LiveData<List<String>>
         get() = _images
 
-    fun setImages(images: List<String>) {
+    private val _focusPosition: SingleLiveEvent<Int> = SingleLiveEvent()
+    val focusPosition: LiveData<Int>
+        get() = _focusPosition
+
+    fun setImages(images: List<String>, focusPosition: Int) {
         _images.value = images
+        _focusPosition.value = focusPosition
     }
 
     fun setExitEvent() {

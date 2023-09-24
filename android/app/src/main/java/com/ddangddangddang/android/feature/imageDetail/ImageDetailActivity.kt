@@ -18,18 +18,25 @@ class ImageDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        if (viewModel.images.value == null) viewModel.setImages(getImageUrls())
+        if (viewModel.images.value == null) viewModel.setImages(getImageUrls(), getImageFocus())
         setupViewModel()
     }
 
     private fun setupViewModel() {
         viewModel.images.observe(this) { setupImages(it) }
+        viewModel.focusPosition.observe(this) {
+            binding.vpImageList.currentItem = it
+        }
     }
 
     private fun getImageUrls(): List<String> {
         val images = intent.getStringArrayExtra(IMAGE_URL_KEY) ?: emptyArray()
         if (images.isEmpty()) notifyNotExistImages()
         return images.toList()
+    }
+
+    private fun getImageFocus(): Int {
+        return intent.getIntExtra(FOCUS_IMAGE_POSITION_KEY, 0)
     }
 
     private fun notifyNotExistImages() {
@@ -48,8 +55,10 @@ class ImageDetailActivity :
 
     companion object {
         private const val IMAGE_URL_KEY = "image_url_key"
-        fun getIntent(context: Context, images: List<String>): Intent {
+        private const val FOCUS_IMAGE_POSITION_KEY = "focus_image_position_key"
+        fun getIntent(context: Context, images: List<String>, focusPosition: Int): Intent {
             return Intent(context, ImageDetailActivity::class.java).apply {
+                putExtra(FOCUS_IMAGE_POSITION_KEY, focusPosition)
                 putExtra(IMAGE_URL_KEY, images.toTypedArray())
             }
         }

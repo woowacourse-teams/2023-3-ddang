@@ -103,6 +103,13 @@ class AuctionDetailViewModel @Inject constructor(
         }
     }
 
+    fun navigateToImageDetail(image: String) {
+        val images = auctionDetailModel.value?.images ?: return
+        val focusPosition = images.indexOf(image)
+        if (focusPosition == -1) return
+        _event.value = AuctionDetailEvent.NavigateToImageDetail(images, focusPosition)
+    }
+
     fun setExitEvent() {
         _event.value = AuctionDetailEvent.Exit
     }
@@ -126,8 +133,7 @@ class AuctionDetailViewModel @Inject constructor(
             viewModelScope.launch {
                 when (auctionRepository.deleteAuction(it.id)) {
                     is ApiResponse.Success ->
-                        _event.value =
-                            AuctionDetailEvent.NotifyAuctionDeletionComplete
+                        _event.value = AuctionDetailEvent.NotifyAuctionDeletionComplete
 
                     is ApiResponse.Failure -> {}
                     is ApiResponse.NetworkError -> {}
@@ -143,6 +149,9 @@ class AuctionDetailViewModel @Inject constructor(
         object PopupAuctionBid : AuctionDetailEvent()
         data class EnterMessageRoom(val roomId: Long) : AuctionDetailEvent()
         data class ReportAuction(val auctionId: Long) : AuctionDetailEvent()
+        data class NavigateToImageDetail(val images: List<String>, val focusPosition: Int) :
+            AuctionDetailEvent()
+
         object DeleteAuction : AuctionDetailEvent()
         object NotifyAuctionDoesNotExist : AuctionDetailEvent()
         object NotifyAuctionDeletionComplete : AuctionDetailEvent()
