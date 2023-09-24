@@ -18,9 +18,16 @@ public interface JpaRegionRepository extends JpaRepository<Region, Long> {
     List<Region> findThirdAllByFirstAndSecondRegionId(final Long firstRegionId, final Long secondRegionId);
 
     @Query("""
-            select r from Region r where r.id = :thirdRegionId and
-            r.firstRegion.id is not null and
-            r.secondRegion.id is not null
-           """)
+             select r from Region r where r.id = :thirdRegionId and
+             r.firstRegion.id is not null and
+             r.secondRegion.id is not null
+            """)
     Optional<Region> findThirdRegionById(final Long thirdRegionId);
+
+    @Query("""
+             select r from Region r where r.id in :thirdRegionIds and
+             r.firstRegion.id is not null and
+             r.secondRegion.id is not null
+            """)
+    List<Region> findAllThirdRegionByIds(final List<Long> thirdRegionIds);
 }
