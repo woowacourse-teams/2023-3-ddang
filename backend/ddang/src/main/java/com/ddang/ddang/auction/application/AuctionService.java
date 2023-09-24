@@ -22,14 +22,12 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,11 +42,26 @@ public class AuctionService {
 
     @Transactional
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
-        final User seller = findSeller(dto);
-        final Category subCategory = findSubCategory(dto);
+        final User seller = userRepository.findById(dto.sellerId())
+                                          .orElseThrow(() -> new UserNotFoundException(
+                                                  "지정한 판매자를 찾을 수 없습니다."
+                                          ));
+        final Category subCategory = categoryRepository.findSubCategoryById(dto.subCategoryId())
+                                                       .orElseThrow(() -> new CategoryNotFoundException(
+                                                               "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
+                                                       ));
         final Auction auction = dto.toEntity(seller, subCategory);
-        final List<AuctionRegion> auctionRegions = convertAuctionRegions(dto);
-        final List<AuctionImage> auctionImages = convertAuctionImages(dto);
+        final List<Region> thirdRegions = regionRepository.findAllThirdRegionByIds(dto.thirdRegionIds());
+
+        validateAuctionRegions(thirdRegions);
+
+        final List<AuctionRegion> auctionRegions = thirdRegions.stream()
+                                                               .map(AuctionRegion::new)
+                                                               .toList();
+        final List<AuctionImage> auctionImages = imageProcessor.storeImageFiles(dto.auctionImages())
+                                                               .stream()
+                                                               .map(StoreImageDto::toAuctionImageEntity)
+                                                               .toList();
 
         auction.addAuctionRegions(auctionRegions);
         auction.addAuctionImages(auctionImages);
@@ -58,37 +71,10 @@ public class AuctionService {
         return CreateInfoAuctionDto.from(persistAuction);
     }
 
-    private User findSeller(final CreateAuctionDto dto) {
-        return userRepository.findById(dto.sellerId())
-                             .orElseThrow(() -> new UserNotFoundException("지정한 판매자를 찾을 수 없습니다."));
-    }
-
-    private Category findSubCategory(final CreateAuctionDto dto) {
-        return categoryRepository.findSubCategoryById(dto.subCategoryId())
-                                 .orElseThrow(() -> new CategoryNotFoundException(
-                                         "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
-                                 ));
-    }
-
-    private List<AuctionRegion> convertAuctionRegions(final CreateAuctionDto dto) {
-        final List<AuctionRegion> auctionRegions = new ArrayList<>();
-
-        for (final Long thirdRegionId : dto.thirdRegionIds()) {
-            final Region thirdRegion = regionRepository.findThirdRegionById(thirdRegionId)
-                                                       .orElseThrow(() -> new RegionNotFoundException(
-                                                               "지정한 세 번째 지역이 없거나 세 번째 지역이 아닙니다."
-                                                       ));
-            auctionRegions.add(new AuctionRegion(thirdRegion));
+    private void validateAuctionRegions(final List<Region> thirdRegions) {
+        if (thirdRegions.isEmpty()) {
+            throw new RegionNotFoundException("지정한 세 번째 지역이 없습니다.");
         }
-
-        return auctionRegions;
-    }
-
-    private List<AuctionImage> convertAuctionImages(final CreateAuctionDto dto) {
-        return imageProcessor.storeImageFiles(dto.auctionImages())
-                             .stream()
-                             .map(StoreImageDto::toAuctionImageEntity)
-                             .toList();
     }
 
     public ReadAuctionDto readByAuctionId(final Long auctionId) {
