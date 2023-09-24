@@ -15,4 +15,7 @@ class ImageDetailViewModel @Inject constructor() : ViewModel() {
     fun setImages(images: List<String>) {
         _images.value = images
     }
+
+    fun setExitEvent() {
+    }
 }
