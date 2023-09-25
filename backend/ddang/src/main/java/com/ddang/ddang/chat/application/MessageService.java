@@ -1,6 +1,7 @@
 package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
@@ -10,11 +11,8 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -57,33 +55,10 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        try {
-            final String sendNotificationMessage = sendNotification(persistMessage, baseUrl);
-            log.info(sendNotificationMessage);
-        } catch (Exception ex) {
-            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
-        }
+        final MessageDto messageDto = MessageDto.from(persistMessage, chatRoom, writer, receiver, baseUrl);
+        notificationService.send(CreateNotificationDto.of(messageDto));
 
         return persistMessage.getId();
-    }
-
-    private String sendNotification(final Message message, final String baseUrl)  {
-        final ProfileImage writerProfileImage = message.getWriter().getProfileImage();
-
-        final CreateNotificationDto dto = new CreateNotificationDto(
-                NotificationType.MESSAGE,
-                message.getReceiver().getId(),
-                message.getWriter().getName(),
-                message.getContents(),
-                calculateRedirectUrl(message.getChatRoom().getId()),
-                ImageUrlCalculator.calculateProfileImageUrl(writerProfileImage, baseUrl)
-        );
-
-        return notificationService.send(dto);
-    }
-
-    private String calculateRedirectUrl(final Long id) {
-        return "/chattings/" + id;
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
