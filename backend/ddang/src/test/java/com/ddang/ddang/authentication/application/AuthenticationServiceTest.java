@@ -15,6 +15,7 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -42,7 +43,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 
@@ -76,10 +76,10 @@ class AuthenticationServiceTest {
     TokenDecoder tokenDecoder;
 
     @Autowired
-    BlackListTokenService mockBlackListTokenService;
+    BlackListTokenService blackListTokenService;
 
     @Autowired
-    JpaDeviceTokenRepository mockDeviceTokenRepository;
+    JpaDeviceTokenRepository deviceTokenRepository;
 
     @Autowired
     JwtEncoder jwtEncoder;
@@ -95,8 +95,6 @@ class AuthenticationServiceTest {
     ) {
         mockProvider = mock(OAuth2UserInformationProvider.class);
         mockProviderComposite = mock(Oauth2UserInformationProviderComposite.class);
-        mockBlackListTokenService = mock(BlackListTokenService.class);
-        mockDeviceTokenRepository = mock(JpaDeviceTokenRepository.class);
         authenticationService = new AuthenticationService(
                 deviceTokenService,
                 mockProviderComposite,
@@ -104,8 +102,8 @@ class AuthenticationServiceTest {
                 profileImageRepository,
                 tokenEncoder,
                 tokenDecoder,
-                mockBlackListTokenService,
-                mockDeviceTokenRepository
+                blackListTokenService,
+                deviceTokenRepository
         );
 
         doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
@@ -335,6 +333,9 @@ class AuthenticationServiceTest {
 
         userRepository.save(user);
 
+        final DeviceToken deviceToken = new DeviceToken(user, "test");
+        deviceTokenRepository.save(deviceToken);
+
         final Map<String, Object> privateClaims = Map.of("userId", 1L);
         final String accessToken = "Bearer " + tokenEncoder.encode(
                 LocalDateTime.now(),
@@ -351,8 +352,6 @@ class AuthenticationServiceTest {
 
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
-        willDoNothing().given(mockDeviceTokenRepository).deleteById(anyLong());
-        willDoNothing().given(mockBlackListTokenService).registerBlackListToken(anyString(), anyString());
 
         // when
         authenticationService.withdrawal(Oauth2Type.KAKAO, accessToken, refreshToken);
