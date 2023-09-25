@@ -1,7 +1,6 @@
 package com.ddang.ddang.notification.application;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -18,8 +17,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
@@ -30,6 +30,9 @@ class FcmNotificationServiceTest {
 
     @MockBean
     FirebaseMessaging mockFirebaseMessaging;
+
+    @MockBean
+    JpaDeviceTokenRepository mockDeviceTokenRepository;
 
     @Autowired
     NotificationService notificationService;
@@ -61,6 +64,7 @@ class FcmNotificationServiceTest {
                 "image.png"
         );
 
+        given(mockDeviceTokenRepository.findByUserId(any(Long.class))).willReturn(Optional.of(deviceToken));
         given(mockFirebaseMessaging.send(any(Message.class))).willReturn("returnMessage");
 
         // when
@@ -71,7 +75,7 @@ class FcmNotificationServiceTest {
     }
 
     @Test
-    void 알림을_전송시_알림을_받을_사용자_기기_토큰을_찾을_수_없다면_예외가_발생한다() {
+    void 알림을_전송시_알림을_받을_사용자_기기_토큰을_찾을_수_없다면_실패를_반환한다() {
         // given
         final Long invalidUserId = -999L;
         final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
@@ -83,10 +87,11 @@ class FcmNotificationServiceTest {
                 "image.png"
         );
 
-        // when & then
-        assertThatThrownBy(() -> notificationService.send(createNotificationDto))
-                .isInstanceOf(DeviceTokenNotFoundException.class)
-                .hasMessage("사용자의 기기 토큰을 찾을 수 없습니다.");
+        // when
+        final String actual = notificationService.send(createNotificationDto);
+
+        // then
+        assertThat(actual).isEqualTo("알림 전송에 실패했습니다.");
     }
 
     @Test

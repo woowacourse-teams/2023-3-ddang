@@ -10,6 +10,7 @@ import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.ddang.ddang.notification.application.util.NotificationProperty.BODY;
@@ -31,34 +32,37 @@ public class FcmNotificationService implements NotificationService {
     private final JpaDeviceTokenRepository deviceTokenRepository;
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String send(final CreateNotificationDto createNotificationDto) {
-        final DeviceToken deviceToken = deviceTokenRepository.findByUserId(createNotificationDto.targetUserId())
-                                                             .orElseThrow(() -> new DeviceTokenNotFoundException(
-                                                                     "사용자의 기기 토큰을 찾을 수 없습니다."
-                                                             ));
+        // TODO: 2023/09/25 [고민] device token 찾기, Message 생성, firebase.send()에서 예외가 발생하더라도 항상 무시되어야 하는데, 세 가지 예외를 하나의 try-catch로 묶어도 괜찮을지?
+        try {
+            final DeviceToken deviceToken = deviceTokenRepository.findByUserId(createNotificationDto.targetUserId())
+                                                                 .orElseThrow(() -> new DeviceTokenNotFoundException(
+                                                                         "사용자의 기기 토큰을 찾을 수 없습니다."
+                                                                 ));
 
-        return makeAndSendMessage(createNotificationDto, deviceToken);
+            return makeAndSendMessage(createNotificationDto, deviceToken);
+        } catch (final Exception ex) {
+            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
+            return NOTIFICATION_SEND_FAIL;
+        }
     }
 
     private String makeAndSendMessage(
             final CreateNotificationDto createNotificationDto,
             final DeviceToken deviceToken
-    ) {
+    ) throws FirebaseMessagingException {
         final Message message = Message.builder()
                                        .setToken(deviceToken.getDeviceToken())
-                                       .putData(NOTIFICATION_TYPE.getKeyName(), createNotificationDto.notificationType().getValue())
+                                       .putData(NOTIFICATION_TYPE.getKeyName(), createNotificationDto.notificationType()
+                                                                                                     .getValue())
                                        .putData(IMAGE.getKeyName(), createNotificationDto.image())
                                        .putData(TITLE.getKeyName(), createNotificationDto.title())
                                        .putData(BODY.getKeyName(), createNotificationDto.body())
                                        .putData(REDIRECT_URL.getKeyName(), createNotificationDto.redirectUrl())
                                        .build();
 
-        try {
-            firebaseMessaging.send(message);
-            return NOTIFICATION_SEND_SUCCESS;
-        } catch (FirebaseMessagingException ex) {
-            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
-            return NOTIFICATION_SEND_FAIL;
-        }
+        firebaseMessaging.send(message);
+        return NOTIFICATION_SEND_SUCCESS;
     }
 }
