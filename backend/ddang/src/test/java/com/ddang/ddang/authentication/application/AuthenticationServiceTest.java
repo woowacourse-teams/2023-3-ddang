@@ -79,6 +79,9 @@ class AuthenticationServiceTest {
     BlackListTokenService mockBlackListTokenService;
 
     @Autowired
+    JpaDeviceTokenRepository mockDeviceTokenRepository;
+
+    @Autowired
     JwtEncoder jwtEncoder;
 
     @Mock
@@ -93,6 +96,7 @@ class AuthenticationServiceTest {
         mockProvider = mock(OAuth2UserInformationProvider.class);
         mockProviderComposite = mock(Oauth2UserInformationProviderComposite.class);
         mockBlackListTokenService = mock(BlackListTokenService.class);
+        mockDeviceTokenRepository = mock(JpaDeviceTokenRepository.class);
         authenticationService = new AuthenticationService(
                 deviceTokenService,
                 mockProviderComposite,
@@ -100,7 +104,8 @@ class AuthenticationServiceTest {
                 profileImageRepository,
                 tokenEncoder,
                 tokenDecoder,
-                mockBlackListTokenService
+                mockBlackListTokenService,
+                mockDeviceTokenRepository
         );
 
         doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
@@ -346,6 +351,7 @@ class AuthenticationServiceTest {
 
         given(mockProviderComposite.findProvider(Oauth2Type.KAKAO)).willReturn(mockProvider);
         given(mockProvider.findUserInformation(anyString())).willReturn(userInformationDto);
+        willDoNothing().given(mockDeviceTokenRepository).deleteById(anyLong());
         willDoNothing().given(mockBlackListTokenService).registerBlackListToken(anyString(), anyString());
 
         // when

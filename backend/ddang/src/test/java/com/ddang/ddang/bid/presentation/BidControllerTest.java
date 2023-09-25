@@ -1,24 +1,5 @@
 package com.ddang.ddang.bid.presentation;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
@@ -39,9 +20,6 @@ import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -64,6 +42,29 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {BidController.class},
         excludeFilters = {
@@ -129,7 +130,7 @@ class BidControllerTest {
         final CreateBidRequest bidRequest = new CreateBidRequest(1L, 10_000);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class))).willReturn(1L);
+        given(bidService.create(any(CreateBidDto.class), anyString())).willReturn(1L);
 
         // when & then
         mockMvc.perform(post("/bids")
@@ -164,7 +165,7 @@ class BidControllerTest {
         final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class))).willThrow(auctionNotFoundException);
+        given(bidService.create(any(CreateBidDto.class), anyString())).willThrow(auctionNotFoundException);
 
         // when & then
         mockMvc.perform(post("/bids")
@@ -187,7 +188,7 @@ class BidControllerTest {
         final UserNotFoundException userNotFoundException = new UserNotFoundException("해당 사용자를 찾을 수 없습니다.");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(userNotFoundException);
 
         // when & then
@@ -210,7 +211,7 @@ class BidControllerTest {
         final InvalidAuctionToBidException invalidAuctionToBidException = new InvalidAuctionToBidException("이미 종료된 경매입니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidAuctionToBidException);
 
         // when & then
@@ -233,7 +234,7 @@ class BidControllerTest {
         final InvalidAuctionToBidException invalidAuctionToBidException = new InvalidAuctionToBidException("삭제된 경매입니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidAuctionToBidException);
 
         // when & then
@@ -256,7 +257,7 @@ class BidControllerTest {
         final InvalidBidderException invalidBidderException = new InvalidBidderException("판매자는 입찰할 수 없습니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidBidderException);
 
         // when & then
@@ -279,7 +280,7 @@ class BidControllerTest {
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidBidPriceException);
 
         // when & then
@@ -301,7 +302,7 @@ class BidControllerTest {
         final InvalidBidderException invalidBidderException = new InvalidBidderException("이미 최고 입찰자입니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidBidderException);
 
         // when & then
@@ -324,7 +325,7 @@ class BidControllerTest {
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("가능 입찰액보다 낮은 금액을 입력했습니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidBidPriceException);
 
         // when & then
@@ -347,7 +348,7 @@ class BidControllerTest {
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("가능 입찰액보다 낮은 금액을 입력했습니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidBidPriceException);
 
         // when & then
@@ -370,7 +371,7 @@ class BidControllerTest {
         final InvalidBidPriceException invalidBidPriceException = new InvalidBidPriceException("입찰 금액이 잘못되었습니다");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(bidService.create(any(CreateBidDto.class)))
+        given(bidService.create(any(CreateBidDto.class), anyString()))
                 .willThrow(invalidBidPriceException);
 
         // when & then
