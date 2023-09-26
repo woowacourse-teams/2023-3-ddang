@@ -1,5 +1,14 @@
 package com.ddang.ddang.authentication.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
+
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
@@ -22,6 +31,11 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Map;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -30,21 +44,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Map;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -233,7 +232,7 @@ class AuthenticationServiceTest {
     void refreshToken을_전달하면_새로운_accessToken을_반환한다() {
         // given
         final Map<String, Object> privateClaims = Map.of("userId", 1L);
-        final String refreshToken = "Bearer " + tokenEncoder.encode(
+        final String refreshToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.REFRESH,
                 privateClaims
@@ -288,7 +287,7 @@ class AuthenticationServiceTest {
     void 유효한_accessToken을_검증하면_참을_반환한다() {
         // given
         final Map<String, Object> privateClaims = Map.of("userId", 1L);
-        final String accessToken = "Bearer " + tokenEncoder.encode(
+        final String accessToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.ACCESS,
                 privateClaims
@@ -308,7 +307,7 @@ class AuthenticationServiceTest {
         final LocalDateTime expiredPublishTime = instant.atZone(ZoneId.of("UTC")).toLocalDateTime();
 
         final Map<String, Object> privateClaims = Map.of("userId", 1L);
-        final String accessToken = "Bearer " + tokenEncoder.encode(
+        final String accessToken = tokenEncoder.encode(
                 expiredPublishTime,
                 TokenType.ACCESS,
                 privateClaims
@@ -337,12 +336,12 @@ class AuthenticationServiceTest {
         deviceTokenRepository.save(deviceToken);
 
         final Map<String, Object> privateClaims = Map.of("userId", 1L);
-        final String accessToken = "Bearer " + tokenEncoder.encode(
+        final String accessToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.ACCESS,
                 privateClaims
         );
-        final String refreshToken = "Bearer " + tokenEncoder.encode(
+        final String refreshToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.REFRESH,
                 privateClaims
@@ -375,12 +374,12 @@ class AuthenticationServiceTest {
         user.withdrawal();
 
         final Map<String, Object> privateClaims = Map.of("userId", 1L);
-        final String accessToken = "Bearer " + tokenEncoder.encode(
+        final String accessToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.ACCESS,
                 privateClaims
         );
-        final String refreshToken = "Bearer " + tokenEncoder.encode(
+        final String refreshToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.REFRESH,
                 privateClaims
