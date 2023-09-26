@@ -38,7 +38,10 @@ class ImageDetailActivity :
 
     private fun getImageUrls(): List<String> {
         val images = intent.getStringArrayExtra(IMAGE_URL_KEY) ?: emptyArray()
-        if (images.isEmpty()) notifyNotExistImages()
+        if (images.isEmpty()) {
+            notifyNotExistImages()
+            finish()
+        }
         return images.toList()
     }
 
@@ -48,7 +51,6 @@ class ImageDetailActivity :
 
     private fun notifyNotExistImages() {
         Toaster.showShort(this, getString(R.string.image_detail_images_not_exist))
-        finish()
     }
 
     private fun setupImages(images: List<String>) {
