@@ -4,6 +4,7 @@ import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
@@ -44,6 +45,9 @@ public class FcmNotificationService implements NotificationService {
             final CreateNotificationDto createNotificationDto,
             final DeviceToken deviceToken
     ) {
+        final AndroidConfig androidConfig = AndroidConfig.builder()
+                                                         .setPriority(AndroidConfig.Priority.HIGH)
+                                                         .build();
         final Message message = Message.builder()
                                        .setToken(deviceToken.getDeviceToken())
                                        .putData(NOTIFICATION_TYPE.getKeyName(), createNotificationDto.notificationType().getValue())
@@ -51,6 +55,7 @@ public class FcmNotificationService implements NotificationService {
                                        .putData(TITLE.getKeyName(), createNotificationDto.title())
                                        .putData(BODY.getKeyName(), createNotificationDto.body())
                                        .putData(REDIRECT_URL.getKeyName(), createNotificationDto.redirectUrl())
+                                       .setAndroidConfig(androidConfig)
                                        .build();
 
         try {
