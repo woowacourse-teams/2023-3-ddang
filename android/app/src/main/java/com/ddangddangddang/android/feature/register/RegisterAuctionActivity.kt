@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.category.SelectCategoryActivity
 import com.ddangddangddang.android.feature.register.region.SelectRegionsActivity
@@ -118,7 +119,7 @@ class RegisterAuctionActivity :
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitError -> {
-                showErrorSubmitMessage(event.message)
+                showErrorSubmitMessage(event.errorType)
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.SubmitResult -> {
@@ -196,9 +197,14 @@ class RegisterAuctionActivity :
         )
     }
 
-    private fun showErrorSubmitMessage(message: String) {
+    private fun showErrorSubmitMessage(errorType: ErrorType) {
+        val message = when (errorType) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
+        }
         binding.root.showSnackbar(
-            message,
+            message ?: getString(R.string.register_autcion_default_error_message),
             getString(R.string.all_snackbar_default_action),
         )
     }

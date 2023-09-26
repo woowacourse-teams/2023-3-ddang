@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.RegisterImageModel
@@ -16,7 +17,6 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.json.JSONObject
 import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -96,17 +96,17 @@ class RegisterAuctionViewModel @Inject constructor(private val repository: Aucti
                 }
 
                 is ApiResponse.Failure -> {
-                    if (response.responseCode == 400) {
-                        response.error?.let {
-                            val jsonObject = JSONObject(it)
-                            val message = jsonObject.getString("message")
-                            _event.value = RegisterAuctionEvent.SubmitError(message)
-                        }
-                    }
+                    _event.value =
+                        RegisterAuctionEvent.SubmitError(ErrorType.FAILURE(response.error))
                 }
 
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.NetworkError -> {
+                    _event.value = RegisterAuctionEvent.SubmitError(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = RegisterAuctionEvent.SubmitError(ErrorType.UNEXPECTED)
+                }
             }
             isLoading = false
         }
@@ -223,7 +223,7 @@ class RegisterAuctionViewModel @Inject constructor(private val repository: Aucti
 
     sealed class RegisterAuctionEvent {
         object Exit : RegisterAuctionEvent()
-        data class SubmitError(val message: String) : RegisterAuctionEvent()
+        data class SubmitError(val errorType: ErrorType) : RegisterAuctionEvent()
         class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
         class SubmitResult(val id: Long) : RegisterAuctionEvent()
         sealed class InputErrorEvent : RegisterAuctionEvent() {
