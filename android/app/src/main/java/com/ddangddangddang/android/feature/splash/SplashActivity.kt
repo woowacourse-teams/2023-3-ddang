@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySplashBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.login.LoginActivity
 import com.ddangddangddang.android.feature.main.MainActivity
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -46,6 +47,10 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
             SplashViewModel.SplashEvent.AutoLoginSuccess -> navigateToMain()
             SplashViewModel.SplashEvent.RefreshTokenExpired -> navigateToLogin()
             SplashViewModel.SplashEvent.TokenNotExist -> navigateToLogin()
+            is SplashViewModel.SplashEvent.FailureStartDdangDdangDdang -> {
+                showErrorMessage(event.errorType)
+                finish()
+            }
         }
     }
 
@@ -57,6 +62,18 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     private fun navigateToLogin() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
+    }
+
+    private fun showErrorMessage(errorType: ErrorType) {
+        val message = when (errorType) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
+        }
+        Toaster.showShort(
+            this,
+            message ?: getString(R.string.splash_app_default_error_message),
+        )
     }
 
     private fun requestUpdate() {

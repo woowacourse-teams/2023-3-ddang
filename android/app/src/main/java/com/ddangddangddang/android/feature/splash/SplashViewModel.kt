@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.splash
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuthRepository
@@ -37,9 +38,17 @@ class SplashViewModel @Inject constructor(
                     }
                 }
 
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Failure ->
+                    _event.value =
+                        SplashEvent.FailureStartDdangDdangDdang(ErrorType.FAILURE(null))
+
+                is ApiResponse.NetworkError ->
+                    _event.value =
+                        SplashEvent.FailureStartDdangDdangDdang(ErrorType.NETWORK_ERROR)
+
+                is ApiResponse.Unexpected ->
+                    _event.value =
+                        SplashEvent.FailureStartDdangDdangDdang(ErrorType.UNEXPECTED)
             }
         }
     }
@@ -51,11 +60,20 @@ class SplashViewModel @Inject constructor(
             }
 
             is ApiResponse.Failure -> {
-                if (response.responseCode == 401) _event.value = SplashEvent.RefreshTokenExpired
+                if (response.responseCode == 401) {
+                    _event.value = SplashEvent.RefreshTokenExpired
+                } else {
+                    _event.value = SplashEvent.FailureStartDdangDdangDdang(ErrorType.FAILURE(null))
+                }
             }
 
-            is ApiResponse.NetworkError -> {}
-            is ApiResponse.Unexpected -> {}
+            is ApiResponse.NetworkError ->
+                _event.value =
+                    SplashEvent.FailureStartDdangDdangDdang(ErrorType.NETWORK_ERROR)
+
+            is ApiResponse.Unexpected ->
+                _event.value =
+                    SplashEvent.FailureStartDdangDdangDdang(ErrorType.UNEXPECTED)
         }
     }
 
@@ -63,5 +81,6 @@ class SplashViewModel @Inject constructor(
         object TokenNotExist : SplashEvent()
         object RefreshTokenExpired : SplashEvent()
         object AutoLoginSuccess : SplashEvent()
+        data class FailureStartDdangDdangDdang(val errorType: ErrorType) : SplashEvent()
     }
 }
