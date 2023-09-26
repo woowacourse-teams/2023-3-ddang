@@ -7,6 +7,8 @@
         <item name="android:timePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@color/white</item>
+        <item name="colorControlActivated">@color/red_80</item>
+        <item name="android:textColorHighlight">@color/red_60</item>
     </style>
 
     <style name="Theme.DdangDdangDdang" parent="Base.Theme.DdangDdangDdang" />
