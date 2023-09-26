@@ -21,7 +21,7 @@ public class DeviceTokenService {
     @Transactional
     public void persist(final Long userId, final PersistDeviceTokenDto deviceTokenDto) {
         final String newDeviceToken = deviceTokenDto.deviceToken();
-        if (newDeviceToken.isBlank()) {
+        if (newDeviceToken == null || newDeviceToken.isBlank()) {
             return;
         }
 
