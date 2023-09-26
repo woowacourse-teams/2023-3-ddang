@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.bumptech.glide.Glide
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
@@ -20,7 +21,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.net.URL
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -64,10 +64,9 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun createMessageReceivedNotification(remoteMessage: RemoteMessage): Notification {
         return runBlocking {
-            val image =
-                runCatching {
-                    getBitmapFromUrl(remoteMessage.data["image"] ?: "")
-                }.getOrDefault(defaultImage)
+            val image = runCatching {
+                getBitmapFromUrl(remoteMessage.data["image"] ?: "")
+            }.getOrDefault(defaultImage)
             val requestCode = System.currentTimeMillis().toInt()
             val roomId = remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
             val intent = MessageRoomActivity.getIntent(applicationContext, roomId)
@@ -91,12 +90,12 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private suspend fun getBitmapFromUrl(url: String): Bitmap {
-        if (url.isBlank()) throw IllegalArgumentException("url is blank")
         return withContext(Dispatchers.IO) {
-            val connection = URL(url).openConnection()
-            connection.connect()
-            val input = connection.getInputStream()
-            BitmapFactory.decodeStream(input)
+            Glide.with(applicationContext)
+                .asBitmap()
+                .load(url)
+                .submit()
+                .get()
         }
     }
 }
