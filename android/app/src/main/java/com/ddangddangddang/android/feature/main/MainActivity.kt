@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS
+import android.provider.Settings.EXTRA_APP_PACKAGE
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -138,6 +139,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun openNotificationSettings() {
         val intent = Intent(ACTION_APP_NOTIFICATION_SETTINGS)
+        intent.putExtra(EXTRA_APP_PACKAGE, this.packageName)
         startActivity(intent)
     }
 }

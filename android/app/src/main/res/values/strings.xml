@@ -15,6 +15,7 @@
     <string name="all_auction_success">낙찰 완료</string>
     <string name="all_auction_failure">경매 유찰</string>
     <string name="all_app_bar_back_key_description">뒤로가기 버튼</string>
+    <string name="all_app_bar_close_description">닫기 버튼</string>
     <string name="all_dialog_default_negative_button">취소</string>
     <string name="all_dialog_default_positive_button">확인</string>
     <string name="all_snackbar_default_action">확인</string>
@@ -124,6 +125,7 @@
     <string name="mypage_user_info_change_button">회원 정보 수정</string>
     <string name="mypage_my_auction_list_button">나의 경매 목록</string>
     <string name="mypage_my_participate_auction_list_button">내가 참여한 경매 목록</string>
+    <string name="mypage_notification_settings_button">알림 설정</string>
     <string name="mypage_announcement_button">공지사항</string>
     <string name="mypage_privacy_policy_button">개인정보처리방침</string>
     <string name="mypage_logout_button">로그아웃</string>
@@ -181,4 +183,7 @@
     <string name="my_auction_list_title">나의 경매 목록</string>
     <string name="my_auction_list_not_exist">등록한 경매 상품이 아직 없습니다</string>
     <string name="my_auction_load_failed_title">내 경매 목록을 불러오는데 실패했습니다</string>
+
+    <!-- image_detail -->
+    <string name="image_detail_images_not_exist">이미지 목록이 존재하지 않습니다.</string>
 </resources>

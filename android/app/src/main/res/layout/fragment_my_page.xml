@@ -108,12 +108,21 @@
                     bind:categoryName="@{@string/mypage_my_participate_auction_list_button}" />
 
                 <include
+                    android:id="@+id/tv_notification_settings_button"
+                    layout="@layout/view_my_page_feature_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.navigateToNotificationSettings()}"
+                    app:layout_constraintTop_toBottomOf="@id/tv_my_participate_auction_list_button"
+                    bind:categoryName="@{@string/mypage_notification_settings_button}" />
+
+                <include
                     android:id="@+id/tv_announcement_button"
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{() -> viewModel.navigateToAnnouncement()}"
-                    app:layout_constraintTop_toBottomOf="@id/tv_my_participate_auction_list_button"
+                    app:layout_constraintTop_toBottomOf="@id/tv_notification_settings_button"
                     bind:categoryName="@{@string/mypage_announcement_button}" />
 
                 <include

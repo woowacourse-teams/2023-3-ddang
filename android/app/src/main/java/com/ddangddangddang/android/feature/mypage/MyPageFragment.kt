@@ -5,6 +5,8 @@ import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS
+import android.provider.Settings.EXTRA_APP_PACKAGE
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -74,6 +76,10 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 navigateToMyParticipateAuction()
             }
 
+            MyPageViewModel.MyPageEvent.NavigateToNotificationSettings -> {
+                navigateToNotificationSettings()
+            }
+
             MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
             }
 
@@ -128,6 +134,12 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     private fun navigateToMyParticipateAuction() {
         startActivity(Intent(requireContext(), ParticipateAuctionActivity::class.java))
+    }
+
+    private fun navigateToNotificationSettings() {
+        val intent = Intent(ACTION_APP_NOTIFICATION_SETTINGS)
+        intent.putExtra(EXTRA_APP_PACKAGE, requireContext().packageName)
+        startActivity(intent)
     }
 
     private fun showPrivacyPolicy() {

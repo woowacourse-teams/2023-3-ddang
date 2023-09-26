@@ -40,12 +40,15 @@ class MyPageViewModel @Inject constructor(
                 is ApiResponse.Success -> {
                     _profile.value = response.body.toPresentation()
                 }
+
                 is ApiResponse.Failure -> {
                     _event.value = MyPageEvent.LoadProfileFailed(ErrorType.FAILURE(response.error))
                 }
+
                 is ApiResponse.NetworkError -> {
                     _event.value = MyPageEvent.LoadProfileFailed(ErrorType.NETWORK_ERROR)
                 }
+
                 is ApiResponse.Unexpected -> {
                     _event.value = MyPageEvent.LoadProfileFailed(ErrorType.UNEXPECTED)
                 }
@@ -66,6 +69,10 @@ class MyPageViewModel @Inject constructor(
         _event.value = MyPageEvent.NavigateToMyParticipateAuctions
     }
 
+    fun navigateToNotificationSettings() {
+        _event.value = MyPageEvent.NavigateToNotificationSettings
+    }
+
     fun navigateToAnnouncement() {
         _event.value = MyPageEvent.NavigateToAnnouncement
     }
@@ -80,12 +87,15 @@ class MyPageViewModel @Inject constructor(
                 is ApiResponse.Success -> {
                     _event.value = MyPageEvent.LogoutSuccessfully
                 }
+
                 is ApiResponse.Failure -> {
                     _event.value = MyPageEvent.LogoutFailed(ErrorType.FAILURE(response.error))
                 }
+
                 is ApiResponse.NetworkError -> {
                     _event.value = MyPageEvent.WithdrawalFailed(ErrorType.NETWORK_ERROR)
                 }
+
                 is ApiResponse.Unexpected -> {
                     _event.value = MyPageEvent.WithdrawalFailed(ErrorType.UNEXPECTED)
                 }
@@ -99,12 +109,15 @@ class MyPageViewModel @Inject constructor(
                 is ApiResponse.Success -> {
                     _event.value = MyPageEvent.WithdrawalSuccessfully
                 }
+
                 is ApiResponse.Failure -> {
                     _event.value = MyPageEvent.WithdrawalFailed(ErrorType.FAILURE(response.error))
                 }
+
                 is ApiResponse.NetworkError -> {
                     _event.value = MyPageEvent.WithdrawalFailed(ErrorType.NETWORK_ERROR)
                 }
+
                 is ApiResponse.Unexpected -> {
                     _event.value = MyPageEvent.WithdrawalFailed(ErrorType.UNEXPECTED)
                 }
@@ -117,6 +130,7 @@ class MyPageViewModel @Inject constructor(
         object ProfileChange : MyPageEvent()
         object NavigateToMyAuctions : MyPageEvent()
         object NavigateToMyParticipateAuctions : MyPageEvent()
+        object NavigateToNotificationSettings : MyPageEvent()
         object NavigateToAnnouncement : MyPageEvent()
         object NavigateToPrivacyPolicy : MyPageEvent()
         object LogoutSuccessfully : MyPageEvent()

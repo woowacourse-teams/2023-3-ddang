@@ -15,22 +15,16 @@ class AuthRemoteDataSource @Inject constructor(private val service: AuthService)
         service.loginByKakao(kakaoLoginRequest)
 
     suspend fun refreshToken(refreshToken: String): ApiResponse<TokenResponse> =
-        service.refreshToken(RefreshTokenRequest(formatToken(refreshToken)))
+        service.refreshToken(RefreshTokenRequest(refreshToken))
 
     suspend fun logout(accessToken: String, refreshToken: String): ApiResponse<Unit> {
-        return service.logout(formatToken(accessToken), LogoutRequest(formatToken(refreshToken)))
+        return service.logout(accessToken, LogoutRequest(refreshToken))
     }
 
     suspend fun verifyToken(token: String): ApiResponse<ValidateTokenResponse> =
-        service.verifyToken(formatToken(token))
-
-    private fun formatToken(token: String): String = "$TOKEN_PREFIX $token"
+        service.verifyToken(token)
 
     suspend fun withdrawal(accessToken: String, refreshToken: String): ApiResponse<Unit> {
-        return service.withdrawal(formatToken(accessToken), WithdrawalRequest(formatToken(refreshToken)))
-    }
-
-    companion object {
-        private const val TOKEN_PREFIX = "Bearer"
+        return service.withdrawal(accessToken, WithdrawalRequest(refreshToken))
     }
 }
