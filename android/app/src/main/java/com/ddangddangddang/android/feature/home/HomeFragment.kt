@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentHomeBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
@@ -65,7 +66,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                 navigateToRegisterAuction()
             }
 
-            is HomeViewModel.HomeEvent.FailureLoadAuctions -> showErrorMessage(event.message)
+            is HomeViewModel.HomeEvent.FailureLoadAuctions -> showErrorMessage(event.errorType)
         }
     }
 
@@ -80,7 +81,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         startActivity(intent)
     }
 
-    private fun showErrorMessage(message: String?) {
+    private fun showErrorMessage(errorType: ErrorType) {
+        val message = when (errorType) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
+        }
         Toaster.showShort(
             requireContext(),
             message ?: getString(R.string.home_default_error_message),

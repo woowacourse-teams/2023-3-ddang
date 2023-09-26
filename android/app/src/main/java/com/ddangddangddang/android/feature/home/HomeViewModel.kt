@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -67,13 +68,13 @@ class HomeViewModel @Inject constructor(private val repository: AuctionRepositor
                 }
 
                 is ApiResponse.Failure -> {
-                    _event.value = HomeEvent.FailureLoadAuctions(response.error)
+                    _event.value = HomeEvent.FailureLoadAuctions(ErrorType.FAILURE(response.error))
                 }
                 is ApiResponse.NetworkError -> {
-                    _event.value = HomeEvent.FailureLoadAuctions(response.exception.message)
+                    _event.value = HomeEvent.FailureLoadAuctions(ErrorType.NETWORK_ERROR)
                 }
                 is ApiResponse.Unexpected -> {
-                    _event.value = HomeEvent.FailureLoadAuctions(response.t?.message)
+                    _event.value = HomeEvent.FailureLoadAuctions(ErrorType.UNEXPECTED)
                 }
             }
             _loadingAuctionsInProgress = false
@@ -89,7 +90,7 @@ class HomeViewModel @Inject constructor(private val repository: AuctionRepositor
         data class NavigateToAuctionDetail(val auctionId: Long) : HomeEvent()
         object NavigateToRegisterAuction : HomeEvent()
 
-        data class FailureLoadAuctions(val message: String?) : HomeEvent()
+        data class FailureLoadAuctions(val errorType: ErrorType) : HomeEvent()
     }
 
     companion object {
