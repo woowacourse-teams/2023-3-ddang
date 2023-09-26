@@ -1,5 +1,7 @@
 package com.ddang.ddang.auction.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.configuration.JpaConfiguration;
@@ -10,6 +12,9 @@ import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -18,12 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -550,5 +549,98 @@ class AuctionTest {
 
         // then
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 경매를_진행중이며_입찰자가_없는_경우_UNBIDDEN을_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final LocalDateTime now = LocalDateTime.now();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(now.plusDays(2))
+                                       .build();
+
+        // when
+        final AuctionStatus actual = auction.findAuctionStatus(now);
+
+        // then
+        assertThat(actual).isEqualTo(AuctionStatus.UNBIDDEN);
+    }
+
+    @Test
+    void 경매가_마감되었고_입찰자가_없는_경우_FAILURE를_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final LocalDateTime now = LocalDateTime.now();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(now.minusDays(2))
+                                       .build();
+
+        // when
+        final AuctionStatus actual = auction.findAuctionStatus(now);
+
+        assertThat(actual).isEqualTo(AuctionStatus.FAILURE);
+    }
+
+    @Test
+    void 경매가_진행중이며_입찰자가_있는_경우_ONGOING을_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final LocalDateTime now = LocalDateTime.now();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(now.plusDays(2))
+                                       .build();
+        auction.updateLastBid(new Bid(auction, seller, new BidPrice(1500)));
+
+        // when
+        final AuctionStatus actual = auction.findAuctionStatus(now);
+
+        // then
+        assertThat(actual).isEqualTo(AuctionStatus.ONGOING);
+    }
+
+    @Test
+    void 경매가_마감되었고_입찰자가_있는_경우_SUCCESS를_반환한다() {
+        // given
+        final User seller = User.builder()
+                                .name("회원1")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(4.7d)
+                                .oauthId("12345")
+                                .build();
+        final LocalDateTime now = LocalDateTime.now();
+        final Auction auction = Auction.builder()
+                                       .title("경매")
+                                       .seller(seller)
+                                       .closingTime(now.minusDays(2))
+                                       .build();
+        auction.updateLastBid(new Bid(auction, seller, new BidPrice(1500)));
+
+        // when
+        final AuctionStatus actual = auction.findAuctionStatus(now);
+
+        // then
+        assertThat(actual).isEqualTo(AuctionStatus.SUCCESS);
     }
 }
