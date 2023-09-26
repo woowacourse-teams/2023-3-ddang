@@ -46,7 +46,7 @@ public record AuctionDetailResponse(
                 dto.description(),
                 dto.startPrice(),
                 dto.lastBidPrice(),
-                processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
+                dto.auctionStatus().name(),
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
@@ -67,19 +67,5 @@ public record AuctionDetailResponse(
                   .stream()
                   .map(DirectRegionResponse::from)
                   .toList();
-    }
-
-    // TODO 2차 데모데이 이후 enum으로 처리
-    private static String processAuctionStatus(final LocalDateTime closingTime, final Integer lastBidPrice) {
-        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice == null) {
-            return "UNBIDDEN";
-        }
-        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice != null) {
-            return "ONGOING";
-        }
-        if (LocalDateTime.now().isAfter(closingTime) && lastBidPrice == null) {
-            return "FAILURE";
-        }
-        return "SUCCESS";
     }
 }
