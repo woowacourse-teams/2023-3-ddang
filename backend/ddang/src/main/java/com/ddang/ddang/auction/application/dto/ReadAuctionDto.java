@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.image.application.util.ImageIdProcessor;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -27,10 +28,11 @@ public record ReadAuctionDto(
         Long sellerProfileId,
         String sellerName,
         double sellerReliability,
-        boolean isSellerDeleted
+        boolean isSellerDeleted,
+        AuctionStatus auctionStatus
 ) {
 
-    public static ReadAuctionDto from(final Auction auction) {
+    public static ReadAuctionDto of(final Auction auction, final LocalDateTime targetTime) {
         return new ReadAuctionDto(
                 auction.getId(),
                 auction.getTitle(),
@@ -50,7 +52,8 @@ public record ReadAuctionDto(
                 ImageIdProcessor.process(auction.getSeller().getProfileImage()),
                 auction.getSeller().getName(),
                 auction.getSeller().getReliability(),
-                auction.getSeller().isDeleted()
+                auction.getSeller().isDeleted(),
+                auction.findAuctionStatus(targetTime)
         );
     }
 
