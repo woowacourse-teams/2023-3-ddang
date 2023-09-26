@@ -60,6 +60,7 @@
                     android:singleLine="true"
                     android:text="@{viewModel.auctionDetailModel.title}"
                     android:textColor="@color/black_900"
+                    android:textIsSelectable="true"
                     android:textSize="@dimen/textsize_main_header"
                     android:textStyle="bold"
                     tools:text="M1 맥북 에어" />
@@ -256,6 +257,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@{viewModel.auctionDetailModel.description}"
+                    android:textIsSelectable="true"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
