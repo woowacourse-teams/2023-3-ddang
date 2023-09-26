@@ -24,7 +24,7 @@ class ImageDetailActivity :
 
     private fun setupViewModel() {
         viewModel.images.observe(this) { setupImages(it) }
-        viewModel.focusPosition.observe(this) {
+        viewModel.initPosition.observe(this) {
             binding.vpImageList.setCurrentItem(it, false)
         }
         viewModel.event.observe(this) { handleEvent(it) }

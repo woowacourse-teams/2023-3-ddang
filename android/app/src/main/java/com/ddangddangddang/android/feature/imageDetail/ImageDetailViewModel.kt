@@ -17,13 +17,13 @@ class ImageDetailViewModel @Inject constructor() : ViewModel() {
     val images: LiveData<List<String>>
         get() = _images
 
-    private val _focusPosition: SingleLiveEvent<Int> = SingleLiveEvent()
-    val focusPosition: LiveData<Int>
-        get() = _focusPosition
+    private val _initPosition: SingleLiveEvent<Int> = SingleLiveEvent()
+    val initPosition: LiveData<Int>
+        get() = _initPosition
 
     fun setImages(images: List<String>, focusPosition: Int) {
         _images.value = images
-        _focusPosition.value = focusPosition
+        _initPosition.value = focusPosition
     }
 
     fun setExitEvent() {
