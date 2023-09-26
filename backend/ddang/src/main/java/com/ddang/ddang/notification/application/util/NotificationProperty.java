@@ -2,7 +2,7 @@ package com.ddang.ddang.notification.application.util;
 
 public enum NotificationProperty {
 
-    NOTIFICATION_TYPE("notificationType"),
+    NOTIFICATION_TYPE("type"),
     IMAGE("image"),
     TITLE("title"),
     BODY("body"),
