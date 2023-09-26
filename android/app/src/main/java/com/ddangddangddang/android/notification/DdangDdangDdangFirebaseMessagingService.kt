@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.bumptech.glide.Glide
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
@@ -21,7 +22,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import java.net.URL
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -65,17 +65,16 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun createMessageReceivedNotification(remoteMessage: RemoteMessage): Notification? {
         return runBlocking {
+            val image = runCatching {
+                getBitmapFromUrl(remoteMessage.data["image"] ?: "")
+            }.getOrDefault(defaultImage)
             val type =
                 NotificationType.of(remoteMessage.data["type"] ?: "") ?: return@runBlocking null
             val pendingIntent = when (type) {
                 NotificationType.MESSAGE -> getMessageRoomPendingIntent(remoteMessage)
                 NotificationType.BID -> getAuctionDetailPendingIntent(remoteMessage)
             }
-            val image =
-                runCatching {
-                    getBitmapFromUrl(remoteMessage.data["image"] ?: "")
-                }.getOrDefault(defaultImage)
-
+            
             NotificationCompat.Builder(applicationContext, CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.img_logo)
                 setLargeIcon(image)
@@ -88,12 +87,12 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private suspend fun getBitmapFromUrl(url: String): Bitmap {
-        if (url.isBlank()) throw IllegalArgumentException("url is blank")
         return withContext(Dispatchers.IO) {
-            val connection = URL(url).openConnection()
-            connection.connect()
-            val input = connection.getInputStream()
-            BitmapFactory.decodeStream(input)
+            Glide.with(applicationContext)
+                .asBitmap()
+                .load(url)
+                .submit()
+                .get()
         }
     }
 
