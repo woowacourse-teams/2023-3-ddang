@@ -35,6 +35,8 @@ import java.util.Optional;
 @Slf4j
 public class BidService {
 
+    private static final String BID_NOTIFICATION_MESSAGE_FORMAT = "상위 입찰자가 나타났습니다. 구매를 원하신다면 더 높은 가격을 제시해 주세요.";
+
     private final NotificationService notificationService;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
@@ -147,7 +149,7 @@ public class BidService {
                 NotificationType.BID,
                 previousBidder.getId(),
                 auction.getTitle(),
-                String.valueOf(auction.getLastBid().getPrice()),
+                BID_NOTIFICATION_MESSAGE_FORMAT,
                 calculateRedirectUrl(auction.getId()),
                 ImageUrlCalculator.calculateAuctionImageUrl(auctionImage, baseUrl)
         );
