@@ -8,7 +8,6 @@ import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuctionService
 import javax.inject.Inject
 
 class ChatRepositoryImpl @Inject constructor(
@@ -34,21 +33,4 @@ class ChatRepositoryImpl @Inject constructor(
         chatMessageRequest: ChatMessageRequest,
     ): ApiResponse<ChatMessageIdResponse> =
         chatRemoteDataSource.sendMessage(chatRoomId, chatMessageRequest)
-
-    companion object {
-        @Volatile
-        private var instance: ChatRepositoryImpl? = null
-
-        fun getInstance(service: AuctionService): ChatRepositoryImpl {
-            return instance ?: synchronized(this) {
-                instance ?: createInstance(service)
-            }
-        }
-
-        private fun createInstance(service: AuctionService): ChatRepositoryImpl {
-            val remoteDataSource = ChatRemoteDataSource(service)
-            return ChatRepositoryImpl(remoteDataSource)
-                .also { instance = it }
-        }
-    }
 }

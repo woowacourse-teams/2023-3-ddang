@@ -12,7 +12,6 @@ import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuctionService
 import java.io.File
 import javax.inject.Inject
 
@@ -88,23 +87,5 @@ class AuctionRepositoryImpl @Inject constructor(
         val response = remoteDataSource.deleteAuction(auctionId)
         if (response is ApiResponse.Success) localDataSource.removeAuctionPreview(auctionId)
         return response
-    }
-
-    companion object {
-        @Volatile
-        private var instance: AuctionRepositoryImpl? = null
-
-        fun getInstance(service: AuctionService): AuctionRepositoryImpl {
-            return instance ?: synchronized(this) {
-                instance ?: createInstance(service)
-            }
-        }
-
-        private fun createInstance(service: AuctionService): AuctionRepositoryImpl {
-            val localDataSource = AuctionLocalDataSource()
-            val remoteDataSource = AuctionRemoteDataSource(service)
-            return AuctionRepositoryImpl(localDataSource, remoteDataSource)
-                .also { instance = it }
-        }
     }
 }

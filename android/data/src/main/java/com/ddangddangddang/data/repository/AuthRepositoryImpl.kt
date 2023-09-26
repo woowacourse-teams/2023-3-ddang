@@ -1,14 +1,11 @@
 package com.ddangddangddang.data.repository
 
-import android.content.Context
 import com.ddangddangddang.data.datasource.AuthLocalDataSource
 import com.ddangddangddang.data.datasource.AuthRemoteDataSource
-import com.ddangddangddang.data.local.AuthSharedPreference
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuthService
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject
@@ -79,24 +76,5 @@ class AuthRepositoryImpl @Inject constructor(
         if (response is ApiResponse.Success) resetToken()
 
         return response
-    }
-
-    companion object {
-        @Volatile
-        private var instance: AuthRepositoryImpl? = null
-
-        fun getInstance(context: Context, service: AuthService): AuthRepositoryImpl {
-            return instance ?: synchronized(this) {
-                instance ?: createInstance(context, service)
-            }
-        }
-
-        private fun createInstance(context: Context, service: AuthService): AuthRepositoryImpl {
-            val sharedPreferences = AuthSharedPreference(context)
-            val localDataSource = AuthLocalDataSource(sharedPreferences)
-            val remoteDataSource = AuthRemoteDataSource(service)
-            return AuthRepositoryImpl(localDataSource, remoteDataSource)
-                .also { instance = it }
-        }
     }
 }
