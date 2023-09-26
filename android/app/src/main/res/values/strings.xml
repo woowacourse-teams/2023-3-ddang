@@ -27,6 +27,11 @@
     <string name="all_unexpected_error_message">예기치 못한 오류가 발생했습니다. 다시 시도해주세요.</string>
     <string name="all_must_update_to_latest_version">최신 버전으로 업데이트가 필요합니다.</string>
 
+    <!-- splash -->
+    <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
+    <string name="splash_app_update_request_dialog_message">더 새로워진 땅땅땅을 준비했습니다!\n업데이트 부탁드립니다!</string>
+    <string name="splash_app_update_denied">업데이트를 해주셔야 서비스를 정상 사용가능합니다.</string>
+
     <!-- home -->
     <string name="home">경매 상품 목록</string>
     <string name="home_filter_new">최신순</string>
