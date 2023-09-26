@@ -42,7 +42,12 @@ public class FcmNotificationService implements NotificationService {
                                                                  ));
 
             return makeAndSendMessage(createNotificationDto, deviceToken);
-        } catch (final FirebaseMessagingException | FcmNotFoundException | DeviceTokenNotFoundException ex) {
+        } catch (
+                final FirebaseMessagingException
+                      | FcmNotFoundException
+                      | DeviceTokenNotFoundException
+                      | NullPointerException ex
+        ) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
             return NOTIFICATION_SEND_FAIL;
         }
