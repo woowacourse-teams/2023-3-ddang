@@ -18,6 +18,7 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -69,7 +70,7 @@ class MessageServiceTest {
 
     @BeforeEach
     void setUp() {
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn("성공");
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
     }
 
     @Test
@@ -242,7 +243,7 @@ class MessageServiceTest {
                 contents
         );
 
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn("알림 전송에 실패했습니다.");
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.FAIL);
 
         // when
         final Long actual = messageService.create(createMessageDto, "");

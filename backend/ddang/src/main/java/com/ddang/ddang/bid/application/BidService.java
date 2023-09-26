@@ -16,6 +16,7 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -61,8 +62,8 @@ public class BidService {
         }
 
         try {
-            final String sendNotificationMessage = sendNotification(auctionAndImageDto, previousBidder.get(), baseUrl);
-            log.info(sendNotificationMessage);
+            final NotificationStatus sendNotificationMessage = sendNotification(auctionAndImageDto, previousBidder.get(), baseUrl);
+            log.info(sendNotificationMessage.toString());
         } catch (Exception ex) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
         }
@@ -136,7 +137,7 @@ public class BidService {
         return saveBid;
     }
 
-    private String sendNotification(
+    private NotificationStatus sendNotification(
             final AuctionAndImageDto auctionAndImageDto,
             final User previousBidder,
             final String baseUrl

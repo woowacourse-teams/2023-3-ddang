@@ -5,6 +5,7 @@ import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -68,10 +69,10 @@ class FcmNotificationServiceTest {
         given(mockFirebaseMessaging.send(any(Message.class))).willReturn("returnMessage");
 
         // when
-        final String actual = notificationService.send(createNotificationDto);
+        final NotificationStatus actual = notificationService.send(createNotificationDto);
 
         // then
-        assertThat(actual).isEqualTo("알림 전송 성공");
+        assertThat(actual).isEqualTo(NotificationStatus.SUCCESS);
     }
 
     @Test
@@ -88,10 +89,10 @@ class FcmNotificationServiceTest {
         );
 
         // when
-        final String actual = notificationService.send(createNotificationDto);
+        final NotificationStatus actual = notificationService.send(createNotificationDto);
 
         // then
-        assertThat(actual).isEqualTo("알림 전송에 실패했습니다.");
+        assertThat(actual).isEqualTo(NotificationStatus.FAIL);
     }
 
     @Test
@@ -119,9 +120,9 @@ class FcmNotificationServiceTest {
         given(mockFirebaseMessaging.send(any(Message.class))).willThrow(FirebaseMessagingException.class);
 
         // when
-        final String actual = notificationService.send(invalidDto);
+        final NotificationStatus actual = notificationService.send(invalidDto);
 
         // then
-        assertThat(actual).isEqualTo("알림 전송에 실패했습니다.");
+        assertThat(actual).isEqualTo(NotificationStatus.FAIL);
     }
 }

@@ -13,6 +13,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -56,7 +57,9 @@ public class MessageService {
         final Message persistMessage = messageRepository.save(message);
 
         final MessageDto messageDto = MessageDto.from(persistMessage, chatRoom, writer, receiver, baseUrl);
-        notificationService.send(CreateNotificationDto.of(messageDto));
+        // TODO : 외부 서비스를 호출하는 해당 서비스에서 정상적으로 처리되었는지 로그를 찍어주면 좋을 것 같은데, 이것도 이야기 해보면 좋을까요?
+        final NotificationStatus notificationStatus = notificationService.send(CreateNotificationDto.of(messageDto));
+        log.info(notificationStatus.toString());
 
         return persistMessage.getId();
     }
