@@ -9,6 +9,7 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
+import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
@@ -58,6 +59,10 @@ class AuctionDetailActivity :
             )
 
             is AuctionDetailViewModel.AuctionDetailEvent.ReportAuction -> navigateToReport(event.auctionId)
+            is AuctionDetailViewModel.AuctionDetailEvent.NavigateToImageDetail -> {
+                navigateToImageDetail(event.images, event.focusPosition)
+            }
+
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
             AuctionDetailViewModel.AuctionDetailEvent.DeleteAuction -> askDeletion()
             AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDeletionComplete -> notifyDeleteComplete()
@@ -76,6 +81,12 @@ class AuctionDetailActivity :
 
     private fun navigateToReport(auctionId: Long) {
         startActivity(ReportActivity.getIntent(this, ReportType.ArticleReport.ordinal, auctionId))
+    }
+
+    private fun navigateToImageDetail(images: List<String>, focusPosition: Int) {
+        startActivity(
+            ImageDetailActivity.getIntent(this@AuctionDetailActivity, images, focusPosition),
+        )
     }
 
     private fun notifyAuctionDoesNotExist() {
@@ -104,7 +115,7 @@ class AuctionDetailActivity :
             clipToPadding = false
             clipChildren = false
             offscreenPageLimit = 1
-            adapter = AuctionImageAdapter(images)
+            adapter = AuctionImageAdapter(images) { viewModel.navigateToImageDetail(it) }
             setPageTransformer(MarginPageTransformer(convertDpToPx(20f)))
             setPadding(200, 0, 200, 0)
         }
