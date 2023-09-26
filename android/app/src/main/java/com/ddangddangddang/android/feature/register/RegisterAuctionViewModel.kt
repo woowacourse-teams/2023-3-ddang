@@ -21,6 +21,7 @@ import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -143,7 +144,8 @@ class RegisterAuctionViewModel @Inject constructor(private val repository: Aucti
         val description = description.value ?: ""
         val startPrice = _startPrice.value?.toInt() ?: 0
         val bidUnit = bidUnit.value?.toInt() ?: 0
-        val closingTime = closingTime.value.toString() + ":00" // seconds
+        val closingTime =
+            closingTime.value?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00'")) ?: ""
         val regions = _directRegion.value?.map { it.id } ?: emptyList()
 
         return RegisterAuctionRequest(
