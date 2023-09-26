@@ -1,5 +1,6 @@
 package com.ddang.ddang.notification.application;
 
+import com.ddang.ddang.configuration.fcm.exception.FcmNotFoundException;
 import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
@@ -34,7 +35,6 @@ public class FcmNotificationService implements NotificationService {
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public String send(final CreateNotificationDto createNotificationDto) {
-        // TODO: 2023/09/25 [고민] device token 찾기, Message 생성, firebase.send()에서 예외가 발생하더라도 항상 무시되어야 하는데, 세 가지 예외를 하나의 try-catch로 묶어도 괜찮을지?
         try {
             final DeviceToken deviceToken = deviceTokenRepository.findByUserId(createNotificationDto.targetUserId())
                                                                  .orElseThrow(() -> new DeviceTokenNotFoundException(
@@ -42,7 +42,7 @@ public class FcmNotificationService implements NotificationService {
                                                                  ));
 
             return makeAndSendMessage(createNotificationDto, deviceToken);
-        } catch (final Exception ex) {
+        } catch (final FirebaseMessagingException | FcmNotFoundException | DeviceTokenNotFoundException ex) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
             return NOTIFICATION_SEND_FAIL;
         }
