@@ -35,6 +35,7 @@ import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
+import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
@@ -454,7 +455,8 @@ class AuctionControllerTest extends CommonControllerSliceTest {
                 1L,
                 "판매자",
                 3.5d,
-                false
+                false,
+                AuctionStatus.UNBIDDEN
         );
         final ReadChatRoomDto chatRoomDto = new ReadChatRoomDto(1L, true);
 
@@ -568,7 +570,8 @@ class AuctionControllerTest extends CommonControllerSliceTest {
                 1L,
                 "판매자",
                 3.5d,
-                false
+                false,
+                AuctionStatus.UNBIDDEN
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -589,7 +592,8 @@ class AuctionControllerTest extends CommonControllerSliceTest {
                 1L,
                 "판매자",
                 3.5d,
-                true
+                true,
+                AuctionStatus.UNBIDDEN
         );
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
