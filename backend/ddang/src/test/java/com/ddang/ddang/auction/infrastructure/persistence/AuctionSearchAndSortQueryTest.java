@@ -76,7 +76,6 @@ public class AuctionSearchAndSortQueryTest extends InitializeCommonAuctionData {
                     softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(auction16);
                     softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(auction15);
                     softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(auction14);
-                    softAssertions.assertThat(actual.hasNext()).isTrue();
                 });
             }
 

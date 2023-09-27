@@ -60,6 +60,8 @@ class AuctionServiceTest {
     @Autowired
     AuctionService auctionService;
 
+    // TODO: 2023/09/25 서비스 통합테스트에서 레포지토리 의존성을 제거해야 할 것 같다 -> 통합테스트의 의미에 부합하지 않는 테스트가 되기 때문
+    // TODO: 2023/09/25 픽스처를 생성하자! - [오후 10시 19분 퇴근!]
     @Autowired
     JpaAuctionRepository auctionRepository;
 

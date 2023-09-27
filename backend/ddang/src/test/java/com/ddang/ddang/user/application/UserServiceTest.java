@@ -1,12 +1,12 @@
 package com.ddang.ddang.user.application;
 
-import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.dto.UpdateUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.application.fixture.UserServiceFixture;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.assertj.core.api.SoftAssertions;
@@ -22,10 +22,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-@IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class UserServiceTest {
+class UserServiceTest extends UserServiceFixture {
 
     @Autowired
     UserService userService;
@@ -33,40 +32,26 @@ class UserServiceTest {
     @Autowired
     JpaUserRepository userRepository;
 
-
     @MockBean
     StoreImageProcessor imageProcessor;
 
     @Test
     void 특정_사용자_정보를_조회한다() {
-        // given
-        final User user = User.builder()
-                              .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(4.7d)
-                              .oauthId("12345")
-                              .build();
-
-        userRepository.save(user);
-
         // when
-        final ReadUserDto actual = userService.readById(user.getId());
+        final ReadUserDto actual = userService.readById(사용자.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.name()).isEqualTo(user.getName());
-            softAssertions.assertThat(actual.profileImageId()).isEqualTo(user.getProfileImage().getId());
-            softAssertions.assertThat(actual.reliability()).isEqualTo(user.getReliability());
+            softAssertions.assertThat(actual.name()).isEqualTo(사용자.getName());
+            softAssertions.assertThat(actual.profileImageId()).isEqualTo(사용자.getProfileImage().getId());
+            softAssertions.assertThat(actual.reliability()).isEqualTo(사용자.getReliability());
         });
     }
 
     @Test
     void 존재하지_않는_사용자_정보_조회시_예외를_반환한다() {
-        // given
-        final Long invalidUserId = -999L;
-
         // when & then
-        assertThatThrownBy(() -> userService.readById(invalidUserId))
+        assertThatThrownBy(() -> userService.readById(존재하지_않는_사용자_아이디))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자 정보를 사용할 수 없습니다.");
     }
@@ -74,36 +59,20 @@ class UserServiceTest {
     @Test
     void 사용자_정보를_수정한다() {
         // given
-        final User user = User.builder()
-                              .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(4.7d)
-                              .oauthId("12345")
-                              .build();
-
-        userRepository.save(user);
-
         final StoreImageDto storeImageDto = new StoreImageDto("newUpload.png", "newStore.png");
         given(imageProcessor.storeImageFile(any())).willReturn(storeImageDto);
 
-        final MockMultipartFile updateImage = new MockMultipartFile(
-                "updateImage.png",
-                "updateImage.png",
-                MediaType.IMAGE_PNG.toString(),
-                new byte[]{1}
-        );
-
-        final UpdateUserDto updateUserDto = new UpdateUserDto("updateName", updateImage);
+        final UpdateUserDto updateUserDto = new UpdateUserDto("updateName", 프로필_이미지);
 
         // when
-        userService.updateById(user.getId(), updateUserDto);
+        userService.updateById(사용자.getId(), updateUserDto);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(user.getName()).isEqualTo("updateName");
-            softAssertions.assertThat(user.getProfileImage().getImage().getStoreName()).isEqualTo("newStore.png");
-            softAssertions.assertThat(user.getReliability()).isEqualTo(4.7d);
-            softAssertions.assertThat(user.getOauthId()).isEqualTo("12345");
+            softAssertions.assertThat(사용자.getName()).isEqualTo("updateName");
+            softAssertions.assertThat(사용자.getProfileImage().getImage().getStoreName()).isEqualTo("newStore.png");
+            softAssertions.assertThat(사용자.getReliability()).isEqualTo(4.7d);
+            softAssertions.assertThat(사용자.getOauthId()).isEqualTo("12345");
         });
     }
 
