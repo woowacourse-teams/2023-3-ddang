@@ -14,6 +14,7 @@ public final class ImageUrlCalculator {
             return null;
         }
 
+        // TODO: 2023/09/27 이름 변경
         final String baseUrl = imageBaseUrl.getBaseUrl();
 
         return baseUrl.concat(String.valueOf(id));

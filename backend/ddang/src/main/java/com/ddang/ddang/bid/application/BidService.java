@@ -43,6 +43,7 @@ public class BidService {
     private final JpaBidRepository bidRepository;
 
     @Transactional
+    // TODO: 2023/09/27 baseUrl -> 로컬 경로로 바꾸기
     public Long create(final CreateBidDto bidDto, final String baseUrl) {
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
