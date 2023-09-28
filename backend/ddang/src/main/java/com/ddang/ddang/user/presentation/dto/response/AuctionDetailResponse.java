@@ -40,7 +40,7 @@ public record AuctionDetailResponse(
     public static AuctionDetailResponse from(final ReadAuctionDto dto) {
         return new AuctionDetailResponse(
                 dto.id(),
-                convertImageUrls(dto),
+                convertImageFullUrls(dto),
                 dto.title(),
                 new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
@@ -55,7 +55,7 @@ public record AuctionDetailResponse(
         );
     }
 
-    private static List<String> convertImageUrls(final ReadAuctionDto dto) {
+    private static List<String> convertImageFullUrls(final ReadAuctionDto dto) {
         return dto.auctionImageIds()
                   .stream()
                   .map(id -> ImageUrlCalculator.calculate(ImageRelativeUrl.AUCTION, id))
