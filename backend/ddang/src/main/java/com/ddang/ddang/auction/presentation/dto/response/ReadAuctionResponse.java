@@ -26,7 +26,7 @@ public record ReadAuctionResponse(
 
 
     private static String convertImageFullUrl(final Long id) {
-        return ImageUrlCalculator.calculate(ImageRelativeUrl.AUCTION, id);
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id);
     }
 
     private static int processAuctionPrice(final Integer startPrice, final Integer lastBidPrice) {

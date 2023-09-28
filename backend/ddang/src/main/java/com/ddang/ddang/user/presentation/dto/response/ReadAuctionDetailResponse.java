@@ -17,7 +17,7 @@ public record ReadAuctionDetailResponse(
             final AuthenticationUserInfo userInfo
     ) {
         final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(dto.auctionDto());
-        final String profileImageUrl = ImageUrlCalculator.calculate(ImageRelativeUrl.USER, dto.auctionDto().sellerId());
+        final String profileImageUrl = ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.auctionDto().sellerId());
 
         final SellerResponse sellerResponse = new SellerResponse(
                 dto.auctionDto().sellerId(),

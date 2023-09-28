@@ -26,6 +26,6 @@ public record CreateAuctionResponse(
     }
 
     private static String convertAuctionImageUrl(final Long id) {
-        return ImageUrlCalculator.calculate(ImageRelativeUrl.AUCTION, id);
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id);
     }
 }

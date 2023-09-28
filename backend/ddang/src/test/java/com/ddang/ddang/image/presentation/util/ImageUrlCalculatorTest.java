@@ -23,7 +23,7 @@ class ImageUrlCalculatorTest {
         final String absoluteUrl = "http://3-ddang.store/users/images/";
 
         // when
-        final String actual = ImageUrlCalculator.calculateProfileImageUrl(mockProfileImage, absoluteUrl);
+        final String actual = ImageUrlCalculator.calculateBy(absoluteUrl, mockProfileImage.getId());
 
         // then
         assertThat(actual).isEqualTo(absoluteUrl + profileImageId);
@@ -38,7 +38,7 @@ class ImageUrlCalculatorTest {
         final String absoluteUrl = "http://3-ddang.store/users/images/";
 
         // when
-        final String actual = ImageUrlCalculator.calculateAuctionImageUrl(mockAuctionImage, absoluteUrl);
+        final String actual = ImageUrlCalculator.calculateBy(absoluteUrl, mockAuctionImage.getId());
 
         // then
         assertThat(actual).isEqualTo(absoluteUrl + auctionImageId);

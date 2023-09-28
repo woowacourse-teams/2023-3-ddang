@@ -152,7 +152,7 @@ public class BidService {
                 auction.getTitle(),
                 BID_NOTIFICATION_MESSAGE_FORMAT,
                 calculateRedirectUrl(auction.getId()),
-                ImageUrlCalculator.calculateAuctionImageUrl(auctionImage, absoluteUrl)
+                ImageUrlCalculator.calculateBy(absoluteUrl, auctionImage.getId())
         );
 
         return notificationService.send(dto);

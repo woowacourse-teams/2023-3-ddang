@@ -76,7 +76,7 @@ public class MessageService {
                 message.getWriter().getName(),
                 message.getContents(),
                 calculateRedirectUrl(message.getChatRoom().getId()),
-                ImageUrlCalculator.calculateProfileImageUrl(writerProfileImage, absoluteUrl)
+                ImageUrlCalculator.calculateBy(absoluteUrl, writerProfileImage.getId())
         );
 
         return notificationService.send(dto);

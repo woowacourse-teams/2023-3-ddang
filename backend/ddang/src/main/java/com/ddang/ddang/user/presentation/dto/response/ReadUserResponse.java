@@ -16,6 +16,6 @@ public record ReadUserResponse(String name, String profileImage, double reliabil
     }
 
     private static String convertImageFullUrl(final Long id) {
-        return ImageUrlCalculator.calculate(ImageRelativeUrl.USER, id);
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, id);
     }
 }

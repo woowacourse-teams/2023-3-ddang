@@ -14,6 +14,6 @@ public record ReadChatPartnerResponse(Long id, String name, String profileImage)
     }
 
     private static String convertImageFullUrl(final Long id) {
-        return ImageUrlCalculator.calculate(ImageRelativeUrl.USER, id);
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, id);
     }
 }
