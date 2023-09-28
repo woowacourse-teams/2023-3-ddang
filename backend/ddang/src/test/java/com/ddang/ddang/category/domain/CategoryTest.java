@@ -20,10 +20,8 @@ class CategoryTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(main.getSubCategories())
-                          .hasSize(1);
-            softAssertions.assertThat(sub.getMainCategory())
-                          .isNotNull();
+            softAssertions.assertThat(main.getSubCategories()).hasSize(1);
+            softAssertions.assertThat(sub.getMainCategory()).isNotNull();
         });
     }
 }
