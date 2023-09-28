@@ -44,10 +44,10 @@ class CategoryServiceTest extends CategoryServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).id()).isEqualTo(가구_하위_의자_카테고리.getId());
-            softAssertions.assertThat(actual.get(0).name()).isEqualTo(가구_하위_의자_카테고리.getName());
-            softAssertions.assertThat(actual.get(1).id()).isEqualTo(가구_하위_책상_카테고리.getId());
-            softAssertions.assertThat(actual.get(1).name()).isEqualTo(가구_하위_책상_카테고리.getName());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(가구_서브_의자_카테고리.getId());
+            softAssertions.assertThat(actual.get(0).name()).isEqualTo(가구_서브_의자_카테고리.getName());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(가구_서브_책상_카테고리.getId());
+            softAssertions.assertThat(actual.get(1).name()).isEqualTo(가구_서브_책상_카테고리.getName());
         });
     }
 
