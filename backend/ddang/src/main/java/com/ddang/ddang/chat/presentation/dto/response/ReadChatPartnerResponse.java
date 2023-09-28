@@ -10,10 +10,10 @@ public record ReadChatPartnerResponse(Long id, String name, String profileImage)
     public static ReadChatPartnerResponse from(final ReadUserInChatRoomDto dto) {
         final String name = NameProcessor.process(dto.isDeleted(), dto.name());
 
-        return new ReadChatPartnerResponse(dto.id(), name, convertImageFullUrl(dto.profileImageId()));
-    }
-
-    private static String convertImageFullUrl(final Long id) {
-        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, id);
+        return new ReadChatPartnerResponse(
+                dto.id(),
+                name,
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.profileImageId())
+        );
     }
 }

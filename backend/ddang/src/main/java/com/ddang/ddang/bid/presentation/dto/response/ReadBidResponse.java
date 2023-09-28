@@ -21,10 +21,11 @@ public record ReadBidResponse(
 
     public static ReadBidResponse from(final ReadBidDto dto) {
         final String name = NameProcessor.process(dto.isDeletedUser(), dto.name());
-        return new ReadBidResponse(name, convertImageFullUrl(dto.profileImageId()), dto.price(), dto.bidTime());
-    }
-
-    private static String convertImageFullUrl(final Long id) {
-        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, id);
+        return new ReadBidResponse(
+                name,
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.profileImageId()),
+                dto.price(),
+                dto.bidTime()
+        );
     }
 }

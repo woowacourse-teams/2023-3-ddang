@@ -10,12 +10,8 @@ public record ReadUserResponse(String name, String profileImage, double reliabil
     public static ReadUserResponse from(final ReadUserDto readUserDto) {
         return new ReadUserResponse(
                 NameProcessor.process(readUserDto.isDeleted(), readUserDto.name()),
-                convertImageFullUrl(readUserDto.profileImageId()),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, readUserDto.profileImageId()),
                 readUserDto.reliability()
         );
-    }
-
-    private static String convertImageFullUrl(final Long id) {
-        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, id);
     }
 }

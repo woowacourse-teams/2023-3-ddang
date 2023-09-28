@@ -14,13 +14,9 @@ public record SellerResponse(
     public static SellerResponse from(final ReadAuctionDto auctionDto) {
         return new SellerResponse(
                 auctionDto.sellerId(),
-                convertImageFullUrl(auctionDto.sellerProfileId()),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, auctionDto.sellerProfileId()),
                 auctionDto.sellerName(),
                 auctionDto.sellerReliability()
         );
-    }
-
-    private static String convertImageFullUrl(final Long id) {
-        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, id);
     }
 }
