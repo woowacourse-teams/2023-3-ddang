@@ -55,7 +55,7 @@ class JpaCategoryRepositoryTest extends JpaCategoryRepositoryFixture {
     }
 
     @Test
-    void 하위_카테고리가_아닌_아이디를_전달하면_빈_Optional을_반환한다() {
+    void 서브_카테고리가_아닌_카테고리의_아이디를_전달하면_빈_Optional을_반환한다() {
         // when
         final Optional<Category> actual = categoryRepository.findSubCategoryById(가구_카테고리.getId());
 
