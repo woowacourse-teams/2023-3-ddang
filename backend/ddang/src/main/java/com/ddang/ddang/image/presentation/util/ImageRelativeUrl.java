@@ -13,7 +13,7 @@ public enum ImageRelativeUrl {
         this.value = value;
     }
 
-    public String getAbsoluteUrl() {
+    public String calculateAbsoluteUrl() {
         return ServletUriComponentsBuilder.fromCurrentContextPath()
                                           .build()
                                           .toUriString()

@@ -34,7 +34,7 @@ public class BidController {
             @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateBidRequest bidRequest
     ) {
-        bidService.create(CreateBidDto.of(bidRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.getAbsoluteUrl());
+        bidService.create(CreateBidDto.of(bidRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.calculateAbsoluteUrl());
 
         return ResponseEntity.created(URI.create("/auctions/" + bidRequest.auctionId()))
                              .build();

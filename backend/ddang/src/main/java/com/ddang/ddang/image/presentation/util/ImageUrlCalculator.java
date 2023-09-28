@@ -6,7 +6,7 @@ public final class ImageUrlCalculator {
     }
 
     public static String calculateBy(final ImageRelativeUrl imageRelativeUrl, final Long id) {
-        final String absoluteUrl = imageRelativeUrl.getAbsoluteUrl();
+        final String absoluteUrl = imageRelativeUrl.calculateAbsoluteUrl();
 
         return absoluteUrl.concat(String.valueOf(id));
     }
