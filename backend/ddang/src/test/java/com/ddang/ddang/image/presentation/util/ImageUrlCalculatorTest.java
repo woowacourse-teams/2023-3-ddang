@@ -20,13 +20,13 @@ class ImageUrlCalculatorTest {
         final ProfileImage mockProfileImage = mock(ProfileImage.class);
         final long profileImageId = 1L;
         BDDMockito.given(mockProfileImage.getId()).willReturn(profileImageId);
-        final String baseUrl = "/baseUrl/";
+        final String absoluteUrl = "http://3-ddang.store/users/images/";
 
         // when
-        final String actual = ImageUrlCalculator.calculateProfileImageUrl(mockProfileImage, baseUrl);
+        final String actual = ImageUrlCalculator.calculateProfileImageUrl(mockProfileImage, absoluteUrl);
 
         // then
-        assertThat(actual).isEqualTo(baseUrl + profileImageId);
+        assertThat(actual).isEqualTo(absoluteUrl + profileImageId);
     }
 
     @Test
@@ -35,12 +35,12 @@ class ImageUrlCalculatorTest {
         final AuctionImage mockAuctionImage = mock(AuctionImage.class);
         final long auctionImageId = 1L;
         BDDMockito.given(mockAuctionImage.getId()).willReturn(auctionImageId);
-        final String baseUrl = "/baseUrl/";
+        final String absoluteUrl = "http://3-ddang.store/users/images/";
 
         // when
-        final String actual = ImageUrlCalculator.calculateAuctionImageUrl(mockAuctionImage, baseUrl);
+        final String actual = ImageUrlCalculator.calculateAuctionImageUrl(mockAuctionImage, absoluteUrl);
 
         // then
-        assertThat(actual).isEqualTo(baseUrl + auctionImageId);
+        assertThat(actual).isEqualTo(absoluteUrl + auctionImageId);
     }
 }

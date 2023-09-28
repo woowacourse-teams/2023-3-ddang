@@ -9,25 +9,25 @@ public final class ImageUrlCalculator {
     private ImageUrlCalculator() {
     }
 
-    public static String calculate(final ImageBaseUrl imageBaseUrl, final Long id) {
+    public static String calculate(final ImageRelativeUrl imageRelativeUrl, final Long id) {
         if (id == null) {
             return null;
         }
 
-        final String baseUrl = imageBaseUrl.getBaseUrl();
+        final String absoluteUrl = imageRelativeUrl.getAbsoluteUrl();
 
-        return baseUrl.concat(String.valueOf(id));
+        return absoluteUrl.concat(String.valueOf(id));
     }
 
-    public static String calculateProfileImageUrl(final ProfileImage profileImage, final String baseUrl) {
+    public static String calculateProfileImageUrl(final ProfileImage profileImage, final String absoluteUrl) {
         final Long profileImageId = ImageIdProcessor.process(profileImage);
 
-        return baseUrl.concat(String.valueOf(profileImageId));
+        return absoluteUrl.concat(String.valueOf(profileImageId));
     }
 
-    public static String calculateAuctionImageUrl(final AuctionImage auctionImage, final String baseUrl) {
+    public static String calculateAuctionImageUrl(final AuctionImage auctionImage, final String absoluteUrl) {
         final Long auctionImageId = ImageIdProcessor.process(auctionImage);
 
-        return baseUrl.concat(String.valueOf(auctionImageId));
+        return absoluteUrl.concat(String.valueOf(auctionImageId));
     }
 }

@@ -1,7 +1,7 @@
 package com.ddang.ddang.user.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
@@ -58,7 +58,7 @@ public record AuctionDetailResponse(
     private static List<String> convertImageUrls(final ReadAuctionDto dto) {
         return dto.auctionImageIds()
                   .stream()
-                  .map(id -> ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, id))
+                  .map(id -> ImageUrlCalculator.calculate(ImageRelativeUrl.AUCTION, id))
                   .toList();
     }
 

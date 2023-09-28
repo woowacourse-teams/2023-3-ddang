@@ -1,7 +1,7 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
 import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
-import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.user.presentation.util.NameProcessor;
 
@@ -14,6 +14,6 @@ public record ReadChatPartnerResponse(Long id, String name, String profileImage)
     }
 
     private static String convertImageUrl(final Long id) {
-        return ImageUrlCalculator.calculate(ImageBaseUrl.USER, id);
+        return ImageUrlCalculator.calculate(ImageRelativeUrl.USER, id);
     }
 }
