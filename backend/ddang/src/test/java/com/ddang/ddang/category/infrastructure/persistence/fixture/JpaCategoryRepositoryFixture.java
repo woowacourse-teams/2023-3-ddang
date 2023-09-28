@@ -7,6 +7,7 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class JpaCategoryRepositoryFixture {
 
     @PersistenceContext
