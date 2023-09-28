@@ -15,10 +15,10 @@ import org.springframework.context.annotation.Import;
 public class JpaCategoryRepositoryFixture {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Autowired
-    JpaCategoryRepository categoryRepository;
+    private JpaCategoryRepository categoryRepository;
 
     protected Category 가구_카테고리;
     protected Category 전자기기_카테고리;

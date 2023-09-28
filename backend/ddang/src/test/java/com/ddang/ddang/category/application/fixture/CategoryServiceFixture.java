@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class CategoryServiceFixture {
 
     @Autowired
-    JpaCategoryRepository categoryRepository;
+    private JpaCategoryRepository categoryRepository;
 
     protected Category 가구_카테고리;
     protected Category 전자기기_카테고리;
