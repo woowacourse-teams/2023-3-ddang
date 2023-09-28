@@ -2,11 +2,10 @@ package com.ddang.ddang.category.application.fixture;
 
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.configuration.IsolateDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
-@IsolateDatabase
+@SuppressWarnings("NonAsciiCharacters")
 public class CategoryServiceFixture {
 
     @Autowired

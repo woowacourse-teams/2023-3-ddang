@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.fixture.JpaCategoryRepositoryFixture;
+import com.ddang.ddang.configuration.QuerydslConfiguration;
 import java.util.List;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
@@ -11,7 +12,11 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
+@DataJpaTest
+@Import(QuerydslConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class JpaCategoryRepositoryTest extends JpaCategoryRepositoryFixture {

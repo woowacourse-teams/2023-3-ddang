@@ -2,16 +2,11 @@ package com.ddang.ddang.category.infrastructure.persistence.fixture;
 
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
-@DataJpaTest
-@Import(QuerydslConfiguration.class)
 public class JpaCategoryRepositoryFixture {
 
     @PersistenceContext
