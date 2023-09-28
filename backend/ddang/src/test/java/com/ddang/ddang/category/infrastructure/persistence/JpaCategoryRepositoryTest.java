@@ -40,8 +40,8 @@ class JpaCategoryRepositoryTest extends JpaCategoryRepositoryFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual).contains(가구_하위_의자_카테고리);
-            softAssertions.assertThat(actual).contains(가구_하위_책상_카테고리);
+            softAssertions.assertThat(actual.get(0)).isEqualTo(가구_하위_의자_카테고리);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(가구_하위_책상_카테고리);
         });
     }
 
