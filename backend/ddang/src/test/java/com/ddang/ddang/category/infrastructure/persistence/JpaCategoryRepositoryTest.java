@@ -45,18 +45,18 @@ class JpaCategoryRepositoryTest extends JpaCategoryRepositoryFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0)).isEqualTo(가구_하위_의자_카테고리);
-            softAssertions.assertThat(actual.get(1)).isEqualTo(가구_하위_책상_카테고리);
+            softAssertions.assertThat(actual.get(0)).isEqualTo(가구_서브_의자_카테고리);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(가구_서브_책상_카테고리);
         });
     }
 
     @Test
     void 서브_카테고리를_조회한다() {
         // when
-        final Optional<Category> actual = categoryRepository.findSubCategoryById(가구_하위_의자_카테고리.getId());
+        final Optional<Category> actual = categoryRepository.findSubCategoryById(가구_서브_의자_카테고리.getId());
 
         // then
-        assertThat(actual).contains(가구_하위_의자_카테고리);
+        assertThat(actual).contains(가구_서브_의자_카테고리);
     }
 
     @Test
