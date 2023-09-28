@@ -67,7 +67,7 @@ public class MessageService {
         return persistMessage.getId();
     }
 
-    private String sendNotification(final Message message, final String absoluteUrl)  {
+    private String sendNotification(final Message message, final String profileImageAbsoluteUrl)  {
         final ProfileImage writerProfileImage = message.getWriter().getProfileImage();
 
         final CreateNotificationDto dto = new CreateNotificationDto(
@@ -76,7 +76,7 @@ public class MessageService {
                 message.getWriter().getName(),
                 message.getContents(),
                 calculateRedirectUrl(message.getChatRoom().getId()),
-                ImageUrlCalculator.calculateBy(absoluteUrl, writerProfileImage.getId())
+                ImageUrlCalculator.calculateBy(profileImageAbsoluteUrl, writerProfileImage.getId())
         );
 
         return notificationService.send(dto);

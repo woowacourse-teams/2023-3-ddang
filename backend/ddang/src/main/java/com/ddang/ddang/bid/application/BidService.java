@@ -43,7 +43,7 @@ public class BidService {
     private final JpaBidRepository bidRepository;
 
     @Transactional
-    public Long create(final CreateBidDto bidDto, final String absoluteUrl) {
+    public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final AuctionAndImageDto auctionAndImageDto =
@@ -64,7 +64,7 @@ public class BidService {
 
         try {
             final String sendNotificationMessage =
-                    sendNotification(auctionAndImageDto, previousBidder.get(), absoluteUrl);
+                    sendNotification(auctionAndImageDto, previousBidder.get(), auctionImageAbsoluteUrl);
             log.info(sendNotificationMessage);
         } catch (Exception ex) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
@@ -142,7 +142,7 @@ public class BidService {
     private String sendNotification(
             final AuctionAndImageDto auctionAndImageDto,
             final User previousBidder,
-            final String absoluteUrl
+            final String auctionImageAbsoluteUrl
     ) {
         final Auction auction = auctionAndImageDto.auction();
         final AuctionImage auctionImage = auctionAndImageDto.auctionImage();
@@ -152,7 +152,7 @@ public class BidService {
                 auction.getTitle(),
                 BID_NOTIFICATION_MESSAGE_FORMAT,
                 calculateRedirectUrl(auction.getId()),
-                ImageUrlCalculator.calculateBy(absoluteUrl, auctionImage.getId())
+                ImageUrlCalculator.calculateBy(auctionImageAbsoluteUrl, auctionImage.getId())
         );
 
         return notificationService.send(dto);
