@@ -30,10 +30,6 @@ public class LogTracer {
         return new TraceStatus(traceId, startTimeMs, methodName);
     }
 
-    private String formattedClassAndMethod(final String prefix, final String className, final String methodName) {
-        return prefix + className + "." + methodName + "()";
-    }
-
     private void syncTraceDepth() {
         final TraceDepth traceId = traceIdHolder.get();
 
@@ -46,6 +42,10 @@ public class LogTracer {
         }
 
         return traceId.createNextId();
+    }
+
+    private String formattedClassAndMethod(final String prefix, final String className, final String methodName) {
+        return prefix + className + "." + methodName + "()";
     }
 
     private String addSpace(final String prefix, final int level) {

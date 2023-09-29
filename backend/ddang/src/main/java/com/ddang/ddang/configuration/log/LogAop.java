@@ -35,8 +35,8 @@ public class LogAop {
             return joinPoint.proceed();
         }
 
-        final String methodName = getMethodName(joinPoint);
         final String className = getClassSimpleName(joinPoint);
+        final String methodName = getMethodName(joinPoint);
         final TraceStatus status = logTrace.begin(className, methodName);
 
         try {
