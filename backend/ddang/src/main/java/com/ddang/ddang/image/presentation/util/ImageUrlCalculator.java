@@ -8,10 +8,10 @@ public final class ImageUrlCalculator {
     public static String calculateBy(final ImageRelativeUrl imageRelativeUrl, final Long id) {
         final String absoluteUrl = imageRelativeUrl.calculateAbsoluteUrl();
 
-        return absoluteUrl.concat(String.valueOf(id));
+        return absoluteUrl + id;
     }
 
     public static String calculateBy(final String imageAbsoluteUrl, final Long id) {
-        return imageAbsoluteUrl.concat(String.valueOf(id));
+        return imageAbsoluteUrl + id;
     }
 }

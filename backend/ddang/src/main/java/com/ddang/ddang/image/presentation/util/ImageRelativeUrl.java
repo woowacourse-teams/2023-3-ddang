@@ -14,9 +14,10 @@ public enum ImageRelativeUrl {
     }
 
     public String calculateAbsoluteUrl() {
-        return ServletUriComponentsBuilder.fromCurrentContextPath()
-                                          .build()
-                                          .toUriString()
-                                          .concat(value);
+        final String imageBaseUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                                                               .build()
+                                                               .toUriString();
+
+        return imageBaseUrl + value;
     }
 }
