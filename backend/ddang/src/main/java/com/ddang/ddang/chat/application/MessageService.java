@@ -38,7 +38,7 @@ public class MessageService {
     private final JpaUserRepository userRepository;
 
     @Transactional
-    public Long create(final CreateMessageDto dto, final String absoluteUrl) {
+    public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
         final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -58,7 +58,7 @@ public class MessageService {
         final Message persistMessage = messageRepository.save(message);
 
         try {
-            final String sendNotificationMessage = sendNotification(persistMessage, absoluteUrl);
+            final String sendNotificationMessage = sendNotification(persistMessage, profileImageAbsoluteUrl);
             log.info(sendNotificationMessage);
         } catch (Exception ex) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
