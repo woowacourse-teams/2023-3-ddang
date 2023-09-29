@@ -13,7 +13,7 @@ public record MessageDto(
         User writer,
         User receiver,
         String contents,
-        String baseUrl
+        String profileImageAbsoluteUrl
 ) {
 
     public static MessageDto from(
@@ -21,7 +21,7 @@ public record MessageDto(
             final ChatRoom chatRoom,
             final User writer,
             final User receiver,
-            final String baseUrl
+            final String profileImageAbsoluteUrl
     ) {
         return new MessageDto(
                 persistMessage.getId(),
@@ -30,7 +30,7 @@ public record MessageDto(
                 writer,
                 receiver,
                 persistMessage.getContents(),
-                baseUrl
+                profileImageAbsoluteUrl
         );
     }
 }

@@ -62,8 +62,7 @@ public class FcmNotificationService implements NotificationService {
                                                          .build();
         final Message message = Message.builder()
                                        .setToken(deviceToken.getDeviceToken())
-                                       .putData(NOTIFICATION_TYPE.getKeyName(), createNotificationDto.notificationType()
-                                                                                                     .getValue())
+                                       .putData(NOTIFICATION_TYPE.getKeyName(), createNotificationDto.notificationType().getValue())
                                        .putData(IMAGE.getKeyName(), createNotificationDto.image())
                                        .putData(TITLE.getKeyName(), createNotificationDto.title())
                                        .putData(BODY.getKeyName(), createNotificationDto.body())

@@ -56,31 +56,12 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        final MessageDto messageDto = MessageDto.from(persistMessage, chatRoom, writer, receiver, baseUrl);
+        final MessageDto messageDto = MessageDto.from(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
         // TODO : 외부 서비스를 호출하는 해당 서비스에서 정상적으로 처리되었는지 로그를 찍어주면 좋다고 생각해 추가했습니다. 이에 대한 고민은 코멘트로 남겨두겠습니다.
         final NotificationStatus notificationStatus = notificationService.send(CreateNotificationDto.from(messageDto));
         log.info(notificationStatus.toString());
 
         return persistMessage.getId();
-    }
-
-    private String sendNotification(final Message message, final String profileImageAbsoluteUrl) {
-        final ProfileImage writerProfileImage = message.getWriter().getProfileImage();
-
-        final CreateNotificationDto dto = new CreateNotificationDto(
-                NotificationType.MESSAGE,
-                message.getReceiver().getId(),
-                message.getWriter().getName(),
-                message.getContents(),
-                calculateRedirectUrl(message.getChatRoom().getId()),
-                ImageUrlCalculator.calculateBy(profileImageAbsoluteUrl, writerProfileImage.getId())
-        );
-
-        return notificationService.send(dto);
-    }
-
-    private String calculateRedirectUrl(final Long id) {
-        return "/chattings/" + id;
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
