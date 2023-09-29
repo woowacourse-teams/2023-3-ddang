@@ -6,6 +6,7 @@ import com.ddang.ddang.authentication.infrastructure.jwt.JwtEncoder;
 import java.time.LocalDateTime;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class JwtDecoderFixture {
 
     protected String 유효하지_않은_길이의_토큰 = "abcde";

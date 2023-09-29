@@ -1,5 +1,6 @@
 package com.ddang.ddang.authentication.infrastructure.oauth2.fixture;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class KakaoOauth2TypeFixture {
 
     protected String 카카오_소셜_로그인_방식 = "kakao";

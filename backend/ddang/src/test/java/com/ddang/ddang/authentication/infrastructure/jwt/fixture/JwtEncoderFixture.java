@@ -3,6 +3,7 @@ package com.ddang.ddang.authentication.infrastructure.jwt.fixture;
 import com.ddang.ddang.authentication.configuration.JwtConfigurationProperties;
 import java.util.Map;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class JwtEncoderFixture {
 
     protected JwtConfigurationProperties 토큰_설정 = new JwtConfigurationProperties(

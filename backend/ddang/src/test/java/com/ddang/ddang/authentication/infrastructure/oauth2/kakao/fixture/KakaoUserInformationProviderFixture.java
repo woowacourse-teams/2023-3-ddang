@@ -1,20 +1,14 @@
 package com.ddang.ddang.authentication.infrastructure.oauth2.kakao.fixture;
 
 import com.ddang.ddang.authentication.configuration.KakaoProvidersConfigurationProperties;
-import com.ddang.ddang.authentication.configuration.Oauth2PropertiesConfiguration;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
-import com.ddang.ddang.authentication.infrastructure.oauth2.kakao.KakaoUserInformationProvider;
-import com.ddang.ddang.configuration.RestTemplateConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
-@RestClientTest({KakaoUserInformationProvider.class})
-@Import({RestTemplateConfiguration.class, Oauth2PropertiesConfiguration.class})
+@SuppressWarnings("NonAsciiCharacters")
 public class KakaoUserInformationProviderFixture {
 
     @Autowired

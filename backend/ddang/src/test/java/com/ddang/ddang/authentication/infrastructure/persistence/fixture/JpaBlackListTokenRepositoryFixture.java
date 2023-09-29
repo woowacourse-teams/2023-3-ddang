@@ -3,17 +3,12 @@ package com.ddang.ddang.authentication.infrastructure.persistence.fixture;
 import com.ddang.ddang.authentication.domain.BlackListToken;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.infrastructure.persistence.JpaBlackListTokenRepository;
-import com.ddang.ddang.configuration.JpaConfiguration;
-import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
-@DataJpaTest
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
+@SuppressWarnings("NonAsciiCharacters")
 public class JpaBlackListTokenRepositoryFixture {
 
     @PersistenceContext

@@ -7,15 +7,21 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withUnauthorizedRequest;
 
+import com.ddang.ddang.authentication.configuration.Oauth2PropertiesConfiguration;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.infrastructure.oauth2.kakao.fixture.KakaoUserInformationProviderFixture;
+import com.ddang.ddang.configuration.RestTemplateConfiguration;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 
+@RestClientTest({KakaoUserInformationProvider.class})
+@Import({RestTemplateConfiguration.class, Oauth2PropertiesConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class KakaoUserInformationProviderTest extends KakaoUserInformationProviderFixture {
