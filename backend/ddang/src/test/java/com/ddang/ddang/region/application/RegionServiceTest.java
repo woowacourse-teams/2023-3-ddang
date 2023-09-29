@@ -77,8 +77,8 @@ class RegionServiceTest extends RegionServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).name()).isEqualTo(서울특별시.getName());
-            softAssertions.assertThat(actual.get(1).name()).isEqualTo(두번째_지역이_없는_첫번째_지역.getName());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(서울특별시.getId());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(두번째_지역이_없는_첫번째_지역.getId());
         });
     }
 
@@ -90,8 +90,8 @@ class RegionServiceTest extends RegionServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).name()).isEqualTo(서울특별시_강남구.getName());
-            softAssertions.assertThat(actual.get(1).name()).isEqualTo(세번째_지역이_없는_두번째_지역.getName());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(서울특별시_강남구.getId());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(세번째_지역이_없는_두번째_지역.getId());
         });
     }
 
@@ -112,8 +112,8 @@ class RegionServiceTest extends RegionServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).name()).isEqualTo(서울특별시_강남구_삼성동.getName());
-            softAssertions.assertThat(actual.get(1).name()).isEqualTo(서울특별시_강남구_대치동.getName());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(서울특별시_강남구_삼성동.getId());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(서울특별시_강남구_대치동.getId());
         });
     }
 
