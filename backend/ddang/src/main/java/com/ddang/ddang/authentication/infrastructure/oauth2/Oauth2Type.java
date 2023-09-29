@@ -18,7 +18,7 @@ public enum Oauth2Type {
 
     public String calculateNickname(final String name) {
         final String type = this.name()
-                             .toLowerCase(Locale.ENGLISH);
+                                .toLowerCase(Locale.ENGLISH);
         return type + name;
     }
 }
