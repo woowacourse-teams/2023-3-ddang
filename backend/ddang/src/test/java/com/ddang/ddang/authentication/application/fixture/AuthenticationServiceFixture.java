@@ -39,11 +39,10 @@ public class AuthenticationServiceFixture {
     protected AuthenticationService profileImageAuthenticationService;
     protected JpaProfileImageRepository 프로필_이미지_저장소 = mock(JpaProfileImageRepository.class);
 
-    protected Oauth2Type 지원하는_소셜_로그인 = Oauth2Type.KAKAO;
-    protected Oauth2Type 지원하지_않는_소셜_로그인 = Oauth2Type.KAKAO;
+    protected Oauth2Type 지원하는_소셜_로그인_타입 = Oauth2Type.KAKAO;
+    protected Oauth2Type 지원하지_않는_소셜_로그인_타입 = Oauth2Type.KAKAO;
 
     protected String 유효한_소셜_로그인_토큰 = "Bearer accessToken";
-    protected String 유효하지_않은_소셜_로그인_토큰 = "accessToken";
     protected String 만료된_소셜_로그인_토큰;
 
     protected String 디바이스_토큰 = "deviceToken";
@@ -55,6 +54,7 @@ public class AuthenticationServiceFixture {
     protected UserInformationDto 사용자_회원_정보 = new UserInformationDto(12345L);
     protected UserInformationDto 탈퇴한_사용자_회원_정보 = new UserInformationDto(54321L);
     protected UserInformationDto 가입하지_않은_사용자_회원_정보 = new UserInformationDto(-99999L);
+    protected UserInformationDto 이미지가_없는_사용자_회원_정보 = new UserInformationDto(-11111L);
 
     protected String 유효한_액세스_토큰;
     protected String 유효하지_않은_액세스_토큰 = "Bearer invalidAccessToken";
@@ -120,11 +120,11 @@ public class AuthenticationServiceFixture {
                   .build();
 
         탈퇴한_사용자 = User.builder()
-                  .name("kakao12346")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(0.0d)
-                  .oauthId("12346")
-                  .build();
+                      .name("kakao12346")
+                      .profileImage(new ProfileImage("upload.png", "store.png"))
+                      .reliability(0.0d)
+                      .oauthId("12346")
+                      .build();
 
         이미지가_없는_사용자 = User.builder()
                           .name("kakao12347")
@@ -134,9 +134,8 @@ public class AuthenticationServiceFixture {
                           .build();
 
         userRepository.save(사용자);
-        userRepository.save(탈퇴한_사용자);
-
         탈퇴한_사용자.withdrawal();
+        userRepository.save(탈퇴한_사용자);
 
         final DeviceToken deviceToken = new DeviceToken(사용자, 디바이스_토큰);
         deviceTokenRepository.save(deviceToken);
