@@ -1,17 +1,9 @@
 package com.ddang.ddang.authentication.application.fixture;
 
-import static org.mockito.Mockito.mock;
-
-import com.ddang.ddang.authentication.application.AuthenticationService;
-import com.ddang.ddang.authentication.application.BlackListTokenService;
-import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
-import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -24,20 +16,9 @@ import java.time.ZoneId;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuthenticationServiceFixture {
-
-    @MockBean
-    protected Oauth2UserInformationProviderComposite 소셜_회원_정보_제공자_묶음;
-
-    @MockBean
-    protected OAuth2UserInformationProvider 소셜_회원_정보_제공자;
-
-    protected AuthenticationService authenticationService;
-    protected AuthenticationService profileImageAuthenticationService;
-    protected JpaProfileImageRepository 프로필_이미지_저장소 = mock(JpaProfileImageRepository.class);
 
     protected Oauth2Type 지원하는_소셜_로그인_타입 = Oauth2Type.KAKAO;
     protected Oauth2Type 지원하지_않는_소셜_로그인_타입 = Oauth2Type.KAKAO;
@@ -54,7 +35,6 @@ public class AuthenticationServiceFixture {
     protected UserInformationDto 사용자_회원_정보 = new UserInformationDto(12345L);
     protected UserInformationDto 탈퇴한_사용자_회원_정보 = new UserInformationDto(54321L);
     protected UserInformationDto 가입하지_않은_사용자_회원_정보 = new UserInformationDto(-99999L);
-    protected UserInformationDto 이미지가_없는_사용자_회원_정보 = new UserInformationDto(-11111L);
 
     protected String 유효한_액세스_토큰;
     protected String 유효하지_않은_액세스_토큰 = "Bearer invalidAccessToken";
@@ -64,9 +44,6 @@ public class AuthenticationServiceFixture {
     protected String 유효한_리프레시_토큰;
     protected String 만료된_리프레시_토큰;
     protected String 유효하지_않은_타입의_리프레시_토큰 = "invalidRefreshToken";
-
-    @MockBean
-    private DeviceTokenService deviceTokenService;
 
     @Autowired
     private JpaUserRepository userRepository;
@@ -78,38 +55,10 @@ public class AuthenticationServiceFixture {
     private TokenEncoder tokenEncoder;
 
     @Autowired
-    private TokenDecoder tokenDecoder;
-
-    @Autowired
-    private BlackListTokenService blackListTokenService;
-
-    @Autowired
     private JpaDeviceTokenRepository deviceTokenRepository;
 
     @BeforeEach
-    void setUp() {
-        authenticationService = new AuthenticationService(
-                deviceTokenService,
-                소셜_회원_정보_제공자_묶음,
-                userRepository,
-                profileImageRepository,
-                tokenEncoder,
-                tokenDecoder,
-                blackListTokenService,
-                deviceTokenRepository
-        );
-
-        profileImageAuthenticationService = new AuthenticationService(
-                deviceTokenService,
-                소셜_회원_정보_제공자_묶음,
-                userRepository,
-                프로필_이미지_저장소,
-                tokenEncoder,
-                tokenDecoder,
-                blackListTokenService,
-                deviceTokenRepository
-        );
-
+    void fixtureSetUp() {
         profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
 
         사용자 = User.builder()
