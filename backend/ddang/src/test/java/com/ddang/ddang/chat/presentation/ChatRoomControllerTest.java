@@ -1,28 +1,5 @@
 package com.ddang.ddang.chat.presentation;
 
-import static org.hamcrest.Matchers.is;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
@@ -50,10 +27,6 @@ import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
@@ -62,7 +35,36 @@ import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static org.hamcrest.Matchers.is;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ChatRoomControllerTest extends CommonControllerSliceTest {
@@ -106,32 +108,16 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(messageService.create(any(CreateMessageDto.class), anyString())).willReturn(1L);
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/chattings/{chatRoomId}/messages", 1L)
-                                                        .contentType(MediaType.APPLICATION_JSON)
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                                                        .content(objectMapper.writeValueAsString(request)))
-               .andExpectAll(
-                       status().isCreated(),
-                       header().string(HttpHeaders.LOCATION, is("/chattings/1")),
-                       jsonPath("$.id", is(1L), Long.class)
-               )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               pathParameters(
-                                       parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
-                               ),
-                               requestFields(
-                                       fieldWithPath("receiverId").description("메시지 수신자 ID"),
-                                       fieldWithPath("contents").description("메시지 내용")
-                               ),
-                               responseFields(
-                                       fieldWithPath("id").type(JsonFieldType.NUMBER).description("메시지 보내진 채팅방 ID")
-                               )
-                       )
-               );
+        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.post("/chattings/{chatRoomId}/messages", 1L)
+                                                                                            .contentType(MediaType.APPLICATION_JSON)
+                                                                                            .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                                                            .content(objectMapper.writeValueAsString(request)))
+                                                   .andExpectAll(
+                                                           status().isCreated(),
+                                                           header().string(HttpHeaders.LOCATION, is("/chattings/1")),
+                                                           jsonPath("$.id", is(1L), Long.class)
+                                                   );
+        createMessage_문서화(resultActions);
     }
 
     @Test
@@ -210,39 +196,17 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willReturn(List.of(readMessageDto));
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}/messages", 1L)
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                                                        .contentType(MediaType.APPLICATION_JSON)
-                                                        .queryParam("lastMessageId", lastMessageId.toString())
-               )
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.[0].isMyMessage", is(expected.isMyMessage())),
-                       jsonPath("$.[0].contents", is(expected.contents()))
-               )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               pathParameters(
-                                       parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
-                               ),
-                               queryParameters(
-                                       parameterWithName("lastMessageId").description("마지막으로 응답받은 메시지의 ID").optional()
-                               ),
-                               responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY)
-                                                          .description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
-                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
-                                                                    .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN)
-                                                                      .description("조회를 요청한 사람이 보낸 메시지인지 여부"),
-                                       fieldWithPath("[].contents").type(JsonFieldType.STRING).description("메시지 내용")
-                               )
-                       )
-               );
+        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}/messages", 1L)
+                                                                                            .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                                                            .contentType(MediaType.APPLICATION_JSON)
+                                                                                            .queryParam("lastMessageId", lastMessageId.toString())
+                                                   )
+                                                   .andExpectAll(
+                                                           status().isOk(),
+                                                           jsonPath("$.[0].isMyMessage", is(expected.isMyMessage())),
+                                                           jsonPath("$.[0].contents", is(expected.contents()))
+                                                   );
+        readAllByLastMessageId_문서화(resultActions);
     }
 
     @Test
@@ -355,54 +319,27 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                 .willReturn(List.of(dto1, dto2));
 
         // when & then
-        mockMvc.perform(get("/chattings")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                       .contentType(MediaType.APPLICATION_JSON))
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.[0].id", is(dto1.id()), Long.class),
-                       jsonPath("$.[0].chatPartner.name", is(dto1.partnerDto().name())),
-                       jsonPath("$.[0].auction.title", is(dto1.auctionDto().title())),
-                       jsonPath("$.[0].lastMessage.contents", is(dto1.lastMessageDto().contents())),
-                       jsonPath("$.[1].id", is(dto2.id()), Long.class),
-                       jsonPath("$.[1].chatPartner.name", is(dto2.partnerDto().name())),
-                       jsonPath("$.[1].auction.title", is(dto2.auctionDto().title())),
-                       jsonPath("$.[1].lastMessage.contents", is(dto2.lastMessageDto().contents()))
-               )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
-                                       fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                         .description("채팅 상대방 ID"),
-                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING)
-                                                                           .description("채팅 상대방 이름"),
-                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                   .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT)
-                                                                  .description("채팅방과 연관된 경매"),
-                                       fieldWithPath("[].auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING)
-                                                                        .description("경매 제목"),
-                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING)
-                                                                        .description("경매 대표 사진"),
-                                       fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
-                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT)
-                                                                      .description("마지막으로 전송된 메시지"),
-                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING)
-                                                                                .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
-                                                                               .description("메시지 내용"),
-                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                          .description("채팅 가능 여부")
-                               )
-                       )
-               );
+        final ResultActions resultActions = mockMvc.perform(get("/chattings")
+                                                           .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                           .contentType(MediaType.APPLICATION_JSON))
+                                                   .andExpectAll(
+                                                           status().isOk(),
+                                                           jsonPath("$.[0].id", is(dto1.id()), Long.class),
+                                                           jsonPath("$.[0].chatPartner.name", is(dto1.partnerDto()
+                                                                                                     .name())),
+                                                           jsonPath("$.[0].auction.title", is(dto1.auctionDto()
+                                                                                                  .title())),
+                                                           jsonPath("$.[0].lastMessage.contents", is(dto1.lastMessageDto()
+                                                                                                         .contents())),
+                                                           jsonPath("$.[1].id", is(dto2.id()), Long.class),
+                                                           jsonPath("$.[1].chatPartner.name", is(dto2.partnerDto()
+                                                                                                     .name())),
+                                                           jsonPath("$.[1].auction.title", is(dto2.auctionDto()
+                                                                                                  .title())),
+                                                           jsonPath("$.[1].lastMessage.contents", is(dto2.lastMessageDto()
+                                                                                                         .contents()))
+                                                   );
+        readAllParticipatingChatRooms_문서화(resultActions);
     }
 
     @Test
@@ -456,43 +393,18 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willReturn(chatRoom);
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}", 1L)
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                                                        .contentType(MediaType.APPLICATION_JSON))
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.id", is(chatRoom.id()), Long.class),
-                       jsonPath("$.chatPartner.name", is(chatRoom.partnerDto().name())),
-                       jsonPath("$.auction.title", is(chatRoom.auctionDto().title()))
-               )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               pathParameters(
-                                       parameterWithName("chatRoomId").description("조회하고자 하는 채팅방 ID")
-                               ),
-                               responseFields(
-                                       fieldWithPath("id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
-                                       fieldWithPath("auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
-                                       fieldWithPath("auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("auction.title").type(JsonFieldType.STRING).description("경매 제목"),
-                                       fieldWithPath("auction.image").type(JsonFieldType.STRING)
-                                                                     .description("경매 대표 사진"),
-                                       fieldWithPath("auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
-                                       fieldWithPath("chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                      .description("채팅 상대방 ID"),
-                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING)
-                                                                        .description("채팅 상대방 이름"),
-                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                       .description("채팅 가능 여부")
-                               )
-                       )
-               );
+        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}", 1L)
+                                                                                            .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                                                            .contentType(MediaType.APPLICATION_JSON))
+                                                   .andExpectAll(
+                                                           status().isOk(),
+                                                           jsonPath("$.id", is(chatRoom.id()), Long.class),
+                                                           jsonPath("$.chatPartner.name", is(chatRoom.partnerDto()
+                                                                                                     .name())),
+                                                           jsonPath("$.auction.title", is(chatRoom.auctionDto()
+                                                                                                  .title()))
+                                                   );
+        readChatRoom_문서화(resultActions);
     }
 
     @Test
@@ -574,27 +486,15 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willReturn(newChatRoomId);
 
         // when & then
-        mockMvc.perform(post("/chattings")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                       .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(chatRoomRequest)))
-               .andExpectAll(
-                       status().isCreated(),
-                       header().string(HttpHeaders.LOCATION, is("/chattings/" + newChatRoomId))
-               )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               requestFields(
-                                       fieldWithPath("auctionId").type(JsonFieldType.NUMBER).description("연관된 경매 ID")
-                               ),
-                               responseFields(
-                                       fieldWithPath("chatRoomId").type(JsonFieldType.NUMBER).description("생성된 채팅방 ID")
-                               )
-                       )
-               );
+        final ResultActions resultActions = mockMvc.perform(post("/chattings")
+                                                           .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                           .contentType(MediaType.APPLICATION_JSON)
+                                                           .content(objectMapper.writeValueAsString(chatRoomRequest)))
+                                                   .andExpectAll(
+                                                           status().isCreated(),
+                                                           header().string(HttpHeaders.LOCATION, is("/chattings/" + newChatRoomId))
+                                                   );
+        createChatRoom_문서화(resultActions);
     }
 
     @Test
@@ -713,5 +613,139 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        status().isForbidden(),
                        jsonPath("$.message", is(invalidUserToChat.getMessage()))
                );
+    }
+
+    private void createMessage_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        pathParameters(
+                                parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("receiverId").description("메시지 수신자 ID"),
+                                fieldWithPath("contents").description("메시지 내용")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(JsonFieldType.NUMBER)
+                                                   .description("메시지 보내진 채팅방 ID")
+                        )
+                )
+        );
+    }
+
+    private void readAllByLastMessageId_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        pathParameters(
+                                parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
+                        ),
+                        queryParameters(
+                                parameterWithName("lastMessageId").description("마지막으로 응답받은 메시지의 ID").optional()
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                   .description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
+                                fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
+                                                             .description("메시지를 보낸 시간"),
+                                fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN)
+                                                               .description("조회를 요청한 사람이 보낸 메시지인지 여부"),
+                                fieldWithPath("[].contents").type(JsonFieldType.STRING)
+                                                            .description("메시지 내용")
+                        )
+                )
+        );
+    }
+
+    private void readAllParticipatingChatRooms_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
+                                fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
+                                fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER)
+                                                                  .description("채팅 상대방 ID"),
+                                fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING)
+                                                                    .description("채팅 상대방 이름"),
+                                fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING)
+                                                                            .description("채팅 상대방 프로필 사진"),
+                                fieldWithPath("[].auction").type(JsonFieldType.OBJECT)
+                                                           .description("채팅방과 연관된 경매"),
+                                fieldWithPath("[].auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
+                                fieldWithPath("[].auction.title").type(JsonFieldType.STRING)
+                                                                 .description("경매 제목"),
+                                fieldWithPath("[].auction.image").type(JsonFieldType.STRING)
+                                                                 .description("경매 대표 사진"),
+                                fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
+                                fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT)
+                                                               .description("마지막으로 전송된 메시지"),
+                                fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING)
+                                                                         .description("메시지를 보낸 시간"),
+                                fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
+                                                                        .description("메시지 내용"),
+                                fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN)
+                                                                   .description("채팅 가능 여부")
+                        )
+                )
+        );
+    }
+
+    private void readChatRoom_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        pathParameters(
+                                parameterWithName("chatRoomId").description("조회하고자 하는 채팅방 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
+                                fieldWithPath("auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
+                                fieldWithPath("auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
+                                fieldWithPath("auction.title").type(JsonFieldType.STRING).description("경매 제목"),
+                                fieldWithPath("auction.image").type(JsonFieldType.STRING)
+                                                              .description("경매 대표 사진"),
+                                fieldWithPath("auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
+                                fieldWithPath("chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
+                                fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER)
+                                                               .description("채팅 상대방 ID"),
+                                fieldWithPath("chatPartner.name").type(JsonFieldType.STRING)
+                                                                 .description("채팅 상대방 이름"),
+                                fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING)
+                                                                         .description("채팅 상대방 프로필 사진"),
+                                fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN)
+                                                                .description("채팅 가능 여부")
+                        )
+                )
+        );
+    }
+
+    private void createChatRoom_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        requestFields(
+                                fieldWithPath("auctionId").type(JsonFieldType.NUMBER)
+                                                          .description("연관된 경매 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("chatRoomId").type(JsonFieldType.NUMBER)
+                                                           .description("생성된 채팅방 ID")
+                        )
+                )
+        );
     }
 }
