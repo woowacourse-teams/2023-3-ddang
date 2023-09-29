@@ -1,5 +1,7 @@
 package com.ddang.ddang.authentication.application.fixture;
 
+import static org.mockito.Mockito.mock;
+
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
@@ -9,7 +11,6 @@ import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
@@ -35,6 +36,8 @@ public class AuthenticationServiceFixture {
     protected OAuth2UserInformationProvider 소셜_회원_정보_제공자;
 
     protected AuthenticationService authenticationService;
+    protected AuthenticationService profileImageAuthenticationService;
+    protected JpaProfileImageRepository 프로필_이미지_저장소 = mock(JpaProfileImageRepository.class);
 
     protected Oauth2Type 지원하는_소셜_로그인 = Oauth2Type.KAKAO;
     protected Oauth2Type 지원하지_않는_소셜_로그인 = Oauth2Type.KAKAO;
@@ -47,12 +50,14 @@ public class AuthenticationServiceFixture {
 
     protected User 사용자;
     protected User 탈퇴한_사용자;
+    protected User 이미지가_없는_사용자;
 
     protected UserInformationDto 사용자_회원_정보 = new UserInformationDto(12345L);
     protected UserInformationDto 탈퇴한_사용자_회원_정보 = new UserInformationDto(54321L);
     protected UserInformationDto 가입하지_않은_사용자_회원_정보 = new UserInformationDto(-99999L);
 
     protected String 유효한_액세스_토큰;
+    protected String 유효하지_않은_액세스_토큰 = "Bearer invalidAccessToken";
     protected String 탈퇴한_사용자_액세스_토큰;
     protected String 이미지가_없는_사용자_액세스_토큰;
     protected String 존재하지_않는_사용자_액세스_토큰;
@@ -94,6 +99,19 @@ public class AuthenticationServiceFixture {
                 deviceTokenRepository
         );
 
+        profileImageAuthenticationService = new AuthenticationService(
+                deviceTokenService,
+                소셜_회원_정보_제공자_묶음,
+                userRepository,
+                프로필_이미지_저장소,
+                tokenEncoder,
+                tokenDecoder,
+                blackListTokenService,
+                deviceTokenRepository
+        );
+
+        profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
+
         사용자 = User.builder()
                   .name("kakao12345")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -107,6 +125,13 @@ public class AuthenticationServiceFixture {
                   .reliability(0.0d)
                   .oauthId("12346")
                   .build();
+
+        이미지가_없는_사용자 = User.builder()
+                          .name("kakao12347")
+                          .profileImage(null)
+                          .reliability(0.0d)
+                          .oauthId("12347")
+                          .build();
 
         userRepository.save(사용자);
         userRepository.save(탈퇴한_사용자);

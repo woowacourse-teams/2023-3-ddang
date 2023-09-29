@@ -13,6 +13,7 @@ import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginExc
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
+import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -31,8 +32,8 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
         // when & then
         assertThatThrownBy(() -> authenticationService.login(
-                지원하지_않는_소셜_로그인, 
-                유효한_소셜_로그인_토큰, 
+                지원하지_않는_소셜_로그인,
+                유효한_소셜_로그인_토큰,
                 디바이스_토큰)
         ).isInstanceOf(UnsupportedSocialLoginException.class)
          .hasMessage("지원하는 소셜 로그인 기능이 아닙니다.");
@@ -62,15 +63,15 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
         // when
         final TokenDto actual = authenticationService.login(
-                지원하는_소셜_로그인, 
-                유효한_소셜_로그인_토큰, 
+                지원하는_소셜_로그인,
+                유효한_소셜_로그인_토큰,
                 디바이스_토큰
         );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.accessToken()).isNotEmpty();
-            softAssertions.assertThat(actual.refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.accessToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.refreshToken()).isNotEmpty().contains("Bearer ");
         });
     }
 
@@ -81,7 +82,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(소셜_회원_정보_제공자.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
 
         // when & then
-        assertThatThrownBy(() -> authenticationService.login(지원하는_소셜_로그인, 이미지가_없는_사용자_액세스_토큰, 디바이스_토큰))
+        assertThatThrownBy(() -> profileImageAuthenticationService.login(지원하는_소셜_로그인, 이미지가_없는_사용자_액세스_토큰, 디바이스_토큰))
                 .isInstanceOf(ImageNotFoundException.class)
                 .hasMessage("기본 이미지를 찾을 수 없습니다.");
     }
@@ -166,6 +167,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
     @Test
     void 가입한_회원이_탈퇴하는_경우_정상처리한다() throws InvalidWithdrawalException {
+        // given
         given(소셜_회원_정보_제공자_묶음.findProvider(지원하는_소셜_로그인)).willReturn(소셜_회원_정보_제공자);
         given(소셜_회원_정보_제공자.findUserInformation(anyString())).willReturn(사용자_회원_정보);
 
@@ -196,9 +198,45 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
                 .willThrow(new InvalidTokenException("401 Unauthorized"));
 
         // when & then
-        assertThatThrownBy(
-                () -> authenticationService.withdrawal(Oauth2Type.KAKAO, 존재하지_않는_사용자_액세스_토큰, 유효한_리프레시_토큰))
+        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, 존재하지_않는_사용자_액세스_토큰, 유효한_리프레시_토큰))
                 .isInstanceOf(InvalidWithdrawalException.class)
                 .hasMessage("탈퇴에 대한 권한 없습니다.");
+    }
+
+    @Test
+    void 탈퇴할_때_유효한_토큰이_아닌_경우_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> authenticationService.withdrawal(Oauth2Type.KAKAO, 유효하지_않은_액세스_토큰, 유효한_리프레시_토큰))
+                .isInstanceOf(InvalidTokenException.class)
+                .hasMessage("유효한 토큰이 아닙니다.");
+    }
+
+    @Test
+    void 로그인할_때_이미지가_없는_사용자라면_예외가_발생한다() {
+        // given
+        given(소셜_회원_정보_제공자_묶음.findProvider(지원하는_소셜_로그인)).willReturn(소셜_회원_정보_제공자);
+        given(소셜_회원_정보_제공자.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
+        given(프로필_이미지_저장소.findByStoreName(anyString())).willReturn(Optional.empty());
+
+        // when & then
+        assertThatThrownBy(() -> profileImageAuthenticationService.login(Oauth2Type.KAKAO, 유효한_액세스_토큰, 디바이스_토큰))
+                .isInstanceOf(ImageNotFoundException.class)
+                .hasMessage("기본 이미지를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 로그인할_때_가입하지_않은_사용자라면_회원가입을_진행한다() {
+        // given
+        given(소셜_회원_정보_제공자_묶음.findProvider(지원하는_소셜_로그인)).willReturn(소셜_회원_정보_제공자);
+        given(소셜_회원_정보_제공자.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
+
+        // when
+        final TokenDto actual = authenticationService.login(Oauth2Type.KAKAO, 유효한_소셜_로그인_토큰, 디바이스_토큰);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.accessToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.refreshToken()).isNotEmpty().contains("Bearer ");
+        });
     }
 }
