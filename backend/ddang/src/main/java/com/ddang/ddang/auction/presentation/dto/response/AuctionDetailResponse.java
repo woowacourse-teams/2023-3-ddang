@@ -1,7 +1,7 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -41,13 +41,13 @@ public record AuctionDetailResponse(
     public static AuctionDetailResponse from(final ReadAuctionDto dto) {
         return new AuctionDetailResponse(
                 dto.id(),
-                convertImageUrls(dto),
+                convertImageFullUrls(dto),
                 dto.title(),
                 new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
                 dto.startPrice(),
                 dto.lastBidPrice(),
-                processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
+                dto.auctionStatus().name(),
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
@@ -56,10 +56,10 @@ public record AuctionDetailResponse(
         );
     }
 
-    private static List<String> convertImageUrls(final ReadAuctionDto dto) {
+    private static List<String> convertImageFullUrls(final ReadAuctionDto dto) {
         return dto.auctionImageIds()
                   .stream()
-                  .map(id -> ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, id))
+                  .map(id -> ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id))
                   .toList();
     }
 
@@ -68,19 +68,5 @@ public record AuctionDetailResponse(
                   .stream()
                   .map(DirectRegionResponse::from)
                   .toList();
-    }
-
-    // TODO 2차 데모데이 이후 enum으로 처리
-    private static String processAuctionStatus(final LocalDateTime closingTime, final Integer lastBidPrice) {
-        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice == null) {
-            return "UNBIDDEN";
-        }
-        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice != null) {
-            return "ONGOING";
-        }
-        if (LocalDateTime.now().isAfter(closingTime) && lastBidPrice == null) {
-            return "FAILURE";
-        }
-        return "SUCCESS";
     }
 }

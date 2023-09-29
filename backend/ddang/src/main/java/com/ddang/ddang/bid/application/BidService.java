@@ -36,13 +36,15 @@ import java.util.Optional;
 @Slf4j
 public class BidService {
 
+    private static final String BID_NOTIFICATION_MESSAGE_FORMAT = "상위 입찰자가 나타났습니다. 구매를 원하신다면 더 높은 가격을 제시해 주세요.";
+
     private final NotificationService notificationService;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaBidRepository bidRepository;
 
     @Transactional
-    public Long create(final CreateBidDto bidDto, final String baseUrl) {
+    public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final AuctionAndImageDto auctionAndImageDto =
@@ -62,7 +64,8 @@ public class BidService {
         }
 
         try {
-            final NotificationStatus sendNotificationMessage = sendNotification(auctionAndImageDto, previousBidder.get(), baseUrl);
+            final NotificationStatus sendNotificationMessage =
+                    sendNotification(auctionAndImageDto, previousBidder.get(), auctionImageAbsoluteUrl);
             log.info(sendNotificationMessage.toString());
         } catch (Exception ex) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
@@ -140,7 +143,7 @@ public class BidService {
     private NotificationStatus sendNotification(
             final AuctionAndImageDto auctionAndImageDto,
             final User previousBidder,
-            final String baseUrl
+            final String auctionImageAbsoluteUrl
     ) {
         final Auction auction = auctionAndImageDto.auction();
         final AuctionImage auctionImage = auctionAndImageDto.auctionImage();
@@ -148,9 +151,9 @@ public class BidService {
                 NotificationType.BID,
                 previousBidder.getId(),
                 auction.getTitle(),
-                String.valueOf(auction.getLastBid().getPrice()),
+                BID_NOTIFICATION_MESSAGE_FORMAT,
                 calculateRedirectUrl(auction.getId()),
-                ImageUrlCalculator.calculateAuctionImageUrl(auctionImage, baseUrl)
+                ImageUrlCalculator.calculateBy(auctionImageAbsoluteUrl, auctionImage.getId())
         );
 
         return notificationService.send(dto);

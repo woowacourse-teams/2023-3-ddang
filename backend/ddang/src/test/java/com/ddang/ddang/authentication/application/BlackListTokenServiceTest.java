@@ -61,10 +61,8 @@ class BlackListTokenServiceTest {
     void 블랙리스트로_등록된_토큰인지_확인할때_이미_블랙리스트로_등록된_토큰을_전달하면_참을_반환한다() {
         // given
         final Map<String, Object> privateClaims = Map.of("userId", 1L);
-        final String accessToken =
-                "Bearer " + tokenEncoder.encode(LocalDateTime.now(), TokenType.ACCESS, privateClaims);
-        final String refreshToken =
-                "Bearer " + tokenEncoder.encode(LocalDateTime.now(), TokenType.REFRESH, privateClaims);
+        final String accessToken = tokenEncoder.encode(LocalDateTime.now(), TokenType.ACCESS, privateClaims);
+        final String refreshToken = tokenEncoder.encode(LocalDateTime.now(), TokenType.REFRESH, privateClaims);
 
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
 

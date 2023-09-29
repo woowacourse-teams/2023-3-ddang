@@ -37,7 +37,7 @@ public class MessageService {
     private final JpaUserRepository userRepository;
 
     @Transactional
-    public Long create(final CreateMessageDto dto, final String baseUrl) {
+    public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
         final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -62,6 +62,25 @@ public class MessageService {
         log.info(notificationStatus.toString());
 
         return persistMessage.getId();
+    }
+
+    private String sendNotification(final Message message, final String profileImageAbsoluteUrl) {
+        final ProfileImage writerProfileImage = message.getWriter().getProfileImage();
+
+        final CreateNotificationDto dto = new CreateNotificationDto(
+                NotificationType.MESSAGE,
+                message.getReceiver().getId(),
+                message.getWriter().getName(),
+                message.getContents(),
+                calculateRedirectUrl(message.getChatRoom().getId()),
+                ImageUrlCalculator.calculateBy(profileImageAbsoluteUrl, writerProfileImage.getId())
+        );
+
+        return notificationService.send(dto);
+    }
+
+    private String calculateRedirectUrl(final Long id) {
+        return "/chattings/" + id;
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
