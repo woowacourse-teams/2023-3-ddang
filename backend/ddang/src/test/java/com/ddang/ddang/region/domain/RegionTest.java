@@ -20,10 +20,9 @@ class RegionTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(first.getSecondRegions())
-                          .hasSize(1);
-            softAssertions.assertThat(second.getFirstRegion())
-                          .isNotNull();
+            softAssertions.assertThat(first.getSecondRegions()).hasSize(1);
+            softAssertions.assertThat(first.getSecondRegions().get(0).getName()).isEqualTo(second.getName());
+            softAssertions.assertThat(second.getFirstRegion().getName()).isEqualTo(first.getName());
         });
     }
 
@@ -41,12 +40,10 @@ class RegionTest {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(second.getThirdRegions())
-                          .hasSize(1);
-            softAssertions.assertThat(third.getSecondRegion())
-                          .isNotNull();
-            softAssertions.assertThat(third.getFirstRegion())
-                          .isNotNull();
+            softAssertions.assertThat(second.getThirdRegions()).hasSize(1);
+            softAssertions.assertThat(second.getThirdRegions().get(0).getName()).isEqualTo(third.getName());
+            softAssertions.assertThat(third.getSecondRegion().getName()).isEqualTo(second.getName());
+            softAssertions.assertThat(third.getFirstRegion().getName()).isEqualTo(first.getName());
         });
     }
 }
