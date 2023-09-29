@@ -130,10 +130,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         final Long invalidChatRoomId = -999L;
         final CreateMessageRequest request = new CreateMessageRequest(1L, "메시지 내용");
 
-        final ChatRoomNotFoundException chatRoomNotFoundException =
-                new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
-
-        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(chatRoomNotFoundException);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", invalidChatRoomId)
@@ -142,7 +139,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(chatRoomNotFoundException.getMessage()))
+                       jsonPath("$.message", is("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."))
                );
     }
 
@@ -157,11 +154,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         final Long chatRoomId = 1L;
         final CreateMessageRequest request = new CreateMessageRequest(invalidWriterId, "메시지 내용");
 
-        final UserNotFoundException userNotFoundException = new UserNotFoundException(
-                "지정한 아이디에 대한 발신자를 찾을 수 없습니다."
-        );
-
-        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(userNotFoundException);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(post("/chattings/{chatRoomId}/messages", chatRoomId)
@@ -170,7 +163,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+                       jsonPath("$.message", is("지정한 아이디에 대한 발신자를 찾을 수 없습니다."))
                );
     }
 
@@ -237,10 +230,8 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final Long invalidChatRoomId = -999L;
-        final ChatRoomNotFoundException chatRoomNotFoundException =
-                new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
 
-        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(chatRoomNotFoundException);
+        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(get("/chattings/" + invalidChatRoomId + "/messages")
@@ -249,7 +240,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .queryParam("lastMessageId", "1"))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(chatRoomNotFoundException.getMessage()))
+                       jsonPath("$.message", is("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."))
                );
     }
 
@@ -261,10 +252,8 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final Long invalidMessageId = -999L;
-        final MessageNotFoundException messageNotFoundException =
-                new MessageNotFoundException("조회한 마지막 메시지가 존재하지 않습니다.");
 
-        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(messageNotFoundException);
+        given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(new MessageNotFoundException("조회한 마지막 메시지가 존재하지 않습니다."));
 
         // when & then
         mockMvc.perform(get("/chattings/1/messages")
@@ -274,7 +263,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                )
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(messageNotFoundException.getMessage()))
+                       jsonPath("$.message", is("조회한 마지막 메시지가 존재하지 않습니다."))
                );
     }
 
@@ -345,12 +334,10 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
     @Test
     void 사용자가_참여한_채팅방_목록_조회시_요청한_사용자_정보가_없다면_404를_반환한다() throws Exception {
         // given
-        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willThrow(userNotFoundException);
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         final Long invalidUserId = -999L;
-        given(chatRoomService.readAllByUserId(invalidUserId)).willThrow(userNotFoundException);
+        given(chatRoomService.readAllByUserId(invalidUserId)).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(get("/chattings")
@@ -358,7 +345,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+                       jsonPath("$.message", is("사용자 정보를 찾을 수 없습니다."))
                );
     }
 
@@ -414,9 +401,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
-
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(userNotFoundException);
+        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(get("/chattings/1")
@@ -424,7 +409,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+                       jsonPath("$.message", is("사용자 정보를 찾을 수 없습니다."))
                );
     }
 
@@ -436,10 +421,8 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final Long invalidChatRoomId = -999L;
-        final ChatRoomNotFoundException chatRoomNotFoundException =
-                new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
 
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(chatRoomNotFoundException);
+        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(get("/chattings/{chatRoomId}", invalidChatRoomId)
@@ -447,7 +430,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(chatRoomNotFoundException.getMessage()))
+                       jsonPath("$.message", is("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."))
                );
     }
 
@@ -505,9 +488,8 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보를 찾을 수 없습니다.");
 
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(userNotFoundException);
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(post("/chattings")
@@ -516,7 +498,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .content(objectMapper.writeValueAsString(chatRoomRequest)))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+                       jsonPath("$.message", is("사용자 정보를 찾을 수 없습니다."))
                );
     }
 
@@ -529,9 +511,8 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
 
         final Long invalidAuctionId = 999L;
         final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(invalidAuctionId);
-        final AuctionNotFoundException auctionNotFoundException = new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
 
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(auctionNotFoundException);
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(post("/chattings")
@@ -540,7 +521,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .content(objectMapper.writeValueAsString(chatRoomRequest)))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(auctionNotFoundException.getMessage()))
+                       jsonPath("$.message", is("해당 경매를 찾을 수 없습니다."))
                );
     }
 
@@ -552,10 +533,8 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final InvalidAuctionToChatException invalidAuctionToChatException =
-                new InvalidAuctionToChatException("경매가 아직 종료되지 않았습니다.");
 
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(invalidAuctionToChatException);
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new InvalidAuctionToChatException("경매가 아직 종료되지 않았습니다."));
 
         // when & then
         mockMvc.perform(post("/chattings")
@@ -564,7 +543,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .content(objectMapper.writeValueAsString(chatRoomRequest)))
                .andExpectAll(
                        status().isBadRequest(),
-                       jsonPath("$.message", is(invalidAuctionToChatException.getMessage()))
+                       jsonPath("$.message", is("경매가 아직 종료되지 않았습니다."))
                );
     }
 
@@ -576,9 +555,8 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final CreateChatRoomRequest chatRoomRequest = new CreateChatRoomRequest(1L);
-        final WinnerNotFoundException winnerNotFoundException = new WinnerNotFoundException("낙찰자가 존재하지 않습니다");
 
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(winnerNotFoundException);
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new WinnerNotFoundException("낙찰자가 존재하지 않습니다"));
 
         // when & then
         mockMvc.perform(post("/chattings")
@@ -587,7 +565,7 @@ class ChatRoomControllerTest extends CommonControllerSliceTest {
                        .content(objectMapper.writeValueAsString(chatRoomRequest)))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(winnerNotFoundException.getMessage()))
+                       jsonPath("$.message", is("낙찰자가 존재하지 않습니다"))
                );
     }
 
