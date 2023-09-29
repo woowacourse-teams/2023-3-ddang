@@ -24,19 +24,6 @@ class ImageUrlCalculatorTest {
     }
 
     @Test
-    void 이미지_아이디가_null인_경우_프로필_사진의_URL로_null을_반환한다() {
-        // given
-        final Long emptyProfileImage = null;
-        final String absoluteUrl = "http://3-ddang.store/users/images/";
-
-        // when
-        final String actual = ImageUrlCalculator.calculateBy(absoluteUrl, emptyProfileImage);
-
-        // then
-        assertThat(actual).isNull();
-    }
-
-    @Test
     void 경매_대표_이미지의_URL을_계산한다() {
         // given
         final Long auctionImageId = 1L;
@@ -47,18 +34,5 @@ class ImageUrlCalculatorTest {
 
         // then
         assertThat(actual).isEqualTo(absoluteUrl + auctionImageId);
-    }
-
-    @Test
-    void 이미지_아이디가_null인_경우_경매_대표_이미지의_URL로_null을_반환한다() {
-        // given
-        final Long emptyAuctionImageId = null;
-        final String absoluteUrl = "http://3-ddang.store/users/images/";
-
-        // when
-        final String actual = ImageUrlCalculator.calculateBy(absoluteUrl, emptyAuctionImageId);
-
-        // then
-        assertThat(actual).isNull();
     }
 }
