@@ -1,6 +1,7 @@
 package com.ddang.ddang.log;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import com.ddang.ddang.configuration.log.SlackAppender;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
