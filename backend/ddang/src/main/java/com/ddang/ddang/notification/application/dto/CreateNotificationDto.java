@@ -25,15 +25,14 @@ public record CreateNotificationDto(
         String image
 ) {
 
-    public static CreateNotificationDto of(final MessageDto messageDto) {
+    public static CreateNotificationDto from(final MessageDto messageDto) {
         return new CreateNotificationDto(
                 NotificationType.MESSAGE,
                 messageDto.receiver().getId(),
                 messageDto.writer().getName(),
                 messageDto.contents(),
                 calculateRedirectUrl(messageDto.chatRoom().getId()),
-                ImageUrlCalculator.calculateProfileImageUrl(messageDto.receiver()
-                                                                      .getProfileImage(), messageDto.baseUrl())
+                ImageUrlCalculator.calculateProfileImageUrl(messageDto.receiver().getProfileImage(), messageDto.baseUrl())
         );
     }
 

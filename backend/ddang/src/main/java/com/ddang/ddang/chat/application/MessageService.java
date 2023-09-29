@@ -58,7 +58,7 @@ public class MessageService {
 
         final MessageDto messageDto = MessageDto.from(persistMessage, chatRoom, writer, receiver, baseUrl);
         // TODO : 외부 서비스를 호출하는 해당 서비스에서 정상적으로 처리되었는지 로그를 찍어주면 좋을 것 같은데, 이것도 이야기 해보면 좋을까요?
-        final NotificationStatus notificationStatus = notificationService.send(CreateNotificationDto.of(messageDto));
+        final NotificationStatus notificationStatus = notificationService.send(CreateNotificationDto.from(messageDto));
         log.info(notificationStatus.toString());
 
         return persistMessage.getId();
