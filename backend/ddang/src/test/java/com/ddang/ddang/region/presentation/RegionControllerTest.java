@@ -56,6 +56,7 @@ class RegionControllerTest extends RegionControllerFixture {
                                                            jsonPath("$.[1].id", is(부산광역시.id()), Long.class),
                                                            jsonPath("$.[1].name", is(부산광역시.name()))
                                                    );
+
         readAllFirst_문서화(resultActions);
     }
 
@@ -147,59 +148,56 @@ class RegionControllerTest extends RegionControllerFixture {
     }
 
     private void readAllFirst_문서화(final ResultActions resultActions) throws Exception {
-        resultActions
-                .andDo(
-                        restDocs.document(
-                                responseFields(
-                                        fieldWithPath("[]").type(JsonFieldType.ARRAY)
-                                                           .description("모든 첫 번째 직거래 지역"),
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                              .description("첫 번째 직거래 지역 ID"),
-                                        fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                .description("첫 번째 직거래 지역 이름")
-                                )
+        resultActions.andDo(
+                restDocs.document(
+                        responseFields(
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                   .description("모든 첫 번째 직거래 지역"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER)
+                                                      .description("첫 번째 직거래 지역 ID"),
+                                fieldWithPath("[].name").type(JsonFieldType.STRING)
+                                                        .description("첫 번째 직거래 지역 이름")
                         )
-                );
+                )
+        );
     }
 
     private void readAllSecond_문서화(final ResultActions resultActions) throws Exception {
-        resultActions
-                .andDo(
-                        restDocs.document(
-                                pathParameters(
-                                        parameterWithName("firstId").description("첫 번째 지역 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("[]").type(JsonFieldType.ARRAY)
-                                                           .description("첫 번째 지역에 해당하는 모든 두 번째 직거래 지역"),
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                              .description("두 번째 직거래 지역 ID"),
-                                        fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                .description("두 번째 직거래 지역 이름")
-                                )
+        resultActions.andDo(
+                restDocs.document(
+                        pathParameters(
+                                parameterWithName("firstId").description("첫 번째 지역 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                   .description("첫 번째 지역에 해당하는 모든 두 번째 직거래 지역"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER)
+                                                      .description("두 번째 직거래 지역 ID"),
+                                fieldWithPath("[].name").type(JsonFieldType.STRING)
+                                                        .description("두 번째 직거래 지역 이름")
                         )
-                );
+                )
+        );
     }
 
     private void readAllThird_문서화(final ResultActions resultActions) throws Exception {
-        resultActions
-                .andDo(
-                        restDocs.document(
-                                pathParameters(
-                                        parameterWithName("firstId")
-                                                .description("첫 번째 지역 ID"),
-                                        parameterWithName("secondId")
-                                                .description("두 번째 지역 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("[]").type(JsonFieldType.ARRAY)
-                                                           .description("두 번째 지역에 해당하는 모든 세 번째 직거래 지역"),
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER)
-                                                              .description("세 번째 직거래 지역 ID"),
-                                        fieldWithPath("[].name").type(JsonFieldType.STRING)
-                                                                .description("세 번째 직거래 지역 이름")
-                                )
+        resultActions.andDo(
+                restDocs.document(
+                        pathParameters(
+                                parameterWithName("firstId")
+                                        .description("첫 번째 지역 ID"),
+                                parameterWithName("secondId")
+                                        .description("두 번째 지역 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                   .description("두 번째 지역에 해당하는 모든 세 번째 직거래 지역"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER)
+                                                      .description("세 번째 직거래 지역 ID"),
+                                fieldWithPath("[].name").type(JsonFieldType.STRING)
+                                                        .description("세 번째 직거래 지역 이름")
                         )
-                );
+                )
+        );
     }
 }
