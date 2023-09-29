@@ -33,7 +33,7 @@ public class MdcFilter extends OncePerRequestFilter {
             final FilterChain filterChain
     ) throws ServletException, IOException {
         MDC.put("requestId", findRequestId(request));
-        MDC.put("requestUrl", request.getRequestURI());
+        MDC.put("requestUri", request.getRequestURI());
         MDC.put("userId", String.valueOf(findUserId(request)));
 
         filterChain.doFilter(request, response);
