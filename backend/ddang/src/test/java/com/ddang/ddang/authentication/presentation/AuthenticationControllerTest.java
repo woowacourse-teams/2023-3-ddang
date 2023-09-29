@@ -23,7 +23,6 @@ import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalExc
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
-import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.fixture.AuthenticationControllerFixture;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,20 +59,19 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void 소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_accessToken과_refreshToken을_반환한다() throws Exception {
         // given
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString())).willReturn(발급된_토큰);
+        given(authenticationService.login(eq(지원하는_소셜_로그인_타입), anyString(), anyString())).willReturn(발급된_토큰);
 
         // when & then
-        final ResultActions resultActions = mockMvc.perform(
-                                                           RestDocumentationRequestBuilders.post("/oauth2/login/{oauth2Type}", 소셜_로그인_타입)
-                                                                                           .contentType(MediaType.APPLICATION_JSON)
-                                                                                           .content(objectMapper.writeValueAsString(
-                                                                                                   유효한_로그인_요청))
-                                                   )
-                                                   .andExpectAll(
-                                                           status().isOk(),
-                                                           jsonPath("$.accessToken").exists(),
-                                                           jsonPath("$.refreshToken").exists()
-                                                   );
+        final ResultActions resultActions =
+                mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/login/{oauth2Type}", 소셜_로그인_타입)
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(objectMapper.writeValueAsString(유효한_로그인_요청))
+                       )
+                       .andExpectAll(
+                               status().isOk(),
+                               jsonPath("$.accessToken").exists(),
+                               jsonPath("$.refreshToken").exists()
+                       );
 
         login_문서화(resultActions);
     }
@@ -81,7 +79,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void 소셜_로그인을_진행하지_않는_타입을_전달하면_400이_발생한다() throws Exception {
         // given
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString()))
+        given(authenticationService.login(eq(지원하지_않는_소셜_로그인_타입), anyString(), anyString()))
                 .willThrow(new UnsupportedSocialLoginException("지원하는 소셜 로그인 기능이 아닙니다."));
 
         // when & then
@@ -98,7 +96,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void 유효하지_않은_소셜_로그인_토큰을_전달하면_401이_발생한다() throws Exception {
         // given
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString()))
+        given(authenticationService.login(eq(지원하는_소셜_로그인_타입), anyString(), anyString()))
                 .willThrow(new InvalidTokenException("401 Unauthorized", new RuntimeException()));
 
         // when & then
@@ -156,7 +154,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
         // when & then
         final ResultActions resultActions = mockMvc.perform(get("/oauth2/validate-token")
                                                            .contentType(MediaType.APPLICATION_JSON)
-                                                           .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰)
+                                                           .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
                                                    )
                                                    .andExpectAll(
                                                            status().isOk(),
@@ -174,7 +172,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
         // when & then
         mockMvc.perform(get("/oauth2/validate-token")
                        .contentType(MediaType.APPLICATION_JSON)
-                       .header(HttpHeaders.AUTHORIZATION, 만료된_액세스_토큰)
+                       .header(HttpHeaders.AUTHORIZATION, 만료된_액세스_토큰_내용)
                )
                .andExpectAll(
                        status().isOk(),
@@ -191,7 +189,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
         final ResultActions resultActions = mockMvc.perform(post("/oauth2/logout")
                                                            .contentType(MediaType.APPLICATION_JSON)
                                                            .content(objectMapper.writeValueAsString(유효한_로그아웃_요청))
-                                                           .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰)
+                                                           .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
                                                    )
                                                    .andExpectAll(
                                                            status().isNoContent()
@@ -206,15 +204,15 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
         willDoNothing().given(authenticationService).withdrawal(any(), anyString(), anyString());
 
         // when & then
-        final ResultActions resultActions = mockMvc.perform(
-                                                   RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", 소셜_로그인_타입)
-                                                                                   .contentType(MediaType.APPLICATION_JSON)
-                                                                                   .content(objectMapper.writeValueAsString(유효한_회원탈퇴_요청))
-                                                                                   .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰)
-                                           )
-                                           .andExpectAll(
-                                                   status().isNoContent()
-                                           );
+        final ResultActions resultActions =
+                mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", 소셜_로그인_타입)
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(objectMapper.writeValueAsString(유효한_회원탈퇴_요청))
+                                                                .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
+                       )
+                       .andExpectAll(
+                               status().isNoContent()
+                       );
 
         withdrawal_문서화(resultActions);
     }
@@ -227,7 +225,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", 소셜_로그인_타입)
-                                                        .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰)
+                                                        .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
                                                         .contentType(MediaType.APPLICATION_JSON)
                                                         .content(objectMapper.writeValueAsString(유효하지_않은_회원탈퇴_요청))
                )
@@ -248,8 +246,10 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                                 fieldWithPath("deviceToken").description("기기 디바이스 토큰")
                         ),
                         responseFields(
-                                fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Access Token"),
-                                fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("Refresh Token")
+                                fieldWithPath("accessToken").type(JsonFieldType.STRING)
+                                                            .description("Access Token"),
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                                             .description("Refresh Token")
                         )
                 )
         );
@@ -264,7 +264,8 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                         responseFields(
                                 fieldWithPath("accessToken").type(JsonFieldType.STRING)
                                                             .description("재발급한 Access Token"),
-                                fieldWithPath("refreshToken").type(JsonFieldType.STRING).description("기존 Refresh Token")
+                                fieldWithPath("refreshToken").type(JsonFieldType.STRING)
+                                                             .description("기존 Refresh Token")
                         )
                 )
         );
