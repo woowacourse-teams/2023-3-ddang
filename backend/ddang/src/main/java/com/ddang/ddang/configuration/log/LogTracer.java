@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class LogTracer {
 
-    private static final String START_PREFIX = "-->";
-    private static final String COMPLETE_PREFIX = "<--";
-    private static final String EXCEPTION_PREFIX = "<X-";
+    private static final String START_PREFIX = "--->";
+    private static final String COMPLETE_PREFIX = "<---";
+    private static final String EXCEPTION_PREFIX = "<-X-";
     private static final String FIRST_DEPTH_SPACE = "|";
-    private static final String OTHER_DEPTH_SPACE = "|   ";
+    private static final String OTHER_DEPTH_SPACE = "|    ";
 
     private final ThreadLocal<TraceDepth> traceIdHolder = new ThreadLocal<>();
 
