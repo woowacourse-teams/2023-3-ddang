@@ -21,7 +21,6 @@ public class ChatRoomControllerFixture extends CommonControllerSliceTest {
 
     protected TokenDecoder tokenDecoder = mock(TokenDecoder.class);
     protected final PrivateClaims 비공개_클레임 = new PrivateClaims(1L);
-
     protected ReadUserInChatRoomDto 판매자 = new ReadUserInChatRoomDto(1L, "사용자1", 1L, 5.0d, false);
     private ReadUserInChatRoomDto 구매자1 = new ReadUserInChatRoomDto(2L, "사용자2", 2L, 5.0d, false);
     private ReadUserInChatRoomDto 구매자2 = new ReadUserInChatRoomDto(3L, "사용자3", 3L, 5.0d, false);
