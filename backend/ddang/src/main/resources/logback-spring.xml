@@ -45,7 +45,7 @@
             </rollingPolicy>
         </appender>
 
-        <root level="info">
+        <root>
             <appender-ref ref="FILE-INFO_REQUEST-TRACE"/>
         </root>
     </springProfile>
