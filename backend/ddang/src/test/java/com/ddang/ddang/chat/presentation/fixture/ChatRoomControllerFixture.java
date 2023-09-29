@@ -38,5 +38,6 @@ public class ChatRoomControllerFixture extends CommonControllerSliceTest {
     protected final Long 유효하지_않은_사용자_아이디 = -999L;
     protected final Long 채팅방_아이디 = 1L;
     protected final Long 유효하지_않은_채팅방_아이디 = -999L;
+    protected final Long 마지막_메시지_아이디 = 1L;
     protected final Long 유효하지_않은_마지막_메시지_아이디 = -999L;
 }

@@ -145,7 +145,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
         final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}/messages", 1L)
                                                                                             .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                                                                                             .contentType(MediaType.APPLICATION_JSON)
-                                                                                            .queryParam("lastMessageId", 유효하지_않은_마지막_메시지_아이디.toString())
+                                                                                            .queryParam("lastMessageId", 마지막_메시지_아이디.toString())
                                                    )
                                                    .andExpectAll(
                                                            status().isOk(),
