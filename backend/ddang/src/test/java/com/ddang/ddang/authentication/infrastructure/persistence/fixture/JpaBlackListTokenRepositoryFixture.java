@@ -17,10 +17,10 @@ public class JpaBlackListTokenRepositoryFixture {
     @Autowired
     private JpaBlackListTokenRepository blackListTokenRepository;
 
-    protected String 만료_토큰_내용 = "accessToken";
+    protected String 만료_토큰_내용 = "expired token";
     protected String 만료되지_않은_토큰_내용 = "not expired token";
-    protected BlackListToken 만료할_토큰 = new BlackListToken(TokenType.ACCESS, "accessToken");
-    protected BlackListToken 만료된_토큰 = new BlackListToken(TokenType.ACCESS, "accessToken");
+    protected BlackListToken 만료할_토큰 = new BlackListToken(TokenType.ACCESS, 만료되지_않은_토큰_내용);
+    protected BlackListToken 만료된_토큰 = new BlackListToken(TokenType.ACCESS, 만료_토큰_내용);
 
     @BeforeEach
     void setUp() {
