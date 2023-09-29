@@ -1,7 +1,7 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -41,7 +41,7 @@ public record AuctionDetailResponse(
     public static AuctionDetailResponse from(final ReadAuctionDto dto) {
         return new AuctionDetailResponse(
                 dto.id(),
-                convertImageUrls(dto),
+                convertImageFullUrls(dto),
                 dto.title(),
                 new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
@@ -56,10 +56,10 @@ public record AuctionDetailResponse(
         );
     }
 
-    private static List<String> convertImageUrls(final ReadAuctionDto dto) {
+    private static List<String> convertImageFullUrls(final ReadAuctionDto dto) {
         return dto.auctionImageIds()
                   .stream()
-                  .map(id -> ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, id))
+                  .map(id -> ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id))
                   .toList();
     }
 

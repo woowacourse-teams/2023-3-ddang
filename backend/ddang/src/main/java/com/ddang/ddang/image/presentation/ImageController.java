@@ -23,7 +23,7 @@ public class ImageController {
         final Resource resource = imageService.readProfileImage(id);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentType(MediaType.IMAGE_JPEG);
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
@@ -33,7 +33,7 @@ public class ImageController {
         final Resource resource = imageService.readAuctionImage(id);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_PNG);
+        headers.setContentType(MediaType.IMAGE_JPEG);
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }

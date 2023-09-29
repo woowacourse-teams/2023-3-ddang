@@ -1,9 +1,10 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
+// TODO: 9/29/23 추후 대표 이미지 관련 필드 추가
 public record ReadAuctionResponse(
         Long id,
         String title,
@@ -17,16 +18,11 @@ public record ReadAuctionResponse(
         return new ReadAuctionResponse(
                 dto.id(),
                 dto.title(),
-                convertImageUrl(dto.auctionImageIds().get(0)),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, dto.auctionImageIds().get(0)),
                 processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                 dto.auctionStatus().name(),
                 dto.auctioneerCount()
         );
-    }
-
-
-    private static String convertImageUrl(final Long id) {
-        return ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, id);
     }
 
     private static int processAuctionPrice(final Integer startPrice, final Integer lastBidPrice) {
