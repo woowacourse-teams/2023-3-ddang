@@ -1,11 +1,11 @@
 package com.ddang.ddang.region.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.auction.domain.Auction;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -31,6 +31,6 @@ class AuctionRegionTest {
         auctionRegion.initAuction(auction);
 
         // then
-        assertThat(auctionRegion.getAuction()).isNotNull();
+        assertThat(auctionRegion.getAuction().getTitle()).isEqualTo(auction.getTitle());
     }
 }
