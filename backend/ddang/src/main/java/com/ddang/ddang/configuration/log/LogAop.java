@@ -35,8 +35,8 @@ public class LogAop {
             return joinPoint.proceed();
         }
 
-        final String className = getClassSimpleName(joinPoint);
-        final String methodName = getMethodName(joinPoint);
+        final String className = findClassSimpleName(joinPoint);
+        final String methodName = findMethodName(joinPoint);
         final TraceStatus status = logTrace.begin(className, methodName);
 
         try {
@@ -55,7 +55,7 @@ public class LogAop {
         return RequestContextHolder.getRequestAttributes() == null;
     }
 
-    private String getClassSimpleName(ProceedingJoinPoint joinPoint) {
+    private String findClassSimpleName(final ProceedingJoinPoint joinPoint) {
         final Class<?> clazz = joinPoint.getTarget().getClass();
         final String className = clazz.getSimpleName();
 
@@ -65,7 +65,7 @@ public class LogAop {
         return className;
     }
 
-    private String getMethodName(ProceedingJoinPoint joinPoint) {
+    private String findMethodName(final ProceedingJoinPoint joinPoint) {
         return joinPoint.getSignature().getName();
     }
 }

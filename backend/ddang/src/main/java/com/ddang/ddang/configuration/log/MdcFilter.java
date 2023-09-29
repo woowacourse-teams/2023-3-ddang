@@ -47,6 +47,7 @@ public class MdcFilter extends OncePerRequestFilter {
         if (requestId == null || requestId.isEmpty() || requestId.isBlank()) {
             return UUID.randomUUID().toString();
         }
+        
         return requestId;
     }
 

@@ -70,11 +70,21 @@ public class LogTracer {
         complete(status, className, methodName, null);
     }
 
-    public void exception(TraceStatus status, final String className, final String methodName, final Throwable ex) {
+    public void exception(
+            final TraceStatus status,
+            final String className,
+            final String methodName,
+            final Throwable ex
+    ) {
         complete(status, className, methodName, ex);
     }
 
-    private void complete(final TraceStatus status, final String className, final String methodName, final Throwable ex) {
+    private void complete(
+            final TraceStatus status,
+            final String className,
+            final String methodName,
+            final Throwable ex
+    ) {
         final Long stopTime = System.currentTimeMillis();
         final long resultTime = stopTime - status.getStartTime();
         final TraceDepth traceId = status.getTraceDepth();
