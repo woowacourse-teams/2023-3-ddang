@@ -65,7 +65,7 @@
     </springProfile>
 
     <springProfile name="slack-error-logging">
-        <appender name="SLACK_APPENDER" class="com.ddang.ddang.log.SlackAppender">
+        <appender name="SLACK_APPENDER" class="com.ddang.ddang.configuration.log.SlackAppender">
         </appender>
 
         <appender name="ASYNC_SLACK_APPENDER" class="ch.qos.logback.classic.AsyncAppender">
