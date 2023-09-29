@@ -31,7 +31,7 @@ public class AuthenticationController {
     private final BlackListTokenService blackListTokenService;
 
     @PostMapping("/login/{oauth2Type}")
-    public ResponseEntity<Object> validate(
+    public ResponseEntity<Object> login(
             @PathVariable final Oauth2Type oauth2Type,
             @RequestBody final LoginTokenRequest request
     ) {
