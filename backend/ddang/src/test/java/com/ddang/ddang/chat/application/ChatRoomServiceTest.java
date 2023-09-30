@@ -96,14 +96,8 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).id()).isEqualTo(제이미_엔초_채팅방.getId());
-            softAssertions.assertThat(actual.get(0).auctionDto().id()).isEqualTo(제이미_엔초_채팅방.getAuction().getId());
-            softAssertions.assertThat(actual.get(0).partnerDto().id()).isEqualTo(제이미.getId());
-            softAssertions.assertThat(actual.get(0).lastMessageDto().id()).isEqualTo(제이미가_엔초에게_2시에_보낸_쪽지.getId());
-            softAssertions.assertThat(actual.get(1).id()).isEqualTo(엔초_지토_채팅방.getId());
-            softAssertions.assertThat(actual.get(1).auctionDto().id()).isEqualTo(엔초_지토_채팅방.getAuction().getId());
-            softAssertions.assertThat(actual.get(1).partnerDto().id()).isEqualTo(지토.getId());
-            softAssertions.assertThat(actual.get(1).lastMessageDto().id()).isEqualTo(엔초가_지토에게_1시에_보낸_쪽지.getId());
+            softAssertions.assertThat(actual.get(0)).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보);
         });
     }
 
@@ -162,7 +156,8 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방_정보를_조회할_때_조회한_사람이_해당_채팅방_참여자가_아니라면_채팅방_아이디와_참여가능여부_거짓을_반환한다() {
         // when
-        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 경매에_참여한_적_없는_사용자_정보);
+        final ReadChatRoomDto actual =
+                chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 경매에_참여한_적_없는_사용자_정보);
 
         // then
         assertThat(actual).isEqualTo(엔초_지토_채팅방_정보_및_참여_불가능);

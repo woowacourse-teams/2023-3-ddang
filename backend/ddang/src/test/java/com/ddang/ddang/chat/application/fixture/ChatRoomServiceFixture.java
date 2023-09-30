@@ -12,7 +12,11 @@ import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -56,7 +60,7 @@ public class ChatRoomServiceFixture {
     private AuctionImage 대표_이미지가_아닌_경매_이미지;
     private AuctionImage 엔초의_경매_대표_이미지;
     private AuctionImage 엔초의_대표_이미지가_아닌_경매_이미지;
-    protected AuctionImage 제이미의_경매_대표_이미지;
+    private AuctionImage 제이미의_경매_대표_이미지;
     private AuctionImage 제이미의_대표_이미지가_아닌_경매_이미지;
     private Bid 채팅방_없는_경매_입찰;
     private Bid 지토가_엔초_경매에_입찰;
@@ -75,9 +79,9 @@ public class ChatRoomServiceFixture {
     protected Auction 채팅방이_없는_경매;
     protected Auction 판매자_엔초_구매자_지토_경매;
     protected ChatRoom 엔초_지토_채팅방;
-    protected ChatRoom 제이미_엔초_채팅방;
-    protected Message 엔초가_지토에게_1시에_보낸_쪽지;
-    protected Message 제이미가_엔초에게_2시에_보낸_쪽지;
+    private ChatRoom 제이미_엔초_채팅방;
+    private Message 엔초가_지토에게_1시에_보낸_쪽지;
+    private Message 제이미가_엔초에게_2시에_보낸_쪽지;
     protected Long 존재하지_않는_사용자_아이디 = -999L;
     protected Long 존재하지_않는_경매_아이디 = -999L;
     protected Long 존재하지_않는_채팅방_아이디 = -999L;
@@ -94,6 +98,8 @@ public class ChatRoomServiceFixture {
     protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_가능;
     protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_불가능;
     protected ReadChatRoomDto 채팅방은_아직_없지만_참여_가능;
+    protected ReadChatRoomWithLastMessageDto 엔초_채팅_목록의_제이미_엔초_채팅방_정보;
+    protected ReadChatRoomWithLastMessageDto 엔초_채팅_목록의_엔초_지토_채팅방_정보;
 
     @BeforeEach
     void setUp() {
@@ -243,5 +249,19 @@ public class ChatRoomServiceFixture {
         엔초_지토_채팅방_정보_및_참여_가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), true);
         엔초_지토_채팅방_정보_및_참여_불가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), false);
         채팅방은_아직_없지만_참여_가능 = new ReadChatRoomDto(null, true);
+        엔초_채팅_목록의_제이미_엔초_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
+                제이미_엔초_채팅방.getId(),
+                ReadAuctionInChatRoomDto.of(판매자_제이미_구매자_엔초_경매, 제이미의_경매_대표_이미지),
+                ReadUserInChatRoomDto.from(제이미),
+                ReadLastMessageDto.from(제이미가_엔초에게_2시에_보낸_쪽지),
+                true
+        );
+        엔초_채팅_목록의_엔초_지토_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
+                엔초_지토_채팅방.getId(),
+                ReadAuctionInChatRoomDto.of(판매자_엔초_구매자_지토_경매, 엔초의_경매_대표_이미지),
+                ReadUserInChatRoomDto.from(지토),
+                ReadLastMessageDto.from(엔초가_지토에게_1시에_보낸_쪽지),
+                true
+        );
     }
 }
