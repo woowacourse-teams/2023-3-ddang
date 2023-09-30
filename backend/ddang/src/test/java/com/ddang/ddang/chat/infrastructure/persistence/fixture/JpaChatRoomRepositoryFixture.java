@@ -65,26 +65,26 @@ public class JpaChatRoomRepositoryFixture {
         경매이미지2 = new AuctionImage("경매이미지2.png", "경매이미지2.png");
 
         판매자 = User.builder()
-                  .name("판매자")
-                  .profileImage(프로필_이미지)
-                  .reliability(4.7d)
-                  .oauthId("12345")
-                  .build();
+                   .name("판매자")
+                   .profileImage(프로필_이미지)
+                   .reliability(4.7d)
+                   .oauthId("12345")
+                   .build();
         구매자 = User.builder()
-                  .name("구매자")
-                  .profileImage(프로필_이미지)
-                  .reliability(4.7d)
-                  .oauthId("12346")
-                  .build();
+                   .name("구매자")
+                   .profileImage(프로필_이미지)
+                   .reliability(4.7d)
+                   .oauthId("12346")
+                   .build();
         경매 = Auction.builder()
-                    .seller(판매자)
-                    .title("맥북")
-                    .description("맥북 팔아요")
-                    .subCategory(전자기기_서브_노트북_카테고리)
-                    .startPrice(new Price(10_000))
-                    .bidUnit(new BidUnit(1_000))
-                    .closingTime(LocalDateTime.now())
-                    .build();
+                     .seller(판매자)
+                     .title("맥북")
+                     .description("맥북 팔아요")
+                     .subCategory(전자기기_서브_노트북_카테고리)
+                     .startPrice(new Price(10_000))
+                     .bidUnit(new BidUnit(1_000))
+                     .closingTime(LocalDateTime.now())
+                     .build();
 
         입찰 = new Bid(경매, 구매자, new BidPrice(15_000));
 

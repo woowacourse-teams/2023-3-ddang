@@ -62,28 +62,28 @@ public class QuerydslChatRoomAndImageRepositoryImplFixture {
         전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
         프로필_이미지 = new ProfileImage("upload.png", "store.png");
         판매자 = User.builder()
-                               .name("판매자")
-                               .profileImage(프로필_이미지)
-                               .reliability(4.7d)
-                               .oauthId("12345")
-                               .build();
+                   .name("판매자")
+                   .profileImage(프로필_이미지)
+                   .reliability(4.7d)
+                   .oauthId("12345")
+                   .build();
         구매자 = User.builder()
-                               .name("구매자")
-                               .profileImage(프로필_이미지)
-                               .reliability(4.7d)
-                               .oauthId("12346")
-                               .build();
+                   .name("구매자")
+                   .profileImage(프로필_이미지)
+                   .reliability(4.7d)
+                   .oauthId("12346")
+                   .build();
         대표_이미지가_아닌_경매_이미지 =
                 new AuctionImage("대표 이미지가_아닌_경매_이미지.png", "대표 이미지가_아닌_경매_이미지.png");
         경매 = Auction.builder()
-                                    .seller(판매자)
-                                    .title("맥북")
-                                    .description("맥북 팔아요")
-                                    .subCategory(전자기기_서브_노트북_카테고리)
-                                    .startPrice(new Price(10_000))
-                                    .bidUnit(new BidUnit(1_000))
-                                    .closingTime(LocalDateTime.now())
-                                    .build();
+                     .seller(판매자)
+                     .title("맥북")
+                     .description("맥북 팔아요")
+                     .subCategory(전자기기_서브_노트북_카테고리)
+                     .startPrice(new Price(10_000))
+                     .bidUnit(new BidUnit(1_000))
+                     .closingTime(LocalDateTime.now())
+                     .build();
         입찰 = new Bid(경매, 구매자, new BidPrice(15_000));
 
         경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");

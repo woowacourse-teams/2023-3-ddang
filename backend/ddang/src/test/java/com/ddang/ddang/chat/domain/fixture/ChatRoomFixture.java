@@ -25,33 +25,33 @@ public class ChatRoomFixture {
     @BeforeEach
     void setUp() {
         판매자 = User.builder()
-                  .name("판매자")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(4.7d)
-                  .oauthId("12345")
-                  .build();
+                   .name("판매자")
+                   .profileImage(new ProfileImage("upload.png", "store.png"))
+                   .reliability(4.7d)
+                   .oauthId("12345")
+                   .build();
         구매자 = User.builder()
-                  .name("구매자")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(4.7d)
-                  .oauthId("12346")
-                  .build();
+                   .name("구매자")
+                   .profileImage(new ProfileImage("upload.png", "store.png"))
+                   .reliability(4.7d)
+                   .oauthId("12346")
+                   .build();
         경매에_참여하지_않는_사용자 = User.builder()
-                              .name("경매에 참여하지 않는 사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(4.7d)
-                              .oauthId("12347")
-                              .build();
+                                   .name("경매에 참여하지 않는 사용자")
+                                   .profileImage(new ProfileImage("upload.png", "store.png"))
+                                   .reliability(4.7d)
+                                   .oauthId("12347")
+                                   .build();
 
         경매 = Auction.builder()
-                    .seller(판매자)
-                    .title("맥북")
-                    .description("맥북 팔아요")
-                    .subCategory(new Category("전자기기"))
-                    .startPrice(new Price(10_000))
-                    .bidUnit(new BidUnit(1_000))
-                    .closingTime(LocalDateTime.now())
-                    .build();
+                     .seller(판매자)
+                     .title("맥북")
+                     .description("맥북 팔아요")
+                     .subCategory(new Category("전자기기"))
+                     .startPrice(new Price(10_000))
+                     .bidUnit(new BidUnit(1_000))
+                     .closingTime(LocalDateTime.now())
+                     .build();
         입찰 = new Bid(경매, 구매자, new BidPrice(15_000));
 
         ReflectionTestUtils.setField(판매자, "id", 1L);
