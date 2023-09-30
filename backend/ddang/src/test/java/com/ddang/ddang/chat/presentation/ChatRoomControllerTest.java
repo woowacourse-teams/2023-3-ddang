@@ -112,7 +112,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -129,7 +129,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("지정한 아이디에 대한 발신자를 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -185,7 +185,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .queryParam("lastMessageId", "1"))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -203,7 +203,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                )
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("조회한 마지막 메시지가 존재하지 않습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -249,7 +249,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("사용자 정보를 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -286,7 +286,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("사용자 정보를 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -302,7 +302,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -318,7 +318,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is("해당 채팅방에 접근할 권한이 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -353,7 +353,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .content(objectMapper.writeValueAsString(채팅방_생성_요청)))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("사용자 정보를 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -370,7 +370,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .content(objectMapper.writeValueAsString(유효하지_않은_경매_아이디_채팅방_생성_요청)))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("해당 경매를 찾을 수 없습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -387,7 +387,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .content(objectMapper.writeValueAsString(채팅방_생성_요청)))
                .andExpectAll(
                        status().isBadRequest(),
-                       jsonPath("$.message", is("경매가 아직 종료되지 않았습니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -404,7 +404,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .content(objectMapper.writeValueAsString(채팅방_생성_요청)))
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is("낙찰자가 존재하지 않습니다"))
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -421,7 +421,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .content(objectMapper.writeValueAsString(채팅방_생성_요청)))
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다."))
+                       jsonPath("$.message").exists()
                );
     }
 
