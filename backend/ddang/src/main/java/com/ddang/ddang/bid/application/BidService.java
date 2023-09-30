@@ -12,12 +12,9 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
-import com.ddang.ddang.image.domain.AuctionImage;
-import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
-import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -35,8 +32,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class BidService {
-
-    private static final String BID_NOTIFICATION_MESSAGE_FORMAT = "상위 입찰자가 나타났습니다. 구매를 원하신다면 더 높은 가격을 제시해 주세요.";
 
     private final NotificationService notificationService;
     private final JpaAuctionRepository auctionRepository;
@@ -145,22 +140,9 @@ public class BidService {
             final User previousBidder,
             final String auctionImageAbsoluteUrl
     ) {
-        final Auction auction = auctionAndImageDto.auction();
-        final AuctionImage auctionImage = auctionAndImageDto.auctionImage();
-        final CreateNotificationDto dto = new CreateNotificationDto(
-                NotificationType.BID,
-                previousBidder.getId(),
-                auction.getTitle(),
-                BID_NOTIFICATION_MESSAGE_FORMAT,
-                calculateRedirectUrl(auction.getId()),
-                ImageUrlCalculator.calculateBy(auctionImageAbsoluteUrl, auctionImage.getId())
-        );
+        final CreateNotificationDto dto = CreateNotificationDto.of(previousBidder.getId(), auctionAndImageDto, auctionImageAbsoluteUrl);
 
         return notificationService.send(dto);
-    }
-
-    private String calculateRedirectUrl(final Long auctionId) {
-        return "/auctions/" + auctionId;
     }
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
