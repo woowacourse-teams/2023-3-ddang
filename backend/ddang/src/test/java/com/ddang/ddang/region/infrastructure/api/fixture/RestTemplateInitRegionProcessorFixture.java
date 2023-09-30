@@ -32,5 +32,5 @@ public class RestTemplateInitRegionProcessorFixture {
     protected ResultApiRegionResponse 개포1동 = new ResultApiRegionResponse("개포1동", 개포1동_지역_코드);
     protected TotalApiRegionResponse 첫번째_지역_목록_조회_응답 = new TotalApiRegionResponse(List.of(서울특별시));
     protected TotalApiRegionResponse 서울특별시_하위_지역_목록_조회_응답 = new TotalApiRegionResponse(List.of(강남구));
-    protected TotalApiRegionResponse 서울특별시_강남구_하위_지역_목록_조회_응답 = new TotalApiRegionResponse(List.of(개포1동));
+    protected TotalApiRegionResponse 서울특별시_하위_강남구의_하위_지역_목록_조회_응답 = new TotalApiRegionResponse(List.of(개포1동));
 }

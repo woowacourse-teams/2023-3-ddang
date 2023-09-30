@@ -76,7 +76,7 @@ class RestTemplateInitRegionProcessorTest extends RestTemplateInitRegionProcesso
         mockRestServiceServer
                 .expect(requestTo(서울특별시_강남구_하위_지역_목록_조회_URI))
                 .andRespond(withSuccess(
-                        objectMapper.writeValueAsString(서울특별시_강남구_하위_지역_목록_조회_응답),
+                        objectMapper.writeValueAsString(서울특별시_하위_강남구의_하위_지역_목록_조회_응답),
                         MediaType.APPLICATION_JSON
                 ));
 

@@ -77,7 +77,7 @@ class RegionControllerTest extends RegionControllerFixture {
     @Test
     void 첫번째_지역에_해당하는_모든_두번째_지역을_조회한다() throws Exception {
         // given
-        given(regionService.readAllSecondByFirstRegionId(서울특별시.id())).willReturn(List.of(서울특별시_강남구, 서울특별시_강동구));
+        given(regionService.readAllSecondByFirstRegionId(서울특별시.id())).willReturn(List.of(서울특별시_하위_강남구, 서울특별시_하위_강동구));
 
         // when & then
         final ResultActions resultActions =
@@ -85,10 +85,10 @@ class RegionControllerTest extends RegionControllerFixture {
                                                                 .contentType(MediaType.APPLICATION_JSON))
                        .andExpectAll(
                                status().isOk(),
-                               jsonPath("$.[0].id", is(서울특별시_강남구.id()), Long.class),
-                               jsonPath("$.[0].name", is(서울특별시_강남구.name())),
-                               jsonPath("$.[1].id", is(서울특별시_강동구.id()), Long.class),
-                               jsonPath("$.[1].name", is(서울특별시_강동구.name()))
+                               jsonPath("$.[0].id", is(서울특별시_하위_강남구.id()), Long.class),
+                               jsonPath("$.[0].name", is(서울특별시_하위_강남구.name())),
+                               jsonPath("$.[1].id", is(서울특별시_하위_강동구.id()), Long.class),
+                               jsonPath("$.[1].name", is(서울특별시_하위_강동구.name()))
                        );
 
         readAllSecond_문서화(resultActions);
@@ -112,21 +112,21 @@ class RegionControllerTest extends RegionControllerFixture {
     @Test
     void 두번째_지역에_해당하는_모든_세번째_지역을_조회한다() throws Exception {
         // given
-        given(regionService.readAllThirdByFirstAndSecondRegionId(서울특별시.id(), 서울특별시_강남구.id()))
-                .willReturn(List.of(서울특별시_강남구_개포1동, 서울특별시_강남구_개포2동));
+        given(regionService.readAllThirdByFirstAndSecondRegionId(서울특별시.id(), 서울특별시_하위_강남구.id()))
+                .willReturn(List.of(서울특별시_하위_강남구_하위_개포1동, 서울특별시_하위_강남구_하위_개포2동));
 
         // when & then
         final ResultActions resultActions =
                 mockMvc.perform(RestDocumentationRequestBuilders.get("/regions/{firstId}/{secondId}",
                                                                         서울특별시.id(),
-                                                                        서울특별시_강남구.id())
+                                                                        서울특별시_하위_강남구.id())
                                                                 .contentType(MediaType.APPLICATION_JSON))
                        .andExpectAll(
                                status().isOk(),
-                               jsonPath("$.[0].id", is(서울특별시_강남구_개포1동.id()), Long.class),
-                               jsonPath("$.[0].name", is(서울특별시_강남구_개포1동.name())),
-                               jsonPath("$.[1].id", is(서울특별시_강남구_개포2동.id()), Long.class),
-                               jsonPath("$.[1].name", is(서울특별시_강남구_개포2동.name()))
+                               jsonPath("$.[0].id", is(서울특별시_하위_강남구_하위_개포1동.id()), Long.class),
+                               jsonPath("$.[0].name", is(서울특별시_하위_강남구_하위_개포1동.name())),
+                               jsonPath("$.[1].id", is(서울특별시_하위_강남구_하위_개포2동.id()), Long.class),
+                               jsonPath("$.[1].name", is(서울특별시_하위_강남구_하위_개포2동.name()))
                        );
 
         readAllThird_문서화(resultActions);
