@@ -1,5 +1,8 @@
 package com.ddang.ddang.notification.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum NotificationType {
 
     MESSAGE("message"),
@@ -9,9 +12,5 @@ public enum NotificationType {
 
     NotificationType(final String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 }
