@@ -62,7 +62,7 @@ public class JpaChatRoomReportRepositoryFixture {
     protected ChatRoomReport 채팅방_신고3;
 
     @BeforeEach
-    void init() {
+    void setUp() {
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
         판매자 = User.builder()
                   .name("판매자")

@@ -58,7 +58,7 @@ public class JpaAuctionReportRepositoryFixture {
     protected AuctionReport 경매_신고3;
 
     @BeforeEach
-    void init() {
+    void setUp() {
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
         판매자 = User.builder()
                   .name("판매자")
