@@ -56,7 +56,7 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        final MessageDto messageDto = MessageDto.from(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
+        final MessageDto messageDto = MessageDto.of(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
         final NotificationStatus notificationStatus = notificationService.send(CreateNotificationDto.from(messageDto));
         log.error(notificationStatus.toString());
 

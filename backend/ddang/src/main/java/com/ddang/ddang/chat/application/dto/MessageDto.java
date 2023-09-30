@@ -16,7 +16,7 @@ public record MessageDto(
         String profileImageAbsoluteUrl
 ) {
 
-    public static MessageDto from(
+    public static MessageDto of(
             final Message persistMessage,
             final ChatRoom chatRoom,
             final User writer,
