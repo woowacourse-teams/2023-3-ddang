@@ -28,11 +28,11 @@ public class JpaDeviceTokenRepositoryFixture {
     @BeforeEach
     void setUp() {
         사용자 = User.builder()
-                  .name("사용자")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(4.7d)
-                  .oauthId("12345")
-                  .build();
+                    .name("사용자")
+                    .profileImage(new ProfileImage("upload.png", "store.png"))
+                    .reliability(4.7d)
+                    .oauthId("12345")
+                    .build();
 
         사용자의_디바이스_토큰 = new DeviceToken(사용자, "deviceToken");
 

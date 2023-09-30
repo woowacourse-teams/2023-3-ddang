@@ -1,7 +1,6 @@
 package com.ddang.ddang.device.application;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.application.fixture.DeviceTokenServiceFixture;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
@@ -30,22 +29,16 @@ class DeviceTokenServiceTest extends DeviceTokenServiceFixture {
 
     @Test
     void 사용자의_디바이스_토큰이_존재하지_않는다면_저장한다() {
-        // given
-        final PersistDeviceTokenDto initialDeviceTokenDto = new PersistDeviceTokenDto(초기_디바이스_토큰_값);
-
         // when & then
         assertThatNoException().isThrownBy(
-                () -> deviceTokenService.persist(디바이스_토큰이_없는_사용자.getId(), initialDeviceTokenDto)
+                () -> deviceTokenService.persist(디바이스_토큰이_없는_사용자.getId(), 디바이스_토큰_저장을_위한_DTO)
         );
     }
 
     @Test
     void 사용자의_디바이스_토큰이_이미_존재하고_새로운_토큰이_주어진다면_토큰을_갱신한다() {
-        // given
-        final PersistDeviceTokenDto updatedDeviceTokenDto = new PersistDeviceTokenDto(갱신된_디바이스_토큰_값);
-
         // when
-        deviceTokenService.persist(디바이스_토큰이_있는_사용자.getId(), updatedDeviceTokenDto);
+        deviceTokenService.persist(디바이스_토큰이_있는_사용자.getId(), 디바이스_토큰_갱신을_위한_DTO);
 
         // then
         final Optional<DeviceToken> deviceTokenResult = deviceTokenRepository.findByUserId(디바이스_토큰이_있는_사용자.getId());
@@ -55,10 +48,10 @@ class DeviceTokenServiceTest extends DeviceTokenServiceFixture {
     @Test
     void 사용자의_디바이스_토큰이_이미_존재하고_동일한_토큰이_주어진다면_토큰을_갱신하지_않는다() {
         // given
-        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(사용_중인_디바이스_토큰_값);
+
 
         // when
-        deviceTokenService.persist(디바이스_토큰이_있는_사용자.getId(), persistDeviceTokenDto);
+        deviceTokenService.persist(디바이스_토큰이_있는_사용자.getId(), 존재하는_디바이스_토큰과_동일한_토큰을_저장하려는_DTO);
 
         // then
         final Optional<DeviceToken> userDeviceToken = deviceTokenRepository.findByUserId(디바이스_토큰이_있는_사용자.getId());
@@ -67,11 +60,8 @@ class DeviceTokenServiceTest extends DeviceTokenServiceFixture {
 
     @Test
     void 사용자를_찾을_수_없다면_예외가_발생한다() {
-        // given
-        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(디바이스_토큰_값);
-
         // when & then
-        assertThatThrownBy(() -> deviceTokenService.persist(존재하지_않는_사용자_아이디, persistDeviceTokenDto))
+        assertThatThrownBy(() -> deviceTokenService.persist(존재하지_않는_사용자_아이디, 디바이스_토큰_저장을_위한_DTO))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }

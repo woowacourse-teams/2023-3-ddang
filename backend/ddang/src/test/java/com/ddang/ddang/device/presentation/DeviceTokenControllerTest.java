@@ -70,14 +70,14 @@ class DeviceTokenControllerTest extends DeviceTokenControllerFixture {
     @Test
     void 디바이스_토큰을_저장_또는_갱신한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효한_비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효한_사용자_ID_클레임));
         doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
         final ResultActions resultActions =
                 mockMvc.perform(patch("/device-token")
                                .contentType(MediaType.APPLICATION_JSON)
-                               .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                               .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
                                .content(objectMapper.writeValueAsString(디바이스_토큰_갱신_요청)))
                        .andExpectAll(
                                status().isOk()
@@ -89,13 +89,13 @@ class DeviceTokenControllerTest extends DeviceTokenControllerFixture {
     @Test
     void 사용자를_찾을_수_없는_경우_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효하지_않은_비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효하지_않은_사용자_ID_클레임));
         willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."))
                 .given(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
 
         // when & then
         mockMvc.perform(patch("/device-token")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 유효하지_않은_액세스_토큰_값)
                        .content(objectMapper.writeValueAsString(디바이스_토큰_갱신_요청))
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
