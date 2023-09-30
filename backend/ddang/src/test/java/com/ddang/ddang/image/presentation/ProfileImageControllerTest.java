@@ -44,7 +44,7 @@ class ProfileImageControllerTest extends CommonControllerSliceTest {
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/users/images/{id}", 1L))
                .andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.IMAGE_PNG))
+               .andExpect(content().contentType(MediaType.IMAGE_JPEG))
                .andExpect(content().bytes(imageBytes));
     }
 
@@ -87,7 +87,7 @@ class ProfileImageControllerTest extends CommonControllerSliceTest {
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/auctions/images/{id}", 1L))
                .andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.IMAGE_PNG))
+               .andExpect(content().contentType(MediaType.IMAGE_JPEG))
                .andExpect(content().bytes(imageBytes));
     }
 
