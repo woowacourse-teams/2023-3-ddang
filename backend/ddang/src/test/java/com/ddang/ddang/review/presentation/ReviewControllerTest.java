@@ -14,7 +14,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
@@ -27,6 +29,13 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -70,14 +79,17 @@ class ReviewControllerTest extends ReviewControllerFixture {
         given(reviewService.create(any(CreateReviewDto.class))).willReturn(생성된_평가_아이디);
 
         // when & then
-        mockMvc.perform(post("/reviews")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(사용자_평가_등록_요청))
-        ).andExpectAll(
-                status().isCreated(),
-                header().string(HttpHeaders.LOCATION, is("/reviews/" + 생성된_평가_아이디))
-        );
+        final ResultActions resultActions =
+                mockMvc.perform(post("/reviews")
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(사용자_평가_등록_요청))
+                ).andExpectAll(
+                        status().isCreated(),
+                        header().string(HttpHeaders.LOCATION, is("/reviews/" + 생성된_평가_아이디))
+                );
+
+        create_문서화(resultActions);
     }
 
     @Test
@@ -104,22 +116,73 @@ class ReviewControllerTest extends ReviewControllerFixture {
                 .willReturn(List.of(구매자가_판매자2에게_받은_평가, 구매자가_판매자1에게_받은_평가));
 
         // when & then
-        mockMvc.perform(get("/reviews")
-                       .queryParam("userId", String.valueOf(구매자.id()))
-                       .contentType(MediaType.APPLICATION_JSON)
-               )
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.[0].id", is(구매자가_판매자2에게_받은_평가.id()), Long.class),
-                       jsonPath("$.[0].writer.id", is(구매자가_판매자2에게_받은_평가.writer().id()), Long.class),
-                       jsonPath("$.[0].writer.name", is(구매자가_판매자2에게_받은_평가.writer().name())),
-                       jsonPath("$.[0].content", is(구매자가_판매자2에게_받은_평가.content())),
-                       jsonPath("$.[0].score", is(구매자가_판매자2에게_받은_평가.score())),
-                       jsonPath("$.[1].id", is(구매자가_판매자1에게_받은_평가.id()), Long.class),
-                       jsonPath("$.[1].writer.id", is(구매자가_판매자1에게_받은_평가.writer().id()), Long.class),
-                       jsonPath("$.[1].writer.name", is(구매자가_판매자1에게_받은_평가.writer().name())),
-                       jsonPath("$.[1].content", is(구매자가_판매자1에게_받은_평가.content())),
-                       jsonPath("$.[1].score", is(구매자가_판매자1에게_받은_평가.score()))
-               );
+        final ResultActions resultActions =
+                mockMvc.perform(get("/reviews")
+                               .queryParam("userId", String.valueOf(구매자.id()))
+                               .contentType(MediaType.APPLICATION_JSON)
+                       )
+                       .andExpectAll(
+                               status().isOk(),
+                               jsonPath("$.[0].id", is(구매자가_판매자2에게_받은_평가.id()), Long.class),
+                               jsonPath("$.[0].writer.id", is(구매자가_판매자2에게_받은_평가.writer().id()), Long.class),
+                               jsonPath("$.[0].writer.name", is(구매자가_판매자2에게_받은_평가.writer().name())),
+                               jsonPath("$.[0].content", is(구매자가_판매자2에게_받은_평가.content())),
+                               jsonPath("$.[0].score", is(구매자가_판매자2에게_받은_평가.score())),
+                               jsonPath("$.[1].id", is(구매자가_판매자1에게_받은_평가.id()), Long.class),
+                               jsonPath("$.[1].writer.id", is(구매자가_판매자1에게_받은_평가.writer().id()), Long.class),
+                               jsonPath("$.[1].writer.name", is(구매자가_판매자1에게_받은_평가.writer().name())),
+                               jsonPath("$.[1].content", is(구매자가_판매자1에게_받은_평가.content())),
+                               jsonPath("$.[1].score", is(구매자가_판매자1에게_받은_평가.score()))
+                       );
+
+        read_문서화(resultActions);
+    }
+
+    private void create_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("회원 Bearer 인증 정보")
+                        ),
+                        requestFields(
+                                fieldWithPath("auctionId").type(JsonFieldType.NUMBER)
+                                                          .description("거래한 경매 ID"),
+                                fieldWithPath("targetId").type(JsonFieldType.NUMBER)
+                                                         .description("평가 대상 ID"),
+                                fieldWithPath("score").type(JsonFieldType.NUMBER)
+                                                      .description("평가 점수"),
+                                fieldWithPath("content").type(JsonFieldType.STRING)
+                                                        .description("평가 내용")
+                        )
+                )
+        );
+    }
+
+    private void read_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        queryParameters(
+                                parameterWithName("userId").description("평가 목록 조회 대상 유저의 아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                   .description("조회 대상 사용자가 받은 모든 평가 목록"),
+                                fieldWithPath("[].id").type(JsonFieldType.NUMBER)
+                                                      .description("사용자 평가 ID"),
+                                fieldWithPath("[].writer.id").type(JsonFieldType.NUMBER)
+                                                             .description("평가를 작성한 사용자의 ID"),
+                                fieldWithPath("[].writer.name").type(JsonFieldType.STRING)
+                                                               .description("평가를 작성한 사용자의 이름"),
+                                fieldWithPath("[].writer.profileImage").type(JsonFieldType.STRING)
+                                                                       .description("평가를 작성한 사용자의 프로필 이미지 url"),
+                                fieldWithPath("[].content").type(JsonFieldType.STRING)
+                                                           .description("평가 내용"),
+                                fieldWithPath("[].score").type(JsonFieldType.NUMBER)
+                                                         .description("평가 점수"),
+                                fieldWithPath("[].createdTime").type(JsonFieldType.STRING)
+                                                               .description("평가 작성 시간")
+                        )
+                )
+        );
     }
 }
