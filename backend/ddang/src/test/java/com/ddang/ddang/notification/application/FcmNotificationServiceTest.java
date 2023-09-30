@@ -17,8 +17,8 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import java.util.Optional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,9 +31,6 @@ class FcmNotificationServiceTest {
 
     @MockBean
     FirebaseMessaging mockFirebaseMessaging;
-
-    @MockBean
-    JpaDeviceTokenRepository mockDeviceTokenRepository;
 
     @Autowired
     NotificationService notificationService;
@@ -65,14 +62,18 @@ class FcmNotificationServiceTest {
                 "image.png"
         );
 
-        given(mockDeviceTokenRepository.findByUserId(any(Long.class))).willReturn(Optional.of(deviceToken));
         given(mockFirebaseMessaging.send(any(Message.class))).willReturn("returnMessage");
 
-        // when
-        final NotificationStatus actual = notificationService.send(createNotificationDto);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                // when
+                final NotificationStatus actual = notificationService.send(createNotificationDto);
 
-        // then
-        assertThat(actual).isEqualTo(NotificationStatus.SUCCESS);
+                // then
+                assertThat(actual).isEqualTo(NotificationStatus.SUCCESS);
+            }
+        });
     }
 
     @Test
@@ -119,10 +120,15 @@ class FcmNotificationServiceTest {
 
         given(mockFirebaseMessaging.send(any(Message.class))).willThrow(FirebaseMessagingException.class);
 
-        // when
-        final NotificationStatus actual = notificationService.send(invalidDto);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                // when
+                final NotificationStatus actual = notificationService.send(invalidDto);
 
-        // then
-        assertThat(actual).isEqualTo(NotificationStatus.FAIL);
+                // then
+                assertThat(actual).isEqualTo(NotificationStatus.FAIL);
+            }
+        });
     }
 }
