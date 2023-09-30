@@ -13,8 +13,6 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
-import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -35,13 +33,7 @@ public class QuerydslChatRoomAndImageRepositoryImplFixture {
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaProfileImageRepository profileImageRepository;
-
-    @Autowired
     private JpaUserRepository userRepository;
-
-    @Autowired
-    private JpaAuctionImageRepository auctionImageRepository;
 
     @Autowired
     private JpaAuctionRepository auctionRepository;
@@ -52,44 +44,54 @@ public class QuerydslChatRoomAndImageRepositoryImplFixture {
     @Autowired
     private JpaChatRoomRepository chatRoomRepository;
 
-    private Category 전자기기_카테고리 = new Category("전자기기");
-    private Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
-    private ProfileImage 프로필_이미지 = new ProfileImage("upload.png", "store.png");
-    private User 판매자 = User.builder()
-                           .name("판매자")
-                           .profileImage(프로필_이미지)
-                           .reliability(4.7d)
-                           .oauthId("12345")
-                           .build();
-    private User 구매자 = User.builder()
-                             .name("구매자")
-                             .profileImage(프로필_이미지)
-                             .reliability(4.7d)
-                             .oauthId("12346")
-                             .build();
-    private AuctionImage 대표_이미지가_아닌_경매_이미지 =
-            new AuctionImage("대표 이미지가_아닌_경매_이미지.png", "대표 이미지가_아닌_경매_이미지.png");
-    private Auction 경매 = Auction.builder()
-                                  .seller(판매자)
-                                  .title("맥북")
-                                  .description("맥북 팔아요")
-                                  .subCategory(전자기기_서브_노트북_카테고리)
-                                  .startPrice(new Price(10_000))
-                                  .bidUnit(new BidUnit(1_000))
-                                  .closingTime(LocalDateTime.now())
-                                  .build();
-    private Bid 입찰 = new Bid(경매, 구매자, new BidPrice(15_000));
+    private Category 전자기기_카테고리;
+    private Category 전자기기_서브_노트북_카테고리;
+    private ProfileImage 프로필_이미지;
+    private User 판매자;
+    private User 구매자;
+    private AuctionImage 대표_이미지가_아닌_경매_이미지;
+    private Auction 경매;
+    private Bid 입찰;
 
-    protected AuctionImage 경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
-    protected ChatRoom 채팅방 = new ChatRoom(경매, 구매자);
+    protected AuctionImage 경매_대표_이미지;
+    protected ChatRoom 채팅방;
 
     @BeforeEach
     void setUp() {
+        전자기기_카테고리 = new Category("전자기기");
+        전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
+        프로필_이미지 = new ProfileImage("upload.png", "store.png");
+        판매자 = User.builder()
+                               .name("판매자")
+                               .profileImage(프로필_이미지)
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
+        구매자 = User.builder()
+                               .name("구매자")
+                               .profileImage(프로필_이미지)
+                               .reliability(4.7d)
+                               .oauthId("12346")
+                               .build();
+        대표_이미지가_아닌_경매_이미지 =
+                new AuctionImage("대표 이미지가_아닌_경매_이미지.png", "대표 이미지가_아닌_경매_이미지.png");
+        경매 = Auction.builder()
+                                    .seller(판매자)
+                                    .title("맥북")
+                                    .description("맥북 팔아요")
+                                    .subCategory(전자기기_서브_노트북_카테고리)
+                                    .startPrice(new Price(10_000))
+                                    .bidUnit(new BidUnit(1_000))
+                                    .closingTime(LocalDateTime.now())
+                                    .build();
+        입찰 = new Bid(경매, 구매자, new BidPrice(15_000));
+
+        경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
+        채팅방 = new ChatRoom(경매, 구매자);
+
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
-        profileImageRepository.save(프로필_이미지);
         userRepository.saveAll(List.of(판매자, 구매자));
-        auctionImageRepository.saveAll(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         auctionRepository.save(경매);
         bidRepository.save(입찰);

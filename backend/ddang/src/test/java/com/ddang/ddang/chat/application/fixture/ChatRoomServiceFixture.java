@@ -52,132 +52,153 @@ public class ChatRoomServiceFixture {
     @Autowired
     private JpaMessageRepository messageRepository;
 
-    private Category 전자기기_카테고리 = new Category("전자기기");
-    private Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
-    private ProfileImage 프로필_이미지 = new ProfileImage("upload.png", "store.png");
+    private Category 전자기기_카테고리;
+    private Category 전자기기_서브_노트북_카테고리;
+    private ProfileImage 프로필_이미지;
+    private AuctionImage 경매_대표_이미지;
+    private AuctionImage 대표_이미지가_아닌_경매_이미지;
+    protected AuctionImage 엔초의_경매_대표_이미지;
+    private AuctionImage 엔초의_대표_이미지가_아닌_경매_이미지;
+    protected AuctionImage 제이미의_경매_대표_이미지;
+    private AuctionImage 제이미의_대표_이미지가_아닌_경매_이미지;
+    private Bid 채팅방_없는_경매_입찰;
+    private Bid 지토가_엔초_경매에_입찰;
+    private Bid 엔초가_제이미_경매에_입찰;
+
     protected Long 존재하지_않는_사용자_아이디 = -999L;
-    protected User 판매자 = User.builder()
-                           .name("판매자")
-                           .profileImage(프로필_이미지)
-                           .reliability(4.7d)
-                           .oauthId("12345")
-                           .build();
-    protected User 구매자 = User.builder()
-                           .name("구매자")
-                           .profileImage(프로필_이미지)
-                           .reliability(4.7d)
-                           .oauthId("12346")
-                           .build();
-    private AuctionImage 경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
-    private AuctionImage 대표_이미지가_아닌_경매_이미지 =
-            new AuctionImage("대표 이미지가_아닌_경매_이미지.png", "대표 이미지가_아닌_경매_이미지.png");
+    protected User 판매자;
+    protected User 구매자;
+    protected User 엔초;
+    protected User 제이미;
+    protected User 지토;
     protected Long 존재하지_않는_경매_아이디 = -999L;
-    protected Auction 채팅방이_없는_경매 = Auction.builder()
-                                        .seller(판매자)
-                                        .title("맥북")
-                                        .description("맥북 팔아요")
-                                        .subCategory(전자기기_서브_노트북_카테고리)
-                                        .startPrice(new Price(10_000))
-                                        .bidUnit(new BidUnit(1_000))
-                                        .closingTime(LocalDateTime.now())
-                                        .build();
-    protected Auction 종료되지_않은_경매 = Auction.builder()
-                                          .seller(판매자)
-                                          .title("맥북")
-                                          .description("맥북 팔아요")
-                                          .subCategory(전자기기_서브_노트북_카테고리)
-                                          .startPrice(new Price(10_000))
-                                          .bidUnit(new BidUnit(1_000))
-                                          .closingTime(LocalDateTime.now().plusDays(10L))
-                                          .build();
-    protected Auction 낙찰자가_없는_경매 = Auction.builder()
-                                          .seller(판매자)
-                                          .title("맥북")
-                                          .description("맥북 팔아요")
-                                          .subCategory(전자기기_서브_노트북_카테고리)
-                                          .startPrice(new Price(10_000))
-                                          .bidUnit(new BidUnit(1_000))
-                                          .closingTime(LocalDateTime.now())
-                                          .build();
-    private Bid 채팅방_없는_경매_입찰 = new Bid(채팅방이_없는_경매, 구매자, new BidPrice(15_000));
-
-    protected User 엔초 = User.builder()
-                            .name("엔초")
-                            .profileImage(프로필_이미지)
-                            .reliability(4.7d)
-                            .oauthId("12346")
-                            .build();
-    protected User 제이미 = User.builder()
-                           .name("제이미")
-                           .profileImage(프로필_이미지)
-                           .reliability(4.7d)
-                           .oauthId("12347")
-                           .build();
-    protected User 지토 = User.builder()
-                          .name("지토")
-                          .profileImage(프로필_이미지)
-                          .reliability(4.7d)
-                          .oauthId("12348")
-                          .build();
-    protected AuctionImage 엔초의_경매_대표_이미지 = new AuctionImage("엔초의_경매_대표_이미지.png", "엔초의_경매_대표_이미지.png");
-    private AuctionImage 엔초의_대표_이미지가_아닌_경매_이미지 =
-            new AuctionImage("엔초의_대표 이미지가_아닌_경매_이미지.png", "엔초의_대표 이미지가_아닌_경매_이미지.png");
-    protected AuctionImage 제이미의_경매_대표_이미지 = new AuctionImage("제이미의_경매_대표_이미지.png", "제이미의_경매_대표_이미지.png");
-    private AuctionImage 제이미의_대표_이미지가_아닌_경매_이미지 =
-            new AuctionImage("제이미의_대표 이미지가_아닌_경매_이미지.png", "제이미의_대표 이미지가_아닌_경매_이미지.png");
-    protected Auction 판매자_엔초_구매자_지토_경매 = Auction.builder()
-                                              .seller(엔초)
-                                              .title("엔초 맥북")
-                                              .description("엔초 맥북 팔아요")
-                                              .subCategory(전자기기_서브_노트북_카테고리)
-                                              .startPrice(new Price(10_000))
-                                              .bidUnit(new BidUnit(1_000))
-                                              .closingTime(LocalDateTime.now())
-                                              .build();
-    protected Auction 판매자_제이미_구매자_엔초_경매 = Auction.builder()
-                                               .seller(제이미)
-                                               .title("제이미 맥북")
-                                               .description("제이미 맥북 팔아요")
-                                               .subCategory(전자기기_서브_노트북_카테고리)
-                                               .startPrice(new Price(10_000))
-                                               .bidUnit(new BidUnit(1_000))
-                                               .closingTime(LocalDateTime.now())
-                                               .build();
-    private Bid 지토가_엔초_경매에_입찰 = new Bid(판매자_엔초_구매자_지토_경매, 지토, new BidPrice(15_000));
-    private Bid 엔초가_제이미_경매에_입찰 = new Bid(판매자_제이미_구매자_엔초_경매, 엔초, new BidPrice(15_000));
-
+    protected Auction 채팅방이_없는_경매;
+    protected Auction 종료되지_않은_경매;
+    protected Auction 낙찰자가_없는_경매;
+    protected Auction 판매자_엔초_구매자_지토_경매;
+    protected Auction 판매자_제이미_구매자_엔초_경매;
     protected Long 존재하지_않는_채팅방_아이디 = -999L;
-    protected ChatRoom 엔초_지토_채팅방 = new ChatRoom(판매자_엔초_구매자_지토_경매, 지토);
-    protected ChatRoom 제이미_엔초_채팅방 = new ChatRoom(판매자_제이미_구매자_엔초_경매, 엔초);
-
-    protected Message 엔초가_지토에게_1시에_보낸_쪽지 = Message.builder()
-                                                .chatRoom(엔초_지토_채팅방)
-                                                .contents("엔초가 지토에게 1시애 보낸 쪽지")
-                                                .writer(엔초)
-                                                .receiver(지토)
-                                                .build();
-    protected Message 제이미가_엔초에게_2시에_보낸_쪽지 = Message.builder()
-                                                 .chatRoom(제이미_엔초_채팅방)
-                                                 .contents("제이미가 엔초에게 2시애 보낸 쪽지")
-                                                 .writer(제이미)
-                                                 .receiver(엔초)
-                                                 .build();
+    protected ChatRoom 엔초_지토_채팅방;
+    protected ChatRoom 제이미_엔초_채팅방;
+    protected Message 엔초가_지토에게_1시에_보낸_쪽지;
+    protected Message 제이미가_엔초에게_2시에_보낸_쪽지;
 
     @BeforeEach
     void setUp() {
+        전자기기_카테고리 = new Category("전자기기");
+        전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
+        프로필_이미지 = new ProfileImage("upload.png", "store.png");
+        경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
+        대표_이미지가_아닌_경매_이미지 =
+                new AuctionImage("대표 이미지가_아닌_경매_이미지.png", "대표 이미지가_아닌_경매_이미지.png");
+        엔초의_경매_대표_이미지 = new AuctionImage("엔초의_경매_대표_이미지.png", "엔초의_경매_대표_이미지.png");
+        엔초의_대표_이미지가_아닌_경매_이미지 =
+                new AuctionImage("엔초의_대표 이미지가_아닌_경매_이미지.png", "엔초의_대표 이미지가_아닌_경매_이미지.png");
+        제이미의_경매_대표_이미지 = new AuctionImage("제이미의_경매_대표_이미지.png", "제이미의_경매_대표_이미지.png");
+        제이미의_대표_이미지가_아닌_경매_이미지 =
+                new AuctionImage("제이미의_대표 이미지가_아닌_경매_이미지.png", "제이미의_대표 이미지가_아닌_경매_이미지.png");
+
+        판매자 = User.builder()
+                  .name("판매자")
+                  .profileImage(프로필_이미지)
+                  .reliability(4.7d)
+                  .oauthId("12345")
+                  .build();
+        구매자 = User.builder()
+                  .name("구매자")
+                  .profileImage(프로필_이미지)
+                  .reliability(4.7d)
+                  .oauthId("12346")
+                  .build();
+        엔초 = User.builder()
+                 .name("엔초")
+                 .profileImage(프로필_이미지)
+                 .reliability(4.7d)
+                 .oauthId("12346")
+                 .build();
+        제이미 = User.builder()
+                  .name("제이미")
+                  .profileImage(프로필_이미지)
+                  .reliability(4.7d)
+                  .oauthId("12347")
+                  .build();
+        지토 = User.builder()
+                 .name("지토")
+                 .profileImage(프로필_이미지)
+                 .reliability(4.7d)
+                 .oauthId("12348")
+                 .build();
+        채팅방이_없는_경매 = Auction.builder()
+                            .seller(판매자)
+                            .title("맥북")
+                            .description("맥북 팔아요")
+                            .subCategory(전자기기_서브_노트북_카테고리)
+                            .startPrice(new Price(10_000))
+                            .bidUnit(new BidUnit(1_000))
+                            .closingTime(LocalDateTime.now())
+                            .build();
+        종료되지_않은_경매 = Auction.builder()
+                            .seller(판매자)
+                            .title("맥북")
+                            .description("맥북 팔아요")
+                            .subCategory(전자기기_서브_노트북_카테고리)
+                            .startPrice(new Price(10_000))
+                            .bidUnit(new BidUnit(1_000))
+                            .closingTime(LocalDateTime.now().plusDays(10L))
+                            .build();
+        낙찰자가_없는_경매 = Auction.builder()
+                            .seller(판매자)
+                            .title("맥북")
+                            .description("맥북 팔아요")
+                            .subCategory(전자기기_서브_노트북_카테고리)
+                            .startPrice(new Price(10_000))
+                            .bidUnit(new BidUnit(1_000))
+                            .closingTime(LocalDateTime.now())
+                            .build();
+        채팅방_없는_경매_입찰 = new Bid(채팅방이_없는_경매, 구매자, new BidPrice(15_000));
+        판매자_엔초_구매자_지토_경매 = Auction.builder()
+                                  .seller(엔초)
+                                  .title("엔초 맥북")
+                                  .description("엔초 맥북 팔아요")
+                                  .subCategory(전자기기_서브_노트북_카테고리)
+                                  .startPrice(new Price(10_000))
+                                  .bidUnit(new BidUnit(1_000))
+                                  .closingTime(LocalDateTime.now())
+                                  .build();
+        판매자_제이미_구매자_엔초_경매 = Auction.builder()
+                                   .seller(제이미)
+                                   .title("제이미 맥북")
+                                   .description("제이미 맥북 팔아요")
+                                   .subCategory(전자기기_서브_노트북_카테고리)
+                                   .startPrice(new Price(10_000))
+                                   .bidUnit(new BidUnit(1_000))
+                                   .closingTime(LocalDateTime.now())
+                                   .build();
+        지토가_엔초_경매에_입찰 = new Bid(판매자_엔초_구매자_지토_경매, 지토, new BidPrice(15_000));
+        엔초가_제이미_경매에_입찰 = new Bid(판매자_제이미_구매자_엔초_경매, 엔초, new BidPrice(15_000));
+
+        존재하지_않는_채팅방_아이디 = -999L;
+        엔초_지토_채팅방 = new ChatRoom(판매자_엔초_구매자_지토_경매, 지토);
+        제이미_엔초_채팅방 = new ChatRoom(판매자_제이미_구매자_엔초_경매, 엔초);
+
+        엔초가_지토에게_1시에_보낸_쪽지 = Message.builder()
+                                    .chatRoom(엔초_지토_채팅방)
+                                    .contents("엔초가 지토에게 1시애 보낸 쪽지")
+                                    .writer(엔초)
+                                    .receiver(지토)
+                                    .build();
+        제이미가_엔초에게_2시에_보낸_쪽지 = Message.builder()
+                                     .chatRoom(제이미_엔초_채팅방)
+                                     .contents("제이미가 엔초에게 2시애 보낸 쪽지")
+                                     .writer(제이미)
+                                     .receiver(엔초)
+                                     .build();
+
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
 
-        profileImageRepository.save(프로필_이미지);
         userRepository.saveAll(List.of(판매자, 구매자, 엔초, 제이미, 지토));
 
-        auctionImageRepository.saveAll(
-                List.of(
-                        경매_대표_이미지, 대표_이미지가_아닌_경매_이미지,
-                        엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지,
-                        제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지
-                )
-        );
         채팅방이_없는_경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         판매자_엔초_구매자_지토_경매.addAuctionImages(List.of(엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지));
         판매자_제이미_구매자_엔초_경매.addAuctionImages(List.of(제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지));
@@ -191,7 +212,6 @@ public class ChatRoomServiceFixture {
         판매자_제이미_구매자_엔초_경매.updateLastBid(엔초가_제이미_경매에_입찰);
 
         chatRoomRepository.saveAll(List.of(엔초_지토_채팅방, 제이미_엔초_채팅방));
-
         messageRepository.saveAll(List.of(엔초가_지토에게_1시에_보낸_쪽지, 제이미가_엔초에게_2시에_보낸_쪽지));
     }
 }
