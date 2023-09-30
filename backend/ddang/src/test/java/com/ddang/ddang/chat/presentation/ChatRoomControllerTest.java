@@ -83,7 +83,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 메시지를_생성한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(messageService.create(any(CreateMessageDto.class), anyString())).willReturn(1L);
 
         // when & then
@@ -102,11 +102,11 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방이_없는_경우_메시지_생성시_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
 
         // when & then
-        mockMvc.perform(post("/chattings/{chatRoomId}/messages", 유효하지_않은_사용자_아이디)
+        mockMvc.perform(post("/chattings/{chatRoomId}/messages", 유효하지_않은_채팅방_아이디)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .content(objectMapper.writeValueAsString(메시지_생성_요청))
                        .contentType(MediaType.APPLICATION_JSON))
@@ -119,7 +119,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 발신자가_없는_경우_메시지_생성시_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(new UserNotFoundException("지정한 아이디에 대한 발신자를 찾을 수 없습니다."));
 
         // when & then
@@ -136,13 +136,13 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 마지막_조회_메시지_이후_메시지를_조회한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willReturn(List.of(조회용_메시지));
 
         final ReadMessageResponse expected = ReadMessageResponse.of(조회용_메시지, true);
 
         // when & then
-        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}/messages", 1L)
+        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}/messages", 채팅방_아이디)
                                                                                             .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                                                                                             .contentType(MediaType.APPLICATION_JSON)
                                                                                             .queryParam("lastMessageId", 마지막_메시지_아이디.toString())
@@ -158,7 +158,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 마지막_메시지_아이디가_없는_경우_빈_리스트를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willReturn(Collections.emptyList());
 
         // when & then
@@ -175,14 +175,14 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방_아이디가_잘못된_경우_메시지를_조회하면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
 
         // when & then
-        mockMvc.perform(get("/chattings/" + 유효하지_않은_채팅방_아이디 + "/messages")
+        mockMvc.perform(get("/chattings/{chatRoomId}/messages", 유효하지_않은_채팅방_아이디)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
-                       .queryParam("lastMessageId", "1"))
+                       .queryParam("lastMessageId", 마지막_메시지_아이디.toString()))
                .andExpectAll(
                        status().isNotFound(),
                        jsonPath("$.message").exists()
@@ -192,11 +192,11 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 마지막_메시지_아이디가_잘못된_경우_메시지를_조회하면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willThrow(new MessageNotFoundException("조회한 마지막 메시지가 존재하지 않습니다."));
 
         // when & then
-        mockMvc.perform(get("/chattings/1/messages")
+        mockMvc.perform(get("/chattings/{chatRoomId}/messages", 채팅방_아이디)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                        .queryParam("lastMessageId", 유효하지_않은_마지막_메시지_아이디.toString())
@@ -210,7 +210,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 사용자가_참여한_모든_채팅방을_조회한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.readAllByUserId(anyLong())).willReturn(List.of(조회용_채팅방1, 조회용_채팅방2));
 
         // when & then
@@ -241,7 +241,6 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     void 사용자가_참여한_채팅방_목록_조회시_요청한_사용자_정보가_없다면_404를_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        given(chatRoomService.readAllByUserId(유효하지_않은_사용자_아이디)).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(get("/chattings")
@@ -256,11 +255,11 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_조회한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willReturn(조회용_참가중인_채팅방);
 
         // when & then
-        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}", 1L)
+        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}", 채팅방_아이디)
                                                                                             .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                                                                                             .contentType(MediaType.APPLICATION_JSON))
                                                    .andExpectAll(
@@ -277,11 +276,11 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_요청한_사용자_정보가_없다면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         // when & then
-        mockMvc.perform(get("/chattings/1")
+        mockMvc.perform(get("/chattings/{chatRoomId}", 채팅방_아이디)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
@@ -293,7 +292,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_채팅방을_찾을_수_없다면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(new ChatRoomNotFoundException("지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
 
         // when & then
@@ -309,11 +308,11 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_요청한_사용자_채팅방의_참여자가_아니라면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(new InvalidUserToChat("해당 채팅방에 접근할 권한이 없습니다."));
 
         // when & then
-        mockMvc.perform(get("/chattings/1")
+        mockMvc.perform(get("/chattings/{chatRoomId}", 채팅방_아이디)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
@@ -325,7 +324,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방을_생성한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willReturn(채팅방_아이디);
 
         // when & then
@@ -343,7 +342,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방_생성시_요청한_사용자_정보를_찾을_수_없다면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
         // when & then
@@ -360,7 +359,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방_생성시_관련된_경매_정보를_찾을_수_없다면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
 
         // when & then
@@ -377,7 +376,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방_생성시_유효하지_않은_경매_아이디를_전달받는다면_400를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
 
         // when & then
         mockMvc.perform(post("/chattings")
@@ -393,7 +392,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 경매가_종료되지_않은_상태에서_채팅방을_생성하면_400을_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new InvalidAuctionToChatException("경매가 아직 종료되지 않았습니다."));
 
         // when & then
@@ -410,7 +409,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방_생성시_낙찰자가_없다면_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new WinnerNotFoundException("낙찰자가 존재하지 않습니다"));
 
         // when & then
@@ -427,7 +426,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     @Test
     void 채팅방_생성을_요청한_사용자가_경매의_판매자_또는_최종_낙찰자가_아니라면_403을_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new InvalidUserToChat("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다."));
 
         // when & then
