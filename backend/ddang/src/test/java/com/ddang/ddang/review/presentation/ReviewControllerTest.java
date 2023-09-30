@@ -100,7 +100,8 @@ class ReviewControllerTest extends ReviewControllerFixture {
     @Test
     void 주어진_사용자가_받은_평가_목록을_최신순으로_조회한다() throws Exception {
         // given
-        given(reviewService.readAllByTargetId(anyLong())).willReturn(List.of(구매자가_판매자2에게_받은_평가, 구매자가_판매자1에게_받은_평가));
+        given(reviewService.readAllByTargetId(anyLong()))
+                .willReturn(List.of(구매자가_판매자2에게_받은_평가, 구매자가_판매자1에게_받은_평가));
 
         // when & then
         mockMvc.perform(get("/reviews")

@@ -37,17 +37,26 @@ public class ReviewService {
         final User target = userRepository.findById(reviewDto.targetId())
                                           .orElseThrow(() -> new UserNotFoundException("평가 상대의 정보를 찾을 수 없습니다."));
 
+        validateAlreadyReviewed(findAuction, writer);
+
+        final Review review = reviewDto.toEntity(findAuction, writer, target);
+        final Review persistReview = saveReviewAndUpdateReliability(review, target);
+
+        return persistReview.getId();
+    }
+
+    private void validateAlreadyReviewed(final Auction findAuction, final User writer) {
         if (reviewRepository.existsByAuctionIdAndWriterId(findAuction.getId(), writer.getId())) {
             throw new AlreadyReviewException("이미 평가하였습니다.");
         }
+    }
 
-        final Review review = reviewDto.toEntity(findAuction, writer, target);
+    private Review saveReviewAndUpdateReliability(final Review review, final User target) {
         final Review persistReview = reviewRepository.save(review);
 
         final List<Review> targetReviews = reviewRepository.findAllByTargetId(target.getId());
         target.updateReliability(targetReviews);
-
-        return persistReview.getId();
+        return persistReview;
     }
 
     public List<ReadReviewDto> readAllByTargetId(final Long targetId) {
