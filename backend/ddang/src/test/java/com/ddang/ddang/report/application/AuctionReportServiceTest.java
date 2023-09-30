@@ -2,14 +2,13 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.application.fixture.AuctionReportServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -30,14 +29,8 @@ class AuctionReportServiceTest extends AuctionReportServiceFixture {
 
     @Test
     void 경매_신고를_등록한다() {
-        // given
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
-                경매.getId(),
-                "신고합니다",
-                새로운_신고자.getId());
-
         // when
-        final Long actual = auctionReportService.create(createAuctionReportDto);
+        final Long actual = auctionReportService.create(새로운_경매_신고_요청);
 
         // then
         assertThat(actual).isPositive();
@@ -45,75 +38,40 @@ class AuctionReportServiceTest extends AuctionReportServiceFixture {
 
     @Test
     void 존재하지_않는_사용자가_신고하는_경우_예외가_발생한다() {
-        // given
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
-                경매.getId(),
-                "신고합니다",
-                존재하지_않는_사용자_아이디
-        );
-
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(존재하지_않는_사용자의_경매_신고_요청))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }
 
     @Test
     void 존재하지_않는_경매를_신고하는_경우_예외가_발생한다() {
-        // given
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
-                존재하지_않는_경매_아이디,
-                "신고합니다",
-                새로운_신고자.getId()
-        );
-
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(존재하지_않는_경매_신고_요청))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
 
     @Test
     void 본인이_등록한_경매를_신고하는_경우_예외가_발생한다() {
-        // given
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
-                경매.getId(),
-                "신고합니다",
-                판매자.getId()
-        );
-
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(판매자가_본인의_경매_신고_요청))
                 .isInstanceOf(InvalidReporterToAuctionException.class)
                 .hasMessage("본인 경매글입니다.");
     }
 
     @Test
     void 삭제한_경매를_신고하는_경우_예외가_발생한다() {
-        // given
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
-                삭제된_경매.getId(),
-                "신고합니다",
-                새로운_신고자.getId()
-        );
-
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(삭제된_경매_신고_요청))
                 .isInstanceOf(InvalidReportAuctionException.class)
                 .hasMessage("이미 삭제된 경매입니다.");
     }
 
     @Test
     void 이미_신고한_경매를_동일_사용자가_신고하는_경우_예외가_발생한다() {
-        // given
-        final CreateAuctionReportDto createAuctionReportDto = new CreateAuctionReportDto(
-                경매.getId(),
-                "신고합니다",
-                이미_신고한_신고자1.getId()
-        );
-
         // when & then
-        assertThatThrownBy(() -> auctionReportService.create(createAuctionReportDto))
+        assertThatThrownBy(() -> auctionReportService.create(이미_신고한_사용자가_경매_신고_요청))
                 .isInstanceOf(AlreadyReportAuctionException.class)
                 .hasMessage("이미 신고한 경매입니다.");
     }
