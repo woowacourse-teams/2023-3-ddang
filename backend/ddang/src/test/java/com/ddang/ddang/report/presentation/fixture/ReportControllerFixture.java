@@ -1,5 +1,6 @@
 package com.ddang.ddang.report.presentation.fixture;
 
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
@@ -15,6 +16,10 @@ import java.time.LocalDateTime;
 @SuppressWarnings("NonAsciiCharacters")
 public class ReportControllerFixture extends CommonControllerSliceTest {
 
+    // TODO: 9/30/23 final을 붙일지 말지 고민되네요, 경고가 보기 싫어서 일단 private에만 붙인 상태입니다.
+    protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
+    protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(-999L);
+    protected PrivateClaims 채팅방_참여자가_아닌_사용자_ID_클레임 = new PrivateClaims(999L);
     protected CreateAuctionReportRequest 경매_신고_요청 = new CreateAuctionReportRequest(1L, "신고합니다");
     protected CreateAuctionReportRequest 경매_아이디가_없는_신고_요청 = new CreateAuctionReportRequest(null, "신고합니다");
     protected CreateAuctionReportRequest 경매_아이디가_음수인_신고_요청 = new CreateAuctionReportRequest(-999L, "신고합니다");
@@ -55,9 +60,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
 
     protected CreateChatRoomReportRequest 채팅방_신고_요청 = new CreateChatRoomReportRequest(1L, "신고합니다");
-    protected Long 존재하지_않는_사용자_아이디 = -999L;
     protected CreateChatRoomReportRequest 존재하지_않는_채팅방_신고_요청 = new CreateChatRoomReportRequest(9999L, "신고합니다");
-    protected Long 채팅방_참여자가_아닌_사용자_아이디 = 999L;
     protected CreateChatRoomReportRequest 채팅방_아이디가_null인_신고_요청 = new CreateChatRoomReportRequest(null, "신고합니다");
     protected CreateChatRoomReportRequest 채팅방_아이디가_음수인_신고_요청 = new CreateChatRoomReportRequest(-999L, "신고합니다");
     protected static CreateChatRoomReportRequest 신고_내용이_null인_채팅_신고_요청 = new CreateChatRoomReportRequest(1L, null);
@@ -93,8 +96,8 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             LocalDateTime.now().plusDays(2),
             2
     );
-    final ReadUserInReportDto 구매자_정보2 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
-    final ReadReporterDto 신고자_정보2 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
+    private final ReadUserInReportDto 구매자_정보2 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
+    private final ReadReporterDto 신고자_정보2 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
     protected ReadChatRoomReportDto 채팅방_신고2 = new ReadChatRoomReportDto(
             2L,
             신고자_정보2,
@@ -113,8 +116,8 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             LocalDateTime.now().plusDays(2),
             2
     );
-    final ReadUserInReportDto 구매자_정보3 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
-    final ReadReporterDto 신고자_정보3 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
+    private final ReadUserInReportDto 구매자_정보3 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
+    private final ReadReporterDto 신고자_정보3 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
     protected ReadChatRoomReportDto 채팅방_신고3 = new ReadChatRoomReportDto(
             3L,
             신고자_정보3,
