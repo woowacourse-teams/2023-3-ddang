@@ -367,9 +367,25 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
         mockMvc.perform(post("/chattings")
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(유효하지_않은_경매_아이디_채팅방_생성_요청)))
+                       .content(objectMapper.writeValueAsString(존재하지_않은_경매_아이디_채팅방_생성_요청)))
                .andExpectAll(
                        status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 채팅방_생성시_유효하지_않은_경매_아이디를_전달받는다면_400를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(비공개_클레임));
+
+        // when & then
+        mockMvc.perform(post("/chattings")
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(유효하지_않은_경매_아이디_채팅방_생성_요청)))
+               .andExpectAll(
+                       status().isBadRequest(),
                        jsonPath("$.message").exists()
                );
     }

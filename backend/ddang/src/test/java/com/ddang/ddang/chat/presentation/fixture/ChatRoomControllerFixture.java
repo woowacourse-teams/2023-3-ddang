@@ -33,7 +33,8 @@ public class ChatRoomControllerFixture extends CommonControllerSliceTest {
     protected ReadMessageDto 조회용_메시지 = new ReadMessageDto(1L, LocalDateTime.now(), 1L, 1L, 1L, "메시지내용");
     protected ReadParticipatingChatRoomDto 조회용_참가중인_채팅방 = new ReadParticipatingChatRoomDto(1L, 조회용_경매1, 판매자, true);
     protected CreateChatRoomRequest 채팅방_생성_요청 = new CreateChatRoomRequest(1L);
-    protected CreateChatRoomRequest 유효하지_않은_경매_아이디_채팅방_생성_요청 = new CreateChatRoomRequest(1L);
+    protected CreateChatRoomRequest 존재하지_않은_경매_아이디_채팅방_생성_요청 = new CreateChatRoomRequest(1L);
+    protected CreateChatRoomRequest 유효하지_않은_경매_아이디_채팅방_생성_요청 = new CreateChatRoomRequest(-999L);
     protected final Long 유효하지_않은_사용자_아이디 = -999L;
     protected final Long 채팅방_아이디 = 1L;
     protected final Long 유효하지_않은_채팅방_아이디 = -999L;
