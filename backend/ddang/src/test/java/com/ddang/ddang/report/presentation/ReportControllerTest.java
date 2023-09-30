@@ -57,19 +57,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SuppressWarnings("NonAsciiCharacters")
 class ReportControllerTest extends ReportControllerFixture {
 
-    TokenDecoder mockTokenDecoder;
+    TokenDecoder tokenDecoder;
 
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        mockTokenDecoder = mock(TokenDecoder.class);
+        tokenDecoder = mock(TokenDecoder.class);
 
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
                 blackListTokenService,
                 authenticationUserService,
-                mockTokenDecoder,
+                tokenDecoder,
                 store
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
@@ -89,7 +89,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
@@ -111,7 +111,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(존재하지_않는_사용자_아이디);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class)))
                 .willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
@@ -132,7 +132,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class)))
                 .willThrow(new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
 
@@ -153,7 +153,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class)))
                 .willThrow(new InvalidReporterToAuctionException("본인 경매글입니다."));
 
@@ -174,7 +174,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class)))
                 .willThrow(new InvalidReportAuctionException("이미 삭제된 경매입니다."));
 
@@ -195,7 +195,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class)))
                 .willThrow(new AlreadyReportAuctionException("이미 신고한 경매입니다."));
 
@@ -216,7 +216,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
@@ -236,7 +236,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
@@ -257,7 +257,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
 
         // when & then
@@ -281,7 +281,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(auctionReportService.readAll())
                 .willReturn(List.of(경매_신고1, 경매_신고2, 경매_신고3));
 
@@ -323,7 +323,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
 
         // when & then
@@ -345,7 +345,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(존재하지_않는_사용자_아이디);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class)))
                 .willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
@@ -366,7 +366,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class)))
                 .willThrow(new ChatRoomNotFoundException("해당 채팅방을 찾을 수 없습니다."));
 
@@ -387,7 +387,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(채팅방_참여자가_아닌_사용자_아이디);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class)))
                 .willThrow(new InvalidChatRoomReportException("해당 채팅방을 신고할 권한이 없습니다."));
 
@@ -408,7 +408,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class)))
                 .willThrow(new AlreadyReportChatRoomException("이미 신고한 채팅방입니다."));
 
@@ -429,7 +429,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
 
         // when & then
@@ -449,7 +449,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
 
         // when & then
@@ -470,7 +470,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
 
         // when & then
@@ -494,7 +494,7 @@ class ReportControllerTest extends ReportControllerFixture {
         // given
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
         given(chatRoomReportService.readAll())
                 .willReturn(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
 
