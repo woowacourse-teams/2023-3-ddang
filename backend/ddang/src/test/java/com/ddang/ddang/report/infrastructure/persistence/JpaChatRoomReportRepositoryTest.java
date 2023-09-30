@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JpaChatRoomReportRepositoryTest extends JpaChatRoomReportRepositoryFixture {
 
     @PersistenceContext
-    private EntityManager em;
+    EntityManager em;
 
     @Autowired
     JpaChatRoomReportRepository chatRoomReportRepository;

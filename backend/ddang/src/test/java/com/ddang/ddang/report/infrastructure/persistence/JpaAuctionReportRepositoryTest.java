@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
 
     @PersistenceContext
-    private EntityManager em;
+    EntityManager em;
 
     @Autowired
     JpaAuctionReportRepository auctionReportRepository;
