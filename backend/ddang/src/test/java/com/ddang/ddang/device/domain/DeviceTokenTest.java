@@ -8,6 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class DeviceTokenTest extends DeviceTokenFixture {
 
+
     @Test
     void 디바이스_토큰이_다르다면_참을_반환한다() {
         // given
