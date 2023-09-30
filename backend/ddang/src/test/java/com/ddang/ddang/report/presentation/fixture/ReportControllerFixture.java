@@ -16,6 +16,9 @@ import java.time.LocalDateTime;
 @SuppressWarnings("NonAsciiCharacters")
 public class ReportControllerFixture extends CommonControllerSliceTest {
 
+    protected Long 생성된_경매_신고_아이디 = 1L;
+    protected Long 생성된_채팅방_신고_아이디 = 1L;
+    protected String 엑세스_토큰_값 = "Bearer accessToken";
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(-999L);
     protected PrivateClaims 채팅방_참여자가_아닌_사용자_ID_클레임 = new PrivateClaims(999L);

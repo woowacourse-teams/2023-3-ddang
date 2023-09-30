@@ -87,11 +87,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 경매_신고를_등록한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(생성된_경매_신고_아이디);
 
         // when & then
         final ResultActions resultActions = mockMvc.perform(post("/reports/auctions")
-                                                           .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                           .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                                                            .contentType(MediaType.APPLICATION_JSON)
                                                            .content(objectMapper.writeValueAsString(경매_신고_요청))
                                                    )
@@ -112,7 +112,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(경매_신고_요청))
                )
@@ -131,7 +131,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(경매_신고_요청))
                )
@@ -150,7 +150,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(경매_신고_요청))
                )
@@ -169,7 +169,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(경매_신고_요청))
                )
@@ -188,7 +188,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(경매_신고_요청))
                )
@@ -202,11 +202,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 경매_아이디가_없는_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(생성된_경매_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(경매_아이디가_없는_신고_요청))
                )
@@ -220,11 +220,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 경매_아이디가_음수인_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(생성된_경매_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(경매_아이디가_음수인_신고_요청))
                )
@@ -239,11 +239,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 신고_내용_없이_경매_신고시_400을_반환한다(final CreateAuctionReportRequest 내용이_없는_경매_신고_요청) throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(1L);
+        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(생성된_경매_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(내용이_없는_경매_신고_요청))
                )
@@ -261,8 +261,7 @@ class ReportControllerTest extends ReportControllerFixture {
     void 전체_경매_신고_목록을_조회한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.readAll())
-                .willReturn(List.of(경매_신고1, 경매_신고2, 경매_신고3));
+        given(auctionReportService.readAll()).willReturn(List.of(경매_신고1, 경매_신고2, 경매_신고3));
 
         // when & then
         final ResultActions resultActions =
@@ -301,11 +300,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 채팅방_신고를_등록한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(생성된_채팅방_신고_아이디);
 
         // when & then
         final ResultActions resultActions = mockMvc.perform(post("/reports/chat-rooms")
-                                                           .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                                                           .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                                                            .contentType(MediaType.APPLICATION_JSON)
                                                            .content(objectMapper.writeValueAsString(채팅방_신고_요청))
                                                    )
@@ -326,7 +325,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(채팅방_신고_요청))
                )
@@ -345,7 +344,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(존재하지_않는_채팅방_신고_요청))
                )
@@ -364,7 +363,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(채팅방_신고_요청))
                )
@@ -383,7 +382,7 @@ class ReportControllerTest extends ReportControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(채팅방_신고_요청))
                )
@@ -397,11 +396,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 채팅방_아이디가_없는_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(생성된_채팅방_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(채팅방_아이디가_null인_신고_요청))
                )
@@ -415,11 +414,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 채팅방_아이디가_음수인_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(생성된_채팅방_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(채팅방_아이디가_음수인_신고_요청))
                )
@@ -434,11 +433,11 @@ class ReportControllerTest extends ReportControllerFixture {
     void 신고_내용_없이_채팅방_신고시_400을_반환한다(final CreateChatRoomReportRequest 채팅방_신고_요청) throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(1L);
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(생성된_채팅방_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
                        .content(objectMapper.writeValueAsString(채팅방_신고_요청))
                )
@@ -456,8 +455,7 @@ class ReportControllerTest extends ReportControllerFixture {
     void 전체_채팅방_신고_목록을_조회한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.readAll())
-                .willReturn(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
+        given(chatRoomReportService.readAll()).willReturn(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
 
         // when & then
         final ResultActions resultActions =
