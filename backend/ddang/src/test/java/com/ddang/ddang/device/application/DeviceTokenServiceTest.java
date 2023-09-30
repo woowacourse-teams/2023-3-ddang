@@ -47,9 +47,6 @@ class DeviceTokenServiceTest extends DeviceTokenServiceFixture {
 
     @Test
     void 사용자의_디바이스_토큰이_이미_존재하고_동일한_토큰이_주어진다면_토큰을_갱신하지_않는다() {
-        // given
-
-
         // when
         deviceTokenService.persist(디바이스_토큰이_있는_사용자.getId(), 존재하는_디바이스_토큰과_동일한_토큰을_저장하려는_DTO);
 
