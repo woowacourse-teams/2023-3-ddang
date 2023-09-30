@@ -202,7 +202,6 @@ class ReportControllerTest extends ReportControllerFixture {
     void 경매_아이디가_없는_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(생성된_경매_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
@@ -220,7 +219,6 @@ class ReportControllerTest extends ReportControllerFixture {
     void 경매_아이디가_음수인_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(생성된_경매_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
@@ -239,7 +237,6 @@ class ReportControllerTest extends ReportControllerFixture {
     void 신고_내용_없이_경매_신고시_400을_반환한다(final CreateAuctionReportRequest 내용이_없는_경매_신고_요청) throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.create(any(CreateAuctionReportDto.class))).willReturn(생성된_경매_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/auctions")
@@ -396,7 +393,6 @@ class ReportControllerTest extends ReportControllerFixture {
     void 채팅방_아이디가_없는_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(생성된_채팅방_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
@@ -414,7 +410,6 @@ class ReportControllerTest extends ReportControllerFixture {
     void 채팅방_아이디가_음수인_경우_신고시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(생성된_채팅방_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
@@ -433,7 +428,6 @@ class ReportControllerTest extends ReportControllerFixture {
     void 신고_내용_없이_채팅방_신고시_400을_반환한다(final CreateChatRoomReportRequest 채팅방_신고_요청) throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willReturn(생성된_채팅방_신고_아이디);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
