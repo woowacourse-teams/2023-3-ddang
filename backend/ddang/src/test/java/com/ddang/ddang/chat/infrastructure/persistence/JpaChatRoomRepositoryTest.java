@@ -32,7 +32,7 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
     @Test
     void 채팅방을_저장한다() {
         // given
-         final ChatRoom chatRoom = new ChatRoom(경매, 구매자);
+        final ChatRoom chatRoom = new ChatRoom(경매, 구매자);
 
         // when
         chatRoomRepository.save(chatRoom);
