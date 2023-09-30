@@ -87,10 +87,10 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     void 메시지를_생성한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(messageService.create(any(CreateMessageDto.class), anyString())).willReturn(1L);
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willReturn(채팅방_아이디);
 
         // when & then
-        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.post("/chattings/{chatRoomId}/messages", 1L)
+        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.post("/chattings/{chatRoomId}/messages", 채팅방_아이디)
                                                                                             .contentType(MediaType.APPLICATION_JSON)
                                                                                             .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                                                                                             .content(objectMapper.writeValueAsString(메시지_생성_요청)))
@@ -165,7 +165,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
         given(messageService.readAllByLastMessageId(any(ReadMessageRequest.class))).willReturn(Collections.emptyList());
 
         // when & then
-        mockMvc.perform(get("/chattings/1/messages")
+        mockMvc.perform(get("/chattings/{chatRoomId}/messages", 채팅방_아이디)
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                        .contentType(MediaType.APPLICATION_JSON)
                )
