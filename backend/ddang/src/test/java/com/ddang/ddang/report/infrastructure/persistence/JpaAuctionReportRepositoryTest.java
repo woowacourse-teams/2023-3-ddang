@@ -73,6 +73,7 @@ class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(3);
             softAssertions.assertThat(actual.get(0)).isEqualTo(경매_신고1);
             softAssertions.assertThat(actual.get(1)).isEqualTo(경매_신고2);
             softAssertions.assertThat(actual.get(2)).isEqualTo(경매_신고3);

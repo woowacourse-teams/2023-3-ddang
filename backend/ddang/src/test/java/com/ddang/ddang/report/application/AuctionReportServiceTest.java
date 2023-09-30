@@ -83,6 +83,7 @@ class AuctionReportServiceTest extends AuctionReportServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(3);
             softAssertions.assertThat(actual.get(0).reporterDto().id()).isEqualTo(이미_신고한_신고자1.getId());
             softAssertions.assertThat(actual.get(0).auctionDto().id()).isEqualTo(경매.getId());
             softAssertions.assertThat(actual.get(1).reporterDto().id()).isEqualTo(이미_신고한_신고자2.getId());

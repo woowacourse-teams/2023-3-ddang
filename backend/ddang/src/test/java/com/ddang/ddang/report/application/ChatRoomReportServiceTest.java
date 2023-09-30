@@ -110,6 +110,7 @@ class ChatRoomReportServiceTest extends ChatRoomReportServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(3);
             softAssertions.assertThat(actual.get(0).reporterDto().id()).isEqualTo(이미_신고한_구매자1.getId());
             softAssertions.assertThat(actual.get(0).chatRoomDto().id()).isEqualTo(채팅방1.getId());
             softAssertions.assertThat(actual.get(1).reporterDto().id()).isEqualTo(이미_신고한_구매자2.getId());
