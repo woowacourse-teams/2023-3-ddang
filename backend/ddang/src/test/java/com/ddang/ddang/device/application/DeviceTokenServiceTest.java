@@ -42,7 +42,9 @@ class DeviceTokenServiceTest extends DeviceTokenServiceFixture {
 
         // then
         final Optional<DeviceToken> deviceTokenResult = deviceTokenRepository.findByUserId(디바이스_토큰이_있는_사용자.getId());
-        assertThat(deviceTokenResult.get().getDeviceToken()).isEqualTo(갱신된_디바이스_토큰_값);
+        final String actual = deviceTokenResult.get().getDeviceToken();
+
+        assertThat(actual).isEqualTo(갱신된_디바이스_토큰_값);
     }
 
     @Test
@@ -52,7 +54,9 @@ class DeviceTokenServiceTest extends DeviceTokenServiceFixture {
 
         // then
         final Optional<DeviceToken> userDeviceToken = deviceTokenRepository.findByUserId(디바이스_토큰이_있는_사용자.getId());
-        assertThat(userDeviceToken.get().getDeviceToken()).isEqualTo(사용_중인_디바이스_토큰_값);
+        final String actual = userDeviceToken.get().getDeviceToken();
+
+        assertThat(actual).isEqualTo(사용_중인_디바이스_토큰_값);
     }
 
     @Test
