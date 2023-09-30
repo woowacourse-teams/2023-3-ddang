@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
+import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -37,7 +39,7 @@ public class ReviewService {
         final User target = userRepository.findById(reviewDto.targetId())
                                           .orElseThrow(() -> new UserNotFoundException("평가 상대의 정보를 찾을 수 없습니다."));
 
-        validateAlreadyReviewed(findAuction, writer);
+        validateWriterCanReview(findAuction, writer);
 
         final Review review = reviewDto.toEntity(findAuction, writer, target);
         final Review persistReview = saveReviewAndUpdateReliability(review, target);
@@ -45,8 +47,16 @@ public class ReviewService {
         return persistReview.getId();
     }
 
-    private void validateAlreadyReviewed(final Auction findAuction, final User writer) {
-        if (reviewRepository.existsByAuctionIdAndWriterId(findAuction.getId(), writer.getId())) {
+    private void validateWriterCanReview(final Auction auction, final User writer) {
+        if (!auction.isSellerOrWinner(writer, LocalDateTime.now())) {
+            throw new InvalidUserToReview("경매의 판매자 또는 최종 낙찰자만 평가가 가능합니다.");
+        }
+
+        validateAlreadyReviewed(auction, writer);
+    }
+
+    private void validateAlreadyReviewed(final Auction auction, final User writer) {
+        if (reviewRepository.existsByAuctionIdAndWriterId(auction.getId(), writer.getId())) {
             throw new AlreadyReviewException("이미 평가하였습니다.");
         }
     }

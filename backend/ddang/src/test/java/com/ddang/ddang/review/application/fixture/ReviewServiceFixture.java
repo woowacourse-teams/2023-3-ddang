@@ -66,6 +66,12 @@ public class ReviewServiceFixture {
                              .reliability(4.7d)
                              .oauthId("12347")
                              .build();
+    protected User 경매_참여자가_아닌_사용자 = User.builder()
+                                        .name("경매 참여자가 아닌 사용자")
+                                        .profileImage(new ProfileImage("profile.png", "profile.png"))
+                                        .reliability(4.7d)
+                                        .oauthId("12347")
+                                        .build();
     protected Long 존재하지_않는_사용자 = -999L;
     protected Auction 판매자1이_평가한_경매 = Auction.builder()
                                             .seller(판매자1)
@@ -116,7 +122,7 @@ public class ReviewServiceFixture {
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
 
-        userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자));
+        userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자, 경매_참여자가_아닌_사용자));
 
         판매자1이_평가한_경매.addAuctionImages(List.of(경매1_대표_이미지));
         판매자2가_평가한_경매.addAuctionImages(List.of(경매2_대표_이미지));

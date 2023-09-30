@@ -5,6 +5,7 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
+import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.application.fixture.ReviewServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.assertj.core.api.SoftAssertions;
@@ -83,10 +84,22 @@ class ReviewServiceTest extends ReviewServiceFixture {
     }
 
     @Test
+    void 경매의_판매자나_낙찰자가_아닌_사용자일_경우_예외가_발생한다() {
+        // given
+        final CreateReviewDto createReviewDto =
+                new CreateReviewDto(평가_안한_경매.getId(), 경매_참여자가_아닌_사용자.getId(), 구매자.getId(), "친절하다", 5.0d);
+
+        // when & then
+        assertThatThrownBy(() -> reviewService.create(createReviewDto))
+                .isInstanceOf(InvalidUserToReview.class)
+                .hasMessage("경매의 판매자 또는 최종 낙찰자만 평가가 가능합니다.");
+    }
+
+    @Test
     void 이미_평가했는데_평가를_등록한다면_예외가_발생한다() {
         // given
         final CreateReviewDto createReviewDto =
-                new CreateReviewDto(구매자가_판매자1에게_받은_평가.getId(), 판매자1.getId(), 구매자.getId(), "친절하다", 5.0d);
+                new CreateReviewDto(판매자1이_평가한_경매.getId(), 판매자1.getId(), 구매자.getId(), "친절하다", 5.0d);
 
         // when & then
         assertThatThrownBy(() -> reviewService.create(createReviewDto))
