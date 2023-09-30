@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 @SuppressWarnings("NonAsciiCharacters")
 public class ReportControllerFixture extends CommonControllerSliceTest {
 
-    // TODO: 9/30/23 final을 붙일지 말지 고민되네요, 경고가 보기 싫어서 일단 private에만 붙인 상태입니다.
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(-999L);
     protected PrivateClaims 채팅방_참여자가_아닌_사용자_ID_클레임 = new PrivateClaims(999L);
@@ -25,8 +24,8 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected CreateAuctionReportRequest 경매_아이디가_음수인_신고_요청 = new CreateAuctionReportRequest(-999L, "신고합니다");
     protected static CreateAuctionReportRequest 신고_내용이_null인_경매_신고_요청 = new CreateAuctionReportRequest(1L, null);
     protected static CreateAuctionReportRequest 신고_내용이_빈값인_경매_신고_요청 = new CreateAuctionReportRequest(1L, "");
-    private final ReadUserInReportDto 판매자_정보 = new ReadUserInReportDto(1L, "판매자", 1L, 4.0d, "12345", false);
-    private final ReadAuctionInReportDto 신고할_경매_정보 = new ReadAuctionInReportDto(
+    private ReadUserInReportDto 판매자_정보 = new ReadUserInReportDto(1L, "판매자", 1L, 4.0d, "12345", false);
+    private ReadAuctionInReportDto 신고할_경매_정보 = new ReadAuctionInReportDto(
             1L,
             판매자_정보,
             "제목",
@@ -65,7 +64,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected CreateChatRoomReportRequest 채팅방_아이디가_음수인_신고_요청 = new CreateChatRoomReportRequest(-999L, "신고합니다");
     protected static CreateChatRoomReportRequest 신고_내용이_null인_채팅_신고_요청 = new CreateChatRoomReportRequest(1L, null);
     protected static CreateChatRoomReportRequest 신고_내용이_빈값인_채팅_신고_요청 = new CreateChatRoomReportRequest(-999L, "");
-    private final ReadAuctionInReportDto 신고할_채팅방의_경매_정보1 = new ReadAuctionInReportDto(
+    private ReadAuctionInReportDto 신고할_채팅방의_경매_정보1 = new ReadAuctionInReportDto(
             1L,
             판매자_정보,
             "제목",
@@ -76,8 +75,8 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             LocalDateTime.now().plusDays(2),
             2
     );
-    private final  ReadUserInReportDto 구매자_정보1 = new ReadUserInReportDto(2L, "구매자1", 2L, 4.0d, "12346", false);
-    private final ReadReporterDto 신고자_정보1 = new ReadReporterDto(2L, "구매자1", 2L, 4.0d, false);
+    private ReadUserInReportDto 구매자_정보1 = new ReadUserInReportDto(2L, "구매자1", 2L, 4.0d, "12346", false);
+    private ReadReporterDto 신고자_정보1 = new ReadReporterDto(2L, "구매자1", 2L, 4.0d, false);
     protected ReadChatRoomReportDto 채팅방_신고1 = new ReadChatRoomReportDto(
             1L,
             신고자_정보1,
@@ -85,7 +84,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보1, 구매자_정보1, false),
             "신고합니다."
     );
-    private final ReadAuctionInReportDto 신고할_채팅방의_경매_정보2 = new ReadAuctionInReportDto(
+    private ReadAuctionInReportDto 신고할_채팅방의_경매_정보2 = new ReadAuctionInReportDto(
             2L,
             판매자_정보,
             "제목",
@@ -96,8 +95,8 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             LocalDateTime.now().plusDays(2),
             2
     );
-    private final ReadUserInReportDto 구매자_정보2 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
-    private final ReadReporterDto 신고자_정보2 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
+    private ReadUserInReportDto 구매자_정보2 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
+    private ReadReporterDto 신고자_정보2 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
     protected ReadChatRoomReportDto 채팅방_신고2 = new ReadChatRoomReportDto(
             2L,
             신고자_정보2,
@@ -105,7 +104,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보2, 구매자_정보2, false),
             "신고합니다."
     );
-    private final ReadAuctionInReportDto 신고할_채팅방의_경매_정보3 = new ReadAuctionInReportDto(
+    private ReadAuctionInReportDto 신고할_채팅방의_경매_정보3 = new ReadAuctionInReportDto(
             3L,
             판매자_정보,
             "제목",
@@ -116,8 +115,8 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             LocalDateTime.now().plusDays(2),
             2
     );
-    private final ReadUserInReportDto 구매자_정보3 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
-    private final ReadReporterDto 신고자_정보3 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
+    private ReadUserInReportDto 구매자_정보3 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
+    private ReadReporterDto 신고자_정보3 = new ReadReporterDto(3L, "구매자2", 3L, 4.0d, false);
     protected ReadChatRoomReportDto 채팅방_신고3 = new ReadChatRoomReportDto(
             3L,
             신고자_정보3,
