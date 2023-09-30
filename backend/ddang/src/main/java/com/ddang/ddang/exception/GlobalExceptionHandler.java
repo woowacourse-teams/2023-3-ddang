@@ -29,6 +29,7 @@ import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomExcepti
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
+import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -322,6 +323,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, DeviceTokenNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyReviewException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyReviewException(
+            final AlreadyReviewException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReviewException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
