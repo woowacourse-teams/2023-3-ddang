@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.presentation.fixture;
 
-import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
@@ -14,12 +13,9 @@ import com.ddang.ddang.configuration.CommonControllerSliceTest;
 
 import java.time.LocalDateTime;
 
-import static org.mockito.Mockito.mock;
-
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomControllerFixture extends CommonControllerSliceTest {
 
-    protected final TokenDecoder tokenDecoder = mock(TokenDecoder.class);
     protected final PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected final ReadUserInChatRoomDto 판매자 = new ReadUserInChatRoomDto(1L, "판매자", 1L, 5.0d, false);
     private final ReadUserInChatRoomDto 구매자1 = new ReadUserInChatRoomDto(2L, "구매자1", 2L, 5.0d, false);
