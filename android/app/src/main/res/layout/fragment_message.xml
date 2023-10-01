@@ -50,7 +50,7 @@
             android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/message_not_exist_rooms"
-            android:textColor="@color/grey_800"
+            android:textColor="@color/grey_500"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

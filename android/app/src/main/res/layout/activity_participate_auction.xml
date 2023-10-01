@@ -32,21 +32,21 @@
                 app:tint="@color/grey_900" />
 
             <TextView
+                style="@style/Header1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_side_layout"
-                android:text="@string/my_participate_auction_list_title"
-                android:textColor="@color/grey_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                android:text="@string/my_participate_auction_list_title" />
         </androidx.appcompat.widget.Toolbar>
 
         <TextView
+            style="@style/Header2"
             isVisible="@{viewModel.isLast() &amp;&amp; (viewModel.auctions.size() == 0)}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/my_participate_auction_list_not_exist"
+            android:textColor="@color/grey_500"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tb_my_participate_auction" />
 

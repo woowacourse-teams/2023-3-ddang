@@ -45,9 +45,7 @@
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_weight="1"
                     android:text="@string/profile_change"
-                    android:textColor="@color/grey_900"
-                    android:textSize="@dimen/textsize_main_header"
-                    android:textStyle="bold" />
+                    style="@style/Header1" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -57,8 +55,7 @@
                     android:gravity="end"
                     android:onClick="@{()->viewModel.submitProfile(context)}"
                     android:text="@string/profile_change_confirm"
-                    android:textColor="@color/grey_900"
-                    android:textSize="@dimen/textsize_body" />
+                    style="@style/Body" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
@@ -113,9 +110,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/profile_change_nickname"
-            android:textColor="@color/grey_900"
-            android:textSize="16sp"
-            android:textStyle="bold"
+            style="@style/Header2"
             app:layout_constraintStart_toStartOf="@id/et_user_nickname"
             app:layout_constraintTop_toBottomOf="@id/cv_image" />
 
@@ -133,7 +128,7 @@
             android:paddingHorizontal="16dp"
             android:text="@={viewModel.userNickname}"
             android:textCursorDrawable="@drawable/ic_edittext_cursor"
-            android:textSize="14sp"
+            style="@style/Body"
             app:layout_constraintTop_toBottomOf="@id/tv_user_nickname" />
 
 
