@@ -17,15 +17,15 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
     private final JPAQueryFactory queryFactory;
 
     public List<Message> findMessagesAllByLastMessageId(
-            final Long userId,
+            final Long readUserId,
             final Long chatRoomId,
             final Long lastMessageId
     ) {
         return queryFactory
                 .selectFrom(message)
                 .where(
-                        message.writer.id.eq(userId)
-                                         .or(message.receiver.id.eq(userId)),
+                        message.writer.id.eq(readUserId)
+                                         .or(message.receiver.id.eq(readUserId)),
                         message.chatRoom.id.eq(chatRoomId),
                         isGreaterThanLastId(lastMessageId)
                 )
