@@ -68,7 +68,7 @@
             android:background="@drawable/bg_red_radius_24dp"
             android:onClick="@{() -> viewModel.submitKeyword()}"
             android:text="@string/search_keyword"
-            android:textColor="@color/chip_text_active"
+            android:textColor="@color/text_active_fixed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_search_keyword"
             app:layout_constraintTop_toTopOf="@id/et_search_keyword" />

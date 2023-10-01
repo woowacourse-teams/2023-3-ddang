@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">@color/red_50</color>
-    <color name="chip_text_active">@color/grey_900</color>
+    <color name="text_active_fixed">@color/grey_900</color>
     <color name="bottom_navigation_active">@color/red_500</color>
     <color name="auction_status_text_color">@color/grey_900</color>
 

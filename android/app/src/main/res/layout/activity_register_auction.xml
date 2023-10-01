@@ -309,7 +309,7 @@
                     android:onClick="@{() -> viewModel.submitAuction(context)}"
                     android:padding="0dp"
                     android:text="@string/register_auction"
-                    android:textColor="@color/chip_text_active"
+                    android:textColor="@color/text_active_fixed"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"

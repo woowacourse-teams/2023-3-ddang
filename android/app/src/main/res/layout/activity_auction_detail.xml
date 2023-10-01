@@ -361,7 +361,7 @@
             android:onClick="@{()->viewModel.handleAuctionDetailBottomButton()}"
             android:padding="0dp"
             android:text="@{AuctionDetailFormatter.INSTANCE.getAuctionBottomButtonText(context,viewModel.auctionDetailBottomButtonStatus)}"
-            android:textColor="@color/chip_text_active"
+            android:textColor="@color/text_active_fixed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

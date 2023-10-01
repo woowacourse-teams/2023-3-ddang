@@ -231,7 +231,7 @@
                 android:minHeight="0dp"
                 android:onClick="@{()->viewModel.sendMessage()}"
                 android:text="@string/message_room_message_submit"
-                android:textColor="@color/chip_text_active" />
+                android:textColor="@color/text_active_fixed" />
 
         </LinearLayout>
 
