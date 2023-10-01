@@ -49,15 +49,18 @@ public class JpaMessageRepositoryFixture {
                        .reliability(4.7d)
                        .oauthId("12346")
                        .build();
+
+        userRepository.save(채팅참여_판매자);
+        userRepository.save(채팅참여_구매자);
+
         경매 = Auction.builder()
                     .title("경매")
                     .build();
 
-        userRepository.save(채팅참여_판매자);
-        userRepository.save(채팅참여_구매자);
         auctionRepository.save(경매);
 
         final ChatRoom 채팅방 = new ChatRoom(경매, 채팅참여_구매자);
+
         chatRoomRepository.save(채팅방);
 
         메시지 = Message.builder()

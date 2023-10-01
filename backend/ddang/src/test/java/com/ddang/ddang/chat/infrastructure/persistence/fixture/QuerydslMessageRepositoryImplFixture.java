@@ -16,8 +16,11 @@ import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("NonAsciiCharacters")
-public class QuerydslMessageRepositoryFixture {
+public class QuerydslMessageRepositoryImplFixture {
 
     @PersistenceContext
     private EntityManager em;
@@ -60,18 +63,22 @@ public class QuerydslMessageRepositoryFixture {
                   .reliability(4.7d)
                   .oauthId("12345")
                   .build();
+
+        userRepository.save(판매자);
+        userRepository.save(구매자);
+
         경매 = Auction.builder()
                     .title("title")
                     .build();
 
-        userRepository.save(판매자);
-        userRepository.save(구매자);
         auctionRepository.save(경매);
 
         채팅방 = new ChatRoom(경매, 구매자);
+
         chatRoomRepository.save(채팅방);
 
         메시지_총_개수 = 10;
+        final List<Message> messages = new ArrayList<>();
         for (int count = 0; count < 메시지_총_개수; count++) {
             final Message message = Message.builder()
                                            .chatRoom(채팅방)
@@ -79,9 +86,9 @@ public class QuerydslMessageRepositoryFixture {
                                            .receiver(구매자)
                                            .contents("안녕하세요")
                                            .build();
-
-            messageRepository.save(message);
+            messages.add(message);
         }
+        messageRepository.saveAll(messages);
 
         em.flush();
         em.clear();
