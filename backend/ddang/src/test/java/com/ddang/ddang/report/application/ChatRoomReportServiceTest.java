@@ -2,13 +2,12 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.fixture.ChatRoomReportServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -29,15 +28,8 @@ class ChatRoomReportServiceTest extends ChatRoomReportServiceFixture {
 
     @Test
     void 채팅방_신고를_등록한다() {
-        // given
-        final CreateChatRoomReportDto createChatRoomReportDto = new CreateChatRoomReportDto(
-                채팅방1.getId(),
-                "신고합니다.",
-                판매자겸_아직_신고하지_않은_신고자.getId()
-        );
-
         // when
-        final Long actual = chatRoomReportService.create(createChatRoomReportDto);
+        final Long actual = chatRoomReportService.create(채팅방_신고_요청_dto);
 
         // then
         assertThat(actual).isPositive();
@@ -45,60 +37,32 @@ class ChatRoomReportServiceTest extends ChatRoomReportServiceFixture {
 
     @Test
     void 존재하지_않는_사용자가_채팅방을_신고할시_예외가_발생한다() {
-        // given
-        final CreateChatRoomReportDto createChatRoomReportDto = new CreateChatRoomReportDto(
-                채팅방1.getId(),
-                "신고합니다.",
-                존재하지_않는_사용자_아이디
-        );
-
         // when & then
-        assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
+        assertThatThrownBy(() -> chatRoomReportService.create(존재하지_않는_사용자의_채팅방_신고_요청_dto))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }
 
     @Test
     void 존재하지_않는_채팅방을_신고할시_예외가_발생한다() {
-        // given
-        final CreateChatRoomReportDto createChatRoomReportDto = new CreateChatRoomReportDto(
-                존재하지_않는_채팅방_아이디,
-                "신고합니다.",
-                판매자겸_아직_신고하지_않은_신고자.getId()
-        );
-
         // when & then
-        assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
+        assertThatThrownBy(() -> chatRoomReportService.create(존재하지_않는_채팅방_신고_요청_dto))
                 .isInstanceOf(ChatRoomNotFoundException.class)
                 .hasMessage("해당 채팅방을 찾을 수 없습니다.");
     }
 
     @Test
     void 판매자와_구매자_외의_사용자가_채팅방을_신고할시_예외가_발생한다() {
-        // given
-        final CreateChatRoomReportDto createChatRoomReportDto = new CreateChatRoomReportDto(
-                채팅방1.getId(),
-                "신고합니다.",
-                채팅방_참여자가_아닌_사용자.getId()
-        );
-
         // when & then
-        assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
+        assertThatThrownBy(() -> chatRoomReportService.create(참여자가_아닌_사용자의_채팅방_신고_요청_dto))
                 .isInstanceOf(InvalidChatRoomReportException.class)
                 .hasMessage("해당 채팅방을 신고할 권한이 없습니다.");
     }
 
     @Test
     void 이미_신고한_채팅방을_동일_사용자가_신고하는_경우_예외가_발생한다() {
-        // given
-        final CreateChatRoomReportDto createChatRoomReportDto = new CreateChatRoomReportDto(
-                채팅방1.getId(),
-                "신고합니다.",
-                이미_신고한_구매자1.getId()
-        );
-
         // when & then
-        assertThatThrownBy(() -> chatRoomReportService.create(createChatRoomReportDto))
+        assertThatThrownBy(() -> chatRoomReportService.create(이미_신고한_사용자의_채팅방_신고_요청_dto))
                 .isInstanceOf(AlreadyReportChatRoomException.class)
                 .hasMessage("이미 신고한 채팅방입니다.");
     }

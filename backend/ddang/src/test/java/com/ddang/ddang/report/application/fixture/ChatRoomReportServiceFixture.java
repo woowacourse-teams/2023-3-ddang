@@ -12,6 +12,7 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.domain.User;
@@ -46,28 +47,32 @@ public class ChatRoomReportServiceFixture {
     @Autowired
     private JpaChatRoomRepository chatRoomRepository;
 
-    protected Long 존재하지_않는_사용자_아이디 = -9999L;
-    protected Long 존재하지_않는_채팅방_아이디 = -9999L;
-    protected User 판매자;
-    protected User 판매자겸_아직_신고하지_않은_신고자;
     protected User 이미_신고한_구매자1;
     protected User 이미_신고한_구매자2;
     protected User 이미_신고한_구매자3;
-    protected User 채팅방_참여자가_아닌_사용자;
     protected ChatRoom 채팅방1;
     protected ChatRoom 채팅방2;
     protected ChatRoom 채팅방3;
 
+    protected CreateChatRoomReportDto 채팅방_신고_요청_dto;
+    protected CreateChatRoomReportDto 존재하지_않는_사용자의_채팅방_신고_요청_dto;
+    protected CreateChatRoomReportDto 존재하지_않는_채팅방_신고_요청_dto;
+    protected CreateChatRoomReportDto 참여자가_아닌_사용자의_채팅방_신고_요청_dto;
+    protected CreateChatRoomReportDto 이미_신고한_사용자의_채팅방_신고_요청_dto;
+
     @BeforeEach
     void setUp() {
+        final Long 존재하지_않는_사용자_아이디 = -9999L;
+        final Long 존재하지_않는_채팅방_아이디 = -9999L;
+
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
-        판매자 = User.builder()
-                  .name("판매자")
-                  .profileImage(프로필_이미지)
-                  .reliability(4.7d)
-                  .oauthId("12345")
-                  .build();
-        판매자겸_아직_신고하지_않은_신고자 = 판매자;
+        final User 판매자 = User.builder()
+                             .name("판매자")
+                             .profileImage(프로필_이미지)
+                             .reliability(4.7d)
+                             .oauthId("12345")
+                             .build();
+        final User 판매자겸_아직_신고하지_않은_신고자 = 판매자;
         이미_신고한_구매자1 = User.builder()
                           .name("구매자1")
                           .profileImage(프로필_이미지)
@@ -86,12 +91,12 @@ public class ChatRoomReportServiceFixture {
                           .reliability(4.7d)
                           .oauthId("12348")
                           .build();
-        채팅방_참여자가_아닌_사용자 = User.builder()
-                              .name("채팅방_참여자가_아닌_사용자")
-                              .profileImage(프로필_이미지)
-                              .reliability(4.7d)
-                              .oauthId("12349")
-                              .build();
+        final User 채팅방_참여자가_아닌_사용자 = User.builder()
+                                         .name("채팅방_참여자가_아닌_사용자")
+                                         .profileImage(프로필_이미지)
+                                         .reliability(4.7d)
+                                         .oauthId("12349")
+                                         .build();
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
@@ -146,5 +151,31 @@ public class ChatRoomReportServiceFixture {
         chatRoomRepository.saveAll(List.of(채팅방1, 채팅방2, 채팅방3));
 
         chatRoomReportRepository.saveAll(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
+
+        채팅방_신고_요청_dto = new CreateChatRoomReportDto(
+                채팅방1.getId(),
+                "신고합니다.",
+                판매자겸_아직_신고하지_않은_신고자.getId()
+        );
+        존재하지_않는_사용자의_채팅방_신고_요청_dto = new CreateChatRoomReportDto(
+                채팅방1.getId(),
+                "신고합니다.",
+                존재하지_않는_사용자_아이디
+        );
+        존재하지_않는_채팅방_신고_요청_dto = new CreateChatRoomReportDto(
+                존재하지_않는_채팅방_아이디,
+                "신고합니다.",
+                판매자겸_아직_신고하지_않은_신고자.getId()
+        );
+        참여자가_아닌_사용자의_채팅방_신고_요청_dto = new CreateChatRoomReportDto(
+                채팅방1.getId(),
+                "신고합니다.",
+                채팅방_참여자가_아닌_사용자.getId()
+        );
+        이미_신고한_사용자의_채팅방_신고_요청_dto = new CreateChatRoomReportDto(
+                채팅방1.getId(),
+                "신고합니다.",
+                이미_신고한_구매자1.getId()
+        );
     }
 }

@@ -93,7 +93,7 @@ class ReportControllerTest extends ReportControllerFixture {
         final ResultActions resultActions = mockMvc.perform(post("/reports/auctions")
                                                            .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                                                            .contentType(MediaType.APPLICATION_JSON)
-                                                           .content(objectMapper.writeValueAsString(경매_신고_요청))
+                                                           .content(objectMapper.writeValueAsString(경매_신고_request))
                                                    )
                                                    .andExpectAll(
                                                            status().isCreated(),
@@ -114,7 +114,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/auctions")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(경매_신고_요청))
+                       .content(objectMapper.writeValueAsString(경매_신고_request))
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -133,7 +133,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/auctions")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(경매_신고_요청))
+                       .content(objectMapper.writeValueAsString(경매_신고_request))
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -152,7 +152,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/auctions")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(경매_신고_요청))
+                       .content(objectMapper.writeValueAsString(경매_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -171,7 +171,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/auctions")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(경매_신고_요청))
+                       .content(objectMapper.writeValueAsString(경매_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -190,7 +190,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/auctions")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(경매_신고_요청))
+                       .content(objectMapper.writeValueAsString(경매_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -207,7 +207,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/auctions")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(경매_아이디가_없는_신고_요청))
+                       .content(objectMapper.writeValueAsString(경매_아이디가_없는_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -224,7 +224,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/auctions")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(경매_아이디가_음수인_신고_요청))
+                       .content(objectMapper.writeValueAsString(경매_아이디가_음수인_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -251,14 +251,14 @@ class ReportControllerTest extends ReportControllerFixture {
     }
 
     private static Stream<CreateAuctionReportRequest> provideAuctionReportRequestWithEmptyDescription() {
-        return Stream.of(신고_내용이_null인_경매_신고_요청, 신고_내용이_빈값인_경매_신고_요청);
+        return Stream.of(신고_내용이_null인_경매_신고_request, 신고_내용이_빈값인_경매_신고_request);
     }
 
     @Test
     void 전체_경매_신고_목록을_조회한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(auctionReportService.readAll()).willReturn(List.of(경매_신고1, 경매_신고2, 경매_신고3));
+        given(auctionReportService.readAll()).willReturn(List.of(경매_신고_dto1, 경매_신고_dto2, 경매_신고_dto3));
 
         // when & then
         final ResultActions resultActions =
@@ -267,27 +267,27 @@ class ReportControllerTest extends ReportControllerFixture {
                        )
                        .andExpectAll(
                                status().isOk(),
-                               jsonPath("$.reports.[0].id", is(경매_신고1.id()), Long.class),
-                               jsonPath("$.reports.[0].reporter.id", is(경매_신고1.reporterDto().id()), Long.class),
-                               jsonPath("$.reports.[0].reporter.name", is(경매_신고1.reporterDto().name())),
+                               jsonPath("$.reports.[0].id", is(경매_신고_dto1.id()), Long.class),
+                               jsonPath("$.reports.[0].reporter.id", is(경매_신고_dto1.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[0].reporter.name", is(경매_신고_dto1.reporterDto().name())),
                                jsonPath("$.reports.[0].createdTime").exists(),
-                               jsonPath("$.reports.[0].auction.id", is(경매_신고1.auctionDto().id()), Long.class),
-                               jsonPath("$.reports.[0].auction.title", is(경매_신고1.auctionDto().title())),
-                               jsonPath("$.reports.[0].description", is(경매_신고1.description())),
-                               jsonPath("$.reports.[1].id", is(경매_신고2.id()), Long.class),
-                               jsonPath("$.reports.[1].reporter.id", is(경매_신고2.reporterDto().id()), Long.class),
-                               jsonPath("$.reports.[1].reporter.name", is(경매_신고2.reporterDto().name())),
+                               jsonPath("$.reports.[0].auction.id", is(경매_신고_dto1.auctionDto().id()), Long.class),
+                               jsonPath("$.reports.[0].auction.title", is(경매_신고_dto1.auctionDto().title())),
+                               jsonPath("$.reports.[0].description", is(경매_신고_dto1.description())),
+                               jsonPath("$.reports.[1].id", is(경매_신고_dto2.id()), Long.class),
+                               jsonPath("$.reports.[1].reporter.id", is(경매_신고_dto2.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[1].reporter.name", is(경매_신고_dto2.reporterDto().name())),
                                jsonPath("$.reports.[1].createdTime").exists(),
-                               jsonPath("$.reports.[1].auction.id", is(경매_신고2.auctionDto().id()), Long.class),
-                               jsonPath("$.reports.[1].auction.title", is(경매_신고2.auctionDto().title())),
-                               jsonPath("$.reports.[1].description", is(경매_신고2.description())),
-                               jsonPath("$.reports.[2].id", is(경매_신고3.id()), Long.class),
-                               jsonPath("$.reports.[2].reporter.id", is(경매_신고3.reporterDto().id()), Long.class),
-                               jsonPath("$.reports.[2].reporter.name", is(경매_신고3.reporterDto().name())),
+                               jsonPath("$.reports.[1].auction.id", is(경매_신고_dto2.auctionDto().id()), Long.class),
+                               jsonPath("$.reports.[1].auction.title", is(경매_신고_dto2.auctionDto().title())),
+                               jsonPath("$.reports.[1].description", is(경매_신고_dto2.description())),
+                               jsonPath("$.reports.[2].id", is(경매_신고_dto3.id()), Long.class),
+                               jsonPath("$.reports.[2].reporter.id", is(경매_신고_dto3.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[2].reporter.name", is(경매_신고_dto3.reporterDto().name())),
                                jsonPath("$.reports.[2].createdTime").exists(),
-                               jsonPath("$.reports.[2].auction.id", is(경매_신고3.auctionDto().id()), Long.class),
-                               jsonPath("$.reports.[2].auction.title", is(경매_신고3.auctionDto().title())),
-                               jsonPath("$.reports.[2].description", is(경매_신고3.description()))
+                               jsonPath("$.reports.[2].auction.id", is(경매_신고_dto3.auctionDto().id()), Long.class),
+                               jsonPath("$.reports.[2].auction.title", is(경매_신고_dto3.auctionDto().title())),
+                               jsonPath("$.reports.[2].description", is(경매_신고_dto3.description()))
                        );
 
         readAllAuctionReport_문서화(resultActions);
@@ -303,7 +303,7 @@ class ReportControllerTest extends ReportControllerFixture {
         final ResultActions resultActions = mockMvc.perform(post("/reports/chat-rooms")
                                                            .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                                                            .contentType(MediaType.APPLICATION_JSON)
-                                                           .content(objectMapper.writeValueAsString(채팅방_신고_요청))
+                                                           .content(objectMapper.writeValueAsString(채팅방_신고_request))
                                                    )
                                                    .andExpectAll(
                                                            status().isCreated(),
@@ -324,7 +324,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/chat-rooms")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(채팅방_신고_요청))
+                       .content(objectMapper.writeValueAsString(채팅방_신고_request))
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -343,7 +343,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/chat-rooms")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(존재하지_않는_채팅방_신고_요청))
+                       .content(objectMapper.writeValueAsString(존재하지_않는_채팅방_신고_request))
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -362,7 +362,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/chat-rooms")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(채팅방_신고_요청))
+                       .content(objectMapper.writeValueAsString(채팅방_신고_request))
                )
                .andExpectAll(
                        status().isForbidden(),
@@ -381,7 +381,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/chat-rooms")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(채팅방_신고_요청))
+                       .content(objectMapper.writeValueAsString(채팅방_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -398,7 +398,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/chat-rooms")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(채팅방_아이디가_null인_신고_요청))
+                       .content(objectMapper.writeValueAsString(채팅방_아이디가_null인_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -415,7 +415,7 @@ class ReportControllerTest extends ReportControllerFixture {
         mockMvc.perform(post("/reports/chat-rooms")
                        .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
                        .contentType(MediaType.APPLICATION_JSON)
-                       .content(objectMapper.writeValueAsString(채팅방_아이디가_음수인_신고_요청))
+                       .content(objectMapper.writeValueAsString(채팅방_아이디가_음수인_신고_request))
                )
                .andExpectAll(
                        status().isBadRequest(),
@@ -442,14 +442,14 @@ class ReportControllerTest extends ReportControllerFixture {
     }
 
     private static Stream<CreateChatRoomReportRequest> provideChatRoomReportRequestWithEmptyDescription() {
-        return Stream.of(신고_내용이_null인_채팅_신고_요청, 신고_내용이_빈값인_채팅_신고_요청);
+        return Stream.of(신고_내용이_null인_채팅_신고_request, 신고_내용이_빈값인_채팅_신고_request);
     }
 
     @Test
     void 전체_채팅방_신고_목록을_조회한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.readAll()).willReturn(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
+        given(chatRoomReportService.readAll()).willReturn(List.of(채팅방_신고1, 채팅방_신고_dto2, 채팅방_신고_dto3));
 
         // when & then
         final ResultActions resultActions =
@@ -464,18 +464,18 @@ class ReportControllerTest extends ReportControllerFixture {
                                jsonPath("$.reports.[0].createdTime").exists(),
                                jsonPath("$.reports.[0].chatRoom.id", is(채팅방_신고1.chatRoomDto().id()), Long.class),
                                jsonPath("$.reports.[0].description", is(채팅방_신고1.description())),
-                               jsonPath("$.reports.[1].id", is(채팅방_신고2.id()), Long.class),
-                               jsonPath("$.reports.[1].reporter.id", is(채팅방_신고2.reporterDto().id()), Long.class),
-                               jsonPath("$.reports.[1].reporter.name", is(채팅방_신고2.reporterDto().name())),
+                               jsonPath("$.reports.[1].id", is(채팅방_신고_dto2.id()), Long.class),
+                               jsonPath("$.reports.[1].reporter.id", is(채팅방_신고_dto2.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[1].reporter.name", is(채팅방_신고_dto2.reporterDto().name())),
                                jsonPath("$.reports.[1].createdTime").exists(),
-                               jsonPath("$.reports.[1].chatRoom.id", is(채팅방_신고2.chatRoomDto().id()), Long.class),
-                               jsonPath("$.reports.[1].description", is(채팅방_신고2.description())),
-                               jsonPath("$.reports.[2].id", is(채팅방_신고3.id()), Long.class),
-                               jsonPath("$.reports.[2].reporter.id", is(채팅방_신고3.reporterDto().id()), Long.class),
-                               jsonPath("$.reports.[2].reporter.name", is(채팅방_신고3.reporterDto().name())),
+                               jsonPath("$.reports.[1].chatRoom.id", is(채팅방_신고_dto2.chatRoomDto().id()), Long.class),
+                               jsonPath("$.reports.[1].description", is(채팅방_신고_dto2.description())),
+                               jsonPath("$.reports.[2].id", is(채팅방_신고_dto3.id()), Long.class),
+                               jsonPath("$.reports.[2].reporter.id", is(채팅방_신고_dto3.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[2].reporter.name", is(채팅방_신고_dto3.reporterDto().name())),
                                jsonPath("$.reports.[2].createdTime").exists(),
-                               jsonPath("$.reports.[2].chatRoom.id", is(채팅방_신고3.chatRoomDto().id()), Long.class),
-                               jsonPath("$.reports.[2].description", is(채팅방_신고3.description()))
+                               jsonPath("$.reports.[2].chatRoom.id", is(채팅방_신고_dto3.chatRoomDto().id()), Long.class),
+                               jsonPath("$.reports.[2].description", is(채팅방_신고_dto3.description()))
                        );
 
         readAllChatRoomReport_문서화(resultActions);

@@ -42,12 +42,12 @@ public class AuctionReportServiceFixture {
     @Autowired
     private JpaAuctionReportRepository auctionReportRepository;
 
-    protected CreateAuctionReportDto 새로운_경매_신고_요청;
-    protected CreateAuctionReportDto 존재하지_않는_사용자의_경매_신고_요청;
-    protected CreateAuctionReportDto 존재하지_않는_경매_신고_요청;
-    protected CreateAuctionReportDto 판매자가_본인의_경매_신고_요청;
-    protected CreateAuctionReportDto 삭제된_경매_신고_요청;
-    protected CreateAuctionReportDto 이미_신고한_사용자가_경매_신고_요청;
+    protected CreateAuctionReportDto 새로운_경매_신고_요청_dto;
+    protected CreateAuctionReportDto 존재하지_않는_사용자의_경매_신고_요청_dto;
+    protected CreateAuctionReportDto 존재하지_않는_경매_신고_요청_dto;
+    protected CreateAuctionReportDto 판매자가_본인의_경매_신고_요청_dto;
+    protected CreateAuctionReportDto 삭제된_경매_신고_요청_dto;
+    protected CreateAuctionReportDto 이미_신고한_사용자가_경매_신고_요청_dto;
     protected User 이미_신고한_신고자1;
     protected User 이미_신고한_신고자2;
     protected User 이미_신고한_신고자3;
@@ -130,32 +130,32 @@ public class AuctionReportServiceFixture {
 
         auctionReportRepository.saveAll(List.of(경매_신고1, 경매_신고2, 경매_신고3));
 
-        새로운_경매_신고_요청 = new CreateAuctionReportDto(
+        새로운_경매_신고_요청_dto = new CreateAuctionReportDto(
                 경매.getId(),
                 "신고합니다",
                 새로운_신고자.getId()
         );
-        존재하지_않는_사용자의_경매_신고_요청 = new CreateAuctionReportDto(
+        존재하지_않는_사용자의_경매_신고_요청_dto = new CreateAuctionReportDto(
                 경매.getId(),
                 "신고합니다",
                 존재하지_않는_사용자_아이디
         );
-        존재하지_않는_경매_신고_요청 = new CreateAuctionReportDto(
+        존재하지_않는_경매_신고_요청_dto = new CreateAuctionReportDto(
                 존재하지_않는_경매_아이디,
                 "신고합니다",
                 새로운_신고자.getId()
         );
-        판매자가_본인의_경매_신고_요청 = new CreateAuctionReportDto(
+        판매자가_본인의_경매_신고_요청_dto = new CreateAuctionReportDto(
                 경매.getId(),
                 "신고합니다",
                 판매자.getId()
         );
-        삭제된_경매_신고_요청 = new CreateAuctionReportDto(
+        삭제된_경매_신고_요청_dto = new CreateAuctionReportDto(
                 삭제된_경매.getId(),
                 "신고합니다",
                 새로운_신고자.getId()
         );
-        이미_신고한_사용자가_경매_신고_요청 = new CreateAuctionReportDto(
+        이미_신고한_사용자가_경매_신고_요청_dto = new CreateAuctionReportDto(
                 경매.getId(),
                 "신고합니다",
                 이미_신고한_신고자1.getId()
