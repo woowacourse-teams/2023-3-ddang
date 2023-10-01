@@ -319,10 +319,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
                     android:text="@{viewModel.auctionDetailModel.sellerModel.nickname}"
+                    app:layout_constraintBottom_toTopOf="@id/iv_reliability_icon"
                     app:layout_constraintStart_toEndOf="@id/cv_profile"
-                    app:layout_constraintTop_toBottomOf="@id/tv_seller_info"
+                    app:layout_constraintTop_toTopOf="@id/cv_profile"
+                    app:layout_constraintVertical_chainStyle="packed"
                     tools:text="카붕이" />
 
                 <ImageView
@@ -331,6 +332,8 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/all_reliability_icon_description"
                     android:src="@drawable/ic_star_18"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="@id/cv_profile"
                     app:layout_constraintStart_toStartOf="@id/tv_seller_nickname"
                     app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname" />
 
@@ -341,6 +344,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="@{@string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
                     app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
                     app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"

@@ -60,6 +60,7 @@
             android:layout_marginTop="4dp"
             android:contentDescription="@string/all_reliability_icon_description"
             android:src="@drawable/ic_star_18"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/cv_profile_image"
             app:layout_constraintStart_toStartOf="@id/tv_nickname"
             app:layout_constraintTop_toBottomOf="@id/tv_nickname" />
@@ -71,6 +72,7 @@
             android:layout_marginStart="4dp"
             android:text="@{@string/all_reliability(profile.reliability)}"
             style="@style/Body"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
             app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
             app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"
