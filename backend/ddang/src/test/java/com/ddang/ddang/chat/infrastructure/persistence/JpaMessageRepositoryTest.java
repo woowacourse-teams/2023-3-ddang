@@ -1,10 +1,12 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
+import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.fixture.JpaMessageRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -29,13 +31,19 @@ class JpaMessageRepositoryTest extends JpaMessageRepositoryFixture {
     @Test
     void 메시지를_저장한다() {
         // when
-        messageRepository.save(메시지);
+        final Message actual = messageRepository.save(메시지);
 
         em.flush();
         em.clear();
 
         // then
-        assertThat(메시지.getId()).isPositive();
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.getId()).isPositive();
+            softAssertions.assertThat(actual.getContents()).isEqualTo(메시지.getContents());
+            softAssertions.assertThat(actual.getWriter()).isEqualTo(메시지.getWriter());
+            softAssertions.assertThat(actual.getReceiver()).isEqualTo(메시지.getReceiver());
+            softAssertions.assertThat(actual.getChatRoom()).isEqualTo(메시지.getChatRoom());
+        });
     }
 
     @Test
