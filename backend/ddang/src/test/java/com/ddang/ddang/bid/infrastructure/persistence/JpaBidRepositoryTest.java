@@ -36,13 +36,13 @@ class JpaBidRepositoryTest extends JpaBidRepositoryFixture {
         final Bid bid = new Bid(경매1, 입찰자1, 입찰액);
 
         // when
-        bidRepository.save(bid);
+        final Bid actual = bidRepository.save(bid);
 
         // then
         em.flush();
         em.clear();
 
-        assertThat(bid.getId()).isPositive();
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test
