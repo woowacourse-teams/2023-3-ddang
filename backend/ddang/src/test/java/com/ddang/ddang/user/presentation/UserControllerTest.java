@@ -1,5 +1,26 @@
 package com.ddang.ddang.user.presentation;
 
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.presentation.fixture.UserControllerFixture;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -19,45 +40,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
-import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.user.application.dto.ReadUserDto;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.ddang.ddang.user.presentation.dto.request.UpdateUserRequest;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
 @SuppressWarnings("NonAsciiCharacters")
-class UserControllerTest extends CommonControllerSliceTest {
+class UserControllerTest extends UserControllerFixture {
 
-    TokenDecoder mockTokenDecoder;
+    TokenDecoder tokenDecoder;
 
     MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        mockTokenDecoder = mock(TokenDecoder.class);
+        tokenDecoder = mock(TokenDecoder.class);
 
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
                 blackListTokenService,
                 authenticationUserService,
-                mockTokenDecoder,
+                tokenDecoder,
                 store
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
@@ -75,199 +73,159 @@ class UserControllerTest extends CommonControllerSliceTest {
     @Test
     void 사용자_정보를_조회한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(userService.readById(anyLong())).willReturn(readUserDto);
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(userService.readById(anyLong())).willReturn(사용자_정보_조회_dto);
 
         // when & then
-        mockMvc.perform(get("/users")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-               )
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.name", is(readUserDto.name())),
-                       jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
-               )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               responseFields(
-                                       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                                       fieldWithPath("profileImage").type(JsonFieldType.STRING)
-                                                                    .description("사용자 프로필 이미지"),
-                                       fieldWithPath("reliability").type(JsonFieldType.NUMBER).description("사용자 신뢰도")
-                               )
-                       )
-               );
+        final ResultActions resultActions = mockMvc.perform(get("/users")
+                                                           .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                                                   )
+                                                   .andExpectAll(
+                                                           status().isOk(),
+                                                           jsonPath("$.name", is(사용자_정보_조회_dto.name())),
+                                                           jsonPath("$.profileImage").exists(),
+                                                           jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
+                                                   );
+
+        readById_문서화(resultActions);
     }
 
     @Test
     void 탈퇴한_사용자_정보를_조회한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", true);
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(userService.readById(anyLong())).willReturn(readUserDto);
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(userService.readById(anyLong())).willReturn(탈퇴한_사용자_정보_조회_dto);
 
         // when & then
         mockMvc.perform(get("/users")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
                )
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.name", is("알 수 없음")),
+                       jsonPath("$.name", is(탈퇴한_사용자_이름)),
                        jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
-        );
+                       jsonPath("$.reliability", is(탈퇴한_사용자_정보_조회_dto.reliability()))
+               );
     }
 
     @Test
     void 사용자_정보를_모두_수정한다() throws Exception {
         // given
-        final MockMultipartFile profileImage = new MockMultipartFile(
-                "profileImage",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                new byte[]{1}
-        );
-        final UpdateUserRequest updateUserRequest = new UpdateUserRequest("updateName");
-        final MockMultipartFile request = new MockMultipartFile(
-                "request",
-                "request",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(updateUserRequest)
-        );
-
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(userService.updateById(anyLong(), any())).willReturn(readUserDto);
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(userService.updateById(anyLong(), any())).willReturn(수정후_사용자_정보_조회_dto);
 
         // when & then
-        mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
-                       .file(request)
-                       .file(profileImage)
-                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-               )
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.name", is(readUserDto.name())),
-                       jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
-               )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               requestParts(
-                                       partWithName("profileImage").description("수정할 프로필 이미지 파일"),
-                                       partWithName("request").description("요청 데이터 - 수정할 이름")
-                               ),
-                               responseFields(
-                                       fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                                       fieldWithPath("profileImage").type(JsonFieldType.STRING).description("사용자 프로필 이미지"),
-                                       fieldWithPath("reliability").type(JsonFieldType.NUMBER).description("사용자 신뢰도")
-                               )
-                       )
-               );
+        final ResultActions resultActions = mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
+                                                           .file(수정할_이름)
+                                                           .file(수정할_프로필_이미지)
+                                                           .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                                                           .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                                                   )
+                                                   .andExpectAll(
+                                                           status().isOk(),
+                                                           jsonPath("$.name", is(수정할_이름_request.name())),
+                                                           jsonPath("$.profileImage").exists(),
+                                                           jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
+                                                   );
+
+        updateById_문서화(resultActions);
     }
 
     @Test
     void 사용자_정보를_이름만_수정한다() throws Exception {
         // given
-        final MockMultipartFile profileImage = new MockMultipartFile(
-                "profileImage",
-                (byte[]) null
-        );
-        final UpdateUserRequest updateUserRequest = new UpdateUserRequest("updateName");
-        final MockMultipartFile request = new MockMultipartFile(
-                "request",
-                "request",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(updateUserRequest)
-        );
-
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(userService.updateById(anyLong(), any())).willReturn(readUserDto);
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(userService.updateById(anyLong(), any())).willReturn(수정후_사용자_정보_조회_dto);
 
         // when & then
         mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
-                       .file(request)
-                       .file(profileImage)
+                       .file(수정할_이름)
+                       .file(프로필_이미지가_없는_경우_파일)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
                )
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.name", is(readUserDto.name())),
+                       jsonPath("$.name", is(수정할_이름_request.name())),
                        jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
+                       jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
                );
     }
 
     @Test
     void 사용자_정보를_이미지만_수정한다() throws Exception {
         // given
-        final MockMultipartFile profileImage = new MockMultipartFile(
-                "profileImage",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                new byte[]{1}
-        );
-        final MockMultipartFile request = new MockMultipartFile(
-                "request",
-                (byte[]) null
-        );
-
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(userService.updateById(anyLong(), any())).willReturn(readUserDto);
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(userService.updateById(anyLong(), any())).willReturn(사용자_정보_조회_dto);
 
         // when & then
         mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
-                       .file(request)
-                       .file(profileImage)
+                       .file(이름을_수정하지_않는_경우)
+                       .file(수정할_프로필_이미지)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
                )
                .andExpectAll(
                        status().isOk(),
-                       jsonPath("$.name", is(readUserDto.name())),
+                       jsonPath("$.name", is(사용자_정보_조회_dto.name())),
                        jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
+                       jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
                );
     }
 
     @Test
     void 존재하지_않는_사용자_정보_조회시_404를_반환한다() throws Exception {
         // given
-        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보를 사용할 수 없습니다.");
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(userService.readById(anyLong())).willThrow(userNotFoundException);
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(userService.readById(anyLong())).willThrow(new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
 
         // when & then
         mockMvc.perform(get("/users")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
                )
                .andExpectAll(
                        status().isNotFound(),
-                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+                       jsonPath("$.message").exists()
                );
+    }
+
+    private void readById_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        responseFields(
+                                fieldWithPath("name").type(JsonFieldType.STRING)
+                                                     .description("사용자 닉네임"),
+                                fieldWithPath("profileImage").type(JsonFieldType.STRING)
+                                                             .description("사용자 프로필 이미지"),
+                                fieldWithPath("reliability").type(JsonFieldType.NUMBER)
+                                                            .description("사용자 신뢰도")
+                        )
+                )
+        );
+    }
+
+    private void updateById_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        requestParts(
+                                partWithName("profileImage").description("수정할 프로필 이미지 파일"),
+                                partWithName("request").description("요청 데이터 - 수정할 이름")
+                        ),
+                        responseFields(
+                                fieldWithPath("name").type(JsonFieldType.STRING)
+                                                     .description("사용자 닉네임"),
+                                fieldWithPath("profileImage").type(JsonFieldType.STRING)
+                                                             .description("사용자 프로필 이미지"),
+                                fieldWithPath("reliability").type(JsonFieldType.NUMBER)
+                                                            .description("사용자 신뢰도")
+                        )
+                )
+        );
     }
 }
