@@ -30,7 +30,7 @@ import static org.mockito.BDDMockito.given;
 class FcmNotificationServiceTest {
 
     @MockBean
-    FirebaseMessaging mockFirebaseMessaging;
+    FirebaseMessaging firebaseMessaging;
 
     @Autowired
     NotificationService notificationService;
