@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:onClick="@{() -> onItemClick.invoke(region.id)}"
-        android:background="@color/grey_50_to_red_900_selected">
+        android:background="@color/grey_50_to_primary_selected">
 
         <TextView
             android:id="@+id/tv_region"

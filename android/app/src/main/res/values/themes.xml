@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.DdangDdangDdang" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/red_900</item>
+        <item name="colorPrimary">@color/primary</item>
         <item name="android:datePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:timePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -40,9 +40,9 @@
 
     <style name="App.Custom.HomeFilterChip" parent="Widget.Material3.Chip.Filter">
         <item name="android:textAppearance">@style/ChipText</item>
-        <item name="android:textColor">@color/grey_900_to_grey_50_checked</item>
-        <item name="chipBackgroundColor">@color/grey_50_to_red_900_checked</item>
-        <item name="chipStrokeColor">@color/grey_500_to_red_900_checked</item>
+        <item name="android:textColor">@color/grey_900_to_chip_text_active_checked</item>
+        <item name="chipBackgroundColor">@color/grey_50_to_primary_checked</item>
+        <item name="chipStrokeColor">@color/grey_500_to_primary_checked</item>
         <item name="checkedIcon">@null</item>
     </style>
 </resources>

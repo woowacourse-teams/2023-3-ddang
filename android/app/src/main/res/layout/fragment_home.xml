@@ -108,7 +108,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:backgroundTint="@color/red_900"
+            android:backgroundTint="@color/primary"
             android:contentDescription="@string/home_register_auction_button_description"
             android:onClick="@{() -> viewModel.navigateToRegisterAuction()}"
             android:src="@drawable/ic_create_24"

@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{context.getString(auctionStatus.progressStatusId)}"
-            android:textColor="@color/grey_50"
+            android:textColor="@color/auction_status_text_color"
             app:layout_constraintBottom_toBottomOf="@id/v_auction_status"
             app:layout_constraintEnd_toEndOf="@id/v_auction_status"
             app:layout_constraintStart_toStartOf="@id/v_auction_status"
