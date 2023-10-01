@@ -9,6 +9,9 @@
         <item name="android:windowBackground">@color/white</item>
         <item name="colorControlActivated">@color/red_800</item>
         <item name="android:textColorHighlight">@color/red_700</item>
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:fontFamily">@font/pretendard</item>
     </style>
 
     <style name="Theme.DdangDdangDdang" parent="Base.Theme.DdangDdangDdang" />
@@ -36,11 +39,10 @@
     </style>
 
     <style name="App.Custom.HomeFilterChip" parent="Widget.Material3.Chip.Filter">
-        <item name="chipBackgroundColor">@color/grey_50_to_red_900_checked</item>
+        <item name="android:textAppearance">@style/ChipText</item>
         <item name="android:textColor">@color/grey_900_to_grey_50_checked</item>
+        <item name="chipBackgroundColor">@color/grey_50_to_red_900_checked</item>
         <item name="chipStrokeColor">@color/grey_500_to_red_900_checked</item>
-        <item name="android:textSize">@dimen/textsize_filter_chips</item>
-        <item name="android:textStyle">bold</item>
         <item name="checkedIcon">@null</item>
     </style>
 </resources>
