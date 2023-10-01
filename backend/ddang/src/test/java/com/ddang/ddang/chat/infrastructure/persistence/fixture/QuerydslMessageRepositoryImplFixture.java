@@ -48,6 +48,7 @@ public class QuerydslMessageRepositoryImplFixture {
     protected Auction 경매;
     protected ChatRoom 채팅방;
     protected int 메시지_총_개수;
+    protected List<Message> 저장된_메시지들;
 
     @BeforeEach
     void setUp() {
@@ -78,7 +79,7 @@ public class QuerydslMessageRepositoryImplFixture {
         chatRoomRepository.save(채팅방);
 
         메시지_총_개수 = 10;
-        final List<Message> messages = new ArrayList<>();
+        저장된_메시지들 = new ArrayList<>();
         for (int count = 0; count < 메시지_총_개수; count++) {
             final Message message = Message.builder()
                                            .chatRoom(채팅방)
@@ -86,9 +87,9 @@ public class QuerydslMessageRepositoryImplFixture {
                                            .receiver(구매자)
                                            .contents("안녕하세요")
                                            .build();
-            messages.add(message);
+            저장된_메시지들.add(message);
         }
-        messageRepository.saveAll(messages);
+        messageRepository.saveAll(저장된_메시지들);
 
         em.flush();
         em.clear();
