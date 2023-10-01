@@ -34,7 +34,7 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 마지막으로_읽은_메시지_이후에_추가된_메시지를_조회한다() {
         // when
-        final Long lastMessageId = 저장된_메시지들.get(2).getId(); // 세 번째 메시지 아이디
+        final Long lastMessageId = 저장된_메시지들.get(2).getId();
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 판매자.getId(),
                 채팅방.getId(),
@@ -58,7 +58,7 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 상대방이_메시지를_추가한_경우_마지막으로_읽은_메시지_이후의_메시지를_조회한다() {
         // when
-        final Long lastMessageId = 저장된_메시지들.get(2).getId(); // 세 번째 메시지 아이디
+        final Long lastMessageId = 저장된_메시지들.get(2).getId();
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
@@ -82,7 +82,7 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 마지막으로_읽은_메시지_이후의_메시지가_없는_경우_빈_리스트를_반환한다() {
         // when
-        final Long lastMessageId = 저장된_메시지들.get(메시지_총_개수 - 1).getId(); // 마지막 메시지 아이디
+        final Long lastMessageId = 저장된_메시지들.get(메시지_총_개수 - 1).getId();
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
