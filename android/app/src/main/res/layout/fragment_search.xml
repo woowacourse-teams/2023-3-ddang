@@ -31,9 +31,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:text="@string/search"
-                android:textColor="@color/grey_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                style="@style/Header1"
+                />
         </androidx.appcompat.widget.Toolbar>
 
         <EditText
@@ -52,7 +51,7 @@
             android:paddingHorizontal="16dp"
             android:text="@={viewModel.keyword}"
             android:textCursorDrawable="@drawable/ic_edittext_cursor"
-            android:textSize="@dimen/textsize_body"
+            style="@style/Body"
             app:layout_constraintBottom_toTopOf="@id/rv_search_auctions"
             app:layout_constraintEnd_toStartOf="@id/btn_search"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -68,7 +67,8 @@
             android:background="@drawable/bg_red_radius_24dp"
             android:onClick="@{() -> viewModel.submitKeyword()}"
             android:text="@string/search_keyword"
-            android:textStyle="bold"
+            style="@style/Header2"
+            android:textColor="@color/chip_text_active"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_search_keyword"
             app:layout_constraintTop_toTopOf="@id/et_search_keyword" />
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:text="@string/search_notice_no_auction"
             android:textColor="@color/grey_500"
-            android:textSize="@dimen/textsize_sub_header"
+            style="@style/Header1"
             android:visibility="@{viewModel.searchStatus instanceof SearchStatus.NoData ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -92,7 +92,7 @@
             android:layout_height="wrap_content"
             android:text="@string/search_notice_input_keyword"
             android:textColor="@color/grey_500"
-            android:textSize="@dimen/textsize_sub_header"
+            style="@style/Header2"
             android:visibility="@{viewModel.searchStatus instanceof SearchStatus.BeforeSearch ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
