@@ -48,6 +48,7 @@
 
                 <TextView
                     android:id="@+id/tv_detail_title"
+                    style="@style/Header1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
@@ -59,10 +60,7 @@
                     android:selected="@{true}"
                     android:singleLine="true"
                     android:text="@{viewModel.auctionDetailModel.title}"
-                    android:textColor="@color/grey_900"
                     android:textIsSelectable="true"
-                    android:textSize="@dimen/textsize_main_header"
-                    android:textStyle="bold"
                     tools:text="M1 맥북 에어" />
 
                 <ImageView
@@ -131,21 +129,21 @@
 
                 <TextView
                     android:id="@+id/tv_auction_category"
+                    style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{AuctionDetailFormatter.INSTANCE.formatCategoryText(context, viewModel.auctionDetailModel.mainCategory,viewModel.auctionDetailModel.subCategory)}"
                     android:textColor="@color/grey_500"
-                    android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tl_indicator"
                     tools:text="가전 > 노트북" />
 
                 <TextView
+                    style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{viewModel.auctionDetailModel.registerTime.toLocalDate().toString()}"
                     android:textColor="@color/grey_500"
-                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_auction_category"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintTop_toTopOf="@id/tv_auction_category"
@@ -153,6 +151,7 @@
 
                 <TextView
                     android:id="@+id/tv_auction_status"
+                    style="@style/Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
@@ -160,22 +159,21 @@
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
                     android:text="@{viewModel.auctionDetailModel.auctionDetailStatusModel.progressStatus}"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
+                    android:textColor="@color/grey_50"
+                    android:textFontWeight="700"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_auction_category"
-                    tools:background="@color/red_900"
+                    tools:background="@color/red_300"
                     tools:text="경매중" />
 
                 <TextView
                     android:id="@+id/tv_auction_closingTime"
+                    style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="14dp"
                     android:text="@{AuctionDetailFormatter.INSTANCE.formatClosingTime(viewModel.auctionDetailModel.closingTime)}"
                     android:textColor="@color/grey_500"
-                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@id/tv_auction_status"
                     app:layout_constraintStart_toEndOf="@id/tv_auction_status"
                     app:layout_constraintTop_toTopOf="@id/tv_auction_status"
@@ -183,36 +181,35 @@
 
                 <TextView
                     android:id="@+id/tv_last_bid_price"
+                    style="@style/Header1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@{AuctionDetailFormatter.INSTANCE.formatAuctionDetailStatus(context,viewModel.auctionDetailModel)}"
                     android:textColor="@color/grey_900"
-                    android:textSize="@dimen/textsize_main_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_auction_status"
                     tools:text="현재가 400,000원" />
 
                 <TextView
                     android:id="@+id/tv_remain_time"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{AuctionDetailFormatter.INSTANCE.formatClosingRemainDateText(context,viewModel.auctionDetailModel.closingTime)}"
-                    android:textColor="@color/red_900"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
+                    android:textColor="@color/primary"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintTop_toTopOf="@id/tv_start_price"
                     tools:text="마감까지 1시간 35분" />
 
                 <TextView
                     android:id="@+id/tv_start_price"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{@string/detail_auction_start_price(viewModel.auctionDetailModel.startPrice)}"
-                    android:textColor="@color/grey_500"
-                    android:textSize="@dimen/textsize_sub_header"
+                    android:textColor="@color/grey_700"
+                    android:textFontWeight="400"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_last_bid_price"
                     tools:text="시작가 100,000원" />
@@ -224,16 +221,17 @@
                     android:contentDescription="@string/detail_auctioneer_count_icon_description"
                     android:src="@drawable/ic_people_alt_24"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
-                    app:layout_constraintTop_toBottomOf="@id/tv_start_price" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_start_price"
+                    app:tint="@color/grey_700" />
 
                 <TextView
                     android:id="@+id/tv_auctioneer_count"
+                    style="@style/Caption"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:text="@{@string/detail_auction_auctioneer_count(viewModel.auctionDetailModel.auctioneerCount)}"
-                    android:textColor="@color/grey_500"
-                    android:textSize="12sp"
+                    android:textColor="@color/grey_700"
                     app:layout_constraintBottom_toBottomOf="@id/iv_auctioneer_count_icon"
                     app:layout_constraintStart_toEndOf="@id/iv_auctioneer_count_icon"
                     app:layout_constraintTop_toTopOf="@id/iv_auctioneer_count_icon"
@@ -241,24 +239,23 @@
 
                 <TextView
                     android:id="@+id/tv_auction_explain"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="@string/detail_auction_description"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/iv_auctioneer_count_icon" />
 
                 <TextView
                     android:id="@+id/tv_auction_description"
+                    style="@style/Body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="@{viewModel.auctionDetailModel.description}"
+                    android:textColor="@color/grey_800"
                     android:textIsSelectable="true"
-                    android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_auction_explain"
@@ -266,13 +263,11 @@
 
                 <TextView
                     android:id="@+id/tv_direct_exchange_regions"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="@string/detail_direct_exchange_regions_description"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_auction_description" />
 
@@ -290,13 +285,11 @@
 
                 <TextView
                     android:id="@+id/tv_seller_info"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:text="@string/detail_seller_info"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/rv_direct_exchange_regions" />
 
@@ -322,6 +315,7 @@
 
                 <TextView
                     android:id="@+id/tv_seller_nickname"
+                    style="@style/Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -342,6 +336,7 @@
 
                 <TextView
                     android:id="@+id/tv_seller_reliability_score"
+                    style="@style/Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
@@ -357,6 +352,7 @@
 
         <Button
             android:id="@+id/btn_auction_detail_bottom_button"
+            style="@style/BigButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
@@ -365,7 +361,7 @@
             android:onClick="@{()->viewModel.handleAuctionDetailBottomButton()}"
             android:padding="0dp"
             android:text="@{AuctionDetailFormatter.INSTANCE.getAuctionBottomButtonText(context,viewModel.auctionDetailBottomButtonStatus)}"
-            android:textSize="@dimen/textsize_submit_button"
+            android:textColor="@color/chip_text_active"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
