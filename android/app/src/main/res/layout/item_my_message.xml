@@ -37,7 +37,7 @@
             android:layout_marginTop="@dimen/padding_vertical_filter_chips"
             android:text="@{item.createdDateTime}"
             android:paddingHorizontal="4dp"
-            android:textColor="@color/black_400"
+            android:textColor="@color/grey_500"
             android:textSize="12sp"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="@id/tv_message_contents"

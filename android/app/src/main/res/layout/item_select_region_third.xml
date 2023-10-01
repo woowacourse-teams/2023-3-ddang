@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{region.name}"
-            android:textColor="@color/black_600"
+            android:textColor="@color/grey_700"
             android:textSize="@dimen/textsize_sub_header"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

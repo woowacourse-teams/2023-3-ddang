@@ -8,10 +8,10 @@ enum class AuctionDetailStatusModel(
     val progressStatus: String,
     @ColorRes val colorId: Int,
 ) {
-    ONGOING("현재가", "경매중", R.color.red_100),
+    ONGOING("현재가", "경매중", R.color.red_900),
     UNBIDDEN("입찰전", "경매중", R.color.green),
-    SUCCESS("낙찰가", "낙찰 완료", R.color.black_600),
-    FAILURE("입찰전", "경매 유찰", R.color.black_600),
+    SUCCESS("낙찰가", "낙찰 완료", R.color.grey_700),
+    FAILURE("입찰전", "경매 유찰", R.color.grey_700),
     ;
 
     companion object {

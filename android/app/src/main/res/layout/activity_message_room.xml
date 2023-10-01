@@ -39,7 +39,7 @@
                     android:contentDescription="@string/all_app_bar_back_key_description"
                     android:onClick="@{()->viewModel.setExitEvent()}"
                     android:src="@drawable/ic_left_24"
-                    app:tint="@color/black_900" />
+                    app:tint="@color/grey_900" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv_profile"
@@ -77,7 +77,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="@color/black_900"
+                    android:textColor="@color/grey_900"
                     android:textSize="@dimen/textsize_main_header"
                     android:textStyle="bold"
                     tools:text="쪽지 상대방 이름" />
@@ -89,7 +89,7 @@
                     android:contentDescription="@string/message_room_refresh_description"
                     android:onClick="@{()->viewModel.loadMessages()}"
                     android:src="@drawable/ic_refresh_24"
-                    app:tint="@color/black_900" />
+                    app:tint="@color/grey_900" />
 
                 <ImageView
                     android:layout_width="24dp"

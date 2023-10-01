@@ -2,25 +2,25 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.DdangDdangDdang" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
-        <item name="colorPrimary">@color/red_100</item>
+        <item name="colorPrimary">@color/red_900</item>
         <item name="android:datePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:timePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@color/white</item>
-        <item name="colorControlActivated">@color/red_80</item>
-        <item name="android:textColorHighlight">@color/red_60</item>
+        <item name="colorControlActivated">@color/red_800</item>
+        <item name="android:textColorHighlight">@color/red_700</item>
     </style>
 
     <style name="Theme.DdangDdangDdang" parent="Base.Theme.DdangDdangDdang" />
 
     <style name="App.Custom.Picker" parent="Theme.Material3.DayNight.Dialog">
         <!-- 상단 색 변경 -->
-        <item name="colorAccent">@color/red_100</item>
+        <item name="colorAccent">@color/red_900</item>
         <!-- dialog의 배경 변경 -->
-        <item name="background">@color/red_100</item>
+        <item name="background">@color/red_900</item>
         <!-- 선택한 날짜를 표시할 색상 -->
-        <item name="colorControlActivated">@color/red_100</item>
-        <item name="colorControlHighlight">@color/red_60</item>
+        <item name="colorControlActivated">@color/red_900</item>
+        <item name="colorControlHighlight">@color/red_700</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerPositiveButtonStyle
         </item>
         <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerNegativeButtonStyle
@@ -28,17 +28,17 @@
     </style>
 
     <style name="DatePickerNegativeButtonStyle" parent="android:Widget.Material.Button.Borderless">
-        <item name="android:textColor">@color/black_600</item>
+        <item name="android:textColor">@color/grey_700</item>
     </style>
 
     <style name="DatePickerPositiveButtonStyle" parent="android:Widget.Material.Button.Borderless">
-        <item name="android:textColor">@color/red_100</item>
+        <item name="android:textColor">@color/red_900</item>
     </style>
 
     <style name="App.Custom.HomeFilterChip" parent="Widget.Material3.Chip.Filter">
-        <item name="chipBackgroundColor">@color/white_to_red_100_checked</item>
-        <item name="android:textColor">@color/black_to_white_checked</item>
-        <item name="chipStrokeColor">@color/black_400_to_red_100_checked</item>
+        <item name="chipBackgroundColor">@color/grey_50_to_red_900_checked</item>
+        <item name="android:textColor">@color/grey_900_to_grey_50_checked</item>
+        <item name="chipStrokeColor">@color/grey_500_to_red_900_checked</item>
         <item name="android:textSize">@dimen/textsize_filter_chips</item>
         <item name="android:textStyle">bold</item>
         <item name="checkedIcon">@null</item>

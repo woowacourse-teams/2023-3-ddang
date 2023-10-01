@@ -18,7 +18,7 @@
         android:id="@+id/cl_main_category_item"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/white_to_red_100_selected"
+        android:background="@color/grey_50_to_red_900_selected"
         android:onClick="@{() -> onItemClick.invoke(category.id)}">
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:text="@{category.name}"
             android:textAlignment="center"
-            android:textColor="@color/black_600"
+            android:textColor="@color/grey_700"
             android:textSize="@dimen/textsize_sub_header"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

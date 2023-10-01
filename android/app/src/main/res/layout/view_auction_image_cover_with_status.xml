@@ -31,7 +31,7 @@
             app:layout_constraintBottom_toBottomOf="@id/v_auction_image"
             app:layout_constraintStart_toStartOf="@id/v_auction_image"
             app:layout_constraintEnd_toEndOf="@id/v_auction_image"
-            android:background="@drawable/bg_black_400_radius_25dp"
+            android:background="@drawable/bg_grey_500_radius_25dp"
             android:alpha=".3" />
 
         <TextView

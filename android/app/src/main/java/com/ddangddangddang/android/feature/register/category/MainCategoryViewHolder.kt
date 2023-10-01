@@ -21,11 +21,11 @@ class MainCategoryViewHolder(
         binding.category = category
         if (category.isChecked) {
             binding.clMainCategoryItem.isSelected = true
-            binding.tvCategory.setTextColor(binding.root.context.getColor(R.color.white))
+            binding.tvCategory.setTextColor(binding.root.context.getColor(R.color.grey_50))
             binding.tvCategory.setTypeface(null, Typeface.BOLD)
         } else {
             binding.clMainCategoryItem.isSelected = false
-            binding.tvCategory.setTextColor(binding.root.context.getColor(R.color.black_600))
+            binding.tvCategory.setTextColor(binding.root.context.getColor(R.color.grey_700))
             binding.tvCategory.setTypeface(null, Typeface.NORMAL)
         }
     }

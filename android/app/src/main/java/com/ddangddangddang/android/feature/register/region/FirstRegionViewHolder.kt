@@ -20,11 +20,11 @@ class FirstRegionViewHolder(
         binding.region = region
         if (region.isChecked) {
             binding.clFirstRegionItem.isSelected = true
-            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.white))
+            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.grey_50))
             binding.tvRegion.setTypeface(null, Typeface.BOLD)
         } else {
             binding.clFirstRegionItem.isSelected = false
-            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.black_600))
+            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.grey_700))
             binding.tvRegion.setTypeface(null, Typeface.NORMAL)
         }
     }
