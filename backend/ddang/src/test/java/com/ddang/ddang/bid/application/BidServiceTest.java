@@ -56,7 +56,7 @@ class BidServiceTest extends BidServiceFixture {
     @Test
     void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액_이상의_금액으로_입찰을_등록할_수_있다() {
         // given
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공_메시지);
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공);
 
         bidService.create(입찰_요청_dto1, 이미지_절대_url);
 
@@ -75,7 +75,7 @@ class BidServiceTest extends BidServiceFixture {
     @Test
     void 첫_입찰자는_시작가를_입찰로_등록할_수_있다() {
         //given
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공_메시지);
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공);
 
         // when
         final Long actual = bidService.create(시작가로_입찰_요청_dto, 이미지_절대_url);

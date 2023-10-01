@@ -10,6 +10,7 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +31,7 @@ public class BidServiceFixture {
     @Autowired
     private JpaBidRepository bidRepository;
 
-    protected String 알림_성공_메시지 = "성공";
+    protected NotificationStatus 알림_성공 = NotificationStatus.SUCCESS;
     protected String 이미지_절대_url = "https://3-ddang.store/auctions/images";
     protected Long 존재하지_않는_경매_아이디 = -999L;
     protected Long 존재하지_않는_사용자_아이디 = -9999L;
