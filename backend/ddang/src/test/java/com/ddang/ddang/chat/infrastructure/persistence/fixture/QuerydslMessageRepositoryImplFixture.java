@@ -49,6 +49,8 @@ public class QuerydslMessageRepositoryImplFixture {
     protected ChatRoom 채팅방;
     protected int 메시지_총_개수;
     protected List<Message> 저장된_메시지들;
+    protected Long 세번째_메시지_아이디;
+    protected Long 마지막_메시지_아이디;
 
     @BeforeEach
     void setUp() {
@@ -90,6 +92,9 @@ public class QuerydslMessageRepositoryImplFixture {
             저장된_메시지들.add(message);
         }
         messageRepository.saveAll(저장된_메시지들);
+
+        세번째_메시지_아이디 = 저장된_메시지들.get(2).getId();
+        마지막_메시지_아이디 = 저장된_메시지들.get(메시지_총_개수 - 1).getId();
 
         em.flush();
         em.clear();

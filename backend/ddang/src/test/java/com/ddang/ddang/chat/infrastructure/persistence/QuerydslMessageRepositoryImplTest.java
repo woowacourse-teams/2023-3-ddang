@@ -34,17 +34,15 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 마지막으로_읽은_메시지_이후에_추가된_메시지를_조회한다() {
         // when
-        final Long lastMessageId = 저장된_메시지들.get(2).getId();
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 판매자.getId(),
                 채팅방.getId(),
-                lastMessageId
+                세번째_메시지_아이디
         );
-        final int expected = 7;
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(expected);
+            softAssertions.assertThat(actual).hasSize(7);
             softAssertions.assertThat(actual.get(0)).isEqualTo(저장된_메시지들.get(3));
             softAssertions.assertThat(actual.get(1)).isEqualTo(저장된_메시지들.get(4));
             softAssertions.assertThat(actual.get(2)).isEqualTo(저장된_메시지들.get(5));
@@ -58,17 +56,15 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 상대방이_메시지를_추가한_경우_마지막으로_읽은_메시지_이후의_메시지를_조회한다() {
         // when
-        final Long lastMessageId = 저장된_메시지들.get(2).getId();
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
-                lastMessageId
+                세번째_메시지_아이디
         );
-        final int expected = 7;
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(expected);
+            softAssertions.assertThat(actual).hasSize(7);
             softAssertions.assertThat(actual.get(0)).isEqualTo(저장된_메시지들.get(3));
             softAssertions.assertThat(actual.get(1)).isEqualTo(저장된_메시지들.get(4));
             softAssertions.assertThat(actual.get(2)).isEqualTo(저장된_메시지들.get(5));
@@ -82,11 +78,10 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 마지막으로_읽은_메시지_이후의_메시지가_없는_경우_빈_리스트를_반환한다() {
         // when
-        final Long lastMessageId = 저장된_메시지들.get(메시지_총_개수 - 1).getId();
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
-                lastMessageId
+                마지막_메시지_아이디
         );
 
         // then
