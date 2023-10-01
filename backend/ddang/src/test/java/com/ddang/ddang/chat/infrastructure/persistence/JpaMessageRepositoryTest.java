@@ -49,6 +49,6 @@ class JpaMessageRepositoryTest extends JpaMessageRepositoryFixture {
     @Test
     void 조회하려는_메시지_아이디가_존재하지_않는_경우_거짓을_반환한다() {
         // when & then
-        assertThat(messageRepository.existsById(invalidMessageId)).isFalse();
+        assertThat(messageRepository.existsById(유효하지_않은_메시지_아이디)).isFalse();
     }
 }

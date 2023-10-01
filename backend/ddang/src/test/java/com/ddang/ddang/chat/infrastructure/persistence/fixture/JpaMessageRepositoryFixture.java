@@ -32,7 +32,7 @@ public class JpaMessageRepositoryFixture {
     protected User 채팅참여_구매자;
     protected Auction 경매;
     protected Message 메시지;
-    protected Long invalidMessageId = -999L;
+    protected Long 유효하지_않은_메시지_아이디 = -999L;
 
     @BeforeEach
     void setUp() {
