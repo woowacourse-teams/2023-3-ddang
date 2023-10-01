@@ -25,6 +25,7 @@
     <color name="grey_50">#121212</color>
 
     <color name="green">#A2C791</color>
+    <color name="yellow">#F4DA8B</color>
 
     <color name="transparent">#00000000</color>
 </resources>

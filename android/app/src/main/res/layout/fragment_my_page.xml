@@ -28,9 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:text="@string/mypage"
-                android:textColor="@color/grey_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                style="@style/Header1" />
         </androidx.appcompat.widget.Toolbar>
 
         <ScrollView
