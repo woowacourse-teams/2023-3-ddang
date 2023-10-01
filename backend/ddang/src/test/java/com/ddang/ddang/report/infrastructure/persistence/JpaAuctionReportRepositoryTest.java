@@ -36,13 +36,13 @@ class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
         final AuctionReport auctionReport = new AuctionReport(판매자, 경매, "신고합니다");
 
         // when
-        auctionReportRepository.save(auctionReport);
+        final AuctionReport actual = auctionReportRepository.save(auctionReport);
 
         // then
         em.flush();
         em.clear();
 
-        assertThat(auctionReport.getId()).isPositive();
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test

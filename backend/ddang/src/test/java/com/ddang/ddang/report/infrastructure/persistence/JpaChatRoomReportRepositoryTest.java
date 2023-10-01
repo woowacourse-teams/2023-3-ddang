@@ -35,13 +35,13 @@ class JpaChatRoomReportRepositoryTest extends JpaChatRoomReportRepositoryFixture
         final ChatRoomReport chatRoomReport = new ChatRoomReport(구매자1, 채팅방1, "신고합니다.");
 
         // when
-        chatRoomReportRepository.save(chatRoomReport);
+        final ChatRoomReport actual = chatRoomReportRepository.save(chatRoomReport);
 
         // then
         em.flush();
         em.clear();
 
-        assertThat(chatRoomReport.getId()).isPositive();
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test
