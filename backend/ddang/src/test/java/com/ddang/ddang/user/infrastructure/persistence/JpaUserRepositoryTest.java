@@ -40,13 +40,13 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
                               .build();
 
         // when
-        userRepository.save(user);
+        final User actual = userRepository.save(user);
 
         // then
         em.flush();
         em.clear();
 
-        assertThat(user.getId()).isPositive();
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test
