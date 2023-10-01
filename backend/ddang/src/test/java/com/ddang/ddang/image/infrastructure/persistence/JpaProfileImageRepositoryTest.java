@@ -35,13 +35,13 @@ class JpaProfileImageRepositoryTest extends JpaProfileImageRepositoryFixture {
         final ProfileImage profileImage = new ProfileImage(업로드_이미지_파일명, 저장된_이미지_파일명);
 
         // when
-        profileImageRepository.save(profileImage);
+        final ProfileImage actual = profileImageRepository.save(profileImage);
 
         em.flush();
         em.clear();
 
         // then
-        assertThat(profileImage.getId()).isPositive();
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test

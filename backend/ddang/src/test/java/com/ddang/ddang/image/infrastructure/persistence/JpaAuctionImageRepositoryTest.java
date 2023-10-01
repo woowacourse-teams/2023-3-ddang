@@ -34,13 +34,13 @@ class JpaAuctionImageRepositoryTest extends JpaAuctionImageRepositoryFixture {
         final AuctionImage auctionImage = new AuctionImage(업로드_이미지_파일명, 저장된_이미지_파일명);
 
         // when
-        auctionImageRepository.save(auctionImage);
+        final AuctionImage actual = auctionImageRepository.save(auctionImage);
 
         // then
         em.flush();
         em.clear();
 
-        assertThat(auctionImage.getId()).isPositive();
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test
