@@ -4,7 +4,6 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.User;
@@ -33,15 +32,11 @@ public class BidFixture {
                   .oauthId("12345")
                   .build();
 
-        final Category 전자기기_카테고리 = new Category("전자기기");
-        final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
-        전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         final AuctionImage 경매_이미지 = new AuctionImage("경매이미지.jpg", "경매이미지.jpg");
         경매 = Auction.builder()
                     .seller(판매자)
                     .title("경매 상품")
                     .description("이것은 경매 상품입니다.")
-                    .subCategory(전자기기_서브_노트북_카테고리)
                     .bidUnit(new BidUnit(1_000))
                     .startPrice(new Price(1_000))
                     .closingTime(LocalDateTime.now())
