@@ -196,7 +196,7 @@ class BidControllerTest extends BidControllerFixture {
     }
 
     @Test
-    void 첫_입찰자가_시작가_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
+    void 첫_입찰자가_시작가보다_낮은_금액으로_입찰시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(bidService.create(any(CreateBidDto.class), anyString()))

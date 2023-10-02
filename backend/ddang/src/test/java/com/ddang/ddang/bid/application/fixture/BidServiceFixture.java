@@ -40,10 +40,11 @@ public class BidServiceFixture {
     protected User 입찰자2;
     protected Auction 경매1;
     protected Auction 입찰_내역이_없는_경매;
+    protected Auction 입찰_내역이_하나_있던_경매;
 
-    protected CreateBidDto 입찰_요청_dto1;
-    protected CreateBidDto 입찰_요청_dto2;
-    protected CreateBidDto 시작가로_입찰_요청_dto;
+    protected CreateBidDto 입찰_요청_dto;
+    protected CreateBidDto 입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto;
+    protected CreateBidDto 첫입찰자가_시작가로_입찰_요청_dto;
     protected CreateBidDto 존재하지_않는_경매_아이디에_대한_입찰_요청_dto;
     protected CreateBidDto 존재하지_않는_사용자_아이디를_통한_입찰_요청_dto;
     protected CreateBidDto 종료된_경매에_대한_입찰_요청_dto;
@@ -105,6 +106,7 @@ public class BidServiceFixture {
                                    .closingTime(LocalDateTime.now().plusDays(7))
                                    .build();
         입찰_내역이_없는_경매 = 경매3;
+        입찰_내역이_하나_있던_경매 = 경매2;
         final Auction 종료된_경매 = Auction.builder()
                                       .seller(판매자)
                                       .title("경매 상품 2")
@@ -127,7 +129,7 @@ public class BidServiceFixture {
         경매1.addAuctionImages(List.of(경매_이미지1));
         경매2.addAuctionImages(List.of(경매_이미지2));
         경매3.addAuctionImages(List.of(경매_이미지3));
-        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3, 종료된_경매, 삭제된_경매));
+        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3, 입찰_내역이_하나_있던_경매, 종료된_경매, 삭제된_경매));
 
         final Bid bid1 = new Bid(경매1, 입찰자1, new BidPrice(1_000));
         final Bid bid2 = new Bid(경매2, 입찰자1, new BidPrice(1_000));
@@ -140,18 +142,18 @@ public class BidServiceFixture {
         경매2.updateLastBid(bid2);
         경매1.updateLastBid(bid3);
 
-        입찰_요청_dto1 = new CreateBidDto(경매3.getId(), 10_000, 입찰자1.getId());
-        입찰_요청_dto2 = new CreateBidDto(경매3.getId(), 14_000, 입찰자2.getId());
-        시작가로_입찰_요청_dto = new CreateBidDto(경매3.getId(), 1_000, 입찰자1.getId());
+        입찰_요청_dto = new CreateBidDto(경매3.getId(), 10_000, 입찰자1.getId());
+        입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto = new CreateBidDto(입찰_내역이_하나_있던_경매.getId(), 14_000, 입찰자2.getId());
+        첫입찰자가_시작가로_입찰_요청_dto = new CreateBidDto(경매3.getId(), 1_000, 입찰자1.getId());
         존재하지_않는_경매_아이디에_대한_입찰_요청_dto = new CreateBidDto(존재하지_않는_경매_아이디, 10_000, 입찰자1.getId());
         존재하지_않는_사용자_아이디를_통한_입찰_요청_dto = new CreateBidDto(경매3.getId(), 10_000, 존재하지_않는_사용자_아이디);
         종료된_경매에_대한_입찰_요청_dto = new CreateBidDto(종료된_경매.getId(), 10_000, 입찰자1.getId());
         삭제된_경매에_대한_입찰_요청_dto = new CreateBidDto(삭제된_경매.getId(), 10_000, 입찰자1.getId());
         판매자가_본인_경매에_입찰_요청_dto = new CreateBidDto(경매3.getId(), 10_000, 판매자.getId());
         첫입찰시_시작가보다_낮은_입찰액으로_입찰_요청_dto = new CreateBidDto(경매3.getId(), 900, 입찰자1.getId());
-        동일한_사용자가_입찰_요청_dto = new CreateBidDto(경매3.getId(), 12_000, 입찰자1.getId());
-        이전_입찰액보다_낮은_입찰액으로_입찰_요청_dto = new CreateBidDto(경매3.getId(), 8_000, 입찰자2.getId());
-        최소_입찰단위를_더한_금액보다_낮은_입찰액으로_입찰_요청_dto = new CreateBidDto(경매3.getId(), 10_500, 입찰자2.getId());
+        동일한_사용자가_입찰_요청_dto = new CreateBidDto(입찰_내역이_하나_있던_경매.getId(), 12_000, 입찰자1.getId());
+        이전_입찰액보다_낮은_입찰액으로_입찰_요청_dto = new CreateBidDto(입찰_내역이_하나_있던_경매.getId(), 500, 입찰자2.getId());
+        최소_입찰단위를_더한_금액보다_낮은_입찰액으로_입찰_요청_dto = new CreateBidDto(입찰_내역이_하나_있던_경매.getId(), 1_500, 입찰자2.getId());
         범위_밖의_금액으로_입찰_요청_dto1 = new CreateBidDto(경매3.getId(), -1, 입찰자2.getId());
         범위_밖의_금액으로_입찰_요청_dto2 = new CreateBidDto(경매3.getId(), 2_100_000_001, 입찰자2.getId());
     }

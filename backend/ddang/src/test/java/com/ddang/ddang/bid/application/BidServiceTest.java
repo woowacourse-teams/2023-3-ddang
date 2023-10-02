@@ -43,12 +43,12 @@ class BidServiceTest extends BidServiceFixture {
     @Test
     void 입찰을_등록한다() {
         // when
-        final Long actual = bidService.create(입찰_요청_dto1, 이미지_절대_url);
+        final Long actual = bidService.create(입찰_요청_dto, 이미지_절대_url);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPositive();
-            softAssertions.assertThat(입찰_내역이_없는_경매.getLastBid().getPrice().getValue()).isEqualTo(입찰_요청_dto1.bidPrice());
+            softAssertions.assertThat(입찰_내역이_없는_경매.getLastBid().getPrice().getValue()).isEqualTo(입찰_요청_dto.bidPrice());
             softAssertions.assertThat(입찰_내역이_없는_경매.getAuctioneerCount()).isEqualTo(1);
         });
     }
@@ -58,16 +58,15 @@ class BidServiceTest extends BidServiceFixture {
         // given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공);
 
-        bidService.create(입찰_요청_dto1, 이미지_절대_url);
-
         // when
-        final Long actual = bidService.create(입찰_요청_dto2, 이미지_절대_url);
+        final Long actual = bidService.create(입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto, 이미지_절대_url);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPositive();
-            softAssertions.assertThat(입찰_내역이_없는_경매.getLastBid().getPrice().getValue()).isEqualTo(입찰_요청_dto2.bidPrice());
-            softAssertions.assertThat(입찰_내역이_없는_경매.getAuctioneerCount()).isEqualTo(2);
+            softAssertions.assertThat(입찰_내역이_하나_있던_경매.getLastBid().getPrice().getValue())
+                          .isEqualTo(입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto.bidPrice());
+            softAssertions.assertThat(입찰_내역이_하나_있던_경매.getAuctioneerCount()).isEqualTo(2);
             verify(notificationService).send(any());
         });
     }
@@ -75,7 +74,7 @@ class BidServiceTest extends BidServiceFixture {
     @Test
     void 첫_입찰자는_시작가를_입찰로_등록할_수_있다() {
         // when
-        final Long actual = bidService.create(시작가로_입찰_요청_dto, 이미지_절대_url);
+        final Long actual = bidService.create(첫입찰자가_시작가로_입찰_요청_dto, 이미지_절대_url);
 
         // then
         assertThat(actual).isPositive();
@@ -131,9 +130,6 @@ class BidServiceTest extends BidServiceFixture {
 
     @Test
     void 마지막_입찰자가_연속으로_입찰하는_경우_예외가_발생한다() {
-        // given
-        bidService.create(입찰_요청_dto1, 이미지_절대_url);
-
         // when && then
         assertThatThrownBy(() -> bidService.create(동일한_사용자가_입찰_요청_dto, 이미지_절대_url))
                 .isInstanceOf(InvalidBidderException.class)
@@ -142,9 +138,6 @@ class BidServiceTest extends BidServiceFixture {
 
     @Test
     void 마지막_입찰액보다_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
-        // given
-        bidService.create(입찰_요청_dto1, 이미지_절대_url);
-
         // when & then
         assertThatThrownBy(() -> bidService.create(이전_입찰액보다_낮은_입찰액으로_입찰_요청_dto, 이미지_절대_url))
                 .isInstanceOf(InvalidBidPriceException.class)
@@ -153,9 +146,6 @@ class BidServiceTest extends BidServiceFixture {
 
     @Test
     void 최소_입찰_단위보다_낮은_금액으로_입찰하는_경우_예외가_발생한다() {
-        // given
-        bidService.create(입찰_요청_dto1, 이미지_절대_url);
-
         // when & then
         assertThatThrownBy(() -> bidService.create(최소_입찰단위를_더한_금액보다_낮은_입찰액으로_입찰_요청_dto, 이미지_절대_url))
                 .isInstanceOf(InvalidBidPriceException.class)

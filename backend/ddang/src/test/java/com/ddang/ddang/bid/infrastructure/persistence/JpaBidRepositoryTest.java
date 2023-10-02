@@ -46,7 +46,7 @@ class JpaBidRepositoryTest extends JpaBidRepositoryFixture {
     }
 
     @Test
-    void 특정_경매가_존재하는지_확인한다() {
+    void 특정_경매에_입찰이_존재하는지_확인한다() {
         // when
         final boolean actual = bidRepository.existsById(경매1의_입찰1.getId());
 
