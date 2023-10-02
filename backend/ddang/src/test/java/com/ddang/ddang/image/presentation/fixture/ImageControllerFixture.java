@@ -5,7 +5,7 @@ import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class ProfileImageControllerFixture extends CommonControllerSliceTest {
+public class ImageControllerFixture extends CommonControllerSliceTest {
 
     protected byte[] 이미지_파일_바이트 = "이것은 이미지 파일의 바이트 코드입니다.".getBytes();
     protected Resource 이미지_파일_리소스 = new ByteArrayResource(이미지_파일_바이트);

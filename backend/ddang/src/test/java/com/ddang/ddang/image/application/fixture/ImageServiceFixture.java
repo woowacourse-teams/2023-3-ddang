@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class ProfileImageServiceFixture {
+public class ImageServiceFixture {
 
     @Autowired
     JpaProfileImageRepository profileImageRepository;

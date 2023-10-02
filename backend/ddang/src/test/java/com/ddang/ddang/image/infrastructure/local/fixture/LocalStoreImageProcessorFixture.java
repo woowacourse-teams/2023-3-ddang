@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class LocalStoreProfileImageProcessorFixture {
+public class LocalStoreImageProcessorFixture {
 
     protected MockMultipartFile 빈_이미지_파일 = new MockMultipartFile("image.png", new byte[0]);
     protected MultipartFile 이미지_파일 = mock(MultipartFile.class);

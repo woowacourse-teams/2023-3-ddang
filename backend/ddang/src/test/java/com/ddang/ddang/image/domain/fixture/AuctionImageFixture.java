@@ -7,7 +7,7 @@ import com.ddang.ddang.auction.domain.Price;
 import java.time.LocalDateTime;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionProfileImageFixture {
+public class AuctionImageFixture {
 
     protected Auction 경매 = Auction.builder()
                                   .title("경매 상품")

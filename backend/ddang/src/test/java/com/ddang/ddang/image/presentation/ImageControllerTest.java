@@ -2,7 +2,7 @@ package com.ddang.ddang.image.presentation;
 
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
-import com.ddang.ddang.image.presentation.fixture.ProfileImageControllerFixture;
+import com.ddang.ddang.image.presentation.fixture.ImageControllerFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
-class ProfileImageControllerTest extends ProfileImageControllerFixture {
+class ImageControllerTest extends ImageControllerFixture {
 
     MockMvc mockMvc;
 

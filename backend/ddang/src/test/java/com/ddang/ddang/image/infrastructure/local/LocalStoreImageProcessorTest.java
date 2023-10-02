@@ -4,7 +4,7 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
-import com.ddang.ddang.image.infrastructure.local.fixture.LocalStoreProfileImageProcessorFixture;
+import com.ddang.ddang.image.infrastructure.local.fixture.LocalStoreImageProcessorFixture;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.willThrow;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class LocalStoreProfileImageProcessorTest extends LocalStoreProfileImageProcessorFixture {
+class LocalStoreImageProcessorTest extends LocalStoreImageProcessorFixture {
 
     LocalStoreImageProcessor imageProcessor = new LocalStoreImageProcessor();
 
