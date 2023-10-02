@@ -39,7 +39,7 @@ public class ReviewController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadReviewResponse>> read(@RequestParam final Long userId) {
+    public ResponseEntity<List<ReadReviewResponse>> readAllReviewsOfTargetUser(@RequestParam final Long userId) {
         final List<ReadReviewDto> readReviewDtos = reviewService.readAllByTargetId(userId);
         final List<ReadReviewResponse> response = readReviewDtos.stream()
                                                                 .map(ReadReviewResponse::from)
