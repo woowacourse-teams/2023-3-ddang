@@ -5,7 +5,7 @@ import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.image.infrastructure.local.fixture.LocalStoreProfileImageProcessorFixture;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
