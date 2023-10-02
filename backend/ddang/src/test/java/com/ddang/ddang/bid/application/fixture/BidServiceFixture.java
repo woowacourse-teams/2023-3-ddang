@@ -66,13 +66,13 @@ public class BidServiceFixture {
                              .oauthId("12345")
                              .build();
         입찰자1 = User.builder()
-                   .name("구매자1")
+                   .name("입찰자1")
                    .profileImage(프로필_이미지)
                    .reliability(4.7d)
                    .oauthId("12346")
                    .build();
         입찰자2 = User.builder()
-                   .name("구매자2")
+                   .name("입찰자2")
                    .profileImage(프로필_이미지)
                    .reliability(4.7d)
                    .oauthId("78910")
