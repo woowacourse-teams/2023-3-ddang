@@ -7,8 +7,8 @@
         <item name="android:timePickerDialogTheme">@style/App.Custom.Picker</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@color/base_background</item>
-        <item name="colorControlActivated">@color/red_800</item>
-        <item name="android:textColorHighlight">@color/red_700</item>
+        <item name="colorControlActivated">@color/red_300</item>
+        <item name="android:textColorHighlight">@color/red_100</item>
         <item name="android:textColor">@color/grey_900</item>
         <item name="fontFamily">@font/pretendard</item>
         <item name="android:fontFamily">@font/pretendard</item>
