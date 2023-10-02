@@ -1,6 +1,5 @@
 package com.ddang.ddang.auction.application.fixture;
 
-import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
@@ -28,25 +27,22 @@ import org.springframework.mock.web.MockMultipartFile;
 public class AuctionServiceFixture {
 
     @Autowired
-    AuctionService auctionService;
+    private JpaAuctionRepository auctionRepository;
 
     @Autowired
-    JpaAuctionRepository auctionRepository;
+    private JpaRegionRepository regionRepository;
 
     @Autowired
-    JpaRegionRepository regionRepository;
+    private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    JpaCategoryRepository categoryRepository;
+    private JpaUserRepository userRepository;
 
     @Autowired
-    JpaUserRepository userRepository;
+    private JpaChatRoomRepository chatRoomRepository;
 
     @Autowired
-    JpaChatRoomRepository chatRoomRepository;
-
-    @Autowired
-    JpaBidRepository bidRepository;
+    private JpaBidRepository bidRepository;
 
 
     private Category 가구_카테고리 = new Category("가구");
@@ -89,6 +85,7 @@ public class AuctionServiceFixture {
     protected Auction 채팅방이_있는_경매;
     protected Auction 채팅방이_없는_경매;
     protected Auction 입찰이_존재하는_경매;
+    protected Auction 종료후_채팅방이_없는_경매;
 
     @BeforeEach
     void setUp() {
@@ -118,7 +115,17 @@ public class AuctionServiceFixture {
                 List.of(경매_이미지_파일),
                 판매자.getId()
         );
-
+        유효한_경매_생성_dto = new CreateAuctionDto(
+                "제목",
+                "내용",
+                1_000,
+                1_000,
+                LocalDateTime.now(),
+                List.of(역삼동.getId()),
+                가구_서브_의자_카테고리.getId(),
+                List.of(경매_이미지_파일),
+                판매자.getId()
+        );
         존재하지_않는_판매자의_경매_생성_dto = new CreateAuctionDto(
                 "제목",
                 "내용",
@@ -130,7 +137,6 @@ public class AuctionServiceFixture {
                 List.of(경매_이미지_파일),
                 존재하지_않는_사용자_ID
         );
-
         존재하지_않는_지역의_경매_생성_dto = new CreateAuctionDto(
                 "제목",
                 "내용",
@@ -142,7 +148,6 @@ public class AuctionServiceFixture {
                 List.of(경매_이미지_파일),
                 판매자.getId()
         );
-
         두_번째_지역의_경매_생성_dto = new CreateAuctionDto(
                 "제목",
                 "내용",
@@ -154,7 +159,6 @@ public class AuctionServiceFixture {
                 List.of(경매_이미지_파일),
                 판매자.getId()
         );
-
         존재하지_않는_카테고리의_경매_생성_dto = new CreateAuctionDto(
                 "제목",
                 "내용",
@@ -166,7 +170,6 @@ public class AuctionServiceFixture {
                 List.of(경매_이미지_파일),
                 판매자.getId()
         );
-
         메인_카테고리의_경매_생성_dto = new CreateAuctionDto(
                 "제목",
                 "내용",
@@ -178,7 +181,6 @@ public class AuctionServiceFixture {
                 List.of(경매_이미지_파일),
                 판매자.getId()
         );
-
         종료되는_날이_3일_뒤인_경매_생성_dto = new CreateAuctionDto(
                 "제목",
                 "내용",
@@ -194,8 +196,9 @@ public class AuctionServiceFixture {
         채팅방이_있는_경매 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
         채팅방이_없는_경매 = 종료되는_날이_3일_뒤인_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
         입찰이_존재하는_경매 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
+        종료후_채팅방이_없는_경매 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
 
-        auctionRepository.saveAll(List.of(채팅방이_있는_경매, 채팅방이_없는_경매, 입찰이_존재하는_경매));
+        auctionRepository.saveAll(List.of(채팅방이_있는_경매, 채팅방이_없는_경매, 입찰이_존재하는_경매, 종료후_채팅방이_없는_경매));
 
         final ChatRoom 채팅방 = new ChatRoom(채팅방이_있는_경매, 구매자);
 

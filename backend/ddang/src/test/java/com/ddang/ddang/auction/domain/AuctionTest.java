@@ -89,7 +89,6 @@ class AuctionTest extends AuctionFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(auction.getAuctionImages()).isNotEmpty();
             softAssertions.assertThat(auction.getAuctionImages()).contains(경매_이미지);
             softAssertions.assertThat(경매_이미지.getAuction()).isEqualTo(auction);
         });
