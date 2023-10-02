@@ -9,9 +9,7 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -57,14 +55,12 @@ class JpaAuctionRepositoryTest {
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
         // given
-        final Instant instant = Instant.parse("2023-07-08T22:21:20Z");
-        final ZoneId zoneId = ZoneId.of("UTC");
         final Auction expected = Auction.builder()
                                         .title("경매 상품 1")
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
                                         .startPrice(new Price(1_000))
-                                        .closingTime(instant.atZone(zoneId).toLocalDateTime())
+                                        .closingTime(LocalDateTime.now())
                                         .build();
 
         auctionRepository.save(expected);
