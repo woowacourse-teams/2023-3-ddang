@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/base_background"
         tools:context=".feature.register.region.SelectRegionsActivity">
 
         <androidx.appcompat.widget.Toolbar
@@ -30,16 +30,14 @@
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:onClick="@{() -> viewModel.setExitEvent()}"
                 android:src="@drawable/ic_left_24"
-                app:tint="@color/black_900" />
+                app:tint="@color/grey_900" />
 
             <TextView
+                style="@style/Header1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="@string/select_direct_regions"
-                android:textColor="@color/black_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                android:text="@string/select_direct_regions" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -59,9 +57,7 @@
             android:background="#1A98989E"
             android:gravity="center"
             android:text="@string/select_regions_first_title"
-            android:textColor="@color/black_900"
-            android:textSize="@dimen/textsize_sub_header"
-            android:textStyle="bold"
+            style="@style/Header2"
             app:layout_constraintEnd_toStartOf="@id/tv_region_second_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
@@ -83,9 +79,7 @@
             android:background="#1A98989E"
             android:gravity="center"
             android:text="@string/select_regions_second_title"
-            android:textColor="@color/black_900"
-            android:textSize="@dimen/textsize_sub_header"
-            android:textStyle="bold"
+            style="@style/Header2"
             app:layout_constraintEnd_toStartOf="@id/tv_region_third_title"
             app:layout_constraintStart_toEndOf="@id/tv_region_first_title"
             app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
@@ -107,9 +101,7 @@
             android:background="#1A98989E"
             android:gravity="center"
             android:text="@string/select_regions_third_title"
-            android:textColor="@color/black_900"
-            android:textSize="@dimen/textsize_sub_header"
-            android:textStyle="bold"
+            style="@style/Header2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/tv_region_second_title"
             app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
@@ -151,14 +143,14 @@
 
         <Button
             android:id="@+id/btn_select_submit"
+            style="@style/BigButton"
             android:layout_width="0dp"
             android:layout_height="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
             android:layout_marginBottom="8dp"
             android:onClick="@{() -> viewModel.submit()}"
             android:text="@string/seelct_regions_submit"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textColor="@color/text_active_fixed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

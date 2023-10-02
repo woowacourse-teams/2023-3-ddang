@@ -37,28 +37,25 @@
                     android:contentDescription="@string/all_app_bar_back_key_description"
                     android:onClick="@{() -> viewModel.setExitEvent()}"
                     android:src="@drawable/ic_left_24"
-                    app:tint="@color/black_900" />
+                    app:tint="@color/grey_900" />
 
                 <TextView
+                    style="@style/Header1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_weight="1"
-                    android:text="@string/profile_change"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/textsize_main_header"
-                    android:textStyle="bold" />
+                    android:text="@string/profile_change" />
 
                 <TextView
+                    style="@style/Body"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:layout_marginEnd="16dp"
                     android:gravity="end"
                     android:onClick="@{()->viewModel.submitProfile(context)}"
-                    android:text="@string/profile_change_confirm"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/textsize_body" />
+                    android:text="@string/profile_change_confirm" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
@@ -109,23 +106,22 @@
 
         <TextView
             android:id="@+id/tv_user_nickname"
+            style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/profile_change_nickname"
-            android:textColor="@color/black_900"
-            android:textSize="16sp"
-            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@id/et_user_nickname"
             app:layout_constraintTop_toBottomOf="@id/cv_image" />
 
         <EditText
             android:id="@+id/et_user_nickname"
+            style="@style/Body"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/bg_white_black_radius_10dp"
+            android:background="@drawable/bg_white_grey_radius_10dp"
             android:hint="@string/profile_change_nickname_text_hint"
             android:inputType="text"
             android:maxLength="25"
@@ -133,7 +129,6 @@
             android:paddingHorizontal="16dp"
             android:text="@={viewModel.userNickname}"
             android:textCursorDrawable="@drawable/ic_edittext_cursor"
-            android:textSize="14sp"
             app:layout_constraintTop_toBottomOf="@id/tv_user_nickname" />
 
 

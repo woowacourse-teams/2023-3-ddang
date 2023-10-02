@@ -6,6 +6,7 @@
     <data>
 
         <import type="android.view.View" />
+
         <import type="com.ddangddangddang.android.feature.search.SearchViewModel.SearchStatus" />
 
         <variable
@@ -27,17 +28,16 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                style="@style/Header1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_side_layout"
-                android:text="@string/search"
-                android:textColor="@color/black_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                android:text="@string/search" />
         </androidx.appcompat.widget.Toolbar>
 
         <EditText
             android:id="@+id/et_search_keyword"
+            style="@style/Body"
             android:layout_width="0dp"
             android:layout_height="42dp"
             android:layout_marginStart="@dimen/margin_side_layout"
@@ -52,7 +52,6 @@
             android:paddingHorizontal="16dp"
             android:text="@={viewModel.keyword}"
             android:textCursorDrawable="@drawable/ic_edittext_cursor"
-            android:textSize="@dimen/textsize_body"
             app:layout_constraintBottom_toTopOf="@id/rv_search_auctions"
             app:layout_constraintEnd_toStartOf="@id/btn_search"
             app:layout_constraintHorizontal_chainStyle="packed"
@@ -62,24 +61,25 @@
 
         <Button
             android:id="@+id/btn_search"
+            style="@style/Header2"
             android:layout_width="80dp"
             android:layout_height="42dp"
             android:layout_marginEnd="@dimen/margin_side_layout"
             android:background="@drawable/bg_red_radius_24dp"
             android:onClick="@{() -> viewModel.submitKeyword()}"
             android:text="@string/search_keyword"
-            android:textStyle="bold"
+            android:textColor="@color/text_active_fixed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/et_search_keyword"
             app:layout_constraintTop_toTopOf="@id/et_search_keyword" />
 
         <TextView
             android:id="@+id/tv_notice_no_auctions"
+            style="@style/Header1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/search_notice_no_auction"
-            android:textColor="@color/black_400"
-            android:textSize="@dimen/textsize_sub_header"
+            android:textColor="@color/grey_500"
             android:visibility="@{viewModel.searchStatus instanceof SearchStatus.NoData ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,11 +88,11 @@
 
         <TextView
             android:id="@+id/tv_notice_input_keyword"
+            style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/search_notice_input_keyword"
-            android:textColor="@color/black_400"
-            android:textSize="@dimen/textsize_sub_header"
+            android:textColor="@color/grey_500"
             android:visibility="@{viewModel.searchStatus instanceof SearchStatus.BeforeSearch ? View.VISIBLE : View.INVISIBLE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

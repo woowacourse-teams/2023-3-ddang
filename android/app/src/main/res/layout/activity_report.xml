@@ -28,16 +28,14 @@
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:onClick="@{() -> viewModel.setExitEvent()}"
                 android:src="@drawable/ic_left_24"
-                app:tint="@color/black_900" />
+                app:tint="@color/grey_900" />
 
             <TextView
+                style="@style/Header1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="@string/report"
-                android:textColor="@color/black_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                android:text="@string/report" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.constraintlayout.widget.Guideline
@@ -56,17 +54,17 @@
 
         <TextView
             android:id="@+id/tv_report"
+            style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
             android:text="@string/report_contents"
-            android:textSize="@dimen/textsize_sub_header"
-            android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@id/tb_report" />
 
         <EditText
             android:id="@+id/et_report_contents"
+            style="@style/Body"
             android:layout_width="0dp"
             android:layout_height="190dp"
             android:layout_marginTop="12dp"
@@ -77,19 +75,18 @@
             android:padding="16dp"
             android:text="@={viewModel.reportContents}"
             android:textCursorDrawable="@drawable/ic_edittext_cursor"
-            android:textSize="@dimen/textsize_body"
             app:layout_constraintEnd_toStartOf="@id/gl_end"
             app:layout_constraintStart_toEndOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@id/tv_report" />
 
         <Button
+            style="@style/BigButton"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
             android:onClick="@{() -> viewModel.submit()}"
             android:text="@string/report_submit"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textColor="@color/text_active_fixed"
             app:layout_constraintEnd_toStartOf="@id/gl_end"
             app:layout_constraintStart_toEndOf="@id/gl_start"
             app:layout_constraintTop_toBottomOf="@id/et_report_contents" />

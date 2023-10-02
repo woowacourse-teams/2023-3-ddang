@@ -18,16 +18,17 @@
         android:id="@+id/cl_first_region_item"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:onClick="@{() -> onItemClick.invoke(region.id)}"
-        android:background="@color/white_to_red_100_selected">
+        android:background="@color/grey_50_to_primary_selected"
+        android:onClick="@{() -> onItemClick.invoke(region.id)}">
 
         <TextView
             android:id="@+id/tv_region"
+            style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{region.name}"
-            android:textColor="@color/black_600"
-            android:textSize="@dimen/textsize_sub_header"
+            android:textColor="@color/grey_700"
+            android:textFontWeight="400"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="base_background">@color/grey_50</color>
+    <color name="primary">@color/red_900</color>
+    <color name="text_active_fixed">@color/grey_50</color>
+    <color name="bottom_navigation_active">@color/primary</color>
+    <color name="auction_status_text_color">@color/grey_50</color>
+
+    <color name="selected_second_region_background">@color/red_50</color>
+    <color name="selected_second_region_text">@color/red_900</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="red_100">#F20505</color>
-    <color name="red_80">#FC6969</color>
-    <color name="red_60">#FECDCD</color>
+
+    <color name="red_900">#C40000</color>
+    <color name="red_800">#D21613</color>
+    <color name="red_700">#DF211B</color>
+    <color name="red_500">#FF3A1F</color>
+    <color name="red_300">#F16F69</color>
+    <color name="red_100">#FFCCCF</color>
+    <color name="red_50">#FFEBED</color>
+
+    <color name="grey_900">#121212</color>
+    <color name="grey_800">#323232</color>
+    <color name="grey_700">#505050</color>
+    <color name="grey_500">#8A8A8A</color>
+    <color name="grey_300">#D0D0D0</color>
+    <color name="grey_100">#EEEEEE</color>
+    <color name="grey_50">#F7F7F7</color>
+
     <color name="green">#ADD39B</color>
     <color name="yellow">#FFE38F</color>
-    <color name="black_900">#2C2C2C</color>
-    <color name="black_600">#202529</color>
-    <color name="black_400">#98989E</color>
+
     <color name="transparent">#00000000</color>
 </resources>

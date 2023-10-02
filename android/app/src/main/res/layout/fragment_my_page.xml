@@ -28,9 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:text="@string/mypage"
-                android:textColor="@color/black_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                style="@style/Header1" />
         </androidx.appcompat.widget.Toolbar>
 
         <ScrollView
@@ -74,7 +72,7 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
-                    android:background="@color/black_400"
+                    android:background="@color/grey_500"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/view_profile" />
@@ -148,7 +146,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:text="@string/mypage_delete_account_button"
-                    android:textColor="@color/black_400"
+                    android:textColor="@color/grey_500"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintTop_toBottomOf="@id/tv_logout_button"
