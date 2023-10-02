@@ -19,6 +19,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -66,7 +67,7 @@ class BidServiceTest {
 
     @BeforeEach
     void setUp() {
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn("성공");
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
     }
 
     @Test
@@ -656,11 +657,11 @@ class BidServiceTest {
                                         .closingTime(LocalDateTime.now().plusDays(7))
                                         .build();
         final User user = User.builder()
-                               .name("사용자1")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
-                               .reliability(4.7d)
-                               .oauthId("12345")
-                               .build();
+                              .name("사용자1")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
         auctionRepository.save(auction1);
         userRepository.save(user);
