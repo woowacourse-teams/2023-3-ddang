@@ -16,22 +16,25 @@
 
     <style name="Theme.DdangDdangDdang" parent="Base.Theme.DdangDdangDdang" />
 
-    <style name="App.Custom.Picker" parent="Theme.Material3.DayNight.Dialog">
-        <!-- 상단 색 변경 -->
-        <item name="colorAccent">@color/primary</item>
-        <!-- dialog의 배경 변경 -->
-        <item name="background">@color/primary</item>
-        <!-- 선택한 날짜를 표시할 색상 -->
-        <item name="colorControlActivated">@color/primary</item>
-        <item name="colorControlHighlight">@color/red_700</item>
+    <style name="App.Custom.Picker" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:datePickerStyle">@style/DatePicker</item>
+        <item name="android:timePickerStyle">@style/TimePicker</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerPositiveButtonStyle
         </item>
         <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerNegativeButtonStyle
         </item>
     </style>
 
+    <style name="DatePicker" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:datePickerMode">spinner</item>
+    </style>
+
+    <style name="TimePicker" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
+
     <style name="DatePickerNegativeButtonStyle" parent="android:Widget.Material.Button.Borderless">
-        <item name="android:textColor">@color/grey_300</item>
+        <item name="android:textColor">@color/grey_500</item>
     </style>
 
     <style name="DatePickerPositiveButtonStyle" parent="android:Widget.Material.Button.Borderless">
