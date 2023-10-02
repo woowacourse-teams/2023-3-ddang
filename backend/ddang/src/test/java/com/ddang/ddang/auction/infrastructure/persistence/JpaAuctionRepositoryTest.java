@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.infrastructure.persistence.fixture.JpaAuctionRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
@@ -23,7 +24,7 @@ import org.springframework.context.annotation.Import;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class JpaAuctionRepositoryTest {
+class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
 
     @PersistenceContext
     EntityManager em;
@@ -60,7 +61,7 @@ class JpaAuctionRepositoryTest {
                                         .description("이것은 경매 상품 1 입니다.")
                                         .bidUnit(new BidUnit(1_000))
                                         .startPrice(new Price(1_000))
-                                        .closingTime(LocalDateTime.now())
+                                        .closingTime(시간.atZone(위치).toLocalDateTime())
                                         .build();
 
         auctionRepository.save(expected);
