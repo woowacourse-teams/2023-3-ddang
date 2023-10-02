@@ -18,7 +18,7 @@
         android:id="@+id/cl_second_region_item"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@color/grey_50_to_primary_selected"
+        android:background="@color/grey_50_to_selected_second_region_bg_selected"
         android:onClick="@{() -> onItemClick.invoke(region.id)}">
 
         <TextView

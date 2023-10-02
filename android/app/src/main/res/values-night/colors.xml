@@ -5,6 +5,9 @@
     <color name="bottom_navigation_active">@color/red_500</color>
     <color name="auction_status_text_color">@color/grey_900</color>
 
+    <color name="selected_second_region_background">@color/red_900</color>
+    <color name="selected_second_region_text">@color/grey_50</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
