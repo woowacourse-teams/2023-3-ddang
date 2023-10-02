@@ -26,7 +26,8 @@
     </style>
 
     <style name="DatePicker" parent="@android:style/Widget.Material.DatePicker">
-        <item name="android:datePickerMode">spinner</item>
+        <item name="android:datePickerMode">calendar</item>
+        <item name="android:headerBackground">@color/primary</item>
     </style>
 
     <style name="TimePicker" parent="@android:style/Widget.Material.TimePicker">
