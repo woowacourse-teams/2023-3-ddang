@@ -27,7 +27,7 @@ class ProfileImageServiceTest extends ProfileImageServiceFixture {
         final Resource actual = imageService.readProfileImage(프로필_이미지.getId());
 
         // then
-        assertThat(actual.getFilename()).isEqualTo(프로필_이미지_파읾명);
+        assertThat(actual.getFilename()).isEqualTo(프로필_이미지_파일명);
     }
 
     @Test
@@ -45,7 +45,7 @@ class ProfileImageServiceTest extends ProfileImageServiceFixture {
         final Resource actual = imageService.readAuctionImage(경매_이미지.getId());
 
         // then
-        assertThat(actual.getFilename()).isEqualTo(경매_이미지_파읾명);
+        assertThat(actual.getFilename()).isEqualTo(경매_이미지_파일명);
     }
 
     @Test
