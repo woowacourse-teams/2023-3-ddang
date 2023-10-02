@@ -74,9 +74,6 @@ class BidServiceTest extends BidServiceFixture {
 
     @Test
     void 첫_입찰자는_시작가를_입찰로_등록할_수_있다() {
-        //given
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공);
-
         // when
         final Long actual = bidService.create(시작가로_입찰_요청_dto, 이미지_절대_url);
 
