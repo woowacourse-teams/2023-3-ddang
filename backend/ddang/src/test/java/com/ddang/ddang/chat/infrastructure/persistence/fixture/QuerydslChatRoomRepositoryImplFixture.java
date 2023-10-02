@@ -44,36 +44,28 @@ public class QuerydslChatRoomRepositoryImplFixture {
     @Autowired
     private JpaChatRoomRepository chatRoomRepository;
 
-    private Category 전자기기_카테고리;
-    private Category 전자기기_서브_노트북_카테고리;
-    private ProfileImage 프로필_이미지;
-    private User 판매자;
-    private User 구매자;
-    private AuctionImage 대표_이미지가_아닌_경매_이미지;
-    private Bid 입찰;
-
     protected AuctionImage 경매_대표_이미지;
     protected Auction 경매;
     protected ChatRoom 채팅방;
 
     @BeforeEach
     void setUp() {
-        전자기기_카테고리 = new Category("전자기기");
-        전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
-        프로필_이미지 = new ProfileImage("upload.png", "store.png");
-        판매자 = User.builder()
-                   .name("판매자")
-                   .profileImage(프로필_이미지)
-                   .reliability(4.7d)
-                   .oauthId("12345")
-                   .build();
-        구매자 = User.builder()
-                   .name("구매자")
-                   .profileImage(프로필_이미지)
-                   .reliability(4.7d)
-                   .oauthId("12346")
-                   .build();
-        대표_이미지가_아닌_경매_이미지 =
+        final Category 전자기기_카테고리 = new Category("전자기기");
+        final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
+        final ProfileImage 프로필_이미지 = new ProfileImage("upload.png", "store.png");
+        final User 판매자 = User.builder()
+                              .name("판매자")
+                              .profileImage(프로필_이미지)
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
+        final User 구매자 = User.builder()
+                              .name("구매자")
+                              .profileImage(프로필_이미지)
+                              .reliability(4.7d)
+                              .oauthId("12346")
+                              .build();
+        final AuctionImage 대표_이미지가_아닌_경매_이미지 =
                 new AuctionImage("대표 이미지가_아닌_경매_이미지.png", "대표 이미지가_아닌_경매_이미지.png");
 
         경매 = Auction.builder()
@@ -86,7 +78,7 @@ public class QuerydslChatRoomRepositoryImplFixture {
                      .closingTime(LocalDateTime.now())
                      .build();
 
-        입찰 = new Bid(경매, 구매자, new BidPrice(15_000));
+        final Bid 입찰 = new Bid(경매, 구매자, new BidPrice(15_000));
 
         경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
         채팅방 = new ChatRoom(경매, 구매자);

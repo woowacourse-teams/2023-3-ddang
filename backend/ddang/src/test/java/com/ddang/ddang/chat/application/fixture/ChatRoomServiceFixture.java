@@ -53,23 +53,6 @@ public class ChatRoomServiceFixture {
     @Autowired
     private JpaMessageRepository messageRepository;
 
-    private Category 전자기기_카테고리;
-    private Category 전자기기_서브_노트북_카테고리;
-    private ProfileImage 프로필_이미지;
-    private AuctionImage 경매_대표_이미지;
-    private AuctionImage 대표_이미지가_아닌_경매_이미지;
-    private AuctionImage 엔초의_경매_대표_이미지;
-    private AuctionImage 엔초의_대표_이미지가_아닌_경매_이미지;
-    private AuctionImage 제이미의_경매_대표_이미지;
-    private AuctionImage 제이미의_대표_이미지가_아닌_경매_이미지;
-    private Bid 채팅방_없는_경매_입찰;
-    private Bid 지토가_엔초_경매에_입찰;
-    private Bid 엔초가_제이미_경매에_입찰;
-    private Auction 종료되지_않은_경매;
-    private Auction 낙찰자가_없는_경매;
-    private Auction 판매자_제이미_구매자_엔초_경매;
-    private ChatRoomAndImageDto 엔초_지토_채팅방_정보;
-
     protected User 판매자;
     protected User 구매자;
     protected User 엔초;
@@ -103,20 +86,20 @@ public class ChatRoomServiceFixture {
 
     @BeforeEach
     void setUp() {
-        전자기기_카테고리 = new Category("전자기기");
-        전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
+        final Category 전자기기_카테고리 = new Category("전자기기");
+        final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
 
-        프로필_이미지 = new ProfileImage("upload.png", "store.png");
-        경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
-        대표_이미지가_아닌_경매_이미지 =
+        final ProfileImage 프로필_이미지 = new ProfileImage("upload.png", "store.png");
+        final AuctionImage 경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
+        final AuctionImage 대표_이미지가_아닌_경매_이미지 =
                 new AuctionImage("대표 이미지가_아닌_경매_이미지.png", "대표 이미지가_아닌_경매_이미지.png");
-        엔초의_경매_대표_이미지 = new AuctionImage("엔초의_경매_대표_이미지.png", "엔초의_경매_대표_이미지.png");
-        엔초의_대표_이미지가_아닌_경매_이미지 =
+        final AuctionImage 엔초의_경매_대표_이미지 = new AuctionImage("엔초의_경매_대표_이미지.png", "엔초의_경매_대표_이미지.png");
+        final AuctionImage 엔초의_대표_이미지가_아닌_경매_이미지 =
                 new AuctionImage("엔초의_대표 이미지가_아닌_경매_이미지.png", "엔초의_대표 이미지가_아닌_경매_이미지.png");
-        제이미의_경매_대표_이미지 = new AuctionImage("제이미의_경매_대표_이미지.png", "제이미의_경매_대표_이미지.png");
-        제이미의_대표_이미지가_아닌_경매_이미지 =
+        final AuctionImage 제이미의_경매_대표_이미지 = new AuctionImage("제이미의_경매_대표_이미지.png", "제이미의_경매_대표_이미지.png");
+        final AuctionImage 제이미의_대표_이미지가_아닌_경매_이미지 =
                 new AuctionImage("제이미의_대표 이미지가_아닌_경매_이미지.png", "제이미의_대표 이미지가_아닌_경매_이미지.png");
 
         판매자 = User.builder()
@@ -166,7 +149,7 @@ public class ChatRoomServiceFixture {
                                .bidUnit(new BidUnit(1_000))
                                .closingTime(LocalDateTime.now())
                                .build();
-        종료되지_않은_경매 = Auction.builder()
+        final Auction 종료되지_않은_경매 = Auction.builder()
                                .seller(판매자)
                                .title("맥북")
                                .description("맥북 팔아요")
@@ -175,7 +158,7 @@ public class ChatRoomServiceFixture {
                                .bidUnit(new BidUnit(1_000))
                                .closingTime(LocalDateTime.now().plusDays(10L))
                                .build();
-        낙찰자가_없는_경매 = Auction.builder()
+        final Auction 낙찰자가_없는_경매 = Auction.builder()
                                .seller(판매자)
                                .title("맥북")
                                .description("맥북 팔아요")
@@ -193,7 +176,7 @@ public class ChatRoomServiceFixture {
                                        .bidUnit(new BidUnit(1_000))
                                        .closingTime(LocalDateTime.now())
                                        .build();
-        판매자_제이미_구매자_엔초_경매 = Auction.builder()
+        final Auction 판매자_제이미_구매자_엔초_경매 = Auction.builder()
                                          .seller(제이미)
                                          .title("제이미 맥북")
                                          .description("제이미 맥북 팔아요")
@@ -209,9 +192,9 @@ public class ChatRoomServiceFixture {
                 List.of(채팅방이_없는_경매, 종료되지_않은_경매, 낙찰자가_없는_경매, 판매자_엔초_구매자_지토_경매, 판매자_제이미_구매자_엔초_경매)
         );
 
-        채팅방_없는_경매_입찰 = new Bid(채팅방이_없는_경매, 구매자, new BidPrice(15_000));
-        지토가_엔초_경매에_입찰 = new Bid(판매자_엔초_구매자_지토_경매, 지토, new BidPrice(15_000));
-        엔초가_제이미_경매에_입찰 = new Bid(판매자_제이미_구매자_엔초_경매, 엔초, new BidPrice(15_000));
+        final Bid 채팅방_없는_경매_입찰 = new Bid(채팅방이_없는_경매, 구매자, new BidPrice(15_000));
+        final Bid 지토가_엔초_경매에_입찰 = new Bid(판매자_엔초_구매자_지토_경매, 지토, new BidPrice(15_000));
+        final Bid 엔초가_제이미_경매에_입찰 = new Bid(판매자_제이미_구매자_엔초_경매, 엔초, new BidPrice(15_000));
         bidRepository.saveAll(List.of(채팅방_없는_경매_입찰, 지토가_엔초_경매에_입찰, 엔초가_제이미_경매에_입찰));
         채팅방이_없는_경매.updateLastBid(채팅방_없는_경매_입찰);
         판매자_엔초_구매자_지토_경매.updateLastBid(지토가_엔초_경매에_입찰);
@@ -235,7 +218,7 @@ public class ChatRoomServiceFixture {
                                            .build();
         messageRepository.saveAll(List.of(엔초가_지토에게_1시에_보낸_쪽지, 제이미가_엔초에게_2시에_보낸_쪽지));
 
-        엔초_지토_채팅방_정보 = new ChatRoomAndImageDto(엔초_지토_채팅방, 엔초의_경매_대표_이미지);
+        final ChatRoomAndImageDto 엔초_지토_채팅방_정보 = new ChatRoomAndImageDto(엔초_지토_채팅방, 엔초의_경매_대표_이미지);
         엔초_회원_정보 = new AuthenticationUserInfo(엔초.getId());
         판매자_회원_정보 = new AuthenticationUserInfo(판매자.getId());
         경매에_참여한_적_없는_사용자_정보 = new AuthenticationUserInfo(경매에_참여한_적_없는_사용자.getId());

@@ -44,12 +44,7 @@ public class JpaChatRoomRepositoryFixture {
     @Autowired
     private JpaChatRoomRepository chatRoomRepository;
 
-    private Category 전자기기_카테고리;
-    private Category 전자기기_서브_노트북_카테고리;
-    private ProfileImage 프로필_이미지;
-    private AuctionImage 경매이미지1;
-    private AuctionImage 경매이미지2;
-    private User 판매자;
+    protected User 판매자;
     protected User 구매자;
     protected Auction 경매;
     private Bid 입찰;
@@ -58,11 +53,11 @@ public class JpaChatRoomRepositoryFixture {
 
     @BeforeEach
     void setUp() {
-        전자기기_카테고리 = new Category("전자기기");
-        전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
-        프로필_이미지 = new ProfileImage("upload.png", "store.png");
-        경매이미지1 = new AuctionImage("경매이미지1.png", "경매이미지1.png");
-        경매이미지2 = new AuctionImage("경매이미지2.png", "경매이미지2.png");
+        final Category 전자기기_카테고리 = new Category("전자기기");
+        final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
+        final ProfileImage 프로필_이미지 = new ProfileImage("upload.png", "store.png");
+        final AuctionImage 경매이미지1 = new AuctionImage("경매이미지1.png", "경매이미지1.png");
+        final AuctionImage 경매이미지2 = new AuctionImage("경매이미지2.png", "경매이미지2.png");
 
         판매자 = User.builder()
                    .name("판매자")
