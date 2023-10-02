@@ -42,16 +42,17 @@ public class AuctionReportServiceFixture {
     @Autowired
     private JpaAuctionReportRepository auctionReportRepository;
 
+    protected User 이미_신고한_신고자1;
+    protected User 이미_신고한_신고자2;
+    protected User 이미_신고한_신고자3;
+    protected Auction 경매;
+
     protected CreateAuctionReportDto 새로운_경매_신고_요청_dto;
     protected CreateAuctionReportDto 존재하지_않는_사용자의_경매_신고_요청_dto;
     protected CreateAuctionReportDto 존재하지_않는_경매_신고_요청_dto;
     protected CreateAuctionReportDto 판매자가_본인의_경매_신고_요청_dto;
     protected CreateAuctionReportDto 삭제된_경매_신고_요청_dto;
     protected CreateAuctionReportDto 이미_신고한_사용자가_경매_신고_요청_dto;
-    protected User 이미_신고한_신고자1;
-    protected User 이미_신고한_신고자2;
-    protected User 이미_신고한_신고자3;
-    protected Auction 경매;
 
     @BeforeEach
     void setUp() {

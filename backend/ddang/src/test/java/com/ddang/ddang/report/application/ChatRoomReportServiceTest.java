@@ -7,7 +7,7 @@ import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomExcepti
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.fixture.ChatRoomReportServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

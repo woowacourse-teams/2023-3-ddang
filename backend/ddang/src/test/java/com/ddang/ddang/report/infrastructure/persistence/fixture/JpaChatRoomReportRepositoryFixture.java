@@ -53,7 +53,6 @@ public class JpaChatRoomReportRepositoryFixture {
 
     protected Long 존재하지_않는_채팅방_아이디 = -9999L;
     protected Long 존재하지_않는_사용자_아이디 = -9999L;
-    protected User 판매자;
     protected User 구매자1;
     protected User 구매자1겸_신고자;
     protected ChatRoom 채팅방1;
@@ -64,12 +63,12 @@ public class JpaChatRoomReportRepositoryFixture {
     @BeforeEach
     void setUp() {
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
-        판매자 = User.builder()
-                  .name("판매자")
-                  .profileImage(프로필_이미지)
-                  .reliability(4.7d)
-                  .oauthId("12345")
-                  .build();
+        final User 판매자 = User.builder()
+                             .name("판매자")
+                             .profileImage(프로필_이미지)
+                             .reliability(4.7d)
+                             .oauthId("12345")
+                             .build();
         구매자1 = User.builder()
                    .name("구매자1")
                    .profileImage(프로필_이미지)

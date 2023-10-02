@@ -50,8 +50,6 @@ public class JpaAuctionReportRepositoryFixture {
     protected Long 존재하지_않는_사용자_아이디 = -9999L;
     protected User 판매자;
     protected User 신고자1;
-    protected User 신고자2;
-    protected User 신고자3;
     protected Auction 경매;
     protected AuctionReport 경매_신고1;
     protected AuctionReport 경매_신고2;
@@ -72,18 +70,18 @@ public class JpaAuctionReportRepositoryFixture {
                    .reliability(4.7d)
                    .oauthId("12346")
                    .build();
-        신고자2 = User.builder()
-                   .name("신고자2")
-                   .profileImage(프로필_이미지)
-                   .reliability(4.7d)
-                   .oauthId("12347")
-                   .build();
-        신고자3 = User.builder()
-                   .name("신고자3")
-                   .profileImage(프로필_이미지)
-                   .reliability(4.7d)
-                   .oauthId("12348")
-                   .build();
+        final User 신고자2 = User.builder()
+                              .name("신고자2")
+                              .profileImage(프로필_이미지)
+                              .reliability(4.7d)
+                              .oauthId("12347")
+                              .build();
+        final User 신고자3 = User.builder()
+                              .name("신고자3")
+                              .profileImage(프로필_이미지)
+                              .reliability(4.7d)
+                              .oauthId("12348")
+                              .build();
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");

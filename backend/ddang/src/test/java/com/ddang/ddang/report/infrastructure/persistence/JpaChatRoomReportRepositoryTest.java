@@ -6,7 +6,7 @@ import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaChatRoomReportRepositoryFixture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
