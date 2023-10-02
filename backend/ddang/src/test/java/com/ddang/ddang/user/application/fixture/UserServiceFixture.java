@@ -14,7 +14,7 @@ import org.springframework.mock.web.MockMultipartFile;
 public class UserServiceFixture {
 
     @Autowired
-    JpaUserRepository userRepository;
+    private JpaUserRepository userRepository;
 
     protected Long 존재하지_않는_사용자_아이디 = -999L;
 
