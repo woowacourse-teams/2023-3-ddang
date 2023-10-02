@@ -46,8 +46,8 @@ class JpaRegionRepositoryTest extends JpaRegionRepositoryFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0)).isEqualTo(서울특별시_하위_강남구);
-            softAssertions.assertThat(actual.get(1)).isEqualTo(서울특별시_하위_송파구);
+            softAssertions.assertThat(actual.get(0)).isEqualTo(서울특별시_강남구);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(서울특별시_송파구);
         });
     }
 
@@ -55,23 +55,23 @@ class JpaRegionRepositoryTest extends JpaRegionRepositoryFixture {
     void 두번째_지역에_해당하는_모든_세번째_지역을_조회한다() {
         // when
         final List<Region> actual =
-                regionRepository.findThirdAllByFirstAndSecondRegionId(서울특별시.getId(), 서울특별시_하위_강남구.getId());
+                regionRepository.findThirdAllByFirstAndSecondRegionId(서울특별시.getId(), 서울특별시_강남구.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0)).isEqualTo(서울특별시_하위_강남구_하위_삼성동);
-            softAssertions.assertThat(actual.get(1)).isEqualTo(서울특별시_하위_강남구_하위_대치동);
+            softAssertions.assertThat(actual.get(0)).isEqualTo(서울특별시_강남구_삼성동);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(서울특별시_강남구_대치동);
         });
     }
 
     @Test
     void 세번째_지역을_조회한다() {
         // when
-        final Optional<Region> actual = regionRepository.findThirdRegionById(서울특별시_하위_강남구_하위_삼성동.getId());
+        final Optional<Region> actual = regionRepository.findThirdRegionById(서울특별시_강남구_삼성동.getId());
 
         // then
-        assertThat(actual).contains(서울특별시_하위_강남구_하위_삼성동);
+        assertThat(actual).contains(서울특별시_강남구_삼성동);
     }
 
     @Test
@@ -86,14 +86,14 @@ class JpaRegionRepositoryTest extends JpaRegionRepositoryFixture {
     @Test
     void 세번째_지역에_해당하는_모든_id를_전달하면_그에_맞는_thirdRegions를_반환한다() {
         // when
-        final List<Long> thirdRegionIds = List.of(서울특별시_하위_강남구_하위_삼성동.getId(), 서울특별시_하위_강남구_하위_대치동.getId());
+        final List<Long> thirdRegionIds = List.of(서울특별시_강남구_삼성동.getId(), 서울특별시_강남구_대치동.getId());
         final List<Region> actual = regionRepository.findAllThirdRegionByIds(thirdRegionIds);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0)).isEqualTo(서울특별시_하위_강남구_하위_삼성동);
-            softAssertions.assertThat(actual.get(1)).isEqualTo(서울특별시_하위_강남구_하위_대치동);
+            softAssertions.assertThat(actual.get(0)).isEqualTo(서울특별시_강남구_삼성동);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(서울특별시_강남구_대치동);
         });
     }
 

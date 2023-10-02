@@ -58,11 +58,11 @@ class RegionServiceTest extends RegionServiceFixture {
             softAssertions.assertThat(actualFirstRegion1).isEqualTo(서울특별시);
             softAssertions.assertThat(actualFirstRegion2).isEqualTo(두번째_지역이_없는_첫번째_지역);
             softAssertions.assertThat(actualFirstRegion1.getSecondRegions()).hasSize(2);
-            softAssertions.assertThat(actualSecondRegion1OfFirstRegion1).isEqualTo(서울특별시_하위_강남구);
+            softAssertions.assertThat(actualSecondRegion1OfFirstRegion1).isEqualTo(서울특별시_강남구);
             softAssertions.assertThat(actualSecondRegion2OfFirstRegion1).isEqualTo(세번째_지역이_없는_두번째_지역);
             softAssertions.assertThat(actualSecondRegion1OfFirstRegion1.getThirdRegions()).hasSize(2);
-            softAssertions.assertThat(actualThirdRegion1OfSecondRegion1).isEqualTo(서울특별시_하위_강남구_하위_삼성동);
-            softAssertions.assertThat(actualThirdRegion2OfSecondRegion1).isEqualTo(서울특별시_하위_강남구_하위_대치동);
+            softAssertions.assertThat(actualThirdRegion1OfSecondRegion1).isEqualTo(서울특별시_강남구_삼성동);
+            softAssertions.assertThat(actualThirdRegion2OfSecondRegion1).isEqualTo(서울특별시_강남구_대치동);
         });
     }
 
@@ -87,7 +87,7 @@ class RegionServiceTest extends RegionServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).id()).isEqualTo(서울특별시_하위_강남구.getId());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(서울특별시_강남구.getId());
             softAssertions.assertThat(actual.get(1).id()).isEqualTo(세번째_지역이_없는_두번째_지역.getId());
         });
     }
@@ -104,13 +104,13 @@ class RegionServiceTest extends RegionServiceFixture {
     void 두번째_지역에_해당하는_모든_세번째_지역을_조회한다() {
         // when
         final List<ReadRegionDto> actual = 
-                regionService.readAllThirdByFirstAndSecondRegionId(서울특별시.getId(), 서울특별시_하위_강남구.getId());
+                regionService.readAllThirdByFirstAndSecondRegionId(서울특별시.getId(), 서울특별시_강남구.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).id()).isEqualTo(서울특별시_하위_강남구_하위_삼성동.getId());
-            softAssertions.assertThat(actual.get(1).id()).isEqualTo(서울특별시_하위_강남구_하위_대치동.getId());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(서울특별시_강남구_삼성동.getId());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(서울특별시_강남구_대치동.getId());
         });
     }
 
