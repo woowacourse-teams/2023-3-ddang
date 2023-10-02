@@ -23,12 +23,12 @@
 
         <TextView
             android:id="@+id/tv_region"
+            style="@style/Header2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{region.name}"
             android:textColor="@color/grey_700"
             android:textFontWeight="400"
-            android:textSize="@dimen/textsize_sub_header"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

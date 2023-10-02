@@ -43,6 +43,8 @@
     </style>
 
     <style name="ChipText">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:fontFamily">@font/pretendard</item>
         <item name="android:textSize">@dimen/textsize_filter_chips</item>
         <item name="android:textFontWeight">700</item>
         <item name="android:fontWeight">700</item>
