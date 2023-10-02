@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class ImageServiceFixture {
 
     @Autowired
-    JpaProfileImageRepository profileImageRepository;
+    private JpaProfileImageRepository profileImageRepository;
 
     @Autowired
-    JpaAuctionImageRepository auctionImageRepository;
+    private JpaAuctionImageRepository auctionImageRepository;
 
     protected Long 존재하지_않는_프로필_이미지_아이디 = -999L;
     protected Long 존재하지_않는_경매_이미지_아이디 = -999L;
