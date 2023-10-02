@@ -1,4 +1,4 @@
-package com.ddang.ddang.review.presentation.response;
+package com.ddang.ddang.review.presentation.dto.response;
 
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.fasterxml.jackson.annotation.JsonFormat;

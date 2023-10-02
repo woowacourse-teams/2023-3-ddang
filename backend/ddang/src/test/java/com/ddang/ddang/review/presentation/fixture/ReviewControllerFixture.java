@@ -4,7 +4,7 @@ import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.dto.ReadUserInReviewDto;
-import com.ddang.ddang.review.presentation.request.CreateReviewRequest;
+import com.ddang.ddang.review.presentation.dto.request.CreateReviewRequest;
 
 import java.time.LocalDateTime;
 

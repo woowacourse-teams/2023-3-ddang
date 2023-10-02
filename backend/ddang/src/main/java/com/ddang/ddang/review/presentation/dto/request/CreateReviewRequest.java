@@ -1,4 +1,4 @@
-package com.ddang.ddang.review.presentation.request;
+package com.ddang.ddang.review.presentation.dto.request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

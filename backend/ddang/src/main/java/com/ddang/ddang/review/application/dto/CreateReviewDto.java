@@ -2,7 +2,7 @@ package com.ddang.ddang.review.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.review.domain.Review;
-import com.ddang.ddang.review.presentation.request.CreateReviewRequest;
+import com.ddang.ddang.review.presentation.dto.request.CreateReviewRequest;
 import com.ddang.ddang.user.domain.User;
 
 public record CreateReviewDto(Long auctionId, Long writerId, Long targetId, String content, Double score) {
