@@ -18,7 +18,7 @@
         android:id="@+id/cl_auction_detail_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+
         tools:context=".feature.detail.AuctionDetailActivity">
 
         <androidx.appcompat.widget.Toolbar
@@ -155,7 +155,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:background="@{AuctionDetailFormatter.INSTANCE.formatAuctionStatusColor(context, viewModel.auctionDetailModel.auctionDetailStatusModel.colorId)}"
+                    android:background="@drawable/bg_radius_5dp"
+                    android:backgroundTint="@{AuctionDetailFormatter.INSTANCE.formatAuctionStatusColor(context, viewModel.auctionDetailModel.auctionDetailStatusModel.colorId)}"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
                     android:text="@{viewModel.auctionDetailModel.auctionDetailStatusModel.progressStatus}"
@@ -163,7 +164,7 @@
                     android:textFontWeight="700"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_auction_category"
-                    tools:background="@color/red_300"
+                    tools:backgroundTint="@color/red_300"
                     tools:text="경매중" />
 
                 <TextView
@@ -207,6 +208,7 @@
                     style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
                     android:text="@{@string/detail_auction_start_price(viewModel.auctionDetailModel.startPrice)}"
                     android:textColor="@color/grey_700"
                     android:textFontWeight="400"
@@ -222,6 +224,7 @@
                     android:src="@drawable/ic_people_alt_24"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_start_price"
+                    android:layout_marginTop="12dp"
                     app:tint="@color/grey_700" />
 
                 <TextView
