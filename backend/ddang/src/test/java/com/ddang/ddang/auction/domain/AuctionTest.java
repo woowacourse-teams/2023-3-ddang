@@ -4,10 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ddang.ddang.auction.domain.fixture.AuctionFixture;
 import com.ddang.ddang.bid.domain.Bid;
-import com.ddang.ddang.configuration.JpaConfiguration;
-import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -15,18 +12,10 @@ import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
-@DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class AuctionTest extends AuctionFixture {
-
-    @Autowired
-    JpaUserRepository userRepository;
 
     @Test
     void 경매를_삭제한다() {
