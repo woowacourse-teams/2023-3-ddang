@@ -96,7 +96,6 @@ class MessageServiceTest extends MessageServiceFixture {
     @Test
     void 첫_번째_메시지_이후에_생성된_모든_메시지를_조회한다() {
         // when
-        System.out.println("두_번째_메시지부터_모든_메시지_조회용_메시지_request = " + 두_번째_메시지부터_모든_메시지_조회용_메시지_request);
         final List<ReadMessageDto> actual = messageService.readAllByLastMessageId(두_번째_메시지부터_모든_메시지_조회용_메시지_request);
 
         // then
