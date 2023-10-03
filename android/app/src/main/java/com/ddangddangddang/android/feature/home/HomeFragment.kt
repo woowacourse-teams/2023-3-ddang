@@ -109,4 +109,8 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
             binding.srlReloadAuctions.isRefreshing = false
         }
     }
+
+    fun scrollToTop() {
+        binding.rvAuction.smoothScrollToPosition(0)
+    }
 }
