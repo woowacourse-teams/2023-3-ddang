@@ -23,6 +23,8 @@ import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
+import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
+import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
@@ -322,6 +324,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, DeviceTokenNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAuctionToAskQuestionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidAuctionToAskQuestionException(final InvalidAuctionToAskQuestionException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidAuctionToAskQuestionException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidQuestionerException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidQuestionerException(final InvalidQuestionerException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidQuestionerException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
