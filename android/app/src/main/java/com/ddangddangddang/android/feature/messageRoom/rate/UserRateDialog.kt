@@ -22,10 +22,10 @@ class UserRateDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadPartnerId()
+        loadPartnerInfo()
     }
 
-    private fun loadPartnerId() {
+    private fun loadPartnerInfo() {
         activityViewModel.messageRoomInfo.value?.let { info ->
             viewModel.setPartnerInfo(info)
             return
