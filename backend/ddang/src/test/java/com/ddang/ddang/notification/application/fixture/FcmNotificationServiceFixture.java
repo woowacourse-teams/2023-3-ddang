@@ -14,7 +14,6 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
-import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
@@ -57,9 +56,9 @@ public class FcmNotificationServiceFixture {
     private User 입찰자1;
     private User 기기토큰이_없는_사용자;
     protected DeviceToken 기기토큰;
-    protected SendNotificationEvent 알림_전송_이벤트_DTO;
-    protected SendNotificationEvent 기기토큰이_없는_사용자의_알림_전송_이벤트_DTO;
-    protected SendNotificationEvent 프로필_이미지가_null인_알림_전송_이벤트_DTO;
+    protected CreateNotificationDto 프로필_이미지가_null인_알림_생성_dto;
+    protected CreateNotificationDto 기기토큰이_없는_사용자의_알림_생성_DTO;
+    protected CreateNotificationDto 알림_생성_DTO;
 
     protected String 알림_메시지_아이디 = "notificationMessageId";
 
@@ -99,7 +98,7 @@ public class FcmNotificationServiceFixture {
 
         deviceTokenRepository.save(기기토큰);
 
-        final CreateNotificationDto 알림_생성_DTO = new CreateNotificationDto(
+        알림_생성_DTO = new CreateNotificationDto(
                 NotificationType.MESSAGE,
                 사용자1.getId(),
                 "제목",
@@ -107,9 +106,8 @@ public class FcmNotificationServiceFixture {
                 "/redirectUrlForNotification",
                 "image.png"
         );
-        알림_전송_이벤트_DTO = new SendNotificationEvent(알림_생성_DTO);
 
-        final CreateNotificationDto 기기토큰이_없는_사용자의_알림_생성_DTO = new CreateNotificationDto(
+        기기토큰이_없는_사용자의_알림_생성_DTO = new CreateNotificationDto(
                 NotificationType.MESSAGE,
                 기기토큰이_없는_사용자.getId(),
                 "제목",
@@ -117,7 +115,6 @@ public class FcmNotificationServiceFixture {
                 "/redirectUrl",
                 "image.png"
         );
-        기기토큰이_없는_사용자의_알림_전송_이벤트_DTO = new SendNotificationEvent(기기토큰이_없는_사용자의_알림_생성_DTO);
 
         final Auction 경매 = Auction.builder()
                                   .seller(사용자1)
@@ -149,6 +146,6 @@ public class FcmNotificationServiceFixture {
         messageRepository.save(메시지);
 
         final MessageDto 프로필_이미지가_null인_메시지_DTO = MessageDto.of(메시지, 채팅방, 사용자1, 사용자2, null);
-        프로필_이미지가_null인_알림_전송_이벤트_DTO = new SendNotificationEvent(CreateNotificationDto.from(프로필_이미지가_null인_메시지_DTO));
+        프로필_이미지가_null인_알림_생성_dto = CreateNotificationDto.from(프로필_이미지가_null인_메시지_DTO);
     }
 }

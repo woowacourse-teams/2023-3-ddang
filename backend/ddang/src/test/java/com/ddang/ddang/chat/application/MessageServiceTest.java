@@ -8,6 +8,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
+import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -15,7 +16,6 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -179,7 +179,7 @@ class MessageServiceTest {
         messageService.create(createMessageDto, "");
 
         // then
-        final int actual = (int) events.stream(SendNotificationEvent.class).count();
+        final int actual = (int) events.stream(MessageNotificationEvent.class).count();
         assertThat(actual).isEqualTo(1);
     }
 

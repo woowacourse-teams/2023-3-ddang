@@ -14,7 +14,6 @@ import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
@@ -156,56 +155,7 @@ class BidServiceTest {
         assertThat(actual).isPositive();
     }
 
-    @Test
-    void 마지막_입찰_이후_상위_입찰자가_생기면_기존_마지막_입찰자에게_알림을_보낸다() {
-        // given
-        final User seller = User.builder()
-                                .name("판매자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
-        final Auction auction = Auction.builder()
-                                       .seller(seller)
-                                       .title("경매 상품 1")
-                                       .description("이것은 경매 상품 1 입니다.")
-                                       .bidUnit(new BidUnit(1_000))
-                                       .startPrice(new Price(1_000))
-                                       .closingTime(LocalDateTime.now().plusDays(7))
-                                       .build();
-        final AuctionImage auctionImage = new AuctionImage("auction_image.png", "auction_image.png");
-        final User user1 = User.builder()
-                               .name("사용자1")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
-                               .reliability(4.7d)
-                               .oauthId("12346")
-                               .build();
-        final User user2 = User.builder()
-                               .name("사용자2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
-                               .reliability(4.7d)
-                               .oauthId("12347")
-                               .build();
-
-        userRepository.save(seller);
-        auctionRepository.save(auction);
-        auctionImageRepository.save(auctionImage);
-        auction.addAuctionImages(List.of(auctionImage));
-        userRepository.save(user1);
-        userRepository.save(user2);
-
-        final CreateBidDto createBidDto1 = new CreateBidDto(auction.getId(), 10_000, user1.getId());
-        final CreateBidDto createBidDto2 = new CreateBidDto(auction.getId(), 14_000, user2.getId());
-
-        bidService.create(createBidDto1, "");
-
-        // when
-        bidService.create(createBidDto2, "");
-
-        // then
-        final int actual = (int) events.stream(SendNotificationEvent.class).count();
-        assertThat(actual).isEqualTo(1);
-    }
+    // TODO: 2023/10/04 입찰 알림 테스트 작성
 
     @Test
     void 첫_입찰자는_시작가를_입찰로_등록할_수_있다() {

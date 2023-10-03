@@ -12,7 +12,6 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
-import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -58,12 +57,12 @@ public class BidService {
             return saveBid.getId();
         }
 
+        // TODO: 2023/10/03 입찰자 이벤트 만들기
         final CreateNotificationDto createNotificationDto = CreateNotificationDto.of(
                 previousBidder.get().getId(),
                 auctionAndImageDto,
                 auctionImageAbsoluteUrl
         );
-        eventPublisher.publishEvent(new SendNotificationEvent(createNotificationDto));
 
         return saveBid.getId();
     }

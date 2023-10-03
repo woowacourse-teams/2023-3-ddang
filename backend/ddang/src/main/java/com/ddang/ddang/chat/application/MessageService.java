@@ -3,6 +3,7 @@ package com.ddang.ddang.chat.application;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
+import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
@@ -11,8 +12,6 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.event.domain.SendNotificationEvent;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -57,7 +56,7 @@ public class MessageService {
         final Message persistMessage = messageRepository.save(message);
 
         final MessageDto messageDto = MessageDto.of(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
-        eventPublisher.publishEvent(new SendNotificationEvent(CreateNotificationDto.from(messageDto)));
+        eventPublisher.publishEvent(new MessageNotificationEvent(messageDto));
 
         return persistMessage.getId();
     }
