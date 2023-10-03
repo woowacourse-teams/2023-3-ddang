@@ -4,6 +4,7 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
+import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
@@ -75,5 +76,11 @@ public class ReviewService {
         return targetReviews.stream()
                             .map(ReadReviewDto::from)
                             .toList();
+    }
+
+    public ReadReviewDetailDto read(final Long writerId, final Long auctionId) {
+        return reviewRepository.findByAuctionIdAndWriterId(auctionId, writerId)
+                               .map(ReadReviewDetailDto::from)
+                               .orElse(ReadReviewDetailDto.empty());
     }
 }

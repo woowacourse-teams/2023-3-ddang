@@ -3,6 +3,7 @@ package com.ddang.ddang.review.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
+import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
@@ -123,6 +124,30 @@ class ReviewServiceTest extends ReviewServiceFixture {
             softAssertions.assertThat(actual.get(1).writer().id()).isEqualTo(판매자1.getId());
             softAssertions.assertThat(actual.get(1).content()).isEqualTo(구매자가_판매자1에게_받은_평가.getContent());
             softAssertions.assertThat(actual.get(1).score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore());
+        });
+    }
+
+    @Test
+    void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재한다면_dto에_넣어_반환한다() {
+        // when
+        final ReadReviewDetailDto actual = reviewService.read(판매자1.getId(), 판매자1이_평가한_경매.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore());
+            softAssertions.assertThat(actual.content()).isEqualTo(구매자가_판매자1에게_받은_평가.getContent());
+        });
+    }
+
+    @Test
+    void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재하지_않는다면_dto의_필드가_null이다() {
+        // when
+        final ReadReviewDetailDto actual = reviewService.read(평가_안한_경매_판매자.getId(), 평가_안한_경매.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.score()).isNull();
+            softAssertions.assertThat(actual.content()).isNull();
         });
     }
 }
