@@ -62,7 +62,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
     protected Auction 경매15;
     protected Auction 경매16;
 
-    protected int 페이지_크기 = 3;
+    protected int 페이지_크기_3 = 3;
 
     @BeforeEach
     void commonFixtureSetUp() {

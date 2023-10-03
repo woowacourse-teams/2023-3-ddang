@@ -18,9 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 @DataJpaTest
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture {
 
     QuerydslAuctionRepository querydslAuctionRepository;
@@ -31,13 +31,13 @@ class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture
     }
 
     @Nested
-    class 검색_결과가_존재하는_검색어_테스트 {
+    class 검색_결과가_14개인_검색어_테스트 {
 
         @Test
-        void 첫번째_페이지_요청_테스트() {
+        void 페이지_크기_3_첫번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                    PageRequest.of(0, 페이지_크기),
+                    PageRequest.of(0, 페이지_크기_3),
                     검색어_맥북
             );
 
@@ -52,10 +52,10 @@ class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture
         }
 
         @Test
-        void 두번째_페이지_요청_테스트() {
+        void 페이지_크기_3_두번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                    PageRequest.of(1, 페이지_크기),
+                    PageRequest.of(1, 페이지_크기_3),
                     검색어_맥북
             );
 
@@ -70,10 +70,10 @@ class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture
         }
 
         @Test
-        void 세번째_페이지_요청_테스트() {
+        void 페이지_크기_3_세번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                    PageRequest.of(2, 페이지_크기),
+                    PageRequest.of(2, 페이지_크기_3),
                     검색어_맥북
             );
 
@@ -88,10 +88,10 @@ class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture
         }
 
         @Test
-        void 네번째_페이지_요청_테스트() {
+        void 페이지_크기_3_네번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                    PageRequest.of(3, 페이지_크기),
+                    PageRequest.of(3, 페이지_크기_3),
                     검색어_맥북
             );
 
@@ -106,10 +106,10 @@ class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture
         }
 
         @Test
-        void 다섯번째_페이지_요청_테스트() {
+        void 페이지_크기_3_다섯번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                    PageRequest.of(4, 페이지_크기),
+                    PageRequest.of(4, 페이지_크기_3),
                     검색어_맥북
             );
 
@@ -123,10 +123,10 @@ class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture
         }
 
         @Test
-        void 여섯번째_페이지_요청_테스트() {
+        void 페이지_크기_3_여섯번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                    PageRequest.of(5, 페이지_크기),
+                    PageRequest.of(5, 페이지_크기_3),
                     검색어_맥북
             );
 
@@ -143,10 +143,10 @@ class AuctionForListSearchByTitleTest extends AuctionForListSearchByTitleFixture
     class 검색_결과가_존재하지_않는_검색어_테스트 {
 
         @Test
-        void 첫번째_페이지_요청_테스트() {
+        void 페이지_크기_3_첫번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                    PageRequest.of(0, 페이지_크기),
+                    PageRequest.of(0, 페이지_크기_3),
                     검색어_캐비어
             );
 

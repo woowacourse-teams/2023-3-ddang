@@ -18,9 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 @DataJpaTest
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class AuctionForListByUserIdTest extends AuctionForListByUserIdFixture {
 
     QuerydslAuctionRepository querydslAuctionRepository;
@@ -31,14 +31,14 @@ class AuctionForListByUserIdTest extends AuctionForListByUserIdFixture {
     }
 
     @Nested
-    class 등록한_경매가_있는_사용자_테스트 {
+    class 등록한_경매가_5개인_사용자_테스트 {
 
         @Test
         void 첫번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByUserId(
                     등록한_경매가_5개인_사용자.getId(),
-                    PageRequest.of(0, 페이지_크기)
+                    PageRequest.of(0, 페이지_크기_3)
             );
 
             // then
@@ -56,7 +56,7 @@ class AuctionForListByUserIdTest extends AuctionForListByUserIdFixture {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByUserId(
                     등록한_경매가_5개인_사용자.getId(),
-                    PageRequest.of(1, 페이지_크기)
+                    PageRequest.of(1, 페이지_크기_3)
             );
 
             // then
@@ -73,7 +73,7 @@ class AuctionForListByUserIdTest extends AuctionForListByUserIdFixture {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByUserId(
                     등록한_경매가_5개인_사용자.getId(),
-                    PageRequest.of(2, 페이지_크기)
+                    PageRequest.of(2, 페이지_크기_3)
             );
 
             // then
@@ -89,11 +89,11 @@ class AuctionForListByUserIdTest extends AuctionForListByUserIdFixture {
     class 등록한_경매가_없는_사용자_테스트 {
 
         @Test
-        void 첫번째_페이지_요청_테스트() {
+        void 페이지_크기_3_첫번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByUserId(
                     등록한_경매가_없는_사용자.getId(),
-                    PageRequest.of(0, 페이지_크기)
+                    PageRequest.of(0, 페이지_크기_3)
             );
 
             // then

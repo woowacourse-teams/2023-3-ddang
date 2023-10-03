@@ -18,9 +18,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
 @DataJpaTest
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class AuctionForListByBidderIdTest extends AuctionForListByBidderIdFixture {
 
     QuerydslAuctionRepository querydslAuctionRepository;
@@ -31,14 +31,14 @@ class AuctionForListByBidderIdTest extends AuctionForListByBidderIdFixture {
     }
 
     @Nested
-    class 참여한_경매가_존재하는_사용자_테스트 {
+    class 참여한_경매가_7개인_사용자_테스트 {
 
         @Test
-        void 첫번째_페이지_요청_테스트() {
+        void 페이지_크기_3_첫번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByBidderId(
                     참여한_경매가_7개인_사용자.getId(),
-                    PageRequest.of(0, 페이지_크기)
+                    PageRequest.of(0, 페이지_크기_3)
             );
 
             // then
@@ -52,11 +52,11 @@ class AuctionForListByBidderIdTest extends AuctionForListByBidderIdFixture {
         }
 
         @Test
-        void 두번째_페이지_요청_테스트() {
+        void 페이지_크기_3_두번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByBidderId(
                     참여한_경매가_7개인_사용자.getId(),
-                    PageRequest.of(1, 페이지_크기)
+                    PageRequest.of(1, 페이지_크기_3)
             );
 
             // then
@@ -70,11 +70,11 @@ class AuctionForListByBidderIdTest extends AuctionForListByBidderIdFixture {
         }
 
         @Test
-        void 세번째_페이지_요청_테스트() {
+        void 페이지_크기_3_세번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByBidderId(
                     참여한_경매가_7개인_사용자.getId(),
-                    PageRequest.of(2, 3)
+                    PageRequest.of(2, 페이지_크기_3)
             );
 
             // then
@@ -86,11 +86,11 @@ class AuctionForListByBidderIdTest extends AuctionForListByBidderIdFixture {
         }
 
         @Test
-        void 네번째_페이지_요청_테스트() {
+        void 페이지_크기_3_네번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByBidderId(
                     참여한_경매가_7개인_사용자.getId(),
-                    PageRequest.of(3, 3)
+                    PageRequest.of(3, 페이지_크기_3)
             );
 
             // then
@@ -106,11 +106,11 @@ class AuctionForListByBidderIdTest extends AuctionForListByBidderIdFixture {
     class 참여한_경매가_없는_사용자_테스트 {
 
         @Test
-        void 첫번째_페이지_요청_테스트() {
+        void 페이지_크기_3_첫번째_페이지_요청_테스트() {
             // when
             final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByBidderId(
                     참여한_경매가_없는_사용자.getId(),
-                    PageRequest.of(0, 3)
+                    PageRequest.of(0, 페이지_크기_3)
             );
 
             // then
