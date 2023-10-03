@@ -5,6 +5,7 @@ import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
 
@@ -29,8 +31,14 @@ class MessageServiceTest extends MessageServiceFixture {
     @Autowired
     MessageService messageService;
 
+    @MockBean
+    NotificationService notificationService;
+
     @Test
     void 메시지를_생성한다() {
+        //given
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
+
         // when
         final Long messageId = messageService.create(메시지_생성_DTO, 이미지_절대_경로);
 
@@ -40,6 +48,9 @@ class MessageServiceTest extends MessageServiceFixture {
 
     @Test
     void 메시지를_생성하고_알림을_보낸다() {
+        //given
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
+
         // when
         messageService.create(메시지_생성_DTO, 이미지_절대_경로);
 
@@ -49,6 +60,7 @@ class MessageServiceTest extends MessageServiceFixture {
 
     @Test
     void 알림전송에_실패한_경우에도_정상적으로_메시지가_저장된다() {
+        // given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.FAIL);
 
         // when
