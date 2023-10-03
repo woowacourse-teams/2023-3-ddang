@@ -11,14 +11,14 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.notification.application.NotificationService;
+import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +31,7 @@ import java.util.List;
 @Slf4j
 public class MessageService {
 
-    private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
     private final JpaMessageRepository messageRepository;
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
@@ -57,8 +57,7 @@ public class MessageService {
         final Message persistMessage = messageRepository.save(message);
 
         final MessageDto messageDto = MessageDto.of(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
-        final NotificationStatus notificationStatus = notificationService.send(CreateNotificationDto.from(messageDto));
-        log.error(notificationStatus.toString());
+        eventPublisher.publishEvent(new SendNotificationEvent(CreateNotificationDto.from(messageDto)));
 
         return persistMessage.getId();
     }
