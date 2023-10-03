@@ -17,9 +17,9 @@ import org.springframework.context.annotation.Import;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class JpaMessageRepositoryTest extends JpaMessageRepositoryFixture {
 
     @PersistenceContext
