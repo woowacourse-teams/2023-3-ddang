@@ -89,7 +89,7 @@ jobs:
 
       - name: slack notification
         run: |
-          if [ "${{ github.event_name }}" = "synchronize" ]; then
+          if [ "${{ github.event_name }}" == "synchronize" ]; then
             exit 0 
           fi 
 
