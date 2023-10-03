@@ -12,14 +12,14 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
-import com.ddang.ddang.notification.application.NotificationService;
+import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +33,7 @@ import java.util.Optional;
 @Slf4j
 public class BidService {
 
-    private final NotificationService notificationService;
+    private final ApplicationEventPublisher eventPublisher;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaBidRepository bidRepository;
@@ -58,13 +58,12 @@ public class BidService {
             return saveBid.getId();
         }
 
-        try {
-            final NotificationStatus sendNotificationMessage =
-                    sendNotification(auctionAndImageDto, previousBidder.get(), auctionImageAbsoluteUrl);
-            log.info(sendNotificationMessage.toString());
-        } catch (Exception ex) {
-            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
-        }
+        final CreateNotificationDto createNotificationDto = CreateNotificationDto.of(
+                previousBidder.get().getId(),
+                auctionAndImageDto,
+                auctionImageAbsoluteUrl
+        );
+        eventPublisher.publishEvent(new SendNotificationEvent(createNotificationDto));
 
         return saveBid.getId();
     }
@@ -133,16 +132,6 @@ public class BidService {
         auction.updateLastBid(saveBid);
 
         return saveBid;
-    }
-
-    private NotificationStatus sendNotification(
-            final AuctionAndImageDto auctionAndImageDto,
-            final User previousBidder,
-            final String auctionImageAbsoluteUrl
-    ) {
-        final CreateNotificationDto dto = CreateNotificationDto.of(previousBidder.getId(), auctionAndImageDto, auctionImageAbsoluteUrl);
-
-        return notificationService.send(dto);
     }
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
