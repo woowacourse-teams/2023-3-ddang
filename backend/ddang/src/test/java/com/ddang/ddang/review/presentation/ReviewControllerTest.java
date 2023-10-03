@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -35,8 +36,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -80,10 +80,10 @@ class ReviewControllerTest extends ReviewControllerFixture {
 
         // when & then
         final ResultActions resultActions =
-                mockMvc.perform(post("/reviews")
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(사용자_평가_등록_요청))
+                mockMvc.perform(RestDocumentationRequestBuilders.post("/reviews")
+                                                                .header(HttpHeaders.AUTHORIZATION, 액세스_토큰)
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(objectMapper.writeValueAsString(사용자_평가_등록_요청))
                 ).andExpectAll(
                         status().isCreated(),
                         header().string(HttpHeaders.LOCATION, is("/reviews/" + 생성된_평가_아이디))
@@ -100,7 +100,7 @@ class ReviewControllerTest extends ReviewControllerFixture {
 
         // when & then
         mockMvc.perform(post("/reviews")
-                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                .header(HttpHeaders.AUTHORIZATION, 액세스_토큰)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(중복된_평가_등록_요청))
         ).andExpectAll(
@@ -117,9 +117,8 @@ class ReviewControllerTest extends ReviewControllerFixture {
 
         // when & then
         final ResultActions resultActions =
-                mockMvc.perform(get("/reviews")
-                               .queryParam("userId", String.valueOf(구매자.id()))
-                               .contentType(MediaType.APPLICATION_JSON)
+                mockMvc.perform(RestDocumentationRequestBuilders.get("/reviews/users/{userId}", String.valueOf(구매자.id()))
+                                                                .contentType(MediaType.APPLICATION_JSON)
                        )
                        .andExpectAll(
                                status().isOk(),
@@ -135,7 +134,27 @@ class ReviewControllerTest extends ReviewControllerFixture {
                                jsonPath("$.[1].score", is(구매자가_판매자1에게_받은_평가.score()))
                        );
 
-        read_문서화(resultActions);
+        readAllReviewsOfTargetUser_문서화(resultActions);
+    }
+
+    @Test
+    void 사용자가_경매_거래에_작성한_평가를_조회한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효한_작성자_비공개_클레임));
+        given(reviewService.read(anyLong(), anyLong()))
+                .willReturn(구매자가_판매자1에게_받은_평가_내용);
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/reviews")
+                                                        .header(HttpHeaders.AUTHORIZATION, 액세스_토큰)
+                                                        .queryParam("auctionId", String.valueOf(유효한_경매_아이디))
+                                                        .contentType(MediaType.APPLICATION_JSON)
+               )
+               .andExpectAll(
+                       status().isOk(),
+                       jsonPath("score", is(구매자가_판매자1에게_받은_평가_내용.score()), Double.class),
+                       jsonPath("content", is(구매자가_판매자1에게_받은_평가_내용.content()))
+               );
     }
 
     private void create_문서화(final ResultActions resultActions) throws Exception {
@@ -158,10 +177,10 @@ class ReviewControllerTest extends ReviewControllerFixture {
         );
     }
 
-    private void read_문서화(final ResultActions resultActions) throws Exception {
+    private void readAllReviewsOfTargetUser_문서화(final ResultActions resultActions) throws Exception {
         resultActions.andDo(
                 restDocs.document(
-                        queryParameters(
+                        pathParameters(
                                 parameterWithName("userId").description("평가 목록 조회 대상 유저의 아이디")
                         ),
                         responseFields(

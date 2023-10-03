@@ -4,13 +4,16 @@ import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.review.application.ReviewService;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
+import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.presentation.dto.request.CreateReviewRequest;
+import com.ddang.ddang.review.presentation.dto.response.ReadReviewDetailResponse;
 import com.ddang.ddang.review.presentation.dto.response.ReadReviewResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,12 +41,23 @@ public class ReviewController {
                              .build();
     }
 
-    @GetMapping
-    public ResponseEntity<List<ReadReviewResponse>> readAllReviewsOfTargetUser(@RequestParam final Long userId) {
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<List<ReadReviewResponse>> readAllReviewsOfTargetUser(@PathVariable final Long userId) {
         final List<ReadReviewDto> readReviewDtos = reviewService.readAllByTargetId(userId);
         final List<ReadReviewResponse> response = readReviewDtos.stream()
                                                                 .map(ReadReviewResponse::from)
                                                                 .toList();
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ReadReviewDetailResponse> read(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @RequestParam final Long auctionId
+    ) {
+        final ReadReviewDetailDto readReviewDetailDto = reviewService.read(userInfo.userId(), auctionId);
+        ReadReviewDetailResponse response = ReadReviewDetailResponse.from(readReviewDetailDto);
 
         return ResponseEntity.ok(response);
     }
