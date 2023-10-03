@@ -18,7 +18,7 @@ import java.net.URI;
 @RestController
 @RequestMapping("/questions")
 @RequiredArgsConstructor
-public class QuestionController {
+public class QuestionAndAnswerController {
 
     private final QuestionService questionService;
 

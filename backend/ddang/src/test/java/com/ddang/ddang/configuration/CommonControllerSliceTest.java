@@ -18,7 +18,7 @@ import com.ddang.ddang.device.presentation.DeviceTokenController;
 import com.ddang.ddang.image.application.ImageService;
 import com.ddang.ddang.image.presentation.ImageController;
 import com.ddang.ddang.questionandanswer.application.QuestionService;
-import com.ddang.ddang.questionandanswer.presentation.QuestionController;
+import com.ddang.ddang.questionandanswer.presentation.QuestionAndAnswerController;
 import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.presentation.RegionController;
 import com.ddang.ddang.report.application.AuctionReportService;
@@ -54,7 +54,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 ReportController.class,
                 UserAuctionController.class,
                 UserController.class,
-                QuestionController.class
+                QuestionAndAnswerController.class
         },
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
@@ -109,7 +109,7 @@ public abstract class CommonControllerSliceTest {
     protected UserController userController;
 
     @Autowired
-    protected QuestionController questionController;
+    protected QuestionAndAnswerController questionAndAnswerController;
 
     @MockBean
     protected AuctionService auctionService;

@@ -5,7 +5,7 @@ import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.ddang.ddang.questionandanswer.presentation.dto.CreateQuestionRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class QuestionControllerFixture extends CommonControllerSliceTest {
+public class QuestionAndAnswerControllerFixture extends CommonControllerSliceTest {
 
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(999L);

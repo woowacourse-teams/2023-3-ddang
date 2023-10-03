@@ -12,7 +12,7 @@ import com.ddang.ddang.questionandanswer.application.dto.CreateQuestionDto;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.questionandanswer.presentation.dto.CreateQuestionRequest;
-import com.ddang.ddang.questionandanswer.presentation.fixture.QuestionControllerFixture;
+import com.ddang.ddang.questionandanswer.presentation.fixture.QuestionAndAnswerControllerFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
-class QuestionControllerTest extends QuestionControllerFixture {
+class QuestionAndAnswerAndAnswerControllerTest extends QuestionAndAnswerControllerFixture {
 
     TokenDecoder tokenDecoder;
 
@@ -64,7 +64,7 @@ class QuestionControllerTest extends QuestionControllerFixture {
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(questionController)
+        mockMvc = MockMvcBuilders.standaloneSetup(questionAndAnswerController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver, new DescendingSortPageableArgumentResolver())
