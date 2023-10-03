@@ -4,6 +4,7 @@ import com.ddang.ddang.configuration.fcm.exception.FcmNotFoundException;
 import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.google.firebase.messaging.AndroidConfig;
 import com.ddang.ddang.notification.domain.NotificationStatus;
@@ -12,6 +13,7 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,8 +35,10 @@ public class FcmNotificationService implements NotificationService {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public NotificationStatus send(final CreateNotificationDto createNotificationDto) {
+    @EventListener(classes = {SendNotificationEvent.class})
+    public NotificationStatus send(final SendNotificationEvent sendNotificationEvent) {
         try {
+            final CreateNotificationDto createNotificationDto = sendNotificationEvent.createNotificationDto();
             final DeviceToken deviceToken = deviceTokenRepository.findByUserId(createNotificationDto.targetUserId())
                                                                  .orElseThrow(() -> new DeviceTokenNotFoundException(
                                                                          "사용자의 기기 토큰을 찾을 수 없습니다."

@@ -39,7 +39,7 @@ class FcmNotificationServiceTest extends FcmNotificationServiceFixture {
             @Override
             public void afterCommit() {
                 // when
-                final NotificationStatus actual = notificationService.send(알림_생성_DTO);
+                final NotificationStatus actual = notificationService.send(알림_전송_이벤트_DTO);
 
                 // then
                 assertThat(actual).isEqualTo(NotificationStatus.SUCCESS);
@@ -50,7 +50,7 @@ class FcmNotificationServiceTest extends FcmNotificationServiceFixture {
     @Test
     void 알림을_전송시_알림을_받을_사용자_기기_토큰을_찾을_수_없다면_실패를_반환한다() {
         // when
-        final NotificationStatus actual = notificationService.send(기기토큰이_없는_사용자의_알림_DTO);
+        final NotificationStatus actual = notificationService.send(기기토큰이_없는_사용자의_알림_전송_이벤트_DTO);
 
         // then
         assertThat(actual).isEqualTo(NotificationStatus.FAIL);
@@ -65,7 +65,7 @@ class FcmNotificationServiceTest extends FcmNotificationServiceFixture {
             @Override
             public void afterCommit() {
                 // when
-                final NotificationStatus actual = notificationService.send(알림_생성_DTO);
+                final NotificationStatus actual = notificationService.send(알림_전송_이벤트_DTO);
 
                 // then
                 assertThat(actual).isEqualTo(NotificationStatus.FAIL);

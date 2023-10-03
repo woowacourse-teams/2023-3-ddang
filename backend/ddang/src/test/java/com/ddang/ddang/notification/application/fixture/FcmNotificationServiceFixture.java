@@ -2,6 +2,7 @@ package com.ddang.ddang.notification.application.fixture;
 
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.event.domain.SendNotificationEvent;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -22,9 +23,9 @@ public class FcmNotificationServiceFixture {
 
     protected User 사용자;
     protected DeviceToken 기기토큰;
-    protected CreateNotificationDto 알림_생성_DTO;
+    protected SendNotificationEvent 알림_전송_이벤트_DTO;
     protected String 알림_메시지_아이디 = "notificationMessageId";
-    protected CreateNotificationDto 기기토큰이_없는_사용자의_알림_DTO;
+    protected SendNotificationEvent 기기토큰이_없는_사용자의_알림_전송_이벤트_DTO;
 
     private User 기기토큰이_없는_사용자;
 
@@ -50,7 +51,7 @@ public class FcmNotificationServiceFixture {
 
         deviceTokenRepository.save(기기토큰);
 
-        알림_생성_DTO = new CreateNotificationDto(
+        final CreateNotificationDto 알림_생성_DTO = new CreateNotificationDto(
                 NotificationType.MESSAGE,
                 사용자.getId(),
                 "제목",
@@ -58,8 +59,9 @@ public class FcmNotificationServiceFixture {
                 "/redirectUrlForNotification",
                 "image.png"
         );
+        알림_전송_이벤트_DTO = new SendNotificationEvent(알림_생성_DTO);
 
-        기기토큰이_없는_사용자의_알림_DTO = new CreateNotificationDto(
+        final CreateNotificationDto 기기토큰이_없는_사용자의_알림_생성_DTO = new CreateNotificationDto(
                 NotificationType.MESSAGE,
                 기기토큰이_없는_사용자.getId(),
                 "제목",
@@ -67,5 +69,6 @@ public class FcmNotificationServiceFixture {
                 "/redirectUrl",
                 "image.png"
         );
+        기기토큰이_없는_사용자의_알림_전송_이벤트_DTO = new SendNotificationEvent(기기토큰이_없는_사용자의_알림_생성_DTO);
     }
 }
