@@ -2,7 +2,6 @@ package com.ddang.ddang.review.application;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
@@ -29,81 +28,52 @@ class ReviewServiceTest extends ReviewServiceFixture {
 
     @Test
     void 평가를_등록한고_평가_상대의_신뢰도를_갱신한다() {
-        // given
-        final double newScore = 4.5d;
-        final CreateReviewDto createReviewDto =
-                new CreateReviewDto(평가_안한_경매.getId(), 평가_안한_경매_판매자.getId(), 구매자.getId(), "친절하다.", newScore);
-
-        final Double previousScore1 = 구매자가_이전까지_받은_평가_총2개.get(0).getScore();
-        final Double previousScore2 = 구매자가_이전까지_받은_평가_총2개.get(1).getScore();
-        final double expect = (previousScore1 + previousScore2 + newScore) / 3;
-
         // when
-        final Long actual = reviewService.create(createReviewDto);
+        final Long actual = reviewService.create(구매자에_대한_평가_등록을_위한_DTO);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPositive();
-            softAssertions.assertThat(구매자.getReliability()).isEqualTo(expect);
+            softAssertions.assertThat(구매자.getReliability()).isEqualTo(구매자가_새로운_평가_점수를_받고난_후의_신뢰도);
         });
     }
 
     @Test
-    void 채팅방을_찾을_수_없다면_예외가_발생한다() {
-        // given
-        final CreateReviewDto createReviewDto =
-                new CreateReviewDto(존재하지_않는_경매_아이디, 구매자.getId(), 판매자1.getId(), "친절하다.", 5.0d);
-
+    void 연관된_경매를_찾을_수_없다면_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> reviewService.create(createReviewDto))
+        assertThatThrownBy(() -> reviewService.create(존재하지_않는_경매와_연관된_평가를_등록하려는_DTO))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
 
     @Test
     void 평가_작성자를_찾을_수_없다면_예외가_발생한다() {
-        // given
-        final CreateReviewDto createReviewDto =
-                new CreateReviewDto(평가_안한_경매.getId(), 존재하지_않는_사용자, 평가_안한_경매_판매자.getId(), "친절하다.", 5.0d);
-
         // when & then
-        assertThatThrownBy(() -> reviewService.create(createReviewDto))
+        assertThatThrownBy(() -> reviewService.create(존재하지_않는_사용자가_평가를_등록하려는_DTO))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("작성자 정보를 찾을 수 없습니다.");
     }
 
     @Test
     void 평가_상대를_찾을_수_없다면_예외가_발생한다() {
-        // given
-        final CreateReviewDto createReviewDto =
-                new CreateReviewDto(평가_안한_경매.getId(), 구매자.getId(), 존재하지_않는_사용자, "친절하다.", 5.0d);
-
         // when & then
-        assertThatThrownBy(() -> reviewService.create(createReviewDto))
+        assertThatThrownBy(() -> reviewService.create(존재하지_않는_사용자를_평가하려는_DTO))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("평가 상대의 정보를 찾을 수 없습니다.");
     }
 
     @Test
     void 경매의_판매자나_낙찰자가_아닌_사용자일_경우_예외가_발생한다() {
-        // given
-        final CreateReviewDto createReviewDto =
-                new CreateReviewDto(평가_안한_경매.getId(), 경매_참여자가_아닌_사용자.getId(), 구매자.getId(), "친절하다", 5.0d);
-
         // when & then
-        assertThatThrownBy(() -> reviewService.create(createReviewDto))
+        assertThatThrownBy(() -> reviewService.create(경매_참여자가_아닌_사용자가_평가를_등록하려는_DTO))
                 .isInstanceOf(InvalidUserToReview.class)
                 .hasMessage("경매의 판매자 또는 최종 낙찰자만 평가가 가능합니다.");
     }
 
     @Test
     void 이미_평가했는데_평가를_등록한다면_예외가_발생한다() {
-        // given
-        final CreateReviewDto createReviewDto =
-                new CreateReviewDto(판매자1이_평가한_경매.getId(), 판매자1.getId(), 구매자.getId(), "친절하다", 5.0d);
-
         // when & then
-        assertThatThrownBy(() -> reviewService.create(createReviewDto))
+        assertThatThrownBy(() -> reviewService.create(이미_평가한_경매와_연관된_평가를_또_등록하려는_DTO))
                 .isInstanceOf(AlreadyReviewException.class)
                 .hasMessage("이미 평가하였습니다.");
     }
