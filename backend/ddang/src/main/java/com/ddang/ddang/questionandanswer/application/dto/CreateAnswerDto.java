@@ -1,7 +1,7 @@
 package com.ddang.ddang.questionandanswer.application.dto;
 
 import com.ddang.ddang.questionandanswer.domain.Answer;
-import com.ddang.ddang.questionandanswer.presentation.dto.CreateAnswerRequest;
+import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateAnswerRequest;
 
 public record CreateAnswerDto(Long questionId, String content, Long userId) {
 

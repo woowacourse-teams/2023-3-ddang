@@ -2,7 +2,7 @@ package com.ddang.ddang.questionandanswer.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.questionandanswer.domain.Question;
-import com.ddang.ddang.questionandanswer.presentation.dto.CreateQuestionRequest;
+import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateQuestionRequest;
 import com.ddang.ddang.user.domain.User;
 
 public record CreateQuestionDto(Long auctionId, String content, Long userId) {

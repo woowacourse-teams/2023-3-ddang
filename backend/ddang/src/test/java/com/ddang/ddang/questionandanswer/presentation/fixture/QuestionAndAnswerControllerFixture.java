@@ -2,8 +2,8 @@ package com.ddang.ddang.questionandanswer.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.questionandanswer.presentation.dto.CreateAnswerRequest;
-import com.ddang.ddang.questionandanswer.presentation.dto.CreateQuestionRequest;
+import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateAnswerRequest;
+import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateQuestionRequest;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuestionAndAnswerControllerFixture extends CommonControllerSliceTest {

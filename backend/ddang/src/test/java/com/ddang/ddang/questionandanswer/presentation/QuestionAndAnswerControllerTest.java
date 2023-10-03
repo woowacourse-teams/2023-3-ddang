@@ -14,8 +14,8 @@ import com.ddang.ddang.questionandanswer.application.exception.AlreadyAnsweredEx
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAnswererException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
-import com.ddang.ddang.questionandanswer.presentation.dto.CreateAnswerRequest;
-import com.ddang.ddang.questionandanswer.presentation.dto.CreateQuestionRequest;
+import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateAnswerRequest;
+import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateQuestionRequest;
 import com.ddang.ddang.questionandanswer.presentation.fixture.QuestionAndAnswerControllerFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
