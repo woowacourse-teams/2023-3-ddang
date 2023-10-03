@@ -16,7 +16,6 @@ import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -40,8 +39,6 @@ class MessageRoomViewModel @Inject constructor(
         get() = _messages.value?.lastOrNull()?.id
 
     private var isMessageLoading: Boolean = false
-
-    private val formatter = DateTimeFormatter.ofPattern("h:mm a")
 
     fun loadMessageRoom(roomId: Long) {
         viewModelScope.launch {
@@ -106,25 +103,27 @@ class MessageRoomViewModel @Inject constructor(
     private fun List<MessageModel>.toViewItems(): List<MessageViewItem> {
         return mapIndexed { index, messageModel ->
             val sendDateTime = LocalDateTime.parse(messageModel.createdAt)
-            val sendTime = sendDateTime.format(formatter)
-            if (index == 0) return@mapIndexed messageModel.toViewItem(sendTime, true)
+            if (index == 0) return@mapIndexed messageModel.toViewItem(sendDateTime, true)
 
             val sendDate = sendDateTime.toLocalDate()
             val previousSendDateTime = LocalDateTime.parse(this[index - 1].createdAt)
             val previousSendDate = previousSendDateTime.toLocalDate()
             return@mapIndexed if (sendDate == previousSendDate) {
-                messageModel.toViewItem(sendTime, false)
+                messageModel.toViewItem(sendDateTime, false)
             } else {
-                messageModel.toViewItem(sendTime, true)
+                messageModel.toViewItem(sendDateTime, true)
             }
         }
     }
 
-    private fun MessageModel.toViewItem(sendTime: String, isFirstAtDate: Boolean): MessageViewItem {
+    private fun MessageModel.toViewItem(
+        sendDateTime: LocalDateTime,
+        isFirstAtDate: Boolean,
+    ): MessageViewItem {
         return if (isMyMessage) {
-            MessageViewItem.MyMessageViewItem(id, sendTime, contents, isFirstAtDate)
+            MessageViewItem.MyMessageViewItem(id, sendDateTime, contents, isFirstAtDate)
         } else {
-            MessageViewItem.PartnerMessageViewItem(id, sendTime, contents, isFirstAtDate)
+            MessageViewItem.PartnerMessageViewItem(id, sendDateTime, contents, isFirstAtDate)
         }
     }
 

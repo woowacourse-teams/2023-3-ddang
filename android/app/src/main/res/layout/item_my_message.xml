@@ -6,20 +6,45 @@
     <data>
 
         <variable
+            name="dateFormatter"
+            type="java.time.format.DateTimeFormatter" />
+
+        <variable
+            name="timeFormatter"
+            type="java.time.format.DateTimeFormatter" />
+
+        <variable
             name="item"
             type="com.ddangddangddang.android.feature.messageRoom.MessageViewItem.MyMessageViewItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp">
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_date"
+            style="@style/Caption"
+            isVisible="@{item.isFirstAtDate}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_vertical_filter_chips"
+            android:background="@drawable/bg_stroke_gray_radius_1dp"
+            android:backgroundTint="@color/grey_100"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:text="@{item.createdDateTime.format(dateFormatter)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="2023년 10월 3일" />
 
         <TextView
             android:id="@+id/tv_message_contents"
             style="@style/Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_vertical_filter_chips"
             android:background="@drawable/bg_stroke_gray_radius_1dp"
             android:backgroundTint="@color/primary"
             android:maxWidth="310dp"
@@ -27,7 +52,7 @@
             android:text="@{item.contents}"
             android:textColor="@color/text_active_fixed"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_date"
             tools:text="안녕하세요, 이번 방탄 진 포카 낙찰자입니다!ㅎㅎ
 서울 사시던데 강남에서 직거래 어떠세요?" />
 
@@ -37,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_vertical_filter_chips"
             android:paddingHorizontal="4dp"
-            android:text="@{item.createdDateTime}"
+            android:text="@{item.createdDateTime.format(timeFormatter)}"
             android:textColor="@color/grey_500"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="@id/tv_message_contents"

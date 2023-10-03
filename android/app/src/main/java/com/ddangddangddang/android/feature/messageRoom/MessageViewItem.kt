@@ -1,15 +1,17 @@
 package com.ddangddangddang.android.feature.messageRoom
 
+import java.time.LocalDateTime
+
 sealed interface MessageViewItem {
     val id: Long
     val type: MessageViewType
-    val createdDateTime: String
+    val createdDateTime: LocalDateTime
     val contents: String
     val isFirstAtDate: Boolean
 
     data class MyMessageViewItem(
         override val id: Long,
-        override val createdDateTime: String,
+        override val createdDateTime: LocalDateTime,
         override val contents: String,
         override val isFirstAtDate: Boolean,
     ) : MessageViewItem {
@@ -18,7 +20,7 @@ sealed interface MessageViewItem {
 
     data class PartnerMessageViewItem(
         override val id: Long,
-        override val createdDateTime: String,
+        override val createdDateTime: LocalDateTime,
         override val contents: String,
         override val isFirstAtDate: Boolean,
     ) : MessageViewItem {

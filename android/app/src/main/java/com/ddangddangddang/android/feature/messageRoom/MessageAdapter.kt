@@ -3,13 +3,16 @@ package com.ddangddangddang.android.feature.messageRoom
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import java.time.format.DateTimeFormatter
 
 class MessageAdapter(
+    private val dateFormatter: DateTimeFormatter,
+    private val timeFormatter: DateTimeFormatter,
     private val diffUtilCommitCallback: Runnable,
 ) : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-        return MessageViewHolder.of(parent, MessageViewType.values()[viewType])
+        return MessageViewHolder.of(parent, MessageViewType.values()[viewType], dateFormatter, timeFormatter)
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
