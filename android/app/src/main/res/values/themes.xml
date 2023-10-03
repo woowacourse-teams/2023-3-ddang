@@ -25,9 +25,9 @@
         <item name="colorControlActivated">@color/red_900</item>
         <item name="colorControlHighlight">@color/red_700</item>
         <item name="android:timePickerStyle">@style/TimePicker</item>
-        <item name="android:buttonBarPositiveButtonStyle">@style/DatePickerPositiveButtonStyle
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle
         </item>
-        <item name="android:buttonBarNegativeButtonStyle">@style/DatePickerNegativeButtonStyle
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle
         </item>
     </style>
 
@@ -35,11 +35,11 @@
         <item name="android:timePickerMode">spinner</item>
     </style>
 
-    <style name="DatePickerNegativeButtonStyle" parent="android:Widget.Material.Button.Borderless">
+    <style name="NegativeButtonStyle" parent="android:Widget.Material.Button.Borderless">
         <item name="android:textColor">@color/grey_700</item>
     </style>
 
-    <style name="DatePickerPositiveButtonStyle" parent="android:Widget.Material.Button.Borderless">
+    <style name="PositiveButtonStyle" parent="android:Widget.Material.Button.Borderless">
         <item name="android:textColor">@color/red_900</item>
     </style>
 
