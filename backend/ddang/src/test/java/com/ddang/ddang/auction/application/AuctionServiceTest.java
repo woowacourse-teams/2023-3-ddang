@@ -79,9 +79,6 @@ class AuctionServiceTest extends AuctionServiceFixture {
 
     @Test
     void 지정한_아이디에_대한_판매자가_없는_경우_경매를_등록하면_예외가_발생한다() {
-        // given
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(경매_이미지_엔티티));
-
         // when & then
         assertThatThrownBy(() -> auctionService.create(존재하지_않는_판매자의_경매_생성_dto))
                 .isInstanceOf(UserNotFoundException.class)
