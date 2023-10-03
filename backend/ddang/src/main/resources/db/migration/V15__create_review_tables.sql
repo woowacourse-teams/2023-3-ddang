@@ -2,7 +2,7 @@ create table review (
     id bigint not null auto_increment,
     created_time datetime(6) not null,
     content varchar(255),
-    score float,
+    score float not null,
     auction_id bigint not null,
     writer_id bigint not null,
     target_id bigint not null,
