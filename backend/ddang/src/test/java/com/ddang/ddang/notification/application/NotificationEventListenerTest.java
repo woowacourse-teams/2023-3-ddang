@@ -1,5 +1,7 @@
 package com.ddang.ddang.notification.application;
 
+import com.ddang.ddang.bid.application.BidService;
+import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.configuration.IsolateDatabase;
@@ -28,6 +30,9 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
     @Autowired
     MessageService messageService;
 
+    @Autowired
+    BidService bidService;
+
     @Test
     void 메시지를_전송하면_알림을_전송한다() {
         // when
@@ -35,6 +40,16 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
 
         // then
         final long actual = events.stream(MessageNotificationEvent.class).count();
+        assertThat(actual).isEqualTo(1);
+    }
+
+    @Test
+    void 상위_입찰자가_발생하면_이전_입찰자에게_알림을_전송한다() {
+        // when
+        bidService.create(입찰_생성_DTO, 이미지_절대_경로);
+
+        // then
+        final long actual = events.stream(BidNotificationEvent.class).count();
         assertThat(actual).isEqualTo(1);
     }
 }

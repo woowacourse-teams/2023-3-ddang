@@ -40,6 +40,22 @@ public class NotificationEventListener {
         notificationService.send(createNotificationDto);
     }
 
+    @EventListener
+    public void sendBidNotification(final BidNotificationEvent bidNotificationEvent) {
+        final BidNotificationDto bidNotificationDto = bidNotificationEvent.bidNotificationDto();
+        final Auction auction = bidNotificationDto.auctionAndImageDto().auction();
+        final AuctionImage auctionImage = bidNotificationDto.auctionAndImageDto().auctionImage();
+        final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
+                NotificationType.BID,
+                bidNotificationDto.previousBidderId(),
+                auction.getTitle(),
+                BID_NOTIFICATION_MESSAGE_FORMAT,
+                calculateRedirectUrl(BID_NOTIFICATION_REDIRECT_URI, auction.getId()),
+                ImageUrlCalculator.calculateBy(bidNotificationDto.auctionImageAbsoluteUrl(), auctionImage.getId())
+        );
+        notificationService.send(createNotificationDto);
+    }
+
     private String calculateRedirectUrl(final String uri, final Long id) {
         return uri + URI_DELIMITER + id;
     }

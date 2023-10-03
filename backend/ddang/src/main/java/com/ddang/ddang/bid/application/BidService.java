@@ -4,15 +4,16 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
+import com.ddang.ddang.bid.application.dto.BidNotificationDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
+import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -57,12 +58,12 @@ public class BidService {
             return saveBid.getId();
         }
 
-        // TODO: 2023/10/03 입찰자 이벤트 만들기
-        final CreateNotificationDto createNotificationDto = CreateNotificationDto.of(
+        final BidNotificationDto bidNotificationDto = new BidNotificationDto(
                 previousBidder.get().getId(),
                 auctionAndImageDto,
                 auctionImageAbsoluteUrl
         );
+        eventPublisher.publishEvent(new BidNotificationEvent(bidNotificationDto));
 
         return saveBid.getId();
     }
