@@ -24,6 +24,8 @@ public class QuestionServiceFixture {
     JpaAuctionRepository auctionRepository;
 
     protected CreateQuestionDto 경매_질문_등록_요청_dto;
+    protected CreateQuestionDto 존재하지_않는_사용자가_경매_질문_등록_요청_dto;
+    protected CreateQuestionDto 존재하지_않는_경매_질문_등록_요청_dto;
     protected CreateQuestionDto 종료된_경매_질문_등록_요청_dto;
     protected CreateQuestionDto 삭제된_경매_질문_등록_요청_dto;
     protected CreateQuestionDto 판매자가_본인_경매_질문_등록_요청_dto;
@@ -73,6 +75,8 @@ public class QuestionServiceFixture {
         auctionRepository.saveAll(List.of(경매, 종료된_경매, 삭제된_경매));
 
         경매_질문_등록_요청_dto = new CreateQuestionDto(경매.getId(), "궁금한 점이 있습니다.", 질문자.getId());
+        존재하지_않는_사용자가_경매_질문_등록_요청_dto = new CreateQuestionDto(경매.getId(), "궁금한 점이 있습니다.", -999L);
+        존재하지_않는_경매_질문_등록_요청_dto = new CreateQuestionDto(-999L, "궁금한 점이 있습니다.", 질문자.getId());
         종료된_경매_질문_등록_요청_dto = new CreateQuestionDto(종료된_경매.getId(), "궁금한 점이 있습니다.", 질문자.getId());
         삭제된_경매_질문_등록_요청_dto = new CreateQuestionDto(삭제된_경매.getId(), "궁금한 점이 있습니다.", 질문자.getId());
         판매자가_본인_경매_질문_등록_요청_dto = new CreateQuestionDto(경매.getId(), "궁금한 점이 있습니다.", 판매자.getId());

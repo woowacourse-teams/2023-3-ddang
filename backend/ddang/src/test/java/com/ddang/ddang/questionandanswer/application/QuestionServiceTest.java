@@ -1,9 +1,11 @@
 package com.ddang.ddang.questionandanswer.application;
 
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.questionandanswer.application.fixture.QuestionServiceFixture;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -27,6 +29,22 @@ class QuestionServiceTest extends QuestionServiceFixture {
 
         // then
         assertThat(actual).isPositive();
+    }
+
+    @Test
+    void 존재하지_않는_사용자가_경매에_질문하는_경우_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> questionService.create(존재하지_않는_사용자가_경매_질문_등록_요청_dto))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 존재하지_않는_경매에_질문하는_경우_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> questionService.create(존재하지_않는_경매_질문_등록_요청_dto))
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
 
     @Test
