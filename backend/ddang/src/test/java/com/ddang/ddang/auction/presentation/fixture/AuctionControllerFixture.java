@@ -22,7 +22,10 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
 
     protected Long 존재하지_않는_경매_id = -999L;
     protected Long 유효한_경매_id = 1L;
-    protected Long 등록한_경매_id = 1L;
+    protected String 경매_이미지_상대_주소 = "/auctions/images";
+    protected String 프로필_이미지_상대_주소 = "/users/images";
+    protected String 경매_생성_시_경매_상태 = "UNBIDDEN";
+    protected int 경매_생성_시_경매_참여자_수 = 0;
     protected String 유효한_액세스_토큰 = "Bearer accessToken";
     protected MockMultipartFile 유효한_경매_이미지_파일;
     protected MockMultipartFile 비어_있는_경매_이미지_파일;
@@ -35,7 +38,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
     protected PrivateClaims 유효하지_않은_사용자_id_클레임 = new PrivateClaims(-999L);
     protected CreateInfoAuctionDto 경매_등록_결과_dto = new CreateInfoAuctionDto(
             1L,
-            "title",
+            "제목",
             1L,
             1_000
     );
