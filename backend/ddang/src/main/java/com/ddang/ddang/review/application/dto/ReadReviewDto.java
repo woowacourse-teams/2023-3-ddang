@@ -18,6 +18,7 @@ public record ReadReviewDto(
                 ReadUserInReviewDto.from(review.getWriter()),
                 review.getContent(),
                 review.getScore(),
-                review.getCreatedTime());
+                review.getCreatedTime()
+        );
     }
 }

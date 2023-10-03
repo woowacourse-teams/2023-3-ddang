@@ -67,6 +67,7 @@ public class ReviewService {
 
         final List<Review> targetReviews = reviewRepository.findAllByTargetId(target.getId());
         target.updateReliability(targetReviews);
+
         return persistReview;
     }
 
