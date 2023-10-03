@@ -15,11 +15,7 @@ public class LogTracerAop {
 
     private static final String PROXY_CLASS_PREFIX = "Proxy";
 
-    private final LogTracer logTrace;
-
-    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
-    private void restControllerAnnotatedClass() {
-    }
+    private final LogTracer logTracer;
 
     @Pointcut("@within(org.springframework.stereotype.Service)")
     private void serviceAnnotatedClass() {
@@ -29,7 +25,7 @@ public class LogTracerAop {
     private void repositoryClass() {
     }
 
-    @Around("restControllerAnnotatedClass() || serviceAnnotatedClass() || repositoryClass()")
+    @Around("serviceAnnotatedClass() || repositoryClass()")
     public Object doLog(final ProceedingJoinPoint joinPoint) throws Throwable {
         if (isNotRequestScope()) {
             return joinPoint.proceed();
@@ -37,15 +33,15 @@ public class LogTracerAop {
 
         final String className = findClassSimpleName(joinPoint);
         final String methodName = findMethodName(joinPoint);
-        final TraceStatus status = logTrace.begin(className, methodName);
+        final TraceStatus status = logTracer.begin(className, methodName);
 
         try {
             final Object result = joinPoint.proceed();
 
-            logTrace.end(status, className, methodName);
+            logTracer.end(status, className, methodName);
             return result;
         } catch (final Throwable ex) {
-            logTrace.exception(status, className, methodName, ex);
+            logTracer.exception(status, className, methodName, ex);
 
             throw ex;
         }
