@@ -40,43 +40,37 @@ public class NotificationEventListenerFixture {
     @Autowired
     private JpaBidRepository bidRepository;
 
-    protected String 이미지_절대_경로 = "/imageUrl";
     protected CreateMessageDto 메시지_생성_DTO;
     protected CreateBidDto 입찰_생성_DTO;
 
+    protected String 이미지_절대_경로 = "/imageUrl";
+
     @BeforeEach
     void setUp() {
-        final User 발신자 = User.builder()
-                             .name("발신자")
-                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(4.7d)
-                             .oauthId("12345")
-                             .build();
-        final User 수신자 = User.builder()
-                             .name("수신자")
-                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(4.7d)
-                             .oauthId("12347")
-                             .build();
-        final User 기존_입찰자 = User.builder()
-                                .name("기존 입찰자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
-                                .reliability(4.7d)
-                                .oauthId("09876")
-                                .build();
+        final User 발신자_겸_판매자 = User.builder()
+                                   .name("발신자 겸 판매자")
+                                   .profileImage(new ProfileImage("upload.png", "store.png"))
+                                   .reliability(4.7d)
+                                   .oauthId("12345")
+                                   .build();
+        final User 수신자_겸_기존_입찰자 = User.builder()
+                                      .name("수신자 겸 기존 입찰자")
+                                      .profileImage(new ProfileImage("upload.png", "store.png"))
+                                      .reliability(4.7d)
+                                      .oauthId("12347")
+                                      .build();
         final User 새로운_입찰자 = User.builder()
                                  .name("새로운 입찰자")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
                                  .reliability(4.7d)
                                  .oauthId("13579")
                                  .build();
-        userRepository.save(발신자);
-        userRepository.save(수신자);
-        userRepository.save(기존_입찰자);
+        userRepository.save(발신자_겸_판매자);
+        userRepository.save(수신자_겸_기존_입찰자);
         userRepository.save(새로운_입찰자);
 
         final Auction 경매 = Auction.builder()
-                                  .seller(발신자)
+                                  .seller(발신자_겸_판매자)
                                   .title("경매글")
                                   .description("경매글 설명")
                                   .bidUnit(new BidUnit(100))
@@ -89,12 +83,12 @@ public class NotificationEventListenerFixture {
         auctionImageRepository.save(경매_이미지);
         경매.addAuctionImages(List.of(경매_이미지));
 
-        final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
+        final ChatRoom 채팅방 = new ChatRoom(경매, 발신자_겸_판매자);
         chatRoomRepository.save(채팅방);
 
-        메시지_생성_DTO = new CreateMessageDto(채팅방.getId(), 발신자.getId(), 수신자.getId(), "메시지 내용");
+        메시지_생성_DTO = new CreateMessageDto(채팅방.getId(), 발신자_겸_판매자.getId(), 수신자_겸_기존_입찰자.getId(), "메시지 내용");
 
-        final Bid bid = new Bid(경매, 기존_입찰자, new BidPrice(200));
+        final Bid bid = new Bid(경매, 수신자_겸_기존_입찰자, new BidPrice(200));
         bidRepository.save(bid);
         경매.updateLastBid(bid);
 

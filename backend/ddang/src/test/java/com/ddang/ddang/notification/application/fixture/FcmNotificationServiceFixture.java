@@ -51,9 +51,9 @@ public class FcmNotificationServiceFixture {
     @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
 
-    protected User 사용자1;
-    private User 사용자2;
-    private User 입찰자1;
+    protected User 메시지_조회자_겸_발신자;
+    private User 메시지_수신자;
+    private User 새로운_입찰자;
     private User 기기토큰이_없는_사용자;
     protected DeviceToken 기기토큰;
     protected CreateNotificationDto 프로필_이미지가_null인_알림_생성_dto;
@@ -64,24 +64,24 @@ public class FcmNotificationServiceFixture {
 
     @BeforeEach
     void setUp() {
-        사용자1 = User.builder()
-                   .name("사용자1")
-                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                   .reliability(4.7d)
-                   .oauthId("12345")
-                   .build();
-        사용자2 = User.builder()
-                   .name("사용자2")
-                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                   .reliability(4.7d)
-                   .oauthId("12347")
-                   .build();
-        입찰자1 = User.builder()
-                   .name("입찰자1")
-                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                   .reliability(4.7d)
-                   .oauthId("56789")
-                   .build();
+        메시지_조회자_겸_발신자 = User.builder()
+                            .name("메시지_조회자_겸_발신자")
+                            .profileImage(new ProfileImage("upload.png", "store.png"))
+                            .reliability(4.7d)
+                            .oauthId("12345")
+                            .build();
+        메시지_수신자 = User.builder()
+                      .name("메시지_수신자")
+                      .profileImage(new ProfileImage("upload.png", "store.png"))
+                      .reliability(4.7d)
+                      .oauthId("12347")
+                      .build();
+        새로운_입찰자 = User.builder()
+                      .name("입찰자1")
+                      .profileImage(new ProfileImage("upload.png", "store.png"))
+                      .reliability(4.7d)
+                      .oauthId("56789")
+                      .build();
         기기토큰이_없는_사용자 = User.builder()
                            .name("기기토큰이 없는 사용자")
                            .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -89,18 +89,18 @@ public class FcmNotificationServiceFixture {
                            .oauthId("12234")
                            .build();
 
-        userRepository.save(사용자1);
-        userRepository.save(사용자2);
-        userRepository.save(입찰자1);
+        userRepository.save(메시지_조회자_겸_발신자);
+        userRepository.save(메시지_수신자);
+        userRepository.save(새로운_입찰자);
         userRepository.save(기기토큰이_없는_사용자);
 
-        기기토큰 = new DeviceToken(사용자1, "deviceToken");
+        기기토큰 = new DeviceToken(메시지_조회자_겸_발신자, "deviceToken");
 
         deviceTokenRepository.save(기기토큰);
 
         알림_생성_DTO = new CreateNotificationDto(
                 NotificationType.MESSAGE,
-                사용자1.getId(),
+                메시지_조회자_겸_발신자.getId(),
                 "제목",
                 "내용",
                 "/redirectUrlForNotification",
@@ -117,7 +117,7 @@ public class FcmNotificationServiceFixture {
         );
 
         final Auction 경매 = Auction.builder()
-                                  .seller(사용자1)
+                                  .seller(메시지_조회자_겸_발신자)
                                   .title("경매글")
                                   .description("경매글 설명")
                                   .bidUnit(new BidUnit(100))
@@ -130,26 +130,26 @@ public class FcmNotificationServiceFixture {
         auctionImageRepository.save(경매_이미지);
         경매.addAuctionImages(List.of(경매_이미지));
 
-        final Bid bid = new Bid(경매, 입찰자1, new BidPrice(200));
+        final Bid bid = new Bid(경매, 새로운_입찰자, new BidPrice(200));
         bidRepository.save(bid);
         경매.updateLastBid(bid);
 
-        final ChatRoom 채팅방 = new ChatRoom(경매, 사용자1);
+        final ChatRoom 채팅방 = new ChatRoom(경매, 메시지_조회자_겸_발신자);
         chatRoomRepository.save(채팅방);
 
         final Message 메시지 = Message.builder()
                                    .chatRoom(채팅방)
-                                   .writer(사용자1)
-                                   .receiver(사용자2)
+                                   .writer(메시지_조회자_겸_발신자)
+                                   .receiver(메시지_수신자)
                                    .contents("메시지")
                                    .build();
         messageRepository.save(메시지);
 
-        final MessageDto 프로필_이미지가_null인_메시지_DTO = MessageDto.of(메시지, 채팅방, 사용자1, 사용자2, null);
+        final MessageDto 프로필_이미지가_null인_메시지_DTO = MessageDto.of(메시지, 채팅방, 메시지_조회자_겸_발신자, 메시지_수신자, null);
         프로필_이미지가_null인_알림_생성_dto = new CreateNotificationDto(
                 NotificationType.MESSAGE,
-                사용자1.getId(),
-                사용자2.getName(),
+                메시지_조회자_겸_발신자.getId(),
+                메시지_수신자.getName(),
                 프로필_이미지가_null인_메시지_DTO.contents(),
                 "/redirectUrl",
                 "/imageUrl"
