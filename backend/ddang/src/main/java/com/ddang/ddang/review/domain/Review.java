@@ -45,7 +45,7 @@ public class Review extends BaseCreateTimeEntity {
     private Double score;
 
     @Builder
-    public Review(
+    private Review(
             final Auction auction,
             final User writer,
             final User target,
