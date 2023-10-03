@@ -2,13 +2,11 @@ package com.ddang.ddang.chat.infrastructure.persistence.fixture;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -26,22 +24,16 @@ public class QuerydslMessageRepositoryImplFixture {
     private EntityManager em;
 
     @Autowired
-    JpaUserRepository userRepository;
+    private JpaUserRepository userRepository;
 
     @Autowired
-    JpaAuctionRepository auctionRepository;
+    private JpaAuctionRepository auctionRepository;
 
     @Autowired
-    JpaRegionRepository regionRepository;
+    private JpaChatRoomRepository chatRoomRepository;
 
     @Autowired
-    JpaCategoryRepository categoryRepository;
-
-    @Autowired
-    JpaChatRoomRepository chatRoomRepository;
-
-    @Autowired
-    JpaMessageRepository messageRepository;
+    private JpaMessageRepository messageRepository;
 
     protected User 판매자;
     protected User 구매자;
