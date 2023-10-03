@@ -4,6 +4,7 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.questionandanswer.application.dto.CreateQuestionDto;
+import com.ddang.ddang.questionandanswer.application.dto.ReadQuestionAndAnswersDto;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.questionandanswer.domain.Question;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,5 +57,16 @@ public class QuestionService {
         if (auction.isOwner(questioner)) {
             throw new InvalidQuestionerException("경매 등록자는 질문할 수 없습니다.");
         }
+    }
+
+    // TODO: 2023-10-04 [고민] 내가 참여한 경매와 같이 user에 경매 조회가 있는 것처럼, 경매 쪽에 Q&A 조회 메서드가 있는 게 적절할까요?
+    public ReadQuestionAndAnswersDto readAllByAuctionId(final Long auctionId) {
+        if (!auctionRepository.existsById(auctionId)) {
+            throw new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
+        }
+
+        final List<Question> questions = questionRepository.readAllByAuctionId(auctionId);
+
+        return ReadQuestionAndAnswersDto.from(questions);
     }
 }
