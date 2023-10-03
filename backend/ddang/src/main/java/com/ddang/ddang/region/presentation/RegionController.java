@@ -3,13 +3,14 @@ package com.ddang.ddang.region.presentation;
 import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.application.dto.ReadRegionDto;
 import com.ddang.ddang.region.presentation.dto.response.ReadRegionResponse;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/regions")
@@ -39,7 +40,7 @@ public class RegionController {
     }
 
     @GetMapping("/{firstId}/{secondId}")
-    public ResponseEntity<List<ReadRegionResponse>> readAllSecond(
+    public ResponseEntity<List<ReadRegionResponse>> readAllThird(
             @PathVariable final Long firstId,
             @PathVariable final Long secondId
     ) {

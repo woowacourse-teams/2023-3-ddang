@@ -37,7 +37,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(callSuper = false, of = {"id"})
-@ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime"})
+@ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime", "auctioneerCount"})
 public class Auction extends BaseTimeEntity {
 
     private static final boolean DELETED_STATUS = true;
