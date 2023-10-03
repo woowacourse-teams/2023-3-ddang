@@ -62,7 +62,7 @@ public class MessageService {
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        if (!userRepository.existsById(request.userId())) {
+        if (!userRepository.existsById(request.messageReaderId())) {
             throw new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
         }
 
@@ -75,7 +75,7 @@ public class MessageService {
         }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
-                request.userId(),
+                request.messageReaderId(),
                 chatRoom.getId(),
                 request.lastMessageId()
         );
