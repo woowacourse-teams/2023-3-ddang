@@ -8,10 +8,8 @@ public record ReadReviewDetailDto(@Nullable Double score, @Nullable String conte
 
     private static final Double EMPTY_SCORE = null;
     private static final String EMPTY_CONTENT = null;
+    public static final ReadReviewDetailDto EMPTY = new ReadReviewDetailDto(EMPTY_SCORE, EMPTY_CONTENT);
 
-    public static ReadReviewDetailDto empty() {
-        return new ReadReviewDetailDto(EMPTY_SCORE, EMPTY_CONTENT);
-    }
     public static ReadReviewDetailDto from(final Review review) {
         return new ReadReviewDetailDto(review.getScore(), review.getContent());
     }

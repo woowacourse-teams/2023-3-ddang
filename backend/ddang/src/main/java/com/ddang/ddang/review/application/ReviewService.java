@@ -81,6 +81,6 @@ public class ReviewService {
     public ReadReviewDetailDto read(final Long writerId, final Long auctionId) {
         return reviewRepository.findByAuctionIdAndWriterId(auctionId, writerId)
                                .map(ReadReviewDetailDto::from)
-                               .orElse(ReadReviewDetailDto.empty());
+                               .orElse(ReadReviewDetailDto.EMPTY);
     }
 }
