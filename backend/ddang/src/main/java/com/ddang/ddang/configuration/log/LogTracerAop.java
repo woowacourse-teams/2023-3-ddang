@@ -11,7 +11,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class LogAop {
+public class LogTracerAop {
 
     private static final String PROXY_CLASS_PREFIX = "Proxy";
 
