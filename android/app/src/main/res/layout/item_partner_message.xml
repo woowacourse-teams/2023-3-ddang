@@ -31,7 +31,7 @@
             android:layout_marginTop="@dimen/padding_vertical_filter_chips"
             android:background="@drawable/bg_stroke_gray_radius_1dp"
             android:backgroundTint="@color/grey_100"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
             android:text="@{item.createdDateTime.format(dateFormatter)}"
             app:layout_constraintEnd_toEndOf="parent"
