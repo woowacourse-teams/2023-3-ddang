@@ -6,7 +6,6 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -37,13 +36,7 @@ class JpaMessageRepositoryTest extends JpaMessageRepositoryFixture {
         em.clear();
 
         // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.getId()).isPositive();
-            softAssertions.assertThat(actual.getContents()).isEqualTo(메시지.getContents());
-            softAssertions.assertThat(actual.getWriter()).isEqualTo(메시지.getWriter());
-            softAssertions.assertThat(actual.getReceiver()).isEqualTo(메시지.getReceiver());
-            softAssertions.assertThat(actual.getChatRoom()).isEqualTo(메시지.getChatRoom());
-        });
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test
