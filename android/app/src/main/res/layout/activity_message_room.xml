@@ -85,9 +85,19 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:contentDescription="@string/message_room_refresh_description"
-                    android:onClick="@{()->viewModel.loadMessages()}"
+                    android:onClick="@{() -> viewModel.loadMessages()}"
                     android:src="@drawable/ic_refresh_24"
                     app:tint="@color/grey_900" />
+
+                <ImageView
+                    android:id="@+id/iv_user_rate"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:contentDescription="@string/message_room_rate_description"
+                    android:onClick="@{() -> viewModel.setRateEvent()}"
+                    android:src="@drawable/ic_pencil_24"
+                    app:tint="@color/green" />
 
                 <ImageView
                     android:layout_width="24dp"
