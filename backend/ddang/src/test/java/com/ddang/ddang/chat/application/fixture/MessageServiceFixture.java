@@ -18,7 +18,6 @@ import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -26,8 +25,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -57,12 +54,12 @@ public class MessageServiceFixture {
     protected CreateMessageDto 유효하지_않은_채팅방의_메시지_생성_DTO;
     protected CreateMessageDto 유효하지_않은_발신자의_메시지_생성_DTO;
     protected CreateMessageDto 유효하지_않은_수신자의_메시지_생성_DTO;
-    protected ReadMessageRequest 마지막_조회_메시지_아이디가_없는_조회용_메시지_request;
-    protected ReadMessageRequest 두_번째_메시지부터_모든_메시지_조회용_메시지_request;
-    protected ReadMessageRequest 조회할_메시지가_더이상_없는_조회용_메시지_request;
-    protected ReadMessageRequest 유효하지_않은_사용자의_조회용_메시지_request;
-    protected ReadMessageRequest 유효하지_않은_채팅방의_조회용_메시지_request;
-    protected ReadMessageRequest 존재하지_않는_마지막_메시지_아이디의_조회용_메시지_request;
+    protected ReadMessageRequest 마지막_조회_메시지_아이디가_없는_메시지_조회용_request;
+    protected ReadMessageRequest 두_번째_메시지부터_모든_메시지_조회용_request;
+    protected ReadMessageRequest 조회할_메시지가_더이상_없는_메시지_조회용_request;
+    protected ReadMessageRequest 유효하지_않은_사용자의_메시지_조회용_request;
+    protected ReadMessageRequest 유효하지_않은_채팅방의_메시지_조회용_request;
+    protected ReadMessageRequest 존재하지_않는_마지막_메시지_아이디의_메시지_조회용_request;
 
     protected String 이미지_절대_경로 = "/imageUrl";
     protected int 메시지_총_개수 = 10;
@@ -140,11 +137,11 @@ public class MessageServiceFixture {
             messageRepository.save(메시지);
         }
 
-        마지막_조회_메시지_아이디가_없는_조회용_메시지_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), null);
-        두_번째_메시지부터_모든_메시지_조회용_메시지_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), 메시지들.get(0).getId());
-        조회할_메시지가_더이상_없는_조회용_메시지_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), 메시지들.get(메시지_총_개수 - 1).getId());
-        유효하지_않은_사용자의_조회용_메시지_request = new ReadMessageRequest(-999L, 채팅방.getId(), null);
-        유효하지_않은_채팅방의_조회용_메시지_request = new ReadMessageRequest(발신자.getId(), -999L, null);
-        존재하지_않는_마지막_메시지_아이디의_조회용_메시지_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), -999L);
+        마지막_조회_메시지_아이디가_없는_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), null);
+        두_번째_메시지부터_모든_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), 메시지들.get(0).getId());
+        조회할_메시지가_더이상_없는_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), 메시지들.get(메시지_총_개수 - 1).getId());
+        유효하지_않은_사용자의_메시지_조회용_request = new ReadMessageRequest(-999L, 채팅방.getId(), null);
+        유효하지_않은_채팅방의_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), -999L, null);
+        존재하지_않는_마지막_메시지_아이디의_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), -999L);
     }
 }
