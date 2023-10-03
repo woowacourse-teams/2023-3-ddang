@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface JpaReviewRepository extends JpaRepository<Review, Long> {
 
@@ -18,4 +19,6 @@ public interface JpaReviewRepository extends JpaRepository<Review, Long> {
             ORDER BY r.id DESC
            """)
     List<Review> findAllByTargetId(final Long targetId);
+
+    Optional<Review> findByAuctionIdAndWriterId(final Long auctionId, final Long writerId);
 }

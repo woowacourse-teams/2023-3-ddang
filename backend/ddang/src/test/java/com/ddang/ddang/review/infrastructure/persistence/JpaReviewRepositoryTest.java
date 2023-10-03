@@ -15,6 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -81,5 +82,25 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
             softAssertions.assertThat(actual.get(0)).isEqualTo(구매자가_판매자2에게_받은_평가);
             softAssertions.assertThat(actual.get(1)).isEqualTo(구매자가_판매자1에게_받은_평가);
         });
+    }
+
+    @Test
+    void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재한다면_optional에_넣어_반환한다() {
+        // when
+        final Optional<Review> actual =
+                reviewRepository.findByAuctionIdAndWriterId(판매자1이_평가한_경매.getId(), 판매자1.getId());
+
+        // then
+        assertThat(actual).contains(구매자가_판매자1에게_받은_평가);
+    }
+
+    @Test
+    void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재하지_않는다면_빈_optional을_반환한다() {
+        // when
+        final Optional<Review> actual =
+                reviewRepository.findByAuctionIdAndWriterId(평가_안한_경매.getId(), 평가_안한_경매_판매자.getId());
+
+        // then
+        assertThat(actual).isEmpty();
     }
 }
