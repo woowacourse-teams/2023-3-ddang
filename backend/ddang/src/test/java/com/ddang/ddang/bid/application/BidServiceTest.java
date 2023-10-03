@@ -155,8 +155,6 @@ class BidServiceTest {
         assertThat(actual).isPositive();
     }
 
-    // TODO: 2023/10/04 입찰 알림 테스트 작성
-
     @Test
     void 첫_입찰자는_시작가를_입찰로_등록할_수_있다() {
         // given
