@@ -2,7 +2,7 @@ name: PR 코드 분석
 
 on:
   pull_request:
-    types: [ opened ]
+    types: [opened, reopened, synchronize]
     branches: [ main, develop, develop-be ]
 
 permissions: write-all
@@ -36,7 +36,7 @@ jobs:
       - name: run jacocoTestCoverage
         run: |
           cd backend/ddang
-          ./gradlew jacocoTestCoverage 
+          ./gradlew jacocoTestCoverage --info
 
       - name: set author slack id
         if: always()
@@ -50,9 +50,9 @@ jobs:
           elif [ "$GIT_ID" == "swonny" ]; then
             AUTHOR_NAME="${{ secrets.swonny_slack_display_name }}"
             AUTHOR_ID="${{ secrets.swonny_slack_id }}"
-          elif [ "$GIT_ID" == "JJ503" ]; then
-            AUTHOR_NAME="${{ secrets.JJ503_slack_display_name }}"
-            AUTHOR_ID="${{ secrets.JJ503_slack_id }}"
+          elif [ "$GIT_ID" == "jj503" ]; then
+            AUTHOR_NAME="${{ secrets.jj503_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.jj503_slack_id }}"
           elif [ "$GIT_ID" == "kwonyj1022" ]; then
             AUTHOR_NAME="${{ secrets.kwonyj1022_slack_display_name }}"
             AUTHOR_ID="${{ secrets.kwonyj1022_slack_id }}"
@@ -83,10 +83,12 @@ jobs:
           done
           
           echo "AUTHOR=${AUTHOR}" >> $GITHUB_OUTPUT
+          echo "SONAR_SCANNER_URL=${SONAR_SCANNER_URL}" >> $GITHUB_OUTPUT
           echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
           echo "REVIEWERS_SLACK_ID=${REVIEWERS_SLACK_ID}" >> $GITHUB_OUTPUT
 
-      - name: slack success notification
+      - name: slack notification
+        if: github.event.pull_request.state == 'open'
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
