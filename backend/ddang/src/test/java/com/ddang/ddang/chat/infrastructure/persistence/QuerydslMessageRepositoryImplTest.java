@@ -37,19 +37,19 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 판매자.getId(),
                 채팅방.getId(),
-                세번째_메시지_아이디
+                세_번째_메시지.getId()
         );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(7);
-            softAssertions.assertThat(actual.get(0)).isEqualTo(저장된_메시지들.get(3));
-            softAssertions.assertThat(actual.get(1)).isEqualTo(저장된_메시지들.get(4));
-            softAssertions.assertThat(actual.get(2)).isEqualTo(저장된_메시지들.get(5));
-            softAssertions.assertThat(actual.get(3)).isEqualTo(저장된_메시지들.get(6));
-            softAssertions.assertThat(actual.get(4)).isEqualTo(저장된_메시지들.get(7));
-            softAssertions.assertThat(actual.get(5)).isEqualTo(저장된_메시지들.get(8));
-            softAssertions.assertThat(actual.get(6)).isEqualTo(저장된_메시지들.get(9));
+            softAssertions.assertThat(actual.get(0)).isEqualTo(네_번째_메시지);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(다섯_번째_메시지);
+            softAssertions.assertThat(actual.get(2)).isEqualTo(여섯_번째_메시지);
+            softAssertions.assertThat(actual.get(3)).isEqualTo(일곱_번째_메시지);
+            softAssertions.assertThat(actual.get(4)).isEqualTo(여덟_번째_메시지);
+            softAssertions.assertThat(actual.get(5)).isEqualTo(아홉_번째_메시지);
+            softAssertions.assertThat(actual.get(6)).isEqualTo(열_번째_메시지);
         });
     }
 
@@ -59,19 +59,19 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
-                세번째_메시지_아이디
+                세_번째_메시지.getId()
         );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(7);
-            softAssertions.assertThat(actual.get(0)).isEqualTo(저장된_메시지들.get(3));
-            softAssertions.assertThat(actual.get(1)).isEqualTo(저장된_메시지들.get(4));
-            softAssertions.assertThat(actual.get(2)).isEqualTo(저장된_메시지들.get(5));
-            softAssertions.assertThat(actual.get(3)).isEqualTo(저장된_메시지들.get(6));
-            softAssertions.assertThat(actual.get(4)).isEqualTo(저장된_메시지들.get(7));
-            softAssertions.assertThat(actual.get(5)).isEqualTo(저장된_메시지들.get(8));
-            softAssertions.assertThat(actual.get(6)).isEqualTo(저장된_메시지들.get(9));
+            softAssertions.assertThat(actual.get(0)).isEqualTo(네_번째_메시지);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(다섯_번째_메시지);
+            softAssertions.assertThat(actual.get(2)).isEqualTo(여섯_번째_메시지);
+            softAssertions.assertThat(actual.get(3)).isEqualTo(일곱_번째_메시지);
+            softAssertions.assertThat(actual.get(4)).isEqualTo(여덟_번째_메시지);
+            softAssertions.assertThat(actual.get(5)).isEqualTo(아홉_번째_메시지);
+            softAssertions.assertThat(actual.get(6)).isEqualTo(열_번째_메시지);
         });
     }
 
@@ -81,7 +81,7 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
         final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
-                마지막_메시지_아이디
+                열_번째_메시지.getId()
         );
 
         // then

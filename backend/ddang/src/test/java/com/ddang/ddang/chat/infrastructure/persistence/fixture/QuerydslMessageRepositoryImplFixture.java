@@ -49,8 +49,14 @@ public class QuerydslMessageRepositoryImplFixture {
     protected ChatRoom 채팅방;
     protected int 메시지_총_개수;
     protected List<Message> 저장된_메시지들;
-    protected Long 세번째_메시지_아이디;
-    protected Long 마지막_메시지_아이디;
+    protected Message 세_번째_메시지;
+    protected Message 네_번째_메시지;
+    protected Message 다섯_번째_메시지;
+    protected Message 여섯_번째_메시지;
+    protected Message 일곱_번째_메시지;
+    protected Message 여덟_번째_메시지;
+    protected Message 아홉_번째_메시지;
+    protected Message 열_번째_메시지;
 
     @BeforeEach
     void setUp() {
@@ -93,8 +99,14 @@ public class QuerydslMessageRepositoryImplFixture {
         }
         messageRepository.saveAll(저장된_메시지들);
 
-        세번째_메시지_아이디 = 저장된_메시지들.get(2).getId();
-        마지막_메시지_아이디 = 저장된_메시지들.get(메시지_총_개수 - 1).getId();
+        세_번째_메시지 = 저장된_메시지들.get(2);
+        네_번째_메시지 = 저장된_메시지들.get(3);
+        다섯_번째_메시지 = 저장된_메시지들.get(4);
+        여섯_번째_메시지 = 저장된_메시지들.get(5);
+        일곱_번째_메시지 = 저장된_메시지들.get(6);
+        여덟_번째_메시지 = 저장된_메시지들.get(7);
+        아홉_번째_메시지 = 저장된_메시지들.get(8);
+        열_번째_메시지 = 저장된_메시지들.get(9);
 
         em.flush();
         em.clear();
