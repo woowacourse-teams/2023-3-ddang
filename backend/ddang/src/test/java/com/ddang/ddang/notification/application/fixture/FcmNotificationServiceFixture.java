@@ -146,6 +146,13 @@ public class FcmNotificationServiceFixture {
         messageRepository.save(메시지);
 
         final MessageDto 프로필_이미지가_null인_메시지_DTO = MessageDto.of(메시지, 채팅방, 사용자1, 사용자2, null);
-        프로필_이미지가_null인_알림_생성_dto = CreateNotificationDto.from(프로필_이미지가_null인_메시지_DTO);
+        프로필_이미지가_null인_알림_생성_dto = new CreateNotificationDto(
+                NotificationType.MESSAGE,
+                사용자1.getId(),
+                사용자2.getName(),
+                프로필_이미지가_null인_메시지_DTO.contents(),
+                "/redirectUrl",
+                "/imageUrl"
+        );
     }
 }
