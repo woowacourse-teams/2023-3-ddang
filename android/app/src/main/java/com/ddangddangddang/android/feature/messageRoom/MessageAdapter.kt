@@ -12,7 +12,12 @@ class MessageAdapter(
 ) : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
-        return MessageViewHolder.of(parent, MessageViewType.values()[viewType], dateFormatter, timeFormatter)
+        return MessageViewHolder.of(
+            parent,
+            MessageViewType.values()[viewType],
+            dateFormatter,
+            timeFormatter,
+        )
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
