@@ -33,7 +33,7 @@ class AuctionForListSearchByTitleAndSortByReliabilityTest extends AuctionForList
     void 첫번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(0, 3, 신뢰도순_정렬),
+                PageRequest.of(0, 페이지_크기, 신뢰도순_정렬),
                 검색어_맥북
         );
 
