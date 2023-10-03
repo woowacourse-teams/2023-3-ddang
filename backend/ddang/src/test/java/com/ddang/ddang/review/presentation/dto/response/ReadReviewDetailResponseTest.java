@@ -2,8 +2,12 @@ package com.ddang.ddang.review.presentation.dto.response;
 
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+@SuppressWarnings("NonAsciiCharacters")
 class ReadReviewDetailResponseTest {
 
     @Test
