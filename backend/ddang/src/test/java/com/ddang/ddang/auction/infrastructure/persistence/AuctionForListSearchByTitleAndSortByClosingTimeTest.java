@@ -20,8 +20,7 @@ import org.springframework.data.domain.Slice;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class AuctionForListSearchByTitleAndSortByClosingTimeTest extends
-        AuctionForListSearchByTitleAndSortByClosingTimeFixture {
+class AuctionForListSearchByTitleAndSortByClosingTimeTest extends AuctionForListSearchByTitleAndSortByClosingTimeFixture {
 
     QuerydslAuctionRepository querydslAuctionRepository;
 

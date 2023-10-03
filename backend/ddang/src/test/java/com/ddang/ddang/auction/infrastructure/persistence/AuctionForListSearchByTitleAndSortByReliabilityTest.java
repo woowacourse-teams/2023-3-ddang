@@ -20,8 +20,7 @@ import org.springframework.data.domain.Slice;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class AuctionForListSearchByTitleAndSortByReliabilityTest extends
-        AuctionForListSearchByTitleAndSortByReliabilityFixture {
+class AuctionForListSearchByTitleAndSortByReliabilityTest extends AuctionForListSearchByTitleAndSortByReliabilityFixture {
 
     QuerydslAuctionRepository querydslAuctionRepository;
 
