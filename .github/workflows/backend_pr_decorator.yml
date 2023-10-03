@@ -88,7 +88,7 @@ jobs:
           echo "REVIEWERS_SLACK_ID=${REVIEWERS_SLACK_ID}" >> $GITHUB_OUTPUT
 
       - name: slack notification
-        if: contains(github.event.pull_request.types, 'reopened') == false && contains(github.event.pull_request.types, 'synchronize') == false
+        if: github.event.pull_request.state == 'open' && github.event_name != 'reopen' && github.event_name != 'synchronize' 
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
