@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.application;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -11,21 +12,13 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.application.fixture.AuctionServiceFixture;
-import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
-import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import java.util.List;
-import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -46,24 +39,6 @@ class AuctionServiceTest extends AuctionServiceFixture {
 
     @Autowired
     AuctionService auctionService;
-
-    @Autowired
-    JpaAuctionRepository auctionRepository;
-
-    @Autowired
-    JpaRegionRepository regionRepository;
-
-    @Autowired
-    JpaCategoryRepository categoryRepository;
-
-    @Autowired
-    JpaUserRepository userRepository;
-
-    @Autowired
-    JpaChatRoomRepository chatRoomRepository;
-
-    @Autowired
-    JpaBidRepository bidRepository;
 
     @Test
     void 경매를_등록한다() {
@@ -119,9 +94,6 @@ class AuctionServiceTest extends AuctionServiceFixture {
 
     @Test
     void 채팅방이_존재하고_채팅_자격이_있는_사용자가_지정한_아이디에_해당하는_경매를_조회하면_채팅방_아이디와_채팅_가능을_반환한다() {
-        // given
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(경매_이미지_엔티티));
-
         // when
         final ReadAuctionDto actual = auctionService.readByAuctionId(채팅방이_있는_경매.getId());
 
@@ -132,10 +104,10 @@ class AuctionServiceTest extends AuctionServiceFixture {
             softAssertions.assertThat(actual.description()).isEqualTo(채팅방이_있는_경매.getDescription());
             softAssertions.assertThat(actual.bidUnit()).isEqualTo(채팅방이_있는_경매.getBidUnit().getValue());
             softAssertions.assertThat(actual.startPrice()).isEqualTo(채팅방이_있는_경매.getStartPrice().getValue());
-            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.lastBidPrice()).isEqualTo(채팅방이_있는_경매_입찰_가격.getValue());
             softAssertions.assertThat(actual.deleted()).isFalse();
             softAssertions.assertThat(actual.closingTime()).isEqualTo(채팅방이_있는_경매.getClosingTime());
-            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
+            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(1);
         });
     }
 
@@ -151,72 +123,66 @@ class AuctionServiceTest extends AuctionServiceFixture {
             softAssertions.assertThat(actual.description()).isEqualTo(채팅방이_있는_경매.getDescription());
             softAssertions.assertThat(actual.bidUnit()).isEqualTo(채팅방이_있는_경매.getBidUnit().getValue());
             softAssertions.assertThat(actual.startPrice()).isEqualTo(채팅방이_있는_경매.getStartPrice().getValue());
-            softAssertions.assertThat(actual.lastBidPrice()).isNull();
+            softAssertions.assertThat(actual.lastBidPrice()).isEqualTo(채팅방이_있는_경매_입찰_가격.getValue());
             softAssertions.assertThat(actual.deleted()).isFalse();
             softAssertions.assertThat(actual.closingTime()).isEqualTo(채팅방이_있는_경매.getClosingTime());
-            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
+            softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(1);
         });
     }
 
     @Test
     void 경매가_종료되지_않은_상태에서_지정한_아이디에_해당하는_경매를_조회하면_채팅방_아이디_null과_채팅_불가를_반환한다() {
         // when
-        final ReadAuctionDto actual = auctionService.readByAuctionId(채팅방이_없는_경매.getId());
+        final ReadAuctionDto actual = auctionService.readByAuctionId(종료되는_날이_3일_뒤인_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.id()).isPositive();
-            softAssertions.assertThat(actual.title()).isEqualTo(채팅방이_없는_경매.getTitle());
-            softAssertions.assertThat(actual.description()).isEqualTo(채팅방이_없는_경매.getDescription());
-            softAssertions.assertThat(actual.bidUnit()).isEqualTo(채팅방이_없는_경매.getBidUnit().getValue());
-            softAssertions.assertThat(actual.startPrice()).isEqualTo(채팅방이_없는_경매.getStartPrice().getValue());
+            softAssertions.assertThat(actual.title()).isEqualTo(종료되는_날이_3일_뒤인_경매.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(종료되는_날이_3일_뒤인_경매.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(종료되는_날이_3일_뒤인_경매.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(종료되는_날이_3일_뒤인_경매.getStartPrice().getValue());
             softAssertions.assertThat(actual.lastBidPrice()).isNull();
             softAssertions.assertThat(actual.deleted()).isFalse();
-            softAssertions.assertThat(actual.closingTime()).isEqualTo(채팅방이_없는_경매.getClosingTime());
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(종료되는_날이_3일_뒤인_경매.getClosingTime());
             softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
 
     @Test
     void 경매가_종료되었지만_채팅방이_없는_상태에서_채팅_자격이_있는_사용자가_지정한_아이디에_해당하는_경매를_조회하면_채팅방_아이디_null과_채팅_가능을_반환한다() {
-        // given
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(경매_이미지_엔티티));
-
         // when
-        final ReadAuctionDto actual = auctionService.readByAuctionId(종료후_채팅방이_없는_경매.getId());
+        final ReadAuctionDto actual = auctionService.readByAuctionId(종료된_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.id()).isPositive();
-            softAssertions.assertThat(actual.title()).isEqualTo(종료후_채팅방이_없는_경매.getTitle());
-            softAssertions.assertThat(actual.description()).isEqualTo(종료후_채팅방이_없는_경매.getDescription());
-            softAssertions.assertThat(actual.bidUnit()).isEqualTo(종료후_채팅방이_없는_경매.getBidUnit().getValue());
-            softAssertions.assertThat(actual.startPrice()).isEqualTo(종료후_채팅방이_없는_경매.getStartPrice().getValue());
+            softAssertions.assertThat(actual.title()).isEqualTo(종료된_경매.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(종료된_경매.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(종료된_경매.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(종료된_경매.getStartPrice().getValue());
             softAssertions.assertThat(actual.lastBidPrice()).isNull();
             softAssertions.assertThat(actual.deleted()).isFalse();
-            softAssertions.assertThat(actual.closingTime()).isEqualTo(종료후_채팅방이_없는_경매.getClosingTime());
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(종료된_경매.getClosingTime());
             softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
 
     @Test
     void 채팅방이_없고_채팅_자격이_없는_사용자가_지정한_아이디에_해당하는_경매를_조회하면_채팅방_아이디_null과_채팅_불가를_반환한다() {
-        // given
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(경매_이미지_엔티티));
-
         // when
-        final ReadAuctionDto actual = auctionService.readByAuctionId(채팅방이_없는_경매.getId());
+        final ReadAuctionDto actual = auctionService.readByAuctionId(종료되는_날이_3일_뒤인_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.id()).isPositive();
-            softAssertions.assertThat(actual.title()).isEqualTo(채팅방이_없는_경매.getTitle());
-            softAssertions.assertThat(actual.description()).isEqualTo(채팅방이_없는_경매.getDescription());
-            softAssertions.assertThat(actual.bidUnit()).isEqualTo(채팅방이_없는_경매.getBidUnit().getValue());
-            softAssertions.assertThat(actual.startPrice()).isEqualTo(채팅방이_없는_경매.getStartPrice().getValue());
+            softAssertions.assertThat(actual.title()).isEqualTo(종료되는_날이_3일_뒤인_경매.getTitle());
+            softAssertions.assertThat(actual.description()).isEqualTo(종료되는_날이_3일_뒤인_경매.getDescription());
+            softAssertions.assertThat(actual.bidUnit()).isEqualTo(종료되는_날이_3일_뒤인_경매.getBidUnit().getValue());
+            softAssertions.assertThat(actual.startPrice()).isEqualTo(종료되는_날이_3일_뒤인_경매.getStartPrice().getValue());
             softAssertions.assertThat(actual.lastBidPrice()).isNull();
             softAssertions.assertThat(actual.deleted()).isFalse();
-            softAssertions.assertThat(actual.closingTime()).isEqualTo(채팅방이_없는_경매.getClosingTime());
+            softAssertions.assertThat(actual.closingTime()).isEqualTo(종료되는_날이_3일_뒤인_경매.getClosingTime());
             softAssertions.assertThat(actual.auctioneerCount()).isEqualTo(0);
         });
     }
@@ -231,9 +197,6 @@ class AuctionServiceTest extends AuctionServiceFixture {
 
     @Test
     void 첫번째_페이지의_경매_목록을_조회한다() {
-        // given
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(경매_이미지_엔티티));
-
         // when
         final ReadAuctionsDto actual = auctionService.readAllByCondition(
                 PageRequest.of(0, 1, Sort.by(Order.desc("id"))),
@@ -250,15 +213,12 @@ class AuctionServiceTest extends AuctionServiceFixture {
 
     @Test
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
-        // when
-        auctionService.deleteByAuctionId(채팅방이_없는_경매.getId(), 판매자.getId());
-
-        // then
-        final Optional<Auction> actual = auctionRepository.findById(채팅방이_없는_경매.getId());
-
+        // when & then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).contains(채팅방이_없는_경매);
-            softAssertions.assertThat(actual.get().isDeleted()).isTrue();
+            assertThatCode(() -> auctionService.deleteByAuctionId(종료되는_날이_3일_뒤인_경매.getId(), 판매자.getId())).doesNotThrowAnyException();
+            assertThatThrownBy(() -> auctionService.readByAuctionId(종료되는_날이_3일_뒤인_경매.getId()))
+                    .isInstanceOf(AuctionNotFoundException.class)
+                    .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
         });
     }
 
@@ -273,7 +233,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
     @Test
     void 지정한_아이디에_해당하는_회원이_없는_경우_삭제시_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> auctionService.deleteByAuctionId(채팅방이_없는_경매.getId(), 존재하지_않는_사용자_ID))
+        assertThatThrownBy(() -> auctionService.deleteByAuctionId(종료되는_날이_3일_뒤인_경매.getId(), 존재하지_않는_사용자_ID))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("회원 정보를 찾을 수 없습니다.");
     }
@@ -289,19 +249,17 @@ class AuctionServiceTest extends AuctionServiceFixture {
     @Test
     void 회원이_등록한_경매_목록을_조회한다() {
         // given
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(경매_이미지_엔티티));
-        final PageRequest pageRequest = PageRequest.of(0, 4);
+        final PageRequest pageRequest = PageRequest.of(0, 3);
 
         // when
         final ReadAuctionsDto actual = auctionService.readAllByUserId(판매자.getId(), pageRequest);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.readAuctionDtos()).hasSize(4);
-            softAssertions.assertThat(actual.readAuctionDtos().get(0).id()).isEqualTo(종료후_채팅방이_없는_경매.getId());
+            softAssertions.assertThat(actual.readAuctionDtos()).hasSize(3);
+            softAssertions.assertThat(actual.readAuctionDtos().get(0).id()).isEqualTo(종료된_경매.getId());
             softAssertions.assertThat(actual.readAuctionDtos().get(1).id()).isEqualTo(입찰이_존재하는_경매.getId());
-            softAssertions.assertThat(actual.readAuctionDtos().get(2).id()).isEqualTo(채팅방이_없는_경매.getId());
-            softAssertions.assertThat(actual.readAuctionDtos().get(3).id()).isEqualTo(채팅방이_있는_경매.getId());
+            softAssertions.assertThat(actual.readAuctionDtos().get(2).id()).isEqualTo(종료되는_날이_3일_뒤인_경매.getId());
         });
     }
 
@@ -311,8 +269,9 @@ class AuctionServiceTest extends AuctionServiceFixture {
         final ReadAuctionsDto actual = auctionService.readAllByBidderId(구매자.getId(), pageRequest);
 
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.readAuctionDtos()).hasSize(1);
+            softAssertions.assertThat(actual.readAuctionDtos()).hasSize(2);
             softAssertions.assertThat(actual.readAuctionDtos().get(0).id()).isEqualTo(입찰이_존재하는_경매.getId());
+            softAssertions.assertThat(actual.readAuctionDtos().get(1).id()).isEqualTo(채팅방이_있는_경매.getId());
         });
     }
 }
