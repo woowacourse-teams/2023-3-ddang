@@ -3,9 +3,9 @@ package com.ddang.ddang.image.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.image.infrastructure.persistence.fixture.JpaProfileImageRepositoryFixture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -18,44 +18,45 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class JpaProfileImageRepositoryTest {
+class JpaProfileImageRepositoryTest extends JpaProfileImageRepositoryFixture {
 
     @PersistenceContext
     EntityManager em;
 
     @Autowired
-    JpaProfileImageRepository imageRepository;
+    JpaProfileImageRepository profileImageRepository;
 
     @Test
-    void 지정한_아이디에_해당하는_이미지를_조회한다() {
+    void 프로필_이미지를_저장한다() {
         // given
-        final ProfileImage profileImage = new ProfileImage("uploadName", "storeName");
+        final ProfileImage profileImage = new ProfileImage(업로드_이미지_파일명, 저장된_이미지_파일명);
 
-        imageRepository.save(profileImage);
+        // when
+        final ProfileImage actual = profileImageRepository.save(profileImage);
 
         em.flush();
         em.clear();
 
+        // then
+        assertThat(actual.getId()).isPositive();
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_이미지를_조회한다() {
         // when
-        final Optional<ProfileImage> actual = imageRepository.findById(profileImage.getId());
+        final Optional<ProfileImage> actual = profileImageRepository.findById(프로필_이미지.getId());
 
         // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get()).isEqualTo(profileImage);
-        });
+        assertThat(actual).contains(프로필_이미지);
     }
 
     @Test
     void 지정한_아이디에_해당하는_이미지가_없는_경우_빈_Optional을_반환한다() {
-        // given
-        final Long invalidImageId = -999L;
-
         // when
-        final Optional<ProfileImage> actual = imageRepository.findById(invalidImageId);
+        final Optional<ProfileImage> actual = profileImageRepository.findById(존재하지_않는_프로필_이미지_아이디);
 
         // then
         assertThat(actual).isEmpty();
@@ -63,19 +64,10 @@ class JpaProfileImageRepositoryTest {
 
     @Test
     void 저장된_이름에_해당하는_이미지를_반환한다() {
-        // given
-        final String storeName = "storeName.png";
-        final ProfileImage expect = new ProfileImage("uploadName", storeName);
-
-        imageRepository.save(expect);
-
-        em.flush();
-        em.clear();
-
         // when
-        final Optional<ProfileImage> actual = imageRepository.findByStoreName(storeName);
+        final Optional<ProfileImage> actual = profileImageRepository.findByStoreName(저장된_이미지_파일명);
 
         // then
-        assertThat(actual).contains(expect);
+        assertThat(actual).contains(프로필_이미지);
     }
 }

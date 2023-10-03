@@ -36,7 +36,7 @@ jobs:
       - name: run jacocoTestCoverage
         run: |
           cd backend/ddang
-          ./gradlew jacocoTestCoverage --info
+          ./gradlew jacocoTestCoverage 
 
       - name: set author slack id
         if: always()
@@ -86,19 +86,22 @@ jobs:
           echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
           echo "REVIEWERS_SLACK_ID=${REVIEWERS_SLACK_ID}" >> $GITHUB_OUTPUT
 
-      - name: slack success notification
+      - name: slack notification
+        if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
+          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
+          SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
+          SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":white_check_mark:"
           SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"
           SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS_SLACK_ID }}"
           SLACK_MESSAGE+='"}}]}'
 
-          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
 
       - name: slack failed notification
         if: failure()
@@ -109,7 +112,9 @@ jobs:
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
+          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
+          SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
+          SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":x:"
           SLACK_MESSAGE+='"}}]}'
           
@@ -124,7 +129,9 @@ jobs:
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
+          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
+          SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
+          SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":black_square_for_stop:"
           SLACK_MESSAGE+='"}}]}'
           
