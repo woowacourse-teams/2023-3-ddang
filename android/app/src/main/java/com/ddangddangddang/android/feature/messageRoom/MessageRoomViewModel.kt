@@ -147,6 +147,10 @@ class MessageRoomViewModel @Inject constructor(
         _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.roomId) }
     }
 
+    fun setRateEvent() {
+        _event.value = MessageRoomEvent.Rate
+    }
+
     fun setNavigateToAuctionDetailEvent() {
         _messageRoomInfo.value?.let {
             _event.value = MessageRoomEvent.NavigateToAuctionDetail(it.auctionId)
@@ -156,6 +160,7 @@ class MessageRoomViewModel @Inject constructor(
     sealed class MessageRoomEvent {
         object Exit : MessageRoomEvent()
         data class Report(val roomId: Long) : MessageRoomEvent()
+        object Rate : MessageRoomEvent()
         data class NavigateToAuctionDetail(val auctionId: Long) : MessageRoomEvent()
         sealed class FailureEvent(val type: ErrorType) : MessageRoomEvent() {
             class LoadRoomInfo(type: ErrorType) : FailureEvent(type)
