@@ -15,6 +15,8 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,6 +40,8 @@ class MessageRoomViewModel @Inject constructor(
         get() = _messages.value?.lastOrNull()?.id
 
     private var isMessageLoading: Boolean = false
+
+    private val formatter = DateTimeFormatter.ofPattern("h:mm a")
 
     fun loadMessageRoom(roomId: Long) {
         viewModelScope.launch {
@@ -72,7 +76,7 @@ class MessageRoomViewModel @Inject constructor(
             viewModelScope.launch {
                 when (val response = repository.getMessages(it.roomId, lastMessageId)) {
                     is ApiResponse.Success -> {
-                        addMessages(response.body.map { it.toPresentation().toViewItem() })
+                        addMessages(response.body.map { it.toPresentation() }.toViewItems())
                     }
 
                     is ApiResponse.Failure -> {
@@ -99,11 +103,28 @@ class MessageRoomViewModel @Inject constructor(
         _messages.value = _messages.value?.plus(messages) ?: messages
     }
 
-    private fun MessageModel.toViewItem(): MessageViewItem {
+    private fun List<MessageModel>.toViewItems(): List<MessageViewItem> {
+        return mapIndexed { index, messageModel ->
+            val sendDateTime = LocalDateTime.parse(messageModel.createdAt)
+            val sendTime = sendDateTime.format(formatter)
+            if (index == 0) return@mapIndexed messageModel.toViewItem(sendTime, true)
+
+            val sendDate = sendDateTime.toLocalDate()
+            val previousSendDateTime = LocalDateTime.parse(this[index - 1].createdAt)
+            val previousSendDate = previousSendDateTime.toLocalDate()
+            return@mapIndexed if (sendDate == previousSendDate) {
+                messageModel.toViewItem(sendTime, false)
+            } else {
+                messageModel.toViewItem(sendTime, true)
+            }
+        }
+    }
+
+    private fun MessageModel.toViewItem(sendTime: String, isFirstAtDate: Boolean): MessageViewItem {
         return if (isMyMessage) {
-            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents, false)
+            MessageViewItem.MyMessageViewItem(id, sendTime, contents, isFirstAtDate)
         } else {
-            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents, false)
+            MessageViewItem.PartnerMessageViewItem(id, sendTime, contents, isFirstAtDate)
         }
     }
 
