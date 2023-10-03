@@ -101,9 +101,9 @@ class MessageRoomViewModel @Inject constructor(
 
     private fun MessageModel.toViewItem(): MessageViewItem {
         return if (isMyMessage) {
-            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents)
+            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents, false)
         } else {
-            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents)
+            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents, false)
         }
     }
 
