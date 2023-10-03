@@ -54,4 +54,8 @@ public class Question extends BaseCreateTimeEntity {
         this.answer = answer;
         answer.initQuestion(this);
     }
+
+    public boolean isAnsweringAllowed(final User user) {
+        return auction.isOwner(user);
+    }
 }

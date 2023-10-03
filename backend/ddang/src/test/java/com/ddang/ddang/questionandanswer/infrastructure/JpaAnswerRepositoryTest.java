@@ -42,4 +42,22 @@ class JpaAnswerRepositoryTest extends JpaAnswerRepositoryFixture {
 
         assertThat(actual.getId()).isPositive();
     }
+
+    @Test
+    void 이미_질문에_대한_답변이_존재한다면_참을_반환한다() {
+        // when
+        final boolean actual = answerRepository.existsByQuestionId(답변이_존재하는_질문.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 이미_질문에_대한_답변이_존재하지_않는다면_거짓을_반환한다() {
+        // when
+        final boolean actual = answerRepository.existsByQuestionId(답변이_존재하지_않는_질문.getId());
+
+        // then
+        assertThat(actual).isFalse();
+    }
 }
