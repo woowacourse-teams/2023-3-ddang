@@ -22,12 +22,14 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
 
     protected Long 존재하지_않는_경매_id = -999L;
     protected Long 유효한_경매_id = 1L;
+    protected Long 등록한_경매_id = 1L;
     protected String 유효한_액세스_토큰 = "Bearer accessToken";
     protected MockMultipartFile 유효한_경매_이미지_파일;
     protected MockMultipartFile 비어_있는_경매_이미지_파일;
     protected MockMultipartFile 유효하지_않은_확장자_경매_이미지_파일;
     protected MockMultipartFile 유효한_경매_등록_request_multipartFile;
     protected MockMultipartFile 유효하지_않은_카테고리_경매_등록_request_multipartFile;
+    protected MockMultipartFile 비어있는_경매_이미지_경매_등록_request_multipartFile;
     protected MockMultipartFile 유효하지_않은_지역_경매_등록_request_multipartFile;
     protected PrivateClaims 유효한_사용자_id_클레임 = new PrivateClaims(1L);
     protected PrivateClaims 유효하지_않은_사용자_id_클레임 = new PrivateClaims(-999L);
@@ -54,6 +56,15 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
             List.of(3L)
     );
     private CreateAuctionRequest 유효하지_않은_카테고리_경매_등록_request = new CreateAuctionRequest(
+            "제목",
+            "내용",
+            1_000,
+            1_000,
+            LocalDateTime.now().plusDays(3L),
+            -999L,
+            List.of(3L)
+    );
+    private CreateAuctionRequest 비어있는_경매_이미지_경매_등록_request = new CreateAuctionRequest(
             "제목",
             "내용",
             1_000,
@@ -103,6 +114,12 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 "request",
                 MediaType.APPLICATION_JSON_VALUE,
                 objectMapper.writeValueAsBytes(유효하지_않은_카테고리_경매_등록_request)
+        );
+        비어있는_경매_이미지_경매_등록_request_multipartFile = new MockMultipartFile(
+                "request",
+                "request",
+                MediaType.APPLICATION_JSON_VALUE,
+                objectMapper.writeValueAsBytes(비어있는_경매_이미지_경매_등록_request)
         );
         유효하지_않은_지역_경매_등록_request_multipartFile = new MockMultipartFile(
                 "request",

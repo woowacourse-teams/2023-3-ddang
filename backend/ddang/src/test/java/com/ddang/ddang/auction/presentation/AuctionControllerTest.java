@@ -29,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
-import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.auction.presentation.fixture.AuctionControllerFixture;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
@@ -37,7 +36,6 @@ import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgum
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
@@ -45,15 +43,12 @@ import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureExc
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -107,7 +102,7 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                                     .andExpectAll(
                                                             status().isCreated(),
                                                             header().string(HttpHeaders.LOCATION, is("/auctions/1")),
-                                                            jsonPath("$.id", is(1L), Long.class)
+                                                            jsonPath("$.id", is(등록한_경매_id), Long.class)
                                                     );
 
         create_문서화(resultAuctions);
@@ -185,7 +180,7 @@ class AuctionControllerTest extends AuctionControllerFixture {
         // when & then
         mockMvc.perform(multipart("/auctions")
                        .file(비어_있는_경매_이미지_파일)
-                       .file(유효하지_않은_카테고리_경매_등록_request_multipartFile)
+                       .file(비어있는_경매_이미지_경매_등록_request_multipartFile)
                        .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                        .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰)
                )
@@ -219,30 +214,7 @@ class AuctionControllerTest extends AuctionControllerFixture {
     @Test
     void 경매_등록시_지원하지_않는_확장자의_이미지면_400을_반환한다() throws Exception {
         // given
-        final MockMultipartFile 유효한_경매_이미지_파일 = new MockMultipartFile(
-                "images",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                new byte[]{1}
-        );
-        final CreateAuctionRequest createAuctionRequest = new CreateAuctionRequest(
-                "경매 상품 1",
-                "이것은 경매 상품 1 입니다.",
-                1_000,
-                1_000,
-                LocalDateTime.now().plusDays(3L),
-                2L,
-                List.of(3L)
-        );
-        final MockMultipartFile request = new MockMultipartFile(
-                "request",
-                "request",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(createAuctionRequest)
-        );
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효한_사용자_id_클레임));
         given(auctionService.create(any())).willThrow(
                 new UnsupportedImageFileExtensionException("지원하지 않는 확장자입니다. : ")
         );
