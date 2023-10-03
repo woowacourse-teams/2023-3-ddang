@@ -139,6 +139,9 @@
     <string name="mypage_delete_account_button">탈퇴하기</string>
     <string name="mypage_toast_logout_successfully_message">성공적으로 로그아웃 되었습니다</string>
     <string name="mypage_snackbar_logout_failed_title">로그아웃에 실패했습니다</string>
+    <string name="mypage_dialog_withdrawal_title">정말 탈퇴하시겠습니까?</string>
+    <string name="mypage_dialog_withdrawal_message">탈퇴 시 유저 정보는 모두 삭제되며, 복구가 불가능합니다.</string>
+    <string name="mypage_dialog_withdrawal_positive_button">탈퇴</string>
     <string name="mypage_toast_withdrawal_successfully_message">성공적으로 탈퇴 되었습니다</string>
     <string name="mypage_snackbar_withdrawal_failed_title">탈퇴에 실패했습니다</string>
     <string name="mypage_snackbar_load_profile_failed_title">프로필 정보를 불러오는데 실패했습니다</string>

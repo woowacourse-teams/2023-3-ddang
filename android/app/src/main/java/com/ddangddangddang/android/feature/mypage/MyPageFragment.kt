@@ -24,6 +24,7 @@ import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
+import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -94,6 +95,8 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
                 notifyRequestFailed(event.type, defaultMessage)
             }
 
+            MyPageViewModel.MyPageEvent.AskWithdrawal -> askWithdrawal()
+
             MyPageViewModel.MyPageEvent.WithdrawalSuccessfully -> {
                 notifyWithdrawalSuccessfully()
                 navigateToLogin()
@@ -145,6 +148,16 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     private fun showPrivacyPolicy() {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(BuildConfig.PRIVACY_POLICY_URL))
         startActivity(intent)
+    }
+
+    private fun askWithdrawal() {
+        showDialog(
+            titleId = R.string.mypage_dialog_withdrawal_title,
+            messageId = R.string.mypage_dialog_withdrawal_message,
+            negativeStringId = R.string.all_dialog_default_negative_button,
+            positiveStringId = R.string.mypage_dialog_withdrawal_positive_button,
+            actionPositive = viewModel::withdrawal,
+        )
     }
 
     private fun notifyWithdrawalSuccessfully() {
