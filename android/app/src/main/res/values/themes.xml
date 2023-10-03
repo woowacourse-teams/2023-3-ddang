@@ -50,5 +50,10 @@
         <item name="chipStrokeColor">@color/grey_500_to_primary_checked</item>
         <item name="checkedIcon">@null</item>
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/grey_500</item>
+        <item name="colorControlActivated">@color/primary</item>
+    </style>
 </resources>
 

@@ -41,4 +41,9 @@
     <style name="PositiveButtonStyle" parent="android:Widget.Material.Button.Borderless">
         <item name="android:textColor">@color/red_500</item>
     </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/grey_500</item>
+        <item name="colorControlActivated">@color/primary</item>
+    </style>
 </resources>

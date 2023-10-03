@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.ddangddangddang.android.feature.messageRoom.rate.UserRateViewModel" />
@@ -58,20 +60,22 @@
 
 
             <RatingBar
-                android:id="@+id/rb_rate_star"
+                android:id="@+id/rb_rate_grade"
+                android:theme="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="6dp"
                 android:minHeight="0dp"
                 android:numStars="5"
                 android:rating="0"
-                android:stepSize="10"
+                android:stepSize="0.5"
                 app:layout_constraintEnd_toStartOf="@id/gl_end"
                 app:layout_constraintStart_toEndOf="@id/gl_begin"
-                app:layout_constraintTop_toBottomOf="@id/tv_description_satisfied" />
+                app:layout_constraintTop_toBottomOf="@id/tv_description_satisfied"
+                tools:rating="3" />
 
             <EditText
-                android:id="@+id/et_description"
+                android:id="@+id/et_detail_description"
                 style="@style/Body"
                 android:layout_width="0dp"
                 android:layout_height="150dp"
@@ -81,36 +85,40 @@
                 android:hint="@string/user_rate_detail_hint"
                 android:inputType="textMultiLine"
                 android:padding="16dp"
+                android:text="@={viewModel.rateDetailContent}"
                 android:textCursorDrawable="@drawable/ic_edittext_cursor"
                 app:layout_constraintEnd_toStartOf="@id/gl_end"
                 app:layout_constraintStart_toEndOf="@id/gl_begin"
-                app:layout_constraintTop_toBottomOf="@id/rb_rate_star" />
+                app:layout_constraintTop_toBottomOf="@id/rb_rate_grade" />
 
             <Button
-                android:id="@+id/tv_rate_cancel"
+                android:id="@+id/btn_rate_cancel"
                 style="@style/NegativeButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:background="@color/transparent"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:text="@string/detail_auction_bid_dialog_cancel"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintEnd_toStartOf="@id/tv_rate_submit"
-                app:layout_constraintTop_toBottomOf="@id/et_description" />
+                app:layout_constraintEnd_toStartOf="@id/btn_rate_submit"
+                app:layout_constraintTop_toBottomOf="@id/et_detail_description" />
 
             <Button
-                android:id="@+id/tv_rate_submit"
+                android:id="@+id/btn_rate_submit"
                 style="@style/PositiveButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:background="@color/transparent"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
+                android:onClick="@{() -> viewModel.submitRate()}"
                 android:text="@string/user_rate_submit"
                 android:textSize="@dimen/textsize_body"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintTop_toBottomOf="@id/et_description" />
+                app:layout_constraintTop_toBottomOf="@id/et_detail_description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
