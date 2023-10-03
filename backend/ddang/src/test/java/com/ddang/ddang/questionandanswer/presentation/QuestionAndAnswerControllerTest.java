@@ -8,9 +8,13 @@ import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.questionandanswer.application.dto.CreateAnswerDto;
 import com.ddang.ddang.questionandanswer.application.dto.CreateQuestionDto;
+import com.ddang.ddang.questionandanswer.application.exception.AlreadyAnsweredException;
+import com.ddang.ddang.questionandanswer.application.exception.InvalidAnswererException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
+import com.ddang.ddang.questionandanswer.presentation.dto.CreateAnswerRequest;
 import com.ddang.ddang.questionandanswer.presentation.dto.CreateQuestionRequest;
 import com.ddang.ddang.questionandanswer.presentation.fixture.QuestionAndAnswerControllerFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -21,6 +25,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -38,6 +43,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.headerWit
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -45,7 +52,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings("NonAsciiCharacters")
-class QuestionAndAnswerAndAnswerControllerTest extends QuestionAndAnswerControllerFixture {
+class QuestionAndAnswerControllerTest extends QuestionAndAnswerControllerFixture {
 
     TokenDecoder tokenDecoder;
 
@@ -91,7 +98,7 @@ class QuestionAndAnswerAndAnswerControllerTest extends QuestionAndAnswerControll
                                                            header().string(HttpHeaders.LOCATION, is("/auctions/1"))
                                                    );
 
-        create_문서화(resultActions);
+        createQuestion_문서화(resultActions);
     }
 
     @Test
@@ -245,7 +252,159 @@ class QuestionAndAnswerAndAnswerControllerTest extends QuestionAndAnswerControll
                );
     }
 
-    public void create_문서화(final ResultActions resultActions) throws Exception {
+    @Test
+    void 답변을_등록한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerService.create(any(CreateAnswerDto.class))).willReturn(생성된_답변_아이디);
+
+        // when & then
+        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.post("/questions/{questionId}/answers", 질문_아이디)
+                                                           .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                                                           .contentType(MediaType.APPLICATION_JSON)
+                                                           .content(objectMapper.writeValueAsString(답변_등록_request))
+                                                   )
+                                                   .andExpectAll(
+                                                           status().isCreated(),
+                                                           header().string(HttpHeaders.LOCATION, is("/auctions/1"))
+                                                   );
+
+        createAnswer_문서화(resultActions);
+    }
+
+    @Test
+    void 경매_아이디를_입력하지_않은_경우_답변시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/questions/{questionId}/answers", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(경매_아이디가_없는_답변_등록_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 경매_아이디가_양수가_아닌_경우_답변시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/questions/{questionId}/answers", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(양수가_아닌_경매_아이디에_대한_답변_등록_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideAnswerRequestWithEmptyContent")
+    void 답변을_입력하지_않은_경우_답변시_400을_반환한다(final CreateAnswerRequest 답변_내용이_빈값인_답변_등록_request) throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/questions/{questionId}/answers", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(답변_내용이_빈값인_답변_등록_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    private static Stream<CreateAnswerRequest> provideAnswerRequestWithEmptyContent() {
+        return Stream.of(답변_내용이_null인_답변_등록_request, 답변_내용이_빈값인_답변_등록_request);
+    }
+
+    @Test
+    void 존재하지_않은_사용자가_답변시_404을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
+        given(answerService.create(any(CreateAnswerDto.class)))
+                .willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        // when & then
+        mockMvc.perform(post("/questions/{questionId}/answers", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(답변_등록_request))
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 존재하지_않은_질문에_답변시_404을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerService.create(any(CreateAnswerDto.class)))
+                .willThrow(new AuctionNotFoundException("해당 질문을 찾을 수 없습니다."));
+
+        // when & then
+        mockMvc.perform(post("/questions/{questionId}/answers", 존재하지_않는_질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(답변_등록_request))
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 판매자가_아닌_사용자가_질문에_답변시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerService.create(any(CreateAnswerDto.class)))
+                .willThrow(new InvalidAnswererException("판매자만 답변할 수 있습니다."));
+
+        // when & then
+        mockMvc.perform(post("/questions/{questionId}/answers", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(판매자가_아닌_사용자가_질문에_대한_답변_등록_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 이미_답변한_질문에_답변시_400을_반환한다() throws Exception {
+        // givens
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerService.create(any(CreateAnswerDto.class)))
+                .willThrow(new AlreadyAnsweredException("이미 답변한 질문입니다."));
+
+        // when & then
+        mockMvc.perform(post("/questions/{questionId}/answers", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(이미_답변한_질문에_대한_답변_등록_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    public void createQuestion_문서화(final ResultActions resultActions) throws Exception {
         resultActions.andDo(
                 restDocs.document(
                         requestHeaders(
@@ -254,6 +413,23 @@ class QuestionAndAnswerAndAnswerControllerTest extends QuestionAndAnswerControll
                         requestFields(
                                 fieldWithPath("auctionId").description("질문할 경매 ID"),
                                 fieldWithPath("content").description("질문 내용")
+                        )
+                )
+        );
+    }
+
+    public void createAnswer_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        pathParameters(
+                                parameterWithName("questionId").description("답변할 질문 ID")
+                        ),
+                        requestFields(
+                                fieldWithPath("auctionId").description("답변할 질문의 경매 ID"),
+                                fieldWithPath("content").description("답변 내용")
                         )
                 )
         );

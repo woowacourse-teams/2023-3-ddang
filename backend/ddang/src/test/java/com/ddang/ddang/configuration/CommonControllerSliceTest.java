@@ -17,6 +17,7 @@ import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.presentation.DeviceTokenController;
 import com.ddang.ddang.image.application.ImageService;
 import com.ddang.ddang.image.presentation.ImageController;
+import com.ddang.ddang.questionandanswer.application.AnswerService;
 import com.ddang.ddang.questionandanswer.application.QuestionService;
 import com.ddang.ddang.questionandanswer.presentation.QuestionAndAnswerController;
 import com.ddang.ddang.region.application.RegionService;
@@ -155,4 +156,7 @@ public abstract class CommonControllerSliceTest {
 
     @MockBean
     protected QuestionService questionService;
+
+    @MockBean
+    protected AnswerService answerService;
 }

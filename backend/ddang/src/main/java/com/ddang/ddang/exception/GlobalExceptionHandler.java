@@ -23,6 +23,8 @@ import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
+import com.ddang.ddang.questionandanswer.application.exception.AlreadyAnsweredException;
+import com.ddang.ddang.questionandanswer.application.exception.InvalidAnswererException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
@@ -338,6 +340,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidQuestionerException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidQuestionerException(final InvalidQuestionerException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidQuestionerException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAnswererException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidAnswererException(final InvalidAnswererException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, InvalidAnswererException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyAnsweredException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyAnsweredException(final AlreadyAnsweredException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyAnsweredException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
