@@ -33,7 +33,7 @@ import java.util.Optional;
 @Slf4j
 public class BidService {
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher bidEventPublisher;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaBidRepository bidRepository;
@@ -63,7 +63,7 @@ public class BidService {
                 auctionAndImageDto,
                 auctionImageAbsoluteUrl
         );
-        eventPublisher.publishEvent(new BidNotificationEvent(bidNotificationDto));
+        bidEventPublisher.publishEvent(new BidNotificationEvent(bidNotificationDto));
 
         return saveBid.getId();
     }

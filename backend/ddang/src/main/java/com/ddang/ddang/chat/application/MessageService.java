@@ -30,7 +30,7 @@ import java.util.List;
 @Slf4j
 public class MessageService {
 
-    private final ApplicationEventPublisher eventPublisher;
+    private final ApplicationEventPublisher messageEventPublisher;
     private final JpaMessageRepository messageRepository;
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
@@ -56,7 +56,7 @@ public class MessageService {
         final Message persistMessage = messageRepository.save(message);
 
         final MessageDto messageDto = MessageDto.of(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
-        eventPublisher.publishEvent(new MessageNotificationEvent(messageDto));
+        messageEventPublisher.publishEvent(new MessageNotificationEvent(messageDto));
 
         return persistMessage.getId();
     }
