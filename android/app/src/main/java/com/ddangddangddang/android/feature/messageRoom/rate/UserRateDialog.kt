@@ -15,7 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class UserRateDialog : DialogFragment() {
-    private lateinit var binding: FragmentUserRateDialogBinding
+    private var _binding: FragmentUserRateDialogBinding? = null
+    private val binding: FragmentUserRateDialogBinding
+        get() = _binding!!
 
     private val viewModel: UserRateViewModel by viewModels()
     private val activityViewModel: MessageRoomViewModel by activityViewModels()
@@ -38,7 +40,7 @@ class UserRateDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        binding = FragmentUserRateDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentUserRateDialogBinding.inflate(inflater, container, false)
             .apply {
                 lifecycleOwner = this@UserRateDialog
                 viewModel = this@UserRateDialog.viewModel
@@ -61,5 +63,10 @@ class UserRateDialog : DialogFragment() {
 
     private fun exit() {
         dismiss()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
