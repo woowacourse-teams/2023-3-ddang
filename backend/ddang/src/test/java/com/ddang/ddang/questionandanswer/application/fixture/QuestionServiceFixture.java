@@ -25,16 +25,16 @@ import java.util.List;
 public class QuestionServiceFixture {
 
     @Autowired
-    JpaUserRepository userRepository;
+    private JpaUserRepository userRepository;
 
     @Autowired
-    JpaAuctionRepository auctionRepository;
+    private JpaAuctionRepository auctionRepository;
 
     @Autowired
-    JpaQuestionRepository questionRepository;
+    private JpaQuestionRepository questionRepository;
 
     @Autowired
-    JpaAnswerRepository answerRepository;
+    private JpaAnswerRepository answerRepository;
 
     protected Long 질문_3개_답변_2개가_존재하는_경매_아이디;
     protected Long 존재하지_않는_경매_아이디 = -999L;

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @SuppressWarnings("NonAsciiCharacters")
 public class QuestionFixture {
 
-    final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
+    private ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
     protected User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)

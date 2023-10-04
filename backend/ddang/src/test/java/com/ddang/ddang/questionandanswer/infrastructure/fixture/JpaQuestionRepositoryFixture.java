@@ -26,16 +26,16 @@ public class JpaQuestionRepositoryFixture {
     private EntityManager em;
 
     @Autowired
-    JpaAuctionRepository auctionRepository;
+    private JpaAuctionRepository auctionRepository;
 
     @Autowired
-    JpaUserRepository userRepository;
+    private JpaUserRepository userRepository;
 
     @Autowired
-    JpaQuestionRepository questionRepository;
+    private JpaQuestionRepository questionRepository;
 
     @Autowired
-    JpaAnswerRepository answerRepository;
+    private JpaAnswerRepository answerRepository;
 
     protected Auction 경매;
     protected Auction 질문이_3개_답변이_2개인_경매;

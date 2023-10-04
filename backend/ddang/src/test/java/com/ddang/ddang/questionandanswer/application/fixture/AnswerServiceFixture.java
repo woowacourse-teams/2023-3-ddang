@@ -22,16 +22,16 @@ import java.util.List;
 public class AnswerServiceFixture {
 
     @Autowired
-    JpaAuctionRepository auctionRepository;
+    private JpaAuctionRepository auctionRepository;
 
     @Autowired
-    JpaUserRepository userRepository;
+    private JpaUserRepository userRepository;
 
     @Autowired
-    JpaQuestionRepository questionRepository;
+    private JpaQuestionRepository questionRepository;
 
     @Autowired
-    JpaAnswerRepository answerRepository;
+    private JpaAnswerRepository answerRepository;
 
     protected CreateAnswerDto 답변_등록_요청_dto;
     protected CreateAnswerDto 존재하지_않는_사용자의_답변_등록_요청_dto;
