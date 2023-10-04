@@ -23,7 +23,7 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = {"id", "name", "reliability", "oauthId", "deleted"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
