@@ -14,6 +14,8 @@ import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.model.ReportType
+import com.ddangddangddang.android.notification.NotificationType
+import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
@@ -25,11 +27,11 @@ import dagger.hilt.android.AndroidEntryPoint
 class AuctionDetailActivity :
     BindingActivity<ActivityAuctionDetailBinding>(R.layout.activity_auction_detail) {
     private val viewModel: AuctionDetailViewModel by viewModels()
+    private val auctionId: Long by lazy { intent.getLongExtra(AUCTION_ID_KEY, -1L) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
-        val auctionId = intent.getLongExtra(AUCTION_ID_KEY, -1L)
         setupViewModel()
 
         if (savedInstanceState == null) viewModel.loadAuctionDetail(auctionId)
@@ -130,6 +132,15 @@ class AuctionDetailActivity :
 
     private fun setupDirectRegions(regions: List<RegionModel>) {
         binding.rvDirectExchangeRegions.adapter = AuctionDirectRegionsAdapter(regions)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cancelNotification()
+    }
+
+    private fun cancelNotification() {
+        cancelActiveNotification(NotificationType.BID.name, auctionId.toInt())
     }
 
     companion object {
