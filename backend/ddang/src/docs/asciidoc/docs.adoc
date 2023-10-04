@@ -445,10 +445,10 @@ include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_
 === 사용자가_경매_거래_상대에게_작성한_평가를_조회한다
 
 ==== 요청
-include::{snippets}/review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-request.adoc[]
-include::{snippets}/review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/query-parameters.adoc[]
-include::{snippets}/review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/request-headers.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-request.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/path-parameters.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/request-headers.adoc[]
 
 ==== 응답
-include::{snippets}/review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-response.adoc[]
-include::{snippets}/review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/response-fields.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-response.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/response-fields.adoc[]

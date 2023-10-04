@@ -1407,7 +1407,7 @@ Content-Type: image/png
 Content-Disposition: form-data; name=request; filename=request
 Content-Type: application/json
 
-{"title":"경매 상품 1","description":"이것은 경매 상품 1 입니다.","bidUnit":1000,"startPrice":1000,"closingTime":"2023-10-07T13:34:22.492939","subCategoryId":2,"thirdRegionIds":[3]}
+{"title":"경매 상품 1","description":"이것은 경매 상품 1 입니다.","bidUnit":1000,"startPrice":1000,"closingTime":"2023-10-08T01:47:53.323342","subCategoryId":2,"thirdRegionIds":[3]}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -2014,8 +2014,8 @@ Content-Type: application/json
     "lastBidPrice" : null,
     "status" : "UNBIDDEN",
     "bidUnit" : 1000,
-    "registerTime" : "2023-10-04T13:34:22",
-    "closingTime" : "2023-10-04T13:34:22",
+    "registerTime" : "2023-10-05T01:47:53",
+    "closingTime" : "2023-10-05T01:47:53",
     "directRegions" : [ {
       "first" : "서울특별시",
       "second" : "강서구",
@@ -2347,12 +2347,12 @@ Content-Type: application/json
     "name" : "사용자1",
     "profileImage" : "http://localhost:8080/users/images/1",
     "price" : 10000,
-    "bidTime" : "2023-10-04T13:34:25"
+    "bidTime" : "2023-10-05T01:47:56"
   }, {
     "name" : "사용자2",
     "profileImage" : "http://localhost:8080/users/images/2",
     "price" : 12000,
-    "bidTime" : "2023-10-04T13:34:25"
+    "bidTime" : "2023-10-05T01:47:56"
   } ]
 }</code></pre>
 </div>
@@ -2547,7 +2547,7 @@ Content-Type: application/json
     "price" : 10000
   },
   "lastMessage" : {
-    "createdAt" : "2023-10-04T13:34:26",
+    "createdAt" : "2023-10-05T01:47:57",
     "contents" : "메시지1"
   },
   "isChatAvailable" : true
@@ -2565,7 +2565,7 @@ Content-Type: application/json
     "price" : 20000
   },
   "lastMessage" : {
-    "createdAt" : "2023-10-04T13:34:26",
+    "createdAt" : "2023-10-05T01:47:57",
     "contents" : "메시지2"
   },
   "isChatAvailable" : true
@@ -3003,7 +3003,7 @@ Content-Type: application/json
 
 [ {
   "id" : 1,
-  "createdAt" : "2023-10-04T13:34:26",
+  "createdAt" : "2023-10-05T01:47:57",
   "isMyMessage" : true,
   "contents" : "메시지내용"
 } ]</code></pre>
@@ -3153,7 +3153,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-10-04T13:34:28",
+    "createdTime" : "2023-10-05T01:47:59",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3165,7 +3165,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "회원2"
     },
-    "createdTime" : "2023-10-04T13:34:28",
+    "createdTime" : "2023-10-05T01:47:59",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3177,7 +3177,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "회원3"
     },
-    "createdTime" : "2023-10-04T13:34:28",
+    "createdTime" : "2023-10-05T01:47:59",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3341,7 +3341,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-10-04T13:34:28",
+    "createdTime" : "2023-10-05T01:47:59",
     "chatRoom" : {
       "id" : 1
     },
@@ -3352,7 +3352,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-10-04T13:34:28",
+    "createdTime" : "2023-10-05T01:47:59",
     "chatRoom" : {
       "id" : 1
     },
@@ -3363,7 +3363,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-10-04T13:34:28",
+    "createdTime" : "2023-10-05T01:47:59",
     "chatRoom" : {
       "id" : 1
     },
@@ -3659,7 +3659,7 @@ Content-Type: application/json
 <h4 id="_요청_33"><a class="link" href="#_요청_33">요청</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reviews/users/5 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reviews/users/3 HTTP/1.1
 Content-Type: application/json</code></pre>
 </div>
 </div>
@@ -3693,23 +3693,23 @@ Content-Type: application/json
 [ {
   "id" : 3,
   "writer" : {
-    "id" : 4,
+    "id" : 2,
     "name" : "판매자2",
-    "profileImage" : "http://localhost:8080/users/images/4"
+    "profileImage" : "http://localhost:8080/users/images/2"
   },
   "content" : "친절하다.",
   "score" : 5.0,
-  "createdTime" : "2023-10-04T13:34:29"
+  "createdTime" : "2023-10-05T01:48:00"
 }, {
   "id" : 2,
   "writer" : {
-    "id" : 3,
+    "id" : 1,
     "name" : "판매자1",
-    "profileImage" : "http://localhost:8080/users/images/3"
+    "profileImage" : "http://localhost:8080/users/images/1"
   },
   "content" : "친절하다.",
   "score" : 5.0,
-  "createdTime" : "2023-10-04T13:34:29"
+  "createdTime" : "2023-10-05T01:48:00"
 } ]</code></pre>
 </div>
 </div>
@@ -3777,12 +3777,13 @@ Content-Type: application/json
 <h4 id="_요청_34"><a class="link" href="#_요청_34">요청</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reviews?auctionId=1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /auctions/1/reviews HTTP/1.1
 Content-Type: application/json
 Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. /auctions/{auctionId}/reviews</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3866,7 +3867,7 @@ Content-Type: application/json
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-10-04 13:34:07 +0900
+Last updated 2023-10-05 01:47:35 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
