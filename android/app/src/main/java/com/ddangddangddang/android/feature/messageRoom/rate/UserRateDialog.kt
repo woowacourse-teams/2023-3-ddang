@@ -55,9 +55,6 @@ class UserRateDialog : DialogFragment() {
     }
 
     private fun setupListener() {
-        binding.rbRateGrade.setOnRatingBarChangeListener { _, rating, _ ->
-            viewModel.setRatingGrade(rating)
-        }
         binding.btnRateCancel.setOnClickListener { exit() }
     }
 
