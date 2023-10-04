@@ -9,11 +9,13 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object FormatterModule {
     @DateFormatter
+    @Singleton
     @Provides
     fun provideDateFormatter(@ApplicationContext context: Context): DateTimeFormatter {
         return DateTimeFormatter.ofPattern(
@@ -23,6 +25,7 @@ object FormatterModule {
     }
 
     @TimeFormatter
+    @Singleton
     @Provides
     fun provideTimeFormatter(@ApplicationContext context: Context): DateTimeFormatter {
         return DateTimeFormatter.ofPattern(
