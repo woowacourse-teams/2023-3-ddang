@@ -1,11 +1,5 @@
 package com.ddang.ddang.auction.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
@@ -18,7 +12,6 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -28,6 +21,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -193,6 +194,15 @@ class AuctionServiceTest extends AuctionServiceFixture {
         assertThatThrownBy(() -> auctionService.readByAuctionId(존재하지_않는_경매_ID))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 지정한_아이디에_해당하는_경매의_판매자_신뢰도가_null이라면_서비스에서_반환하는_dto에서_판매자_신뢰도를_나타내는_부분도_null이다() {
+        // when
+        final ReadAuctionDto actual = auctionService.readByAuctionId(신뢰도가_null인_판매자의_경매.getId());
+
+        // then
+        assertThat(actual.sellerReliability()).isNull();
     }
 
     @Test
