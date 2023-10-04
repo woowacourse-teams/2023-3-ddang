@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -53,13 +52,9 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             if (checkNotificationPermission()) {
                 val notification = createMessageReceivedNotification(remoteMessage) ?: return
-                val intent = Intent(MessageReceiver.MessageAction).apply {
-                    putExtra(
-                        MessageReceiver.MessageRoomId,
-                        remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1,
-                    )
-                }
-                sendBroadcast(intent)
+                sendBroadcastToMessageReceiver(
+                    remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1,
+                )
                 notificationManager.notify(System.currentTimeMillis().toInt(), notification)
             }
         }
@@ -127,5 +122,10 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             intent,
             FLAG_IMMUTABLE,
         )
+    }
+
+    private fun sendBroadcastToMessageReceiver(roomId: Long) {
+        val intent = MessageReceiver.getIntent(roomId)
+        sendBroadcast(intent)
     }
 }

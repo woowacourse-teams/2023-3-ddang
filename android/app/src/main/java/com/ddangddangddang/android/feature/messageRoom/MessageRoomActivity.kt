@@ -2,7 +2,6 @@ package com.ddangddangddang.android.feature.messageRoom
 
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -66,8 +65,7 @@ class MessageRoomActivity :
     }
 
     private fun setupMessageReceiver() {
-        val filter = IntentFilter().apply { addAction(MessageReceiver.MessageAction) }
-        registerReceiver(messageReceiver, filter)
+        registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
     }
 
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {
