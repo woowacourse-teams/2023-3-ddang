@@ -83,7 +83,7 @@
                 tools:text="판매자가 설정한 경매 단위: 12,000 원" />
 
             <Button
-                android:id="@+id/tv_bid_cancel"
+                android:id="@+id/btn_bid_cancel"
                 style="@style/NegativeButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -94,11 +94,11 @@
                 android:onClick="@{()->viewModel.cancel()}"
                 android:text="@string/detail_auction_bid_dialog_cancel"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintEnd_toStartOf="@id/tv_bid_confirm"
+                app:layout_constraintEnd_toStartOf="@id/btn_bid_confirm"
                 app:layout_constraintTop_toBottomOf="@id/tv_bid_unit" />
 
             <Button
-                android:id="@+id/tv_bid_confirm"
+                android:id="@+id/btn_bid_confirm"
                 style="@style/PositiveButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,7 +109,8 @@
                 android:onClick="@{()->viewModel.submit(activityViewModel.auctionDetailModel.id, activityViewModel.minBidPrice)}"
                 android:text="@string/detail_auction_bid_dialog_submit"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintEnd_toEndOf="@id/et_bid_price"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_bid_unit" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

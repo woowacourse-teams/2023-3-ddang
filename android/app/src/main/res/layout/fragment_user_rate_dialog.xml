@@ -61,15 +61,15 @@
 
             <RatingBar
                 android:id="@+id/rb_rate_grade"
-                android:theme="@style/RatingBar"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="6dp"
                 android:minHeight="0dp"
                 android:numStars="5"
+                android:onRatingChanged="@{(v, rating, fu) -> viewModel.setRatingGrade(rating)}"
                 android:rating="0"
                 android:stepSize="0.5"
-                android:onRatingChanged="@{(v, rating, fu) -> viewModel.setRatingGrade(rating)}"
+                android:theme="@style/RatingBar"
                 app:layout_constraintEnd_toStartOf="@id/gl_end"
                 app:layout_constraintStart_toEndOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_description_satisfied"
@@ -112,13 +112,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:layout_marginEnd="10dp"
                 android:background="@color/transparent"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:onClick="@{() -> viewModel.submitRate()}"
                 android:text="@string/user_rate_submit"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_detail_description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
