@@ -11,8 +11,8 @@ import javax.inject.Inject
 class UserRateViewModel @Inject constructor() : ViewModel() {
     private var partnerId: Long? = null
     private var auctionId: Long? = null
-    private var ratingGrade: Float = 0F
 
+    val ratingGrade = MutableLiveData(0F)
     val rateDetailContent = MutableLiveData<String>("")
 
     fun setPartnerInfo(detail: MessageRoomDetailModel) {
@@ -20,13 +20,8 @@ class UserRateViewModel @Inject constructor() : ViewModel() {
         auctionId = detail.auctionId
     }
 
-    fun setRatingGrade(grade: Float) {
-        ratingGrade = grade
-        Log.d("test - grade", ratingGrade.toString())
-    }
-
     fun submitRate() {
         // submit
-        Log.d("test", "submit")
+        Log.d("test", "submit - ${ratingGrade.value}")
     }
 }
