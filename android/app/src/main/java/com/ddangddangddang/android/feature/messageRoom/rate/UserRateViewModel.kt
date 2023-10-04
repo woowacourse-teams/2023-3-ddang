@@ -13,7 +13,7 @@ class UserRateViewModel @Inject constructor() : ViewModel() {
     private var auctionId: Long? = null
 
     val ratingGrade = MutableLiveData(0F)
-    val rateDetailContent = MutableLiveData<String>("")
+    val rateDetailContent = MutableLiveData("")
 
     fun setPartnerInfo(detail: MessageRoomDetailModel) {
         partnerId = detail.messagePartnerId
