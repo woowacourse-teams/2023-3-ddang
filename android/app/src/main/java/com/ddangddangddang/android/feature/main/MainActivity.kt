@@ -66,10 +66,22 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     }
 
     private fun setupViewModel() {
+        viewModel.event.observe(this) { handleEvent(it) }
         viewModel.currentFragmentType.observe(this) {
             changeFragment(it)
             screenViewLogEvent(it.name)
         }
+    }
+
+    private fun handleEvent(event: MainViewModel.MainEvent) {
+        when (event) {
+            MainViewModel.MainEvent.HomeToTop -> scrollHomeToTop()
+        }
+    }
+
+    private fun scrollHomeToTop() {
+        val homeFragment = supportFragmentManager.findFragmentByTag(FragmentType.HOME.tag) as? HomeFragment
+        homeFragment?.scrollToTop()
     }
 
     private fun changeFragment(type: FragmentType) {
