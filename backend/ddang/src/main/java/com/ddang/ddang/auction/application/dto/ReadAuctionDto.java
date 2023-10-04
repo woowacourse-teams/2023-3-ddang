@@ -27,7 +27,7 @@ public record ReadAuctionDto(
         Long sellerId,
         Long sellerProfileId,
         String sellerName,
-        double sellerReliability,
+        Double sellerReliability,
         boolean isSellerDeleted,
         AuctionStatus auctionStatus
 ) {

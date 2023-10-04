@@ -7,7 +7,7 @@ public record ReadUserInReportDto(
         Long id,
         String name,
         Long profileImageId,
-        double reliability,
+        Double reliability,
         String oauthId,
         boolean isSellerDeleted
 ) {

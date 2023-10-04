@@ -42,7 +42,7 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "profile_image_id", foreignKey = @ForeignKey(name = "fk_user_profile_image"), nullable = false)
     private ProfileImage profileImage;
 
-    private double reliability;
+    private Double reliability;
 
     private String oauthId;
 
@@ -53,7 +53,7 @@ public class User extends BaseTimeEntity {
     private User(
             final String name,
             final ProfileImage profileImage,
-            final double reliability,
+            final Double reliability,
             final String oauthId
     ) {
         this.name = name;
