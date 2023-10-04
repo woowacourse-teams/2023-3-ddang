@@ -69,7 +69,7 @@ class MessageRoomActivity :
     }
 
     private fun showUserRate() {
-        UserRateDialog().show(supportFragmentManager, USER_RATE_DIALOG_TAG)
+        UserRateDialog().show(supportFragmentManager, UserRateDialog.USER_RATE_DIALOG_TAG)
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
@@ -108,7 +108,6 @@ class MessageRoomActivity :
 
     companion object {
         private const val ROOM_ID_KEY = "room_id_key"
-        private const val USER_RATE_DIALOG_TAG = "user_rate_dialog_tag"
 
         fun getIntent(context: Context, roomId: Long): Intent {
             return Intent(context, MessageRoomActivity::class.java).apply {

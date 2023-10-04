@@ -66,4 +66,8 @@ class UserRateDialog : DialogFragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    companion object {
+        const val USER_RATE_DIALOG_TAG = "user_rate_dialog_tag"
+    }
 }
