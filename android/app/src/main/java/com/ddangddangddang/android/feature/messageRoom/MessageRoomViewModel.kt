@@ -15,7 +15,6 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -103,22 +102,20 @@ class MessageRoomViewModel @Inject constructor(
     private fun List<MessageModel>.toViewItems(): List<MessageViewItem> {
         var previousSendDate = _messages.value?.lastOrNull()?.createdDateTime?.toLocalDate()
         return map { messageModel ->
-            val sendDateTime = LocalDateTime.parse(messageModel.createdAt)
-            val sendDate = sendDateTime.toLocalDate()
+            val sendDate = messageModel.createdDateTime.toLocalDate()
             val isFirstAtDate = (sendDate == previousSendDate).not()
             previousSendDate = sendDate
-            messageModel.toViewItem(sendDateTime, isFirstAtDate)
+            messageModel.toViewItem(isFirstAtDate)
         }
     }
 
     private fun MessageModel.toViewItem(
-        sendDateTime: LocalDateTime,
         isFirstAtDate: Boolean,
     ): MessageViewItem {
         return if (isMyMessage) {
-            MessageViewItem.MyMessageViewItem(id, sendDateTime, contents, isFirstAtDate)
+            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents, isFirstAtDate)
         } else {
-            MessageViewItem.PartnerMessageViewItem(id, sendDateTime, contents, isFirstAtDate)
+            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents, isFirstAtDate)
         }
     }
 
