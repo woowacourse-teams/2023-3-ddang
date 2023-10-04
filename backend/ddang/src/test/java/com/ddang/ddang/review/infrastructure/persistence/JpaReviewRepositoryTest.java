@@ -3,6 +3,7 @@ package com.ddang.ddang.review.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.review.domain.Review;
+import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.review.infrastructure.persistence.fixture.JpaReviewRepositoryFixture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -39,7 +40,7 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
                                     .writer(판매자1)
                                     .target(구매자)
                                     .content("친절하다.")
-                                    .score(5.0d)
+                                    .score(new Score(5.0d))
                                     .build();
 
         // when

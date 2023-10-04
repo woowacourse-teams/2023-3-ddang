@@ -11,6 +11,6 @@ public record ReadReviewDetailDto(@Nullable Double score, @Nullable String conte
     public static final ReadReviewDetailDto EMPTY = new ReadReviewDetailDto(EMPTY_SCORE, EMPTY_CONTENT);
 
     public static ReadReviewDetailDto from(final Review review) {
-        return new ReadReviewDetailDto(review.getScore(), review.getContent());
+        return new ReadReviewDetailDto(review.getScore().getValue(), review.getContent());
     }
 }

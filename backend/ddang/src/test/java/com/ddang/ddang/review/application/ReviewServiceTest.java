@@ -86,7 +86,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore());
+            softAssertions.assertThat(actual.score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore().getValue());
             softAssertions.assertThat(actual.content()).isEqualTo(구매자가_판매자1에게_받은_평가.getContent());
         });
     }
@@ -110,11 +110,11 @@ class ReviewServiceTest extends ReviewServiceFixture {
             softAssertions.assertThat(actual.get(0).id()).isEqualTo(구매자가_판매자2에게_받은_평가.getId());
             softAssertions.assertThat(actual.get(0).writer().id()).isEqualTo(판매자2.getId());
             softAssertions.assertThat(actual.get(0).content()).isEqualTo(구매자가_판매자2에게_받은_평가.getContent());
-            softAssertions.assertThat(actual.get(0).score()).isEqualTo(구매자가_판매자2에게_받은_평가.getScore());
+            softAssertions.assertThat(actual.get(0).score()).isEqualTo(구매자가_판매자2에게_받은_평가.getScore().getValue());
             softAssertions.assertThat(actual.get(1).id()).isEqualTo(구매자가_판매자1에게_받은_평가.getId());
             softAssertions.assertThat(actual.get(1).writer().id()).isEqualTo(판매자1.getId());
             softAssertions.assertThat(actual.get(1).content()).isEqualTo(구매자가_판매자1에게_받은_평가.getContent());
-            softAssertions.assertThat(actual.get(1).score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore());
+            softAssertions.assertThat(actual.get(1).score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore().getValue());
         });
     }
 
@@ -125,7 +125,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore());
+            softAssertions.assertThat(actual.score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore().getValue());
             softAssertions.assertThat(actual.content()).isEqualTo(구매자가_판매자1에게_받은_평가.getContent());
         });
     }

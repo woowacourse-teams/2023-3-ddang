@@ -3,6 +3,9 @@ package com.ddang.ddang.review.domain;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.common.entity.BaseCreateTimeEntity;
 import com.ddang.ddang.user.domain.User;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -42,7 +45,9 @@ public class Review extends BaseCreateTimeEntity {
 
     private String content;
 
-    private Double score;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "score"))
+    private Score score;
 
     @Builder
     private Review(
@@ -50,7 +55,7 @@ public class Review extends BaseCreateTimeEntity {
             final User writer,
             final User target,
             final String content,
-            final Double score
+            final Score score
     ) {
         this.auction = auction;
         this.writer = writer;

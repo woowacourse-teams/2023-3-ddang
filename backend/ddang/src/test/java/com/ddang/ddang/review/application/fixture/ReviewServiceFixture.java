@@ -10,6 +10,7 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.domain.Review;
+import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -145,14 +146,14 @@ public class ReviewServiceFixture {
                                   .writer(판매자1)
                                   .target(구매자)
                                   .content("친절하다.")
-                                  .score(구매자가_판매자1에게_받은_평가_점수)
+                                  .score(new Score(구매자가_판매자1에게_받은_평가_점수))
                                   .build();
         구매자가_판매자2에게_받은_평가 = Review.builder()
                                   .auction(판매자2가_평가한_경매)
                                   .writer(판매자2)
                                   .target(구매자)
                                   .content("별로다.")
-                                  .score(구매자가_판매자2에게_받은_평가_점수)
+                                  .score(new Score(구매자가_판매자2에게_받은_평가_점수))
                                   .build();
         reviewRepository.saveAll(List.of(구매자가_판매자1에게_받은_평가, 구매자가_판매자2에게_받은_평가));
 

@@ -75,7 +75,7 @@ class UserTest extends UserFixture {
     void 신뢰도_평균을_계산한다() {
         // given
         final List<Review> targetReviews = List.of(평가1, 평가2);
-        final double expected = (평가1.getScore() + 평가2.getScore()) / 2;
+        final double expected = (평가1.getScore().getValue() + 평가2.getScore().getValue()) / 2;
 
         // when
         평가_대상.updateReliability(targetReviews);

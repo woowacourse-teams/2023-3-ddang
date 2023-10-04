@@ -2,6 +2,7 @@ package com.ddang.ddang.user.domain.fixture;
 
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.domain.Review;
+import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.user.domain.User;
 
 @SuppressWarnings("NonAsciiCharacters")
@@ -32,12 +33,12 @@ public class UserFixture {
                                  .writer(평가_작성자1)
                                  .target(평가_대상)
                                  .content("친절하다")
-                                 .score(평가1_점수)
+                                 .score(new Score(평가1_점수))
                                  .build();
     protected Review 평가2 = Review.builder()
                                  .writer(평가_작성자2)
                                  .target(평가_대상)
                                  .content("별로다")
-                                 .score(평가2_점수)
+                                 .score(new Score(평가2_점수))
                                  .build();
 }

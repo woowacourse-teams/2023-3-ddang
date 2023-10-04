@@ -85,7 +85,7 @@ public class User extends BaseTimeEntity {
         }
 
         this.reliability = reviews.stream()
-                                  .mapToDouble(Review::getScore)
+                                  .mapToDouble(review -> review.getScore().getValue())
                                   .average()
                                   .orElseGet(null);
     }
