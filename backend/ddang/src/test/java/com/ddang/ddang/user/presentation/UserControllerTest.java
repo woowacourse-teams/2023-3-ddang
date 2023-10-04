@@ -214,8 +214,8 @@ class UserControllerTest extends UserControllerFixture {
                                 headerWithName("Authorization").description("회원 Bearer 인증 정보")
                         ),
                         requestParts(
-                                partWithName("profileImage").description("수정할 프로필 이미지 파일"),
-                                partWithName("request").description("요청 데이터 - 수정할 이름")
+                                partWithName("profileImage").description("수정할 프로필 이미지 파일").optional(),
+                                partWithName("request").description("요청 데이터 - 수정할 이름").optional()
                         ),
                         responseFields(
                                 fieldWithPath("name").type(JsonFieldType.STRING)

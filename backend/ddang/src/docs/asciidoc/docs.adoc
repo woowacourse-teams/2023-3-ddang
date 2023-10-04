@@ -103,13 +103,14 @@ include::{snippets}/user-controller-test/사용자_정보를_조회한다/respon
 === 사용자 정보 수정
 
 ==== 요청
-
-include::{snippets}/user-controller-test/사용자_정보를_수정한다/http-request.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/http-request.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/request-headers.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/request-parts.adoc[]
 
 ==== 응답
 
-include::{snippets}/user-controller-test/사용자_정보를_수정한다/http-response.adoc[]
-include::{snippets}/user-controller-test/사용자_정보를_수정한다/response-fields.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/http-response.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/response-fields.adoc[]
 
 == 카테고리 API
 
