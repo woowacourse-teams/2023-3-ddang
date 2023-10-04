@@ -38,7 +38,6 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -140,29 +139,6 @@ class ReviewControllerTest extends ReviewControllerFixture {
     }
 
     @Test
-    void 사용자가_경매_거래에_작성한_평가를_조회한다() throws Exception {
-        // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효한_작성자_비공개_클레임));
-        given(reviewService.readByAuctionIdAndWriterId(anyLong(), anyLong()))
-                .willReturn(구매자가_판매자1에게_받은_평가_내용);
-
-        // when & then
-        final ResultActions resultActions =
-                mockMvc.perform(RestDocumentationRequestBuilders.get("/reviews")
-                                                                .header(HttpHeaders.AUTHORIZATION, 액세스_토큰)
-                                                                .queryParam("auctionId", String.valueOf(유효한_경매_아이디))
-                                                                .contentType(MediaType.APPLICATION_JSON)
-                       )
-                       .andExpectAll(
-                               status().isOk(),
-                               jsonPath("score", is(구매자가_판매자1에게_받은_평가_내용.score()), Double.class),
-                               jsonPath("content", is(구매자가_판매자1에게_받은_평가_내용.content()))
-                       );
-
-        readByAuctionId_문서화(resultActions);
-    }
-
-    @Test
     void 지정한_평가_아이디에_해당하는_평가를_조회한다() throws Exception {
         given(reviewService.readByReviewId(anyLong()))
                 .willReturn(구매자가_판매자1에게_받은_평가_내용);
@@ -239,25 +215,6 @@ class ReviewControllerTest extends ReviewControllerFixture {
                                                          .description("평가 점수"),
                                 fieldWithPath("[].createdTime").type(JsonFieldType.STRING)
                                                                .description("평가 작성 시간")
-                        )
-                )
-        );
-    }
-
-    private void readByAuctionId_문서화(final ResultActions resultActions) throws Exception {
-        resultActions.andDo(
-                restDocs.document(
-                        requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("회원 Bearer 인증 정보")
-                        ),
-                        queryParameters(
-                                parameterWithName("auctionId").description("평가와_관련된_경매_아이디")
-                        ),
-                        responseFields(
-                                fieldWithPath("score").type(JsonFieldType.NUMBER)
-                                                      .description("평가 점수"),
-                                fieldWithPath("content").type(JsonFieldType.STRING)
-                                                        .description("평가 내용")
                         )
                 )
         );

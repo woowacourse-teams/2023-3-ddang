@@ -1,8 +1,7 @@
-package com.ddang.ddang.review.presentation.dto.response;
+package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import jakarta.annotation.Nullable;
-
 
 public record ReadReviewDetailResponse(@Nullable Double score, @Nullable String content) {
 

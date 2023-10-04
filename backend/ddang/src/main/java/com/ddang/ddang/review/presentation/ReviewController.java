@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
@@ -42,21 +41,8 @@ public class ReviewController {
     }
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<ReadReviewDetailResponse> read(
-            @PathVariable(required = false) final Long reviewId
-    ) {
+    public ResponseEntity<ReadReviewDetailResponse> read(@PathVariable final Long reviewId) {
         final ReadReviewDetailDto readReviewDetailDto = reviewService.readByReviewId(reviewId);
-        ReadReviewDetailResponse response = ReadReviewDetailResponse.from(readReviewDetailDto);
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping
-    public ResponseEntity<ReadReviewDetailResponse> readByAuctionId(
-            @AuthenticateUser final AuthenticationUserInfo userInfo,
-            @RequestParam(required = false) final Long auctionId
-    ) {
-        final ReadReviewDetailDto readReviewDetailDto = reviewService.readByAuctionIdAndWriterId(userInfo.userId(), auctionId);
         ReadReviewDetailResponse response = ReadReviewDetailResponse.from(readReviewDetailDto);
 
         return ResponseEntity.ok(response);

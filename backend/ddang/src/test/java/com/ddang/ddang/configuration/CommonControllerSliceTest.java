@@ -2,6 +2,7 @@ package com.ddang.ddang.configuration;
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.presentation.AuctionController;
+import com.ddang.ddang.auction.presentation.AuctionReviewController;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
@@ -54,7 +55,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 ReportController.class,
                 UserAuctionController.class,
                 UserController.class,
-                ReviewController.class
+                ReviewController.class,
+                AuctionReviewController.class
         },
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
@@ -110,6 +112,9 @@ public abstract class CommonControllerSliceTest {
 
     @Autowired
     protected ReviewController reviewController;
+
+    @Autowired
+    protected AuctionReviewController auctionReviewController;
 
     @MockBean
     protected AuctionService auctionService;
