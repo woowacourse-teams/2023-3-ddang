@@ -53,7 +53,12 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             if (checkNotificationPermission()) {
                 val notification = createMessageReceivedNotification(remoteMessage) ?: return
-                val intent = Intent(MessageReceiver.MessageAction)
+                val intent = Intent(MessageReceiver.MessageAction).apply {
+                    putExtra(
+                        MessageReceiver.MessageRoomId,
+                        remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1,
+                    )
+                }
                 sendBroadcast(intent)
                 notificationManager.notify(System.currentTimeMillis().toInt(), notification)
             }

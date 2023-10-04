@@ -35,7 +35,11 @@ class MessageRoomActivity :
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
 
     private val messageReceiver: MessageReceiver by lazy {
-        MessageReceiver(viewModel::loadMessages)
+        MessageReceiver { messageRoomId ->
+            if (messageRoomId == viewModel.messageRoomInfo.value?.roomId) {
+                viewModel.loadMessages()
+            }
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
