@@ -23,6 +23,8 @@ import lombok.ToString;
 @ToString(of = {"id", "content"})
 public class Answer extends BaseCreateTimeEntity {
 
+    // TODO: 2023-10-04 [고민] answer에 writer를 만들어 바로 가져오는 방식이 좋을까요?
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
