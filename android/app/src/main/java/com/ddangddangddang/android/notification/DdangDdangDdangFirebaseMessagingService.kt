@@ -8,6 +8,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -137,10 +138,14 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun getMessageRoomPendingIntent(id: Long): PendingIntent? {
         val intent = MessageRoomActivity.getIntent(applicationContext, id)
+        return intent.getPendingIntent(id.toInt())
+    }
+
+    private fun Intent.getPendingIntent(requestCode: Int): PendingIntent? {
         return PendingIntent.getActivity(
             applicationContext,
-            id.toInt(),
-            intent,
+            requestCode,
+            this,
             FLAG_IMMUTABLE,
         )
     }
@@ -165,11 +170,6 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
 
     private fun getAuctionDetailPendingIntent(id: Long): PendingIntent? {
         val intent = AuctionDetailActivity.getIntent(applicationContext, id)
-        return PendingIntent.getActivity(
-            applicationContext,
-            id.toInt(),
-            intent,
-            FLAG_IMMUTABLE,
-        )
+        return intent.getPendingIntent(id.toInt())
     }
 }
