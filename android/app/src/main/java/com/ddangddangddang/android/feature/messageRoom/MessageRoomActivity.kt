@@ -36,9 +36,7 @@ class MessageRoomActivity :
                 getString(R.string.message_room_item_time_format),
                 Locale.KOREAN,
             ),
-        ) {
-            viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) }
-        }
+        )
     }
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +52,7 @@ class MessageRoomActivity :
     private fun setupViewModel() {
         viewModel.event.observe(this) { handleEvent(it) }
         viewModel.messages.observe(this) {
-            messageAdapter.setMessages(it)
+            messageAdapter.setMessages(it) { scrollToDown() }
         }
     }
 
@@ -73,6 +71,10 @@ class MessageRoomActivity :
 
             is MessageRoomViewModel.MessageRoomEvent.FailureEvent -> handleFailureEvent(event)
         }
+    }
+
+    private fun scrollToDown() {
+        viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) }
     }
 
     private fun navigateToReport(roomId: Long) {

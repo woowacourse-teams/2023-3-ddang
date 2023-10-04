@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter
 class MessageAdapter(
     private val dateFormatter: DateTimeFormatter,
     private val timeFormatter: DateTimeFormatter,
-    private val diffUtilCommitCallback: Runnable,
 ) : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -31,7 +30,7 @@ class MessageAdapter(
         return currentList[position].type.ordinal
     }
 
-    fun setMessages(list: List<MessageViewItem>) {
+    fun setMessages(list: List<MessageViewItem>, diffUtilCommitCallback: Runnable? = null) {
         submitList(list, diffUtilCommitCallback)
     }
 
