@@ -3,13 +3,17 @@ package com.ddangddangddang.android.feature.messageRoom
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.ddangddangddang.android.di.DateFormatter
+import com.ddangddangddang.android.di.TimeFormatter
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class MessageAdapter(
-    private val dateFormatter: DateTimeFormatter,
-    private val timeFormatter: DateTimeFormatter,
+@ActivityRetainedScoped
+class MessageAdapter @Inject constructor(
+    @DateFormatter private val dateFormatter: DateTimeFormatter,
+    @TimeFormatter private val timeFormatter: DateTimeFormatter,
 ) : ListAdapter<MessageViewItem, MessageViewHolder>(MessageDiffUtil) {
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         return MessageViewHolder.of(
             parent,

@@ -17,8 +17,7 @@ import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.format.DateTimeFormatter
-import java.util.Locale
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MessageRoomActivity :
@@ -26,18 +25,10 @@ class MessageRoomActivity :
     AnalyticsDelegate by AnalyticsDelegateImpl() {
     private val viewModel: MessageRoomViewModel by viewModels()
     private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
-    private val messageAdapter by lazy {
-        MessageAdapter(
-            DateTimeFormatter.ofPattern(
-                getString(R.string.message_room_item_date_format),
-                Locale.KOREAN,
-            ),
-            DateTimeFormatter.ofPattern(
-                getString(R.string.message_room_item_time_format),
-                Locale.KOREAN,
-            ),
-        )
-    }
+
+    @Inject
+    lateinit var messageAdapter: MessageAdapter
+
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
