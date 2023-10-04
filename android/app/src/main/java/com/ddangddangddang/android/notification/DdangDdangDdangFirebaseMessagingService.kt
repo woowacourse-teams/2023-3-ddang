@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Notification
 import android.app.PendingIntent
 import android.app.PendingIntent.FLAG_IMMUTABLE
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -14,6 +15,7 @@ import com.bumptech.glide.Glide
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
+import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.repository.UserRepository
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -51,6 +53,8 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
         if (remoteMessage.data.isNotEmpty()) {
             if (checkNotificationPermission()) {
                 val notification = createMessageReceivedNotification(remoteMessage) ?: return
+                val intent = Intent(MessageReceiver.MessageAction)
+                sendBroadcast(intent)
                 notificationManager.notify(System.currentTimeMillis().toInt(), notification)
             }
         }
@@ -74,7 +78,7 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
                 NotificationType.MESSAGE -> getMessageRoomPendingIntent(remoteMessage)
                 NotificationType.BID -> getAuctionDetailPendingIntent(remoteMessage)
             }
-            
+
             NotificationCompat.Builder(applicationContext, CHANNEL_ID).apply {
                 setSmallIcon(R.drawable.img_logo)
                 setLargeIcon(image)

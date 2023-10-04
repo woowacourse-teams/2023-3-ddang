@@ -2,6 +2,7 @@ package com.ddangddangddang.android.feature.messageRoom
 
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.ConcatAdapter
@@ -15,6 +16,7 @@ import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.model.ReportType
+import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,6 +33,11 @@ class MessageRoomActivity :
     lateinit var messageAdapter: MessageAdapter
 
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
+
+    private val messageReceiver: MessageReceiver by lazy {
+        MessageReceiver(viewModel::loadMessages)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerAnalytics(javaClass.simpleName, lifecycle)
@@ -39,6 +46,7 @@ class MessageRoomActivity :
         if (viewModel.messageRoomInfo.value == null) viewModel.loadMessageRoom(roomId)
         setupViewModel()
         setupMessageRecyclerView()
+        setupMessageReceiver()
     }
 
     private fun setupViewModel() {
@@ -51,6 +59,11 @@ class MessageRoomActivity :
     private fun setupMessageRecyclerView() {
         binding.rvMessageList.adapter = adapter
         (binding.rvMessageList.layoutManager as LinearLayoutManager).stackFromEnd = true
+    }
+
+    private fun setupMessageReceiver() {
+        val filter = IntentFilter().apply { addAction(MessageReceiver.MessageAction) }
+        registerReceiver(messageReceiver, filter)
     }
 
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {
