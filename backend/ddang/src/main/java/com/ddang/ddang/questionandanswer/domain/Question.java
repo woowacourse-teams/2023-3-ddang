@@ -35,7 +35,7 @@ public class Question extends BaseCreateTimeEntity {
     private Auction auction;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "wrtier_id", foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
     @Column(columnDefinition = "text")
