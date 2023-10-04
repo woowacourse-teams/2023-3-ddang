@@ -41,23 +41,33 @@ public class ReviewController {
                              .build();
     }
 
+    @GetMapping("/{reviewId}")
+    public ResponseEntity<ReadReviewDetailResponse> read(
+            @PathVariable(required = false) final Long reviewId
+    ) {
+        final ReadReviewDetailDto readReviewDetailDto = reviewService.readByReviewId(reviewId);
+        ReadReviewDetailResponse response = ReadReviewDetailResponse.from(readReviewDetailDto);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping
+    public ResponseEntity<ReadReviewDetailResponse> readByAuctionId(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @RequestParam(required = false) final Long auctionId
+    ) {
+        final ReadReviewDetailDto readReviewDetailDto = reviewService.readByAuctionIdAndWriterId(userInfo.userId(), auctionId);
+        ReadReviewDetailResponse response = ReadReviewDetailResponse.from(readReviewDetailDto);
+
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/users/{userId}")
     public ResponseEntity<List<ReadReviewResponse>> readAllReviewsOfTargetUser(@PathVariable final Long userId) {
         final List<ReadReviewDto> readReviewDtos = reviewService.readAllByTargetId(userId);
         final List<ReadReviewResponse> response = readReviewDtos.stream()
                                                                 .map(ReadReviewResponse::from)
                                                                 .toList();
-
-        return ResponseEntity.ok(response);
-    }
-
-    @GetMapping
-    public ResponseEntity<ReadReviewDetailResponse> read(
-            @AuthenticateUser final AuthenticationUserInfo userInfo,
-            @RequestParam final Long auctionId
-    ) {
-        final ReadReviewDetailDto readReviewDetailDto = reviewService.read(userInfo.userId(), auctionId);
-        ReadReviewDetailResponse response = ReadReviewDetailResponse.from(readReviewDetailDto);
 
         return ResponseEntity.ok(response);
     }

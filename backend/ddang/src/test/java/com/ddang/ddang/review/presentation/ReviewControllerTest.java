@@ -8,6 +8,7 @@ import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
+import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.presentation.fixture.ReviewControllerFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -142,7 +143,7 @@ class ReviewControllerTest extends ReviewControllerFixture {
     void 사용자가_경매_거래에_작성한_평가를_조회한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효한_작성자_비공개_클레임));
-        given(reviewService.read(anyLong(), anyLong()))
+        given(reviewService.readByAuctionIdAndWriterId(anyLong(), anyLong()))
                 .willReturn(구매자가_판매자1에게_받은_평가_내용);
 
         // when & then
@@ -158,7 +159,41 @@ class ReviewControllerTest extends ReviewControllerFixture {
                                jsonPath("content", is(구매자가_판매자1에게_받은_평가_내용.content()))
                        );
 
+        readByAuctionId_문서화(resultActions);
+    }
+
+    @Test
+    void 지정한_평가_아이디에_해당하는_평가를_조회한다() throws Exception {
+        given(reviewService.readByReviewId(anyLong()))
+                .willReturn(구매자가_판매자1에게_받은_평가_내용);
+
+        // when & then
+        final ResultActions resultActions =
+                mockMvc.perform(RestDocumentationRequestBuilders.get("/reviews/{reviewId}", 구매자가_판매자1에게_받은_평가_아이디)
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                       )
+                       .andExpectAll(
+                               status().isOk(),
+                               jsonPath("score", is(구매자가_판매자1에게_받은_평가_내용.score()), Double.class),
+                               jsonPath("content", is(구매자가_판매자1에게_받은_평가_내용.content()))
+                       );
+
         read_문서화(resultActions);
+    }
+
+    @Test
+    void 지정한_평가_아이디에_해당하는_평가가_존재하지_않는다면_404가_발생한다() throws Exception {
+        given(reviewService.readByReviewId(anyLong()))
+                .willThrow(new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.get("/reviews/{reviewId}", 구매자가_판매자1에게_받은_평가_아이디)
+                                                        .contentType(MediaType.APPLICATION_JSON)
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("message").exists()
+               );
     }
 
     private void create_문서화(final ResultActions resultActions) throws Exception {
@@ -209,14 +244,30 @@ class ReviewControllerTest extends ReviewControllerFixture {
         );
     }
 
-    private void read_문서화(final ResultActions resultActions) throws Exception {
+    private void readByAuctionId_문서화(final ResultActions resultActions) throws Exception {
         resultActions.andDo(
                 restDocs.document(
                         requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("회원 Bearer 인증 정보")
                         ),
                         queryParameters(
-                                parameterWithName("auctionId").description("평가오_관련된_경매_아이디")
+                                parameterWithName("auctionId").description("평가와_관련된_경매_아이디")
+                        ),
+                        responseFields(
+                                fieldWithPath("score").type(JsonFieldType.NUMBER)
+                                                      .description("평가 점수"),
+                                fieldWithPath("content").type(JsonFieldType.STRING)
+                                                        .description("평가 내용")
+                        )
+                )
+        );
+    }
+
+    private void read_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        pathParameters(
+                                parameterWithName("reviewId").description("평가와_관련된_경매_아이디")
                         ),
                         responseFields(
                                 fieldWithPath("score").type(JsonFieldType.NUMBER)

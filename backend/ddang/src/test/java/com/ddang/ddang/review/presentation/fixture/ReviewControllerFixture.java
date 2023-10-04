@@ -29,8 +29,8 @@ public class ReviewControllerFixture extends CommonControllerSliceTest {
     protected ReadUserInReviewDto 판매자1 = new ReadUserInReviewDto(3L, "판매자1", 판매자1_프로필_이미지_아이디, 5.0d, "12347");
     protected ReadUserInReviewDto 판매자2 = new ReadUserInReviewDto(4L, "판매자2", 판매자2_프로필_이미지_아이디, 5.0d, "12348");
     protected ReadUserInReviewDto 구매자 = new ReadUserInReviewDto(5L, "구매자", 구매자_프로필_이미지_아이디, 5.0d, "12349");
-    private Long 구매자가_판매자1에게_받은_평가_아이디 = 2L;
-    private Long 구매자가_판매자2에게_받은_평가_아이디 = 3L;
+    protected Long 구매자가_판매자1에게_받은_평가_아이디 = 2L;
+    protected Long 구매자가_판매자2에게_받은_평가_아이디 = 3L;
     protected ReadReviewDto 구매자가_판매자1에게_받은_평가 =
             new ReadReviewDto(구매자가_판매자1에게_받은_평가_아이디, 판매자1, "친절하다.", 5.0d, LocalDateTime.now());
     protected ReadReviewDto 구매자가_판매자2에게_받은_평가 =

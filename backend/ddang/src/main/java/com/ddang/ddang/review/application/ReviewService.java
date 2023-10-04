@@ -8,6 +8,7 @@ import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
+import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -71,6 +72,13 @@ public class ReviewService {
         return persistReview;
     }
 
+    public ReadReviewDetailDto readByReviewId(final Long reviewId) {
+        final Review findReview = reviewRepository.findById(reviewId)
+                                              .orElseThrow(() -> new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
+
+        return ReadReviewDetailDto.from(findReview);
+    }
+
     public List<ReadReviewDto> readAllByTargetId(final Long targetId) {
         final List<Review> targetReviews = reviewRepository.findAllByTargetId(targetId);
 
@@ -79,7 +87,7 @@ public class ReviewService {
                             .toList();
     }
 
-    public ReadReviewDetailDto read(final Long writerId, final Long auctionId) {
+    public ReadReviewDetailDto readByAuctionIdAndWriterId(final Long writerId, final Long auctionId) {
         return reviewRepository.findByAuctionIdAndWriterId(auctionId, writerId)
                                .map(ReadReviewDetailDto::from)
                                .orElse(ReadReviewDetailDto.EMPTY);

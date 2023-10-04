@@ -30,6 +30,7 @@ import com.ddang.ddang.report.application.exception.InvalidChatRoomReportExcepti
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
+import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -333,6 +334,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReviewException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleReviewNotFoundException(
+            final ReviewNotFoundException ex
+    ) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ReviewNotFoundException.class), ex);
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 

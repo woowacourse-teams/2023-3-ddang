@@ -6,6 +6,7 @@ import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
+import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.application.fixture.ReviewServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.assertj.core.api.SoftAssertions;
@@ -79,6 +80,26 @@ class ReviewServiceTest extends ReviewServiceFixture {
     }
 
     @Test
+    void 지정한_평가_아이디에_해당하는_평가를_조회한다() {
+        // when
+        final ReadReviewDetailDto actual = reviewService.readByReviewId(구매자가_판매자1에게_받은_평가.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore());
+            softAssertions.assertThat(actual.content()).isEqualTo(구매자가_판매자1에게_받은_평가.getContent());
+        });
+    }
+
+    @Test
+    void 지정한_평가_아이디에_해당하는_평가가_없으면_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> reviewService.readByReviewId(존재하지_않는_평가_아이디))
+                .isInstanceOf(ReviewNotFoundException.class)
+                .hasMessage("해당 평가를 찾을 수 없습니다.");
+    }
+
+    @Test
     void 지정한_아이디가_평가_대상인_평가_목록을_최신순으로_조회한다() {
         // when
         final List<ReadReviewDto> actual = reviewService.readAllByTargetId(구매자.getId());
@@ -100,7 +121,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     @Test
     void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재한다면_dto에_넣어_반환한다() {
         // when
-        final ReadReviewDetailDto actual = reviewService.read(판매자1.getId(), 판매자1이_평가한_경매.getId());
+        final ReadReviewDetailDto actual = reviewService.readByAuctionIdAndWriterId(판매자1.getId(), 판매자1이_평가한_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -112,7 +133,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     @Test
     void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재하지_않는다면_dto의_필드가_null이다() {
         // when
-        final ReadReviewDetailDto actual = reviewService.read(평가_안한_경매_판매자.getId(), 평가_안한_경매.getId());
+        final ReadReviewDetailDto actual = reviewService.readByAuctionIdAndWriterId(평가_안한_경매_판매자.getId(), 평가_안한_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

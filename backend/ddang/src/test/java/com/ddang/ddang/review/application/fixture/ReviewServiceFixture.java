@@ -50,6 +50,7 @@ public class ReviewServiceFixture {
     protected Auction 판매자1이_평가한_경매;
     protected Auction 판매자2가_평가한_경매;
     protected Auction 평가_안한_경매;
+    protected Long 존재하지_않는_평가_아이디 = -999L;
     protected Review 구매자가_판매자1에게_받은_평가;
     protected Review 구매자가_판매자2에게_받은_평가;
     protected List<Review> 구매자가_이전까지_받은_평가_총2개;
