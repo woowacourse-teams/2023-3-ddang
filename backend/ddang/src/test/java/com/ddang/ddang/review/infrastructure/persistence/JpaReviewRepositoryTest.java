@@ -3,7 +3,6 @@ package com.ddang.ddang.review.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.review.domain.Review;
-import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.review.infrastructure.persistence.fixture.JpaReviewRepositoryFixture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -34,23 +33,14 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
 
     @Test
     void 평가를_저장한다() {
-        // given
-        final Review review = Review.builder()
-                                    .auction(평가_안한_경매)
-                                    .writer(판매자1)
-                                    .target(구매자)
-                                    .content("친절하다.")
-                                    .score(new Score(5.0d))
-                                    .build();
-
         // when
-        reviewRepository.save(review);
+        reviewRepository.save(저장하려는_평가);
 
         // then
         em.flush();
         em.clear();
 
-        assertThat(review.getId()).isPositive();
+        assertThat(저장하려는_평가.getId()).isPositive();
     }
 
     @Test
@@ -64,7 +54,6 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
 
     @Test
     void 지정한_채팅방_아이디를_포함하는_평가가_존재하지_않는다면_거짓을_반환한다() {
-        // given
         // when
         final boolean actual = reviewRepository.existsByAuctionIdAndWriterId(평가_안한_경매.getId(), 평가_안한_경매_판매자.getId());
 

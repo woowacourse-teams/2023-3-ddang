@@ -47,6 +47,7 @@ public class JpaReviewRepositoryFixture {
     protected Auction 판매자1이_평가한_경매;
     protected Auction 판매자2가_평가한_경매;
     protected Auction 평가_안한_경매;
+    protected Review 저장하려는_평가;
     protected Review 구매자가_판매자1에게_받은_평가;
     protected Review 구매자가_판매자2에게_받은_평가;
 
@@ -125,6 +126,13 @@ public class JpaReviewRepositoryFixture {
         평가_안한_경매.addAuctionImages(List.of(평가_안한_경매_대표_이미지));
         auctionRepository.saveAll(List.of(판매자1이_평가한_경매, 판매자2가_평가한_경매, 평가_안한_경매));
 
+        저장하려는_평가 = Review.builder()
+                            .auction(평가_안한_경매)
+                            .writer(판매자1)
+                            .target(구매자)
+                            .content("친절하다.")
+                            .score(new Score(5.0d))
+                            .build();
         구매자가_판매자1에게_받은_평가 = Review.builder()
                                         .auction(판매자1이_평가한_경매)
                                         .writer(판매자1)
