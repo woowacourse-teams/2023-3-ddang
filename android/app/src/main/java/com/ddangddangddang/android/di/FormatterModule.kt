@@ -19,7 +19,7 @@ object FormatterModule {
     @Provides
     fun provideDateFormatter(@ApplicationContext context: Context): DateTimeFormatter {
         return DateTimeFormatter.ofPattern(
-            context.getString(R.string.message_room_item_date_format),
+            context.getString(R.string.all_date_format),
             Locale.KOREAN,
         )
     }
@@ -29,7 +29,7 @@ object FormatterModule {
     @Provides
     fun provideTimeFormatter(@ApplicationContext context: Context): DateTimeFormatter {
         return DateTimeFormatter.ofPattern(
-            context.getString(R.string.message_room_item_time_format),
+            context.getString(R.string.all_time_format),
             Locale.KOREAN,
         )
     }

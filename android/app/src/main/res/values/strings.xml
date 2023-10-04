@@ -26,6 +26,8 @@
     <string name="all_network_error_message">인터넷이 연결되어 있는지 확인해주세요.</string>
     <string name="all_unexpected_error_message">예기치 못한 오류가 발생했습니다. 다시 시도해주세요.</string>
     <string name="all_must_update_to_latest_version">최신 버전으로 업데이트가 필요합니다.</string>
+    <string name="all_date_format">yyyy년 M월 d일</string>
+    <string name="all_time_format">h:mm a</string>
 
     <!-- splash -->
     <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
@@ -126,8 +128,6 @@
     <string name="message_room_send_message_failed">메시지 전송에 실패했습니다\n잠시 후에 다시 시도해주세요</string>
     <string name="message_room_created_introduce_text">쪽지방이 생성됐습니다.</string>
     <string name="message_room_auction_bid_price">%,d원</string>
-    <string name="message_room_item_date_format">yyyy년 M월 d일</string>
-    <string name="message_room_item_time_format">h:mm a</string>
 
     <!-- mypage -->
     <string name="mypage">마이페이지</string>
