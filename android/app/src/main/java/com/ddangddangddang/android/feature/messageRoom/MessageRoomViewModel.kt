@@ -102,7 +102,7 @@ class MessageRoomViewModel @Inject constructor(
 
     private fun List<MessageModel>.toViewItems(): List<MessageViewItem> {
         var previousSendDate = _messages.value?.lastOrNull()?.createdDateTime?.toLocalDate()
-        return mapIndexed { index, messageModel ->
+        return map { messageModel ->
             val sendDateTime = LocalDateTime.parse(messageModel.createdAt)
             val sendDate = sendDateTime.toLocalDate()
             val isFirstAtDate = (sendDate == previousSendDate).not()
