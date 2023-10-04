@@ -64,8 +64,8 @@ class QuestionServiceTest extends QuestionServiceFixture {
     void 삭제된_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionService.create(삭제된_경매_질문_등록_요청_dto))
-                .isInstanceOf(InvalidAuctionToAskQuestionException.class)
-                .hasMessage("삭제된 경매입니다.");
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
 
     @Test

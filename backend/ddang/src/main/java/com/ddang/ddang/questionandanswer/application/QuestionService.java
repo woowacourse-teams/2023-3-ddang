@@ -31,7 +31,7 @@ public class QuestionService {
     public Long create(final CreateQuestionDto questionDto) {
         final User questioner = userRepository.findByIdAndDeletedIsFalse(questionDto.userId())
                                               .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final Auction auction = auctionRepository.findById(questionDto.auctionId())
+        final Auction auction = auctionRepository.findByIdAndDeletedIsFalse(questionDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
         checkInvalidAuction(auction);
         checkInvalidQuestioner(auction, questioner);
@@ -43,12 +43,7 @@ public class QuestionService {
     }
 
     private void checkInvalidAuction(final Auction auction) {
-        final LocalDateTime now = LocalDateTime.now();
-
-        if (auction.isDeleted()) {
-            throw new InvalidAuctionToAskQuestionException("삭제된 경매입니다.");
-        }
-        if (auction.isClosed(now)) {
+        if (auction.isClosed(LocalDateTime.now())) {
             throw new InvalidAuctionToAskQuestionException("이미 종료된 경매입니다.");
         }
     }
