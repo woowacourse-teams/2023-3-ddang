@@ -72,7 +72,7 @@ class MessageRoomViewModel @Inject constructor(
             viewModelScope.launch {
                 when (val response = repository.getMessages(it.roomId, lastMessageId)) {
                     is ApiResponse.Success -> {
-                        addMessages(response.body.map { it.toPresentation().toViewItem() })
+                        addMessages(response.body.map { it.toPresentation() }.toViewItems())
                     }
 
                     is ApiResponse.Failure -> {
@@ -99,11 +99,23 @@ class MessageRoomViewModel @Inject constructor(
         _messages.value = _messages.value?.plus(messages) ?: messages
     }
 
-    private fun MessageModel.toViewItem(): MessageViewItem {
+    private fun List<MessageModel>.toViewItems(): List<MessageViewItem> {
+        var previousSendDate = _messages.value?.lastOrNull()?.createdDateTime?.toLocalDate()
+        return map { messageModel ->
+            val sendDate = messageModel.createdDateTime.toLocalDate()
+            val isFirstAtDate = (sendDate == previousSendDate).not()
+            previousSendDate = sendDate
+            messageModel.toViewItem(isFirstAtDate)
+        }
+    }
+
+    private fun MessageModel.toViewItem(
+        isFirstAtDate: Boolean,
+    ): MessageViewItem {
         return if (isMyMessage) {
-            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents)
+            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents, isFirstAtDate)
         } else {
-            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents)
+            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents, isFirstAtDate)
         }
     }
 

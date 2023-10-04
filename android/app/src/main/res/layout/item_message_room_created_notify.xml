@@ -8,15 +8,16 @@
         android:paddingVertical="20dp">
 
         <TextView
+            style="@style/Caption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#F8F8FB"
+            android:background="@drawable/bg_stroke_gray_radius_1dp"
+            android:backgroundTint="@color/grey_100"
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
             android:text="@string/message_room_created_introduce_text"
-            android:textColor="#686868"
-            android:textSize="12sp" />
+            android:textColor="@color/grey_700" />
     </LinearLayout>
 
 </layout>

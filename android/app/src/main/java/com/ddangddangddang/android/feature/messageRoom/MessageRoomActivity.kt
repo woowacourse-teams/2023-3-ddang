@@ -18,6 +18,7 @@ import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MessageRoomActivity :
@@ -25,9 +26,10 @@ class MessageRoomActivity :
     AnalyticsDelegate by AnalyticsDelegateImpl() {
     private val viewModel: MessageRoomViewModel by viewModels()
     private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
-    private val messageAdapter by lazy {
-        MessageAdapter { viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) } }
-    }
+
+    @Inject
+    lateinit var messageAdapter: MessageAdapter
+
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +44,7 @@ class MessageRoomActivity :
     private fun setupViewModel() {
         viewModel.event.observe(this) { handleEvent(it) }
         viewModel.messages.observe(this) {
-            messageAdapter.setMessages(it)
+            messageAdapter.setMessages(it) { scrollToDown() }
         }
     }
 
@@ -62,6 +64,10 @@ class MessageRoomActivity :
 
             is MessageRoomViewModel.MessageRoomEvent.FailureEvent -> handleFailureEvent(event)
         }
+    }
+
+    private fun scrollToDown() {
+        viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) }
     }
 
     private fun navigateToReport(roomId: Long) {
