@@ -241,7 +241,7 @@ public class AuctionServiceFixture {
                                     .closingTime(LocalDateTime.now().plusDays(3L))
                                     .build();
         신뢰도가_null인_판매자의_경매.addAuctionImages(List.of(new AuctionImage("auction.png", "auction.png")));
-        auctionRepository.saveAll(List.of(채팅방이_있는_경매, 종료되는_날이_3일_뒤인_경매, 입찰이_존재하는_경매, 종료된_경매, 신뢰도가_null인_판매자의_경매));
+        auctionRepository.saveAll(List.of(신뢰도가_null인_판매자의_경매, 채팅방이_있는_경매, 종료되는_날이_3일_뒤인_경매, 입찰이_존재하는_경매, 종료된_경매));
 
         final ChatRoom 채팅방 = new ChatRoom(채팅방이_있는_경매, 구매자);
 
