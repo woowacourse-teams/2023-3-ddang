@@ -89,7 +89,7 @@ public class MessageServiceFixture {
                                  .reliability(4.7d)
                                  .oauthId("12347")
                                  .build();
-        탈퇴한_사용자.withdrawal();;
+        탈퇴한_사용자.withdrawal();
         userRepository.saveAll(List.of(발신자, 수신자, 탈퇴한_사용자));
 
         final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
