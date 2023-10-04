@@ -1,6 +1,5 @@
 package com.ddang.ddang.auction.application.fixture;
 
-import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
@@ -9,26 +8,22 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionServiceFixture {
-
-    @Autowired
-    private AuctionService auctionService;
 
     @Autowired
     private JpaAuctionRepository auctionRepository;
@@ -41,9 +36,6 @@ public class AuctionServiceFixture {
 
     @Autowired
     private JpaUserRepository userRepository;
-
-    @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -73,7 +65,7 @@ public class AuctionServiceFixture {
 
     private Long 존재하지_않는_지역_ID = -999L;
     private Long 존재하지_않는_카테고리_ID = -999L;
-    private BidPrice 입찰이_존재하는_경매_입찰_가격 = new BidPrice(1_000);
+    private BidPrice 구매자가_입찰한_경매1_입찰_가격 = new BidPrice(1_000);
 
     protected Long 존재하지_않는_사용자_ID = -999L;
     protected Long 존재하지_않는_경매_ID = -999L;
@@ -86,13 +78,13 @@ public class AuctionServiceFixture {
     protected CreateAuctionDto 메인_카테고리의_경매_생성_dto;
     protected CreateAuctionDto 종료되는_날이_3일_뒤인_경매_생성_dto;
     protected CreateAuctionDto 종료된_경매_생성_dto;
-    protected Auction 채팅방이_있는_경매;
     protected Auction 종료되는_날이_3일_뒤인_경매;
-    protected Auction 입찰이_존재하는_경매;
+    protected Auction 구매자가_입찰한_경매1;
+    protected Auction 구매자가_입찰한_경매2;
     protected Auction 종료된_경매;
-    protected BidPrice 채팅방이_있는_경매_입찰_가격 = new BidPrice(10_000);
-    protected Bid 채팅방이_있는_경매_입찰;
-    protected Bid 입찰이_존재하는_경매_입찰;
+    private BidPrice 구매자가_입찰한_경매2_입찰_가격 = new BidPrice(10_000);
+    private Bid 구매자가_입찰한_경매1_입찰;
+    private Bid 구매자가_입찰한_경매2_입찰;
 
     @BeforeEach
     void setUp() {
@@ -211,23 +203,19 @@ public class AuctionServiceFixture {
                 판매자.getId()
         );
 
-        채팅방이_있는_경매 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
+        구매자가_입찰한_경매2 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
         종료되는_날이_3일_뒤인_경매 = 종료되는_날이_3일_뒤인_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
-        입찰이_존재하는_경매 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
+        구매자가_입찰한_경매1 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
         종료된_경매 = 유효한_경매_생성_dto.toEntity(판매자, 가구_서브_의자_카테고리);
 
-        채팅방이_있는_경매_입찰 = new Bid(채팅방이_있는_경매, 구매자, 채팅방이_있는_경매_입찰_가격);
-        입찰이_존재하는_경매_입찰 = new Bid(입찰이_존재하는_경매, 구매자, 입찰이_존재하는_경매_입찰_가격);
+        구매자가_입찰한_경매1_입찰 = new Bid(구매자가_입찰한_경매1, 구매자, 구매자가_입찰한_경매1_입찰_가격);
+        구매자가_입찰한_경매2_입찰 = new Bid(구매자가_입찰한_경매2, 구매자, 구매자가_입찰한_경매2_입찰_가격);
 
-        bidRepository.saveAll(List.of(채팅방이_있는_경매_입찰, 입찰이_존재하는_경매_입찰));
+        bidRepository.saveAll(List.of(구매자가_입찰한_경매1_입찰, 구매자가_입찰한_경매2_입찰));
 
-        채팅방이_있는_경매.updateLastBid(채팅방이_있는_경매_입찰);
-        입찰이_존재하는_경매.updateLastBid(입찰이_존재하는_경매_입찰);
+        구매자가_입찰한_경매1.updateLastBid(구매자가_입찰한_경매1_입찰);
+        구매자가_입찰한_경매2.updateLastBid(구매자가_입찰한_경매2_입찰);
 
-        auctionRepository.saveAll(List.of(채팅방이_있는_경매, 종료되는_날이_3일_뒤인_경매, 입찰이_존재하는_경매, 종료된_경매));
-
-        final ChatRoom 채팅방 = new ChatRoom(채팅방이_있는_경매, 구매자);
-
-        chatRoomRepository.save(채팅방);
+        auctionRepository.saveAll(List.of(구매자가_입찰한_경매1, 구매자가_입찰한_경매2, 종료되는_날이_3일_뒤인_경매, 종료된_경매));
     }
 }
