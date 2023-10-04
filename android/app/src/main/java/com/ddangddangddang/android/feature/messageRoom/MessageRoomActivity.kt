@@ -69,7 +69,7 @@ class MessageRoomActivity :
     }
 
     private fun showUserRate() {
-        UserRateDialog().show(supportFragmentManager, UserRateDialog.USER_RATE_DIALOG_TAG)
+        UserRateDialog.show(supportFragmentManager)
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {

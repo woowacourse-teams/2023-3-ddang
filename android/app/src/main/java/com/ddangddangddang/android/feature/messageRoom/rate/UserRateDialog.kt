@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.databinding.FragmentUserRateDialogBinding
@@ -68,6 +69,10 @@ class UserRateDialog : DialogFragment() {
     }
 
     companion object {
-        const val USER_RATE_DIALOG_TAG = "user_rate_dialog_tag"
+        private const val USER_RATE_DIALOG_TAG = "user_rate_dialog_tag"
+
+        fun show(fragmentManager: FragmentManager) {
+            UserRateDialog().show(fragmentManager, USER_RATE_DIALOG_TAG)
+        }
     }
 }
