@@ -24,7 +24,6 @@ public class AnswerService {
     private final JpaQuestionRepository questionRepository;
     private final JpaAnswerRepository answerRepository;
 
-
     @Transactional
     public Long create(final CreateAnswerDto answerDto) {
         final User writer = userRepository.findById(answerDto.userId())

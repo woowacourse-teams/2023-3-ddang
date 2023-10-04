@@ -1,6 +1,5 @@
 package com.ddang.ddang.questionandanswer.infrastructure.fixture;
 
-
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
