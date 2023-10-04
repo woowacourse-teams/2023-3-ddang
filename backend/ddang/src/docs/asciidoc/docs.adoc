@@ -419,6 +419,17 @@ include::{snippets}/review-controller-test/평가를_등록한다/request-fields
 
 include::{snippets}/review-controller-test/평가를_등록한다/http-response.adoc[]
 
+=== 지정한 평가 아이디에 해당하는 평가 조회
+
+==== 요청
+
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/http-request.adoc[]
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/http-response.adoc[]
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/response-fields.adoc[]
+
 === 지정한 사용자가 받은 평가 목록 조회
 
 ==== 요청
