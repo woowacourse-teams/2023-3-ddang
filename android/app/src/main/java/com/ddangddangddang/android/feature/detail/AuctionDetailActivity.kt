@@ -70,7 +70,7 @@ class AuctionDetailActivity :
     }
 
     private fun showAuctionBidDialog() {
-        AuctionBidDialog().show(supportFragmentManager, BID_DIALOG_TAG)
+        AuctionBidDialog.show(supportFragmentManager)
     }
 
     private fun navigateToMessageRoom(roomId: Long) {
@@ -134,7 +134,6 @@ class AuctionDetailActivity :
 
     companion object {
         private const val AUCTION_ID_KEY = "auction_id_key"
-        private const val BID_DIALOG_TAG = "bid_dialog_tag"
 
         fun getIntent(context: Context, auctionId: Long): Intent {
             return Intent(context, AuctionDetailActivity::class.java).apply {

@@ -196,4 +196,11 @@
 
     <!-- image_detail -->
     <string name="image_detail_images_not_exist">이미지 목록이 존재하지 않습니다.</string>
+
+    <!-- user_rate -->
+    <string name="user_rate">평가하기</string>
+    <string name="user_rate_description_satisfied">상대방과의 거래에 만족하셨나요?</string>
+    <string name="user_rate_submit">제출</string>
+    <string name="user_rate_detail_hint">거래 후기를 남겨주세요! (선택)</string>
+    <string name="message_room_rate_description">유저 상호 평가 버튼입니다</string>
 </resources>

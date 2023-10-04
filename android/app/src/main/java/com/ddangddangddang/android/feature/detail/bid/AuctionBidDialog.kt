@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
@@ -137,5 +138,13 @@ class AuctionBidDialog : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val BID_DIALOG_TAG = "bid_dialog_tag"
+
+        fun show(fragmentManager: FragmentManager) {
+            AuctionBidDialog().show(fragmentManager, BID_DIALOG_TAG)
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.messageRoom.rate.UserRateDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
@@ -54,6 +55,7 @@ class MessageRoomActivity :
         when (event) {
             is MessageRoomViewModel.MessageRoomEvent.Exit -> finish()
             is MessageRoomViewModel.MessageRoomEvent.Report -> navigateToReport(event.roomId)
+            is MessageRoomViewModel.MessageRoomEvent.Rate -> showUserRate()
             is MessageRoomViewModel.MessageRoomEvent.NavigateToAuctionDetail -> {
                 navigateToAuctionDetail(event.auctionId)
             }
@@ -64,6 +66,10 @@ class MessageRoomActivity :
 
     private fun navigateToReport(roomId: Long) {
         startActivity(ReportActivity.getIntent(this, ReportType.MessageRoomReport.ordinal, roomId))
+    }
+
+    private fun showUserRate() {
+        UserRateDialog.show(supportFragmentManager)
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
