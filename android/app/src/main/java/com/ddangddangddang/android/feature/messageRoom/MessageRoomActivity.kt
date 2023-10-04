@@ -14,6 +14,8 @@ import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.model.ReportType
+import com.ddangddangddang.android.notification.NotificationType
+import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,11 +30,12 @@ class MessageRoomActivity :
         MessageAdapter { viewModel.messages.value?.let { binding.rvMessageList.scrollToPosition(it.size) } }
     }
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
+    private val roomId: Long by lazy { intent.getLongExtra(ROOM_ID_KEY, -1L) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         registerAnalytics(javaClass.simpleName, lifecycle)
         binding.viewModel = viewModel
-        val roomId: Long = intent.getLongExtra(ROOM_ID_KEY, -1L)
         if (viewModel.messageRoomInfo.value == null) viewModel.loadMessageRoom(roomId)
         setupViewModel()
         setupMessageRecyclerView()
@@ -98,6 +101,15 @@ class MessageRoomActivity :
                 getString(R.string.message_room_send_message_failed)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        cancelNotification()
+    }
+
+    private fun cancelNotification() {
+        cancelActiveNotification(NotificationType.MESSAGE.name, roomId.toInt())
     }
 
     companion object {

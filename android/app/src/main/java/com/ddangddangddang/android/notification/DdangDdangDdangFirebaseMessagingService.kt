@@ -93,7 +93,7 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             val image = runCatching {
                 getBitmapFromUrl(remoteMessage.data["image"] ?: "")
             }.getOrDefault(defaultImage)
-            val activeNotification = getActiveNotification(tag, id)
+            val activeNotification = getActiveNotification(tag, id.toInt())
             val currentLine = remoteMessage.data["body"] ?: ""
             val pendingIntent =
                 activeNotification?.contentIntent ?: getMessageRoomPendingIntent(id)
@@ -109,12 +109,6 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
                 setAutoCancel(true)
             }.build()
         }
-    }
-
-    private fun getActiveNotification(tag: String, id: Long): Notification? {
-        return notificationManager.activeNotifications.firstOrNull {
-            it.tag == tag && it.id == id.toInt()
-        }?.notification
     }
 
     private fun getMessageInboxStyle(
