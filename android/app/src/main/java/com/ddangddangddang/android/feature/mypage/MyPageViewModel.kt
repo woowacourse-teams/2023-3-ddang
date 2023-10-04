@@ -103,6 +103,10 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    fun askWithdrawal() {
+        _event.value = MyPageEvent.AskWithdrawal
+    }
+
     fun withdrawal() {
         viewModelScope.launch {
             when (val response = authRepository.withdrawal()) {
@@ -135,6 +139,7 @@ class MyPageViewModel @Inject constructor(
         object NavigateToPrivacyPolicy : MyPageEvent()
         object LogoutSuccessfully : MyPageEvent()
         data class LogoutFailed(val type: ErrorType) : MyPageEvent()
+        object AskWithdrawal : MyPageEvent()
         object WithdrawalSuccessfully : MyPageEvent()
         data class WithdrawalFailed(val type: ErrorType) : MyPageEvent()
     }

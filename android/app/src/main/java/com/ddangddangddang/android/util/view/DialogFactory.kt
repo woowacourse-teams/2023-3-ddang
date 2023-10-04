@@ -10,7 +10,7 @@ fun Activity.showDialog(
     @StringRes
     titleId: Int? = null,
     @StringRes
-    messageId: Int,
+    messageId: Int? = null,
     @StringRes
     negativeStringId: Int? = null,
     @StringRes
@@ -21,7 +21,7 @@ fun Activity.showDialog(
 ) {
     AlertDialog.Builder(this).apply {
         titleId?.let { setTitle(getString(it)) }
-        setMessage(getString(messageId))
+        messageId?.let { setMessage(getString(messageId)) }
         negativeStringId?.let {
             setNegativeButton(negativeStringId) { _, _ ->
                 actionNegative()
@@ -36,24 +36,28 @@ fun Activity.showDialog(
 
 fun Fragment.showDialog(
     @StringRes
-    titleId: Int,
+    titleId: Int? = null,
     @StringRes
-    messageId: Int,
+    messageId: Int? = null,
     @StringRes
-    negativeStringId: Int,
+    negativeStringId: Int? = null,
     @StringRes
-    positiveStringId: Int,
+    positiveStringId: Int = R.string.all_dialog_default_positive_button,
     actionNegative: () -> Unit = {},
     actionPositive: () -> Unit = {},
+    isCancelable: Boolean = true,
 ) {
-    AlertDialog.Builder(requireContext())
-        .setTitle(getString(titleId))
-        .setMessage(getString(messageId))
-        .setNegativeButton(negativeStringId) { _, _ ->
-            actionNegative()
+    AlertDialog.Builder(requireContext()).apply {
+        titleId?.let { setTitle(getString(titleId)) }
+        messageId?.let { setMessage(getString(messageId)) }
+        negativeStringId?.let {
+            setNegativeButton(negativeStringId) { _, _ ->
+                actionNegative()
+            }
         }
-        .setPositiveButton(positiveStringId) { _, _ ->
+        setPositiveButton(positiveStringId) { _, _ ->
             actionPositive()
         }
-        .show()
+        setCancelable(isCancelable)
+    }.show()
 }
