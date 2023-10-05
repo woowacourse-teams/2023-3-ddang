@@ -99,8 +99,6 @@ class MessageServiceTest extends MessageServiceFixture {
                 .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
     }
 
-    // TODO : [4차 데모 이후 리팩토링] BaseTimeEntity 시간 모킹하는 방법 찾아보고 수정 예정
-
     @Test
     void 마지막_조회_메시지가_없는_경우_모든_메시지를_조회한다() {
         // when
