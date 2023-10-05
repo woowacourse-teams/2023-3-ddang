@@ -15,24 +15,26 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode
 @ToString
-public class Reliability {  
-  
-    private Double value;  
-  
-    public Reliability(final Double value) {  
-        this.value = value;  
-    }  
-  
+public class Reliability {
+
+    public static final Reliability INITIAL_RELIABILITY = new Reliability(null);
+
+    private Double value;
+
+    public Reliability(final Double value) {
+        this.value = value;
+    }
+
     public void updateReliability(final List<Review> reviews) {
-        if (reviews.isEmpty()) {  
-            this.value = null;  
-  
-            return;  
-        }  
-  
-        this.value = reviews.stream()  
-                                  .mapToDouble(review -> review.getScore().getValue())  
-                                  .average()  
-                                  .orElseGet(null);  
-    }  
+        if (reviews.isEmpty()) {
+            this.value = null;
+
+            return;
+        }
+
+        this.value = reviews.stream()
+                            .mapToDouble(review -> review.getScore().getValue())
+                            .average()
+                            .orElseGet(null);
+    }
 }

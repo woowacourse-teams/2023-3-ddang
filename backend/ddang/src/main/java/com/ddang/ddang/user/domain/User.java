@@ -21,7 +21,6 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
 import java.util.List;
@@ -59,15 +58,23 @@ public class User extends BaseTimeEntity {
 
     @Builder
     private User(
-            @NonNull final String name,
-            @NonNull final ProfileImage profileImage,
-            @NonNull final Reliability reliability,
-            @NonNull final String oauthId
+            final String name,
+            final ProfileImage profileImage,
+            final Reliability reliability,
+            final String oauthId
     ) {
         this.name = name;
         this.profileImage = profileImage;
-        this.reliability = reliability;
+        this.reliability = processReliability(reliability);
         this.oauthId = oauthId;
+    }
+
+    private Reliability processReliability(final Reliability reliability) {
+        if (reliability == null) {
+            return Reliability.INITIAL_RELIABILITY;
+        }
+
+        return reliability;
     }
 
     public void updateName(final String name) {

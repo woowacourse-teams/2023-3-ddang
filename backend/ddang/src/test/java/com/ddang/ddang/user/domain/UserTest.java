@@ -14,6 +14,41 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserTest extends UserFixture {
 
     @Test
+    void 회원_생성시_신뢰도가_null이면_신뢰도_점수가_null인_신뢰도로_회원을_생성한다() {
+        // given
+        final Reliability nullReliability = null;
+        final Reliability expect = new Reliability(null);
+
+        // when
+        final User user = User.builder()
+                                    .name("kakao12345")
+                                    .profileImage(new ProfileImage("uplad.png", "store.png"))
+                                    .reliability(nullReliability)
+                                    .oauthId("12345")
+                                    .build();
+
+        // then
+        assertThat(user.getReliability()).isEqualTo(expect);
+    }
+
+    @Test
+    void 회원_생성시_신뢰도가_null이_아니라면_해당_신뢰도로_회원을_생성한다() {
+        // given
+        final Reliability notNullReliability = new Reliability(4.5d);
+
+        // when
+        final User user = User.builder()
+                              .name("kakao12345")
+                              .profileImage(new ProfileImage("uplad.png", "store.png"))
+                              .reliability(notNullReliability)
+                              .oauthId("12345")
+                              .build();
+
+        // then
+        assertThat(user.getReliability()).isEqualTo(notNullReliability);
+    }
+
+    @Test
     void 회원_정보의_이름을_수정한다() {
         // given
         final User user = User.builder()
