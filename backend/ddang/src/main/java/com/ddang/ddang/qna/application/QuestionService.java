@@ -62,7 +62,7 @@ public class QuestionService {
             throw new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
         }
 
-        final List<Question> questions = questionRepository.readAllByAuctionId(auctionId);
+        final List<Question> questions = questionRepository.findAllByAuctionId(auctionId);
 
         return ReadQnasDto.from(questions);
     }
@@ -70,7 +70,7 @@ public class QuestionService {
     public void deleteById(final Long questionId, final Long userId) {
         final Question question = questionRepository.findById(questionId)
                                                     .orElseThrow(() -> new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));
-        final User user = userRepository.findById(userId)
+        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
                                         .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         if (!question.isWriter(user)) {

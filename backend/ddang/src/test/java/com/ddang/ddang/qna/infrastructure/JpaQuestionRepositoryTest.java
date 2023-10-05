@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,9 +39,27 @@ class JpaQuestionRepositoryTest extends JpaQuestionRepositoryFixture {
     }
 
     @Test
+    void 삭제된_질문은_조회되지_않는다() {
+        // when
+        final Optional<Question> actual = questionRepository.findByIdAndDeletedIsFalse(삭제된_질문.getId());
+
+        // then
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 삭제되지_않은_질문은_조회된다() {
+        // when
+        final Optional<Question> actual = questionRepository.findByIdAndDeletedIsFalse(질문1.getId());
+
+        // then
+        assertThat(actual).contains(질문1);
+    }
+
+    @Test
     void 경매_아이디를_통해_질문과_답변들을_모두_조회한다() {
         // when
-        final List<Question> actual = questionRepository.readAllByAuctionId(질문이_3개_답변이_2개인_경매.getId());
+        final List<Question> actual = questionRepository.findAllByAuctionId(질문이_3개_답변이_2개인_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

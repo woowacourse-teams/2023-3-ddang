@@ -44,6 +44,7 @@ public class JpaQuestionRepositoryFixture {
     protected Question 질문1;
     protected Question 질문2;
     protected Question 질문3;
+    protected Question 삭제된_질문;
     protected Answer 답변1;
     protected Answer 답변2;
 
@@ -87,9 +88,12 @@ public class JpaQuestionRepositoryFixture {
         질문1.addAnswer(답변1);
         질문2.addAnswer(답변2);
 
+        삭제된_질문 = new Question(경매, 질문자, "질문3");
+        삭제된_질문.delete();
+
         userRepository.saveAll(List.of(판매자, 질문자));
         auctionRepository.saveAll(List.of(경매, 질문이_3개_답변이_2개인_경매));
-        questionRepository.saveAll(List.of(질문1, 질문2, 질문3));
+        questionRepository.saveAll(List.of(질문1, 질문2, 질문3, 삭제된_질문));
         answerRepository.saveAll(List.of(답변1, 답변2));
 
         em.flush();
