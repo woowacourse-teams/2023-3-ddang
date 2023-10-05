@@ -49,7 +49,6 @@ class MessageRoomActivity :
         if (viewModel.messageRoomInfo.value == null) viewModel.loadMessageRoom(roomId)
         setupViewModel()
         setupMessageRecyclerView()
-        setupMessageReceiver()
     }
 
     private fun setupViewModel() {
@@ -62,10 +61,6 @@ class MessageRoomActivity :
     private fun setupMessageRecyclerView() {
         binding.rvMessageList.adapter = adapter
         (binding.rvMessageList.layoutManager as LinearLayoutManager).stackFromEnd = true
-    }
-
-    private fun setupMessageReceiver() {
-        registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
     }
 
     private fun handleEvent(event: MessageRoomViewModel.MessageRoomEvent) {
@@ -125,6 +120,25 @@ class MessageRoomActivity :
                 getString(R.string.message_room_send_message_failed)
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerMessageReceiver()
+        if (viewModel.messageRoomInfo.value != null) viewModel.loadMessages()
+    }
+
+    private fun registerMessageReceiver() {
+        registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterMessageReceiver()
+    }
+
+    private fun unregisterMessageReceiver() {
+        unregisterReceiver(messageReceiver)
     }
 
     companion object {
