@@ -50,12 +50,21 @@ public class BidService {
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
-        final Optional<User> previousBidder = auction.findLastBidder();
-
         final Bid saveBid = saveBid(bidDto, auction, bidder);
 
+        final Optional<User> previousBidder = auction.findLastBidder();
+        publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder);
+
+        return saveBid.getId();
+    }
+
+    private void publishBidNotificationEvent(
+            final String auctionImageAbsoluteUrl,
+            final AuctionAndImageDto auctionAndImageDto,
+            final Optional<User> previousBidder
+    ) {
         if (previousBidder.isEmpty()) {
-            return saveBid.getId();
+            return;
         }
 
         final BidNotificationDto bidNotificationDto = new BidNotificationDto(
@@ -64,8 +73,6 @@ public class BidService {
                 auctionImageAbsoluteUrl
         );
         bidEventPublisher.publishEvent(new BidNotificationEvent(bidNotificationDto));
-
-        return saveBid.getId();
     }
 
     private void checkInvalidAuction(final Auction auction) {
