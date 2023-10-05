@@ -1,7 +1,5 @@
 package com.ddang.ddang.notification.application;
 
-import com.ddang.ddang.bid.application.BidService;
-import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.fixture.FcmNotificationServiceFixture;
 import com.ddang.ddang.notification.domain.NotificationStatus;
@@ -28,12 +26,6 @@ class FcmNotificationServiceTest extends FcmNotificationServiceFixture {
 
     @MockBean
     FirebaseMessaging firebaseMessaging;
-
-    @Autowired
-    BidService bidService;
-
-    @Autowired
-    MessageService messageService;
 
     @Autowired
     NotificationService notificationService;
