@@ -1,7 +1,9 @@
 package com.ddang.ddang.qna.application;
 
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
+import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.application.fixture.AnswerServiceFixture;
@@ -61,5 +63,38 @@ class AnswerServiceTest extends AnswerServiceFixture {
         assertThatThrownBy(() -> answerService.create(이미_답변한_질문에_답변_등록_요청_dto))
                 .isInstanceOf(AlreadyAnsweredException.class)
                 .hasMessage("이미 답변한 질문입니다.");
+    }
+
+    @Test
+    void 답변을_삭제한다() {
+        // when
+        answerService.deleteById(답변.getId(), 판매자.getId());
+
+        // then
+        assertThat(답변.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 존재하지_않는_답변_삭제시_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> answerService.deleteById(존재하지_않는_답변_아이디, 판매자.getId()))
+                .isInstanceOf(AnswerNotFoundException.class)
+                .hasMessage("해당 답변을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 존재하지_않는_사용자가_답변_삭제시_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> answerService.deleteById(답변.getId(), 존재하지_않는_사용자_아이디))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 답변_작성자가_아닌_사용자가_답변_삭제시_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> answerService.deleteById(답변.getId(), 판매자가_아닌_사용자.getId()))
+                .isInstanceOf(UserForbiddenException.class)
+                .hasMessage("삭제할 권한이 없습니다.");
     }
 }

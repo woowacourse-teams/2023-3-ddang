@@ -33,6 +33,12 @@ public class AnswerServiceFixture {
     @Autowired
     private JpaAnswerRepository answerRepository;
 
+    protected Long 존재하지_않는_답변_아이디 = -999L;
+    protected Long 존재하지_않는_사용자_아이디 = -999L;
+    protected Answer 답변;
+    protected User 판매자;
+    protected User 판매자가_아닌_사용자;
+
     protected CreateAnswerDto 답변_등록_요청_dto;
     protected CreateAnswerDto 존재하지_않는_사용자의_답변_등록_요청_dto;
     protected CreateAnswerDto 존재하지_않는_질문에_답변_등록_요청_dto;
@@ -42,12 +48,12 @@ public class AnswerServiceFixture {
     @BeforeEach
     void setUp() {
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
-        final User 판매자 = User.builder()
-                             .name("판매자")
-                             .profileImage(프로필_이미지)
-                             .reliability(4.7d)
-                             .oauthId("12345")
-                             .build();
+        판매자 = User.builder()
+                  .name("판매자")
+                  .profileImage(프로필_이미지)
+                  .reliability(4.7d)
+                  .oauthId("12345")
+                  .build();
         final Auction 경매 = Auction.builder()
                                   .seller(판매자)
                                   .title("경매 상품 1")
@@ -62,12 +68,18 @@ public class AnswerServiceFixture {
                              .reliability(4.7d)
                              .oauthId("12346")
                              .build();
+        판매자가_아닌_사용자 = User.builder()
+                          .name("판매자가 아닌 사용자")
+                          .profileImage(프로필_이미지)
+                          .reliability(4.7d)
+                          .oauthId("12347")
+                          .build();
         final Question 질문 = new Question(경매, 질문자, "궁금한 점이 있습니다.");
         final Question 답변한_질문 = new Question(경매, 질문자, "궁금한 점이 있습니다.");
-        final Answer 답변 = new Answer("답변드립니다.");
+        답변 = new Answer("답변드립니다.");
         답변한_질문.addAnswer(답변);
 
-        userRepository.saveAll(List.of(판매자, 질문자));
+        userRepository.saveAll(List.of(판매자, 질문자, 판매자가_아닌_사용자));
         auctionRepository.save(경매);
         questionRepository.saveAll(List.of(질문, 답변한_질문));
         answerRepository.save(답변);

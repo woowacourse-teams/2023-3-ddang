@@ -41,6 +41,8 @@ public class JpaAnswerRepositoryFixture {
     protected Question 답변이_존재하는_질문;
     protected Question 답변이_존재하지_않는_질문;
     protected String 답변_내용 = "답변드립니다.";
+    protected Answer 답변;
+    protected Answer 삭제된_답변;
 
     @BeforeEach
     void setUp() {
@@ -68,14 +70,18 @@ public class JpaAnswerRepositoryFixture {
         질문 = new Question(경매, 질문자, "궁금한 점이 있어요.");
         답변이_존재하는_질문 = new Question(경매, 질문자, "궁금한 점이 있어요.");
         답변이_존재하지_않는_질문 = 질문;
+        final Question 답변이_삭제된_질문 = new Question(경매, 질문자, "궁금한 점이 있어요.");
 
-        final Answer 답변 = new Answer("답변드립니다.");
+        답변 = new Answer("답변드립니다.");
         답변이_존재하는_질문.addAnswer(답변);
+        삭제된_답변 = new Answer("답변드립니다.");
+        답변이_삭제된_질문.addAnswer(삭제된_답변);
+        삭제된_답변.delete();
 
         userRepository.saveAll(List.of(판매자, 질문자));
         auctionRepository.save(경매);
-        questionRepository.saveAll(List.of(질문, 답변이_존재하는_질문));
-        answerRepository.save(답변);
+        questionRepository.saveAll(List.of(질문, 답변이_존재하는_질문, 답변이_삭제된_질문));
+        answerRepository.saveAll(List.of(답변, 삭제된_답변));
 
         em.flush();
         em.clear();

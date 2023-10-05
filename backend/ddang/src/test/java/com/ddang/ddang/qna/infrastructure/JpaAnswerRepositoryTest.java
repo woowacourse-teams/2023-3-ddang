@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
@@ -51,5 +53,23 @@ class JpaAnswerRepositoryTest extends JpaAnswerRepositoryFixture {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 삭제된_답변은_조회되지_않는다() {
+        // when
+        final Optional<Answer> actual = answerRepository.findByIdAndDeletedIsFalse(삭제된_답변.getId());
+
+        // then
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 삭제되지_않은_답변은_조회된다() {
+        // when
+        final Optional<Answer> actual = answerRepository.findByIdAndDeletedIsFalse(답변.getId());
+
+        // then
+        assertThat(actual).contains(답변);
     }
 }

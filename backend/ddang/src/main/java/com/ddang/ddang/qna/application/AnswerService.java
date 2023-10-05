@@ -1,7 +1,9 @@
 package com.ddang.ddang.qna.application;
 
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
+import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
@@ -53,5 +55,18 @@ public class AnswerService {
         if (answerRepository.existsByQuestionId(question.getId())) {
             throw new AlreadyAnsweredException("이미 답변한 질문입니다.");
         }
+    }
+
+    public void deleteById(final Long answerId, final Long userId) {
+        final Answer answer = answerRepository.findByIdAndDeletedIsFalse(answerId)
+                                              .orElseThrow(() -> new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."));
+        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        if (!answer.isWriter(user)) {
+            throw new UserForbiddenException("삭제할 권한이 없습니다.");
+        }
+
+        answer.delete();
     }
 }
