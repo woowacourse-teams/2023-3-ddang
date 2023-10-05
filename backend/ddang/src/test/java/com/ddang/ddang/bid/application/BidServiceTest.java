@@ -3,6 +3,7 @@ package com.ddang.ddang.bid.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
+import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
@@ -20,6 +21,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -28,9 +31,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
+@RecordApplicationEvents
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class BidServiceTest extends BidServiceFixture {
@@ -40,6 +43,9 @@ class BidServiceTest extends BidServiceFixture {
 
     @MockBean
     NotificationService notificationService;
+
+    @Autowired
+    ApplicationEvents events;
 
     @Test
     void 입찰을_등록한다() {
@@ -61,6 +67,7 @@ class BidServiceTest extends BidServiceFixture {
 
         // when
         final Long actual = bidService.create(입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto, 이미지_절대_url);
+        final long eventActual = events.stream(BidNotificationEvent.class).count();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -68,11 +75,7 @@ class BidServiceTest extends BidServiceFixture {
             softAssertions.assertThat(입찰_내역이_하나_있던_경매.getLastBid().getPrice().getValue())
                           .isEqualTo(입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto.bidPrice());
             softAssertions.assertThat(입찰_내역이_하나_있던_경매.getAuctioneerCount()).isEqualTo(2);
-            try {
-                verify(notificationService).send(any());
-            } catch (FirebaseMessagingException e) {
-                throw new RuntimeException(e);
-            }
+            softAssertions.assertThat(eventActual).isEqualTo(1);
         });
     }
 
