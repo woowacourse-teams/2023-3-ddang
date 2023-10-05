@@ -1,7 +1,7 @@
 package com.ddang.ddang.notification.application;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.bid.application.dto.BidNotificationDto;
+import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
@@ -50,16 +50,16 @@ public class NotificationEventListener {
     @TransactionalEventListener
     public void sendBidNotification(final BidNotificationEvent bidNotificationEvent) {
         try {
-            final BidNotificationDto bidNotificationDto = bidNotificationEvent.bidNotificationDto();
-            final Auction auction = bidNotificationDto.auctionAndImageDto().auction();
-            final AuctionImage auctionImage = bidNotificationDto.auctionAndImageDto().auctionImage();
+            final BidDto bidDto = bidNotificationEvent.bidDto();
+            final Auction auction = bidDto.auctionAndImageDto().auction();
+            final AuctionImage auctionImage = bidDto.auctionAndImageDto().auctionImage();
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.BID,
-                    bidNotificationDto.previousBidderId(),
+                    bidDto.previousBidderId(),
                     auction.getTitle(),
                     BID_NOTIFICATION_MESSAGE_FORMAT,
                     calculateRedirectUrl(BID_NOTIFICATION_REDIRECT_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(bidNotificationDto.auctionImageAbsoluteUrl(), auctionImage.getId())
+                    ImageUrlCalculator.calculateBy(bidDto.auctionImageAbsoluteUrl(), auctionImage.getId())
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
