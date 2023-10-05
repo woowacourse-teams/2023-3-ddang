@@ -2,8 +2,6 @@ package com.ddang.ddang.auction.application.fixture;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.domain.BidUnit;
-import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
@@ -12,7 +10,6 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
-import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.domain.Region;
@@ -63,12 +60,6 @@ public class AuctionServiceFixture {
                              .reliability(4.7d)
                              .oauthId("54321")
                              .build();
-    protected User 신뢰도가_null인_판매자 = User.builder()
-                                        .name("신뢰도가 null인 판매자")
-                                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                                        .reliability(null)
-                                        .oauthId("99999")
-                                        .build();
 
     private MockMultipartFile 경매_이미지_파일 = new MockMultipartFile(
             "image.png",
@@ -96,7 +87,6 @@ public class AuctionServiceFixture {
     protected Auction 종료되는_날이_3일_뒤인_경매;
     protected Auction 입찰이_존재하는_경매;
     protected Auction 종료된_경매;
-    protected Auction 신뢰도가_null인_판매자의_경매;
     protected BidPrice 채팅방이_있는_경매_입찰_가격 = new BidPrice(10_000);
     protected Bid 채팅방이_있는_경매_입찰;
     protected Bid 입찰이_존재하는_경매_입찰;
@@ -116,7 +106,7 @@ public class AuctionServiceFixture {
 
         categoryRepository.save(가구_카테고리);
 
-        userRepository.saveAll(List.of(판매자, 구매자, 신뢰도가_null인_판매자));
+        userRepository.saveAll(List.of(판매자, 구매자));
 
         유효한_경매_생성_dto = new CreateAuctionDto(
                 "제목",
@@ -230,18 +220,7 @@ public class AuctionServiceFixture {
 
         채팅방이_있는_경매.updateLastBid(채팅방이_있는_경매_입찰);
         입찰이_존재하는_경매.updateLastBid(입찰이_존재하는_경매_입찰);
-
-        신뢰도가_null인_판매자의_경매 = Auction.builder()
-                                    .title("신뢰도가 null인 판매자의 경매")
-                                    .description("신뢰도가 null인 판매자의 경매")
-                                    .subCategory(가구_서브_의자_카테고리)
-                                    .seller(신뢰도가_null인_판매자)
-                                    .bidUnit(new BidUnit(1_000))
-                                    .startPrice(new Price(10_000))
-                                    .closingTime(LocalDateTime.now().plusDays(3L))
-                                    .build();
-        신뢰도가_null인_판매자의_경매.addAuctionImages(List.of(new AuctionImage("auction.png", "auction.png")));
-        auctionRepository.saveAll(List.of(신뢰도가_null인_판매자의_경매, 채팅방이_있는_경매, 종료되는_날이_3일_뒤인_경매, 입찰이_존재하는_경매, 종료된_경매));
+        auctionRepository.saveAll(List.of(채팅방이_있는_경매, 종료되는_날이_3일_뒤인_경매, 입찰이_존재하는_경매, 종료된_경매));
 
         final ChatRoom 채팅방 = new ChatRoom(채팅방이_있는_경매, 구매자);
 
