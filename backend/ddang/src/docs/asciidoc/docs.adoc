@@ -257,36 +257,36 @@ include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_
 
 ==== 요청
 
-include::{snippets}/question-and-answer-controller-test/질문을_등록한다/http-request.adoc[]
-include::{snippets}/question-and-answer-controller-test/질문을_등록한다/request-headers.adoc[]
-include::{snippets}/question-and-answer-controller-test/질문을_등록한다/request-fields.adoc[]
+include::{snippets}/qna-controller-test/질문을_등록한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/질문을_등록한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/질문을_등록한다/request-fields.adoc[]
 
 ==== 응답
 
-include::{snippets}/question-and-answer-controller-test/질문을_등록한다/http-response.adoc[]
+include::{snippets}/qna-controller-test/질문을_등록한다/http-response.adoc[]
 
 === 답변 등록
 
 ==== 요청
 
-include::{snippets}/question-and-answer-controller-test/답변을_등록한다/http-request.adoc[]
-include::{snippets}/question-and-answer-controller-test/답변을_등록한다/request-headers.adoc[]
-include::{snippets}/question-and-answer-controller-test/답변을_등록한다/request-fields.adoc[]
+include::{snippets}/qna-controller-test/답변을_등록한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/답변을_등록한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/답변을_등록한다/request-fields.adoc[]
 
 ==== 응답
 
-include::{snippets}/question-and-answer-controller-test/답변을_등록한다/http-response.adoc[]
+include::{snippets}/qna-controller-test/답변을_등록한다/http-response.adoc[]
 
 === Q&A 조회
 
 ==== 요청
 
-include::{snippets}/auction-question-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/http-request.adoc[]
+include::{snippets}/auction-qna-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/http-request.adoc[]
 
 ==== 응답
 
-include::{snippets}/auction-question-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/http-response.adoc[]
-include::{snippets}/auction-question-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/response-fields.adoc[]
+include::{snippets}/auction-qna-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/http-response.adoc[]
+include::{snippets}/auction-qna-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/response-fields.adoc[]
 
 == 입찰 API
 

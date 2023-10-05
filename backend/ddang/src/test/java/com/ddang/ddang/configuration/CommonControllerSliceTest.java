@@ -2,7 +2,7 @@ package com.ddang.ddang.configuration;
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.presentation.AuctionController;
-import com.ddang.ddang.auction.presentation.AuctionQuestionController;
+import com.ddang.ddang.auction.presentation.AuctionQnaController;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
@@ -18,9 +18,9 @@ import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.presentation.DeviceTokenController;
 import com.ddang.ddang.image.application.ImageService;
 import com.ddang.ddang.image.presentation.ImageController;
-import com.ddang.ddang.questionandanswer.application.AnswerService;
-import com.ddang.ddang.questionandanswer.application.QuestionService;
-import com.ddang.ddang.questionandanswer.presentation.QuestionAndAnswerController;
+import com.ddang.ddang.qna.application.AnswerService;
+import com.ddang.ddang.qna.application.QuestionService;
+import com.ddang.ddang.qna.presentation.QnaController;
 import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.presentation.RegionController;
 import com.ddang.ddang.report.application.AuctionReportService;
@@ -46,7 +46,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @WebMvcTest(
         controllers = {
                 AuctionController.class,
-                AuctionQuestionController.class,
+                AuctionQnaController.class,
                 AuthenticationController.class,
                 BidController.class,
                 CategoryController.class,
@@ -57,7 +57,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 ReportController.class,
                 UserAuctionController.class,
                 UserController.class,
-                QuestionAndAnswerController.class
+                QnaController.class
         },
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
@@ -82,7 +82,7 @@ public abstract class CommonControllerSliceTest {
     protected AuctionController auctionController;
 
     @Autowired
-    protected AuctionQuestionController auctionQuestionController;
+    protected AuctionQnaController auctionQnaController;
 
     @Autowired
     protected AuthenticationController authenticationController;
@@ -115,7 +115,7 @@ public abstract class CommonControllerSliceTest {
     protected UserController userController;
 
     @Autowired
-    protected QuestionAndAnswerController questionAndAnswerController;
+    protected QnaController qnaController;
 
     @MockBean
     protected AuctionService auctionService;

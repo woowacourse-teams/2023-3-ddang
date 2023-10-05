@@ -1449,7 +1449,7 @@ Content-Type: image/png
 Content-Disposition: form-data; name=request; filename=request
 Content-Type: application/json
 
-{"title":"제목","description":"내용","bidUnit":1000,"startPrice":1000,"closingTime":"2023-10-07T11:59:10.3191712","subCategoryId":2,"thirdRegionIds":[3]}
+{"title":"제목","description":"내용","bidUnit":1000,"startPrice":1000,"closingTime":"2023-10-08T14:19:55.523108","subCategoryId":2,"thirdRegionIds":[3]}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -2056,8 +2056,8 @@ Content-Type: application/json
     "lastBidPrice" : null,
     "status" : "UNBIDDEN",
     "bidUnit" : 1000,
-    "registerTime" : "2023-10-04T11:59:10",
-    "closingTime" : "2023-10-04T11:59:10",
+    "registerTime" : "2023-10-05T14:19:55",
+    "closingTime" : "2023-10-05T14:19:55",
     "directRegions" : [ {
       "first" : "서울특별시",
       "second" : "강서구",
@@ -2457,7 +2457,7 @@ Authorization: Bearer accessToken</code></pre>
 Content-Type: application/json
 
 {
-  "questionAndAnswers" : [ {
+  "qnas" : [ {
     "question" : {
       "id" : 1,
       "writer" : {
@@ -2465,7 +2465,7 @@ Content-Type: application/json
         "name" : "질문자",
         "image" : "http://localhost:8080/users/images/1"
       },
-      "createdTime" : "2023-10-04T11:59:10",
+      "createdTime" : "2023-10-05T14:19:55",
       "content" : "질문1"
     },
     "answer" : {
@@ -2475,7 +2475,7 @@ Content-Type: application/json
         "name" : "판매자",
         "image" : "http://localhost:8080/users/images/2"
       },
-      "createdTime" : "2023-10-04T11:59:10",
+      "createdTime" : "2023-10-05T14:19:55",
       "content" : "답변1"
     }
   }, {
@@ -2486,7 +2486,7 @@ Content-Type: application/json
         "name" : "질문자",
         "image" : "http://localhost:8080/users/images/1"
       },
-      "createdTime" : "2023-10-04T11:59:10",
+      "createdTime" : "2023-10-05T14:19:55",
       "content" : "질문2"
     },
     "answer" : {
@@ -2496,7 +2496,7 @@ Content-Type: application/json
         "name" : "판매자",
         "image" : "http://localhost:8080/users/images/2"
       },
-      "createdTime" : "2023-10-04T11:59:10",
+      "createdTime" : "2023-10-05T14:19:55",
       "content" : "답변1"
     }
   } ]
@@ -2518,87 +2518,87 @@ Content-Type: application/json
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">모든 경매 질문과 답변 목록</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문 정보 JSON</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 질문 글 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question.writer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문자 정보 JSON</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question.writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer.id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문자의 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question.writer.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer.name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문자의 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question.writer.image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer.image</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문자의 프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question.createdTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.createdTime</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문 등록 시간</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].question.content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문 내용</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">답변 정보 JSON</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">경매 답변 글 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer.writer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">답변자 정보 JSON</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer.writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer.id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">답변자의 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer.writer.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer.name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">답변자의 이름</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer.writer.image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer.image</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">답변자의 프로필 이미지 URL</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer.createdTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.createdTime</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">답변 등록 시간</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionAndAnswers.[].answer.content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">답변 내용</p></td>
 </tr>
@@ -2705,12 +2705,12 @@ Content-Type: application/json
     "name" : "사용자1",
     "profileImage" : "http://localhost:8080/users/images/1",
     "price" : 10000,
-    "bidTime" : "2023-10-04T11:59:16"
+    "bidTime" : "2023-10-05T14:19:59"
   }, {
     "name" : "사용자2",
     "profileImage" : "http://localhost:8080/users/images/2",
     "price" : 12000,
-    "bidTime" : "2023-10-04T11:59:16"
+    "bidTime" : "2023-10-05T14:19:59"
   } ]
 }</code></pre>
 </div>
@@ -2905,7 +2905,7 @@ Content-Type: application/json
     "price" : 10000
   },
   "lastMessage" : {
-    "createdAt" : "2023-10-04T11:59:17",
+    "createdAt" : "2023-10-05T14:20:00",
     "contents" : "메시지1"
   },
   "isChatAvailable" : true
@@ -2923,7 +2923,7 @@ Content-Type: application/json
     "price" : 20000
   },
   "lastMessage" : {
-    "createdAt" : "2023-10-04T11:59:17",
+    "createdAt" : "2023-10-05T14:20:00",
     "contents" : "메시지2"
   },
   "isChatAvailable" : true
@@ -3361,7 +3361,7 @@ Content-Type: application/json
 
 [ {
   "id" : 1,
-  "createdAt" : "2023-10-04T11:59:17",
+  "createdAt" : "2023-10-05T14:20:00",
   "isMyMessage" : true,
   "contents" : "메시지내용"
 } ]</code></pre>
@@ -3511,7 +3511,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "회원1"
     },
-    "createdTime" : "2023-10-04T11:59:22",
+    "createdTime" : "2023-10-05T14:20:04",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3523,7 +3523,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "회원2"
     },
-    "createdTime" : "2023-10-04T11:59:22",
+    "createdTime" : "2023-10-05T14:20:04",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3535,7 +3535,7 @@ Content-Type: application/json
       "id" : 4,
       "name" : "회원3"
     },
-    "createdTime" : "2023-10-04T11:59:22",
+    "createdTime" : "2023-10-05T14:20:04",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3699,7 +3699,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-04T11:59:22",
+    "createdTime" : "2023-10-05T14:20:04",
     "chatRoom" : {
       "id" : 1
     },
@@ -3710,7 +3710,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "구매자2"
     },
-    "createdTime" : "2023-10-04T11:59:22",
+    "createdTime" : "2023-10-05T14:20:04",
     "chatRoom" : {
       "id" : 1
     },
@@ -3721,7 +3721,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "구매자2"
     },
-    "createdTime" : "2023-10-04T11:59:22",
+    "createdTime" : "2023-10-05T14:20:04",
     "chatRoom" : {
       "id" : 1
     },
@@ -3858,7 +3858,7 @@ Authorization: Bearer accessToken
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-10-04 11:58:47 +0900
+Last updated 2023-10-05 14:19:43 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

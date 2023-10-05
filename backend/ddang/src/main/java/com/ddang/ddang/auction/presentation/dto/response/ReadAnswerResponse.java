@@ -1,6 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.questionandanswer.application.dto.ReadAnswerDto;
+import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;

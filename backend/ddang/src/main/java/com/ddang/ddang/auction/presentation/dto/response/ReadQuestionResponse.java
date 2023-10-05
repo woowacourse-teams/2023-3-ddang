@@ -1,6 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.questionandanswer.application.dto.ReadQuestionDto;
+import com.ddang.ddang.qna.application.dto.ReadQuestionDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -19,7 +19,7 @@ public record ReadQuestionResponse(
     public static ReadQuestionResponse from(final ReadQuestionDto readQuestionDto) {
         return new ReadQuestionResponse(
                 readQuestionDto.id(),
-                ReadUserInAuctionQuestionResponse.from(readQuestionDto.readUserInQuestionAndAnswerDto()),
+                ReadUserInAuctionQuestionResponse.from(readQuestionDto.readUserInQnaDto()),
                 readQuestionDto.createdTime(),
                 readQuestionDto.content()
         );
