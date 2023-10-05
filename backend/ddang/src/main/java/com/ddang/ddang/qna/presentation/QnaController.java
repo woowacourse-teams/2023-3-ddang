@@ -61,4 +61,15 @@ public class QnaController {
         return ResponseEntity.noContent()
                              .build();
     }
+
+    @DeleteMapping("/answers/{answerId}")
+    public ResponseEntity<Void> deleteAnswer(
+            @AuthenticateUser AuthenticationUserInfo userInfo,
+            @PathVariable final Long answerId
+    ) {
+        answerService.deleteById(answerId, userInfo.userId());
+
+        return ResponseEntity.noContent()
+                             .build();
+    }
 }

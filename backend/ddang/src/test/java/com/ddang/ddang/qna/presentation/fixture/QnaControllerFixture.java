@@ -13,7 +13,9 @@ public class QnaControllerFixture extends CommonControllerSliceTest {
     protected Long 생성된_질문_아이디 = 1L;
     protected Long 생성된_답변_아이디 = 1L;
     protected Long 질문_아이디 = 1L;
+    protected Long 답변_아이디 = 1L;
     protected Long 존재하지_않는_질문_아이디 = 999L;
+    protected Long 존재하지_않는_답변_아이디 = 999L;
     protected String 액세스_토큰_값 = "Bearer accessToken";
 
     protected CreateQuestionRequest 질문_등록_request = new CreateQuestionRequest(1L, "궁금한 점이 있습니다.");

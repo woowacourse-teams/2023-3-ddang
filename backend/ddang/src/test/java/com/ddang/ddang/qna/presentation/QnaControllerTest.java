@@ -12,6 +12,7 @@ import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
+import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
@@ -418,13 +419,13 @@ class QnaControllerTest extends QnaControllerFixture {
         willDoNothing().given(questionService).deleteById(anyLong(), anyLong());
 
         // when & then
-        final ResultActions resultActions = mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
-                                                           .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
-                                                           .contentType(MediaType.APPLICATION_JSON)
-                                                   )
-                                                   .andExpectAll(
-                                                           status().isNoContent()
-                                                   );
+        final ResultActions resultActions =
+                mockMvc.perform(RestDocumentationRequestBuilders.delete("/questions/{questionId}", 질문_아이디)
+                                                                .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       )
+                       .andExpectAll(
+                               status().isNoContent()
+                       );
 
         deleteQuestion_문서화(resultActions);
     }
@@ -437,9 +438,8 @@ class QnaControllerTest extends QnaControllerFixture {
                 .given(questionService).deleteById(anyLong(), anyLong());
 
         // when & then
-        mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
+        mockMvc.perform(delete("/questions/{questionId}", 존재하지_않는_질문_아이디)
                        .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
-                       .contentType(MediaType.APPLICATION_JSON)
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -450,14 +450,13 @@ class QnaControllerTest extends QnaControllerFixture {
     @Test
     void 존재하지_않는_사용자가_질문_삭제시_404를_반환한다() throws Exception {
         // given
-        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
         willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."))
                 .given(questionService).deleteById(anyLong(), anyLong());
 
         // when & then
         mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
                        .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
-                       .contentType(MediaType.APPLICATION_JSON)
                )
                .andExpectAll(
                        status().isNotFound(),
@@ -475,7 +474,75 @@ class QnaControllerTest extends QnaControllerFixture {
         // when & then
         mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
                        .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
-                       .contentType(MediaType.APPLICATION_JSON)
+               )
+               .andExpectAll(
+                       status().isUnauthorized(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 답변을_삭제한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        willDoNothing().given(answerService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        final ResultActions resultActions =
+                mockMvc.perform(RestDocumentationRequestBuilders.delete("/questions/answers/{answerId}", 답변_아이디)
+                                                                .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       )
+                       .andExpectAll(
+                               status().isNoContent()
+                       );
+
+        deleteAnswer_문서화(resultActions);
+    }
+
+    @Test
+    void 존재하지_않는_답변을_삭제시_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        willThrow(new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."))
+                .given(answerService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/questions/answers/{answerId}", 존재하지_않는_답변_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 존재하지_않는_사용자가_답변_삭제시_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
+        willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."))
+                .given(answerService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/questions/answers/{answerId}", 답변_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 작성자가_아닌_사용자가_답변_삭제시_401을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        willThrow(new UserForbiddenException("삭제할 권한이 없습니다."))
+                .given(answerService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/questions/answers/{answerId}", 답변_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
                )
                .andExpectAll(
                        status().isUnauthorized(),
@@ -521,7 +588,20 @@ class QnaControllerTest extends QnaControllerFixture {
                                 headerWithName("Authorization").description("회원 Bearer 인증 정보")
                         ),
                         pathParameters(
-                                parameterWithName("questionId").description("답변할 질문 ID")
+                                parameterWithName("questionId").description("삭제할 질문 ID")
+                        )
+                )
+        );
+    }
+
+    private void deleteAnswer_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        pathParameters(
+                                parameterWithName("answerId").description("삭제할 답변 ID")
                         )
                 )
         );
