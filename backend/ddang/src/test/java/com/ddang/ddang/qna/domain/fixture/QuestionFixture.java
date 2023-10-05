@@ -39,6 +39,7 @@ public class QuestionFixture {
     protected User 판매자가_아닌_사용자 = 질문_작성자;
 
     protected Question 질문 = new Question(경매, 질문_작성자, 질문_내용);
+    protected Question 삭제된_질문 = new Question(경매, 질문_작성자, 질문_내용);
     protected Answer 답변 = new Answer("답변드립니다.");
 
     @BeforeEach
@@ -47,5 +48,7 @@ public class QuestionFixture {
         ReflectionTestUtils.setField(질문_작성자, "id", 2L);
         ReflectionTestUtils.setField(질문, "id", 1L);
         ReflectionTestUtils.setField(답변, "id", 1L);
+
+        삭제된_질문.delete();
     }
 }

@@ -41,4 +41,22 @@ class QuestionTest extends QuestionFixture {
         // then
         assertThat(actual).isFalse();
     }
+
+    @Test
+    void 삭제되지_않은_질문의_삭제_여부_확인시_거짓을_반환한다() {
+        // when
+        final boolean actual = 질문.isDeleted();
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 삭제된_질문의_삭제_여부_확인시_참을_반환한다() {
+        // when
+        final boolean actual = 삭제된_질문.isDeleted();
+
+        // then
+        assertThat(actual).isTrue();
+    }
 }

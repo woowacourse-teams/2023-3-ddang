@@ -23,8 +23,10 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", "content"})
+@ToString(of = {"id", "content", "deleted"})
 public class Question extends BaseCreateTimeEntity {
+
+    private static final boolean DELETED_STATUS = true;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +46,9 @@ public class Question extends BaseCreateTimeEntity {
     @OneToOne(mappedBy = "question")
     private Answer answer;
 
+    @Column(name = "is_deleted")
+    private boolean deleted = false;
+
     public Question(final Auction auction, final User writer, final String content) {
         this.auction = auction;
         this.writer = writer;
@@ -57,5 +62,13 @@ public class Question extends BaseCreateTimeEntity {
 
     public boolean isAnsweringAllowed(final User user) {
         return auction.isOwner(user);
+    }
+
+    public boolean isWriter(final User user) {
+        return writer.equals(user);
+    }
+
+    public void delete() {
+        deleted = DELETED_STATUS;
     }
 }
