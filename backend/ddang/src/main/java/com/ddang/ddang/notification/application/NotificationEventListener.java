@@ -25,7 +25,7 @@ public class NotificationEventListener {
 
     private final NotificationService notificationService;
 
-    @EventListener
+    @TransactionalEventListener
     public void sendMessageNotification(final MessageNotificationEvent messageNotificationEvent) {
         final MessageDto messageDto = messageNotificationEvent.messageDto();
         final ProfileImage profileImage = messageDto.receiver().getProfileImage();
@@ -40,7 +40,7 @@ public class NotificationEventListener {
         notificationService.send(createNotificationDto);
     }
 
-    @EventListener
+    @TransactionalEventListener
     public void sendBidNotification(final BidNotificationEvent bidNotificationEvent) {
         final BidNotificationDto bidNotificationDto = bidNotificationEvent.bidNotificationDto();
         final Auction auction = bidNotificationDto.auctionAndImageDto().auction();
