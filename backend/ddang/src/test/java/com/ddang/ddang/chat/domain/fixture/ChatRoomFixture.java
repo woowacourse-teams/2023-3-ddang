@@ -19,6 +19,7 @@ public class ChatRoomFixture {
     protected User 판매자;
     protected User 구매자;
     protected User 경매에_참여하지_않는_사용자;
+    protected User 탈퇴한_사용자;
     protected Auction 경매;
     protected Bid 입찰;
 
@@ -42,6 +43,13 @@ public class ChatRoomFixture {
                                    .reliability(4.7d)
                                    .oauthId("12347")
                                    .build();
+        탈퇴한_사용자 = User.builder()
+                        .name("탈퇴한 사용자")
+                        .profileImage(new ProfileImage("upload.png", "store.png"))
+                        .reliability(4.7d)
+                        .oauthId("12348")
+                        .build();
+        탈퇴한_사용자.withdrawal();
 
         경매 = Auction.builder()
                      .seller(판매자)

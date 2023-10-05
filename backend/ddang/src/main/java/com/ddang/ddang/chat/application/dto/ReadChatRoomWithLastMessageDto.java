@@ -6,8 +6,6 @@ import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAnd
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.user.domain.User;
 
-import java.time.LocalDateTime;
-
 public record ReadChatRoomWithLastMessageDto(
         Long id,
         ReadAuctionInChatRoomDto auctionDto,
@@ -30,7 +28,7 @@ public record ReadChatRoomWithLastMessageDto(
                 ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), thumbnailImage),
                 ReadUserInChatRoomDto.from(partner),
                 ReadLastMessageDto.from(lastMessage),
-                chatRoom.isChatAvailableTime(LocalDateTime.now())
+                chatRoom.isChatAvailablePartner(partner)
         );
     }
 }
