@@ -8,6 +8,7 @@ import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.fixture.NotificationEventListenerFixture;
+import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import org.assertj.core.api.SoftAssertions;
@@ -22,6 +23,7 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -31,6 +33,9 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
 
     @MockBean
     FirebaseMessaging firebaseMessaging;
+
+    @MockBean
+    NotificationService notificationService;
 
     @Autowired
     NotificationEventListener notificationEventListener;
@@ -49,6 +54,18 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
 
     @Autowired
     BidService bidService;
+
+    @Test
+    void 이벤트가_호출되면_메시지_알림을_전송한다() throws FirebaseMessagingException {
+        // given
+        given(notificationService.send(any())).willReturn(NotificationStatus.SUCCESS);
+
+        // when
+        notificationEventListener.sendMessageNotification(메시지_알림_이벤트);
+
+        // then
+        verify(notificationService).send(any());
+    }
 
     @Test
     void 메시지를_전송하면_알림을_전송한다() {
@@ -96,5 +113,17 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
             softAssertions.assertThat(bidRepository.findById(actualSavedMessageId)).isPresent();
             softAssertions.assertThat(actual).isEqualTo(1);
         });
+    }
+
+    @Test
+    void 이벤트가_호출되면_입찰_알림을_전송한다() throws FirebaseMessagingException {
+        // given
+        given(notificationService.send(any())).willReturn(NotificationStatus.SUCCESS);
+
+        // when
+        notificationEventListener.sendBidNotification(입찰_알림_이벤트);
+
+        // then
+        verify(notificationService).send(any());
     }
 }
