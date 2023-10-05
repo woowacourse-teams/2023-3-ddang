@@ -82,11 +82,12 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
         // when
         given(firebaseMessaging.send(any())).willThrow(FirebaseMessagingException.class);
         final Long actualSavedMessageId = messageService.create(메시지_생성_DTO, 이미지_절대_경로);
-        final long actual = events.stream(MessageNotificationEvent.class).count();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(messageRepository.findById(actualSavedMessageId)).isPresent();
+
+            final long actual = events.stream(MessageNotificationEvent.class).count();
             softAssertions.assertThat(actual).isEqualTo(1);
         });
     }
@@ -106,11 +107,12 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
         // when
         given(firebaseMessaging.send(any())).willThrow(FirebaseMessagingException.class);
         final Long actualSavedMessageId = bidService.create(입찰_생성_DTO, 이미지_절대_경로);
-        final long actual = events.stream(BidNotificationEvent.class).count();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(bidRepository.findById(actualSavedMessageId)).isPresent();
+
+            final long actual = events.stream(BidNotificationEvent.class).count();
             softAssertions.assertThat(actual).isEqualTo(1);
         });
     }
