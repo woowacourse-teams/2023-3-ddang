@@ -11,6 +11,7 @@ import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,6 +48,17 @@ public class QnaController {
         answerService.create(CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()));
 
         return ResponseEntity.created(URI.create("/auctions/" + answerRequest.auctionId()))
+                             .build();
+    }
+
+    @DeleteMapping("/{questionId}")
+    public ResponseEntity<Void> deleteQuestion(
+            @AuthenticateUser AuthenticationUserInfo userInfo,
+            @PathVariable final Long questionId
+    ) {
+        questionService.deleteById(questionId, userInfo.userId());
+
+        return ResponseEntity.noContent()
                              .build();
     }
 }

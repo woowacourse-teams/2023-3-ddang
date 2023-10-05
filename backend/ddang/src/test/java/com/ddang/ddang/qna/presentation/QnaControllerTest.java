@@ -1,6 +1,7 @@
 package com.ddang.ddang.qna.presentation;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
@@ -36,9 +37,12 @@ import java.util.stream.Stream;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -46,6 +50,7 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -389,7 +394,7 @@ class QnaControllerTest extends QnaControllerFixture {
 
     @Test
     void 이미_답변한_질문에_답변시_400을_반환한다() throws Exception {
-        // givens
+        // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(answerService.create(any(CreateAnswerDto.class)))
                 .willThrow(new AlreadyAnsweredException("이미 답변한 질문입니다."));
@@ -402,6 +407,78 @@ class QnaControllerTest extends QnaControllerFixture {
                )
                .andExpectAll(
                        status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 질문을_삭제한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        willDoNothing().given(questionService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        final ResultActions resultActions = mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
+                                                           .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                                                           .contentType(MediaType.APPLICATION_JSON)
+                                                   )
+                                                   .andExpectAll(
+                                                           status().isNoContent()
+                                                   );
+
+        deleteQuestion_문서화(resultActions);
+    }
+
+    @Test
+    void 존재하지_않는_질문을_삭제시_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        willThrow(new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."))
+                .given(questionService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 존재하지_않는_사용자가_질문_삭제시_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."))
+                .given(questionService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 작성자가_아닌_사용자가_질문_삭제시_401을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        willThrow(new UserForbiddenException("삭제할 권한이 없습니다."))
+                .given(questionService).deleteById(anyLong(), anyLong());
+
+        // when & then
+        mockMvc.perform(delete("/questions/{questionId}", 질문_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+               )
+               .andExpectAll(
+                       status().isUnauthorized(),
                        jsonPath("$.message").exists()
                );
     }
@@ -432,6 +509,19 @@ class QnaControllerTest extends QnaControllerFixture {
                         requestFields(
                                 fieldWithPath("auctionId").description("답변할 질문의 경매 ID"),
                                 fieldWithPath("content").description("답변 내용")
+                        )
+                )
+        );
+    }
+
+    public void deleteQuestion_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        pathParameters(
+                                parameterWithName("questionId").description("답변할 질문 ID")
                         )
                 )
         );
