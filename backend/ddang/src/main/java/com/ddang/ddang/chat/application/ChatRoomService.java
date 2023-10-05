@@ -104,7 +104,7 @@ public class ChatRoomService {
                                                   ));
         checkAccessible(findUser, chatRoomAndImageDto.chatRoom());
 
-        return ReadParticipatingChatRoomDto.of(findUser, chatRoomAndImageDto, LocalDateTime.now());
+        return ReadParticipatingChatRoomDto.of(findUser, chatRoomAndImageDto);
     }
 
     private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
