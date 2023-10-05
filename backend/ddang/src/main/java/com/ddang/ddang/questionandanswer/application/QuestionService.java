@@ -33,6 +33,7 @@ public class QuestionService {
                                               .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findByIdAndDeletedIsFalse(questionDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+
         checkInvalidAuction(auction);
         checkInvalidQuestioner(auction, questioner);
 
