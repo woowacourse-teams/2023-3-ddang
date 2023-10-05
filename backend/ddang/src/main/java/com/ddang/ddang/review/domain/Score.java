@@ -16,6 +16,7 @@ import lombok.ToString;
 public class Score {
 
     private static final double SCORE_UNIT = 0.5;
+
     private double value;
 
     public Score(final double value) {

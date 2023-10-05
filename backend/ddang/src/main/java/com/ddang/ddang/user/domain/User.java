@@ -3,8 +3,10 @@ package com.ddang.ddang.user.domain;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.domain.Review;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -14,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -45,7 +48,9 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "profile_image_id", foreignKey = @ForeignKey(name = "fk_user_profile_image"), nullable = false)
     private ProfileImage profileImage;
 
-    private Double reliability;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "reliability"))
+    private Reliability reliability;
 
     private String oauthId;
 
@@ -54,10 +59,10 @@ public class User extends BaseTimeEntity {
 
     @Builder
     private User(
-            final String name,
-            final ProfileImage profileImage,
-            final Double reliability,
-            final String oauthId
+            @NotNull final String name,
+            @NotNull final ProfileImage profileImage,
+            @NotNull final Reliability reliability,
+            @NotNull final String oauthId
     ) {
         this.name = name;
         this.profileImage = profileImage;
@@ -78,15 +83,6 @@ public class User extends BaseTimeEntity {
     }
 
     public void updateReliability(final List<Review> reviews) {
-        if (reviews.isEmpty()) {
-            this.reliability = null;
-
-            return;
-        }
-
-        this.reliability = reviews.stream()
-                                  .mapToDouble(review -> review.getScore().getValue())
-                                  .average()
-                                  .orElseGet(null);
+        reliability.updateReliability(reviews);
     }
 }
