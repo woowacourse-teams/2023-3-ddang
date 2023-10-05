@@ -16,12 +16,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 
 import java.util.List;
@@ -59,10 +59,10 @@ public class User extends BaseTimeEntity {
 
     @Builder
     private User(
-            @NotNull final String name,
-            @NotNull final ProfileImage profileImage,
-            @NotNull final Reliability reliability,
-            @NotNull final String oauthId
+            @NonNull final String name,
+            @NonNull final ProfileImage profileImage,
+            @NonNull final Reliability reliability,
+            @NonNull final String oauthId
     ) {
         this.name = name;
         this.profileImage = profileImage;
