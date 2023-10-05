@@ -11,6 +11,7 @@ import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.domain.NotificationStatus;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,19 +64,19 @@ public class BidServiceFixture {
         final User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
         입찰자1 = User.builder()
                    .name("입찰자1")
                    .profileImage(프로필_이미지)
-                   .reliability(4.7d)
+                   .reliability(new Reliability(4.7d))
                    .oauthId("12346")
                    .build();
         입찰자2 = User.builder()
                    .name("입찰자2")
                    .profileImage(프로필_이미지)
-                   .reliability(4.7d)
+                   .reliability(new Reliability(4.7d))
                    .oauthId("78910")
                    .build();
         final AuctionImage 경매_이미지1 = new AuctionImage("auction_image.png", "auction_image.png");

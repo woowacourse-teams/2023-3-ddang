@@ -12,6 +12,7 @@ import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +40,7 @@ public class ReviewServiceFixture {
     private Double 구매자가_판매자2에게_받은_평가_점수 = 1.0d;
     private Double 구매자가_받을_새로운_평가_점수 = 4.5d;
 
-    protected Double 구매자가_새로운_평가_점수를_받고난_후의_신뢰도 =
+    protected Double 구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수 =
             (구매자가_판매자1에게_받은_평가_점수 + 구매자가_판매자2에게_받은_평가_점수 + 구매자가_받을_새로운_평가_점수) / 3;
     protected Long 존재하지_않는_사용자 = -999L;
     protected User 판매자1;
@@ -80,31 +81,31 @@ public class ReviewServiceFixture {
         판매자1 = User.builder()
                    .name("판매자1")
                    .profileImage(판매자1_프로필_이미지)
-                   .reliability(4.7d)
+                   .reliability(new Reliability(4.7d))
                    .oauthId("12345")
                    .build();
         판매자2 = User.builder()
                    .name("판매자2")
                    .profileImage(판매자2_프로필_이미지)
-                   .reliability(4.7d)
+                   .reliability(new Reliability(4.7d))
                    .oauthId("12345")
                    .build();
         평가_안한_경매_판매자 = User.builder()
                            .name("평가 안한 판매자")
                            .profileImage(평가_안한_판매자_프로필_이미지)
-                           .reliability(4.7d)
+                           .reliability(new Reliability(4.7d))
                            .oauthId("12346")
                            .build();
         구매자 = User.builder()
                   .name("구매자")
                   .profileImage(구매자_프로필_이미지)
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12347")
                   .build();
         경매_참여자가_아닌_사용자 = User.builder()
                              .name("경매 참여자가 아닌 사용자")
                              .profileImage(new ProfileImage("profile.png", "profile.png"))
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12347")
                              .build();
         userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자, 경매_참여자가_아닌_사용자));

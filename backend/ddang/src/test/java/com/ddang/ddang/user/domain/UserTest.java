@@ -49,7 +49,7 @@ class UserTest extends UserFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.getName()).isEqualTo("kakao12345");
             softAssertions.assertThat(user.getProfileImage()).isEqualTo(new ProfileImage("updateUpload.png", "updateStore.png"));
-            softAssertions.assertThat(user.getReliability()).isEqualTo(5.0d);
+            softAssertions.assertThat(user.getReliability().getValue()).isEqualTo(5.0d);
         });
     }
 

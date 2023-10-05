@@ -16,16 +16,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ReliabilityTest extends ReliabilityFixture {
 
     @Test
-    void 신뢰도_평균을_계산한다() {
+    void 신뢰도_점수_평균을_계산한다() {
         // when
         평가_대상.updateReliability(평가_대상이_받은_평가_목록);
 
         // then
-        assertThat(평가_대상.getReliability()).isEqualTo(평가_대상의_신뢰도_점수);
+        assertThat(평가_대상.getReliability().getValue()).isEqualTo(평가_대상의_신뢰도_점수);
     }
 
     @Test
-    void 신뢰도_기록이_없다면_신뢰도는_null이다() {
+    void 신뢰도_기록이_없다면_신뢰도_점수는_null이다() {
         // given
         final List<Review> targetReviews = Collections.emptyList();
 
@@ -33,6 +33,6 @@ class ReliabilityTest extends ReliabilityFixture {
         평가_대상.updateReliability(targetReviews);
 
         // then
-        assertThat(평가_대상.getReliability()).isNull();
+        assertThat(평가_대상.getReliability().getValue()).isNull();
     }
 }

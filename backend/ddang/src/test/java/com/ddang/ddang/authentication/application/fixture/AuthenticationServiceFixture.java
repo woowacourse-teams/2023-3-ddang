@@ -8,6 +8,7 @@ import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import java.time.Instant;
@@ -64,21 +65,21 @@ public class AuthenticationServiceFixture {
         사용자 = User.builder()
                   .name("kakao12345")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(0.0d)
+                  .reliability(new Reliability(0.0d))
                   .oauthId("12345")
                   .build();
 
         탈퇴한_사용자 = User.builder()
                       .name("kakao12346")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(0.0d)
+                      .reliability(new Reliability(0.0d))
                       .oauthId("12346")
                       .build();
 
         이미지가_없는_사용자 = User.builder()
                           .name("kakao12347")
                           .profileImage(null)
-                          .reliability(0.0d)
+                          .reliability(new Reliability(0.0d))
                           .oauthId("12347")
                           .build();
 

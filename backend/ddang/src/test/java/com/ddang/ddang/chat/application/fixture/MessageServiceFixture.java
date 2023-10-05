@@ -13,6 +13,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,13 +74,13 @@ public class MessageServiceFixture {
         final User 발신자 = User.builder()
                              .name("발신자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
         final User 수신자 = User.builder()
                              .name("수신자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12346")
                              .build();
         userRepository.save(발신자);

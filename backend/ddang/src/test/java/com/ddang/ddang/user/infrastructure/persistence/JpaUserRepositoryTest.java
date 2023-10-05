@@ -2,6 +2,7 @@ package com.ddang.ddang.user.infrastructure.persistence;
 
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.fixture.JpaUserRepositoryFixture;
 import jakarta.persistence.EntityManager;
@@ -35,7 +36,7 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
         final User user = User.builder()
                               .name("새로운 사용자")
                               .profileImage(프로필_이미지)
-                              .reliability(4.7d)
+                              .reliability(new Reliability(4.7d))
                               .oauthId("12345")
                               .build();
 

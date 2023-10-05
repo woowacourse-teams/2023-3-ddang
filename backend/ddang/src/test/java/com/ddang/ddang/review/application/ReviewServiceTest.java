@@ -35,7 +35,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPositive();
-            softAssertions.assertThat(구매자.getReliability()).isEqualTo(구매자가_새로운_평가_점수를_받고난_후의_신뢰도);
+            softAssertions.assertThat(구매자.getReliability().getValue()).isEqualTo(구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수);
         });
     }
 
