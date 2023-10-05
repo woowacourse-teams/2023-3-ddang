@@ -229,7 +229,7 @@ public class ChatRoomServiceFixture {
         경매가_진행중이라서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(종료되지_않은_경매.getId());
         낙찰자가_없어서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(낙찰자가_없는_경매.getId());
         엔초_지토_채팅방_생성을_위한_DTO = new CreateChatRoomDto(판매자_엔초_구매자_지토_경매.getId());
-        엔초가_조회한_엔초_지토_채팅방_정보_조회_결과 = ReadParticipatingChatRoomDto.of(엔초, 엔초_지토_채팅방_정보, LocalDateTime.now());
+        엔초가_조회한_엔초_지토_채팅방_정보_조회_결과 = ReadParticipatingChatRoomDto.of(엔초, 엔초_지토_채팅방_정보);
         엔초_지토_채팅방_정보_및_참여_가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), true);
         엔초_지토_채팅방_정보_및_참여_불가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), false);
         채팅방은_아직_없지만_참여_가능 = new ReadChatRoomDto(null, true);

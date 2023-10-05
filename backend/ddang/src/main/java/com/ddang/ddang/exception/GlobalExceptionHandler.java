@@ -32,6 +32,7 @@ import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionExce
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import java.net.MalformedURLException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -42,12 +43,10 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.net.MalformedURLException;
-
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String EXCEPTION_FORMAT = "%s : ";
+    private static final String LOG_MESSAGE_FORMAT = "%s : %s";
 
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(
@@ -57,15 +56,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             final HttpStatusCode statusCode,
             final WebRequest request
     ) {
-        logger.error(String.format(EXCEPTION_FORMAT, ex.getClass()
-                                                       .getSimpleName()), ex);
+        logger.error(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()), ex);
 
         return super.handleExceptionInternal(ex, body, headers, statusCode, request);
     }
 
+    @ExceptionHandler(MalformedURLException.class)
+    public ResponseEntity<ExceptionResponse> handleMalformedURLException(final MalformedURLException ex) {
+        logger.error(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()), ex);
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new ExceptionResponse("이미지 조회에 실패했습니다."));
+    }
+
     @ExceptionHandler(CategoryNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleCategoryNotFoundException(final CategoryNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, CategoryNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -73,7 +79,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(RegionNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleRegionNotFoundException(final RegionNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, RegionNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -81,7 +87,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ChatRoomNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleChatRoomNotFoundException(final ChatRoomNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, ChatRoomNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -89,7 +95,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(MessageNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleMessageNotFoundException(final MessageNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, MessageNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -97,7 +103,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UnableToChatException.class)
     public ResponseEntity<ExceptionResponse> handleUnableToChatException(final UnableToChatException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UnableToChatException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -105,7 +111,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotFoundException(final UserNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -113,7 +119,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AuctionNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleAuctionNotFoundException(final AuctionNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, AuctionNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -121,7 +127,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidBidException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidBidException(final InvalidBidException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidBidException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -131,7 +137,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleUserNotAuthorizationException(
             final UserForbiddenException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserForbiddenException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -141,7 +147,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleInaccessibleWithdrawalException(
             final InvalidWithdrawalException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidWithdrawalException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -151,7 +157,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleInvalidPriceValueException(
             final InvalidPriceValueException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidPriceValueException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -159,7 +165,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EmptyImageException.class)
     public ResponseEntity<ExceptionResponse> handleEmptyImageException(final EmptyImageException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, EmptyImageException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -169,7 +175,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleStoreImageFailureException(
             final StoreImageFailureException ex
     ) {
-        logger.error(String.format(EXCEPTION_FORMAT, StoreImageFailureException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -179,7 +185,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleUnsupportedImageFileExtensionException(
             final UnsupportedImageFileExtensionException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedImageFileExtensionException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -187,25 +193,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ImageNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleImageNotFoundException(final ImageNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, ImageNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler(MalformedURLException.class)
-    public ResponseEntity<ExceptionResponse> handleMalformedURLException(final MalformedURLException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, MalformedURLException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                             .body(new ExceptionResponse("이미지 조회에 실패했습니다."));
     }
 
     @ExceptionHandler(InvalidUserToChat.class)
     public ResponseEntity<ExceptionResponse> handleUserNotAccessibleException(
             final InvalidUserToChat ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidUserToChat.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -215,7 +213,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleWinnerNotFoundException(
             final WinnerNotFoundException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, WinnerNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -225,7 +223,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleInvalidAuctionToChatException(
             final InvalidAuctionToChatException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidAuctionToChatException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -234,7 +232,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidReporterToAuctionException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidReporterToAuctionException(
             final InvalidReporterToAuctionException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReporterToAuctionException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -243,7 +241,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidReportAuctionException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidReportAuctionException(
             final InvalidReportAuctionException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidReportAuctionException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -252,7 +250,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AlreadyReportAuctionException.class)
     public ResponseEntity<ExceptionResponse> handleAlreadyReportAuctionException(
             final AlreadyReportAuctionException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportAuctionException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -261,7 +259,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidChatRoomReportException.class)
     public ResponseEntity<ExceptionResponse> handleChatRoomReportNotAccessibleExceptionException(
             final InvalidChatRoomReportException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidChatRoomReportException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -270,7 +268,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(AlreadyReportChatRoomException.class)
     public ResponseEntity<ExceptionResponse> handleAlreadyReportChatRoomException(
             final AlreadyReportChatRoomException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportChatRoomException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -278,7 +276,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidTokenException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidTokenException(final InvalidTokenException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidTokenException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -288,7 +286,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleUnsupportedSocialLoginException(
             final UnsupportedSocialLoginException ex
     ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UnsupportedSocialLoginException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -296,7 +294,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UserUnauthorizedException.class)
     public ResponseEntity<ExceptionResponse> handleUserUnauthorizedException(final UserUnauthorizedException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -305,7 +303,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(InvalidSearchConditionException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidSearchConditionException(
             final InvalidSearchConditionException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -313,7 +311,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotificationFailedException.class)
     public ResponseEntity<ExceptionResponse> handleNotificationFailedException(final NotificationFailedException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, NotificationFailedException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -321,7 +319,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(DeviceTokenNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleDeviceTokenNotFoundException(final DeviceTokenNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, DeviceTokenNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -350,11 +348,11 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             final MethodArgumentNotValidException ex,
-            final HttpHeaders headers,
-            final HttpStatusCode status,
-            final WebRequest request
+            final HttpHeaders ignoredHeaders,
+            final HttpStatusCode ignoredStatus,
+            final WebRequest ignoredRequest
     ) {
-        logger.info(String.format(EXCEPTION_FORMAT, MethodArgumentNotValidException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         final String message = ex.getFieldErrors().get(0).getDefaultMessage();
 
