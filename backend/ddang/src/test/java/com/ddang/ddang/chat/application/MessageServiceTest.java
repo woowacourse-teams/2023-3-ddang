@@ -9,6 +9,7 @@ import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ class MessageServiceTest extends MessageServiceFixture {
     NotificationService notificationService;
 
     @Test
-    void 메시지를_생성한다() {
+    void 메시지를_생성한다() throws FirebaseMessagingException {
         //given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
 
@@ -47,7 +48,7 @@ class MessageServiceTest extends MessageServiceFixture {
     }
 
     @Test
-    void 메시지를_생성하고_알림을_보낸다() {
+    void 메시지를_생성하고_알림을_보낸다() throws FirebaseMessagingException {
         //given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
 
@@ -59,7 +60,7 @@ class MessageServiceTest extends MessageServiceFixture {
     }
 
     @Test
-    void 알림전송에_실패한_경우에도_정상적으로_메시지가_저장된다() {
+    void 알림전송에_실패한_경우에도_정상적으로_메시지가_저장된다() throws FirebaseMessagingException {
         // given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.FAIL);
 

@@ -7,7 +7,6 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
-import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -56,7 +55,6 @@ public class FcmNotificationServiceFixture {
     private User 새로운_입찰자;
     private User 기기토큰이_없는_사용자;
     protected DeviceToken 기기토큰;
-    protected CreateNotificationDto 프로필_이미지가_null인_알림_생성_dto;
     protected CreateNotificationDto 기기토큰이_없는_사용자의_알림_생성_DTO;
     protected CreateNotificationDto 알림_생성_DTO;
 
@@ -144,15 +142,5 @@ public class FcmNotificationServiceFixture {
                                    .contents("메시지")
                                    .build();
         messageRepository.save(메시지);
-
-        final MessageDto 프로필_이미지가_null인_메시지_DTO = MessageDto.of(메시지, 채팅방, 메시지_조회자_겸_발신자, 메시지_수신자, null);
-        프로필_이미지가_null인_알림_생성_dto = new CreateNotificationDto(
-                NotificationType.MESSAGE,
-                메시지_조회자_겸_발신자.getId(),
-                메시지_수신자.getName(),
-                프로필_이미지가_null인_메시지_DTO.contents(),
-                "/redirectUrl",
-                "/imageUrl"
-        );
     }
 }

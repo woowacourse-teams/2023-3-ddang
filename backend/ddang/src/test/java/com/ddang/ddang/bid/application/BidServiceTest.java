@@ -11,6 +11,7 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -54,7 +55,7 @@ class BidServiceTest extends BidServiceFixture {
     }
 
     @Test
-    void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액_이상의_금액으로_입찰을_등록할_수_있다() {
+    void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액_이상의_금액으로_입찰을_등록할_수_있다() throws FirebaseMessagingException {
         // given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공);
 
@@ -67,7 +68,11 @@ class BidServiceTest extends BidServiceFixture {
             softAssertions.assertThat(입찰_내역이_하나_있던_경매.getLastBid().getPrice().getValue())
                           .isEqualTo(입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto.bidPrice());
             softAssertions.assertThat(입찰_내역이_하나_있던_경매.getAuctioneerCount()).isEqualTo(2);
-            verify(notificationService).send(any());
+            try {
+                verify(notificationService).send(any());
+            } catch (FirebaseMessagingException e) {
+                throw new RuntimeException(e);
+            }
         });
     }
 
