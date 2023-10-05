@@ -44,6 +44,7 @@ public class MessageServiceFixture {
     protected CreateMessageDto 유효하지_않은_채팅방의_메시지_생성_DTO;
     protected CreateMessageDto 유효하지_않은_발신자의_메시지_생성_DTO;
     protected CreateMessageDto 유효하지_않은_수신자의_메시지_생성_DTO;
+    protected CreateMessageDto 수신자가_탈퇴한_경우_메시지_생성_DTO;
     protected ReadMessageRequest 마지막_조회_메시지_아이디가_없는_메시지_조회용_request;
     protected ReadMessageRequest 두_번째_메시지부터_모든_메시지_조회용_request;
     protected ReadMessageRequest 조회할_메시지가_더이상_없는_메시지_조회용_request;
@@ -82,11 +83,18 @@ public class MessageServiceFixture {
                              .reliability(4.7d)
                              .oauthId("12346")
                              .build();
-        userRepository.save(발신자);
-        userRepository.save(수신자);
+        final User 탈퇴한_사용자 = User.builder()
+                                 .name("탈퇴한 사용자")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(4.7d)
+                                 .oauthId("12347")
+                                 .build();
+        탈퇴한_사용자.withdrawal();
+        userRepository.saveAll(List.of(발신자, 수신자, 탈퇴한_사용자));
 
         final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
-        chatRoomRepository.save(채팅방);
+        final ChatRoom 탈퇴한_사용자와의_채팅방 = new ChatRoom(경매, 탈퇴한_사용자);
+        chatRoomRepository.saveAll(List.of(채팅방, 탈퇴한_사용자와의_채팅방));
 
         메시지_생성_DTO = new CreateMessageDto(
                 채팅방.getId(),
@@ -110,6 +118,12 @@ public class MessageServiceFixture {
                 채팅방.getId(),
                 발신자.getId(),
                 -999L,
+                "메시지 내용"
+        );
+        수신자가_탈퇴한_경우_메시지_생성_DTO = new CreateMessageDto(
+                탈퇴한_사용자와의_채팅방.getId(),
+                발신자.getId(),
+                탈퇴한_사용자.getId(),
                 "메시지 내용"
         );
 
