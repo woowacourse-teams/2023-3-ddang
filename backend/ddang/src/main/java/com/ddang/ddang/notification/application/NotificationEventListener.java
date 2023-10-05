@@ -6,6 +6,7 @@ import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -27,15 +28,14 @@ public class NotificationEventListener {
     @EventListener
     public void sendMessageNotification(final MessageNotificationEvent messageNotificationEvent) {
         final MessageDto messageDto = messageNotificationEvent.messageDto();
+        final ProfileImage profileImage = messageDto.receiver().getProfileImage();
         final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                 NotificationType.MESSAGE,
                 messageDto.receiver().getId(),
                 messageDto.writer().getName(),
                 messageDto.contents(),
                 calculateRedirectUrl(MESSAGE_NOTIFICATION_REDIRECT_URI, messageDto.chatRoom().getId()),
-                ImageUrlCalculator.calculateBy(messageDto.profileImageAbsoluteUrl(), messageDto.receiver()
-                                                                                               .getProfileImage()
-                                                                                               .getId())
+                ImageUrlCalculator.calculateBy(messageDto.profileImageAbsoluteUrl(), profileImage.getId())
         );
         notificationService.send(createNotificationDto);
     }
