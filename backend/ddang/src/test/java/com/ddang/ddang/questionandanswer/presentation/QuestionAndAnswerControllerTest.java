@@ -14,6 +14,7 @@ import com.ddang.ddang.questionandanswer.application.exception.AlreadyAnsweredEx
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAnswererException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidQuestionerException;
+import com.ddang.ddang.questionandanswer.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateAnswerRequest;
 import com.ddang.ddang.questionandanswer.presentation.dto.request.CreateQuestionRequest;
 import com.ddang.ddang.questionandanswer.presentation.fixture.QuestionAndAnswerControllerFixture;
@@ -353,7 +354,7 @@ class QuestionAndAnswerControllerTest extends QuestionAndAnswerControllerFixture
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
         given(answerService.create(any(CreateAnswerDto.class)))
-                .willThrow(new AuctionNotFoundException("해당 질문을 찾을 수 없습니다."));
+                .willThrow(new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));
 
         // when & then
         mockMvc.perform(post("/questions/{questionId}/answers", 존재하지_않는_질문_아이디)

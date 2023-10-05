@@ -1,9 +1,9 @@
 package com.ddang.ddang.questionandanswer.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.questionandanswer.application.dto.CreateAnswerDto;
 import com.ddang.ddang.questionandanswer.application.exception.AlreadyAnsweredException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAnswererException;
+import com.ddang.ddang.questionandanswer.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.questionandanswer.domain.Answer;
 import com.ddang.ddang.questionandanswer.domain.Question;
 import com.ddang.ddang.questionandanswer.infrastructure.JpaAnswerRepository;
@@ -30,7 +30,7 @@ public class AnswerService {
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Question question = questionRepository.findById(answerDto.questionId())
                                                     .orElseThrow(() ->
-                                                            new AuctionNotFoundException("해당 질문을 찾을 수 없습니다.")
+                                                            new QuestionNotFoundException("해당 질문을 찾을 수 없습니다.")
                                                     );
 
         checkInvalidAnswerer(question, writer);

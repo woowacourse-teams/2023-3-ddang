@@ -1,9 +1,9 @@
 package com.ddang.ddang.questionandanswer.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.questionandanswer.application.exception.AlreadyAnsweredException;
 import com.ddang.ddang.questionandanswer.application.exception.InvalidAnswererException;
+import com.ddang.ddang.questionandanswer.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.questionandanswer.application.fixture.AnswerServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -43,7 +43,7 @@ class AnswerServiceTest extends AnswerServiceFixture {
     void 존재하지_않는_질문에_답하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> answerService.create(존재하지_않는_질문에_답변_등록_요청_dto))
-                .isInstanceOf(AuctionNotFoundException.class)
+                .isInstanceOf(QuestionNotFoundException.class)
                 .hasMessage("해당 질문을 찾을 수 없습니다.");
     }
 
