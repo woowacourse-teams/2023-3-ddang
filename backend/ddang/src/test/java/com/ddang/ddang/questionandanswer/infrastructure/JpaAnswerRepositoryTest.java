@@ -4,8 +4,6 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.questionandanswer.domain.Answer;
 import com.ddang.ddang.questionandanswer.infrastructure.fixture.JpaAnswerRepositoryFixture;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -21,9 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaAnswerRepositoryTest extends JpaAnswerRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
     JpaAnswerRepository answerRepository;
 
@@ -37,9 +32,6 @@ class JpaAnswerRepositoryTest extends JpaAnswerRepositoryFixture {
         final Answer actual = answerRepository.save(answer);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(actual.getId()).isPositive();
     }
 
