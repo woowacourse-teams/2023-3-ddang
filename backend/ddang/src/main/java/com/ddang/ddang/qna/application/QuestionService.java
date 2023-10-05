@@ -1,12 +1,14 @@
 package com.ddang.ddang.qna.application;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
+import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -63,5 +65,18 @@ public class QuestionService {
         final List<Question> questions = questionRepository.readAllByAuctionId(auctionId);
 
         return ReadQnasDto.from(questions);
+    }
+
+    public void deleteById(final Long questionId, final Long userId) {
+        final Question question = questionRepository.findById(questionId)
+                                                    .orElseThrow(() -> new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));
+        final User user = userRepository.findById(userId)
+                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        if (!question.isWriter(user)) {
+            throw new UserForbiddenException("삭제할 권한이 없습니다.");
+        }
+
+        question.delete();
     }
 }

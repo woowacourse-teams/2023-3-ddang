@@ -1,11 +1,13 @@
 package com.ddang.ddang.qna.application;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
+import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.application.fixture.QuestionServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.assertj.core.api.*;
@@ -106,5 +108,38 @@ class QuestionServiceTest extends QuestionServiceFixture {
         assertThatThrownBy(() -> questionService.readAllByAuctionId(존재하지_않는_경매_아이디))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 경매를_삭제한다() {
+        // when
+        questionService.deleteById(질문_아이디, 사용자_아이디);
+
+        // then
+        assertThat(질문.isDeleted()).isTrue();
+    }
+
+    @Test
+    void 존재하지_않는_질문_삭제시_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> questionService.deleteById(존재하지_않는_질문_아이디, 사용자_아이디))
+                .isInstanceOf(QuestionNotFoundException.class)
+                .hasMessage("해당 질문을 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 존재하지_않는_사용자가_질문_삭제시_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> questionService.deleteById(질문_아이디, 존재하지_않는_사용자_아이디))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 질문_작성자가_아닌_사용자가_질문_삭제시_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> questionService.deleteById(질문_아이디, 질문하지_않은_사용자.getId()))
+                .isInstanceOf(UserForbiddenException.class)
+                .hasMessage("삭제할 권한이 없습니다.");
     }
 }
