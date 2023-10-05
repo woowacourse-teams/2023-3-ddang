@@ -10,7 +10,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
-import com.ddangddangddang.android.feature.messageRoom.rate.UserRateDialog
+import com.ddangddangddang.android.feature.messageRoom.review.UserReviewDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
@@ -75,7 +75,7 @@ class MessageRoomActivity :
     }
 
     private fun showUserRate() {
-        UserRateDialog.show(supportFragmentManager)
+        UserReviewDialog.show(supportFragmentManager)
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {

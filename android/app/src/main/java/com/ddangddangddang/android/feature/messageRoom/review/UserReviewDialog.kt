@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.messageRoom.rate
+package com.ddangddangddang.android.feature.messageRoom.review
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,17 +10,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import com.ddangddangddang.android.databinding.FragmentUserRateDialogBinding
+import com.ddangddangddang.android.databinding.FragmentUserReviewDialogBinding
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserRateDialog : DialogFragment() {
-    private var _binding: FragmentUserRateDialogBinding? = null
-    private val binding: FragmentUserRateDialogBinding
+class UserReviewDialog : DialogFragment() {
+    private var _binding: FragmentUserReviewDialogBinding? = null
+    private val binding: FragmentUserReviewDialogBinding
         get() = _binding!!
 
-    private val viewModel: UserRateViewModel by viewModels()
+    private val viewModel: UserReviewViewModel by viewModels()
     private val activityViewModel: MessageRoomViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,10 +41,10 @@ class UserRateDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentUserRateDialogBinding.inflate(inflater, container, false)
+        _binding = FragmentUserReviewDialogBinding.inflate(inflater, container, false)
             .apply {
-                lifecycleOwner = this@UserRateDialog
-                viewModel = this@UserRateDialog.viewModel
+                lifecycleOwner = this@UserReviewDialog
+                viewModel = this@UserReviewDialog.viewModel
             }
         return binding.root
     }
@@ -56,7 +56,7 @@ class UserRateDialog : DialogFragment() {
     }
 
     private fun setupListener() {
-        binding.btnRateCancel.setOnClickListener { exit() }
+        binding.btnReviewCancel.setOnClickListener { exit() }
     }
 
     private fun exit() {
@@ -69,10 +69,10 @@ class UserRateDialog : DialogFragment() {
     }
 
     companion object {
-        private const val USER_RATE_DIALOG_TAG = "user_rate_dialog_tag"
+        private const val USER_REVIEW_DIALOG_TAG = "user_review_dialog_tag"
 
         fun show(fragmentManager: FragmentManager) {
-            UserRateDialog().show(fragmentManager, USER_RATE_DIALOG_TAG)
+            UserReviewDialog().show(fragmentManager, USER_REVIEW_DIALOG_TAG)
         }
     }
 }

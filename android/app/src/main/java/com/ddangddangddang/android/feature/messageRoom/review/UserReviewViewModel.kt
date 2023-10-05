@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.messageRoom.rate
+package com.ddangddangddang.android.feature.messageRoom.review
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
@@ -9,19 +9,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class UserRateViewModel @Inject constructor(private val reviewRepository: ReviewRepository) : ViewModel() {
+class UserReviewViewModel @Inject constructor(private val reviewRepository: ReviewRepository) : ViewModel() {
     private var partnerId: Long? = null
     private var auctionId: Long? = null
 
     val ratingGrade = MutableLiveData(0F)
-    val rateDetailContent = MutableLiveData("")
+    val reviewDetailContent = MutableLiveData("")
 
     fun setPartnerInfo(detail: MessageRoomDetailModel) {
         partnerId = detail.messagePartnerId
         auctionId = detail.auctionId
     }
 
-    fun submitRate() {
+    fun submitReview() {
         // submit
         Log.d("test", "submit - ${ratingGrade.value}")
     }
