@@ -47,7 +47,7 @@ public class ChatRoomFixture {
         탈퇴한_사용자 = User.builder()
                         .name("탈퇴한 사용자")
                         .profileImage(new ProfileImage("upload.png", "store.png"))
-                        .reliability(4.7d)
+                        .reliability(new Reliability(4.7d))
                         .oauthId("12348")
                         .build();
         탈퇴한_사용자.withdrawal();
