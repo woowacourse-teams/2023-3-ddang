@@ -44,16 +44,24 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
         )
         viewModelScope.launch {
             when (val response = reviewRepository.reviewUser(request)) {
-                is ApiResponse.Success -> TODO()
-                is ApiResponse.Failure -> TODO()
-                is ApiResponse.NetworkError -> TODO()
-                is ApiResponse.Unexpected -> TODO()
+                is ApiResponse.Success -> {
+                    _event.value = ReviewEvent.ReviewSuccess
+                }
+                is ApiResponse.Failure -> {
+                    _event.value = ReviewEvent.ReviewFailure(ErrorType.FAILURE(response.error))
+                }
+                is ApiResponse.NetworkError -> {
+                    _event.value = ReviewEvent.ReviewFailure(ErrorType.NETWORK_ERROR)
+                }
+                is ApiResponse.Unexpected -> {
+                    _event.value = ReviewEvent.ReviewFailure(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
 
     sealed class ReviewEvent {
         object ReviewSuccess : ReviewEvent()
-        class ReviewFailure(error: ErrorType) : ReviewEvent()
+        class ReviewFailure(val error: ErrorType) : ReviewEvent()
     }
 }

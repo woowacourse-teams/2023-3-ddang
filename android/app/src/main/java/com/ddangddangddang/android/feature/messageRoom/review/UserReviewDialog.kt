@@ -10,8 +10,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentUserReviewDialogBinding
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel
+import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,7 +28,40 @@ class UserReviewDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setupObserve()
         loadPartnerInfo()
+    }
+
+    private fun setupObserve() {
+        viewModel.event.observe(this) { event ->
+            handleEvent(event)
+        }
+    }
+
+    private fun handleEvent(event: UserReviewViewModel.ReviewEvent) {
+        when (event) {
+            UserReviewViewModel.ReviewEvent.ReviewSuccess -> {
+                notifySubmitSuccess()
+                exit()
+            }
+            is UserReviewViewModel.ReviewEvent.ReviewFailure -> {
+                notifySubmitFailure(event.error)
+            }
+        }
+    }
+
+    private fun notifySubmitSuccess() {
+        Toaster.showShort(requireContext(), getString(R.string.user_review_success))
+    }
+
+    private fun notifySubmitFailure(errorType: ErrorType) {
+        val defaultMessage = getString(R.string.user_review_failure)
+        val message = when (errorType) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
+        }
+        Toaster.showShort(requireContext(), message ?: defaultMessage)
     }
 
     private fun loadPartnerInfo() {

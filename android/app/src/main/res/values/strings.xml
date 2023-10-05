@@ -204,5 +204,7 @@
     <string name="user_review_description_satisfied">상대방과의 거래에 만족하셨나요?</string>
     <string name="user_review_submit">제출</string>
     <string name="user_review_detail_hint">거래 후기를 남겨주세요! (선택)</string>
-    <string name="message_room_review_description">유저 상호 평가 버튼입니다</string>
+    <string name="user_review_description">유저 상호 평가 버튼입니다</string>
+    <string name="user_review_failure">평가를 전송하는데 실패했습니다</string>
+    <string name="user_review_success">평가 전송을 성공했습니다</string>
 </resources>
