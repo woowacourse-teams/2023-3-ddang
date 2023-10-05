@@ -259,15 +259,16 @@ class QuestionAndAnswerControllerTest extends QuestionAndAnswerControllerFixture
         given(answerService.create(any(CreateAnswerDto.class))).willReturn(생성된_답변_아이디);
 
         // when & then
-        final ResultActions resultActions = mockMvc.perform(RestDocumentationRequestBuilders.post("/questions/{questionId}/answers", 질문_아이디)
-                                                           .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
-                                                           .contentType(MediaType.APPLICATION_JSON)
-                                                           .content(objectMapper.writeValueAsString(답변_등록_request))
-                                                   )
-                                                   .andExpectAll(
-                                                           status().isCreated(),
-                                                           header().string(HttpHeaders.LOCATION, is("/auctions/1"))
-                                                   );
+        final ResultActions resultActions =
+                mockMvc.perform(RestDocumentationRequestBuilders.post("/questions/{questionId}/answers", 질문_아이디)
+                                                                .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(objectMapper.writeValueAsString(답변_등록_request))
+                       )
+                       .andExpectAll(
+                               status().isCreated(),
+                               header().string(HttpHeaders.LOCATION, is("/auctions/1"))
+                       );
 
         createAnswer_문서화(resultActions);
     }
