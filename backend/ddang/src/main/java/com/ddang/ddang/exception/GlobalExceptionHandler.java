@@ -330,7 +330,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidAuctionToAskQuestionException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidAuctionToAskQuestionException(final InvalidAuctionToAskQuestionException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidAuctionToAskQuestionException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -338,7 +338,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidQuestionerException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidQuestionerException(final InvalidQuestionerException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidQuestionerException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -346,7 +346,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(QuestionNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleQuestionNotFoundException(final QuestionNotFoundException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, QuestionNotFoundException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -354,7 +354,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidAnswererException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidAnswererException(final InvalidAnswererException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidAnswererException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -362,7 +362,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AlreadyAnsweredException.class)
     public ResponseEntity<ExceptionResponse> handleAlreadyAnsweredException(final AlreadyAnsweredException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, AlreadyAnsweredException.class), ex);
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
