@@ -2,6 +2,7 @@ package com.ddang.ddang.notification.application;
 
 import com.ddang.ddang.bid.application.BidService;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
+import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
@@ -44,6 +45,9 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
     JpaMessageRepository messageRepository;
 
     @Autowired
+    JpaBidRepository bidRepository;
+
+    @Autowired
     BidService bidService;
 
     @Test
@@ -57,7 +61,7 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
     }
 
     @Test
-    void 메시지_알림이_실패해도_메시지는_저장된다() throws FirebaseMessagingException {
+    void 메시지_알림_전송이_실패해도_메시지는_저장된다() throws FirebaseMessagingException {
         // when
         given(firebaseMessaging.send(any())).willThrow(FirebaseMessagingException.class);
         final Long actualSavedMessageId = messageService.create(메시지_생성_DTO, 이미지_절대_경로);
@@ -78,5 +82,19 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
         // then
         final long actual = events.stream(BidNotificationEvent.class).count();
         assertThat(actual).isEqualTo(1);
+    }
+
+    @Test
+    void 입찰_알림_전송이_실패해도_메시지는_저장된다() throws FirebaseMessagingException {
+        // when
+        given(firebaseMessaging.send(any())).willThrow(FirebaseMessagingException.class);
+        final Long actualSavedMessageId = bidService.create(입찰_생성_DTO, 이미지_절대_경로);
+        final long actual = events.stream(BidNotificationEvent.class).count();
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(bidRepository.findById(actualSavedMessageId)).isPresent();
+            softAssertions.assertThat(actual).isEqualTo(1);
+        });
     }
 }
