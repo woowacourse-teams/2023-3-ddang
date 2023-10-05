@@ -18,12 +18,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = "id")
 public class ChatRoom extends BaseCreateTimeEntity {
 
@@ -46,10 +44,8 @@ public class ChatRoom extends BaseCreateTimeEntity {
         this.buyer = buyer;
     }
 
-    public boolean isChatAvailableTime(final LocalDateTime targetTime) {
-        final LocalDateTime maxChatTime = getCreatedTime().plusDays(CHAT_EXPIRATION_DAY);
-
-        return targetTime.isBefore(maxChatTime);
+    public boolean isChatAvailablePartner(final User partner) {
+        return !partner.isDeleted();
     }
 
     public User calculateChatPartnerOf(final User user) {

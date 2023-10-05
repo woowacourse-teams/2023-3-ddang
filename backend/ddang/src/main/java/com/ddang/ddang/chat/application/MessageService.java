@@ -22,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -48,8 +47,8 @@ public class MessageService {
                                             .orElseThrow(() -> new UserNotFoundException(
                                                     "지정한 아이디에 대한 수신자를 찾을 수 없습니다."));
 
-        if (!chatRoom.isChatAvailableTime(LocalDateTime.now())) {
-            throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
+        if (!chatRoom.isChatAvailablePartner(receiver)) {
+            throw new UnableToChatException("탈퇴한 사용자에게는 메시지 전송이 불가능합니다.");
         }
 
         final Message message = dto.toEntity(chatRoom, writer, receiver);
@@ -64,7 +63,7 @@ public class MessageService {
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        if (!userRepository.existsById(request.userId())) {
+        if (!userRepository.existsById(request.messageReaderId())) {
             throw new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
         }
 
@@ -77,7 +76,7 @@ public class MessageService {
         }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
-                request.userId(),
+                request.messageReaderId(),
                 chatRoom.getId(),
                 request.lastMessageId()
         );

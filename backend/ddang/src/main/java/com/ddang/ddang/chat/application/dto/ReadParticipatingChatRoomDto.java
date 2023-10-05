@@ -4,8 +4,6 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.user.domain.User;
 
-import java.time.LocalDateTime;
-
 public record ReadParticipatingChatRoomDto(
         Long id,
         ReadAuctionInChatRoomDto auctionDto,
@@ -15,8 +13,7 @@ public record ReadParticipatingChatRoomDto(
 
     public static ReadParticipatingChatRoomDto of(
             final User findUser,
-            final ChatRoomAndImageDto chatRoomAndImageDto,
-            final LocalDateTime targetTime
+            final ChatRoomAndImageDto chatRoomAndImageDto
     ) {
         final ChatRoom chatRoom = chatRoomAndImageDto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
@@ -25,7 +22,7 @@ public record ReadParticipatingChatRoomDto(
                 chatRoom.getId(),
                 ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), chatRoomAndImageDto.thumbnailImage()),
                 ReadUserInChatRoomDto.from(partner),
-                chatRoom.isChatAvailableTime(targetTime)
+                chatRoom.isChatAvailablePartner(partner)
         );
     }
 }
