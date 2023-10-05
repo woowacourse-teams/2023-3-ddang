@@ -4,11 +4,12 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ddangddangddang.android.model.MessageRoomDetailModel
+import com.ddangddangddang.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class UserRateViewModel @Inject constructor() : ViewModel() {
+class UserRateViewModel @Inject constructor(private val reviewRepository: ReviewRepository) : ViewModel() {
     private var partnerId: Long? = null
     private var auctionId: Long? = null
 
