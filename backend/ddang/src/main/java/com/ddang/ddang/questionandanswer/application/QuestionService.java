@@ -55,7 +55,6 @@ public class QuestionService {
         }
     }
 
-    // TODO: 2023-10-04 [고민] 내가 참여한 경매와 같이 user에 경매 조회가 있는 것처럼, 경매 쪽에 Q&A 조회 메서드가 있는 게 적절할까요?
     public ReadQuestionAndAnswersDto readAllByAuctionId(final Long auctionId) {
         if (!auctionRepository.existsById(auctionId)) {
             throw new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
