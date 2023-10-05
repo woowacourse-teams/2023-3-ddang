@@ -11,12 +11,13 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepositor
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuthenticationServiceFixture {
@@ -31,7 +32,6 @@ public class AuthenticationServiceFixture {
 
     protected User 사용자;
     protected User 탈퇴한_사용자;
-    protected User 이미지가_없는_사용자;
 
     protected UserInformationDto 사용자_회원_정보 = new UserInformationDto(12345L);
     protected UserInformationDto 탈퇴한_사용자_회원_정보 = new UserInformationDto(54321L);
@@ -75,13 +75,6 @@ public class AuthenticationServiceFixture {
                       .reliability(new Reliability(0.0d))
                       .oauthId("12346")
                       .build();
-
-        이미지가_없는_사용자 = User.builder()
-                          .name("kakao12347")
-                          .profileImage(null)
-                          .reliability(new Reliability(0.0d))
-                          .oauthId("12347")
-                          .build();
 
         userRepository.save(사용자);
         탈퇴한_사용자.withdrawal();

@@ -20,6 +20,7 @@ class UserTest extends UserFixture {
                               .name("kakao12345")
                               .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(new Reliability(5.0d))
+                              .oauthId("12345")
                               .build();
 
         // when
@@ -40,6 +41,7 @@ class UserTest extends UserFixture {
                               .name("kakao12345")
                               .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(new Reliability(5.0d))
+                              .oauthId("12345")
                               .build();
 
         // when
@@ -58,6 +60,9 @@ class UserTest extends UserFixture {
         // given
         final User user = User.builder()
                               .name("kakao12345")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(new Reliability(5.0d))
+                              .oauthId("12345")
                               .build();
 
         // when
