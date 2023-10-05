@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomControllerFixture extends CommonControllerSliceTest {
 
+    private Long 탈퇴한_사용자_아이디 = 5L;
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected ReadUserInChatRoomDto 판매자 = new ReadUserInChatRoomDto(1L, "판매자", 1L, 5.0d, false);
     private ReadUserInChatRoomDto 구매자1 = new ReadUserInChatRoomDto(2L, "구매자1", 2L, 5.0d, false);
@@ -26,6 +27,7 @@ public class ChatRoomControllerFixture extends CommonControllerSliceTest {
     protected ReadChatRoomWithLastMessageDto 조회용_채팅방2 = new ReadChatRoomWithLastMessageDto(2L, 조회용_경매2, 구매자2, new ReadLastMessageDto(1L, LocalDateTime.now(), 판매자, 구매자2, "메시지2"), true);
     protected CreateMessageRequest 메시지_생성_요청 = new CreateMessageRequest(1L, "메시지 내용");
     protected CreateMessageRequest 유효하지_않은_발신자의_메시지_생성_요청 = new CreateMessageRequest(-999L, "메시지 내용");
+    protected CreateMessageRequest 탈퇴한_사용자와의_메시지_생성_요청 = new CreateMessageRequest(탈퇴한_사용자_아이디, "메시지 내용");
     protected ReadMessageDto 조회용_메시지 = new ReadMessageDto(1L, LocalDateTime.now(), 1L, 1L, 1L, "메시지내용");
     protected ReadParticipatingChatRoomDto 조회용_참가중인_채팅방 = new ReadParticipatingChatRoomDto(1L, 조회용_경매1, 판매자, true);
     protected CreateChatRoomRequest 채팅방_생성_요청 = new CreateChatRoomRequest(1L);

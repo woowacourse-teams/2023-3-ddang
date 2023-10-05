@@ -13,6 +13,7 @@ import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
 import com.ddang.ddang.chat.presentation.fixture.ChatRoomControllerFixture;
@@ -132,6 +133,23 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 발신자가_탈퇴한_사용자인_경우_메시지_생성시_400를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(messageService.create(any(CreateMessageDto.class), anyString())).willThrow(new UnableToChatException("탈퇴한 사용자에게는 메시지 전송이 불가능합니다."));
+
+        // when & then
+        mockMvc.perform(post("/chattings/{chatRoomId}/messages", 채팅방_아이디)
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .content(objectMapper.writeValueAsString(탈퇴한_사용자와의_메시지_생성_요청))
+                       .contentType(MediaType.APPLICATION_JSON))
+               .andExpectAll(
+                       status().isBadRequest(),
                        jsonPath("$.message").exists()
                );
     }
