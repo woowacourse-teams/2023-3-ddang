@@ -45,7 +45,6 @@ public class UserFixture {
                                .score(new Score(평가2_점수))
                                .build();
 
-
     protected List<Review> 평가_대상이_받은_평가_목록 = List.of(평가1, 평가2);
     protected Double 평가_대상의_신뢰도_점수 = (평가1_점수 + 평가2_점수) / 2;
 }
