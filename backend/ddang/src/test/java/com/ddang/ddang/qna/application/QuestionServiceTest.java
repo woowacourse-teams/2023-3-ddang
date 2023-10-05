@@ -111,9 +111,9 @@ class QuestionServiceTest extends QuestionServiceFixture {
     }
 
     @Test
-    void 경매를_삭제한다() {
+    void 질문을_삭제한다() {
         // when
-        questionService.deleteById(질문_아이디, 사용자_아이디);
+        questionService.deleteById(질문.getId(), 질문자.getId());
 
         // then
         assertThat(질문.isDeleted()).isTrue();
@@ -122,7 +122,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 존재하지_않는_질문_삭제시_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.deleteById(존재하지_않는_질문_아이디, 사용자_아이디))
+        assertThatThrownBy(() -> questionService.deleteById(존재하지_않는_질문_아이디, 질문자.getId()))
                 .isInstanceOf(QuestionNotFoundException.class)
                 .hasMessage("해당 질문을 찾을 수 없습니다.");
     }
@@ -130,7 +130,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 존재하지_않는_사용자가_질문_삭제시_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.deleteById(질문_아이디, 존재하지_않는_사용자_아이디))
+        assertThatThrownBy(() -> questionService.deleteById(질문.getId(), 존재하지_않는_사용자_아이디))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }
@@ -138,7 +138,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 질문_작성자가_아닌_사용자가_질문_삭제시_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.deleteById(질문_아이디, 질문하지_않은_사용자.getId()))
+        assertThatThrownBy(() -> questionService.deleteById(질문.getId(), 질문하지_않은_사용자.getId()))
                 .isInstanceOf(UserForbiddenException.class)
                 .hasMessage("삭제할 권한이 없습니다.");
     }
