@@ -1,0 +1,36 @@
+<included>
+  <springProfile name="file-warn-logging">
+    <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${LOG_DIR}/warn/warn-${BY_DATE}.log</file>
+
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+        <level>WARN</level>
+        <onMatch>ACCEPT</onMatch>
+        <onMismatch>DENY</onMismatch>
+      </filter>
+
+      <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+        <providers>
+          <timestamp>
+            <fieldName>timeStamp</fieldName>
+            <pattern>yyyy-MM-dd HH:mm:ss</pattern>
+          </timestamp>
+          <mdc/>
+          <message/>
+        </providers>
+        <charset>utf-8</charset>
+      </encoder>
+
+      <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+        <fileNamePattern>${LOG_DIR}/backup/warn/warn-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+        <maxFileSize>100MB</maxFileSize>
+        <maxHistory>30</maxHistory>
+        <totalSizeCap>3GB</totalSizeCap>
+      </rollingPolicy>
+    </appender>
+
+    <root level="info">
+      <appender-ref ref="FILE-WARN"/>
+    </root>
+  </springProfile>
+</included>
