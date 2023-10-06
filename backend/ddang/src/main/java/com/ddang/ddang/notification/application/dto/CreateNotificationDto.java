@@ -37,7 +37,7 @@ public record CreateNotificationDto(
                 messageDto.writer().getName(),
                 messageDto.contents(),
                 calculateChatRoomRedirectUrl(messageDto.chatRoom().getId()),
-                ImageUrlCalculator.calculateBy(messageDto.profileImageAbsoluteUrl(), messageDto.writer()
+                ImageUrlCalculator.calculateBy(messageDto.profileImageAbsoluteUrl(), messageDto.receiver()
                                                                                                .getProfileImage()
                                                                                                .getId())
         );
