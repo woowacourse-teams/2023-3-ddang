@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
+import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.repository.UserRepository
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -64,6 +65,7 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             when (type) {
                 NotificationType.MESSAGE -> {
                     val notification = createMessageNotification(tag, id, remoteMessage)
+                    sendBroadcastToMessageReceiver(id)
                     notificationManager.notify(tag, id.toInt(), notification)
                 }
 
@@ -109,6 +111,16 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
+    private suspend fun getBitmapFromUrl(url: String): Bitmap {
+        return withContext(Dispatchers.IO) {
+            Glide.with(applicationContext)
+                .asBitmap()
+                .load(url)
+                .submit()
+                .get()
+        }
+    }
+
     private fun getMessageInboxStyle(
         activeNotification: Notification?,
         currentLine: String,
@@ -120,16 +132,6 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
         return InboxStyle().apply {
             lines.forEach { addLine(it) }
             setSummaryText("${lines.size}개의 메시지")
-        }
-    }
-
-    private suspend fun getBitmapFromUrl(url: String): Bitmap {
-        return withContext(Dispatchers.IO) {
-            Glide.with(applicationContext)
-                .asBitmap()
-                .load(url)
-                .submit()
-                .get()
         }
     }
 
@@ -145,6 +147,11 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             this,
             FLAG_IMMUTABLE,
         )
+    }
+
+    private fun sendBroadcastToMessageReceiver(roomId: Long) {
+        val intent = MessageReceiver.getIntent(roomId)
+        sendBroadcast(intent)
     }
 
     private fun createBidNotification(id: Long, remoteMessage: RemoteMessage): Notification {

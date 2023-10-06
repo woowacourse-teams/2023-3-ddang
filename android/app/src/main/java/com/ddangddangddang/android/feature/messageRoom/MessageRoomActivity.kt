@@ -15,6 +15,7 @@ import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.model.ReportType
+import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -33,6 +34,14 @@ class MessageRoomActivity :
     lateinit var messageAdapter: MessageAdapter
 
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
+
+    private val messageReceiver: MessageReceiver by lazy {
+        MessageReceiver { messageRoomId ->
+            if (messageRoomId == viewModel.messageRoomInfo.value?.roomId) {
+                viewModel.loadMessages()
+            }
+        }
+    }
     private val roomId: Long by lazy { intent.getLongExtra(ROOM_ID_KEY, -1L) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,6 +126,13 @@ class MessageRoomActivity :
 
     override fun onResume() {
         super.onResume()
+        registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
+        if (viewModel.messageRoomInfo.value != null) viewModel.loadMessages()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(messageReceiver)
         cancelNotification()
     }
 
