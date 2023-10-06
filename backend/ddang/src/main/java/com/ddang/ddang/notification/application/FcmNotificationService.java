@@ -8,7 +8,6 @@ import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,7 +20,6 @@ import static com.ddang.ddang.notification.application.util.NotificationProperty
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
 public class FcmNotificationService implements NotificationService {
 
     private static final String NOTIFICATION_SEND_SUCCESS = "알림 전송 성공";
@@ -57,7 +55,6 @@ public class FcmNotificationService implements NotificationService {
             firebaseMessaging.send(message);
             return NOTIFICATION_SEND_SUCCESS;
         } catch (FirebaseMessagingException ex) {
-            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
             return NOTIFICATION_SEND_FAIL;
         }
     }
