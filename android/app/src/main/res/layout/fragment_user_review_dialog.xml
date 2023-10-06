@@ -8,6 +8,8 @@
         <variable
             name="viewModel"
             type="com.ddangddangddang.android.feature.messageRoom.review.UserReviewViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
 
@@ -81,6 +83,7 @@
                 android:layout_height="150dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
+                android:focusable="@{viewModel.isCompletedAlready() ? false : true}"
                 android:gravity="top"
                 android:hint="@string/user_review_detail_hint"
                 android:inputType="textMultiLine"
@@ -118,6 +121,7 @@
                 android:onClick="@{() -> viewModel.submitReview()}"
                 android:text="@string/user_review_submit"
                 android:textSize="@dimen/textsize_body"
+                android:visibility="@{viewModel.isCompletedAlready() ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_detail_description" />
 

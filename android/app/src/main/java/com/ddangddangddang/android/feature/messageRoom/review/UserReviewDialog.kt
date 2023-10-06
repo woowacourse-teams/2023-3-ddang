@@ -44,8 +44,13 @@ class UserReviewDialog : DialogFragment() {
                 notifySubmitSuccess()
                 exit()
             }
+
             is UserReviewViewModel.ReviewEvent.ReviewFailure -> {
                 notifySubmitFailure(event.error)
+            }
+
+            is UserReviewViewModel.ReviewEvent.ReviewLoadFailure -> {
+                notifyLoadFailure(event.error)
             }
         }
     }
@@ -56,6 +61,16 @@ class UserReviewDialog : DialogFragment() {
 
     private fun notifySubmitFailure(errorType: ErrorType) {
         val defaultMessage = getString(R.string.user_review_failure)
+        val message = when (errorType) {
+            is ErrorType.FAILURE -> errorType.message
+            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
+            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
+        }
+        Toaster.showShort(requireContext(), message ?: defaultMessage)
+    }
+
+    private fun notifyLoadFailure(errorType: ErrorType) {
+        val defaultMessage = getString(R.string.user_review_load_failure)
         val message = when (errorType) {
             is ErrorType.FAILURE -> errorType.message
             is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)

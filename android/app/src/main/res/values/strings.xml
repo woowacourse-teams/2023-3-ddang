@@ -207,4 +207,5 @@
     <string name="user_review_description">유저 상호 평가 버튼입니다</string>
     <string name="user_review_failure">평가를 전송하는데 실패했습니다</string>
     <string name="user_review_success">평가 전송을 성공했습니다</string>
+    <string name="user_review_load_failure">평가 내용 로드를 실패했습니다</string>
 </resources>

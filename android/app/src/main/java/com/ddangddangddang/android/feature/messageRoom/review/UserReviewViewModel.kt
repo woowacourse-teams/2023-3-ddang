@@ -23,6 +23,10 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
     val ratingGrade = MutableLiveData(0.0)
     val reviewDetailContent = MutableLiveData("")
 
+    private var _isCompletedAlready = MutableLiveData(false)
+    val isCompletedAlready: LiveData<Boolean>
+        get() = _isCompletedAlready
+
     private var _event: SingleLiveEvent<ReviewEvent> = SingleLiveEvent()
     val event: LiveData<ReviewEvent>
         get() = _event
@@ -30,6 +34,30 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
     fun setPartnerInfo(detail: MessageRoomDetailModel) {
         partnerId = detail.messagePartnerId
         auctionId = detail.auctionId
+
+        fetchReviewWritten()
+    }
+
+    private fun fetchReviewWritten() {
+        viewModelScope.launch {
+            val auctionId = auctionId ?: return@launch
+            when (val response = reviewRepository.getUserReview(auctionId)) {
+                is ApiResponse.Success -> {
+                    ratingGrade.value = response.body.score
+                    reviewDetailContent.value = response.body.content
+                    _isCompletedAlready.value = true
+                }
+                is ApiResponse.Failure -> {
+                    _event.value = ReviewEvent.ReviewLoadFailure(ErrorType.FAILURE(response.error))
+                }
+                is ApiResponse.NetworkError -> {
+                    _event.value = ReviewEvent.ReviewLoadFailure(ErrorType.NETWORK_ERROR)
+                }
+                is ApiResponse.Unexpected -> {
+                    _event.value = ReviewEvent.ReviewLoadFailure(ErrorType.UNEXPECTED)
+                }
+            }
+        }
     }
 
     fun submitReview() {
@@ -63,5 +91,6 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
     sealed class ReviewEvent {
         object ReviewSuccess : ReviewEvent()
         class ReviewFailure(val error: ErrorType) : ReviewEvent()
+        class ReviewLoadFailure(val error: ErrorType) : ReviewEvent()
     }
 }
