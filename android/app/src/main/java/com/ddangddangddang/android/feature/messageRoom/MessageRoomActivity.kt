@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
-import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
-import com.ddangddangddang.android.feature.messageRoom.rate.UserRateDialog
+import com.ddangddangddang.android.feature.messageRoom.review.UserReviewDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
@@ -87,7 +86,7 @@ class MessageRoomActivity :
     }
 
     private fun showUserRate() {
-        UserRateDialog.show(supportFragmentManager)
+        UserReviewDialog.show(supportFragmentManager)
     }
 
     private fun navigateToAuctionDetail(auctionId: Long) {
@@ -97,13 +96,8 @@ class MessageRoomActivity :
     private fun handleFailureEvent(event: MessageRoomViewModel.MessageRoomEvent.FailureEvent) {
         val defaultMessage = getDefaultFailureMessageByFailureEvent(event)
         val actionMessage = getString(R.string.all_snackbar_default_action)
-        val message = when (val errorType = event.type) {
-            is ErrorType.FAILURE -> errorType.message
-            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
-            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
-        }
         binding.root.showSnackbar(
-            message = message ?: defaultMessage,
+            message = event.type.message ?: defaultMessage,
             actionMessage = actionMessage,
         )
     }

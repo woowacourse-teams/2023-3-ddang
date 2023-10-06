@@ -105,12 +105,7 @@ class AuctionBidDialog : DialogFragment() {
 
     private fun handleSubmitFailureEvent(errorType: ErrorType) {
         val defaultMessage = getString(R.string.detail_auction_bid_dialog_failure_default_message)
-        val message = when (errorType) {
-            is ErrorType.FAILURE -> errorType.message
-            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
-            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
-        }
-        Toaster.showShort(requireContext(), message ?: defaultMessage)
+        Toaster.showShort(requireContext(), errorType.message ?: defaultMessage)
         exit()
     }
 

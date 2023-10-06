@@ -94,7 +94,7 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_marginStart="@dimen/margin_side_layout"
-                    android:contentDescription="@string/message_room_rate_description"
+                    android:contentDescription="@string/user_review_description"
                     android:onClick="@{() -> viewModel.setRateEvent()}"
                     android:src="@drawable/ic_rate_24"
                     app:tint="@color/green" />

@@ -71,13 +71,8 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
     private fun handleErrorEvent(errorType: ErrorType) {
         val defaultMessage = getString(R.string.my_auction_load_failed_title)
         val actionMessage = getString(R.string.all_snackbar_default_action)
-        val message = when (errorType) {
-            is ErrorType.FAILURE -> errorType.message
-            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
-            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
-        }
         binding.root.showSnackbar(
-            message = message ?: defaultMessage,
+            message = errorType.message ?: defaultMessage,
             actionMessage = actionMessage,
         )
     }

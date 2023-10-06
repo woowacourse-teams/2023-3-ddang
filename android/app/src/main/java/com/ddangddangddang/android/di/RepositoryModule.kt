@@ -10,6 +10,8 @@ import com.ddangddangddang.data.repository.ChatRepository
 import com.ddangddangddang.data.repository.ChatRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepository
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
+import com.ddangddangddang.data.repository.ReviewRepository
+import com.ddangddangddang.data.repository.ReviewRepositoryImpl
 import com.ddangddangddang.data.repository.UserRepository
 import com.ddangddangddang.data.repository.UserRepositoryImpl
 import dagger.Binds
@@ -44,4 +46,8 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindUserRepository(userRepository: UserRepositoryImpl): UserRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindReviewRepository(reviewRepository: ReviewRepositoryImpl): ReviewRepository
 }

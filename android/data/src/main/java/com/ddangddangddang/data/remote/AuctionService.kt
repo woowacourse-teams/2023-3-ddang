@@ -5,6 +5,7 @@ import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
+import com.ddangddangddang.data.model.request.ReviewRequest
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -16,6 +17,7 @@ import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.ProfileResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
+import com.ddangddangddang.data.model.response.UserReviewResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -124,4 +126,10 @@ interface AuctionService {
 
     @PATCH("/device-token")
     suspend fun updateDeviceToken(@Body deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit>
+
+    @POST("/reviews")
+    suspend fun reviewUser(@Body reviewRequest: ReviewRequest): ApiResponse<Unit>
+
+    @GET("/auctions/{auctionId}/reviews")
+    suspend fun getReviewUser(@Path("auctionId") auctionId: Long): ApiResponse<UserReviewResponse>
 }

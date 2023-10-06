@@ -7,7 +7,9 @@
 
         <variable
             name="viewModel"
-            type="com.ddangddangddang.android.feature.messageRoom.rate.UserRateViewModel" />
+            type="com.ddangddangddang.android.feature.messageRoom.review.UserReviewViewModel" />
+
+        <import type="android.view.View" />
     </data>
 
 
@@ -37,11 +39,11 @@
                 app:layout_constraintGuide_end="24dp" />
 
             <TextView
-                android:id="@+id/tv_rate_title"
+                android:id="@+id/tv_review_title"
                 style="@style/Header2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/user_rate"
+                android:text="@string/user_review"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintStart_toStartOf="@id/gl_begin"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -52,18 +54,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="@string/user_rate_description_satisfied"
+                android:text="@string/user_review_description_satisfied"
                 android:textColor="@color/grey_700"
                 app:layout_constraintEnd_toStartOf="@id/gl_end"
                 app:layout_constraintStart_toEndOf="@id/gl_begin"
-                app:layout_constraintTop_toBottomOf="@id/tv_rate_title" />
+                app:layout_constraintTop_toBottomOf="@id/tv_review_title" />
 
 
             <RatingBar
-                android:id="@+id/rb_rate_grade"
+                android:id="@+id/rb_review_grade"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="6dp"
+                android:isIndicator="@{viewModel.isCompletedAlready()}"
                 android:minHeight="0dp"
                 android:numStars="5"
                 android:rating="@={viewModel.ratingGrade}"
@@ -81,18 +84,20 @@
                 android:layout_height="150dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
+                android:focusable="@{!viewModel.isCompletedAlready()}"
+                android:cursorVisible="@{!viewModel.isCompletedAlready()}"
                 android:gravity="top"
-                android:hint="@string/user_rate_detail_hint"
+                android:hint="@{viewModel.isCompletedAlready() ? null : @string/user_review_detail_hint}"
                 android:inputType="textMultiLine"
                 android:padding="16dp"
-                android:text="@={viewModel.rateDetailContent}"
+                android:text="@={viewModel.reviewDetailContent}"
                 android:textCursorDrawable="@drawable/ic_edittext_cursor"
                 app:layout_constraintEnd_toStartOf="@id/gl_end"
                 app:layout_constraintStart_toEndOf="@id/gl_begin"
-                app:layout_constraintTop_toBottomOf="@id/rb_rate_grade" />
+                app:layout_constraintTop_toBottomOf="@id/rb_review_grade" />
 
             <Button
-                android:id="@+id/btn_rate_cancel"
+                android:id="@+id/btn_review_cancel"
                 style="@style/NegativeButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -102,11 +107,11 @@
                 android:minHeight="0dp"
                 android:text="@string/detail_auction_bid_dialog_cancel"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintEnd_toStartOf="@id/btn_rate_submit"
+                app:layout_constraintEnd_toStartOf="@id/btn_review_submit"
                 app:layout_constraintTop_toBottomOf="@id/et_detail_description" />
 
             <Button
-                android:id="@+id/btn_rate_submit"
+                android:id="@+id/btn_review_submit"
                 style="@style/PositiveButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -115,9 +120,10 @@
                 android:background="@color/transparent"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
-                android:onClick="@{() -> viewModel.submitRate()}"
-                android:text="@string/user_rate_submit"
+                android:onClick="@{() -> viewModel.submitReview()}"
+                android:text="@string/user_review_submit"
                 android:textSize="@dimen/textsize_body"
+                android:visibility="@{viewModel.isCompletedAlready() ? View.GONE : View.VISIBLE}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_detail_description" />
 

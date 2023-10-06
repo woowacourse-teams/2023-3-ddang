@@ -198,13 +198,8 @@ class RegisterAuctionActivity :
     }
 
     private fun showErrorSubmitMessage(errorType: ErrorType) {
-        val message = when (errorType) {
-            is ErrorType.FAILURE -> errorType.message
-            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
-            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
-        }
         binding.root.showSnackbar(
-            message ?: getString(R.string.register_autcion_default_error_message),
+            errorType.message ?: getString(R.string.register_autcion_default_error_message),
             getString(R.string.all_snackbar_default_action),
         )
     }
