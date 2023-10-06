@@ -2,6 +2,7 @@ create table question (
      id bigint not null auto_increment,
      created_time datetime(6) not null,
      content text,
+     is_deleted bit,
      auction_id bigint,
      writer_id bigint,
      primary key (id)
@@ -10,6 +11,7 @@ create table answer (
     id bigint not null auto_increment,
     created_time datetime(6) not null,
     content text,
+    is_deleted bit,
     question_id bigint,
     primary key (id)
 );
