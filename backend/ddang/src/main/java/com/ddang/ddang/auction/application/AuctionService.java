@@ -121,10 +121,12 @@ public class AuctionService {
         return findAuction.isClosed(LocalDateTime.now()) && findAuction.isSellerOrWinner(findUser, LocalDateTime.now());
     }
 
-    public ReadAuctionsDto readAllByCondition(
+    public ReadAuctionsDto readAllByLastAuctionId(
+            final Long lastAuctionId,
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition) {
-        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByCondition(
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByLastAuctionId(
+                lastAuctionId,
                 pageable,
                 readAuctionSearchCondition
         );

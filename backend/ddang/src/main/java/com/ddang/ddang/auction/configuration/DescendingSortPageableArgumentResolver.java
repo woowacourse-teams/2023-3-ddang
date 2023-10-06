@@ -1,6 +1,5 @@
 package com.ddang.ddang.auction.configuration;
 
-import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.configuration.util.SortParameter;
 import org.springframework.core.MethodParameter;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +15,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @Component
 public class DescendingSortPageableArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private static final int DEFAULT_PAGE = 0;
+    private static final int IGNORED_PAGE_SIZE = 1;
     private static final int DEFAULT_SIZE = 10;
 
     @Override
@@ -33,10 +32,9 @@ public class DescendingSortPageableArgumentResolver implements HandlerMethodArgu
             final WebDataBinderFactory ignoredBinderFactory
     ) {
         final int size = processSizeParameter(webRequest.getParameter("size"));
-        final int page = processPageParameter(webRequest.getParameter("page"));
-        final Sort sort = processSortParameter(webRequest.getParameter("sortType"));
+        final Sort sort = processSortParameter(webRequest.getParameter("sort"));
 
-        return PageRequest.of(page, size, sort);
+        return PageRequest.of(IGNORED_PAGE_SIZE, size, sort);
     }
 
     private int processSizeParameter(final String sizeParameter) {
@@ -47,19 +45,7 @@ public class DescendingSortPageableArgumentResolver implements HandlerMethodArgu
         return Integer.parseInt(sizeParameter);
     }
 
-    private int processPageParameter(final String pageParameter) {
-        if (pageParameter == null) {
-            return DEFAULT_PAGE;
-        }
-
-        return Integer.parseInt(pageParameter) - 1;
-    }
-
     private Sort processSortParameter(final String sortParameter) {
-        if (AuctionSortConditionConsts.CLOSING_TINE.equals(sortParameter)) {
-            return Sort.by(Direction.ASC, SortParameter.findSortProperty(sortParameter));
-        }
-
         return Sort.by(Direction.DESC, SortParameter.findSortProperty(sortParameter));
     }
 }

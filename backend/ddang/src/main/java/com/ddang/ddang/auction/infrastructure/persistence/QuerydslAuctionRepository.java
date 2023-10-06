@@ -8,7 +8,8 @@ import org.springframework.data.domain.Slice;
 
 public interface QuerydslAuctionRepository {
 
-    Slice<Auction> findAuctionsAllByCondition(
+    Slice<Auction> findAuctionsAllByLastAuctionId(
+            final Long lastAuctionId,
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition
     );
