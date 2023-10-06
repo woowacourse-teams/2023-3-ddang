@@ -24,6 +24,7 @@ public record ReadReviewResponse(
         if (nullableScore != null) {
             returnScore = nullableScore.floatValue();
         }
+
         return new ReadReviewResponse(
                 reviewDto.id(),
                 ReadUserInReviewResponse.from(reviewDto.writer()),

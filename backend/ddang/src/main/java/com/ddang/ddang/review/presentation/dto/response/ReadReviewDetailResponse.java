@@ -10,7 +10,6 @@ public record ReadReviewDetailResponse(@Nullable Float score, @Nullable String c
         final Double nullableScore = readReviewDetailDto.score();
         if (nullableScore == null) {
             return new ReadReviewDetailResponse(null, readReviewDetailDto.content());
-
         }
 
         return new ReadReviewDetailResponse(nullableScore.floatValue(), readReviewDetailDto.content());
