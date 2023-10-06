@@ -8,7 +8,10 @@ import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
+import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
+import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
@@ -18,6 +21,7 @@ import com.ddang.ddang.report.application.exception.InvalidChatRoomReportExcepti
 import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
+import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
@@ -708,6 +712,193 @@ class ReportControllerTest extends ReportControllerFixture {
         readAllQuestionReport_문서화(resultActions);
     }
 
+    @Test
+    void 답변_신고를_등록한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerReportService.create(any(CreateAnswerReportDto.class))).willReturn(생성된_답변_신고_아이디);
+
+        // when & then
+        final ResultActions resultActions =
+                mockMvc.perform(post("/reports/answers")
+                               .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                               .contentType(MediaType.APPLICATION_JSON)
+                               .content(objectMapper.writeValueAsString(답변_신고_request))
+                       )
+                       .andExpectAll(
+                               status().isCreated(),
+                               header().string(HttpHeaders.LOCATION, is("/auctions/1/questions"))
+                       );
+
+        createAnswerReport_문서화(resultActions);
+    }
+
+    @Test
+    void 존재하지_않은_사용자가_답변을_신고할시_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
+        given(answerReportService.create(any(CreateAnswerReportDto.class)))
+                .willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(답변_신고_request))
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 존재하지_않은_답변을_신고할시_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerReportService.create(any(CreateAnswerReportDto.class)))
+                .willThrow(new AnswerNotFoundException("해당 질문을 찾을 수 없습니다."));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(존재하지_않는_답변_신고_request))
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 질문_작성자_본인이_자신의_답변을_신고할시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerReportService.create(any(CreateAnswerReportDto.class)))
+                .willThrow(new InvalidAnswererException("본인 질문입니다."));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(본인의_답변_신고_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 이미_신고한_사용자가_동일_답변을_신고할시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(answerReportService.create(any(CreateAnswerReportDto.class)))
+                .willThrow(new InvalidAnswererException("이미 신고한 질문입니다."));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(이미_신고한_답변_신고_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 경매_아이디가_없는_경우_답변_신고시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(경매_아이디가_null인_답변_신고_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 경매_아이디가_음수인_경우_답변_신고시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(경매_아이디가_음수인_답변_신고_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 답변_아이디가_없는_경우_질문_신고시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(질문_아이디가_null인_답변_신고_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 질문_아이디가_음수인_경우_답변_신고시_400을_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(답변_아이디가_음수인_질문_신고_request))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideAnswerReportRequestWithEmptyDescription")
+    void 신고_내용_없이_답변_신고시_400을_반환한다(final CreateAnswerReportRequest 답변_신고_요청) throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+
+        // when & then
+        mockMvc.perform(post("/reports/answers")
+                       .header(HttpHeaders.AUTHORIZATION, 엑세스_토큰_값)
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(답변_신고_요청))
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    private static Stream<CreateAnswerReportRequest> provideAnswerReportRequestWithEmptyDescription() {
+        return Stream.of(신고_내용이_null인_답변_신고_request, 신고_내용이_빈값인_답변_신고_request);
+    }
+
     private void createAuctionReport_문서화(final ResultActions resultActions) throws Exception {
         resultActions.andDo(
                 restDocs.document(
@@ -817,6 +1008,21 @@ class ReportControllerTest extends ReportControllerFixture {
                                                                        .description("신고한 질문 ID"),
                                 fieldWithPath("reports.[].description").type(JsonFieldType.STRING)
                                                                        .description("신고 내용")
+                        )
+                )
+        );
+    }
+
+    private void createAnswerReport_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        requestHeaders(
+                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                        ),
+                        requestFields(
+                                fieldWithPath("auctionId").description("질문의 경매 ID"),
+                                fieldWithPath("answerId").description("신고할 답변 ID"),
+                                fieldWithPath("description").description("신고 내용")
                         )
                 )
         );

@@ -10,6 +10,7 @@ import com.ddang.ddang.report.application.dto.ReadQuestionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
+import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
@@ -22,6 +23,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected Long 생성된_경매_신고_아이디 = 1L;
     protected Long 생성된_채팅방_신고_아이디 = 1L;
     protected Long 생성된_질문_신고_아이디 = 1L;
+    protected Long 생성된_답변_신고_아이디 = 1L;
     protected String 엑세스_토큰_값 = "Bearer accessToken";
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(-999L);
@@ -150,4 +152,16 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected ReadQuestionReportDto 질문_신고_dto1 = new ReadQuestionReportDto(1L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto1, "신공합니다.");
     protected ReadQuestionReportDto 질문_신고_dto2 = new ReadQuestionReportDto(2L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto2, "신공합니다.");
     protected ReadQuestionReportDto 질문_신고_dto3 = new ReadQuestionReportDto(3L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto3, "신공합니다.");
+
+    protected CreateAnswerReportRequest 답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 존재하지_않는_답변_신고_request = new CreateAnswerReportRequest(1L, 999L, "신고합니다.");
+    protected CreateAnswerReportRequest 본인의_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 이미_신고한_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 경매_아이디가_null인_답변_신고_request = new CreateAnswerReportRequest(null, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 경매_아이디가_음수인_답변_신고_request = new CreateAnswerReportRequest(-1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 질문_아이디가_null인_답변_신고_request = new CreateAnswerReportRequest(1L, null, "신고합니다.");
+    protected CreateAnswerReportRequest 답변_아이디가_음수인_질문_신고_request = new CreateAnswerReportRequest(1L, -1L, "신고합니다.");
+    protected static CreateAnswerReportRequest 신고_내용이_null인_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, null);
+    protected static CreateAnswerReportRequest 신고_내용이_빈값인_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "");
+
 }

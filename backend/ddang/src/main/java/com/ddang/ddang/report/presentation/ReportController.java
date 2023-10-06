@@ -2,15 +2,18 @@ package com.ddang.ddang.report.presentation;
 
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.report.application.AnswerReportService;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.ChatRoomReportService;
 import com.ddang.ddang.report.application.QuestionReportService;
+import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
+import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
@@ -37,6 +40,7 @@ public class ReportController {
     private final AuctionReportService auctionReportService;
     private final ChatRoomReportService chatRoomReportService;
     private final QuestionReportService questionReportService;
+    private final AnswerReportService answerReportService;
 
     @PostMapping("/auctions")
     public ResponseEntity<Void> createAuctionReport(
@@ -93,5 +97,16 @@ public class ReportController {
         final ReadQuestionReportsResponse response = ReadQuestionReportsResponse.from(readQuestionReportDtos);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/answers")
+    public ResponseEntity<Void> createAnswerReport(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @RequestBody @Valid final CreateAnswerReportRequest createAnswerReportRequest
+    ) {
+        answerReportService.create(CreateAnswerReportDto.of(createAnswerReportRequest, userInfo.userId()));
+
+        return ResponseEntity.created(URI.create("/auctions/" + createAnswerReportRequest.auctionId() + "/questions"))
+                             .build();
     }
 }
