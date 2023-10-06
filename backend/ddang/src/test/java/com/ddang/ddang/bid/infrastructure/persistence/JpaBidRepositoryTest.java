@@ -144,7 +144,7 @@ class JpaBidRepositoryTest {
         em.clear();
 
         // when
-        final List<Bid> actual = bidRepository.findByAuctionIdOrderByIdAsc(auction1.getId());
+        final List<Bid> actual = bidRepository.findByAuctionId(auction1.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

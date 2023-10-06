@@ -49,7 +49,6 @@ oauth2:
   client:
     providers:
       kakao:
-        admin-key: adminkey
         user-info-uri: https://kapi.kakao.com/v2/user/me
         user-unlink-uri: https://kapi.kakao.com/v1/user/unlink
 
