@@ -7,7 +7,7 @@ pipeline {
                 slackSend (
                     channel: '#빌드-결과',
                     color: '#FFFF00',
-                    message: "빌드 시작!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)"
+                    message: "빌드 시작!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.INFRA_EC2_PUBLIC_IP}/jenkins)"
                 )
             }
         }
@@ -17,7 +17,7 @@ pipeline {
                 checkout scmGit(
                     branches: [[name: '*/develop']],
                     extensions: [submodule(parentCredentials: true, reference: '', trackingSubmodules: true)],
-                    userRemoteConfigs: [[credentialsId: 'ddang-dev-token', url: 'https://github.com/woowacourse-teams/2023-3-ddang']])
+                    userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/woowacourse-teams/2023-3-ddang']])
             }
         }
 
@@ -33,6 +33,7 @@ pipeline {
         stage('publish') {
             steps {
                sshagent(credentials: ['ec2-prod-key']) {
+                   sh "ssh -o StrictHostKeyChecking=no ubuntu@${env.PROD_EC2_PRIVATE_IP}"
                    sh "scp backend/ddang/build/libs/ddang-0.0.1-SNAPSHOT.jar ubuntu@${env.PROD_EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
                    sh "scp backend/ddang/3-ddang-submodule/application-prod.yml ubuntu@${env.PROD_EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
                    sh "scp backend/ddang/script/prod-deploy-script.sh ubuntu@${env.PROD_EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
