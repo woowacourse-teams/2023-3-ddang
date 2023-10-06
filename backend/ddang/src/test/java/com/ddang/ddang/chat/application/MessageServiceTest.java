@@ -18,7 +18,6 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -70,7 +69,7 @@ class MessageServiceTest {
 
     @BeforeEach
     void setUp() {
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn("성공");
     }
 
     @Test
@@ -189,67 +188,6 @@ class MessageServiceTest {
 
         // then
         verify(notificationService).send(any());
-    }
-
-    @Test
-    void 알림전송에_실패한_경우에도_정상적으로_메시지가_저장된다() {
-        // given
-        final BidUnit bidUnit = new BidUnit(1_000);
-        final Price startPrice = new Price(10_000);
-        final Category main = new Category("전자기기");
-        final Category sub = new Category("노트북");
-
-        main.addSubCategory(sub);
-
-        categoryRepository.save(main);
-        final Auction auction = Auction.builder()
-                                       .title("title")
-                                       .description("description")
-                                       .bidUnit(bidUnit)
-                                       .startPrice(startPrice)
-                                       .closingTime(LocalDateTime.now().plusDays(3L))
-                                       .build();
-
-        auctionRepository.save(auction);
-
-        final User writer = User.builder()
-                                .name("발신자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
-                                .reliability(4.7d)
-                                .oauthId("12345")
-                                .build();
-
-        userRepository.save(writer);
-
-        final User receiver = User.builder()
-                                  .name("수신자")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                                  .reliability(4.7d)
-                                  .oauthId("12346")
-                                  .build();
-
-        userRepository.save(receiver);
-
-        final ChatRoom chatRoom = new ChatRoom(auction, writer);
-
-        chatRoomRepository.save(chatRoom);
-
-        final String contents = "메시지 내용";
-
-        final CreateMessageDto createMessageDto = new CreateMessageDto(
-                chatRoom.getId(),
-                writer.getId(),
-                receiver.getId(),
-                contents
-        );
-
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.FAIL);
-
-        // when
-        final Long actual = messageService.create(createMessageDto, "");
-
-        // then
-        assertThat(actual).isPositive();
     }
 
     @Test
