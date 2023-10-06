@@ -39,6 +39,13 @@ public class QuestionReportServiceFixture {
     @Autowired
     private JpaQuestionReportRepository questionReportRepository;
 
+    protected User 이미_신고한_신고자1;
+    protected User 이미_신고한_신고자2;
+    protected User 이미_신고한_신고자3;
+    protected QuestionReport 질문_신고1;
+    protected QuestionReport 질문_신고2;
+    protected QuestionReport 질문_신고3;
+
     protected CreateQuestionReportDto 질문_신고_요청_dto;
     protected CreateQuestionReportDto 존재하지_않는_사용자가_질문_신고_요청_dto;
     protected CreateQuestionReportDto 존재하지_않는_질문_신고_요청_dto;
@@ -69,12 +76,24 @@ public class QuestionReportServiceFixture {
                              .reliability(4.7d)
                              .oauthId("12347")
                              .build();
-        final User 이미_신고한_신고자 = User.builder()
-                                    .name("이미 신고한 신고자")
-                                    .profileImage(프로필_이미지)
-                                    .reliability(4.7d)
-                                    .oauthId("12348")
-                                    .build();
+        이미_신고한_신고자1 = User.builder()
+                          .name("이미 신고한 신고자1")
+                          .profileImage(프로필_이미지)
+                          .reliability(4.7d)
+                          .oauthId("12348")
+                          .build();
+        이미_신고한_신고자2 = User.builder()
+                          .name("이미 신고한 신고자2")
+                          .profileImage(프로필_이미지)
+                          .reliability(4.7d)
+                          .oauthId("12349")
+                          .build();
+        이미_신고한_신고자3 = User.builder()
+                          .name("이미 신고한 신고자3")
+                          .profileImage(프로필_이미지)
+                          .reliability(4.7d)
+                          .oauthId("12350")
+                          .build();
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
@@ -92,18 +111,20 @@ public class QuestionReportServiceFixture {
         경매.addAuctionImages(List.of(경매_이미지));
 
         final Question 질문 = new Question(경매, 질문자, "신고합니다.");
-        final QuestionReport 질문_신고 = new QuestionReport(이미_신고한_신고자, 질문, "신고합니다.");
+        질문_신고1 = new QuestionReport(이미_신고한_신고자1, 질문, "신고합니다.");
+        질문_신고2 = new QuestionReport(이미_신고한_신고자2, 질문, "신고합니다.");
+        질문_신고3 = new QuestionReport(이미_신고한_신고자3, 질문, "신고합니다.");
 
-        userRepository.saveAll(List.of(판매자, 질문자, 신고자, 이미_신고한_신고자));
+        userRepository.saveAll(List.of(판매자, 질문자, 신고자, 이미_신고한_신고자1, 이미_신고한_신고자2, 이미_신고한_신고자3));
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionRepository.save(경매);
         questionRepository.save(질문);
-        questionReportRepository.save(질문_신고);
+        questionReportRepository.saveAll(List.of(질문_신고1, 질문_신고2, 질문_신고3));
 
         질문_신고_요청_dto = new CreateQuestionReportDto(질문.getId(), "신고합니다.", 신고자.getId());
         존재하지_않는_질문_신고_요청_dto = new CreateQuestionReportDto(존재하지_않는_질문_아이디, "신고합니다.", 신고자.getId());
         존재하지_않는_사용자가_질문_신고_요청_dto = new CreateQuestionReportDto(질문.getId(), "신고합니다.", 존재하지_않는_사용자_아이디);
         질문자가_본인_질문_신고_요청_dto = new CreateQuestionReportDto(질문.getId(), "신고합니다.", 질문자.getId());
-        이미_신고한_질문_신고_요청_dto = new CreateQuestionReportDto(질문.getId(), "신고합니다.", 이미_신고한_신고자.getId());
+        이미_신고한_질문_신고_요청_dto = new CreateQuestionReportDto(질문.getId(), "신고합니다.", 이미_신고한_신고자1.getId());
     }
 }

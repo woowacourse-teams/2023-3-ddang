@@ -4,6 +4,7 @@ import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
+import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.domain.QuestionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaQuestionReportRepository;
@@ -13,6 +14,8 @@ import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,5 +49,13 @@ public class QuestionReportService {
         if (questionReportRepository.existsByIdAndReporterId(question.getId(), reporter.getId())) {
             throw new InvalidQuestionReportException("이미 신고한 질문입니다.");
         }
+    }
+
+    public List<ReadQuestionReportDto> readAll() {
+        final List<QuestionReport> auctionReports = questionReportRepository.findAllByOrderByIdAsc();
+
+        return auctionReports.stream()
+                             .map(ReadQuestionReportDto::from)
+                             .toList();
     }
 }

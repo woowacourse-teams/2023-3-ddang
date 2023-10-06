@@ -2,13 +2,17 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
+import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.application.fixture.QuestionReportServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -60,5 +64,22 @@ class QuestionReportServiceTest extends QuestionReportServiceFixture {
         assertThatThrownBy(() -> questionReportService.create(이미_신고한_질문_신고_요청_dto))
                 .isInstanceOf(InvalidQuestionReportException.class)
                 .hasMessage("이미 신고한 질문입니다.");
+    }
+
+    @Test
+    void 전체_신고_목록을_조회한다() {
+        // when
+        final List<ReadQuestionReportDto> actual = questionReportService.readAll();
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(3);
+            softAssertions.assertThat(actual.get(0).reporterDto().id()).isEqualTo(이미_신고한_신고자1.getId());
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(질문_신고1.getId());
+            softAssertions.assertThat(actual.get(1).reporterDto().id()).isEqualTo(이미_신고한_신고자2.getId());
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(질문_신고2.getId());
+            softAssertions.assertThat(actual.get(2).reporterDto().id()).isEqualTo(이미_신고한_신고자3.getId());
+            softAssertions.assertThat(actual.get(2).id()).isEqualTo(질문_신고3.getId());
+        });
     }
 }
