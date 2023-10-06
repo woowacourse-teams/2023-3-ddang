@@ -2,6 +2,8 @@ package com.ddang.ddang.report.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
+import com.ddang.ddang.report.application.dto.ReadAnswerInReportDto;
+import com.ddang.ddang.report.application.dto.ReadAnswerReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomInReportDto;
@@ -149,9 +151,9 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     private ReadQuestionInReportDto 질문_dto1 = new ReadQuestionInReportDto(1L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
     private ReadQuestionInReportDto 질문_dto2 = new ReadQuestionInReportDto(2L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
     private ReadQuestionInReportDto 질문_dto3 = new ReadQuestionInReportDto(3L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
-    protected ReadQuestionReportDto 질문_신고_dto1 = new ReadQuestionReportDto(1L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto1, "신공합니다.");
-    protected ReadQuestionReportDto 질문_신고_dto2 = new ReadQuestionReportDto(2L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto2, "신공합니다.");
-    protected ReadQuestionReportDto 질문_신고_dto3 = new ReadQuestionReportDto(3L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto3, "신공합니다.");
+    protected ReadQuestionReportDto 질문_신고_dto1 = new ReadQuestionReportDto(1L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto1, "신고합니다.");
+    protected ReadQuestionReportDto 질문_신고_dto2 = new ReadQuestionReportDto(2L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto2, "신고합니다.");
+    protected ReadQuestionReportDto 질문_신고_dto3 = new ReadQuestionReportDto(3L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto3, "신고합니다.");
 
     protected CreateAnswerReportRequest 답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "신고합니다.");
     protected CreateAnswerReportRequest 존재하지_않는_답변_신고_request = new CreateAnswerReportRequest(1L, 999L, "신고합니다.");
@@ -163,5 +165,12 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected CreateAnswerReportRequest 답변_아이디가_음수인_질문_신고_request = new CreateAnswerReportRequest(1L, -1L, "신고합니다.");
     protected static CreateAnswerReportRequest 신고_내용이_null인_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, null);
     protected static CreateAnswerReportRequest 신고_내용이_빈값인_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "");
+    private ReadUserInReportDto 답변자_dto = new ReadUserInReportDto(1L, "사용자", 1L, 5.0d, "12345", false);
+    private ReadAnswerInReportDto 답변_dto1 = new ReadAnswerInReportDto(1L, 답변자_dto, "답변드립니다.", LocalDateTime.now());
+    private ReadAnswerInReportDto 답변_dto2 = new ReadAnswerInReportDto(2L, 답변자_dto, "답변드립니다.", LocalDateTime.now());
+    private ReadAnswerInReportDto 답변_dto3 = new ReadAnswerInReportDto(3L, 답변자_dto, "답변드립니다.", LocalDateTime.now());
+    protected ReadAnswerReportDto 답변_신고_dto1 = new ReadAnswerReportDto(1L, 신고자_정보_dto1, LocalDateTime.now(), 답변_dto1, "신고합니다.");
+    protected ReadAnswerReportDto 답변_신고_dto2 = new ReadAnswerReportDto(2L, 신고자_정보_dto1, LocalDateTime.now(), 답변_dto2, "신고합니다.");
+    protected ReadAnswerReportDto 답변_신고_dto3 = new ReadAnswerReportDto(3L, 신고자_정보_dto1, LocalDateTime.now(), 답변_dto3, "신고합니다.");
 
 }

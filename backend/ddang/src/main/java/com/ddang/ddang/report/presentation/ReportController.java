@@ -10,6 +10,7 @@ import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
+import com.ddang.ddang.report.application.dto.ReadAnswerReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
@@ -17,6 +18,7 @@ import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
+import com.ddang.ddang.report.presentation.dto.response.ReadAnswerReportsResponse;
 import com.ddang.ddang.report.presentation.dto.response.ReadAuctionReportsResponse;
 import com.ddang.ddang.report.presentation.dto.response.ReadChatRoomReportsResponse;
 import com.ddang.ddang.report.presentation.dto.response.ReadQuestionReportsResponse;
@@ -108,5 +110,13 @@ public class ReportController {
 
         return ResponseEntity.created(URI.create("/auctions/" + createAnswerReportRequest.auctionId() + "/questions"))
                              .build();
+    }
+
+    @GetMapping("/answers")
+    public ResponseEntity<ReadAnswerReportsResponse> readAllAnswerReport() {
+        final List<ReadAnswerReportDto> readAnswerReportDtos = answerReportService.readAll();
+        final ReadAnswerReportsResponse response = ReadAnswerReportsResponse.from(readAnswerReportDtos);
+
+        return ResponseEntity.ok(response);
     }
 }
