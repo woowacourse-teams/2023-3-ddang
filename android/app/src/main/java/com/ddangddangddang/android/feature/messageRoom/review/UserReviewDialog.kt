@@ -47,10 +47,12 @@ class UserReviewDialog : DialogFragment() {
 
             is UserReviewViewModel.ReviewEvent.ReviewFailure -> {
                 notifySubmitFailure(event.error)
+                exit()
             }
 
             is UserReviewViewModel.ReviewEvent.ReviewLoadFailure -> {
                 notifyLoadFailure(event.error)
+                exit()
             }
         }
     }
@@ -77,7 +79,6 @@ class UserReviewDialog : DialogFragment() {
             is ErrorType.UNEXPECTED -> getString(errorType.messageId)
         }
         Toaster.showShort(requireContext(), message ?: defaultMessage)
-        exit()
     }
 
     private fun loadPartnerInfo() {
