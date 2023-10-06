@@ -23,7 +23,6 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -448,14 +447,11 @@ class ChatRoomServiceTest {
                                             .bidUnit(new BidUnit(3_000))
                                             .startPrice(new Price(30_000))
                                             .build();
-
-        final AuctionImage auctionImage1 = new AuctionImage("image1.png", "image1.png");
-        final AuctionImage auctionImage2 = new AuctionImage("image2.png", "image2.png");
-        final AuctionImage auctionImage3 = new AuctionImage("image3.png", "image3.png");
-        merryAuction.addAuctionImages(List.of(auctionImage1));
-        enchoAuction.addAuctionImages(List.of(auctionImage2));
-        jamieAuction.addAuctionImages(List.of(auctionImage3));
-        auctionImageRepository.saveAll(List.of(auctionImage1, auctionImage2, auctionImage3));
+        final AuctionImage auctionImage = new AuctionImage("image.png", "image.png");
+        auctionImageRepository.save(auctionImage);
+        merryAuction.addAuctionImages(List.of(auctionImage));
+        enchoAuction.addAuctionImages(List.of(auctionImage));
+        jamieAuction.addAuctionImages(List.of(auctionImage));
 
         auctionRepository.save(merryAuction);
         auctionRepository.save(enchoAuction);
@@ -560,10 +556,7 @@ class ChatRoomServiceTest {
         final ChatRoom chatRoom = new ChatRoom(auction, buyer);
         chatRoomRepository.save(chatRoom);
 
-        final ChatRoomAndImageDto chatRoomAndImageDto = new ChatRoomAndImageDto(chatRoom, auctionImage);
-
-        final ReadParticipatingChatRoomDto expect =
-                ReadParticipatingChatRoomDto.of(seller, chatRoomAndImageDto, LocalDateTime.now());
+        final ReadParticipatingChatRoomDto expect = ReadParticipatingChatRoomDto.of(seller, chatRoom, LocalDateTime.now());
 
         // when
         final ReadParticipatingChatRoomDto actual = chatRoomService.readByChatRoomId(chatRoom.getId(), seller.getId());
