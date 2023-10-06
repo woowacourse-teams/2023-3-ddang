@@ -30,6 +30,7 @@ public class QuestionService {
     private final JpaUserRepository userRepository;
     private final JpaQuestionRepository questionRepository;
 
+    @Transactional
     public Long create(final CreateQuestionDto questionDto) {
         final User questioner = userRepository.findByIdAndDeletedIsFalse(questionDto.userId())
                                               .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
@@ -67,6 +68,7 @@ public class QuestionService {
         return ReadQnasDto.from(questions);
     }
 
+    @Transactional
     public void deleteById(final Long questionId, final Long userId) {
         final Question question = questionRepository.findById(questionId)
                                                     .orElseThrow(() -> new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));

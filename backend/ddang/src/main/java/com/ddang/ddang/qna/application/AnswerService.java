@@ -57,6 +57,7 @@ public class AnswerService {
         }
     }
 
+    @Transactional
     public void deleteById(final Long answerId, final Long userId) {
         final Answer answer = answerRepository.findByIdAndDeletedIsFalse(answerId)
                                               .orElseThrow(() -> new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."));
