@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 public class KakaoUserInformationProvider implements OAuth2UserInformationProvider {
 
     private static final String TOKEN_TYPE = "Bearer ";
-    private static final String KAKAO_ADMIN_TOKEN_TYPE = "KakaoAK ";
     private static final String REST_TEMPLATE_MESSAGE_SEPARATOR = ":";
     private static final int MESSAGE_INDEX = 0;
 
@@ -61,14 +60,14 @@ public class KakaoUserInformationProvider implements OAuth2UserInformationProvid
     @Override
     public UserInformationDto unlinkUserBy(final String oauthId) {
         final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.set(HttpHeaders.AUTHORIZATION, KAKAO_ADMIN_TOKEN_TYPE + providersConfigurationProperties.adminKey());
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + providersConfigurationProperties.adminKey());
 
-        final MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("target_id_type", "user_id");
-        body.add("target_id", oauthId);
+        final MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
+        parameters.add("target_id_type", "user_id");
+        parameters.add("target_id", oauthId);
 
-        final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+        final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(parameters, headers);
 
         try {
             final ResponseEntity<UserInformationDto> response = restTemplate.exchange(
