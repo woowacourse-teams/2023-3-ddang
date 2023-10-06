@@ -128,7 +128,7 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:onClick="@{() -> null}"
+                    android:onClick="@{() -> viewModel.contactUs()}"
                     app:layout_constraintTop_toBottomOf="@id/tv_announcement_button"
                     bind:categoryName="@{@string/mypage_contact_us_button}" />
 
