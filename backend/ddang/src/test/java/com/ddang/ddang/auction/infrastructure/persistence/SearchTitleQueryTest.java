@@ -29,7 +29,7 @@ import org.springframework.data.domain.Slice;
  * Auction17 : 맥북 / 15L / 3.5d / 6 / 4일 뒤
  */
 @SuppressWarnings("NonAsciiCharacters")
-class AuctionSearchTitleQueryTest extends InitializeCommonAuctionData {
+class SearchTitleQueryTest extends InitializeCommonAuctionData {
 
     @Test
     void 검색_결과가_없을때_첫번째_페이지를_요청하면_빈_Slice를_반환한다() {

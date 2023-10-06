@@ -31,7 +31,7 @@ import org.springframework.data.domain.Sort.Order;
  * Auction16 : 맥북 / 16L / 3.5d / 6 / 4일 뒤
  */
 @SuppressWarnings("NonAsciiCharacters")
-class AuctionSortQueryTest extends InitializeCommonAuctionData {
+class SortQueryTest extends InitializeCommonAuctionData {
 
     final ReadAuctionSearchCondition searchCondition = new ReadAuctionSearchCondition(null);
 

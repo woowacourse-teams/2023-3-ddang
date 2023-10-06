@@ -45,62 +45,48 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
     Auction auction15;
     Auction auction16;
 
-    User seller1;
-    User seller2;
-    User seller3;
-    User seller4;
-    User seller5;
-    User seller6;
-    User seller7;
-
     @BeforeEach
     void setUp() {
         querydslAuctionRepository = new QuerydslAuctionRepositoryImpl(new JPAQueryFactory(em));
 
-        seller1 = User.builder()
-                      .name("회원1234543211")
-                      .profileImage("profile.png")
-                      .reliability(4.7d)
-                      .oauthId("1234543211")
-                      .build();
-        seller2 = User.builder()
-                      .name("회원1234543212")
-                      .profileImage("profile.png")
-                      .reliability(3.5d)
-                      .oauthId("1234543212")
-                      .build();
-        seller3 = User.builder()
-                      .name("회원1234543213")
-                      .profileImage("profile.png")
-                      .reliability(2.1d)
-                      .oauthId("1234543213")
-                      .build();
-        seller4 = User.builder()
-                      .name("회원1234543214")
-                      .profileImage("profile.png")
-                      .reliability(5.0d)
-                      .oauthId("1234543214")
-                      .build();
-        seller5 = User.builder()
-                      .name("회원1234543215")
-                      .profileImage("profile.png")
-                      .reliability(1.5d)
-                      .oauthId("1234543215")
-                      .build();
-        seller6 = User.builder()
-                      .name("회원1234543216")
-                      .profileImage("profile.png")
-                      .reliability(0.3d)
-                      .oauthId("1234543216")
-                      .build();
-        seller7 = User.builder()
-                      .name("회원1234543217")
-                      .profileImage("profile.png")
-                      .reliability(0.3d)
-                      .oauthId("1234543217")
-                      .build();
+        final User seller1 = User.builder()
+                                 .name("회원1234543211")
+                                 .profileImage("profile.png")
+                                 .reliability(4.7d)
+                                 .oauthId("1234543211")
+                                 .build();
+        final User seller2 = User.builder()
+                                 .name("회원1234543212")
+                                 .profileImage("profile.png")
+                                 .reliability(3.5d)
+                                 .oauthId("1234543212")
+                                 .build();
+        final User seller3 = User.builder()
+                                 .name("회원1234543213")
+                                 .profileImage("profile.png")
+                                 .reliability(2.1d)
+                                 .oauthId("1234543213")
+                                 .build();
+        final User seller4 = User.builder()
+                                 .name("회원1234543214")
+                                 .profileImage("profile.png")
+                                 .reliability(5.0d)
+                                 .oauthId("1234543214")
+                                 .build();
+        final User seller5 = User.builder()
+                                 .name("회원1234543215")
+                                 .profileImage("profile.png")
+                                 .reliability(1.5d)
+                                 .oauthId("1234543215")
+                                 .build();
+        final User seller6 = User.builder()
+                                 .name("회원1234543216")
+                                 .profileImage("profile.png")
+                                 .reliability(0.3d)
+                                 .oauthId("1234543216")
+                                 .build();
 
-        final List<User> users = List.of(seller1, seller2, seller3, seller4, seller5, seller6, seller7);
+        final List<User> users = List.of(seller1, seller2, seller3, seller4, seller5, seller6);
         userRepository.saveAll(users);
 
         final Category main = new Category("main");
@@ -112,65 +98,6 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
 
         final LocalDateTime nowTime = LocalDateTime.now();
 
-        auction6 = Auction.builder()
-                          .title("레드불을 팝니다")
-                          .description("레드불을 팝니다")
-                          .bidUnit(new BidUnit(1_000))
-                          .startPrice(new Price(1_000))
-                          .closingTime(nowTime.plusDays(2))
-                          .seller(seller6)
-                          .build();
-        bidding(auction6, seller1);
-        addAuctioneerCount(auction6, 7);
-        auction8 = Auction.builder()
-                          .title("맥북을 팝니다")
-                          .description("맥북을 팝니다")
-                          .bidUnit(new BidUnit(1_000))
-                          .startPrice(new Price(1_000))
-                          .closingTime(nowTime.plusDays(4))
-                          .seller(seller2)
-                          .build();
-        bidding(auction8, seller1);
-        addAuctioneerCount(auction8, 5);
-        auction16 = Auction.builder()
-                           .title("맥북을 팝니다")
-                           .description("맥북을 팝니다")
-                           .bidUnit(new BidUnit(1_000))
-                           .startPrice(new Price(1_000))
-                           .closingTime(nowTime.plusDays(4))
-                           .seller(seller2)
-                           .build();
-        bidding(auction16, seller1);
-        addAuctioneerCount(auction16, 4);
-        auction9 = Auction.builder()
-                          .title("맥북을 팝니다")
-                          .description("맥북을 팝니다")
-                          .bidUnit(new BidUnit(1_000))
-                          .startPrice(new Price(1_000))
-                          .closingTime(nowTime.plusDays(4))
-                          .seller(seller2)
-                          .build();
-        bidding(auction9, seller1);
-        addAuctioneerCount(auction9, 5);
-        auction13 = Auction.builder()
-                           .title("맥북을 팝니다")
-                           .description("맥북을 팝니다")
-                           .bidUnit(new BidUnit(1_000))
-                           .startPrice(new Price(1_000))
-                           .closingTime(nowTime.plusDays(4))
-                           .seller(seller2)
-                           .build();
-        bidding(auction13, seller1);
-        addAuctioneerCount(auction13, 5);
-        auction7 = Auction.builder()
-                          .title("맥북을 팝니다")
-                          .description("맥북1을 팝니다")
-                          .bidUnit(new BidUnit(1_000))
-                          .startPrice(new Price(1_000))
-                          .closingTime(nowTime.plusDays(3))
-                          .seller(seller1)
-                          .build();
-        addAuctioneerCount(auction7, 3);
         auction1 = Auction.builder()
                           .title("맥북에어를 팝니다")
                           .description("맥북에어를 팝니다")
@@ -180,8 +107,6 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .seller(seller1)
                           .build();
         addAuctioneerCount(auction1, 2);
-        bidding(auction16, seller1);
-
         auction2 = Auction.builder()
                           .title("맥북프로를 팝니다")
                           .description("맥북프로를 팝니다")
@@ -218,6 +143,42 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .seller(seller5)
                           .build();
         addAuctioneerCount(auction5, 4);
+        auction6 = Auction.builder()
+                          .title("레드불을 팝니다")
+                          .description("레드불을 팝니다")
+                          .bidUnit(new BidUnit(1_000))
+                          .startPrice(new Price(1_000))
+                          .closingTime(nowTime.plusDays(2))
+                          .seller(seller6)
+                          .build();
+        addAuctioneerCount(auction6, 8);
+        auction7 = Auction.builder()
+                          .title("맥북을 팝니다")
+                          .description("맥북1을 팝니다")
+                          .bidUnit(new BidUnit(1_000))
+                          .startPrice(new Price(1_000))
+                          .closingTime(nowTime.plusDays(3))
+                          .seller(seller1)
+                          .build();
+        addAuctioneerCount(auction7, 3);
+        auction8 = Auction.builder()
+                          .title("맥북을 팝니다")
+                          .description("맥북을 팝니다")
+                          .bidUnit(new BidUnit(1_000))
+                          .startPrice(new Price(1_000))
+                          .closingTime(nowTime.plusDays(4))
+                          .seller(seller2)
+                          .build();
+        addAuctioneerCount(auction8, 6);
+        auction9 = Auction.builder()
+                          .title("맥북을 팝니다")
+                          .description("맥북을 팝니다")
+                          .bidUnit(new BidUnit(1_000))
+                          .startPrice(new Price(1_000))
+                          .closingTime(nowTime.plusDays(4))
+                          .seller(seller2)
+                          .build();
+        addAuctioneerCount(auction9, 6);
         auction10 = Auction.builder()
                            .title("맥북을 팝니다")
                            .description("맥북을 팝니다")
@@ -245,6 +206,15 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                            .seller(seller2)
                            .build();
         addAuctioneerCount(auction12, 6);
+        auction13 = Auction.builder()
+                           .title("맥북을 팝니다")
+                           .description("맥북을 팝니다")
+                           .bidUnit(new BidUnit(1_000))
+                           .startPrice(new Price(1_000))
+                           .closingTime(nowTime.plusDays(4))
+                           .seller(seller2)
+                           .build();
+        addAuctioneerCount(auction13, 6);
         auction14 = Auction.builder()
                            .title("맥북을 팝니다")
                            .description("맥북을 팝니다")
@@ -263,6 +233,15 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                            .seller(seller2)
                            .build();
         addAuctioneerCount(auction15, 6);
+        auction16 = Auction.builder()
+                           .title("맥북을 팝니다")
+                           .description("맥북을 팝니다")
+                           .bidUnit(new BidUnit(1_000))
+                           .startPrice(new Price(1_000))
+                           .closingTime(nowTime.plusDays(4))
+                           .seller(seller2)
+                           .build();
+        addAuctioneerCount(auction16, 6);
 
         final List<Auction> auctions = List.of(
                 auction1, auction2, auction3, auction4, auction5, auction6, auction7, auction8, auction9,
@@ -274,20 +253,12 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
         em.clear();
     }
 
-    private void bidding(final Auction targetAuction, final User bidder) {
-        final Bid lastBid = new Bid(targetAuction, bidder, new BidPrice(1));
-
-        bidRepository.save(lastBid);
-
-        targetAuction.updateLastBid(lastBid);
-    }
-
     private void addAuctioneerCount(final Auction targetAuction, final int count) {
         final Bid lastBid = new Bid(targetAuction, targetAuction.getSeller(), new BidPrice(1));
 
         bidRepository.save(lastBid);
 
-        for (int i = 0; i < count; i++) {
+        for(int i = 0; i < count; i++) {
             targetAuction.updateLastBid(lastBid);
         }
     }

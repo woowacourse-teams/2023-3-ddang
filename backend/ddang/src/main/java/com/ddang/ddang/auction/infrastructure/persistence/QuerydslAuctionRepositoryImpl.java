@@ -1,7 +1,6 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
 import static com.ddang.ddang.auction.domain.QAuction.auction;
-import static com.ddang.ddang.bid.domain.QBid.bid;
 import static com.ddang.ddang.category.domain.QCategory.category;
 import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
 import static com.ddang.ddang.region.domain.QRegion.region;
@@ -39,47 +38,32 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
             final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {
         final List<OrderSpecifier<?>> orderSpecifiers = calculateOrderSpecifiers(pageable);
-        final List<BooleanExpression> booleanExpressions = calculateBooleanExpressions(readAuctionSearchCondition);
-        final List<Long> findAuctionIds = findAuctionIds(booleanExpressions, orderSpecifiers, pageable);
-        final List<Auction> findAuctions = findAuctionsByIdsAndOrderSpecifiers(findAuctionIds, orderSpecifiers);
+
+        final List<Long> findAuctionIds = queryFactory.select(auction.id)
+                                                      .from(auction)
+                                                      .where(
+                                                              auction.deleted.isFalse(),
+                                                              convertTitleSearchCondition(readAuctionSearchCondition)
+                                                      )
+                                                      .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
+                                                      .limit(pageable.getPageSize() + SLICE_OFFSET)
+                                                      .offset(pageable.getOffset())
+                                                      .fetch();
+
+        final List<Auction> findAuctions = queryFactory.selectFrom(auction)
+                                                       .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
+                                                       .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
+                                                       .leftJoin(region.firstRegion).fetchJoin()
+                                                       .leftJoin(region.secondRegion).fetchJoin()
+                                                       .leftJoin(auction.subCategory, category).fetchJoin()
+                                                       .leftJoin(category.mainCategory).fetchJoin()
+                                                       .leftJoin(auction.seller).fetchJoin()
+                                                       .leftJoin(auction.lastBid).fetchJoin()
+                                                       .where(auction.id.in(findAuctionIds.toArray(Long[]::new)))
+                                                       .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
+                                                       .fetch();
 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
-    }
-
-    private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
-
-        orderSpecifiers.add(auction.id.desc());
-
-        return orderSpecifiers;
-    }
-
-    private List<BooleanExpression> calculateBooleanExpressions(final ReadAuctionSearchCondition searchCondition) {
-        final List<BooleanExpression> booleanExpressions = new ArrayList<>();
-
-        booleanExpressions.add(auction.deleted.isFalse());
-
-        final BooleanExpression titleBooleanExpression = convertTitleSearchCondition(searchCondition);
-
-        if (titleBooleanExpression != null) {
-            booleanExpressions.add(titleBooleanExpression);
-        }
-
-        return booleanExpressions;
-    }
-
-    private List<Long> findAuctionIds(
-            final List<BooleanExpression> booleanExpressions,
-            final List<OrderSpecifier<?>> orderSpecifiers,
-            final Pageable pageable
-    ) {
-        return queryFactory.select(auction.id)
-                           .from(auction)
-                           .where(booleanExpressions.toArray(BooleanExpression[]::new))
-                           .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
-                           .limit(pageable.getPageSize() + SLICE_OFFSET)
-                           .offset(pageable.getOffset())
-                           .fetch();
     }
 
     private BooleanExpression convertTitleSearchCondition(final ReadAuctionSearchCondition readAuctionSearchCondition) {
@@ -90,6 +74,14 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         }
 
         return auction.title.like("%" + titleSearchCondition + "%");
+    }
+
+    private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
+
+        orderSpecifiers.add(auction.id.desc());
+
+        return orderSpecifiers;
     }
 
     private List<OrderSpecifier<?>> convertOrderSpecifiers(final Pageable pageable) {
@@ -107,24 +99,6 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         return orderSpecifiers;
     }
 
-    private List<Auction> findAuctionsByIdsAndOrderSpecifiers(
-            final List<Long> targetIds,
-            final List<OrderSpecifier<?>> orderSpecifiers
-    ) {
-        return queryFactory.selectFrom(auction)
-                           .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
-                           .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
-                           .leftJoin(region.firstRegion).fetchJoin()
-                           .leftJoin(region.secondRegion).fetchJoin()
-                           .leftJoin(auction.subCategory, category).fetchJoin()
-                           .leftJoin(category.mainCategory).fetchJoin()
-                           .leftJoin(auction.seller).fetchJoin()
-                           .leftJoin(auction.lastBid).fetchJoin()
-                           .where(auction.id.in(targetIds.toArray(Long[]::new)))
-                           .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
-                           .fetch();
-    }
-
     @Override
     public Optional<Auction> findAuctionById(final Long auctionId) {
         final Auction findAuction = queryFactory.selectFrom(auction)
@@ -140,40 +114,5 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                                                 .fetchOne();
 
         return Optional.ofNullable(findAuction);
-    }
-
-    @Override
-    public Slice<Auction> findAuctionsAllByUserId(final Long userId, final Pageable pageable) {
-        final List<BooleanExpression> booleanExpressions = List.of(auction.seller.id.eq(userId));
-        final List<OrderSpecifier<?>> orderSpecifiers = List.of(auction.id.desc());
-        final List<Long> findAuctionIds = findAuctionIds(booleanExpressions, orderSpecifiers, pageable);
-        final List<Auction> findAuctions = findAuctionsByIdsAndOrderSpecifiers(
-                findAuctionIds,
-                List.of(auction.id.desc())
-        );
-
-        return QuerydslSliceHelper.toSlice(findAuctions, pageable);
-    }
-
-    @Override
-    public Slice<Auction> findAuctionsAllByBidderId(final Long bidderId, final Pageable pageable) {
-        final List<Long> findAuctionIds = queryFactory.select(bid.auction.id)
-                                                      .from(bid)
-                                                      .where(bid.bidder.id.eq(bidderId))
-                                                      .groupBy(bid.auction.id)
-                                                      .orderBy(bid.id.max().desc())
-                                                      .limit(pageable.getPageSize() + SLICE_OFFSET)
-                                                      .offset(pageable.getOffset())
-                                                      .fetch();
-        final List<Auction> findAuctions = findAuctionsByIdsAndOrderSpecifiers(findAuctionIds, Collections.emptyList());
-
-        findAuctions.sort((firstAuction, secondAuction) -> {
-            int firstAuctionIndex = findAuctionIds.indexOf(firstAuction.getId());
-            int secondAuctionIndex = findAuctionIds.indexOf(secondAuction.getId());
-
-            return Integer.compare(firstAuctionIndex, secondAuctionIndex);
-        });
-
-        return QuerydslSliceHelper.toSlice(findAuctions, pageable);
     }
 }
