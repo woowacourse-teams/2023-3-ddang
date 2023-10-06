@@ -30,6 +30,7 @@ import com.ddang.ddang.report.application.exception.InvalidChatRoomReportExcepti
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -41,6 +42,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.net.MalformedURLException;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -95,7 +97,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(UnableToChatException.class)
     public ResponseEntity<ExceptionResponse> handleUnableToChatException(final UnableToChatException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UnableToChatException.class), ex);
+        logger.warn(String.format(EXCEPTION_FORMAT, MessageNotFoundException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
@@ -334,7 +336,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     ) {
         logger.info(String.format(EXCEPTION_FORMAT, MethodArgumentNotValidException.class), ex);
 
-        final String message = ex.getFieldErrors().get(0).getDefaultMessage();
+        final String message = ex.getFieldErrors()
+                                 .stream()
+                                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                                 .collect(Collectors.joining(System.lineSeparator()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(message));
