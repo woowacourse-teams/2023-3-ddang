@@ -49,11 +49,11 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
                 is ApiResponse.Success -> {
                     val score = response.body.score
                     val content = response.body.content
-                    if (score == null || content == null) return@launch
-
-                    ratingGrade.value = score.toFloat()
-                    reviewDetailContent.value = content
-                    _isCompletedAlready.value = true
+                    if (score != null && content != null) {
+                        ratingGrade.value = score.toFloat()
+                        reviewDetailContent.value = content
+                        _isCompletedAlready.value = true
+                    }
                 }
 
                 is ApiResponse.Failure -> {
