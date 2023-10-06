@@ -28,6 +28,7 @@ android {
         manifestPlaceholders = [KEY_KAKAO: properties['key.kakao']]
         buildConfigField 'String', 'KEY_KAKAO', properties['key.kakao.string']
         buildConfigField "String", "PRIVACY_POLICY_URL", properties['url.privacyPolicy']
+        buildConfigField "String", "DDANG_EMAIL_ADDRESS", properties['email.address.ddangddangddang']
     }
 
     buildTypes {

@@ -77,6 +77,10 @@ class MyPageViewModel @Inject constructor(
         _event.value = MyPageEvent.NavigateToAnnouncement
     }
 
+    fun contactUs() {
+        _event.value = MyPageEvent.ContactUs
+    }
+
     fun navigateToPrivacyPolicy() {
         _event.value = MyPageEvent.NavigateToPrivacyPolicy
     }
@@ -136,6 +140,7 @@ class MyPageViewModel @Inject constructor(
         object NavigateToMyParticipateAuctions : MyPageEvent()
         object NavigateToNotificationSettings : MyPageEvent()
         object NavigateToAnnouncement : MyPageEvent()
+        object ContactUs : MyPageEvent()
         object NavigateToPrivacyPolicy : MyPageEvent()
         object LogoutSuccessfully : MyPageEvent()
         data class LogoutFailed(val type: ErrorType) : MyPageEvent()

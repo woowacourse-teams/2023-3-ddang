@@ -84,7 +84,10 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
             MyPageViewModel.MyPageEvent.NavigateToAnnouncement -> {
             }
 
+            MyPageViewModel.MyPageEvent.ContactUs -> contactUs()
+
             MyPageViewModel.MyPageEvent.NavigateToPrivacyPolicy -> showPrivacyPolicy()
+
             MyPageViewModel.MyPageEvent.LogoutSuccessfully -> {
                 notifyLogoutSuccessfully()
                 navigateToLogin()
@@ -142,6 +145,14 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
     private fun navigateToNotificationSettings() {
         val intent = Intent(ACTION_APP_NOTIFICATION_SETTINGS)
         intent.putExtra(EXTRA_APP_PACKAGE, requireContext().packageName)
+        startActivity(intent)
+    }
+
+    private fun contactUs() {
+        val address = BuildConfig.DDANG_EMAIL_ADDRESS
+        val intent = Intent(Intent.ACTION_SENDTO).apply {
+            data = Uri.parse("mailto:$address")
+        }
         startActivity(intent)
     }
 

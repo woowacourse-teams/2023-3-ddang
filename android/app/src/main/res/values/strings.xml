@@ -146,6 +146,7 @@
     <string name="mypage_my_participate_auction_list_button">내가 참여한 경매 목록</string>
     <string name="mypage_notification_settings_button">알림 설정</string>
     <string name="mypage_announcement_button">공지사항</string>
+    <string name="mypage_contact_us_button">문의하기</string>
     <string name="mypage_privacy_policy_button">개인정보처리방침</string>
     <string name="mypage_logout_button">로그아웃</string>
     <string name="mypage_delete_account_button">탈퇴하기</string>

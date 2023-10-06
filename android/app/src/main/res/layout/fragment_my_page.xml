@@ -119,9 +119,19 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:onClick="@{() -> viewModel.navigateToAnnouncement()}"
                     app:layout_constraintTop_toBottomOf="@id/tv_notification_settings_button"
                     bind:categoryName="@{@string/mypage_announcement_button}" />
+
+                <include
+                    android:id="@+id/tv_contact_us_button"
+                    layout="@layout/view_my_page_feature_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.contactUs()}"
+                    app:layout_constraintTop_toBottomOf="@id/tv_announcement_button"
+                    bind:categoryName="@{@string/mypage_contact_us_button}" />
 
                 <include
                     android:id="@+id/tv_privacy_policy_button"
@@ -129,7 +139,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:onClick="@{() -> viewModel.navigateToPrivacyPolicy()}"
-                    app:layout_constraintTop_toBottomOf="@id/tv_announcement_button"
+                    app:layout_constraintTop_toBottomOf="@id/tv_contact_us_button"
                     bind:categoryName="@{@string/mypage_privacy_policy_button}" />
 
                 <include
