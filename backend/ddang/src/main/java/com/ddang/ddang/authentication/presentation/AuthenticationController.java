@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,7 +68,7 @@ public class AuthenticationController {
                              .build();
     }
 
-    @PostMapping("/withdrawal/{oauth2Type}")
+    @DeleteMapping("/withdrawal/{oauth2Type}")
     public ResponseEntity<Void> withdrawal(
             @PathVariable final Oauth2Type oauth2Type,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String accessToken,
