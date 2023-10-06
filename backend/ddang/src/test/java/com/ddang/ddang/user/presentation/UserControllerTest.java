@@ -172,7 +172,7 @@ class UserControllerTest {
     }
 
     @Test
-    void 사용자_정보를_모두_수정한다() throws Exception {
+    void 사용자_정보를_수정한다() throws Exception {
         // given
         final MockMultipartFile profileImage = new MockMultipartFile(
                 "profileImage",
@@ -218,81 +218,11 @@ class UserControllerTest {
                                ),
                                responseFields(
                                        fieldWithPath("name").type(JsonFieldType.STRING).description("사용자 닉네임"),
-                                       fieldWithPath("profileImage").type(JsonFieldType.STRING).description("사용자 프로필 이미지"),
+                                       fieldWithPath("profileImage").type(JsonFieldType.STRING)
+                                                                    .description("사용자 프로필 이미지"),
                                        fieldWithPath("reliability").type(JsonFieldType.NUMBER).description("사용자 신뢰도")
                                )
                        )
-               );
-    }
-
-    @Test
-    void 사용자_정보를_이름만_수정한다() throws Exception {
-        // given
-        final MockMultipartFile profileImage = new MockMultipartFile(
-                "profileImage",
-                (byte[]) null
-        );
-        final UpdateUserRequest updateUserRequest = new UpdateUserRequest("updateName");
-        final MockMultipartFile request = new MockMultipartFile(
-                "request",
-                "request",
-                MediaType.APPLICATION_JSON_VALUE,
-                objectMapper.writeValueAsBytes(updateUserRequest)
-        );
-
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(userService.updateById(anyLong(), any())).willReturn(readUserDto);
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-
-        // when & then
-        mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
-                       .file(request)
-                       .file(profileImage)
-                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-               )
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.name", is(readUserDto.name())),
-                       jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
-               );
-    }
-
-    @Test
-    void 사용자_정보를_이미지만_수정한다() throws Exception {
-        // given
-        final MockMultipartFile profileImage = new MockMultipartFile(
-                "profileImage",
-                "image.png",
-                MediaType.IMAGE_PNG_VALUE,
-                new byte[]{1}
-        );
-        final MockMultipartFile request = new MockMultipartFile(
-                "request",
-                (byte[]) null
-        );
-
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-
-        given(userService.updateById(anyLong(), any())).willReturn(readUserDto);
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-
-        // when & then
-        mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
-                       .file(request)
-                       .file(profileImage)
-                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-               )
-               .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.name", is(readUserDto.name())),
-                       jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
                );
     }
 

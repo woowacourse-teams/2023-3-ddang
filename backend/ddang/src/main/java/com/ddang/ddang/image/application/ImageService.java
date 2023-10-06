@@ -3,7 +3,7 @@ package com.ddang.ddang.image.application;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
-import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.image.infrastructure.persistence.JpaImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -22,7 +22,7 @@ public class ImageService {
     @Value("${image.store.dir}")
     private String imageStoreDir;
 
-    private final JpaProfileImageRepository imageRepository;
+    private final JpaImageRepository imageRepository;
     private final JpaAuctionImageRepository auctionImageRepository;
 
     public Resource readProfileImage(final Long id) throws MalformedURLException {
