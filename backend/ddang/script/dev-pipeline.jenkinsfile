@@ -1,6 +1,14 @@
 pipeline {
     agent any
 
+    tools {
+        jdk "jdk-17.0.7"
+    }
+
+    environment {
+        JAVA_HOME = "tool jdk-17.0.7"
+    }
+
     stages {
         stage('build start notification to slack') {
             steps {
@@ -17,7 +25,7 @@ pipeline {
                 checkout scmGit(
                     branches: [[name: '*/develop-be']],
                     extensions: [submodule(parentCredentials: true, reference: '', trackingSubmodules: true)],
-                    userRemoteConfigs: [[credentialsId: 'github-token', url: 'https://github.com/woowacourse-teams/2023-3-ddang']])
+                    userRemoteConfigs: [[credentialsId: 'ddang-dev-token', url: 'https://github.com/woowacourse-teams/2023-3-ddang']])
             }
         }
 
@@ -32,11 +40,11 @@ pipeline {
 
         stage('publish') {
             steps {
-               sshagent(credentials: ['ec2-dev-key']) {
-                   sh "scp backend/ddang/build/libs/ddang-0.0.1-SNAPSHOT.jar ubuntu@${env.DEV_EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
-                   sh "scp backend/ddang/3-ddang-submodule/application-dev.yml ubuntu@${env.DEV_EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
-                   sh "scp backend/ddang/script/dev-deploy-script.sh ubuntu@${env.DEV_EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
-                   sh "ssh ubuntu@${env.DEV_EC2_PRIVATE_IP} 'sh ${env.EC2_DIRECTORY}/dev-deploy-script.sh' "
+               sshagent(credentials: ['ddang-dev-ec2']) {
+                   sh "scp backend/ddang/build/libs/ddang-0.0.1-SNAPSHOT.jar ubuntu@${env.EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
+                   sh "scp backend/ddang/3-ddang-submodule/application-dev.yml ubuntu@${env.EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
+                   sh "scp backend/ddang/script/dev-deploy-script.sh ubuntu@${env.EC2_PRIVATE_IP}:${env.EC2_DIRECTORY}"
+                   sh "ssh ubuntu@${env.EC2_PRIVATE_IP} 'sh ${env.EC2_DIRECTORY}/dev-deploy-script.sh' "
                }
            }
         }
@@ -54,7 +62,7 @@ pipeline {
                 channel: '#빌드-결과',
                 color: '#00FF00',
                 message: """
-                    빌드 성공!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.INFRA_EC2_PUBLIC_IP}/jenkins)
+                    빌드 성공!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)
                 """
             )
         }
@@ -62,7 +70,7 @@ pipeline {
             slackSend (
                 channel: '#빌드-결과',
                 color: '#FF0000',
-                message: "<!channel>\n빌드 실패...: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.INFRA_EC2_PUBLIC_IP}/jenkins)"
+                message: "<!channel>\n빌드 실패...: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)"
             )
         }
     }
