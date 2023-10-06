@@ -354,17 +354,3 @@ include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조
 
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/http-response.adoc[]
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/response-fields.adoc[]
-
-== 디바이스 토큰 API
-
-=== 디바이스 토큰 갱신
-
-==== 요청
-
-include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/http-request.adoc[]
-include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/request-headers.adoc[]
-include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/request-fields.adoc[]
-
-==== 응답
-
-include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/http-response.adoc[]

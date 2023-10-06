@@ -178,4 +178,3 @@ Temporary Items
 *.icloud
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,java,intellij
-/src/main/resources/firebase/

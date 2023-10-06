@@ -1,25 +1,22 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
-import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
-import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.device.application.DeviceTokenService;
-import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Map;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,26 +25,18 @@ public class AuthenticationService {
 
     private static final String PRIVATE_CLAIMS_KEY = "userId";
 
-    private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final JpaUserRepository userRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
 
     @Transactional
-    public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken, final String deviceToken) {
+    public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken) {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
         final User persistUser = findOrPersistUser(oauth2Type, userInformationDto);
 
-        updateOrPersistDeviceToken(deviceToken, persistUser);
-
         return convertTokenDto(persistUser);
-    }
-
-    private void updateOrPersistDeviceToken(final String deviceToken, final User persistUser) {
-        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(deviceToken);
-        deviceTokenService.persist(persistUser.getId(), persistDeviceTokenDto);
     }
 
     private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {

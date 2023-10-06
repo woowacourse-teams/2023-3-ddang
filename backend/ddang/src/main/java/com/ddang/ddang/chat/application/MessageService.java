@@ -10,9 +10,6 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.notification.application.NotificationService;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -22,13 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MessageService {
 
-    private final NotificationService notificationService;
     private final JpaMessageRepository messageRepository;
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
@@ -53,25 +50,8 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        sendNotification(persistMessage);
 
         return persistMessage.getId();
-    }
-
-    private void sendNotification(final Message message) {
-        final CreateNotificationDto dto = new CreateNotificationDto(
-                NotificationType.MESSAGE,
-                message.getReceiver().getId(),
-                message.getWriter().getName(),
-                message.getContents(),
-                calculateRedirectUrl(message.getChatRoom().getId()),
-                message.getWriter().getProfileImage()
-        );
-        notificationService.send(dto);
-    }
-
-    private String calculateRedirectUrl(final Long id) {
-        return "/chattings/" + id;
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
@@ -95,7 +75,7 @@ public class MessageService {
 
         return readMessages.stream()
                            .map(message -> ReadMessageDto.from(message, chatRoom))
-                           .toList();
+                           .collect(Collectors.toList());
     }
 
     private void validateLastMessageId(final Long lastMessageId) {

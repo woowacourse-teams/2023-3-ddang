@@ -1,5 +1,23 @@
 package com.ddang.ddang.authentication.presentation;
 
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
@@ -7,7 +25,7 @@ import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
 import com.ddang.ddang.configuration.RestDocsConfiguration;
@@ -35,24 +53,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.BDDMockito.willThrow;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers = {AuthenticationController.class},
         excludeFilters = {
@@ -101,9 +101,9 @@ class AuthenticationControllerTest {
     void 소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_accessToken과_refreshToken을_반환한다() throws Exception {
         // given
         final TokenDto tokenDto = new TokenDto("accessToken", "refreshToken");
-        final LoginTokenRequest request = new LoginTokenRequest("kakaoAccessToken", "deviceToken");
+        final AccessTokenRequest request = new AccessTokenRequest("kakaoAccessToken");
 
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString())).willReturn(tokenDto);
+        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString())).willReturn(tokenDto);
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/login/{oauth2Type}", "kakao")
@@ -121,8 +121,7 @@ class AuthenticationControllerTest {
                                        parameterWithName("oauth2Type").description("소셜 로그인을 할 서비스 선택(kakao로 고정)")
                                ),
                                requestFields(
-                                       fieldWithPath("accessToken").description("소셜 로그인 AccessToken"),
-                                       fieldWithPath("deviceToken").description("기기 디바이스 토큰")
+                                       fieldWithPath("accessToken").description("소셜 로그인 AccessToken")
                                ),
                                responseFields(
                                        fieldWithPath("accessToken").type(JsonFieldType.STRING).description("Access Token"),
@@ -135,9 +134,9 @@ class AuthenticationControllerTest {
     @Test
     void 소셜_로그인을_진행하지_않는_타입을_전달하면_400이_발생한다() throws Exception {
         // given
-        final LoginTokenRequest request = new LoginTokenRequest("kakaoAccessToken", "deviceToken");
+        final AccessTokenRequest request = new AccessTokenRequest("kakaoAccessToken");
 
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString()))
+        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString()))
                 .willThrow(new UnsupportedSocialLoginException("지원하는 소셜 로그인 기능이 아닙니다."));
 
         // when & then
@@ -155,9 +154,9 @@ class AuthenticationControllerTest {
     void 유효하지_않은_소셜_로그인_토큰을_전달하면_401이_발생한다() throws Exception {
         // given
         final String invalidKakaoAccessToken = "invalidKakaoAccessToken";
-        final LoginTokenRequest request = new LoginTokenRequest(invalidKakaoAccessToken, "deviceToken");
+        final AccessTokenRequest request = new AccessTokenRequest(invalidKakaoAccessToken);
 
-        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString(), anyString()))
+        given(authenticationService.login(eq(Oauth2Type.KAKAO), anyString()))
                 .willThrow(new InvalidTokenException("401 Unauthorized", new RuntimeException()));
 
         // when & then
