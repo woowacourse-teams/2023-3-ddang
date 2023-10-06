@@ -59,7 +59,10 @@ class ParticipateAuctionViewModel @Inject constructor(
         if (loadingAuctionInProgress) return
         _loadingAuctionsInProgress = true
         viewModelScope.launch {
-            when (val response = userRepository.getMyParticipateAuctionPreviews(newPage)) {
+            when (
+                val response =
+                    userRepository.getMyParticipateAuctionPreviews(newPage, SIZE_AUCTION_LOAD)
+            ) {
                 is ApiResponse.Success -> {
                     updateAuctions(response.body, newPage)
                 }
@@ -99,6 +102,7 @@ class ParticipateAuctionViewModel @Inject constructor(
     }
 
     companion object {
+        private const val SIZE_AUCTION_LOAD = 20
         private const val DEFAULT_PAGE = 1
     }
 }

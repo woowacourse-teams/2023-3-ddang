@@ -27,7 +27,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                 val lastVisibleItemPosition =
                     (binding.rvAuction.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
                 val auctionsSize = viewModel.auctions.value?.size ?: 0
-                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                if (lastVisibleItemPosition + 10 >= auctionsSize) {
                     viewModel.loadAuctions()
                 }
             }
@@ -103,6 +103,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     fun scrollToTop() {
-        binding.rvAuction.smoothScrollToPosition(0)
+        val position =
+            (binding.rvAuction.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
+        if (position < 30) {
+            binding.rvAuction.smoothScrollToPosition(0)
+        } else {
+            binding.rvAuction.scrollToPosition(0)
+        }
     }
 }

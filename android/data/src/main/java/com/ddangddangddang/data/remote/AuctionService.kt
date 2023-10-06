@@ -108,11 +108,13 @@ interface AuctionService {
     @GET("/users/auctions/bids")
     suspend fun getMyParticipateAuctionPreviews(
         @Query("page") page: Int,
+        @Query("size") size: Int?,
     ): ApiResponse<AuctionPreviewsResponse>
 
     @GET("/users/auctions/mine")
     suspend fun fetchMyAuctionPreviews(
         @Query("page") page: Int,
+        @Query("size") size: Int?,
     ): ApiResponse<AuctionPreviewsResponse>
 
     @POST("reports/auctions")

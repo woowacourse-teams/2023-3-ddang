@@ -129,7 +129,7 @@ class SearchViewModel @Inject constructor(private val repository: AuctionReposit
     }
 
     companion object {
-        private const val SIZE_AUCTION_LOAD = 10
+        private const val SIZE_AUCTION_LOAD = 20
         private const val DEFAULT_PAGE = 1
         private const val KEYWORD_LENGTH_RANGE_MIN = 2
         private const val KEYWORD_LENGTH_RANGE_MAX = 20
