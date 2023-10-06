@@ -11,12 +11,17 @@
 
       <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
         <providers>
-          <timestamp/>
+          <timestamp>
+            <fieldName>timeStamp</fieldName>
+            <pattern>yyyy-MM-dd HH:mm:ss</pattern>
+          </timestamp>
           <mdc/>
           <message/>
         </providers>
-        <timestampPattern>yyyy-MM-dd HH:mm:ss.SSSSSS</timestampPattern>
         <charset>utf8</charset>
+        <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
+          <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+        </jsonGeneratorDecorator>
       </encoder>
 
       <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
