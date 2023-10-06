@@ -4,10 +4,10 @@
     <springProperty scope="context" name="LOG_DIR" source="log.directory"/>
     <timestamp key="BY_DATE" datePattern="yyyy-MM-dd"/>
 
-    <include resource="./log/console-logging.xml" />
-    <include resource="./log/file-error-logging.xml" />
-    <include resource="./log/file-info-request-logging.xml"/>
-    <include resource="./log/file-warn-logging.xml"/>
-    <include resource="./log/slack-error-logging.xml"/>
+    <include resource="log/console-logging.xml" />
+    <include resource="log/file-error-logging.xml" />
+    <include resource="log/file-info-request-logging.xml"/>
+    <include resource="log/file-warn-logging.xml"/>
+    <include resource="log/slack-error-logging.xml"/>
 
 </configuration>

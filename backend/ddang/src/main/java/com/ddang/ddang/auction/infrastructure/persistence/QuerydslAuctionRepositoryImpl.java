@@ -1,11 +1,5 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
-import static com.ddang.ddang.auction.domain.QAuction.auction;
-import static com.ddang.ddang.bid.domain.QBid.bid;
-import static com.ddang.ddang.category.domain.QCategory.category;
-import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
-import static com.ddang.ddang.region.domain.QRegion.region;
-
 import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.UnsupportedSortConditionException;
@@ -16,17 +10,24 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.bid.domain.QBid.bid;
+import static com.ddang.ddang.category.domain.QCategory.category;
+import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
+import static com.ddang.ddang.region.domain.QRegion.region;
 
 @Repository
 @RequiredArgsConstructor
@@ -74,7 +75,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
 
     private List<OrderSpecifier<?>> processOrderSpecifierByCondition(final Order order) {
         if (AuctionSortConditionConsts.RELIABILITY.equals(order.getProperty())) {
-            return List.of(auction.seller.reliability.desc());
+            return List.of(auction.seller.reliability.value.desc());
         }
         if (AuctionSortConditionConsts.AUCTIONEER_COUNT.equals(order.getProperty())) {
             return List.of(auction.auctioneerCount.desc());

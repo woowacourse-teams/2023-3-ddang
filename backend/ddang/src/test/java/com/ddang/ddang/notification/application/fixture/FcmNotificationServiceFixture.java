@@ -18,6 +18,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,25 +66,25 @@ public class FcmNotificationServiceFixture {
         메시지_조회자_겸_발신자 = User.builder()
                             .name("메시지_조회자_겸_발신자")
                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                            .reliability(4.7d)
+                            .reliability(new Reliability(4.7d))
                             .oauthId("12345")
                             .build();
         메시지_수신자 = User.builder()
                       .name("메시지_수신자")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(4.7d)
+                      .reliability(new Reliability(4.7d))
                       .oauthId("12347")
                       .build();
         새로운_입찰자 = User.builder()
                       .name("입찰자1")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(4.7d)
+                      .reliability(new Reliability(4.7d))
                       .oauthId("56789")
                       .build();
         기기토큰이_없는_사용자 = User.builder()
                            .name("기기토큰이 없는 사용자")
                            .profileImage(new ProfileImage("upload.png", "store.png"))
-                           .reliability(4.7d)
+                           .reliability(new Reliability(4.7d))
                            .oauthId("12234")
                            .build();
 

@@ -4,6 +4,6 @@ public record SellerResponse(
         Long id,
         String image,
         String nickname,
-        double reliability
+        Float reliability
 ) {
 }

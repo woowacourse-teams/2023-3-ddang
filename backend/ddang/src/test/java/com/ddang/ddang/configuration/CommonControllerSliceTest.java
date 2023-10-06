@@ -2,6 +2,7 @@ package com.ddang.ddang.configuration;
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.presentation.AuctionController;
+import com.ddang.ddang.auction.presentation.AuctionReviewController;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
@@ -22,6 +23,8 @@ import com.ddang.ddang.region.presentation.RegionController;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.ChatRoomReportService;
 import com.ddang.ddang.report.presentation.ReportController;
+import com.ddang.ddang.review.application.ReviewService;
+import com.ddang.ddang.review.presentation.ReviewController;
 import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.presentation.UserAuctionController;
 import com.ddang.ddang.user.presentation.UserController;
@@ -51,7 +54,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 RegionController.class,
                 ReportController.class,
                 UserAuctionController.class,
-                UserController.class
+                UserController.class,
+                ReviewController.class,
+                AuctionReviewController.class
         },
         excludeFilters = {
                 @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
@@ -105,6 +110,12 @@ public abstract class CommonControllerSliceTest {
     @Autowired
     protected UserController userController;
 
+    @Autowired
+    protected ReviewController reviewController;
+
+    @Autowired
+    protected AuctionReviewController auctionReviewController;
+
     @MockBean
     protected AuctionService auctionService;
 
@@ -146,4 +157,7 @@ public abstract class CommonControllerSliceTest {
 
     @MockBean
     protected UserService userService;
+
+    @MockBean
+    protected ReviewService reviewService;
 }

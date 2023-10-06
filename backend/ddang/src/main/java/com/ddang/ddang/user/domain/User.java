@@ -2,8 +2,11 @@ package com.ddang.ddang.user.domain;
 
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.review.domain.Review;
+import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -20,10 +23,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = {"id", "name", "reliability", "oauthId", "deleted"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
@@ -42,7 +47,9 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "profile_image_id", foreignKey = @ForeignKey(name = "fk_user_profile_image"), nullable = false)
     private ProfileImage profileImage;
 
-    private double reliability;
+    @Embedded
+    @AttributeOverride(name = "value", column = @Column(name = "reliability"))
+    private Reliability reliability;
 
     private String oauthId;
 
@@ -53,13 +60,21 @@ public class User extends BaseTimeEntity {
     private User(
             final String name,
             final ProfileImage profileImage,
-            final double reliability,
+            final Reliability reliability,
             final String oauthId
     ) {
         this.name = name;
         this.profileImage = profileImage;
-        this.reliability = reliability;
+        this.reliability = processReliability(reliability);
         this.oauthId = oauthId;
+    }
+
+    private Reliability processReliability(final Reliability reliability) {
+        if (reliability == null) {
+            return Reliability.INITIAL_RELIABILITY;
+        }
+
+        return reliability;
     }
 
     public void updateName(final String name) {
@@ -72,5 +87,9 @@ public class User extends BaseTimeEntity {
 
     public void withdrawal() {
         this.deleted = DELETED_STATUS;
+    }
+
+    public void updateReliability(final List<Review> reviews) {
+        reliability.updateReliability(reviews);
     }
 }
