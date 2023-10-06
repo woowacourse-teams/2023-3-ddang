@@ -31,6 +31,8 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
     val event: LiveData<ReviewEvent>
         get() = _event
 
+    private var isLoading = false
+
     fun setPartnerInfo(detail: MessageRoomDetailModel) {
         partnerId = detail.messagePartnerId
         auctionId = detail.auctionId
@@ -40,6 +42,8 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
 
     private fun fetchReviewWritten() {
         viewModelScope.launch {
+            if (isLoading) return@launch
+            isLoading = true
             val auctionId = auctionId ?: return@launch
             when (val response = reviewRepository.getUserReview(auctionId)) {
                 is ApiResponse.Success -> {
@@ -51,16 +55,20 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
                     reviewDetailContent.value = content
                     _isCompletedAlready.value = true
                 }
+
                 is ApiResponse.Failure -> {
                     _event.value = ReviewEvent.ReviewLoadFailure(ErrorType.FAILURE(response.error))
                 }
+
                 is ApiResponse.NetworkError -> {
                     _event.value = ReviewEvent.ReviewLoadFailure(ErrorType.NETWORK_ERROR)
                 }
+
                 is ApiResponse.Unexpected -> {
                     _event.value = ReviewEvent.ReviewLoadFailure(ErrorType.UNEXPECTED)
                 }
             }
+            isLoading = false
         }
     }
 
@@ -75,20 +83,26 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
             reviewDetailContent.value ?: "",
         )
         viewModelScope.launch {
+            if (isLoading) return@launch
+            isLoading = true
             when (val response = reviewRepository.reviewUser(request)) {
                 is ApiResponse.Success -> {
                     _event.value = ReviewEvent.ReviewSuccess
                 }
+
                 is ApiResponse.Failure -> {
                     _event.value = ReviewEvent.ReviewFailure(ErrorType.FAILURE(response.error))
                 }
+
                 is ApiResponse.NetworkError -> {
                     _event.value = ReviewEvent.ReviewFailure(ErrorType.NETWORK_ERROR)
                 }
+
                 is ApiResponse.Unexpected -> {
                     _event.value = ReviewEvent.ReviewFailure(ErrorType.UNEXPECTED)
                 }
             }
+            isLoading = false
         }
     }
 
