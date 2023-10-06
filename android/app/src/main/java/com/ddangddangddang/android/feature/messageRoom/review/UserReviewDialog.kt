@@ -97,6 +97,7 @@ class UserReviewDialog : DialogFragment() {
     private fun setupListener() {
         binding.btnReviewCancel.setOnClickListener { dismiss() }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
