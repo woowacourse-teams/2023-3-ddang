@@ -19,8 +19,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class JwtEncoder implements TokenEncoder {
 
-    public static final String TOKEN_PREFIX = "Bearer ";
-
     private final JwtConfigurationProperties jwtConfigurationProperties;
 
     @Override
@@ -33,7 +31,7 @@ public class JwtEncoder implements TokenEncoder {
         final String key = jwtConfigurationProperties.findTokenKey(tokenType);
         final Long expiredHours = jwtConfigurationProperties.findExpiredHours(tokenType);
 
-        return TOKEN_PREFIX + Jwts.builder()
+        return Jwts.builder()
                    .setIssuedAt(targetDate)
                    .setExpiration(new Date(targetDate.getTime() + expiredHours * 60 * 60 * 1000L))
                    .addClaims(privateClaims)

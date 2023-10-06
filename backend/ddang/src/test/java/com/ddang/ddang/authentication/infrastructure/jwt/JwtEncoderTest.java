@@ -37,7 +37,6 @@ class JwtEncoderTest {
         final String actual = jwtEncoder.encode(LocalDateTime.now(), TokenType.ACCESS, privateClaims);
 
         // then
-        assertThat(actual).isNotBlank()
-                          .contains("Bearer ");
+        assertThat(actual).isNotBlank();
     }
 }
