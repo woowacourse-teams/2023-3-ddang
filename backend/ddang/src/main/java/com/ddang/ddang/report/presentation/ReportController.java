@@ -4,12 +4,15 @@ import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.ChatRoomReportService;
+import com.ddang.ddang.report.application.QuestionReportService;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
 import com.ddang.ddang.report.presentation.dto.response.ReadAuctionReportsResponse;
 import com.ddang.ddang.report.presentation.dto.response.ReadChatRoomReportsResponse;
 import jakarta.validation.Valid;
@@ -31,6 +34,7 @@ public class ReportController {
 
     private final AuctionReportService auctionReportService;
     private final ChatRoomReportService chatRoomReportService;
+    private final QuestionReportService questionReportService;
 
     @PostMapping("/auctions")
     public ResponseEntity<Void> createAuctionReport(
@@ -68,5 +72,16 @@ public class ReportController {
         final ReadChatRoomReportsResponse response = ReadChatRoomReportsResponse.from(readAuctionReportDtos);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/questions")
+    public ResponseEntity<Void> createQuestionReport(
+            @AuthenticateUser final AuthenticationUserInfo userInfo,
+            @RequestBody @Valid final CreateQuestionReportRequest createQuestionReportRequest
+    ) {
+        questionReportService.create(CreateQuestionReportDto.of(createQuestionReportRequest, userInfo.userId()));
+
+        return ResponseEntity.created(URI.create("/auctions/" + createQuestionReportRequest.auctionId() + "/questions"))
+                             .build();
     }
 }

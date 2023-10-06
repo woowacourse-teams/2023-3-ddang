@@ -2,6 +2,7 @@ package com.ddang.ddang.report.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
+import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomInReportDto;
@@ -10,6 +11,7 @@ import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +20,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
 
     protected Long 생성된_경매_신고_아이디 = 1L;
     protected Long 생성된_채팅방_신고_아이디 = 1L;
+    protected Long 생성된_질문_신고_아이디 = 1L;
     protected String 엑세스_토큰_값 = "Bearer accessToken";
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(-999L);
@@ -127,4 +130,15 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto3, 구매자_정보_dto3),
             "신고합니다."
     );
+
+    protected CreateQuestionReportRequest 질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 존재하지_않는_질문_신고_request = new CreateQuestionReportRequest(1L, 999L, "신고합니다.");
+    protected CreateQuestionReportRequest 본인의_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 이미_신고한_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 경매_아이디가_null인_질문_신고_request = new CreateQuestionReportRequest(null, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 경매_아이디가_음수인_질문_신고_request = new CreateQuestionReportRequest(-1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 질문_아이디가_null인_질문_신고_request = new CreateQuestionReportRequest(1L, null, "신고합니다.");
+    protected CreateQuestionReportRequest 질문_아이디가_음수인_질문_신고_request = new CreateQuestionReportRequest(1L, -1L, "신고합니다.");
+    protected static CreateQuestionReportRequest 신고_내용이_null인_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, null);
+    protected static CreateQuestionReportRequest 신고_내용이_빈값인_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "");
 }

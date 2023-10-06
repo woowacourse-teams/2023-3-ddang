@@ -25,6 +25,7 @@ import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.presentation.RegionController;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.ChatRoomReportService;
+import com.ddang.ddang.report.application.QuestionReportService;
 import com.ddang.ddang.report.presentation.ReportController;
 import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.presentation.UserAuctionController;
@@ -155,6 +156,9 @@ public abstract class CommonControllerSliceTest {
 
     @MockBean
     protected ChatRoomReportService chatRoomReportService;
+
+    @MockBean
+    protected QuestionReportService questionReportService;
 
     @MockBean
     protected UserService userService;

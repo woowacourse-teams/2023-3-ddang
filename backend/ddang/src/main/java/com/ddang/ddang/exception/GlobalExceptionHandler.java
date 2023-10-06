@@ -33,6 +33,7 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
+import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -363,6 +364,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(InvalidAnswererException.class)
     public ResponseEntity<ExceptionResponse> handleInvalidAnswererException(final InvalidAnswererException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidQuestionReportException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidQuestionReportException(final InvalidQuestionReportException ex) {
         logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
