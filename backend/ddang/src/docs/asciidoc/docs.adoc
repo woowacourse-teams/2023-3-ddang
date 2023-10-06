@@ -404,3 +404,51 @@ include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_�
 ==== 응답
 
 include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/http-response.adoc[]
+
+== 유저 상호 평가 API
+
+=== 사용자 평가 등록
+
+==== 요청
+
+include::{snippets}/review-controller-test/평가를_등록한다/http-request.adoc[]
+include::{snippets}/review-controller-test/평가를_등록한다/request-headers.adoc[]
+include::{snippets}/review-controller-test/평가를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/review-controller-test/평가를_등록한다/http-response.adoc[]
+
+=== 지정한 평가 아이디에 해당하는 평가 조회
+
+==== 요청
+
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/http-request.adoc[]
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/http-response.adoc[]
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/response-fields.adoc[]
+
+=== 지정한 사용자가 받은 평가 목록 조회
+
+==== 요청
+
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/http-request.adoc[]
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/http-response.adoc[]
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/response-fields.adoc[]
+
+=== 사용자가_경매_거래_상대에게_작성한_평가를_조회한다
+
+==== 요청
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-request.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/path-parameters.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/request-headers.adoc[]
+
+==== 응답
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-response.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/response-fields.adoc[]

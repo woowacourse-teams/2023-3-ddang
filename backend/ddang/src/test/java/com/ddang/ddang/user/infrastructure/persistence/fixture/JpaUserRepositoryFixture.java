@@ -1,6 +1,7 @@
 package com.ddang.ddang.user.infrastructure.persistence.fixture;
 
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -33,14 +34,14 @@ public class JpaUserRepositoryFixture {
         사용자 = User.builder()
                   .name("사용자")
                   .profileImage(사용자_프로필_이미지)
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12345")
                   .build();
 
         탈퇴한_사용자 = User.builder()
                       .name("탈퇴한 사용자")
                       .profileImage(사용자_프로필_이미지)
-                      .reliability(4.7d)
+                      .reliability(new Reliability(4.7d))
                       .oauthId("12345")
                       .build();
         탈퇴한_사용자.withdrawal();

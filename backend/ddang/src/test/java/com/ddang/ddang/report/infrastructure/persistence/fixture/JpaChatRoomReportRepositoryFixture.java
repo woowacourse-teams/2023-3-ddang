@@ -14,6 +14,7 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepositor
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -66,25 +67,25 @@ public class JpaChatRoomReportRepositoryFixture {
         final User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
         구매자1 = User.builder()
                    .name("구매자1")
                    .profileImage(프로필_이미지)
-                   .reliability(4.7d)
+                   .reliability(new Reliability(4.7d))
                    .oauthId("12346")
                    .build();
         final User 구매자2겸_신고자 = User.builder()
                                    .name("구매자2")
                                    .profileImage(프로필_이미지)
-                                   .reliability(4.7d)
+                                   .reliability(new Reliability(4.7d))
                                    .oauthId("12347")
                                    .build();
         final User 구매자3겸_신고자 = User.builder()
                                    .name("구매자3")
                                    .profileImage(프로필_이미지)
-                                   .reliability(4.7d)
+                                   .reliability(new Reliability(4.7d))
                                    .oauthId("12348")
                                    .build();
         구매자1겸_신고자 = 구매자1;

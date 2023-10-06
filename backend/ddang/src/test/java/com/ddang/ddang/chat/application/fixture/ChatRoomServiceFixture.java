@@ -24,6 +24,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -105,37 +106,37 @@ public class ChatRoomServiceFixture {
         판매자 = User.builder()
                     .name("판매자")
                     .profileImage(프로필_이미지)
-                    .reliability(4.7d)
+                    .reliability(new Reliability(4.7d))
                     .oauthId("12345")
                     .build();
         구매자 = User.builder()
                     .name("구매자")
                     .profileImage(프로필_이미지)
-                    .reliability(4.7d)
+                    .reliability(new Reliability(4.7d))
                     .oauthId("12346")
                     .build();
         엔초 = User.builder()
                   .name("엔초")
                   .profileImage(프로필_이미지)
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12346")
                   .build();
         제이미 = User.builder()
                    .name("제이미")
                    .profileImage(프로필_이미지)
-                   .reliability(4.7d)
+                   .reliability(new Reliability(4.7d))
                    .oauthId("12347")
                    .build();
         지토 = User.builder()
                   .name("지토")
                   .profileImage(프로필_이미지)
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12348")
                   .build();
         경매에_참여한_적_없는_사용자 = User.builder()
                                     .name("외부인")
                                     .profileImage(프로필_이미지)
-                                    .reliability(4.7d)
+                                    .reliability(new Reliability(4.7d))
                                     .oauthId("12349")
                                     .build();
         userRepository.saveAll(List.of(판매자, 구매자, 엔초, 제이미, 지토, 경매에_참여한_적_없는_사용자));

@@ -10,7 +10,7 @@ public record ReadUserInChatRoomDto(Long id, String name, Long profileImageId, d
                 user.getId(),
                 user.getName(),
                 ImageIdProcessor.process(user.getProfileImage()),
-                user.getReliability(),
+                user.getReliability().getValue(),
                 user.isDeleted()
         );
     }

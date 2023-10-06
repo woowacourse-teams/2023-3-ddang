@@ -4,6 +4,7 @@ import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,13 +37,13 @@ public class DeviceTokenServiceFixture {
         디바이스_토큰이_있는_사용자 = User.builder()
                                     .name("디바이스 토큰이 있는 사용자")
                                     .profileImage(new ProfileImage("upload.png", "store.png"))
-                                    .reliability(4.7d)
+                                    .reliability(new Reliability(4.7d))
                                     .oauthId("12345")
                                     .build();
         디바이스_토큰이_없는_사용자 = User.builder()
                                     .name("디바이스 토큰이 없는 사용자")
                                     .profileImage(new ProfileImage("upload.png", "store.png"))
-                                    .reliability(4.7d)
+                                    .reliability(new Reliability(4.7d))
                                     .oauthId("12346")
                                     .build();
         사용자의_디바이스_토큰 = new DeviceToken(디바이스_토큰이_있는_사용자, 사용_중인_디바이스_토큰_값);
