@@ -2,7 +2,6 @@ package com.ddang.ddang.exception;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
-import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
@@ -219,8 +218,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidReporterToAuctionException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidReporterToAuctionException(
-            final InvalidReporterToAuctionException ex) {
+    public ResponseEntity<ExceptionResponse> handleInvalidReporterToAuctionException(final InvalidReporterToAuctionException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidReporterToAuctionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -228,8 +226,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidReportAuctionException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidReportAuctionException(
-            final InvalidReportAuctionException ex) {
+    public ResponseEntity<ExceptionResponse> handleInvalidReportAuctionException(final InvalidReportAuctionException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, InvalidReportAuctionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -237,8 +234,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AlreadyReportAuctionException.class)
-    public ResponseEntity<ExceptionResponse> handleAlreadyReportAuctionException(
-            final AlreadyReportAuctionException ex) {
+    public ResponseEntity<ExceptionResponse> handleAlreadyReportAuctionException(final AlreadyReportAuctionException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportAuctionException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -246,8 +242,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ChatRoomReportNotAccessibleException.class)
-    public ResponseEntity<ExceptionResponse> handleChatRoomReportNotAccessibleExceptionException(
-            final ChatRoomReportNotAccessibleException ex) {
+    public ResponseEntity<ExceptionResponse> handleChatRoomReportNotAccessibleExceptionException(final ChatRoomReportNotAccessibleException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, ChatRoomReportNotAccessibleException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
@@ -255,8 +250,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(AlreadyReportChatRoomException.class)
-    public ResponseEntity<ExceptionResponse> handleAlreadyReportChatRoomException(
-            final AlreadyReportChatRoomException ex) {
+    public ResponseEntity<ExceptionResponse> handleAlreadyReportChatRoomException(final AlreadyReportChatRoomException ex) {
         logger.warn(String.format(EXCEPTION_FORMAT, AlreadyReportChatRoomException.class), ex);
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -286,15 +280,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                             .body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler(InvalidSearchConditionException.class)
-    public ResponseEntity<ExceptionResponse> handleInvalidSearchConditionException(
-            final InvalidSearchConditionException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, UserUnauthorizedException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
