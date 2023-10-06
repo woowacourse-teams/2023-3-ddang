@@ -11,15 +11,25 @@ import org.springframework.web.context.request.RequestContextHolder;
 @Aspect
 @Component
 @RequiredArgsConstructor
-public class RequestResponseLogAop {
+public class LogAop {
 
-    private final RequestResponseLogProcessor logProcessor;
+    private static final String PROXY_CLASS_PREFIX = "Proxy";
+
+    private final LogTracer logTrace;
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
     private void restControllerAnnotatedClass() {
     }
 
-    @Around("restControllerAnnotatedClass()")
+    @Pointcut("@within(org.springframework.stereotype.Service)")
+    private void serviceAnnotatedClass() {
+    }
+
+    @Pointcut("execution(* com.ddang.ddang..*Repository+.*(..))")
+    private void repositoryClass() {
+    }
+
+    @Around("restControllerAnnotatedClass() || serviceAnnotatedClass() || repositoryClass()")
     public Object doLog(final ProceedingJoinPoint joinPoint) throws Throwable {
         if (isNotRequestScope()) {
             return joinPoint.proceed();
@@ -27,16 +37,15 @@ public class RequestResponseLogAop {
 
         final String className = findClassSimpleName(joinPoint);
         final String methodName = findMethodName(joinPoint);
-
-        final TraceStatus status = logProcessor.begin(className, methodName, joinPoint.getArgs());
+        final TraceStatus status = logTrace.begin(className, methodName);
 
         try {
             final Object result = joinPoint.proceed();
 
-            logProcessor.end(status, className, methodName, result);
+            logTrace.end(status, className, methodName);
             return result;
         } catch (final Throwable ex) {
-            logProcessor.exception(status, className, methodName, ex);
+            logTrace.exception(status, className, methodName, ex);
 
             throw ex;
         }
@@ -48,8 +57,12 @@ public class RequestResponseLogAop {
 
     private String findClassSimpleName(final ProceedingJoinPoint joinPoint) {
         final Class<?> clazz = joinPoint.getTarget().getClass();
+        final String className = clazz.getSimpleName();
 
-        return clazz.getSimpleName();
+        if (className.contains(PROXY_CLASS_PREFIX)) {
+            return clazz.getInterfaces()[0].getSimpleName();
+        }
+        return className;
     }
 
     private String findMethodName(final ProceedingJoinPoint joinPoint) {

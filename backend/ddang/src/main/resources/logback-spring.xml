@@ -18,10 +18,8 @@
     <springProfile name="file-info-request-trace">
         <appender name="FILE-INFO_REQUEST-TRACE" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_DIR}/request-trace/trace-${BY_DATE}.log</file>
-            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                 <level>INFO</level>
-                <onMatch>ACCEPT</onMatch>
-                <onMismatch>DENY</onMismatch>
             </filter>
 
             <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
@@ -53,10 +51,8 @@
     <springProfile name="file-warn-logging">
         <appender name="FILE-WARN" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <file>${LOG_DIR}/warn/warn-${BY_DATE}.log</file>
-            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                 <level>WARN</level>
-                <onMatch>ACCEPT</onMatch>
-                <onMismatch>DENY</onMismatch>
             </filter>
             <encoder>
                 <pattern>${LOG_PATTERN}</pattern>

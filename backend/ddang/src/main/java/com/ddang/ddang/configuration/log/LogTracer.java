@@ -20,16 +20,14 @@ public class LogTracer {
         syncTraceDepth();
 
         final TraceDepth traceId = traceIdHolder.get();
-        final Long startTime = System.currentTimeMillis();
-        final String methodSignature = formattedMethodSignature(className, methodName);
+        final Long startTimeMs = System.currentTimeMillis();
 
         MDC.put("level", String.valueOf(traceId.getLevel()));
         MDC.put("resultTime", "NONE");
-        MDC.put("class.method", methodSignature);
 
-        log.info("{}", formattedDepth(addSpace(START_PREFIX, traceId.getLevel()), methodSignature));
+        log.info("{}", formattedClassAndMethod(addSpace(START_PREFIX, traceId.getLevel()), className, methodName));
 
-        return new TraceStatus(traceId, startTime, methodName);
+        return new TraceStatus(traceId, startTimeMs, methodName);
     }
 
     private void syncTraceDepth() {
@@ -46,12 +44,8 @@ public class LogTracer {
         return traceId.createNextId();
     }
 
-    private String formattedMethodSignature(final String className, final String methodName) {
-        return className + "." + methodName + "()";
-    }
-
-    private String formattedDepth(final String prefix, final String methodSignature) {
-        return prefix + methodSignature;
+    private String formattedClassAndMethod(final String prefix, final String className, final String methodName) {
+        return prefix + className + "." + methodName + "()";
     }
 
     private String addSpace(final String prefix, final int level) {
@@ -76,6 +70,15 @@ public class LogTracer {
         complete(status, className, methodName, null);
     }
 
+    public void exception(
+            final TraceStatus status,
+            final String className,
+            final String methodName,
+            final Throwable ex
+    ) {
+        complete(status, className, methodName, ex);
+    }
+
     private void complete(
             final TraceStatus status,
             final String className,
@@ -85,19 +88,16 @@ public class LogTracer {
         final Long stopTime = System.currentTimeMillis();
         final long resultTime = stopTime - status.getStartTime();
         final TraceDepth traceId = status.getTraceDepth();
-        final String methodSignature = formattedMethodSignature(className, methodName);
 
         MDC.put("level", String.valueOf(traceId.getLevel()));
         MDC.put("resultTime", resultTime + "ms");
-        MDC.put("class.method", methodSignature);
 
         if (ex == null) {
-            log.info("{}", formattedDepth(addSpace(COMPLETE_PREFIX, traceId.getLevel()), methodSignature));
+            log.info("{}", formattedClassAndMethod(addSpace(COMPLETE_PREFIX, traceId.getLevel()), className, methodName));
         } else {
-            log.info("{} : {}", formattedDepth(
-                            addSpace(EXCEPTION_PREFIX, traceId.getLevel()), methodSignature),
-                    ex.getClass().getSimpleName()
-            );
+            log.info("{}", formattedClassAndMethod(addSpace(EXCEPTION_PREFIX, traceId.getLevel()), className, methodName));
+            MDC.put("exception", ex.getClass().getSimpleName());
+            MDC.put("exceptionMessage", ex.getMessage());
         }
 
         releaseTraceDepth();
@@ -111,14 +111,5 @@ public class LogTracer {
         } else {
             traceIdHolder.set(traceId.createPreviousId());
         }
-    }
-
-    public void exception(
-            final TraceStatus status,
-            final String className,
-            final String methodName,
-            final Throwable ex
-    ) {
-        complete(status, className, methodName, ex);
     }
 }
