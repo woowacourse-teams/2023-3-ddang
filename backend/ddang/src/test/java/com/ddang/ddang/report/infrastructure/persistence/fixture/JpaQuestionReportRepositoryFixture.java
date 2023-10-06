@@ -47,6 +47,10 @@ public class JpaQuestionReportRepositoryFixture {
     protected Question 질문;
     protected Question 이미_신고한_질문;
     protected String 신고_내용 = "신고합니다.";
+    protected QuestionReport 질문_신고1;
+    protected QuestionReport 질문_신고2;
+    protected QuestionReport 질문_신고3;
+    protected QuestionReport 질문_신고4;
 
     @BeforeEach
     void setUp() {
@@ -69,6 +73,24 @@ public class JpaQuestionReportRepositoryFixture {
                   .reliability(4.7d)
                   .oauthId("12347")
                   .build();
+        final User 신고자2 = User.builder()
+                              .name("신고자2")
+                              .profileImage(프로필_이미지)
+                              .reliability(4.7d)
+                              .oauthId("12348")
+                              .build();
+        final User 신고자3 = User.builder()
+                              .name("신고자3")
+                              .profileImage(프로필_이미지)
+                              .reliability(4.7d)
+                              .oauthId("12349")
+                              .build();
+        final User 신고자4 = User.builder()
+                              .name("신고자4")
+                              .profileImage(프로필_이미지)
+                              .reliability(4.7d)
+                              .oauthId("12350")
+                              .build();
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
@@ -86,17 +108,20 @@ public class JpaQuestionReportRepositoryFixture {
         경매.addAuctionImages(List.of(경매_이미지));
 
         질문 = new Question(경매, 질문자, "질문드립니다.");
-
         이미_신고한_질문 = new Question(경매, 질문자, "질문드립니다.");
-        final QuestionReport 질문_신고 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
 
-        userRepository.saveAll(List.of(판매자, 질문자, 신고자));
+        질문_신고1 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
+        질문_신고2 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
+        질문_신고3 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
+        질문_신고4 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
+
+        userRepository.saveAll(List.of(판매자, 질문자, 신고자, 신고자2, 신고자3, 신고자4));
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionRepository.save(경매);
 
         questionRepository.saveAll(List.of(질문, 이미_신고한_질문));
-        questionReportRepository.save(질문_신고);
+        questionReportRepository.saveAll(List.of(질문_신고1, 질문_신고2, 질문_신고3, 질문_신고4));
 
         em.flush();
         em.clear();
