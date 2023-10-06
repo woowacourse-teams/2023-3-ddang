@@ -12,6 +12,8 @@ import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.report.domain.AnswerReport;
+import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -43,9 +45,17 @@ public class JpaAnswerReportRepositoryFixture {
     @Autowired
     private JpaAnswerRepository answerRepository;
 
+    @Autowired
+    private JpaAnswerReportRepository answerReportRepository;
+
     protected User 신고자;
     protected Answer 답변;
     protected String 신고_내용 = "신고합니다.";
+    protected Answer 이미_신고된_답변;
+    protected AnswerReport 답변_신고1;
+    protected AnswerReport 답변_신고2;
+    protected AnswerReport 답변_신고3;
+    protected AnswerReport 답변_신고4;
 
     @BeforeEach
     void setUp() {
@@ -102,17 +112,26 @@ public class JpaAnswerReportRepositoryFixture {
                                   .build();
         경매.addAuctionImages(List.of(경매_이미지));
 
-        final Question 질문 = new Question(경매, 질문자, "질문드립니다.");
+        final Question 질문1 = new Question(경매, 질문자, "질문드립니다.");
+        final Question 질문2 = new Question(경매, 질문자, "질문드립니다.");
         답변 = new Answer("답변드립니다.");
-        질문.addAnswer(답변);
+        이미_신고된_답변 = new Answer("답변드립니다.");
+        질문1.addAnswer(답변);
+        질문2.addAnswer(이미_신고된_답변);
+
+        답변_신고1 = new AnswerReport(신고자, 이미_신고된_답변, "신고합니다.");
+        답변_신고2 = new AnswerReport(신고자2, 이미_신고된_답변, "신고합니다.");
+        답변_신고3 = new AnswerReport(신고자3, 이미_신고된_답변, "신고합니다.");
+        답변_신고4 = new AnswerReport(신고자4, 이미_신고된_답변, "신고합니다.");
 
         userRepository.saveAll(List.of(판매자, 질문자, 신고자, 신고자2, 신고자3, 신고자4));
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionRepository.save(경매);
 
-        questionRepository.save(질문);
-        answerRepository.save(답변);
+        questionRepository.saveAll(List.of(질문1, 질문2));
+        answerRepository.saveAll(List.of(답변, 이미_신고된_답변));
+        answerReportRepository.saveAll(List.of(답변_신고1, 답변_신고2, 답변_신고3, 답변_신고4));
 
         em.flush();
         em.clear();

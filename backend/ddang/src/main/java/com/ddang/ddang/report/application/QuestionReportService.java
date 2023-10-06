@@ -52,9 +52,9 @@ public class QuestionReportService {
     }
 
     public List<ReadQuestionReportDto> readAll() {
-        final List<QuestionReport> auctionReports = questionReportRepository.findAllByOrderByIdAsc();
+        final List<QuestionReport> questionReports = questionReportRepository.findAllByOrderByIdAsc();
 
-        return auctionReports.stream()
+        return questionReports.stream()
                              .map(ReadQuestionReportDto::from)
                              .toList();
     }

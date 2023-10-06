@@ -47,7 +47,7 @@ class JpaQuestionReportRepositoryTest extends JpaQuestionReportRepositoryFixture
     }
 
     @Test
-    void 신고전인_질문이라면_거짓을_반환한다() {
+    void 신고_전인_질문이라면_거짓을_반환한다() {
         // when
         final boolean actual = questionReportRepository.existsByIdAndReporterId(질문.getId(), 신고자.getId());
 
