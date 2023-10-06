@@ -163,23 +163,23 @@ class ChatRoomControllerTest {
                        header().string(HttpHeaders.LOCATION, is("/chattings/1")),
                        jsonPath("$.id", is(1L), Long.class)
                )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               pathParameters(
-                                       parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
-                               ),
-                               requestFields(
-                                       fieldWithPath("receiverId").description("메시지 수신자 ID"),
-                                       fieldWithPath("contents").description("메시지 내용")
-                               ),
-                               responseFields(
-                                       fieldWithPath("id").type(JsonFieldType.NUMBER).description("메시지 보내진 채팅방 ID")
-                               )
-                       )
-               );
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(
+                                        headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                                ),
+                                pathParameters(
+                                        parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
+                                ),
+                                requestFields(
+                                        fieldWithPath("receiverId").description("메시지 수신자 ID"),
+                                        fieldWithPath("contents").description("메시지 내용")
+                                ),
+                                responseFields(
+                                        fieldWithPath("id").type(JsonFieldType.NUMBER).description("메시지 보내진 채팅방 ID")
+                                )
+                        )
+                );
     }
 
     @Test
@@ -244,13 +244,35 @@ class ChatRoomControllerTest {
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
         final Long lastMessageId = 1L;
+        final ReadUserInChatRoomDto writerDto = new ReadUserInChatRoomDto(1L, "user", "profile.png", 5.0d);
+        final ReadUserInChatRoomDto receiverDto = new ReadUserInChatRoomDto(1L, "user", "profile.png", 5.0d);
+
+        final ReadAuctionInChatRoomDto auctionDto = new ReadAuctionInChatRoomDto(
+                1L,
+                "경매1",
+                10_000,
+                List.of(1L, 2L),
+                "main",
+                "sub",
+                writerDto.id(),
+                writerDto.profileImage(),
+                writerDto.name(),
+                writerDto.reliability()
+        );
+
+        final ReadParticipatingChatRoomDto chatRoomDto = new ReadParticipatingChatRoomDto(
+                1L,
+                auctionDto,
+                writerDto,
+                true
+        );
 
         final ReadMessageDto readMessageDto = new ReadMessageDto(
                 1L,
                 LocalDateTime.now(),
-                1L,
-                1L,
-                1L,
+                chatRoomDto,
+                writerDto,
+                receiverDto,
                 "메시지내용"
         );
         final ReadMessageResponse expected = new ReadMessageResponse(1L, LocalDateTime.now(), true, "메시지내용");
@@ -259,38 +281,35 @@ class ChatRoomControllerTest {
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}/messages", 1L)
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                                                        .contentType(MediaType.APPLICATION_JSON)
-                                                        .queryParam("lastMessageId", lastMessageId.toString())
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .queryParam("lastMessageId", lastMessageId.toString())
                )
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.[0].isMyMessage", is(expected.isMyMessage())),
                        jsonPath("$.[0].contents", is(expected.contents()))
                )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               pathParameters(
-                                       parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
-                               ),
-                               queryParameters(
-                                       parameterWithName("lastMessageId").description("마지막으로 응답받은 메시지의 ID").optional()
-                               ),
-                               responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY)
-                                                          .description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
-                                       fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
-                                                                    .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN)
-                                                                      .description("조회를 요청한 사람이 보낸 메시지인지 여부"),
-                                       fieldWithPath("[].contents").type(JsonFieldType.STRING).description("메시지 내용")
-                               )
-                       )
-               );
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(
+                                        headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                                ),
+                                pathParameters(
+                                        parameterWithName("chatRoomId").description("메시지를 보내고 싶은 채팅방의 ID")
+                                ),
+                                queryParameters(
+                                        parameterWithName("lastMessageId").description("마지막으로 응답받은 메시지의 ID").optional()
+                                ),
+                                responseFields(
+                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
+                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
+                                        fieldWithPath("[].createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
+                                        fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN).description("조회를 요청한 사람이 보낸 메시지인지 여부"),
+                                        fieldWithPath("[].contents").type(JsonFieldType.STRING).description("메시지 내용")
+                                )
+                        )
+                );
     }
 
     @Test
@@ -429,40 +448,30 @@ class ChatRoomControllerTest {
                        jsonPath("$.[1].auction.title", is(dto2.auctionDto().title())),
                        jsonPath("$.[1].lastMessage.contents", is(dto2.lastMessageDto().contents()))
                )
-               .andDo(
-                       restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
-                               responseFields(
-                                       fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
-                                       fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
-                                       fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                         .description("채팅 상대방 ID"),
-                                       fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING)
-                                                                           .description("채팅 상대방 이름"),
-                                       fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                   .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("[].auction").type(JsonFieldType.OBJECT)
-                                                                  .description("채팅방과 연관된 경매"),
-                                       fieldWithPath("[].auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
-                                       fieldWithPath("[].auction.title").type(JsonFieldType.STRING)
-                                                                        .description("경매 제목"),
-                                       fieldWithPath("[].auction.image").type(JsonFieldType.STRING)
-                                                                        .description("경매 대표 사진"),
-                                       fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
-                                       fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT)
-                                                                      .description("마지막으로 전송된 메시지"),
-                                       fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING)
-                                                                                .description("메시지를 보낸 시간"),
-                                       fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
-                                                                               .description("메시지 내용"),
-                                       fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                          .description("채팅 가능 여부")
-                               )
-                       )
-               );
+                .andDo(
+                        restDocs.document(
+                                requestHeaders(
+                                        headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                                ),
+                                responseFields(
+                                        fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
+                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
+                                        fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
+                                        fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
+                                        fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
+                                        fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
+                                        fieldWithPath("[].auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
+                                        fieldWithPath("[].auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
+                                        fieldWithPath("[].auction.title").type(JsonFieldType.STRING).description("경매 제목"),
+                                        fieldWithPath("[].auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
+                                        fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
+                                        fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT).description("마지막으로 전송된 메시지"),
+                                        fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING).description("메시지를 보낸 시간"),
+                                        fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING).description("메시지 내용"),
+                                        fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
+                                )
+                        )
+                );
     }
 
     @Test
@@ -522,8 +531,8 @@ class ChatRoomControllerTest {
 
         // when & then
         mockMvc.perform(RestDocumentationRequestBuilders.get("/chattings/{chatRoomId}", 1L)
-                                                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-                                                        .contentType(MediaType.APPLICATION_JSON))
+                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+                       .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
                        status().isOk(),
                        jsonPath("$.id", is(chatRoom.id()), Long.class),
@@ -543,18 +552,13 @@ class ChatRoomControllerTest {
                                        fieldWithPath("auction").type(JsonFieldType.OBJECT).description("채팅방과 연관된 경매"),
                                        fieldWithPath("auction.id").type(JsonFieldType.NUMBER).description("경매 ID"),
                                        fieldWithPath("auction.title").type(JsonFieldType.STRING).description("경매 제목"),
-                                       fieldWithPath("auction.image").type(JsonFieldType.STRING)
-                                                                     .description("경매 대표 사진"),
+                                       fieldWithPath("auction.image").type(JsonFieldType.STRING).description("경매 대표 사진"),
                                        fieldWithPath("auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
                                        fieldWithPath("chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER)
-                                                                      .description("채팅 상대방 ID"),
-                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING)
-                                                                        .description("채팅 상대방 이름"),
-                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING)
-                                                                                .description("채팅 상대방 프로필 사진"),
-                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN)
-                                                                       .description("채팅 가능 여부")
+                                       fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER).description("채팅 상대방 ID"),
+                                       fieldWithPath("chatPartner.name").type(JsonFieldType.STRING).description("채팅 상대방 이름"),
+                                       fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING).description("채팅 상대방 프로필 사진"),
+                                       fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN).description("채팅 가능 여부")
                                )
                        )
                );

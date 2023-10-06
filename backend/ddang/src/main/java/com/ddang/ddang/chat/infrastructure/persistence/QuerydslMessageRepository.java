@@ -9,8 +9,5 @@ public interface QuerydslMessageRepository {
 
     Optional<Message> findLastMessageByChatRoomId(final Long chatRoomId);
 
-    List<Message> findMessagesAllByLastMessageId(
-            final Long userId,
-            final Long chatRoomId,
-            final Long lastMessageId);
+    List<Message> findMessagesAllByLastMessageId(final Long userId, final Long chatRoomId, final Long lastMessageId);
 }
