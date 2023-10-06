@@ -13,34 +13,42 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("!test")
 public class FcmConfiguration {
+
+    private static final FirebaseOptions TEST_OPTIONS = FirebaseOptions.builder()
+                                                                       .setCredentials(new MockGoogleCredentials("test-token"))
+                                                                       .setProjectId("test-project")
+                                                                       .build();
+    private static final FirebaseApp FIREBASE_APP = FirebaseApp.initializeApp(TEST_OPTIONS);
+
+    @Value("${fcm.enabled}")
+    private boolean enabled;
 
     @Value("${fcm.key.path}")
     private String FCM_PRIVATE_KEY_PATH;
 
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        final FileInputStream refreshToken = new FileInputStream(FCM_PRIVATE_KEY_PATH);
-        final List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
+        if (!enabled) {
+            return FirebaseMessaging.getInstance(FIREBASE_APP);
+        }
 
+        final FileInputStream refreshToken = new FileInputStream(FCM_PRIVATE_KEY_PATH);
+
+        final List<FirebaseApp> firebaseApps = FirebaseApp.getApps();
         if (firebaseApps.isEmpty()) {
             return makeNewInstance(refreshToken);
         }
 
-        refreshToken.close();
         return findExistingInstance(firebaseApps);
     }
 
     private FirebaseMessaging makeNewInstance(final InputStream refreshToken) throws IOException {
-        final FirebaseOptions options = FirebaseOptions.builder()
+        FirebaseOptions options = FirebaseOptions.builder()
                                                  .setCredentials(GoogleCredentials.fromStream(refreshToken))
                                                  .build();
-        refreshToken.close();
-
         return FirebaseMessaging.getInstance(FirebaseApp.initializeApp(options));
     }
 
