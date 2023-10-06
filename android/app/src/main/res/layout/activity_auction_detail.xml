@@ -335,7 +335,6 @@
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/all_reliability_icon_description"
                     android:src="@drawable/ic_star_18"
-                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@id/cv_profile"
                     app:layout_constraintStart_toStartOf="@id/tv_seller_nickname"
                     app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname" />
@@ -346,8 +345,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="@{@string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
-                    android:visibility="gone"
+                    android:text="@{viewModel.auctionDetailModel.sellerModel.reliability == null ? @string/all_default_reliability : @string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
                     app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
                     app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
                     app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"

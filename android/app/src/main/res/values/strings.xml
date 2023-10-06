@@ -28,6 +28,7 @@
     <string name="all_must_update_to_latest_version">최신 버전으로 업데이트가 필요합니다.</string>
     <string name="all_date_format">yyyy년 M월 d일</string>
     <string name="all_time_format">h:mm a</string>
+    <string name="all_default_reliability">( - )</string>
 
     <!-- splash -->
     <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
