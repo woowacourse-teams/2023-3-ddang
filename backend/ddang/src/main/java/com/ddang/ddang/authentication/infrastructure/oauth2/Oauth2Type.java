@@ -1,7 +1,7 @@
 package com.ddang.ddang.authentication.infrastructure.oauth2;
 
+import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
-
 import java.util.Locale;
 
 public enum Oauth2Type {
@@ -16,9 +16,9 @@ public enum Oauth2Type {
         }
     }
 
-    public String calculateNickname(final String name) {
+    public String calculateNickname(final UserInformationDto dto) {
         return this.name()
                    .toLowerCase(Locale.ENGLISH)
-                   .concat(name);
+                   .concat(String.valueOf(dto.id()));
     }
 }

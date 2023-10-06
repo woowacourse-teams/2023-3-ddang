@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
-public final class QuerydslSliceHelper {
+public class QuerydslSliceHelper {
 
     private QuerydslSliceHelper() {
     }

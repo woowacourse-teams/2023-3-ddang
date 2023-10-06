@@ -12,8 +12,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -45,34 +43,6 @@ public class KakaoUserInformationProvider implements OAuth2UserInformationProvid
             final ResponseEntity<UserInformationDto> response = restTemplate.exchange(
                     providersConfigurationProperties.userInfoUri(),
                     HttpMethod.GET,
-                    request,
-                    UserInformationDto.class
-            );
-
-            return response.getBody();
-        } catch (final HttpClientErrorException ex) {
-            final String message = ex.getMessage().split(REST_TEMPLATE_MESSAGE_SEPARATOR)[MESSAGE_INDEX];
-
-            throw new InvalidTokenException(message, ex);
-        }
-    }
-
-    @Override
-    public UserInformationDto unlinkUserBy(final String accessToken, final String oauthId) {
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set(HttpHeaders.AUTHORIZATION, TOKEN_TYPE + accessToken);
-
-        final MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
-        parameters.add("target_id_type", "user_id");
-        parameters.add("target_id", oauthId);
-
-        final HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(parameters, headers);
-
-        try {
-            final ResponseEntity<UserInformationDto> response = restTemplate.exchange(
-                    providersConfigurationProperties.userUnlinkUri(),
-                    HttpMethod.POST,
                     request,
                     UserInformationDto.class
             );

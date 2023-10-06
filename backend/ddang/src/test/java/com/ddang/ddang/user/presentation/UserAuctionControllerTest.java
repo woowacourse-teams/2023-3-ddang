@@ -69,7 +69,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AutoConfigureRestDocs
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@SuppressWarnings("NonAsciiCharacters")
 class UserAuctionControllerTest {
 
     @MockBean
@@ -143,8 +142,7 @@ class UserAuctionControllerTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d,
-                false
+                3.5d
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -164,8 +162,7 @@ class UserAuctionControllerTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d,
-                false
+                3.5d
         );
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
@@ -245,8 +242,7 @@ class UserAuctionControllerTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d,
-                false
+                3.5d
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -266,8 +262,7 @@ class UserAuctionControllerTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d,
-                false
+                3.5d
         );
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);

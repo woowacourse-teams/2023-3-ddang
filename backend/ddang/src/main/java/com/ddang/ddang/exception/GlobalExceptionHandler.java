@@ -5,7 +5,6 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
-import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -26,7 +25,7 @@ import com.ddang.ddang.notification.application.exception.NotificationFailedExce
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
+import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -134,16 +133,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(EXCEPTION_FORMAT, UserForbiddenException.class), ex);
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                             .body(new ExceptionResponse(ex.getMessage()));
-    }
-
-    @ExceptionHandler(InvalidWithdrawalException.class)
-    public ResponseEntity<ExceptionResponse> handleInaccessibleWithdrawalException(
-            final InvalidWithdrawalException ex
-    ) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidWithdrawalException.class), ex);
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
@@ -258,10 +247,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(InvalidChatRoomReportException.class)
+    @ExceptionHandler(ChatRoomReportNotAccessibleException.class)
     public ResponseEntity<ExceptionResponse> handleChatRoomReportNotAccessibleExceptionException(
-            final InvalidChatRoomReportException ex) {
-        logger.warn(String.format(EXCEPTION_FORMAT, InvalidChatRoomReportException.class), ex);
+            final ChatRoomReportNotAccessibleException ex) {
+        logger.warn(String.format(EXCEPTION_FORMAT, ChatRoomReportNotAccessibleException.class), ex);
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN)
                              .body(new ExceptionResponse(ex.getMessage()));

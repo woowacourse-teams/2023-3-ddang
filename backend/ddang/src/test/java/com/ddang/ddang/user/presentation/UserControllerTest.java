@@ -46,9 +46,11 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -119,7 +121,7 @@ class UserControllerTest {
     @Test
     void 사용자_정보를_조회한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345");
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
@@ -151,24 +153,22 @@ class UserControllerTest {
     }
 
     @Test
-    void 탈퇴한_사용자_정보를_조회한다() throws Exception {
+    void 존재하지_않는_사용자_정보_조회시_404를_반환한다() throws Exception {
         // given
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", true);
+        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보를 사용할 수 없습니다.");
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(userService.readById(anyLong())).willReturn(readUserDto);
+        given(userService.readById(anyLong())).willThrow(userNotFoundException);
 
         // when & then
         mockMvc.perform(get("/users")
                        .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
-                       status().isOk(),
-                       jsonPath("$.name", is("알 수 없음")),
-                       jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(readUserDto.reliability()))
-        );
+                       status().isNotFound(),
+                       jsonPath("$.message", is(userNotFoundException.getMessage()))
+               );
     }
 
     @Test
@@ -188,7 +188,7 @@ class UserControllerTest {
                 objectMapper.writeValueAsBytes(updateUserRequest)
         );
 
-        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
+        final ReadUserDto readUserDto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345");
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(userService.updateById(anyLong(), any())).willReturn(readUserDto);
@@ -227,21 +227,18 @@ class UserControllerTest {
     }
 
     @Test
-    void 존재하지_않는_사용자_정보_조회시_404를_반환한다() throws Exception {
+    void 회원_탈퇴한다() throws Exception {
         // given
-        final UserNotFoundException userNotFoundException = new UserNotFoundException("사용자 정보를 사용할 수 없습니다.");
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(userService.readById(anyLong())).willThrow(userNotFoundException);
+        willDoNothing().given(userService).deleteById(anyLong());
 
         // when & then
-        mockMvc.perform(get("/users")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
-               )
-               .andExpectAll(
-                       status().isNotFound(),
-                       jsonPath("$.message", is(userNotFoundException.getMessage()))
-               );
+        mockMvc.perform(delete("/users/withdrawal")
+                .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
+        ).andExpectAll(
+                status().isNoContent()
+        );
     }
 }

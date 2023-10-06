@@ -7,14 +7,12 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
-import com.ddang.ddang.authentication.presentation.dto.request.WithdrawalRequest;
 import com.ddang.ddang.authentication.presentation.dto.response.TokenResponse;
 import com.ddang.ddang.authentication.presentation.dto.response.ValidatedTokenResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,18 +61,6 @@ public class AuthenticationController {
             @RequestBody @Valid final LogoutRequest request
     ) {
         blackListTokenService.registerBlackListToken(accessToken, request.refreshToken());
-
-        return ResponseEntity.noContent()
-                             .build();
-    }
-
-    @DeleteMapping("/withdrawal/{oauth2Type}")
-    public ResponseEntity<Void> withdrawal(
-            @PathVariable final Oauth2Type oauth2Type,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) final String accessToken,
-            @RequestBody @Valid final WithdrawalRequest request
-    ) {
-        authenticationService.withdrawal(oauth2Type, accessToken, request.refreshToken());
 
         return ResponseEntity.noContent()
                              .build();

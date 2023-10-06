@@ -1,8 +1,6 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
-import com.ddang.ddang.authentication.application.util.RandomNameGenerator;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
@@ -35,7 +33,6 @@ public class AuthenticationService {
     private final JpaUserRepository userRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
-    private final BlackListTokenService blackListTokenService;
 
     @Transactional
     public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken, final String deviceToken) {
@@ -54,10 +51,10 @@ public class AuthenticationService {
     }
 
     private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {
-        return userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
+        return userRepository.findByOauthId(userInformationDto.findUserId())
                              .orElseGet(() -> {
                                  final User user = User.builder()
-                                                       .name(oauth2Type.calculateNickname(calculateRandomNumber()))
+                                                       .name(oauth2Type.calculateNickname(userInformationDto))
                                                        .profileImage(null)
                                                        .reliability(0.0d)
                                                        .oauthId(userInformationDto.findUserId())
@@ -65,20 +62,6 @@ public class AuthenticationService {
 
                                  return userRepository.save(user);
                              });
-    }
-
-    private String calculateRandomNumber() {
-        String name = RandomNameGenerator.generate();
-
-        while (isAlreadyExist(name)) {
-            name = RandomNameGenerator.generate();
-        }
-
-        return name;
-    }
-
-    private boolean isAlreadyExist(final String name) {
-        return userRepository.existsByNameEndingWith(name);
     }
 
     private TokenDto convertTokenDto(final User persistUser) {
@@ -113,21 +96,5 @@ public class AuthenticationService {
     public boolean validateToken(final String accessToken) {
         return tokenDecoder.decode(TokenType.ACCESS, accessToken)
                            .isPresent();
-    }
-
-    @Transactional
-    public void withdrawal(
-            final Oauth2Type oauth2Type,
-            final String oauth2AccessToken,
-            final String refreshToken
-    ) throws InvalidWithdrawalException {
-        final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
-        final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
-        final User user = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
-                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다."));
-
-        user.withdrawal();
-        blackListTokenService.registerBlackListToken(oauth2AccessToken, refreshToken);
-        provider.unlinkUserBy(oauth2AccessToken, user.getOauthId());
     }
 }

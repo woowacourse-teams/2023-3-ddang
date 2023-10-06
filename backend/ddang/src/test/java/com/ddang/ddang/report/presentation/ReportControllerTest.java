@@ -24,7 +24,7 @@ import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
+import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
@@ -349,7 +349,7 @@ class ReportControllerTest {
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        final ReadUserInReportDto userDto = new ReadUserInReportDto(1L, "판매자", 1L, 4.0d, "12345", false);
+        final ReadUserInReportDto userDto = new ReadUserInReportDto(1L, "판매자", 1L, 4.0d, "12345");
         final ReadAuctionInReportDto auctionDto = new ReadAuctionInReportDto(
                 1L,
                 userDto,
@@ -363,21 +363,21 @@ class ReportControllerTest {
         );
         final ReadAuctionReportDto auctionReportDto1 = new ReadAuctionReportDto(
                 1L,
-                new ReadReporterDto(1L, "회원1", 1L, 5.0, false),
+                new ReadReporterDto(1L, "회원1", 1L, 5.0),
                 LocalDateTime.now(),
                 auctionDto,
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto2 = new ReadAuctionReportDto(
                 2L,
-                new ReadReporterDto(2L, "회원2", 2L, 5.0, false),
+                new ReadReporterDto(2L, "회원2", 2L, 5.0),
                 LocalDateTime.now(),
                 auctionDto,
                 "신고합니다."
         );
         final ReadAuctionReportDto auctionReportDto3 = new ReadAuctionReportDto(
                 3L,
-                new ReadReporterDto(3L, "회원3", 3L, 5.0, false),
+                new ReadReporterDto(3L, "회원3", 3L, 5.0),
                 LocalDateTime.now(),
                 auctionDto,
                 "신고합니다."
@@ -513,10 +513,10 @@ class ReportControllerTest {
         final Long unaccessibleUserId = 999L;
         final PrivateClaims privateClaims = new PrivateClaims(unaccessibleUserId);
         final CreateChatRoomReportRequest createChatRoomReportRequest = new CreateChatRoomReportRequest(1L, "신고합니다");
-        final InvalidChatRoomReportException invalidChatRoomReportException = new InvalidChatRoomReportException("해당 채팅방을 신고할 권한이 없습니다.");
+        final ChatRoomReportNotAccessibleException chatRoomReportNotAccessibleException = new ChatRoomReportNotAccessibleException("해당 채팅방을 신고할 권한이 없습니다.");
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
-        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(invalidChatRoomReportException);
+        given(chatRoomReportService.create(any(CreateChatRoomReportDto.class))).willThrow(chatRoomReportNotAccessibleException);
 
         // when & then
         mockMvc.perform(post("/reports/chat-rooms")
@@ -526,7 +526,7 @@ class ReportControllerTest {
                )
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message", is(invalidChatRoomReportException.getMessage()))
+                       jsonPath("$.message", is(chatRoomReportNotAccessibleException.getMessage()))
                );
     }
 
@@ -623,7 +623,7 @@ class ReportControllerTest {
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
 
-        final ReadUserInReportDto sellerDto = new ReadUserInReportDto(1L, "판매자", 1L, 4.0d, "12345", false);
+        final ReadUserInReportDto sellerDto = new ReadUserInReportDto(1L, "판매자", 1L, 4.0d, "12345");
         final ReadAuctionInReportDto auctionInReportDto = new ReadAuctionInReportDto(
                 1L,
                 sellerDto,
@@ -635,26 +635,26 @@ class ReportControllerTest {
                 LocalDateTime.now().plusDays(2),
                 2
         );
-        final ReadUserInReportDto buyerDto1 = new ReadUserInReportDto(2L, "구매자1", 2L, 4.0d, "12346", false);
+        final ReadUserInReportDto buyerDto1 = new ReadUserInReportDto(2L, "구매자1", 2L, 4.0d, "12346");
         final ReadChatRoomReportDto chatRoomReportDto1 = new ReadChatRoomReportDto(
                 1L,
-                new ReadReporterDto(1L, "회원1", 1L, 5.0, false),
+                new ReadReporterDto(1L, "회원1", 1L, 5.0),
                 LocalDateTime.now(),
                 new ReadChatRoomInReportDto(1L, auctionInReportDto, buyerDto1, false),
                 "신고합니다."
         );
-        final ReadUserInReportDto buyerDto2 = new ReadUserInReportDto(3L, "구매자2", 3L, 4.0d, "12347", false);
+        final ReadUserInReportDto buyerDto2 = new ReadUserInReportDto(3L, "구매자2", 2L, 4.0d, "12347");
         final ReadChatRoomReportDto chatRoomReportDto2 = new ReadChatRoomReportDto(
                 2L,
-                new ReadReporterDto(1L, "회원1", 1L, 5.0, false),
+                new ReadReporterDto(1L, "회원1", 1L, 5.0),
                 LocalDateTime.now(),
                 new ReadChatRoomInReportDto(1L, auctionInReportDto, buyerDto2, false),
                 "신고합니다."
         );
-        final ReadUserInReportDto buyerDto3 = new ReadUserInReportDto(4L, "구매자3", 4L, 4.0d, "12348", false);
+        final ReadUserInReportDto buyerDto3 = new ReadUserInReportDto(4L, "구매자3", 3L, 4.0d, "12348");
         final ReadChatRoomReportDto chatRoomReportDto3 = new ReadChatRoomReportDto(
                 3L,
-                new ReadReporterDto(1L, "회원1", 1L, 5.0, false),
+                new ReadReporterDto(1L, "회원1", 1L, 5.0),
                 LocalDateTime.now(),
                 new ReadChatRoomInReportDto(1L, auctionInReportDto, buyerDto3, false),
                 "신고합니다."

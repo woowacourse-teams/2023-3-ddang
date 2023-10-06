@@ -75,19 +75,6 @@ include::{snippets}/authentication-controller-test/access-token과_refresh-token
 
 include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-response.adoc[]
 
-=== 탈퇴
-
-==== 요청
-
-include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/http-request.adoc[]
-include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/path-parameters.adoc[]
-include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/request-headers.adoc[]
-include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/request-fields.adoc[]
-
-==== 응답
-
-include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/http-response.adoc[]
-
 == 사용자 정보 API
 === 사용자 정보 조회
 
