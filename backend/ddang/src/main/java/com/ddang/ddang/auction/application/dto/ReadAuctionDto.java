@@ -1,9 +1,7 @@
 package com.ddang.ddang.auction.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.bid.domain.Bid;
-import com.ddang.ddang.image.application.util.ImageIdProcessor;
 import com.ddang.ddang.image.domain.AuctionImage;
 
 import java.time.LocalDateTime;
@@ -25,14 +23,12 @@ public record ReadAuctionDto(
         String mainCategory,
         String subCategory,
         Long sellerId,
-        Long sellerProfileId,
+        String sellerProfile,
         String sellerName,
-        double sellerReliability,
-        boolean isSellerDeleted,
-        AuctionStatus auctionStatus
+        double sellerReliability
 ) {
 
-    public static ReadAuctionDto of(final Auction auction, final LocalDateTime targetTime) {
+    public static ReadAuctionDto from(final Auction auction) {
         return new ReadAuctionDto(
                 auction.getId(),
                 auction.getTitle(),
@@ -44,20 +40,18 @@ public record ReadAuctionDto(
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
                 convertReadRegionsDto(auction),
-                convertImageIds(auction),
+                convertImageUrls(auction),
                 auction.getAuctioneerCount(),
                 auction.getSubCategory().getMainCategory().getName(),
                 auction.getSubCategory().getName(),
                 auction.getSeller().getId(),
-                ImageIdProcessor.process(auction.getSeller().getProfileImage()),
+                auction.getSeller().getProfileImage(),
                 auction.getSeller().getName(),
-                auction.getSeller().getReliability().getValue(),
-                auction.getSeller().isDeleted(),
-                auction.findAuctionStatus(targetTime)
+                auction.getSeller().getReliability()
         );
     }
 
-    private static List<Long> convertImageIds(final Auction auction) {
+    private static List<Long> convertImageUrls(final Auction auction) {
         return auction.getAuctionImages()
                       .stream()
                       .map(AuctionImage::getId)

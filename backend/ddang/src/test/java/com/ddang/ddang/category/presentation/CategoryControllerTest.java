@@ -9,26 +9,57 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ddang.ddang.category.application.CategoryService;
 import com.ddang.ddang.category.application.dto.ReadCategoryDto;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
-import com.ddang.ddang.configuration.CommonControllerSliceTest;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+@WebMvcTest(controllers = {CategoryController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class CategoryControllerTest extends CommonControllerSliceTest {
+class CategoryControllerTest {
+
+    @MockBean
+    CategoryService categoryService;
+
+    @Autowired
+    CategoryController categoryController;
+
+    @Autowired
+    RestDocumentationResultHandler restDocs;
 
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))

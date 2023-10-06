@@ -4,10 +4,9 @@ import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.AccessTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
-import com.ddang.ddang.authentication.presentation.dto.request.WithdrawalRequest;
 import com.ddang.ddang.authentication.presentation.dto.response.TokenResponse;
 import com.ddang.ddang.authentication.presentation.dto.response.ValidatedTokenResponse;
 import jakarta.validation.Valid;
@@ -31,11 +30,11 @@ public class AuthenticationController {
     private final BlackListTokenService blackListTokenService;
 
     @PostMapping("/login/{oauth2Type}")
-    public ResponseEntity<Object> login(
+    public ResponseEntity<Object> validate(
             @PathVariable final Oauth2Type oauth2Type,
-            @RequestBody final LoginTokenRequest request
+            @RequestBody final AccessTokenRequest request
     ) {
-        final TokenDto tokenDto = authenticationService.login(oauth2Type, request.accessToken(), request.deviceToken());
+        final TokenDto tokenDto = authenticationService.login(oauth2Type, request.accessToken());
 
         return ResponseEntity.ok(TokenResponse.from(tokenDto));
     }
@@ -62,18 +61,6 @@ public class AuthenticationController {
             @RequestBody @Valid final LogoutRequest request
     ) {
         blackListTokenService.registerBlackListToken(accessToken, request.refreshToken());
-
-        return ResponseEntity.noContent()
-                             .build();
-    }
-
-    @PostMapping("/withdrawal/{oauth2Type}")
-    public ResponseEntity<Void> withdrawal(
-            @PathVariable final Oauth2Type oauth2Type,
-            @RequestHeader(HttpHeaders.AUTHORIZATION) final String accessToken,
-            @RequestBody @Valid final WithdrawalRequest request
-    ) {
-        authenticationService.withdrawal(oauth2Type, accessToken, request.refreshToken());
 
         return ResponseEntity.noContent()
                              .build();

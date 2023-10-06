@@ -1,8 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
-import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -38,16 +36,16 @@ public record AuctionDetailResponse(
         int auctioneerCount
 ) {
 
-    public static AuctionDetailResponse from(final ReadAuctionDto dto) {
+    public static AuctionDetailResponse of(final ReadAuctionDto dto, final String baseUrl) {
         return new AuctionDetailResponse(
                 dto.id(),
-                convertImageFullUrls(dto),
+                convertImageUrls(dto, baseUrl),
                 dto.title(),
                 new CategoryResponse(dto.mainCategory(), dto.subCategory()),
                 dto.description(),
                 dto.startPrice(),
                 dto.lastBidPrice(),
-                dto.auctionStatus().name(),
+                processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
                 dto.bidUnit(),
                 dto.registerTime(),
                 dto.closingTime(),
@@ -56,10 +54,10 @@ public record AuctionDetailResponse(
         );
     }
 
-    private static List<String> convertImageFullUrls(final ReadAuctionDto dto) {
+    private static List<String> convertImageUrls(final ReadAuctionDto dto, final String baseUrl) {
         return dto.auctionImageIds()
                   .stream()
-                  .map(id -> ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id))
+                  .map(id -> baseUrl.concat(String.valueOf(id)))
                   .toList();
     }
 
@@ -68,5 +66,19 @@ public record AuctionDetailResponse(
                   .stream()
                   .map(DirectRegionResponse::from)
                   .toList();
+    }
+
+    // TODO 2차 데모데이 이후 enum으로 처리
+    private static String processAuctionStatus(final LocalDateTime closingTime, final Integer lastBidPrice) {
+        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice == null) {
+            return "UNBIDDEN";
+        }
+        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice != null) {
+            return "ONGOING";
+        }
+        if (LocalDateTime.now().isAfter(closingTime) && lastBidPrice == null) {
+            return "FAILURE";
+        }
+        return "SUCCESS";
     }
 }

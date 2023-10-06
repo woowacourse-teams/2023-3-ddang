@@ -33,7 +33,7 @@ public class ReportController {
     private final ChatRoomReportService chatRoomReportService;
 
     @PostMapping("/auctions")
-    public ResponseEntity<Void> createAuctionReport(
+    public ResponseEntity<Void> createAuctinReport(
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateAuctionReportRequest auctionReportRequest
     ) {

@@ -17,7 +17,6 @@ import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomWithLastMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
@@ -37,11 +37,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomController {
 
+    private static final String AUCTIONS_IMAGE_BASE_URL = "/auctions/images/";
+
     private final ChatRoomService chatRoomService;
     private final MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<CreateChatRoomResponse> createChatRoom(
+    public ResponseEntity<CreateChatRoomResponse> create(
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateChatRoomRequest chatRoomRequest
     ) {
@@ -61,19 +63,26 @@ public class ChatRoomController {
 
         final List<ReadChatRoomWithLastMessageResponse> responses =
                 readParticipatingChatRoomDtos.stream()
-                                             .map(ReadChatRoomWithLastMessageResponse::from)
+                                             .map(dto -> ReadChatRoomWithLastMessageResponse.of(dto, calculateBaseImageUrl()))
                                              .toList();
 
         return ResponseEntity.ok(responses);
     }
 
+    private String calculateBaseImageUrl() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+                                          .build()
+                                          .toUriString()
+                                          .concat(AUCTIONS_IMAGE_BASE_URL);
+    }
+
     @GetMapping("/{chatRoomId}")
     public ResponseEntity<ReadChatRoomResponse> readChatRoomById(
-            @AuthenticateUser final AuthenticationUserInfo userInfo,
-            @PathVariable final Long chatRoomId
+            @PathVariable final Long chatRoomId,
+            @AuthenticateUser final AuthenticationUserInfo userInfo
     ) {
         final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(chatRoomId, userInfo.userId());
-        final ReadChatRoomResponse response = ReadChatRoomResponse.from(chatRoomDto);
+        final ReadChatRoomResponse response = ReadChatRoomResponse.of(chatRoomDto, calculateBaseImageUrl());
 
         return ResponseEntity.ok(response);
     }
@@ -84,10 +93,7 @@ public class ChatRoomController {
             @PathVariable final Long chatRoomId,
             @RequestBody @Valid final CreateMessageRequest request
     ) {
-
-        final Long messageId = messageService.create(
-                CreateMessageDto.of(userInfo.userId(), chatRoomId, request), ImageRelativeUrl.USER.calculateAbsoluteUrl()
-        );
+        final Long messageId = messageService.create(CreateMessageDto.of(userInfo.userId(), chatRoomId, request));
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 
         return ResponseEntity.created(URI.create("/chattings/" + chatRoomId))
@@ -100,11 +106,7 @@ public class ChatRoomController {
             @PathVariable final Long chatRoomId,
             @RequestParam(required = false) final Long lastMessageId
     ) {
-        final ReadMessageRequest readMessageRequest = new ReadMessageRequest(
-                userInfo.userId(),
-                chatRoomId,
-                lastMessageId
-        );
+        final ReadMessageRequest readMessageRequest = new ReadMessageRequest(userInfo.userId(), chatRoomId, lastMessageId);
         final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(readMessageRequest);
         final List<ReadMessageResponse> responses = readMessageDtos.stream()
                                                                    .map(readMessageDto -> ReadMessageResponse.of(
@@ -119,7 +121,8 @@ public class ChatRoomController {
     }
 
     private boolean isMessageOwner(final ReadMessageDto readMessageDto, final AuthenticationUserInfo userInfo) {
-        return readMessageDto.writerId()
+        return readMessageDto.writerDto()
+                             .id()
                              .equals(userInfo.userId());
     }
 }

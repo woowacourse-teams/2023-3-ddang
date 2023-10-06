@@ -2,9 +2,9 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
-import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.user.domain.User;
+
+import java.time.LocalDateTime;
 
 public record ReadChatRoomWithLastMessageDto(
         Long id,
@@ -16,19 +16,17 @@ public record ReadChatRoomWithLastMessageDto(
 
     public static ReadChatRoomWithLastMessageDto of(
             final User findUser,
-            final ChatRoomAndMessageAndImageDto chatRoomAndMessageAndImageDto
+            final ChatRoom chatRoom,
+            final Message lastMessage
     ) {
-        final ChatRoom chatRoom = chatRoomAndMessageAndImageDto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
-        final Message lastMessage = chatRoomAndMessageAndImageDto.message();
-        final AuctionImage thumbnailImage = chatRoomAndMessageAndImageDto.thumbnailImage();
 
         return new ReadChatRoomWithLastMessageDto(
                 chatRoom.getId(),
-                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), thumbnailImage),
+                ReadAuctionInChatRoomDto.from(chatRoom.getAuction()),
                 ReadUserInChatRoomDto.from(partner),
                 ReadLastMessageDto.from(lastMessage),
-                chatRoom.isChatAvailablePartner(partner)
+                chatRoom.isChatAvailableTime(LocalDateTime.now())
         );
     }
 }

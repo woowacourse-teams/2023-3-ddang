@@ -1,105 +1,114 @@
 package com.ddang.ddang.user.application;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.ddang.ddang.user.application.fixture.UserServiceFixture;
+import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class UserServiceTest extends UserServiceFixture {
+class UserServiceTest {
 
     @Autowired
     UserService userService;
 
-    @MockBean
-    StoreImageProcessor imageProcessor;
+    @Autowired
+    JpaUserRepository userRepository;
 
     @Test
     void 특정_사용자_정보를_조회한다() {
+        // given
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
+
         // when
-        final ReadUserDto actual = userService.readById(사용자.getId());
+        final ReadUserDto actual = userService.readById(user.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.name()).isEqualTo(사용자.getName());
-            softAssertions.assertThat(actual.profileImageId()).isEqualTo(사용자.getProfileImage().getId());
-            softAssertions.assertThat(actual.reliability()).isEqualTo(사용자.getReliability().getValue());
+            softAssertions.assertThat(actual.name()).isEqualTo(user.getName());
+            softAssertions.assertThat(actual.profileImage()).isEqualTo(user.getProfileImage());
+            softAssertions.assertThat(actual.reliability()).isEqualTo(user.getReliability());
         });
     }
 
     @Test
     void 존재하지_않는_사용자_정보_조회시_예외를_반환한다() {
+        // given
+        final Long invalidUserId = -999L;
+
         // when & then
-        assertThatThrownBy(() -> userService.readById(존재하지_않는_사용자_아이디))
+        assertThatThrownBy(() -> userService.readById(invalidUserId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자 정보를 사용할 수 없습니다.");
     }
 
     @Test
-    void 사용자_정보를_수정한다() {
+    void 회원_탈퇴한다() {
         // given
-        given(imageProcessor.storeImageFile(any())).willReturn(새로운_프로필_이미지_dto);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
+
+        userRepository.save(user);
 
         // when
-        userService.updateById(사용자.getId(), 사용자_정보_수정_요청_dto);
+        userService.deleteById(user.getId());
 
         // then
+        final Optional<User> actual = userRepository.findById(user.getId());
+
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(사용자.getName()).isEqualTo(사용자_정보_수정_요청_dto.name());
-            softAssertions.assertThat(사용자.getProfileImage().getImage().getStoreName())
-                          .isEqualTo(새로운_프로필_이미지_dto.storeName());
-            softAssertions.assertThat(사용자.getProfileImage().getImage().getUploadName())
-                          .isEqualTo(새로운_프로필_이미지_dto.uploadName());
+            softAssertions.assertThat(actual).isPresent();
+            softAssertions.assertThat(actual.get().isDeleted()).isTrue();
         });
     }
 
     @Test
-    void 사용자_정보를_수정시_이름만_수정한다() {
-        // when
-        userService.updateById(사용자.getId(), 사용자_이름만_수정_요청_dto);
-
-        // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(사용자.getName()).isEqualTo(사용자_이름만_수정_요청_dto.name());
-            softAssertions.assertThat(사용자.getProfileImage()).isEqualTo(프로필_이미지);
-        });
-    }
-
-    @Test
-    void 사용자_정보를_수정시_이미지만_수정한다() {
+    void 회원_탈퇴할때_이미_탈퇴한_회원이면_예외가_발생한다() {
         // given
-        given(imageProcessor.storeImageFile(any())).willReturn(새로운_프로필_이미지_dto);
+        final User user = User.builder()
+                              .name("사용자")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
+                              .build();
 
-        // when
-        userService.updateById(사용자.getId(), 사용자_이미지만_수정_요청_dto);
+        user.withdrawal();
+        userRepository.save(user);
 
-        // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(사용자.getName()).isEqualTo(사용자_이름);
-            softAssertions.assertThat(사용자.getProfileImage().getImage().getStoreName())
-                          .isEqualTo(새로운_프로필_이미지_dto.storeName());
-            softAssertions.assertThat(사용자.getProfileImage().getImage().getUploadName())
-                          .isEqualTo(새로운_프로필_이미지_dto.uploadName());
-        });
-    }
-
-    @Test
-    void 사용자_정보_수정시_존재하지_않는_사용자라면_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> userService.updateById(존재하지_않는_사용자_아이디, 사용자_정보_수정_요청_dto))
+        assertThatThrownBy(() -> userService.deleteById(user.getId()))
+                .isInstanceOf(UserNotFoundException.class)
+                .hasMessage("사용자 정보를 사용할 수 없습니다.");
+    }
+
+    @Test
+    void 회원_탈퇴할때_존재하지_않는_사용자_정보_조회시_예외를_반환한다() {
+        // given
+        final Long invalidUserId = -999L;
+
+        // when & then
+        assertThatThrownBy(() -> userService.deleteById(invalidUserId))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("사용자 정보를 사용할 수 없습니다.");
     }

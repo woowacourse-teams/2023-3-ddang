@@ -1,9 +1,7 @@
 package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
-import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
@@ -16,26 +14,24 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
 public class MessageService {
 
-    private final ApplicationEventPublisher messageEventPublisher;
     private final JpaMessageRepository messageRepository;
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
 
     @Transactional
-    public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
+    public Long create(final CreateMessageDto dto) {
         final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -46,25 +42,22 @@ public class MessageService {
                                             .orElseThrow(() -> new UserNotFoundException(
                                                     "지정한 아이디에 대한 수신자를 찾을 수 없습니다."));
 
-        if (!chatRoom.isChatAvailablePartner(receiver)) {
-            throw new UnableToChatException("탈퇴한 사용자에게는 메시지 전송이 불가능합니다.");
+        if (!chatRoom.isChatAvailableTime(LocalDateTime.now())) {
+            throw new UnableToChatException("현재 메시지 전송이 불가능합니다.");
         }
 
         final Message message = dto.toEntity(chatRoom, writer, receiver);
 
         final Message persistMessage = messageRepository.save(message);
 
-        final MessageDto messageDto = MessageDto.of(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
-        messageEventPublisher.publishEvent(new MessageNotificationEvent(messageDto));
 
         return persistMessage.getId();
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        if (!userRepository.existsById(request.messageReaderId())) {
-            throw new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
-        }
-
+        final User user = userRepository.findById(request.userId())
+                                        .orElseThrow(() -> new UserNotFoundException(
+                                                "지정한 아이디에 대한 사용자를 찾을 수 없습니다."));
         final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -74,14 +67,14 @@ public class MessageService {
         }
 
         final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
-                request.messageReaderId(),
+                user.getId(),
                 chatRoom.getId(),
                 request.lastMessageId()
         );
 
         return readMessages.stream()
-                           .map(message -> ReadMessageDto.from(message, chatRoom))
-                           .toList();
+                           .map(ReadMessageDto::from)
+                           .collect(Collectors.toList());
     }
 
     private void validateLastMessageId(final Long lastMessageId) {
