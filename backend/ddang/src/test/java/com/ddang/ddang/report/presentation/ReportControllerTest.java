@@ -453,7 +453,7 @@ class ReportControllerTest extends ReportControllerFixture {
     void 전체_채팅방_신고_목록을_조회한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomReportService.readAll()).willReturn(List.of(채팅방_신고1, 채팅방_신고_dto2, 채팅방_신고_dto3));
+        given(chatRoomReportService.readAll()).willReturn(List.of(채팅방_신고_dto1, 채팅방_신고_dto2, 채팅방_신고_dto3));
 
         // when & then
         final ResultActions resultActions =
@@ -462,12 +462,12 @@ class ReportControllerTest extends ReportControllerFixture {
                        )
                        .andExpectAll(
                                status().isOk(),
-                               jsonPath("$.reports.[0].id", is(채팅방_신고1.id()), Long.class),
-                               jsonPath("$.reports.[0].reporter.id", is(채팅방_신고1.reporterDto().id()), Long.class),
-                               jsonPath("$.reports.[0].reporter.name", is(채팅방_신고1.reporterDto().name())),
+                               jsonPath("$.reports.[0].id", is(채팅방_신고_dto1.id()), Long.class),
+                               jsonPath("$.reports.[0].reporter.id", is(채팅방_신고_dto1.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[0].reporter.name", is(채팅방_신고_dto1.reporterDto().name())),
                                jsonPath("$.reports.[0].createdTime").exists(),
-                               jsonPath("$.reports.[0].chatRoom.id", is(채팅방_신고1.chatRoomDto().id()), Long.class),
-                               jsonPath("$.reports.[0].description", is(채팅방_신고1.description())),
+                               jsonPath("$.reports.[0].chatRoom.id", is(채팅방_신고_dto1.chatRoomDto().id()), Long.class),
+                               jsonPath("$.reports.[0].description", is(채팅방_신고_dto1.description())),
                                jsonPath("$.reports.[1].id", is(채팅방_신고_dto2.id()), Long.class),
                                jsonPath("$.reports.[1].reporter.id", is(채팅방_신고_dto2.reporterDto().id()), Long.class),
                                jsonPath("$.reports.[1].reporter.name", is(채팅방_신고_dto2.reporterDto().name())),
@@ -672,6 +672,42 @@ class ReportControllerTest extends ReportControllerFixture {
         return Stream.of(신고_내용이_null인_질문_신고_request, 신고_내용이_빈값인_질문_신고_request);
     }
 
+    @Test
+    void 전체_질문_신고_목록을_조회한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
+        given(questionReportService.readAll()).willReturn(List.of(질문_신고_dto1, 질문_신고_dto2, 질문_신고_dto3));
+
+        // when & then
+        final ResultActions resultActions =
+                mockMvc.perform(get("/reports/questions")
+                               .contentType(MediaType.APPLICATION_JSON)
+                       )
+                       .andExpectAll(
+                               status().isOk(),
+                               jsonPath("$.reports.[0].id", is(질문_신고_dto1.id()), Long.class),
+                               jsonPath("$.reports.[0].reporter.id", is(질문_신고_dto1.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[0].reporter.name", is(질문_신고_dto1.reporterDto().name())),
+                               jsonPath("$.reports.[0].createdTime").exists(),
+                               jsonPath("$.reports.[0].question.id", is(질문_신고_dto1.questionDto().id()), Long.class),
+                               jsonPath("$.reports.[0].description", is(질문_신고_dto1.description())),
+                               jsonPath("$.reports.[1].id", is(질문_신고_dto2.id()), Long.class),
+                               jsonPath("$.reports.[1].reporter.id", is(질문_신고_dto2.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[1].reporter.name", is(질문_신고_dto2.reporterDto().name())),
+                               jsonPath("$.reports.[1].createdTime").exists(),
+                               jsonPath("$.reports.[1].question.id", is(질문_신고_dto2.questionDto().id()), Long.class),
+                               jsonPath("$.reports.[1].description", is(질문_신고_dto2.description())),
+                               jsonPath("$.reports.[2].id", is(질문_신고_dto3.id()), Long.class),
+                               jsonPath("$.reports.[2].reporter.id", is(질문_신고_dto3.reporterDto().id()), Long.class),
+                               jsonPath("$.reports.[2].reporter.name", is(질문_신고_dto3.reporterDto().name())),
+                               jsonPath("$.reports.[2].createdTime").exists(),
+                               jsonPath("$.reports.[2].question.id", is(질문_신고_dto3.questionDto().id()), Long.class),
+                               jsonPath("$.reports.[2].description", is(질문_신고_dto3.description()))
+                       );
+
+        readAllQuestionReport_문서화(resultActions);
+    }
+
     private void createAuctionReport_문서화(final ResultActions resultActions) throws Exception {
         resultActions.andDo(
                 restDocs.document(
@@ -758,6 +794,29 @@ class ReportControllerTest extends ReportControllerFixture {
                                 fieldWithPath("auctionId").description("질문의 경매 ID"),
                                 fieldWithPath("questionId").description("신고할 질문 ID"),
                                 fieldWithPath("description").description("신고 내용")
+                        )
+                )
+        );
+    }
+
+    private void readAllQuestionReport_문서화(final ResultActions resultActions) throws Exception {
+        resultActions.andDo(
+                restDocs.document(
+                        responseFields(
+                                fieldWithPath("reports.[]").type(JsonFieldType.ARRAY)
+                                                           .description("모든 질문 신고 목록"),
+                                fieldWithPath("reports.[].id").type(JsonFieldType.NUMBER)
+                                                              .description("질문 신고 글 ID"),
+                                fieldWithPath("reports.[].reporter.id").type(JsonFieldType.NUMBER)
+                                                                       .description("질문을 신고한 사용자의 ID"),
+                                fieldWithPath("reports.[].reporter.name").type(JsonFieldType.STRING)
+                                                                         .description("질문을 신고한 사용자의 이름"),
+                                fieldWithPath("reports.[].createdTime").type(JsonFieldType.STRING)
+                                                                       .description("질문 신고 시간"),
+                                fieldWithPath("reports.[].question.id").type(JsonFieldType.NUMBER)
+                                                                       .description("신고한 질문 ID"),
+                                fieldWithPath("reports.[].description").type(JsonFieldType.STRING)
+                                                                       .description("신고 내용")
                         )
                 )
         );

@@ -10,11 +10,13 @@ import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
 import com.ddang.ddang.report.presentation.dto.response.ReadAuctionReportsResponse;
 import com.ddang.ddang.report.presentation.dto.response.ReadChatRoomReportsResponse;
+import com.ddang.ddang.report.presentation.dto.response.ReadQuestionReportsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -83,5 +85,13 @@ public class ReportController {
 
         return ResponseEntity.created(URI.create("/auctions/" + createQuestionReportRequest.auctionId() + "/questions"))
                              .build();
+    }
+
+    @GetMapping("/questions")
+    public ResponseEntity<ReadQuestionReportsResponse> readAllQuestionReport() {
+        final List<ReadQuestionReportDto> readQuestionReportDtos = questionReportService.readAll();
+        final ReadQuestionReportsResponse response = ReadQuestionReportsResponse.from(readQuestionReportDtos);
+
+        return ResponseEntity.ok(response);
     }
 }

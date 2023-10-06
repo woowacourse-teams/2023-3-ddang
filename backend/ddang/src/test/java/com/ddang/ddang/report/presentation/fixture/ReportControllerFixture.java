@@ -2,11 +2,12 @@ package com.ddang.ddang.report.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomInReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.ReadQuestionInReportDto;
+import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
@@ -83,7 +84,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
     private ReadUserInReportDto 구매자_정보_dto1 = new ReadUserInReportDto(2L, "구매자1", 2L, 4.0d, "12346", false);
     private ReadReporterDto 신고자_정보_dto1 = new ReadReporterDto(2L, "구매자1", 2L, 4.0d, false);
-    protected ReadChatRoomReportDto 채팅방_신고1 = new ReadChatRoomReportDto(
+    protected ReadChatRoomReportDto 채팅방_신고_dto1 = new ReadChatRoomReportDto(
             1L,
             신고자_정보_dto1,
             LocalDateTime.now(),
@@ -141,4 +142,12 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected CreateQuestionReportRequest 질문_아이디가_음수인_질문_신고_request = new CreateQuestionReportRequest(1L, -1L, "신고합니다.");
     protected static CreateQuestionReportRequest 신고_내용이_null인_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, null);
     protected static CreateQuestionReportRequest 신고_내용이_빈값인_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "");
+
+    private ReadUserInReportDto 질문자_dto = new ReadUserInReportDto(1L, "사용자", 1L, 5.0d, "12345", false);
+    private ReadQuestionInReportDto 질문_dto1 = new ReadQuestionInReportDto(1L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
+    private ReadQuestionInReportDto 질문_dto2 = new ReadQuestionInReportDto(2L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
+    private ReadQuestionInReportDto 질문_dto3 = new ReadQuestionInReportDto(3L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
+    protected ReadQuestionReportDto 질문_신고_dto1 = new ReadQuestionReportDto(1L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto1, "신공합니다.");
+    protected ReadQuestionReportDto 질문_신고_dto2 = new ReadQuestionReportDto(2L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto2, "신공합니다.");
+    protected ReadQuestionReportDto 질문_신고_dto3 = new ReadQuestionReportDto(3L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto3, "신공합니다.");
 }
