@@ -43,7 +43,7 @@ public class ChatRoomController {
     private final MessageService messageService;
 
     @PostMapping
-    public ResponseEntity<CreateChatRoomResponse> createChatRoom(
+    public ResponseEntity<CreateChatRoomResponse> create(
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateChatRoomRequest chatRoomRequest
     ) {
@@ -78,8 +78,8 @@ public class ChatRoomController {
 
     @GetMapping("/{chatRoomId}")
     public ResponseEntity<ReadChatRoomResponse> readChatRoomById(
-            @AuthenticateUser final AuthenticationUserInfo userInfo,
-            @PathVariable final Long chatRoomId
+            @PathVariable final Long chatRoomId,
+            @AuthenticateUser final AuthenticationUserInfo userInfo
     ) {
         final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(chatRoomId, userInfo.userId());
         final ReadChatRoomResponse response = ReadChatRoomResponse.of(chatRoomDto, calculateBaseImageUrl());

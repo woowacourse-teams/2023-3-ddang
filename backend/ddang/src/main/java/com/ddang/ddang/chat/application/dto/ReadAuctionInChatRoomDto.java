@@ -2,12 +2,21 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.image.domain.AuctionImage;
+
+import java.util.List;
 
 public record ReadAuctionInChatRoomDto(
         Long id,
         String title,
         Integer lastBidPrice,
-        Long thumbnailImageId
+        List<Long> auctionImageIds,
+        String mainCategory,
+        String subCategory,
+        Long sellerId,
+        String sellerProfile,
+        String sellerName,
+        double sellerReliability
 ) {
 
     public static ReadAuctionInChatRoomDto from(final Auction auction) {
@@ -15,8 +24,21 @@ public record ReadAuctionInChatRoomDto(
                 auction.getId(),
                 auction.getTitle(),
                 convertPrice(auction.getLastBid()),
-                auction.getAuctionImages().get(0).getId()
+                convertImageUrls(auction),
+                auction.getSubCategory().getMainCategory().getName(),
+                auction.getSubCategory().getName(),
+                auction.getSeller().getId(),
+                auction.getSeller().getProfileImage(),
+                auction.getSeller().getName(),
+                auction.getSeller().getReliability()
         );
+    }
+
+    private static List<Long> convertImageUrls(final Auction auction) {
+        return auction.getAuctionImages()
+                      .stream()
+                      .map(AuctionImage::getId)
+                      .toList();
     }
 
     private static Integer convertPrice(final Bid bid) {

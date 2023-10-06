@@ -1,7 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
+import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 
 public record ReadAuctionDetailResponse(
@@ -12,29 +11,28 @@ public record ReadAuctionDetailResponse(
 ) {
 
     public static ReadAuctionDetailResponse of(
-            final ReadAuctionDto auctionDto,
+            final ReadAuctionWithChatRoomIdDto dto,
             final String baseUrl,
-            final AuthenticationUserInfo userInfo,
-            final ReadChatRoomDto chatRoomDto
+            final AuthenticationUserInfo userInfo
     ) {
-        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(auctionDto, baseUrl);
+        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(dto.auctionDto(), baseUrl);
         final SellerResponse sellerResponse = new SellerResponse(
-                auctionDto.sellerId(),
-                auctionDto.sellerProfile(),
-                auctionDto.sellerName(),
-                auctionDto.sellerReliability()
+                dto.auctionDto().sellerId(),
+                dto.auctionDto().sellerProfile(),
+                dto.auctionDto().sellerName(),
+                dto.auctionDto().sellerReliability()
         );
-        final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(chatRoomDto);
+        final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(dto.chatRoomDto());
 
         return new ReadAuctionDetailResponse(
                 auctionDetailResponse,
                 sellerResponse,
                 chatRoomResponse,
-                isOwner(auctionDto, userInfo)
+                isOwner(dto, userInfo)
         );
     }
 
-    private static boolean isOwner(final ReadAuctionDto auctionDto, final AuthenticationUserInfo userInfo) {
-        return auctionDto.sellerId().equals(userInfo.userId());
+    private static boolean isOwner(final ReadAuctionWithChatRoomIdDto dto, final AuthenticationUserInfo userInfo) {
+        return dto.auctionDto().sellerId().equals(userInfo.userId());
     }
 }
