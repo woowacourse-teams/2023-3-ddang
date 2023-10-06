@@ -12,7 +12,7 @@ public record ReadReviewResponse(
 
         String content,
 
-        Double score,
+        Float score,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime createdTime

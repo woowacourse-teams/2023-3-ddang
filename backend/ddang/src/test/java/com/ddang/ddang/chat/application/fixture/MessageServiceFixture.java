@@ -75,19 +75,19 @@ public class MessageServiceFixture {
         final User 발신자 = User.builder()
                              .name("발신자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(new Reliability(4.7d))
+                             .reliability(new Reliability(4.7f))
                              .oauthId("12345")
                              .build();
         final User 수신자 = User.builder()
                              .name("수신자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(new Reliability(4.7d))
+                             .reliability(new Reliability(4.7f))
                              .oauthId("12346")
                              .build();
         final User 탈퇴한_사용자 = User.builder()
                                  .name("탈퇴한 사용자")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                                 .reliability(new Reliability(4.7d))
+                                 .reliability(new Reliability(4.7f))
                                  .oauthId("12347")
                                  .build();
         탈퇴한_사용자.withdrawal();

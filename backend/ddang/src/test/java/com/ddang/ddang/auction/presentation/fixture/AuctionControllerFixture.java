@@ -11,11 +11,12 @@ import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionControllerFixture extends CommonControllerSliceTest {
@@ -155,7 +156,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d,
+                3.5f,
                 false,
                 AuctionStatus.UNBIDDEN
         );
@@ -178,7 +179,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d,
+                3.5f,
                 false,
                 AuctionStatus.UNBIDDEN
         );
@@ -201,7 +202,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 1L,
                 1L,
                 "판매자",
-                3.5d,
+                3.5f,
                 false,
                 AuctionStatus.UNBIDDEN
         );

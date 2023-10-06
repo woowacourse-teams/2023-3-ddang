@@ -65,14 +65,14 @@ public class AuthenticationServiceFixture {
         사용자 = User.builder()
                   .name("kakao12345")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(0.0d))
+                  .reliability(new Reliability(0.0f))
                   .oauthId("12345")
                   .build();
 
         탈퇴한_사용자 = User.builder()
                       .name("kakao12346")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(new Reliability(0.0d))
+                      .reliability(new Reliability(0.0f))
                       .oauthId("12346")
                       .build();
 

@@ -33,7 +33,7 @@ public class UserServiceFixture {
         사용자 = User.builder()
                   .name(사용자_이름)
                   .profileImage(프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12345")
                   .build();
 

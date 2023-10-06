@@ -36,11 +36,11 @@ public class ReviewServiceFixture {
     @Autowired
     private JpaReviewRepository reviewRepository;
 
-    private Double 구매자가_판매자1에게_받은_평가_점수 = 5.0d;
-    private Double 구매자가_판매자2에게_받은_평가_점수 = 1.0d;
-    private Double 구매자가_받을_새로운_평가_점수 = 4.5d;
+    private Float 구매자가_판매자1에게_받은_평가_점수 = 5.0f;
+    private Float 구매자가_판매자2에게_받은_평가_점수 = 1.0f;
+    private Float 구매자가_받을_새로운_평가_점수 = 4.5f;
 
-    protected Double 구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수 =
+    protected Float 구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수 =
             (구매자가_판매자1에게_받은_평가_점수 + 구매자가_판매자2에게_받은_평가_점수 + 구매자가_받을_새로운_평가_점수) / 3;
     protected Long 존재하지_않는_사용자 = -999L;
     protected User 판매자1;
@@ -81,31 +81,31 @@ public class ReviewServiceFixture {
         판매자1 = User.builder()
                    .name("판매자1")
                    .profileImage(판매자1_프로필_이미지)
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("12345")
                    .build();
         판매자2 = User.builder()
                    .name("판매자2")
                    .profileImage(판매자2_프로필_이미지)
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("12345")
                    .build();
         평가_안한_경매_판매자 = User.builder()
                            .name("평가 안한 판매자")
                            .profileImage(평가_안한_판매자_프로필_이미지)
-                           .reliability(new Reliability(4.7d))
+                           .reliability(new Reliability(4.7f))
                            .oauthId("12346")
                            .build();
         구매자 = User.builder()
                   .name("구매자")
                   .profileImage(구매자_프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12347")
                   .build();
         경매_참여자가_아닌_사용자 = User.builder()
                              .name("경매 참여자가 아닌 사용자")
                              .profileImage(new ProfileImage("profile.png", "profile.png"))
-                             .reliability(new Reliability(4.7d))
+                             .reliability(new Reliability(4.7f))
                              .oauthId("12347")
                              .build();
         userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자, 경매_참여자가_아닌_사용자));
@@ -167,14 +167,14 @@ public class ReviewServiceFixture {
                 구매자가_받을_새로운_평가_점수
         );
         존재하지_않는_경매와_연관된_평가를_등록하려는_DTO =
-                new CreateReviewDto(존재하지_않는_경매_아이디, 구매자.getId(), 판매자1.getId(), "친절하다.", 5.0d);
+                new CreateReviewDto(존재하지_않는_경매_아이디, 구매자.getId(), 판매자1.getId(), "친절하다.", 5.0f);
         존재하지_않는_사용자가_평가를_등록하려는_DTO =
-                new CreateReviewDto(평가_안한_경매.getId(), 존재하지_않는_사용자, 평가_안한_경매_판매자.getId(), "친절하다.", 5.0d);
+                new CreateReviewDto(평가_안한_경매.getId(), 존재하지_않는_사용자, 평가_안한_경매_판매자.getId(), "친절하다.", 5.0f);
         존재하지_않는_사용자를_평가하려는_DTO =
-                new CreateReviewDto(평가_안한_경매.getId(), 구매자.getId(), 존재하지_않는_사용자, "친절하다.", 5.0d);
+                new CreateReviewDto(평가_안한_경매.getId(), 구매자.getId(), 존재하지_않는_사용자, "친절하다.", 5.0f);
         경매_참여자가_아닌_사용자가_평가를_등록하려는_DTO =
-                new CreateReviewDto(평가_안한_경매.getId(), 경매_참여자가_아닌_사용자.getId(), 구매자.getId(), "친절하다", 5.0d);
+                new CreateReviewDto(평가_안한_경매.getId(), 경매_참여자가_아닌_사용자.getId(), 구매자.getId(), "친절하다", 5.0f);
         이미_평가한_경매와_연관된_평가를_또_등록하려는_DTO =
-                new CreateReviewDto(판매자1이_평가한_경매.getId(), 판매자1.getId(), 구매자.getId(), "친절하다", 5.0d);
+                new CreateReviewDto(판매자1이_평가한_경매.getId(), 판매자1.getId(), 구매자.getId(), "친절하다", 5.0f);
     }
 }

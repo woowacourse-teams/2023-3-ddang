@@ -54,7 +54,7 @@ public class JpaBidRepositoryFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12345")
                   .build();
 
@@ -86,13 +86,13 @@ public class JpaBidRepositoryFixture {
         입찰자1 = User.builder()
                    .name("입찰자1")
                    .profileImage(프로필_이미지)
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("12346")
                    .build();
         final User 입찰자2 = User.builder()
                               .name("입찰자2")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(new Reliability(4.7f))
                               .oauthId("12346")
                               .build();
 

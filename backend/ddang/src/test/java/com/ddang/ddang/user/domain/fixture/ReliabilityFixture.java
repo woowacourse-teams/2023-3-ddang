@@ -11,18 +11,18 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class ReliabilityFixture {  
   
-    private double 평가1_점수 = 5.0d;  
-    private double 평가2_점수 = 1.0d;  
+    private float 평가1_점수 = 5.0f;
+    private float 평가2_점수 = 1.0f;
     private User 평가_작성자1 = User.builder()
                                .name("평가 작성자1")
                                .profileImage(new ProfileImage("profile.png", "profile.png"))
-                               .reliability(new Reliability(4.7d))
+                               .reliability(new Reliability(4.7f))
                                .oauthId("12346")
                                .build();  
     private User 평가_작성자2 = User.builder()  
                                .name("평가 작성자2")  
                                .profileImage(new ProfileImage("profile.png", "profile.png"))  
-                               .reliability(new Reliability(4.7d))  
+                               .reliability(new Reliability(4.7f))
                                .oauthId("12347")  
                                .build();  
   
@@ -46,5 +46,5 @@ public class ReliabilityFixture {
                                  .build();  
   
     protected List<Review> 평가_대상이_받은_평가_목록 = List.of(평가1, 평가2);
-    protected Double 평가_대상의_신뢰도_점수 = (평가1_점수 + 평가2_점수) / 2;  
+    protected Float 평가_대상의_신뢰도_점수 = (평가1_점수 + 평가2_점수) / 2;
 }

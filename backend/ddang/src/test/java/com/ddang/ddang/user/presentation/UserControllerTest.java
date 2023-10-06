@@ -84,7 +84,7 @@ class UserControllerTest extends UserControllerFixture {
                                                            status().isOk(),
                                                            jsonPath("$.name", is(사용자_정보_조회_dto.name())),
                                                            jsonPath("$.profileImage").exists(),
-                                                           jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
+                                                           jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()), Float.class)
                                                    );
 
         readById_문서화(resultActions);
@@ -104,7 +104,7 @@ class UserControllerTest extends UserControllerFixture {
                        status().isOk(),
                        jsonPath("$.name", is(탈퇴한_사용자_이름)),
                        jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(탈퇴한_사용자_정보_조회_dto.reliability()))
+                       jsonPath("$.reliability", is(탈퇴한_사용자_정보_조회_dto.reliability()), Float.class)
                );
     }
 
@@ -125,7 +125,7 @@ class UserControllerTest extends UserControllerFixture {
                                                            status().isOk(),
                                                            jsonPath("$.name", is(수정할_이름_request.name())),
                                                            jsonPath("$.profileImage").exists(),
-                                                           jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
+                                                           jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()), Float.class)
                                                    );
 
         updateById_문서화(resultActions);
@@ -148,7 +148,7 @@ class UserControllerTest extends UserControllerFixture {
                        status().isOk(),
                        jsonPath("$.name", is(수정할_이름_request.name())),
                        jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
+                       jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()), Float.class)
                );
     }
 
@@ -169,7 +169,7 @@ class UserControllerTest extends UserControllerFixture {
                        status().isOk(),
                        jsonPath("$.name", is(사용자_정보_조회_dto.name())),
                        jsonPath("$.profileImage").exists(),
-                       jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()))
+                       jsonPath("$.reliability", is(사용자_정보_조회_dto.reliability()), Float.class)
                );
     }
 

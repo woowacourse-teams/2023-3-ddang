@@ -29,25 +29,25 @@ public class ChatRoomFixture {
         판매자 = User.builder()
                    .name("판매자")
                    .profileImage(new ProfileImage("upload.png", "store.png"))
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("12345")
                    .build();
         구매자 = User.builder()
                    .name("구매자")
                    .profileImage(new ProfileImage("upload.png", "store.png"))
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("12346")
                    .build();
         경매에_참여하지_않는_사용자 = User.builder()
                                    .name("경매에 참여하지 않는 사용자")
                                    .profileImage(new ProfileImage("upload.png", "store.png"))
-                                   .reliability(new Reliability(4.7d))
+                                   .reliability(new Reliability(4.7f))
                                    .oauthId("12347")
                                    .build();
         탈퇴한_사용자 = User.builder()
                         .name("탈퇴한 사용자")
                         .profileImage(new ProfileImage("upload.png", "store.png"))
-                        .reliability(new Reliability(4.7d))
+                        .reliability(new Reliability(4.7f))
                         .oauthId("12348")
                         .build();
         탈퇴한_사용자.withdrawal();

@@ -127,12 +127,12 @@ class ReviewControllerTest extends ReviewControllerFixture {
                                jsonPath("$.[0].writer.id", is(구매자가_판매자2에게_받은_평가.writer().id()), Long.class),
                                jsonPath("$.[0].writer.name", is(구매자가_판매자2에게_받은_평가.writer().name())),
                                jsonPath("$.[0].content", is(구매자가_판매자2에게_받은_평가.content())),
-                               jsonPath("$.[0].score", is(구매자가_판매자2에게_받은_평가.score())),
+                               jsonPath("$.[0].score", is(구매자가_판매자2에게_받은_평가.score()), Float.class),
                                jsonPath("$.[1].id", is(구매자가_판매자1에게_받은_평가.id()), Long.class),
                                jsonPath("$.[1].writer.id", is(구매자가_판매자1에게_받은_평가.writer().id()), Long.class),
                                jsonPath("$.[1].writer.name", is(구매자가_판매자1에게_받은_평가.writer().name())),
                                jsonPath("$.[1].content", is(구매자가_판매자1에게_받은_평가.content())),
-                               jsonPath("$.[1].score", is(구매자가_판매자1에게_받은_평가.score()))
+                               jsonPath("$.[1].score", is(구매자가_판매자1에게_받은_평가.score()), Float.class)
                        );
 
         readAllReviewsOfTargetUser_문서화(resultActions);
@@ -150,7 +150,7 @@ class ReviewControllerTest extends ReviewControllerFixture {
                        )
                        .andExpectAll(
                                status().isOk(),
-                               jsonPath("score", is(구매자가_판매자1에게_받은_평가_내용.score()), Double.class),
+                               jsonPath("score", is(구매자가_판매자1에게_받은_평가_내용.score()), Float.class),
                                jsonPath("content", is(구매자가_판매자1에게_받은_평가_내용.content()))
                        );
 

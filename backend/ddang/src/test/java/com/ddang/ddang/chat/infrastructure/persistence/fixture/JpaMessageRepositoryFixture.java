@@ -41,13 +41,13 @@ public class JpaMessageRepositoryFixture {
         채팅참여_판매자 = User.builder()
                        .name("판매자")
                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                       .reliability(new Reliability(4.7d))
+                       .reliability(new Reliability(4.7f))
                        .oauthId("12345")
                        .build();
         채팅참여_구매자 = User.builder()
                        .name("구매자")
                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                       .reliability(new Reliability(4.7d))
+                       .reliability(new Reliability(4.7f))
                        .oauthId("12346")
                        .build();
 

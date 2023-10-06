@@ -8,7 +8,7 @@ public record SellerResponse(
         Long id,
         String image,
         String nickname,
-        double reliability
+        Float reliability
 ) {
 
     public static SellerResponse from(final ReadAuctionDto auctionDto) {

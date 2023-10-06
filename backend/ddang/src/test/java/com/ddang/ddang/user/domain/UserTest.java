@@ -34,7 +34,7 @@ class UserTest extends UserFixture {
     @Test
     void 회원_생성시_신뢰도가_null이_아니라면_해당_신뢰도로_회원을_생성한다() {
         // given
-        final Reliability notNullReliability = new Reliability(4.5d);
+        final Reliability notNullReliability = new Reliability(4.5f);
 
         // when
         final User user = User.builder()
@@ -54,7 +54,7 @@ class UserTest extends UserFixture {
         final User user = User.builder()
                               .name("kakao12345")
                               .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(new Reliability(5.0d))
+                              .reliability(new Reliability(5.0f))
                               .oauthId("12345")
                               .build();
 
@@ -65,7 +65,7 @@ class UserTest extends UserFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.getName()).isEqualTo("newName");
             softAssertions.assertThat(user.getProfileImage()).isEqualTo(new ProfileImage("upload.png", "store.png"));
-            softAssertions.assertThat(user.getReliability().getValue()).isEqualTo(5.0d);
+            softAssertions.assertThat(user.getReliability().getValue()).isEqualTo(5.0f);
         });
     }
 
@@ -75,7 +75,7 @@ class UserTest extends UserFixture {
         final User user = User.builder()
                               .name("kakao12345")
                               .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(new Reliability(5.0d))
+                              .reliability(new Reliability(5.0f))
                               .oauthId("12345")
                               .build();
 
@@ -86,7 +86,7 @@ class UserTest extends UserFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.getName()).isEqualTo("kakao12345");
             softAssertions.assertThat(user.getProfileImage()).isEqualTo(new ProfileImage("updateUpload.png", "updateStore.png"));
-            softAssertions.assertThat(user.getReliability().getValue()).isEqualTo(5.0d);
+            softAssertions.assertThat(user.getReliability().getValue()).isEqualTo(5.0f);
         });
     }
 
@@ -96,7 +96,7 @@ class UserTest extends UserFixture {
         final User user = User.builder()
                               .name("kakao12345")
                               .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(new Reliability(5.0d))
+                              .reliability(new Reliability(5.0f))
                               .oauthId("12345")
                               .build();
 

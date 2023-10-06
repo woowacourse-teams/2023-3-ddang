@@ -34,14 +34,14 @@ public class JpaUserRepositoryFixture {
         사용자 = User.builder()
                   .name("사용자")
                   .profileImage(사용자_프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12345")
                   .build();
 
         탈퇴한_사용자 = User.builder()
                       .name("탈퇴한 사용자")
                       .profileImage(사용자_프로필_이미지)
-                      .reliability(new Reliability(4.7d))
+                      .reliability(new Reliability(4.7f))
                       .oauthId("12345")
                       .build();
         탈퇴한_사용자.withdrawal();

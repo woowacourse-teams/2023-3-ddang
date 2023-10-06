@@ -8,7 +8,7 @@ public record ReadReviewDto(
         Long id,
         ReadUserInReviewDto writer,
         String content,
-        Double score,
+        Float score,
         LocalDateTime createdTime
 ) {
 

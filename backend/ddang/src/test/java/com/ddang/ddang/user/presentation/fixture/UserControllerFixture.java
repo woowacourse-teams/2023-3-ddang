@@ -16,10 +16,10 @@ public class UserControllerFixture extends CommonControllerSliceTest {
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected String 탈퇴한_사용자_이름 = "알 수 없음";
 
-    protected ReadUserDto 사용자_정보_조회_dto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);
-    protected ReadUserDto 탈퇴한_사용자_정보_조회_dto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", true);
+    protected ReadUserDto 사용자_정보_조회_dto = new ReadUserDto(1L, "사용자1", 1L, 4.6f, "12345", false);
+    protected ReadUserDto 탈퇴한_사용자_정보_조회_dto = new ReadUserDto(1L, "사용자1", 1L, 4.6f, "12345", true);
     protected UpdateUserRequest 수정할_이름_request = new UpdateUserRequest("updateName");
-    protected ReadUserDto 수정후_사용자_정보_조회_dto = new ReadUserDto(1L, 수정할_이름_request.name(), 1L, 4.6d, "12345", false);
+    protected ReadUserDto 수정후_사용자_정보_조회_dto = new ReadUserDto(1L, 수정할_이름_request.name(), 1L, 4.6f, "12345", false);
     private String json = "{\"name\":\"" + 수정할_이름_request.name() + "\"}";
     private byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
     protected MockMultipartFile 수정할_이름 = new MockMultipartFile(

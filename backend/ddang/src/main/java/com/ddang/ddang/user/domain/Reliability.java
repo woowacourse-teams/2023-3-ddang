@@ -19,9 +19,9 @@ public class Reliability {
 
     public static final Reliability INITIAL_RELIABILITY = new Reliability(null);
 
-    private Double value;
+    private Float value;
 
-    public Reliability(final Double value) {
+    public Reliability(final Float value) {
         this.value = value;
     }
 
@@ -32,9 +32,11 @@ public class Reliability {
             return;
         }
 
-        this.value = reviews.stream()
-                            .mapToDouble(review -> review.getScore().getValue())
-                            .average()
-                            .orElseGet(null);
+        Float scoreSum = 0.0f;
+        for (final Review review : reviews) {
+            scoreSum += review.getScore().getValue();
+        }
+
+        this.value = scoreSum / reviews.size();
     }
 }

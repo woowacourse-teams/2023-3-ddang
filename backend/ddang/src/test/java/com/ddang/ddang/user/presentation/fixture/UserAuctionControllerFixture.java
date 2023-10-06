@@ -42,7 +42,7 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
             1L,
             1L,
             "판매자",
-            3.5d,
+            3.5f,
             false,
             AuctionStatus.UNBIDDEN
     );
@@ -64,7 +64,7 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
             1L,
             1L,
             "판매자",
-            3.5d,
+            3.5f,
             false,
             AuctionStatus.UNBIDDEN
     );

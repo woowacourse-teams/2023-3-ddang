@@ -57,13 +57,13 @@ public class QuerydslChatRoomRepositoryImplFixture {
         final User 판매자 = User.builder()
                               .name("판매자")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(new Reliability(4.7f))
                               .oauthId("12345")
                               .build();
         final User 구매자 = User.builder()
                               .name("구매자")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(new Reliability(4.7f))
                               .oauthId("12346")
                               .build();
         final AuctionImage 대표_이미지가_아닌_경매_이미지 =

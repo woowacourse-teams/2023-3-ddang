@@ -6,7 +6,7 @@ import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.review.presentation.dto.request.CreateReviewRequest;
 import com.ddang.ddang.user.domain.User;
 
-public record CreateReviewDto(Long auctionId, Long writerId, Long targetId, String content, Double score) {
+public record CreateReviewDto(Long auctionId, Long writerId, Long targetId, String content, Float score) {
 
     public static CreateReviewDto of(final Long writerId, final CreateReviewRequest createReviewRequest) {
         return new CreateReviewDto(

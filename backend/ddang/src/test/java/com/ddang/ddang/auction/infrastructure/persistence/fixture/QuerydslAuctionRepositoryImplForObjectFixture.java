@@ -53,7 +53,7 @@ public class QuerydslAuctionRepositoryImplForObjectFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12345")
                   .build();
         userRepository.save(판매자);

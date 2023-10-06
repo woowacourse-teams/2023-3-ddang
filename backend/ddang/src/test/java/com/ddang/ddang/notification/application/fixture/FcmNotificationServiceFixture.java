@@ -66,25 +66,25 @@ public class FcmNotificationServiceFixture {
         메시지_조회자_겸_발신자 = User.builder()
                             .name("메시지_조회자_겸_발신자")
                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                            .reliability(new Reliability(4.7d))
+                            .reliability(new Reliability(4.7f))
                             .oauthId("12345")
                             .build();
         메시지_수신자 = User.builder()
                       .name("메시지_수신자")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(new Reliability(4.7d))
+                      .reliability(new Reliability(4.7f))
                       .oauthId("12347")
                       .build();
         새로운_입찰자 = User.builder()
                       .name("입찰자1")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(new Reliability(4.7d))
+                      .reliability(new Reliability(4.7f))
                       .oauthId("56789")
                       .build();
         기기토큰이_없는_사용자 = User.builder()
                            .name("기기토큰이 없는 사용자")
                            .profileImage(new ProfileImage("upload.png", "store.png"))
-                           .reliability(new Reliability(4.7d))
+                           .reliability(new Reliability(4.7f))
                            .oauthId("12234")
                            .build();
 

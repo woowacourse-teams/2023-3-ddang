@@ -15,11 +15,11 @@ import lombok.ToString;
 @ToString
 public class Score {
 
-    private static final double SCORE_UNIT = 0.5;
+    private static final float SCORE_UNIT = 0.5f;
 
-    private double value;
+    private float value;
 
-    public Score(final double value) {
+    public Score(final float value) {
         if (value % SCORE_UNIT != 0) {
             throw new InvalidScoreException("평가 점수는 0.5 단위여야 합니다.");
         }

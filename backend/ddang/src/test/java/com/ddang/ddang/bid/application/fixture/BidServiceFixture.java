@@ -64,19 +64,19 @@ public class BidServiceFixture {
         final User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(new Reliability(4.7d))
+                             .reliability(new Reliability(4.7f))
                              .oauthId("12345")
                              .build();
         입찰자1 = User.builder()
                    .name("입찰자1")
                    .profileImage(프로필_이미지)
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("12346")
                    .build();
         입찰자2 = User.builder()
                    .name("입찰자2")
                    .profileImage(프로필_이미지)
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("78910")
                    .build();
         final AuctionImage 경매_이미지1 = new AuctionImage("auction_image.png", "auction_image.png");

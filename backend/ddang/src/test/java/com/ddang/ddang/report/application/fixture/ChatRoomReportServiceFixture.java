@@ -70,32 +70,32 @@ public class ChatRoomReportServiceFixture {
         final User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(new Reliability(4.7d))
+                             .reliability(new Reliability(4.7f))
                              .oauthId("12345")
                              .build();
         final User 판매자겸_아직_신고하지_않은_신고자 = 판매자;
         이미_신고한_구매자1 = User.builder()
                           .name("구매자1")
                           .profileImage(프로필_이미지)
-                          .reliability(new Reliability(4.7d))
+                          .reliability(new Reliability(4.7f))
                           .oauthId("12346")
                           .build();
         이미_신고한_구매자2 = User.builder()
                           .name("구매자2")
                           .profileImage(프로필_이미지)
-                          .reliability(new Reliability(4.7d))
+                          .reliability(new Reliability(4.7f))
                           .oauthId("12347")
                           .build();
         이미_신고한_구매자3 = User.builder()
                           .name("구매자3")
                           .profileImage(프로필_이미지)
-                          .reliability(new Reliability(4.7d))
+                          .reliability(new Reliability(4.7f))
                           .oauthId("12348")
                           .build();
         final User 채팅방_참여자가_아닌_사용자 = User.builder()
                                          .name("채팅방_참여자가_아닌_사용자")
                                          .profileImage(프로필_이미지)
-                                         .reliability(new Reliability(4.7d))
+                                         .reliability(new Reliability(4.7f))
                                          .oauthId("12349")
                                          .build();
 

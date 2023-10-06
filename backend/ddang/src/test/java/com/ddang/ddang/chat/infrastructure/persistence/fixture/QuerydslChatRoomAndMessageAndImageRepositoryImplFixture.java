@@ -70,25 +70,25 @@ public class QuerydslChatRoomAndMessageAndImageRepositoryImplFixture {
         엔초 = User.builder()
                  .name("엔초")
                  .profileImage(프로필_이미지)
-                 .reliability(new Reliability(4.7d))
+                 .reliability(new Reliability(4.7f))
                  .oauthId("12346")
                  .build();
         final User 메리 = User.builder()
                              .name("메리")
                              .profileImage(프로필_이미지)
-                             .reliability(new Reliability(4.7d))
+                             .reliability(new Reliability(4.7f))
                              .oauthId("12345")
                              .build();
         final User 제이미 = User.builder()
                               .name("제이미")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(new Reliability(4.7f))
                               .oauthId("12347")
                               .build();
         final User 지토 = User.builder()
                              .name("지토")
                              .profileImage(프로필_이미지)
-                             .reliability(new Reliability(4.7d))
+                             .reliability(new Reliability(4.7f))
                              .oauthId("12348")
                              .build();
 

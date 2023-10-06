@@ -80,7 +80,7 @@ class AuctionReviewControllerTest extends AuctionReviewControllerFixture {
                        )
                        .andExpectAll(
                                status().isOk(),
-                               jsonPath("score", is(구매자가_판매자1에게_받은_평가_내용.score()), Double.class),
+                               jsonPath("score", is(구매자가_판매자1에게_받은_평가_내용.score()), Float.class),
                                jsonPath("content", is(구매자가_판매자1에게_받은_평가_내용.content()))
                        );
 

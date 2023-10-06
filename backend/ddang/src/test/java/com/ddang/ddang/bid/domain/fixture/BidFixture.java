@@ -29,7 +29,7 @@ public class BidFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12345")
                   .build();
 
@@ -47,7 +47,7 @@ public class BidFixture {
         입찰자 = User.builder()
                   .name("입찰자")
                   .profileImage(프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12346")
                   .build();
 

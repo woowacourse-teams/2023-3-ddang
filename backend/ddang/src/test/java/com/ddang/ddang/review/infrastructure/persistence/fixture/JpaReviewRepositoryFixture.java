@@ -67,25 +67,25 @@ public class JpaReviewRepositoryFixture {
         판매자1 = User.builder()
                     .name("판매자1")
                     .profileImage(판매자1_프로필_이미지)
-                    .reliability(new Reliability(4.7d))
+                    .reliability(new Reliability(4.7f))
                     .oauthId("12345")
                     .build();
         판매자2 = User.builder()
                     .name("판매자2")
                     .profileImage(판매자2_프로필_이미지)
-                    .reliability(new Reliability(4.7d))
+                    .reliability(new Reliability(4.7f))
                     .oauthId("12346")
                     .build();
         평가_안한_경매_판매자 = User.builder()
                                .name("평가 안한 판매자")
                                .profileImage(평가_안한_판매자_프로필_이미지)
-                               .reliability(new Reliability(4.7d))
+                               .reliability(new Reliability(4.7f))
                                .oauthId("12346")
                                .build();
         구매자 = User.builder()
                    .name("구매자")
                    .profileImage(구매자_프로필_이미지)
-                   .reliability(new Reliability(4.7d))
+                   .reliability(new Reliability(4.7f))
                    .oauthId("12347")
                    .build();
         userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자));
@@ -132,21 +132,21 @@ public class JpaReviewRepositoryFixture {
                             .writer(판매자1)
                             .target(구매자)
                             .content("친절하다.")
-                            .score(new Score(5.0d))
+                            .score(new Score(5.0f))
                             .build();
         구매자가_판매자1에게_받은_평가 = Review.builder()
                                         .auction(판매자1이_평가한_경매)
                                         .writer(판매자1)
                                         .target(구매자)
                                         .content("친절하다.")
-                                        .score(new Score(5.0d))
+                                        .score(new Score(5.0f))
                                         .build();
         구매자가_판매자2에게_받은_평가 = Review.builder()
                                         .auction(판매자2가_평가한_경매)
                                         .writer(판매자2)
                                         .target(구매자)
                                         .content("별로다.")
-                                        .score(new Score(1.0d))
+                                        .score(new Score(1.0f))
                                         .build();
         reviewRepository.saveAll(List.of(구매자가_판매자1에게_받은_평가, 구매자가_판매자2에게_받은_평가));
 

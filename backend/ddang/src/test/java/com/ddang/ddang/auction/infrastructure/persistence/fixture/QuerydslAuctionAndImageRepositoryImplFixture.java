@@ -53,7 +53,7 @@ public class QuerydslAuctionAndImageRepositoryImplFixture {
         사용자 = User.builder()
                   .name("사용자")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
+                  .reliability(new Reliability(4.7f))
                   .oauthId("12345")
                   .build();
 

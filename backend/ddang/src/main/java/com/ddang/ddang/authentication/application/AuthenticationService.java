@@ -68,7 +68,7 @@ public class AuthenticationService {
                                  final User user = User.builder()
                                                        .name(oauth2Type.calculateNickname(calculateRandomNumber()))
                                                        .profileImage(findDefaultProfileImage())
-                                                       .reliability(new Reliability(0.0d))
+                                                       .reliability(new Reliability(0.0f))
                                                        .oauthId(userInformationDto.findUserId())
                                                        .build();
 

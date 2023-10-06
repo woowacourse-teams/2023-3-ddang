@@ -14,15 +14,15 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 class ScoreTest {
 
     @ParameterizedTest(name = "평가 점수가 {0}점일 때")
-    @ValueSource(doubles = {0.5d, 1.0d})
-    void 평가_점수가_0점5_단위라면_정상적으로_생성된다(double scoreValue) {
+    @ValueSource(floats = {0.5f, 1.0f})
+    void 평가_점수가_0점5_단위라면_정상적으로_생성된다(float scoreValue) {
         // when & then
         assertThatCode(() -> new Score(scoreValue)).doesNotThrowAnyException();
     }
 
     @ParameterizedTest(name = "평가 점수가 {0}점일 때")
-    @ValueSource(doubles = {0.1d, 0.9d})
-    void 평가_점수가_0점5_단위가_아니라면_예외가_발생한다(double invalidScoreValue) {
+    @ValueSource(floats = {0.1f, 0.9f})
+    void 평가_점수가_0점5_단위가_아니라면_예외가_발생한다(float invalidScoreValue) {
         // when & then
         assertThatThrownBy(() -> new Score(invalidScoreValue))
                 .isInstanceOf(InvalidScoreException.class)

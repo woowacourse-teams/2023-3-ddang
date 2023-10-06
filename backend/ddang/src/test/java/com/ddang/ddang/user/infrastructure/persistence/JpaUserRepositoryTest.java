@@ -36,7 +36,7 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
         final User user = User.builder()
                               .name("새로운 사용자")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(new Reliability(4.7f))
                               .oauthId("12345")
                               .build();
 
