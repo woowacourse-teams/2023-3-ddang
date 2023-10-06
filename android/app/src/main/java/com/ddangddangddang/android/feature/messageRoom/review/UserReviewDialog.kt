@@ -43,17 +43,17 @@ class UserReviewDialog : DialogFragment() {
         when (event) {
             UserReviewViewModel.ReviewEvent.ReviewSuccess -> {
                 notifySubmitSuccess()
-                exit()
+                dismiss()
             }
 
             is UserReviewViewModel.ReviewEvent.ReviewFailure -> {
                 notifyFailureMessage(event.error, R.string.user_review_failure)
-                exit()
+                dismiss()
             }
 
             is UserReviewViewModel.ReviewEvent.ReviewLoadFailure -> {
                 notifyFailureMessage(event.error, R.string.user_review_load_failure)
-                exit()
+                dismiss()
             }
         }
     }
@@ -72,7 +72,7 @@ class UserReviewDialog : DialogFragment() {
             viewModel.setPartnerInfo(info)
             return
         }
-        exit()
+        dismiss()
     }
 
     override fun onCreateView(
@@ -95,13 +95,8 @@ class UserReviewDialog : DialogFragment() {
     }
 
     private fun setupListener() {
-        binding.btnReviewCancel.setOnClickListener { exit() }
+        binding.btnReviewCancel.setOnClickListener { dismiss() }
     }
-
-    private fun exit() {
-        dismiss()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
