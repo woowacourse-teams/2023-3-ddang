@@ -35,7 +35,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
                 val lastVisibleItemPosition =
                     (binding.rvSearchAuctions.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
                 val auctionsSize = viewModel.auctions.value?.size ?: 0
-                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                if (lastVisibleItemPosition + 10 >= auctionsSize) {
                     viewModel.loadAuctions()
                 }
             }

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.mapper.AuctionDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -56,11 +57,19 @@ class AuctionDetailViewModel @Inject constructor(
                 is ApiResponse.Failure -> {
                     if (response.responseCode == 404) {
                         _event.value = AuctionDetailEvent.NotifyAuctionDoesNotExist
+                    } else {
+                        _event.value =
+                            AuctionDetailEvent.AuctionLoadFailure(ErrorType.FAILURE(response.error))
                     }
                 }
 
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.NetworkError -> {
+                    _event.value = AuctionDetailEvent.AuctionLoadFailure(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = AuctionDetailEvent.AuctionLoadFailure(ErrorType.UNEXPECTED)
+                }
             }
             _isLoadingWithAnimation.value = false
         }
@@ -94,9 +103,19 @@ class AuctionDetailViewModel @Inject constructor(
                         _event.value = AuctionDetailEvent.EnterMessageRoom(response.body.chatRoomId)
                     }
 
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            AuctionDetailEvent.EnterChatLoadFailure(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            AuctionDetailEvent.EnterChatLoadFailure(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value = AuctionDetailEvent.EnterChatLoadFailure(ErrorType.UNEXPECTED)
+                    }
                 }
                 isLoadingWithoutAnimation = false
             }
@@ -131,13 +150,23 @@ class AuctionDetailViewModel @Inject constructor(
             if (isLoadingWithoutAnimation) return@let
             isLoadingWithoutAnimation = true
             viewModelScope.launch {
-                when (auctionRepository.deleteAuction(it.id)) {
+                when (val response = auctionRepository.deleteAuction(it.id)) {
                     is ApiResponse.Success ->
                         _event.value = AuctionDetailEvent.NotifyAuctionDeletionComplete
 
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            AuctionDetailEvent.AuctionDeleteFailure(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            AuctionDetailEvent.AuctionDeleteFailure(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value = AuctionDetailEvent.AuctionDeleteFailure(ErrorType.UNEXPECTED)
+                    }
                 }
                 isLoadingWithoutAnimation = false
             }
@@ -155,5 +184,8 @@ class AuctionDetailViewModel @Inject constructor(
         object DeleteAuction : AuctionDetailEvent()
         object NotifyAuctionDoesNotExist : AuctionDetailEvent()
         object NotifyAuctionDeletionComplete : AuctionDetailEvent()
+        data class AuctionLoadFailure(val error: ErrorType) : AuctionDetailEvent()
+        data class EnterChatLoadFailure(val error: ErrorType) : AuctionDetailEvent()
+        data class AuctionDeleteFailure(val error: ErrorType) : AuctionDetailEvent()
     }
 }

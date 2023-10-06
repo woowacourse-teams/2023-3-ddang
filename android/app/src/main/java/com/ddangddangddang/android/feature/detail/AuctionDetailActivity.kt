@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
@@ -68,6 +69,17 @@ class AuctionDetailActivity :
             is AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDoesNotExist -> notifyAuctionDoesNotExist()
             AuctionDetailViewModel.AuctionDetailEvent.DeleteAuction -> askDeletion()
             AuctionDetailViewModel.AuctionDetailEvent.NotifyAuctionDeletionComplete -> notifyDeleteComplete()
+            is AuctionDetailViewModel.AuctionDetailEvent.AuctionDeleteFailure -> {
+                notifyFailureMessage(event.error, R.string.detail_auction_delete_failure)
+            }
+
+            is AuctionDetailViewModel.AuctionDetailEvent.AuctionLoadFailure -> {
+                notifyFailureMessage(event.error, R.string.detail_auction_load_failure)
+            }
+
+            is AuctionDetailViewModel.AuctionDetailEvent.EnterChatLoadFailure -> {
+                notifyFailureMessage(event.error, R.string.detail_auction_enter_chat_room_failure)
+            }
         }
     }
 

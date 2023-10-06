@@ -60,7 +60,11 @@ class HomeViewModel @Inject constructor(private val repository: AuctionRepositor
             _loadingAuctionsInProgress = true
             when (
                 val response =
-                    repository.getAuctionPreviews(page = newPage, size = SIZE_AUCTION_LOAD, sortType = sortType)
+                    repository.getAuctionPreviews(
+                        page = newPage,
+                        size = SIZE_AUCTION_LOAD,
+                        sortType = sortType,
+                    )
             ) {
                 is ApiResponse.Success -> {
                     _isLast = response.body.isLast
@@ -70,9 +74,11 @@ class HomeViewModel @Inject constructor(private val repository: AuctionRepositor
                 is ApiResponse.Failure -> {
                     _event.value = HomeEvent.FailureLoadAuctions(ErrorType.FAILURE(response.error))
                 }
+
                 is ApiResponse.NetworkError -> {
                     _event.value = HomeEvent.FailureLoadAuctions(ErrorType.NETWORK_ERROR)
                 }
+
                 is ApiResponse.Unexpected -> {
                     _event.value = HomeEvent.FailureLoadAuctions(ErrorType.UNEXPECTED)
                 }
@@ -94,7 +100,7 @@ class HomeViewModel @Inject constructor(private val repository: AuctionRepositor
     }
 
     companion object {
-        private const val SIZE_AUCTION_LOAD = 10
+        private const val SIZE_AUCTION_LOAD = 20
         private const val DEFAULT_PAGE = 1
     }
 }

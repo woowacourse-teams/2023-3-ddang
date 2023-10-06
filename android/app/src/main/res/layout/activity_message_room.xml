@@ -76,8 +76,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_weight="1"
-                    android:ellipsize="end"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
+                    android:selected="@{true}"
+                    android:singleLine="true"
                     tools:text="쪽지 상대방 이름" />
 
                 <ImageView

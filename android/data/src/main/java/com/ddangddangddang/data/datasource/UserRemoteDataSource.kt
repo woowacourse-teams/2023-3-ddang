@@ -35,11 +35,14 @@ class UserRemoteDataSource @Inject constructor(private val service: AuctionServi
         return service.updateProfile(fileBody, body)
     }
 
-    suspend fun getMyParticipateAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> =
-        service.getMyParticipateAuctionPreviews(page)
+    suspend fun getMyParticipateAuctionPreviews(
+        page: Int,
+        size: Int?,
+    ): ApiResponse<AuctionPreviewsResponse> =
+        service.getMyParticipateAuctionPreviews(page, size)
 
-    suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> =
-        service.fetchMyAuctionPreviews(page)
+    suspend fun getMyAuctionPreviews(page: Int, size: Int?): ApiResponse<AuctionPreviewsResponse> =
+        service.fetchMyAuctionPreviews(page, size)
 
     suspend fun updateDeviceToken(deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit> =
         service.updateDeviceToken(deviceTokenRequest)

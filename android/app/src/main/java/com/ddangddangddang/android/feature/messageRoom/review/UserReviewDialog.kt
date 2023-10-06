@@ -6,14 +6,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.StringRes
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentUserReviewDialogBinding
-import com.ddangddangddang.android.feature.common.ErrorType
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomViewModel
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,12 +46,15 @@ class UserReviewDialog : DialogFragment() {
             }
 
             is UserReviewViewModel.ReviewEvent.ReviewFailure -> {
-                notifyFailureMessage(event.error, R.string.user_review_failure)
+                requireActivity().notifyFailureMessage(event.error, R.string.user_review_failure)
                 dismiss()
             }
 
             is UserReviewViewModel.ReviewEvent.ReviewLoadFailure -> {
-                notifyFailureMessage(event.error, R.string.user_review_load_failure)
+                requireActivity().notifyFailureMessage(
+                    event.error,
+                    R.string.user_review_load_failure,
+                )
                 dismiss()
             }
         }
@@ -60,11 +62,6 @@ class UserReviewDialog : DialogFragment() {
 
     private fun notifySubmitSuccess() {
         Toaster.showShort(requireContext(), getString(R.string.user_review_success))
-    }
-
-    private fun notifyFailureMessage(errorType: ErrorType, @StringRes defaultMessageId: Int) {
-        val defaultMessage = getString(defaultMessageId)
-        Toaster.showShort(requireContext(), errorType.message ?: defaultMessage)
     }
 
     private fun loadPartnerInfo() {

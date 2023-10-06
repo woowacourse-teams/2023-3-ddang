@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityReportBinding
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
@@ -28,6 +29,13 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
                 ReportViewModel.ReportEvent.ExitEvent -> finish()
                 ReportViewModel.ReportEvent.SubmitEvent -> submit()
                 ReportViewModel.ReportEvent.BlankContentsEvent -> notifyBlankContents()
+                is ReportViewModel.ReportEvent.ReportArticleFailure -> {
+                    notifyFailureMessage(event.error, R.string.report_submit_failure)
+                }
+
+                is ReportViewModel.ReportEvent.ReportMessageRoomFailure -> {
+                    notifyFailureMessage(event.error, R.string.report_submit_failure)
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.model.mapper.CategoryModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -16,7 +17,8 @@ import javax.inject.Inject
 private typealias MainId = Long
 
 @HiltViewModel
-class SelectCategoryViewModel @Inject constructor(private val categoryRepository: CategoryRepository) : ViewModel() {
+class SelectCategoryViewModel @Inject constructor(private val categoryRepository: CategoryRepository) :
+    ViewModel() {
     private val _event: SingleLiveEvent<SelectCategoryEvent> = SingleLiveEvent()
     val event: LiveData<SelectCategoryEvent>
         get() = _event
@@ -39,9 +41,20 @@ class SelectCategoryViewModel @Inject constructor(private val categoryRepository
                     _mainCategories.value = mainCategories
                 }
 
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Failure -> {
+                    _event.value =
+                        SelectCategoryEvent.MainCategoriesLoadFailure(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        SelectCategoryEvent.MainCategoriesLoadFailure(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value =
+                        SelectCategoryEvent.MainCategoriesLoadFailure(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
@@ -72,9 +85,20 @@ class SelectCategoryViewModel @Inject constructor(private val categoryRepository
                     subCategoriesCache[mainCategoryId] = subCategories // 캐시 저장
                 }
 
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Failure -> {
+                    _event.value =
+                        SelectCategoryEvent.SubCategoriesLoadFailure(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        SelectCategoryEvent.SubCategoriesLoadFailure(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value =
+                        SelectCategoryEvent.SubCategoriesLoadFailure(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
@@ -99,5 +123,7 @@ class SelectCategoryViewModel @Inject constructor(private val categoryRepository
     sealed class SelectCategoryEvent {
         object Exit : SelectCategoryEvent()
         data class Submit(val category: CategoryModel) : SelectCategoryEvent()
+        data class MainCategoriesLoadFailure(val error: ErrorType) : SelectCategoryEvent()
+        data class SubCategoriesLoadFailure(val error: ErrorType) : SelectCategoryEvent()
     }
 }

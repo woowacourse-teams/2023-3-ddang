@@ -28,7 +28,7 @@ class ParticipateAuctionActivity :
                 val lastVisibleItemPosition =
                     (binding.rvMyParticipateAuction.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
                 val auctionsSize = viewModel.auctions.value?.size ?: 0
-                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                if (lastVisibleItemPosition + 10 >= auctionsSize) {
                     viewModel.loadMyParticipateAuctions()
                 }
             }

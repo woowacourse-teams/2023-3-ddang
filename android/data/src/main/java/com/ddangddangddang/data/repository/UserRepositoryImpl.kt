@@ -19,12 +19,18 @@ class UserRepositoryImpl @Inject constructor(private val remoteDataSource: UserR
         return remoteDataSource.updateProfile(image, profileUpdateRequest)
     }
 
-    override suspend fun getMyParticipateAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> {
-        return remoteDataSource.getMyParticipateAuctionPreviews(page)
+    override suspend fun getMyParticipateAuctionPreviews(
+        page: Int,
+        size: Int?,
+    ): ApiResponse<AuctionPreviewsResponse> {
+        return remoteDataSource.getMyParticipateAuctionPreviews(page, size)
     }
 
-    override suspend fun getMyAuctionPreviews(page: Int): ApiResponse<AuctionPreviewsResponse> {
-        return remoteDataSource.getMyAuctionPreviews(page)
+    override suspend fun getMyAuctionPreviews(
+        page: Int,
+        size: Int?,
+    ): ApiResponse<AuctionPreviewsResponse> {
+        return remoteDataSource.getMyAuctionPreviews(page, size)
     }
 
     override suspend fun updateDeviceToken(deviceTokenRequest: UpdateDeviceTokenRequest): ApiResponse<Unit> {

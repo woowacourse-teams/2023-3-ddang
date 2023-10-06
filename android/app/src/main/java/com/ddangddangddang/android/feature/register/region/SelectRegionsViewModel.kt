@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.mapper.RegionModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
@@ -17,7 +18,8 @@ private typealias FirstId = Long
 private typealias SecondId = Long
 
 @HiltViewModel
-class SelectRegionsViewModel @Inject constructor(private val regionRepository: RegionRepository) : ViewModel() {
+class SelectRegionsViewModel @Inject constructor(private val regionRepository: RegionRepository) :
+    ViewModel() {
     private val _event: SingleLiveEvent<SelectRegionsEvent> =
         SingleLiveEvent()
     val event: LiveData<SelectRegionsEvent>
@@ -49,9 +51,21 @@ class SelectRegionsViewModel @Inject constructor(private val regionRepository: R
                     val regions = response.body.map { it.toPresentation() }
                     _firstRegions.value = regions
                 }
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+
+                is ApiResponse.Failure -> {
+                    _event.value =
+                        SelectRegionsEvent.FirstRegionsLoadFailure(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        SelectRegionsEvent.FirstRegionsLoadFailure(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value =
+                        SelectRegionsEvent.FirstRegionsLoadFailure(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
@@ -84,9 +98,19 @@ class SelectRegionsViewModel @Inject constructor(private val regionRepository: R
                     secondRegionsCache[firstId] = regions
                 }
 
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Failure -> {
+                    _event.value =
+                        SelectRegionsEvent.SecondRegionsLoadFailure(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        SelectRegionsEvent.SecondRegionsLoadFailure(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = SelectRegionsEvent.SecondRegionsLoadFailure(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
@@ -116,9 +140,19 @@ class SelectRegionsViewModel @Inject constructor(private val regionRepository: R
                     thirdRegionsCache[secondId] = regions
                 }
 
-                is ApiResponse.Failure -> {}
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.Failure -> {
+                    _event.value =
+                        SelectRegionsEvent.ThirdRegionsLoadFailure(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        SelectRegionsEvent.ThirdRegionsLoadFailure(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = SelectRegionsEvent.ThirdRegionsLoadFailure(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
@@ -165,5 +199,8 @@ class SelectRegionsViewModel @Inject constructor(private val regionRepository: R
     sealed class SelectRegionsEvent {
         object Exit : SelectRegionsEvent()
         data class Submit(val regions: List<RegionSelectionModel>) : SelectRegionsEvent()
+        data class FirstRegionsLoadFailure(val error: ErrorType) : SelectRegionsEvent()
+        data class SecondRegionsLoadFailure(val error: ErrorType) : SelectRegionsEvent()
+        data class ThirdRegionsLoadFailure(val error: ErrorType) : SelectRegionsEvent()
     }
 }
