@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectCategoryBinding
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -70,6 +71,14 @@ class SelectCategoryActivity :
 
             is SelectCategoryViewModel.SelectCategoryEvent.Submit -> {
                 submit(event.category)
+            }
+
+            is SelectCategoryViewModel.SelectCategoryEvent.MainCategoriesLoadFailure -> {
+                notifyFailureMessage(event.error, R.string.select_category_main_load_failure)
+            }
+
+            is SelectCategoryViewModel.SelectCategoryEvent.SubCategoriesLoadFailure -> {
+                notifyFailureMessage(event.error, R.string.select_category_sub_load_failure)
             }
         }
     }

@@ -108,7 +108,7 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
 
     sealed class ReviewEvent {
         object ReviewSuccess : ReviewEvent()
-        class ReviewFailure(val error: ErrorType) : ReviewEvent()
-        class ReviewLoadFailure(val error: ErrorType) : ReviewEvent()
+        data class ReviewFailure(val error: ErrorType) : ReviewEvent()
+        data class ReviewLoadFailure(val error: ErrorType) : ReviewEvent()
     }
 }

@@ -149,7 +149,7 @@
             android:layout_marginHorizontal="@dimen/margin_side_layout"
             android:layout_marginBottom="8dp"
             android:onClick="@{() -> viewModel.submit()}"
-            android:text="@string/seelct_regions_submit"
+            android:text="@string/select_regions_submit"
             android:textColor="@color/text_active_fixed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -66,6 +66,9 @@
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_dialog_auction_does_not_exist_message">존재하지 않는 경매입니다.</string>
+    <string name="detail_auction_delete_failure">게시글을 삭제하는데 실패했습니다</string>
+    <string name="detail_auction_load_failure">게시글을 불러오는데 실패했습니다</string>
+    <string name="detail_auction_enter_chat_room_failure">채팅방에 입장하는데 실패했습니다</string>
 
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>
@@ -106,7 +109,12 @@
     <string name="select_regions_first_title">시 • 도</string>
     <string name="select_regions_second_title">시 • 군 • 구</string>
     <string name="select_regions_third_title">동 • 읍 • 면</string>
-    <string name="seelct_regions_submit">선택 완료</string>
+    <string name="select_regions_submit">선택 완료</string>
+    <string name="select_category_main_load_failure">메인 카테고리 정보를 불러오는데 실패했습니다</string>
+    <string name="select_category_sub_load_failure">서브 카테고리 정보를 불러오는데 실패했습니다</string>
+    <string name="select_regions_first_failure">시 • 도 정보를 불러오는데 실패했습니다</string>
+    <string name="select_regions_second_failure">시 • 군 • 구 정보를 불러오는데 실패했습니다</string>
+    <string name="select_regions_third_failure">동 • 읍 • 면 정보를 불러오는데 실패했습니다</string>
 
     <!-- login -->
     <string name="login_kakao_login_button_description">카카오 로그인 버튼</string>
@@ -115,6 +123,7 @@
     <!-- message -->
     <string name="message_profile_description">상대방 프로필입니다</string>
     <string name="message_not_exist_rooms">쪽지방이 존재하지 않습니다</string>
+    <string name="message_rooms_load_failure">쪽지방 목록을 불러오는데 실패했습니다</string>
 
     <!-- message_room -->
     <string name="message_room_auction_item_description">경매 상품 이미지입니다</string>
@@ -155,7 +164,7 @@
     <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
     <string name="report_snackbar_navigate_to_report_page_failed">신고 페이지로 이동하는데 실패했습니다</string>
-
+    <string name="report_submit_failure">신고하는데 실패했습니다</string>
 
     <!-- alarm -->
     <string name="alarm_channel_name">전체 알림</string>

@@ -8,11 +8,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentHomeBinding
-import com.ddangddangddang.android.feature.common.ErrorType
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
-import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -66,7 +65,12 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                 navigateToRegisterAuction()
             }
 
-            is HomeViewModel.HomeEvent.FailureLoadAuctions -> showErrorMessage(event.errorType)
+            is HomeViewModel.HomeEvent.FailureLoadAuctions -> {
+                requireActivity().notifyFailureMessage(
+                    event.errorType,
+                    R.string.home_default_error_message,
+                )
+            }
         }
     }
 
@@ -79,13 +83,6 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private fun navigateToRegisterAuction() {
         val intent = RegisterAuctionActivity.getIntent(requireContext())
         startActivity(intent)
-    }
-
-    private fun showErrorMessage(errorType: ErrorType) {
-        Toaster.showShort(
-            requireContext(),
-            errorType.message ?: getString(R.string.home_default_error_message),
-        )
     }
 
     private fun setupAuctionRecyclerView() {

@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
@@ -53,9 +54,20 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
                 when (val response = repository.reportAuction(id, contents)) {
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            ReportEvent.ReportArticleFailure(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            ReportEvent.ReportArticleFailure(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value =
+                            ReportEvent.ReportArticleFailure(ErrorType.UNEXPECTED)
+                    }
                 }
             }
             isLoading = false
@@ -70,9 +82,20 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
                 when (val response = repository.reportMessageRoom(id, contents)) {
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.UNEXPECTED)
+                    }
                 }
             }
             isLoading = false
@@ -83,5 +106,7 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
         object ExitEvent : ReportEvent()
         object SubmitEvent : ReportEvent()
         object BlankContentsEvent : ReportEvent()
+        data class ReportArticleFailure(val error: ErrorType) : ReportEvent()
+        data class ReportMessageRoomFailure(val error: ErrorType) : ReportEvent()
     }
 }
