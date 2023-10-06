@@ -19,6 +19,9 @@
           <message/>
         </providers>
         <charset>utf-8</charset>
+        <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
+          <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+        </jsonGeneratorDecorator>
       </encoder>
 
       <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
