@@ -3,7 +3,6 @@ package com.ddang.ddang.chat.application;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
-import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
@@ -95,13 +94,7 @@ class MessageServiceTest extends MessageServiceFixture {
                 .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
     }
 
-    @Test
-    void 수신자가_탈퇴한_사용자인_경우_메시지를_생성하면_예외가_발생한다() {
-        // when & then
-        assertThatThrownBy(() -> messageService.create(수신자가_탈퇴한_경우_메시지_생성_DTO, 이미지_절대_경로))
-                .isInstanceOf(UnableToChatException.class)
-                .hasMessage("탈퇴한 사용자에게는 메시지 전송이 불가능합니다.");
-    }
+    // TODO : [4차 데모 이후 리팩토링] BaseTimeEntity 시간 모킹하는 방법 찾아보고 수정 예정
 
     @Test
     void 마지막_조회_메시지가_없는_경우_모든_메시지를_조회한다() {

@@ -84,7 +84,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             1L,
             신고자_정보_dto1,
             LocalDateTime.now(),
-            new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto1, 구매자_정보_dto1),
+            new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto1, 구매자_정보_dto1, false),
             "신고합니다."
     );
     private ReadAuctionInReportDto 신고할_채팅방의_경매_정보_dto2 = new ReadAuctionInReportDto(
@@ -104,7 +104,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             2L,
             신고자_정보_dto2,
             LocalDateTime.now(),
-            new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto2, 구매자_정보_dto2),
+            new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto2, 구매자_정보_dto2, false),
             "신고합니다."
     );
     private ReadAuctionInReportDto 신고할_채팅방의_경매_정보_dto3 = new ReadAuctionInReportDto(
@@ -124,7 +124,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             3L,
             신고자_정보_dto3,
             LocalDateTime.now(),
-            new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto3, 구매자_정보_dto3),
+            new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto3, 구매자_정보_dto3, false),
             "신고합니다."
     );
 }

@@ -5,6 +5,11 @@ import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.springframework.test.util.ReflectionTestUtils;
+
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,28 +17,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class ChatRoomTest extends ChatRoomFixture {
 
-    @Test
-    void 탈퇴하지_않은_사용자와는_채팅이_가능하다() {
-
-        final ChatRoom chatRoom = new ChatRoom(경매, 구매자);
-
-        // when
-        final boolean actual = chatRoom.isChatAvailablePartner(구매자);
-
-        // then
-        assertThat(actual).isTrue();
-    }
-
-    @Test
-    void 탈퇴한_사용자와는_채팅이_불가능하다() {
+    @ParameterizedTest
+    @CsvSource(value = {"0:true", "9:true", "10:false"}, delimiter = ':')
+    void 채팅방_비활성화_여부를_체크한다(final long plusDay, final boolean expected) {
         // given
-        final ChatRoom chatRoom = new ChatRoom(경매, 탈퇴한_사용자);
+        final ChatRoom chatRoom = new ChatRoom(경매, 구매자);
+        ReflectionTestUtils.setField(chatRoom, "createdTime", LocalDateTime.now());
 
         // when
-        final boolean actual = chatRoom.isChatAvailablePartner(탈퇴한_사용자);
+        final boolean actual = chatRoom.isChatAvailableTime(chatRoom.getCreatedTime().plusDays(plusDay));
 
         // then
-        assertThat(actual).isFalse();
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

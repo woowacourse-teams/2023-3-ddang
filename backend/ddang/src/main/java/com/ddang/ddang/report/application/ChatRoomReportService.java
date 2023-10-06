@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -55,7 +56,7 @@ public class ChatRoomReportService {
         final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAllByOrderByIdAsc();
 
         return auctionReports.stream()
-                             .map(ReadChatRoomReportDto::from)
+                             .map(auctionReport -> ReadChatRoomReportDto.from(auctionReport, LocalDateTime.now()))
                              .toList();
     }
 }
