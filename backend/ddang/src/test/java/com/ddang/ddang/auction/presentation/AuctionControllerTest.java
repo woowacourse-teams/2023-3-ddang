@@ -501,6 +501,7 @@ class AuctionControllerTest {
 
         final ReadAuctionWithChatRoomIdDto auctionWithChatRoomIdDto =
                 new ReadAuctionWithChatRoomIdDto(auction, chatRoomDto);
+
         final PrivateClaims privateClaims = new PrivateClaims(1L);
 
         given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
@@ -525,9 +526,6 @@ class AuctionControllerTest {
                )
                .andDo(
                        restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
                                pathParameters(
                                        parameterWithName("auctionId").description("조회하고자 하는 경매 ID")
                                ),
@@ -632,17 +630,14 @@ class AuctionControllerTest {
                 "판매자",
                 3.5d
         );
-        final PrivateClaims privateClaims = new PrivateClaims(1L);
-        final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
 
-        given(mockTokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(privateClaims));
+        final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
         given(auctionService.readAllByLastAuctionId(any(), anyInt())).willReturn(readAuctionsDto);
 
         // when & then
         mockMvc.perform(get("/auctions")
                        .contentType(MediaType.APPLICATION_JSON)
                        .queryParam("size", "10")
-                       .header(HttpHeaders.AUTHORIZATION, "Bearer accessToken")
                )
                .andExpectAll(
                        status().isOk(),
@@ -661,9 +656,6 @@ class AuctionControllerTest {
                )
                .andDo(
                        restDocs.document(
-                               requestHeaders(
-                                       headerWithName("Authorization").description("회원 Bearer 인증 정보")
-                               ),
                                queryParameters(
                                        parameterWithName("lastAuctionId").description("마지막으로 조회한 경매 ID").optional(),
                                        parameterWithName("size").description("페이지 크기").optional()

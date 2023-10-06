@@ -1217,7 +1217,7 @@ Content-Type: image/png
 Content-Disposition: form-data; name=request; filename=request
 Content-Type: application/json
 
-{"title":"경매 상품 1","description":"이것은 경매 상품 1 입니다.","bidUnit":1000,"startPrice":1000,"closingTime":"2023-08-20T09:59:53.172963","subCategoryId":2,"thirdRegionIds":[3]}
+{"title":"경매 상품 1","description":"이것은 경매 상품 1 입니다.","bidUnit":1000,"startPrice":1000,"closingTime":"2023-08-19T16:30:53.364176","subCategoryId":2,"thirdRegionIds":[3]}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -1335,8 +1335,7 @@ Content-Type: application/json
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /auctions?size=10 HTTP/1.1
-Content-Type: application/json
-Authorization: Bearer accessToken</code></pre>
+Content-Type: application/json</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1358,24 +1357,6 @@ Authorization: Bearer accessToken</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
-</tr>
-</tbody>
-</table>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
 </tr>
 </tbody>
 </table>
@@ -1500,24 +1481,6 @@ Authorization: Bearer accessToken</code></pre>
 </tr>
 </tbody>
 </table>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Name</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="sect3">
 <h4 id="_응답_12"><a class="link" href="#_응답_12">응답</a></h4>
@@ -1540,8 +1503,8 @@ Content-Type: application/json
     "lastBidPrice" : null,
     "status" : "FAILURE",
     "bidUnit" : 1000,
-    "registerTime" : "2023-08-17T09:59:53",
-    "closingTime" : "2023-08-17T09:59:53",
+    "registerTime" : "2023-08-16T16:30:53",
+    "closingTime" : "2023-08-16T16:30:53",
     "directRegions" : [ {
       "first" : "서울특별시",
       "second" : "강서구",
@@ -1873,12 +1836,12 @@ Content-Type: application/json
     "name" : "사용자1",
     "profileImage" : "이미지1",
     "price" : 10000,
-    "bidTime" : "2023-08-17T09:59:54"
+    "bidTime" : "2023-08-16T16:30:54"
   }, {
     "name" : "사용자2",
     "profileImage" : "이미지2",
     "price" : 12000,
-    "bidTime" : "2023-08-17T09:59:54"
+    "bidTime" : "2023-08-16T16:30:54"
   } ]
 }</code></pre>
 </div>
@@ -2073,7 +2036,7 @@ Content-Type: application/json
     "price" : 10000
   },
   "lastMessage" : {
-    "createdAt" : "2023-08-17T09:59:55",
+    "createdAt" : "2023-08-16T16:30:55",
     "contents" : "메시지1"
   },
   "isChatAvailable" : true
@@ -2091,7 +2054,7 @@ Content-Type: application/json
     "price" : 20000
   },
   "lastMessage" : {
-    "createdAt" : "2023-08-17T09:59:55",
+    "createdAt" : "2023-08-16T16:30:55",
     "contents" : "메시지2"
   },
   "isChatAvailable" : true
@@ -2529,7 +2492,7 @@ Content-Type: application/json
 
 [ {
   "id" : 1,
-  "createdAt" : "2023-08-17T09:59:55",
+  "createdAt" : "2023-08-16T16:30:55",
   "isMyMessage" : true,
   "contents" : "메시지내용"
 } ]</code></pre>
@@ -2679,7 +2642,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-17T09:59:57",
+    "createdTime" : "2023-08-16T16:30:57",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -2691,7 +2654,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "회원2"
     },
-    "createdTime" : "2023-08-17T09:59:57",
+    "createdTime" : "2023-08-16T16:30:57",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -2703,7 +2666,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "회원3"
     },
-    "createdTime" : "2023-08-17T09:59:57",
+    "createdTime" : "2023-08-16T16:30:57",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -2867,7 +2830,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-17T09:59:57",
+    "createdTime" : "2023-08-16T16:30:57",
     "chatRoom" : {
       "id" : 1
     },
@@ -2878,7 +2841,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-17T09:59:57",
+    "createdTime" : "2023-08-16T16:30:57",
     "chatRoom" : {
       "id" : 1
     },
@@ -2889,7 +2852,7 @@ Content-Type: application/json
       "id" : 1,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-17T09:59:57",
+    "createdTime" : "2023-08-16T16:30:57",
     "chatRoom" : {
       "id" : 1
     },
@@ -2957,7 +2920,7 @@ Content-Type: application/json
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-17 09:59:27 +0900
+Last updated 2023-08-16 16:29:20 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

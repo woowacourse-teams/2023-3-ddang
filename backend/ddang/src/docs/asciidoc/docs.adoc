@@ -157,7 +157,6 @@ include::{snippets}/auction-controller-test/경매를_등록한다/response-fiel
 
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/http-request.adoc[]
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/query-parameters.adoc[]
-include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/request-headers.adoc[]
 
 ==== 응답
 
@@ -170,7 +169,6 @@ include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록
 
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/http-request.adoc[]
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/path-parameters.adoc[]
-include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/request-headers.adoc[]
 
 ==== 응답
 
