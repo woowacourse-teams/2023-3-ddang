@@ -17,6 +17,7 @@ import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.ProfileResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
+import com.ddangddangddang.data.model.response.UserReviewResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body
@@ -128,4 +129,7 @@ interface AuctionService {
 
     @POST("/reviews")
     suspend fun reviewUser(@Body reviewRequest: ReviewRequest): ApiResponse<Unit>
+
+    @GET("/auctions/{auctionId}/reviews")
+    suspend fun getReviewUser(@Path("auctionId") auctionId: Long): ApiResponse<UserReviewResponse>
 }
