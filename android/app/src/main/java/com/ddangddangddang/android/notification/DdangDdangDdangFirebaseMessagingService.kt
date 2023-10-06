@@ -60,17 +60,14 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
         if (checkNotificationPermission()) {
             val type = NotificationType.of(remoteMessage.data["type"] ?: "") ?: return
             val tag = type.name
+            val id = remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
             when (type) {
                 NotificationType.MESSAGE -> {
-                    val id =
-                        remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
                     val notification = createMessageNotification(tag, id, remoteMessage)
                     notificationManager.notify(tag, id.toInt(), notification)
                 }
 
                 NotificationType.BID -> {
-                    val id =
-                        remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
                     val notification = createBidNotification(id, remoteMessage)
                     notificationManager.notify(tag, id.toInt(), notification)
                 }
