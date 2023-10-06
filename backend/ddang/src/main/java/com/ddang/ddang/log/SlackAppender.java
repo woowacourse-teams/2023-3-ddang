@@ -1,4 +1,4 @@
-package com.ddang.ddang.configuration.log;
+package com.ddang.ddang.log;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
@@ -57,3 +57,9 @@ public class SlackAppender extends AppenderBase<ILoggingEvent> {
                 eventObject.getFormattedMessage());
     }
 }
+
+
+
+
+
+

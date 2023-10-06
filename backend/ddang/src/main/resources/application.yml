@@ -9,9 +9,7 @@ spring:
         - file-warn-logging
         - file-error-logging
         - slack-error-logging
-        - file-info-request-trace
       prod:
         - file-warn-logging
         - file-error-logging
         - slack-error-logging
-        - file-info-request-trace
