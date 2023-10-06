@@ -20,7 +20,7 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
     private var partnerId: Long? = null
     private var auctionId: Long? = null
 
-    val ratingGrade = MutableLiveData(0.0)
+    val ratingGrade = MutableLiveData(0f)
     val reviewDetailContent = MutableLiveData("")
 
     private var _isCompletedAlready = MutableLiveData(false)
@@ -43,7 +43,7 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
             val auctionId = auctionId ?: return@launch
             when (val response = reviewRepository.getUserReview(auctionId)) {
                 is ApiResponse.Success -> {
-                    ratingGrade.value = response.body.score
+                    ratingGrade.value = response.body.score.toFloat()
                     reviewDetailContent.value = response.body.content
                     _isCompletedAlready.value = true
                 }
@@ -67,7 +67,7 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
         val request = ReviewRequest(
             auctionId,
             partnerId,
-            ratingGrade.value ?: 0.0,
+            ratingGrade.value?.toDouble() ?: 0.0,
             reviewDetailContent.value ?: "",
         )
         viewModelScope.launch {
