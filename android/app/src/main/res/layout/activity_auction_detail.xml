@@ -345,7 +345,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:text="@{@string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
+                    android:text="@{viewModel.auctionDetailModel.sellerModel.reliability == null ? @string/all_default_reliability : @string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
                     app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
                     app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
                     app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"
