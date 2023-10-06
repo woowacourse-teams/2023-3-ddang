@@ -1,5 +1,44 @@
 package com.ddang.ddang.authentication.presentation;
 
+import com.ddang.ddang.authentication.application.AuthenticationService;
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
+import com.ddang.ddang.authentication.application.BlackListTokenService;
+import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
+import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
+import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
+import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
+import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
+import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
+import com.ddang.ddang.authentication.presentation.dto.request.WithdrawalRequest;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.format.support.FormattingConversionService;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -19,36 +58,40 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.authentication.application.dto.TokenDto;
-import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
-import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
-import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
-import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
-import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
-import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
-import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
-import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
-import com.ddang.ddang.authentication.presentation.dto.request.WithdrawalRequest;
-import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.format.support.FormattingConversionService;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
+@WebMvcTest(controllers = {AuthenticationController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuthenticationControllerTest extends CommonControllerSliceTest {
+class AuthenticationControllerTest {
+
+    @MockBean
+    AuthenticationService authenticationService;
+
+    @MockBean
+    BlackListTokenService blackListTokenService;
+
+    @Autowired
+    AuthenticationController authenticationController;
+
+    @MockBean
+    AuthenticationUserService authenticationUserService;
+
+    @Autowired
+    RestDocumentationResultHandler restDocs;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         final FormattingConversionService formattingConversionService = new FormattingConversionService();
         formattingConversionService.addConverter(new Oauth2TypeConverter());
 

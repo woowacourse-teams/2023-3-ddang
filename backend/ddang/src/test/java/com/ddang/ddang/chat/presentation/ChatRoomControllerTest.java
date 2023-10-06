@@ -1,5 +1,64 @@
 package com.ddang.ddang.chat.presentation;
 
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
+import com.ddang.ddang.authentication.application.AuthenticationUserService;
+import com.ddang.ddang.authentication.application.BlackListTokenService;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
+import com.ddang.ddang.chat.application.ChatRoomService;
+import com.ddang.ddang.chat.application.MessageService;
+import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadLastMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadMessageDto;
+import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
+import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
+import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
+import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
+import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
+import com.ddang.ddang.configuration.RestDocsConfiguration;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -23,56 +82,45 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
-import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
-import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
-import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
-import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
-import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
-import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
+@WebMvcTest(controllers = {ChatRoomController.class},
+        excludeFilters = {
+                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebMvcConfigurer.class),
+                @ComponentScan.Filter(type = FilterType.REGEX, pattern = "com\\.ddang\\.ddang\\.authentication\\.configuration\\..*")
+        }
+)
+@AutoConfigureRestDocs
+@Import(RestDocsConfiguration.class)
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ChatRoomControllerTest extends CommonControllerSliceTest {
+class ChatRoomControllerTest {
+
+    @MockBean
+    BlackListTokenService blackListTokenService;
+
+    @MockBean
+    ChatRoomService chatRoomService;
+
+    @MockBean
+    MessageService messageService;
+
+    @MockBean
+    AuthenticationUserService authenticationUserService;
+
+    @Autowired
+    ChatRoomController chatRoomController;
+
+    @Autowired
+    ObjectMapper objectMapper;
+
+    @Autowired
+    RestDocumentationResultHandler restDocs;
 
     TokenDecoder mockTokenDecoder;
 
     MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired RestDocumentationContextProvider provider) {
         mockTokenDecoder = mock(TokenDecoder.class);
 
         final AuthenticationStore store = new AuthenticationStore();
