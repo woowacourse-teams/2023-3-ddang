@@ -51,15 +51,6 @@ class MessageRoomActivity :
         setupMessageRecyclerView()
     }
 
-    override fun onStart() {
-        super.onStart()
-        registerMessageReceiver()
-    }
-
-    private fun registerMessageReceiver() {
-        registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
-    }
-
     private fun setupViewModel() {
         viewModel.event.observe(this) { handleEvent(it) }
         viewModel.messages.observe(this) {
@@ -133,15 +124,12 @@ class MessageRoomActivity :
 
     override fun onResume() {
         super.onResume()
+        registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
         if (viewModel.messageRoomInfo.value != null) viewModel.loadMessages()
     }
 
-    override fun onStop() {
-        super.onStop()
-        unregisterMessageReceiver()
-    }
-
-    private fun unregisterMessageReceiver() {
+    override fun onPause() {
+        super.onPause()
         unregisterReceiver(messageReceiver)
     }
 
