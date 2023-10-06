@@ -50,9 +50,10 @@ public class BidService {
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
+        final Optional<User> previousBidder = auction.findLastBidder();
+
         final Bid saveBid = saveBid(bidDto, auction, bidder);
 
-        final Optional<User> previousBidder = auction.findLastBidder();
         publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder);
 
         return saveBid.getId();
