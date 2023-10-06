@@ -1,7 +1,7 @@
 package com.ddang.ddang.report.domain;
 
 import com.ddang.ddang.common.entity.BaseCreateTimeEntity;
-import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,26 +23,26 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(of = "id")
 @ToString(of = {"id", "description"})
-public class QuestionReport extends BaseCreateTimeEntity {
+public class AnswerReport extends BaseCreateTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reporter_id", foreignKey = @ForeignKey(name = "fk_question_report_reporter"))
+    @JoinColumn(name = "reporter_id", foreignKey = @ForeignKey(name = "fk_answer_report_reporter"))
     private User reporter;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name = "fk_question_report_question"))
-    private Question question;
+    @JoinColumn(name = "answer_id", foreignKey = @ForeignKey(name = "fk_answer_report_answer"))
+    private Answer answer;
 
     @Column(columnDefinition = "text")
     private String description;
 
-    public QuestionReport(final User reporter, final Question question, final String description) {
+    public AnswerReport(final User reporter, final Answer answer, final String description) {
         this.reporter = reporter;
-        this.question = question;
+        this.answer = answer;
         this.description = description;
     }
 }
