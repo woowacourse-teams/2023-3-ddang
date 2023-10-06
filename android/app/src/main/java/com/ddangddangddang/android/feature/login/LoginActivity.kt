@@ -91,13 +91,8 @@ class LoginActivity :
     private fun notifyLoginFailed(type: ErrorType) {
         val defaultMessage = getString(R.string.login_snackbar_login_failed_title)
         val actionMessage = getString(R.string.all_snackbar_default_action)
-        val message = when (type) {
-            is ErrorType.FAILURE -> type.message
-            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
-            is ErrorType.UNEXPECTED -> getString(type.messageId)
-        }
         binding.root.showSnackbar(
-            message = message ?: defaultMessage,
+            message = type.message ?: defaultMessage,
             actionMessage = actionMessage,
         )
     }

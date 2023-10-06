@@ -82,14 +82,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     }
 
     private fun showErrorMessage(errorType: ErrorType) {
-        val message = when (errorType) {
-            is ErrorType.FAILURE -> errorType.message
-            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
-            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
-        }
         Toaster.showShort(
             requireContext(),
-            message ?: getString(R.string.home_default_error_message),
+            errorType.message ?: getString(R.string.home_default_error_message),
         )
     }
 

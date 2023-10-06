@@ -99,14 +99,9 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     }
 
     private fun notifyFailureMessage(type: ErrorType) {
-        val message = when (type) {
-            is ErrorType.FAILURE -> type.message
-            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
-            is ErrorType.UNEXPECTED -> getString(type.messageId)
-        }
         Toaster.showShort(
             requireContext(),
-            message ?: getString(R.string.search_notice_default_error),
+            type.message ?: getString(R.string.search_notice_default_error),
         )
     }
 

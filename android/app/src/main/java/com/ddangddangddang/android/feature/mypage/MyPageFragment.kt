@@ -169,13 +169,8 @@ class MyPageFragment : BindingFragment<FragmentMyPageBinding>(R.layout.fragment_
 
     private fun notifyRequestFailed(type: ErrorType, defaultMessage: String) {
         val actionMessage = getString(R.string.all_snackbar_default_action)
-        val message = when (type) {
-            is ErrorType.FAILURE -> type.message
-            is ErrorType.NETWORK_ERROR -> getString(type.messageId)
-            is ErrorType.UNEXPECTED -> getString(type.messageId)
-        }
         binding.root.showSnackbar(
-            message = message ?: defaultMessage,
+            message = type.message ?: defaultMessage,
             actionMessage = actionMessage,
         )
     }

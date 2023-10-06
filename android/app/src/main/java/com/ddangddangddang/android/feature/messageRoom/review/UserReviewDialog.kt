@@ -62,14 +62,9 @@ class UserReviewDialog : DialogFragment() {
         Toaster.showShort(requireContext(), getString(R.string.user_review_success))
     }
 
-    private fun notifyFailureMessage(errorType: ErrorType, @StringRes defaultMessageid: Int) {
-        val defaultMessage = getString(defaultMessageid)
-        val message = when (errorType) {
-            is ErrorType.FAILURE -> errorType.message
-            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
-            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
-        }
-        Toaster.showShort(requireContext(), message ?: defaultMessage)
+    private fun notifyFailureMessage(errorType: ErrorType, @StringRes defaultMessageId: Int) {
+        val defaultMessage = getString(defaultMessageId)
+        Toaster.showShort(requireContext(), errorType.message ?: defaultMessage)
     }
 
     private fun loadPartnerInfo() {

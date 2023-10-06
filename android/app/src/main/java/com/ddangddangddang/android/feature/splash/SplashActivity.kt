@@ -65,14 +65,9 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     }
 
     private fun showErrorMessage(errorType: ErrorType) {
-        val message = when (errorType) {
-            is ErrorType.FAILURE -> errorType.message
-            is ErrorType.NETWORK_ERROR -> getString(errorType.messageId)
-            is ErrorType.UNEXPECTED -> getString(errorType.messageId)
-        }
         Toaster.showShort(
             this,
-            message ?: getString(R.string.splash_app_default_error_message),
+            errorType.message ?: getString(R.string.splash_app_default_error_message),
         )
     }
 
