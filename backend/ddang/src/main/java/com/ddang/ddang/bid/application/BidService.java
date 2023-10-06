@@ -50,10 +50,9 @@ public class BidService {
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
+        final Bid saveBid = saveBid(bidDto, auction, bidder);
+
         final Optional<User> previousBidder = auction.findLastBidder();
-
-        final Bid saveBid = saveAndUpdateLastBid(bidDto, auction, bidder);
-
         publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder);
 
         return saveBid.getId();
@@ -133,7 +132,7 @@ public class BidService {
         }
     }
 
-    private Bid saveAndUpdateLastBid(final CreateBidDto bidDto, final Auction auction, final User bidder) {
+    private Bid saveBid(final CreateBidDto bidDto, final Auction auction, final User bidder) {
         final Bid createBid = bidDto.toEntity(auction, bidder);
         final Bid saveBid = bidRepository.save(createBid);
 
