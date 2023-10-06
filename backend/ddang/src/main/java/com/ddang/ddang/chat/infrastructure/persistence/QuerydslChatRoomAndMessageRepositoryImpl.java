@@ -36,9 +36,9 @@ public class QuerydslChatRoomAndMessageRepositoryImpl implements QuerydslChatRoo
                                             .select(message.id.max())
                                             .from(message)
                                             .where(message.chatRoom.id.eq(chatRoom.id))
-                                            .groupBy(chatRoom.id)
                             ))
                             .where(isSellerOrWinner(userId))
+                            .groupBy(chatRoom.id)
                             .fetch();
 
         return sortByLastMessageIdDesc(unsortedDtos);
