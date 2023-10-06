@@ -17,6 +17,6 @@ public record CreateReviewRequest(
 
         @NotNull(message = "점수가 입력되지 않았습니다.")
         @Positive(message = "점수는 양수여야 합니다.")
-        Double score
+        Float score
 ) {
 }

@@ -8,15 +8,17 @@ public record SellerResponse(
         Long id,
         String image,
         String nickname,
-        double reliability
+        Float reliability
 ) {
 
     public static SellerResponse from(final ReadAuctionDto auctionDto) {
+        final Float floatReliability = Float.valueOf(String.valueOf(auctionDto.sellerReliability()));
+
         return new SellerResponse(
                 auctionDto.sellerId(),
                 ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, auctionDto.sellerProfileId()),
                 auctionDto.sellerName(),
-                auctionDto.sellerReliability()
+                floatReliability
         );
     }
 }
