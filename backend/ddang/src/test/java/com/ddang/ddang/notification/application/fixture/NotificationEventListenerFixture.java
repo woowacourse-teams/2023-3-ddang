@@ -21,7 +21,6 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,19 +62,19 @@ public class NotificationEventListenerFixture {
         final User 발신자_겸_판매자 = User.builder()
                                    .name("발신자 겸 판매자")
                                    .profileImage(new ProfileImage("upload.png", "store.png"))
-                                   .reliability(new Reliability(4.7d))
+                                   .reliability(4.7d)
                                    .oauthId("12345")
                                    .build();
         final User 수신자_겸_기존_입찰자 = User.builder()
                                       .name("수신자 겸 기존 입찰자")
                                       .profileImage(new ProfileImage("upload.png", "store.png"))
-                                      .reliability(new Reliability(4.7d))
+                                      .reliability(4.7d)
                                       .oauthId("12347")
                                       .build();
         final User 새로운_입찰자 = User.builder()
                                  .name("새로운 입찰자")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                                 .reliability(new Reliability(4.7d))
+                                 .reliability(4.7d)
                                  .oauthId("13579")
                                  .build();
         userRepository.save(발신자_겸_판매자);

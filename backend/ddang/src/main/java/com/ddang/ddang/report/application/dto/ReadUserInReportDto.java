@@ -17,7 +17,7 @@ public record ReadUserInReportDto(
                 user.getId(),
                 user.getName(),
                 ImageIdProcessor.process(user.getProfileImage()),
-                user.getReliability().getValue(),
+                user.getReliability(),
                 user.getOauthId(),
                 user.isDeleted()
         );

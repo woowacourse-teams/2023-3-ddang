@@ -3,7 +3,6 @@ package com.ddang.ddang.user.application.fixture;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.user.application.dto.UpdateUserDto;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +32,7 @@ public class UserServiceFixture {
         사용자 = User.builder()
                   .name(사용자_이름)
                   .profileImage(프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(4.7d)
                   .oauthId("12345")
                   .build();
 

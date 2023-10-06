@@ -12,7 +12,6 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepositor
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -62,25 +61,25 @@ public class JpaAuctionReportRepositoryFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(프로필_이미지)
-                  .reliability(new Reliability(4.7d))
+                  .reliability(4.7d)
                   .oauthId("12345")
                   .build();
         신고자1 = User.builder()
                    .name("신고자1")
                    .profileImage(프로필_이미지)
-                   .reliability(new Reliability(4.7d))
+                   .reliability(4.7d)
                    .oauthId("12346")
                    .build();
         final User 신고자2 = User.builder()
                               .name("신고자2")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(4.7d)
                               .oauthId("12347")
                               .build();
         final User 신고자3 = User.builder()
                               .name("신고자3")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(4.7d)
                               .oauthId("12348")
                               .build();
 

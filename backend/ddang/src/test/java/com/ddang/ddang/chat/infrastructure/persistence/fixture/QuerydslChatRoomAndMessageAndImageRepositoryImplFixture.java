@@ -15,7 +15,6 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -70,25 +69,25 @@ public class QuerydslChatRoomAndMessageAndImageRepositoryImplFixture {
         엔초 = User.builder()
                  .name("엔초")
                  .profileImage(프로필_이미지)
-                 .reliability(new Reliability(4.7d))
+                 .reliability(4.7d)
                  .oauthId("12346")
                  .build();
         final User 메리 = User.builder()
                              .name("메리")
                              .profileImage(프로필_이미지)
-                             .reliability(new Reliability(4.7d))
+                             .reliability(4.7d)
                              .oauthId("12345")
                              .build();
         final User 제이미 = User.builder()
                               .name("제이미")
                               .profileImage(프로필_이미지)
-                              .reliability(new Reliability(4.7d))
+                              .reliability(4.7d)
                               .oauthId("12347")
                               .build();
         final User 지토 = User.builder()
                              .name("지토")
                              .profileImage(프로필_이미지)
-                             .reliability(new Reliability(4.7d))
+                             .reliability(4.7d)
                              .oauthId("12348")
                              .build();
 

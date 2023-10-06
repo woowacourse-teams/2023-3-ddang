@@ -5,7 +5,6 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -21,19 +20,19 @@ public class AuctionFixture {
     protected User 판매자 = User.builder()
                                  .name("판매자")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                                 .reliability(new Reliability(4.7d))
+                                 .reliability(4.7d)
                                  .oauthId("12345")
                                  .build();
     protected User 구매자 = User.builder()
                                  .name("구매자")
                                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                                 .reliability(new Reliability(4.7d))
+                                 .reliability(4.7d)
                                  .oauthId("54321")
                                  .build();
     protected User 사용자 = User.builder()
                              .name("사용자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(new Reliability(4.7d))
+                             .reliability(4.7d)
                              .oauthId("98765")
                              .build();
 

@@ -10,16 +10,14 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslAuctionRepositoryImplForObjectFixture {
@@ -53,7 +51,7 @@ public class QuerydslAuctionRepositoryImplForObjectFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
+                  .reliability(4.7d)
                   .oauthId("12345")
                   .build();
         userRepository.save(판매자);

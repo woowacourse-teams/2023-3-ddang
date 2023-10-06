@@ -51,7 +51,7 @@ public record ReadAuctionDto(
                 auction.getSeller().getId(),
                 ImageIdProcessor.process(auction.getSeller().getProfileImage()),
                 auction.getSeller().getName(),
-                auction.getSeller().getReliability().getValue(),
+                auction.getSeller().getReliability(),
                 auction.getSeller().isDeleted(),
                 auction.findAuctionStatus(targetTime)
         );

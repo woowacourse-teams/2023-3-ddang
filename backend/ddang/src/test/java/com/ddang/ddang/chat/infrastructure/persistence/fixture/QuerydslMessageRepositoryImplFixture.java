@@ -7,7 +7,6 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -56,13 +55,13 @@ public class QuerydslMessageRepositoryImplFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
+                  .reliability(4.7d)
                   .oauthId("78923")
                   .build();
         구매자 = User.builder()
                   .name("구매자")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
+                  .reliability(4.7d)
                   .oauthId("12345")
                   .build();
 

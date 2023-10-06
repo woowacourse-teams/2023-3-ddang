@@ -18,7 +18,6 @@ import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepositor
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
@@ -68,7 +67,7 @@ public class AuthenticationService {
                                  final User user = User.builder()
                                                        .name(oauth2Type.calculateNickname(calculateRandomNumber()))
                                                        .profileImage(findDefaultProfileImage())
-                                                       .reliability(new Reliability(0.0d))
+                                                       .reliability(0.0d)
                                                        .oauthId(userInformationDto.findUserId())
                                                        .build();
 

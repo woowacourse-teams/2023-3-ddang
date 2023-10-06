@@ -7,7 +7,6 @@ import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -29,25 +28,25 @@ public class ChatRoomFixture {
         판매자 = User.builder()
                    .name("판매자")
                    .profileImage(new ProfileImage("upload.png", "store.png"))
-                   .reliability(new Reliability(4.7d))
+                   .reliability(4.7d)
                    .oauthId("12345")
                    .build();
         구매자 = User.builder()
                    .name("구매자")
                    .profileImage(new ProfileImage("upload.png", "store.png"))
-                   .reliability(new Reliability(4.7d))
+                   .reliability(4.7d)
                    .oauthId("12346")
                    .build();
         경매에_참여하지_않는_사용자 = User.builder()
                                    .name("경매에 참여하지 않는 사용자")
                                    .profileImage(new ProfileImage("upload.png", "store.png"))
-                                   .reliability(new Reliability(4.7d))
+                                   .reliability(4.7d)
                                    .oauthId("12347")
                                    .build();
         탈퇴한_사용자 = User.builder()
                         .name("탈퇴한 사용자")
                         .profileImage(new ProfileImage("upload.png", "store.png"))
-                        .reliability(new Reliability(4.7d))
+                        .reliability(4.7d)
                         .oauthId("12348")
                         .build();
         탈퇴한_사용자.withdrawal();
