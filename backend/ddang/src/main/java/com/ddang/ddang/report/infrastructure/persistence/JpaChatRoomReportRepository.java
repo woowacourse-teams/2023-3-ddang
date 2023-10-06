@@ -10,6 +10,7 @@ public interface JpaChatRoomReportRepository extends JpaRepository<ChatRoomRepor
 
     boolean existsByChatRoomIdAndReporterId(final Long chatRoomId, final Long reporterId);
 
+    @Override
     @EntityGraph(attributePaths = {"reporter", "chatRoom", "chatRoom.buyer", "chatRoom.auction", "chatRoom.auction.seller"})
-    List<ChatRoomReport> findAllByOrderByIdAsc();
+    List<ChatRoomReport> findAll();
 }

@@ -203,7 +203,7 @@ class JpaAuctionReportRepositoryTest {
         em.clear();
 
         // when
-        final List<AuctionReport> actual = auctionReportRepository.findAllByOrderByIdAsc();
+        final List<AuctionReport> actual = auctionReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

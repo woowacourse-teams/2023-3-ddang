@@ -28,7 +28,7 @@ public class ChatRoomReportService {
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaChatRoomReportRepository chatRoomReportRepository;
 
-    @Transactional
+
     public Long create(final CreateChatRoomReportDto chatRoomReportDto) {
         final User reporter = userRepository.findById(chatRoomReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
@@ -53,7 +53,7 @@ public class ChatRoomReportService {
     }
 
     public List<ReadChatRoomReportDto> readAll() {
-        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAllByOrderByIdAsc();
+        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAll();
 
         return auctionReports.stream()
                              .map(auctionReport -> ReadChatRoomReportDto.from(auctionReport, LocalDateTime.now()))
