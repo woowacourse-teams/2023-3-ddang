@@ -8,15 +8,12 @@ import static com.ddang.ddang.region.domain.QRegion.region;
 
 import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.exception.UnsupportedSortConditionException;
+import com.ddang.ddang.auction.infrastructure.persistence.util.AuctionSortCondition;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -50,49 +47,11 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     }
 
     private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(processOrderSpecifiers(pageable));
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(convertOrderSpecifiers(pageable));
 
         orderSpecifiers.add(auction.id.desc());
 
         return orderSpecifiers;
-    }
-
-    private List<OrderSpecifier<?>> processOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-        final Sort sort = pageable.getSort();
-
-        for (final Order order : sort) {
-            if (AuctionSortConditionConsts.ID.equals(order.getProperty())) {
-                return Collections.emptyList();
-            }
-
-            orderSpecifiers.addAll(processOrderSpecifierByCondition(order));
-        }
-
-        return orderSpecifiers;
-    }
-
-    private List<OrderSpecifier<?>> processOrderSpecifierByCondition(final Order order) {
-        if (AuctionSortConditionConsts.RELIABILITY.equals(order.getProperty())) {
-            return List.of(auction.seller.reliability.desc());
-        }
-        if (AuctionSortConditionConsts.AUCTIONEER_COUNT.equals(order.getProperty())) {
-            return List.of(auction.auctioneerCount.desc());
-        }
-        if (AuctionSortConditionConsts.CLOSING_TINE.equals(order.getProperty())) {
-            final LocalDateTime now = LocalDateTime.now();
-            final NumberExpression<Integer> closingTimeOrder = new CaseBuilder()
-                    .when(auction.closingTime.after(now)).then(1)
-                    .otherwise(2);
-            final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-
-            orderSpecifiers.add(closingTimeOrder.asc());
-            orderSpecifiers.add(auction.closingTime.asc());
-
-            return orderSpecifiers;
-        }
-
-        throw new UnsupportedSortConditionException("지원하지 않는 정렬 방식입니다.");
     }
 
     private List<BooleanExpression> calculateBooleanExpressions(final ReadAuctionSearchCondition searchCondition) {
@@ -133,6 +92,21 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
         return auction.title.like("%" + titleSearchCondition + "%");
     }
 
+    private List<OrderSpecifier<?>> convertOrderSpecifiers(final Pageable pageable) {
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+        final Sort sort = pageable.getSort();
+
+        for (final Order order : sort) {
+            if (AuctionSortConditionConsts.ID.equals(order.getProperty())) {
+                return Collections.emptyList();
+            }
+
+            orderSpecifiers.add(AuctionSortCondition.convert(order));
+        }
+
+        return orderSpecifiers;
+    }
+
     private List<Auction> findAuctionsByIdsAndOrderSpecifiers(
             final List<Long> targetIds,
             final List<OrderSpecifier<?>> orderSpecifiers
@@ -170,10 +144,7 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
 
     @Override
     public Slice<Auction> findAuctionsAllByUserId(final Long userId, final Pageable pageable) {
-        final List<BooleanExpression> booleanExpressions = List.of(
-                auction.seller.id.eq(userId),
-                auction.deleted.isFalse()
-        );
+        final List<BooleanExpression> booleanExpressions = List.of(auction.seller.id.eq(userId));
         final List<OrderSpecifier<?>> orderSpecifiers = List.of(auction.id.desc());
         final List<Long> findAuctionIds = findAuctionIds(booleanExpressions, orderSpecifiers, pageable);
         final List<Auction> findAuctions = findAuctionsByIdsAndOrderSpecifiers(

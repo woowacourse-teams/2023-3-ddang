@@ -59,41 +59,41 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
         querydslAuctionRepository = new QuerydslAuctionRepositoryImpl(new JPAQueryFactory(em));
 
         seller1 = User.builder()
-                      .name("회원1234543211")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(4.7d)
-                      .oauthId("1234543211")
-                      .build();
+                                 .name("회원1234543211")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(4.7d)
+                                 .oauthId("1234543211")
+                                 .build();
         seller2 = User.builder()
-                      .name("회원1234543212")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(3.5d)
-                      .oauthId("1234543212")
-                      .build();
+                                 .name("회원1234543212")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(3.5d)
+                                 .oauthId("1234543212")
+                                 .build();
         seller3 = User.builder()
-                      .name("회원1234543213")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(2.1d)
-                      .oauthId("1234543213")
-                      .build();
+                                 .name("회원1234543213")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(2.1d)
+                                 .oauthId("1234543213")
+                                 .build();
         seller4 = User.builder()
-                      .name("회원1234543214")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(5.0d)
-                      .oauthId("1234543214")
-                      .build();
+                                 .name("회원1234543214")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(5.0d)
+                                 .oauthId("1234543214")
+                                 .build();
         seller5 = User.builder()
-                      .name("회원1234543215")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(1.5d)
-                      .oauthId("1234543215")
-                      .build();
+                                 .name("회원1234543215")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(1.5d)
+                                 .oauthId("1234543215")
+                                 .build();
         seller6 = User.builder()
-                      .name("회원1234543216")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(0.3d)
-                      .oauthId("1234543216")
-                      .build();
+                                 .name("회원1234543216")
+                                 .profileImage(new ProfileImage("upload.png", "store.png"))
+                                 .reliability(0.3d)
+                                 .oauthId("1234543216")
+                                 .build();
         seller7 = User.builder()
                       .name("회원1234543217")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -118,7 +118,7 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .description("레드불을 팝니다")
                           .bidUnit(new BidUnit(1_000))
                           .startPrice(new Price(1_000))
-                          .closingTime(nowTime.minusDays(2))
+                          .closingTime(nowTime.plusDays(2))
                           .seller(seller6)
                           .build();
         bidding(auction6, seller1);
@@ -128,7 +128,7 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .description("맥북을 팝니다")
                           .bidUnit(new BidUnit(1_000))
                           .startPrice(new Price(1_000))
-                          .closingTime(nowTime.minusDays(4))
+                          .closingTime(nowTime.plusDays(4))
                           .seller(seller2)
                           .build();
         bidding(auction8, seller1);
@@ -138,7 +138,7 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                            .description("맥북을 팝니다")
                            .bidUnit(new BidUnit(1_000))
                            .startPrice(new Price(1_000))
-                           .closingTime(nowTime.minusDays(4))
+                           .closingTime(nowTime.plusDays(4))
                            .seller(seller2)
                            .build();
         bidding(auction16, seller1);
@@ -148,7 +148,7 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .description("맥북을 팝니다")
                           .bidUnit(new BidUnit(1_000))
                           .startPrice(new Price(1_000))
-                          .closingTime(nowTime.minusDays(4))
+                          .closingTime(nowTime.plusDays(4))
                           .seller(seller2)
                           .build();
         bidding(auction9, seller1);
@@ -158,7 +158,7 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                            .description("맥북을 팝니다")
                            .bidUnit(new BidUnit(1_000))
                            .startPrice(new Price(1_000))
-                           .closingTime(nowTime.minusDays(4))
+                           .closingTime(nowTime.plusDays(4))
                            .seller(seller2)
                            .build();
         bidding(auction13, seller1);
@@ -168,7 +168,7 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .description("맥북1을 팝니다")
                           .bidUnit(new BidUnit(1_000))
                           .startPrice(new Price(1_000))
-                          .closingTime(nowTime.minusDays(3))
+                          .closingTime(nowTime.plusDays(3))
                           .seller(seller1)
                           .build();
         addAuctioneerCount(auction7, 3);
@@ -177,7 +177,7 @@ public class InitializeCommonAuctionData extends QuerydslAuctionRepositoryImplTe
                           .description("맥북에어를 팝니다")
                           .bidUnit(new BidUnit(1_000))
                           .startPrice(new Price(1_000))
-                          .closingTime(nowTime.minusDays(5))
+                          .closingTime(nowTime.plusDays(5))
                           .seller(seller1)
                           .build();
         addAuctioneerCount(auction1, 2);
