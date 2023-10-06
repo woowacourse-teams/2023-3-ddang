@@ -77,6 +77,7 @@ class UserReviewDialog : DialogFragment() {
             is ErrorType.UNEXPECTED -> getString(errorType.messageId)
         }
         Toaster.showShort(requireContext(), message ?: defaultMessage)
+        exit()
     }
 
     private fun loadPartnerInfo() {

@@ -43,8 +43,12 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
             val auctionId = auctionId ?: return@launch
             when (val response = reviewRepository.getUserReview(auctionId)) {
                 is ApiResponse.Success -> {
-                    ratingGrade.value = response.body.score.toFloat()
-                    reviewDetailContent.value = response.body.content
+                    val score = response.body.score
+                    val content = response.body.content
+                    if (score == null || content == null) return@launch
+
+                    ratingGrade.value = score.toFloat()
+                    reviewDetailContent.value = content
                     _isCompletedAlready.value = true
                 }
                 is ApiResponse.Failure -> {

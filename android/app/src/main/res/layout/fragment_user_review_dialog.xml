@@ -66,6 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginTop="6dp"
+                android:isIndicator="@{viewModel.isCompletedAlready()}"
                 android:minHeight="0dp"
                 android:numStars="5"
                 android:rating="@={viewModel.ratingGrade}"
