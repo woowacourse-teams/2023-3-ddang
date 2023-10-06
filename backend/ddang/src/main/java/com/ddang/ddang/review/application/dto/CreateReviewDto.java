@@ -14,7 +14,7 @@ public record CreateReviewDto(Long auctionId, Long writerId, Long targetId, Stri
                 writerId,
                 createReviewRequest.targetId(),
                 createReviewRequest.content(),
-                createReviewRequest.score().doubleValue()
+                createReviewRequest.score()
         );
     }
 

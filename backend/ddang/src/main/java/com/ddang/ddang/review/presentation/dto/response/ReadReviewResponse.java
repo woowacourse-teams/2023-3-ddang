@@ -12,24 +12,18 @@ public record ReadReviewResponse(
 
         String content,
 
-        Float score,
+        Double score,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime createdTime
 ) {
 
     public static ReadReviewResponse from(final ReadReviewDto reviewDto) {
-        final Double nullableScore = reviewDto.score();
-        Float returnScore = null;
-        if (nullableScore != null) {
-            returnScore = nullableScore.floatValue();
-        }
-
         return new ReadReviewResponse(
                 reviewDto.id(),
                 ReadUserInReviewResponse.from(reviewDto.writer()),
                 reviewDto.content(),
-                returnScore,
+                reviewDto.score(),
                 reviewDto.createdTime()
         );
     }

@@ -25,9 +25,9 @@ public class ReviewControllerFixture extends CommonControllerSliceTest {
     protected String 액세스_토큰 = "Bearer accessToken";
     protected PrivateClaims 유효한_작성자_비공개_클레임 = new PrivateClaims(유효한_평가_작성자_아이디);
     protected CreateReviewRequest 사용자_평가_등록_요청 =
-            new CreateReviewRequest(유효한_경매_아이디, 유효한_평가_대상_아이디, "친절하다.", 5.0f);
+            new CreateReviewRequest(유효한_경매_아이디, 유효한_평가_대상_아이디, "친절하다.", 5.0d);
     protected CreateReviewRequest 중복된_평가_등록_요청 =
-            new CreateReviewRequest(사용자가_이미_평가한_경매_아이디, 유효한_평가_대상_아이디, "친절하다.", 5.0f);
+            new CreateReviewRequest(사용자가_이미_평가한_경매_아이디, 유효한_평가_대상_아이디, "친절하다.", 5.0d);
     protected Long 생성된_평가_아이디 = 1L;
     protected Long 구매자가_판매자1에게_받은_평가_아이디 = 2L;
     protected Long 구매자가_판매자2에게_받은_평가_아이디 = 3L;
