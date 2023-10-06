@@ -21,7 +21,33 @@ public class LogicMetricAop {
     private void restControllerAnnotatedClass() {
     }
 
-    @Around("restControllerAnnotatedClass()")
+    @Pointcut("within(com.ddang.ddang.image.presentation.ImageController)")
+    private void imageControllerClass() {
+    }
+
+    @Pointcut("within(com.ddang.ddang.region.presentation.RegionController)")
+    private void regionControllerClass() {
+    }
+
+    @Pointcut("within(com.ddang.ddang.category.presentation.CategoryController)")
+    private void categoryControllerClass() {
+    }
+
+    @Pointcut("within(com.ddang.ddang.report.presentation.ReportController)")
+    private void reportControllerClass() {
+    }
+
+    @Pointcut("within(com.ddang.ddang.device.presentation.DeviceTokenController)")
+    private void deviceTokenControllerClass() {
+    }
+
+    @Pointcut("within(com.ddang.ddang.authentication.presentation.AuthenticationController)")
+    private void authenticationControllerClass() {
+    }
+
+    @Around("restControllerAnnotatedClass() && !imageControllerClass() && !regionControllerClass() && "
+            + "!categoryControllerClass() && !reportControllerClass() && !deviceTokenControllerClass() && "
+            + "!authenticationControllerClass()")
     public Object doLog(final ProceedingJoinPoint joinPoint) throws Throwable {
         if (isRequestScope()) {
             final String className = findClassSimpleName(joinPoint);
