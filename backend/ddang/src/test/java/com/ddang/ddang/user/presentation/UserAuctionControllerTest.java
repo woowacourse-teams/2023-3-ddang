@@ -23,7 +23,6 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionDto;
 import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
-import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
@@ -102,8 +101,7 @@ class UserAuctionControllerTest extends CommonControllerSliceTest {
                 1L,
                 "판매자",
                 3.5d,
-                false,
-                AuctionStatus.UNBIDDEN
+                false
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -124,8 +122,7 @@ class UserAuctionControllerTest extends CommonControllerSliceTest {
                 1L,
                 "판매자",
                 3.5d,
-                false,
-                AuctionStatus.UNBIDDEN
+                false
         );
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);
@@ -206,8 +203,7 @@ class UserAuctionControllerTest extends CommonControllerSliceTest {
                 1L,
                 "판매자",
                 3.5d,
-                false,
-                AuctionStatus.UNBIDDEN
+                false
         );
         final ReadAuctionDto auction2 = new ReadAuctionDto(
                 2L,
@@ -228,8 +224,7 @@ class UserAuctionControllerTest extends CommonControllerSliceTest {
                 1L,
                 "판매자",
                 3.5d,
-                false,
-                AuctionStatus.UNBIDDEN
+                false
         );
         final PrivateClaims privateClaims = new PrivateClaims(1L);
         final ReadAuctionsDto readAuctionsDto = new ReadAuctionsDto(List.of(auction2, auction1), true);

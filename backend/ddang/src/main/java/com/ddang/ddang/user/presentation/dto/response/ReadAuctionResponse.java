@@ -1,6 +1,7 @@
 package com.ddang.ddang.user.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import java.time.LocalDateTime;
 
 public record ReadAuctionResponse(
         Long id,
@@ -17,7 +18,7 @@ public record ReadAuctionResponse(
                 dto.title(),
                 convertImageUrl(dto, baseUrl),
                 processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
-                dto.auctionStatus().name(),
+                processAuctionStatus(dto.closingTime(), dto.lastBidPrice()),
                 dto.auctioneerCount()
         );
     }
@@ -32,5 +33,19 @@ public record ReadAuctionResponse(
         }
 
         return lastBidPrice;
+    }
+
+    // TODO 2차 데모데이 이후 enum으로 처리
+    private static String processAuctionStatus(final LocalDateTime closingTime, final Integer lastBidPrice) {
+        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice == null) {
+            return "UNBIDDEN";
+        }
+        if (LocalDateTime.now().isBefore(closingTime) && lastBidPrice != null) {
+            return "ONGOING";
+        }
+        if (LocalDateTime.now().isAfter(closingTime) && lastBidPrice == null) {
+            return "FAILURE";
+        }
+        return "SUCCESS";
     }
 }

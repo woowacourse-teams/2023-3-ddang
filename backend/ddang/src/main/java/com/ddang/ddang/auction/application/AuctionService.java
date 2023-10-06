@@ -22,7 +22,6 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -84,7 +83,7 @@ public class AuctionService {
                                                              "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                      ));
 
-        return ReadAuctionDto.of(findAuction, LocalDateTime.now());
+        return ReadAuctionDto.from(findAuction);
     }
 
     public ReadAuctionsDto readAllByCondition(
@@ -95,19 +94,19 @@ public class AuctionService {
                 readAuctionSearchCondition
         );
 
-        return ReadAuctionsDto.of(auctions, LocalDateTime.now());
+        return ReadAuctionsDto.from(auctions);
     }
 
     public ReadAuctionsDto readAllByUserId(final Long userId, final Pageable pageable) {
         final Slice<Auction> auctions = auctionRepository.findAuctionsAllByUserId(userId, pageable);
 
-        return ReadAuctionsDto.of(auctions, LocalDateTime.now());
+        return ReadAuctionsDto.from(auctions);
     }
 
     public ReadAuctionsDto readAllByBidderId(final Long userId, final Pageable pageable) {
         final Slice<Auction> auctions = auctionRepository.findAuctionsAllByBidderId(userId, pageable);
 
-        return ReadAuctionsDto.of(auctions, LocalDateTime.now());
+        return ReadAuctionsDto.from(auctions);
     }
 
     @Transactional
