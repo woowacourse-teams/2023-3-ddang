@@ -2,7 +2,7 @@ package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.domain.AuctionStatus;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
+import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
 public record CreateAuctionResponse(
@@ -26,6 +26,6 @@ public record CreateAuctionResponse(
     }
 
     private static String convertAuctionImageUrl(final Long id) {
-        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id);
+        return ImageUrlCalculator.calculate(ImageBaseUrl.AUCTION, id);
     }
 }

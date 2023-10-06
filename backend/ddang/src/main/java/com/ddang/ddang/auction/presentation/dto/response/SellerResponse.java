@@ -1,7 +1,7 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
+import com.ddang.ddang.image.presentation.util.ImageBaseUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
 public record SellerResponse(
@@ -14,9 +14,13 @@ public record SellerResponse(
     public static SellerResponse from(final ReadAuctionDto auctionDto) {
         return new SellerResponse(
                 auctionDto.sellerId(),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, auctionDto.sellerProfileId()),
+                convertImageUrl(auctionDto.sellerProfileId()),
                 auctionDto.sellerName(),
                 auctionDto.sellerReliability()
         );
+    }
+
+    private static String convertImageUrl(final Long id) {
+        return ImageUrlCalculator.calculate(ImageBaseUrl.USER, id);
     }
 }
