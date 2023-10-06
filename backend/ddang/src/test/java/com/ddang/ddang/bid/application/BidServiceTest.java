@@ -3,7 +3,6 @@ package com.ddang.ddang.bid.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
-import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
@@ -12,7 +11,6 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,8 +19,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.event.ApplicationEvents;
-import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,9 +27,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
-@RecordApplicationEvents
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class BidServiceTest extends BidServiceFixture {
@@ -43,9 +39,6 @@ class BidServiceTest extends BidServiceFixture {
 
     @MockBean
     NotificationService notificationService;
-
-    @Autowired
-    ApplicationEvents events;
 
     @Test
     void 입찰을_등록한다() {
@@ -61,13 +54,12 @@ class BidServiceTest extends BidServiceFixture {
     }
 
     @Test
-    void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액_이상의_금액으로_입찰을_등록할_수_있다() throws FirebaseMessagingException {
+    void 마지막_입찰자와_다른_사람은_마지막_입찰액과_최소_입찰단위를_더한_금액_이상의_금액으로_입찰을_등록할_수_있다() {
         // given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(알림_성공);
 
         // when
         final Long actual = bidService.create(입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto, 이미지_절대_url);
-        final long eventActual = events.stream(BidNotificationEvent.class).count();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -75,7 +67,7 @@ class BidServiceTest extends BidServiceFixture {
             softAssertions.assertThat(입찰_내역이_하나_있던_경매.getLastBid().getPrice().getValue())
                           .isEqualTo(입찰_내역이_하나_존재하는_경매에_대한_입찰_요청_dto.bidPrice());
             softAssertions.assertThat(입찰_내역이_하나_있던_경매.getAuctioneerCount()).isEqualTo(2);
-            softAssertions.assertThat(eventActual).isEqualTo(1);
+            verify(notificationService).send(any());
         });
     }
 

@@ -1,23 +1,20 @@
 package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
-import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.event.ApplicationEvents;
-import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 
@@ -25,9 +22,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
-@RecordApplicationEvents
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class MessageServiceTest extends MessageServiceFixture {
@@ -38,11 +35,8 @@ class MessageServiceTest extends MessageServiceFixture {
     @MockBean
     NotificationService notificationService;
 
-    @Autowired
-    ApplicationEvents events;
-
     @Test
-    void 메시지를_생성한다() throws FirebaseMessagingException {
+    void 메시지를_생성한다() {
         //given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
 
@@ -55,16 +49,18 @@ class MessageServiceTest extends MessageServiceFixture {
 
     @Test
     void 메시지를_생성하고_알림을_보낸다() {
+        //given
+        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
+
         // when
         messageService.create(메시지_생성_DTO, 이미지_절대_경로);
-        final long actual = events.stream(MessageNotificationEvent.class).count();
 
         // then
-        assertThat(actual).isEqualTo(1);
+        verify(notificationService).send(any());
     }
 
     @Test
-    void 알림전송에_실패한_경우에도_정상적으로_메시지가_저장된다() throws FirebaseMessagingException {
+    void 알림전송에_실패한_경우에도_정상적으로_메시지가_저장된다() {
         // given
         given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.FAIL);
 
@@ -97,6 +93,14 @@ class MessageServiceTest extends MessageServiceFixture {
         assertThatThrownBy(() -> messageService.create(유효하지_않은_수신자의_메시지_생성_DTO, 이미지_절대_경로))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
+    }
+
+    @Test
+    void 수신자가_탈퇴한_사용자인_경우_메시지를_생성하면_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> messageService.create(수신자가_탈퇴한_경우_메시지_생성_DTO, 이미지_절대_경로))
+                .isInstanceOf(UnableToChatException.class)
+                .hasMessage("탈퇴한 사용자에게는 메시지 전송이 불가능합니다.");
     }
 
     @Test
