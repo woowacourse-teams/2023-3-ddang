@@ -87,7 +87,7 @@ class UserReviewDialog : DialogFragment() {
     ): View {
         _binding = FragmentUserReviewDialogBinding.inflate(inflater, container, false)
             .apply {
-                lifecycleOwner = this@UserReviewDialog
+                lifecycleOwner = viewLifecycleOwner
                 viewModel = this@UserReviewDialog.viewModel
             }
         return binding.root
