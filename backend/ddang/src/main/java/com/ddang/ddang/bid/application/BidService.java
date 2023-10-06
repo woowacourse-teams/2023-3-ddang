@@ -4,22 +4,22 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
+import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
+import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
-import com.ddang.ddang.notification.application.NotificationService;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,7 +33,7 @@ import java.util.Optional;
 @Slf4j
 public class BidService {
 
-    private final NotificationService notificationService;
+    private final ApplicationEventPublisher bidEventPublisher;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaBidRepository bidRepository;
@@ -50,23 +50,29 @@ public class BidService {
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
-        final Optional<User> previousBidder = auction.findLastBidder();
-
         final Bid saveBid = saveBid(bidDto, auction, bidder);
 
-        if (previousBidder.isEmpty()) {
-            return saveBid.getId();
-        }
-
-        try {
-            final NotificationStatus sendNotificationMessage =
-                    sendNotification(auctionAndImageDto, previousBidder.get(), auctionImageAbsoluteUrl);
-            log.info(sendNotificationMessage.toString());
-        } catch (Exception ex) {
-            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
-        }
+        final Optional<User> previousBidder = auction.findLastBidder();
+        publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder);
 
         return saveBid.getId();
+    }
+
+    private void publishBidNotificationEvent(
+            final String auctionImageAbsoluteUrl,
+            final AuctionAndImageDto auctionAndImageDto,
+            final Optional<User> previousBidder
+    ) {
+        if (previousBidder.isEmpty()) {
+            return;
+        }
+
+        final BidDto bidDto = new BidDto(
+                previousBidder.get().getId(),
+                auctionAndImageDto,
+                auctionImageAbsoluteUrl
+        );
+        bidEventPublisher.publishEvent(new BidNotificationEvent(bidDto));
     }
 
     private void checkInvalidAuction(final Auction auction) {
@@ -133,16 +139,6 @@ public class BidService {
         auction.updateLastBid(saveBid);
 
         return saveBid;
-    }
-
-    private NotificationStatus sendNotification(
-            final AuctionAndImageDto auctionAndImageDto,
-            final User previousBidder,
-            final String auctionImageAbsoluteUrl
-    ) {
-        final CreateNotificationDto dto = CreateNotificationDto.of(previousBidder.getId(), auctionAndImageDto, auctionImageAbsoluteUrl);
-
-        return notificationService.send(dto);
     }
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
