@@ -31,12 +31,12 @@ public class UserService {
         final User user = userRepository.findByIdAndDeletedIsFalse(userId)
                                         .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
 
-        updateUserByRequest(userDto, user);
+        updateUserByReqeust(userDto, user);
 
         return ReadUserDto.from(user);
     }
 
-    private void updateUserByRequest(final UpdateUserDto userDto, final User user) {
+    private void updateUserByReqeust(final UpdateUserDto userDto, final User user) {
         if (userDto.profileImage() != null) {
             final StoreImageDto storeImageDto = imageProcessor.storeImageFile(userDto.profileImage());
             user.updateProfileImage(storeImageDto.toProfileImageEntity());
