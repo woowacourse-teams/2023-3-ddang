@@ -1,5 +1,10 @@
 package com.ddang.ddang.auction.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
@@ -20,7 +25,6 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
@@ -29,7 +33,10 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -40,15 +47,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -103,7 +101,7 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -124,7 +122,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         // when
@@ -194,7 +192,7 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("789321")
                                 .build();
@@ -215,7 +213,7 @@ class AuctionServiceTest {
                 List.of(3L),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         // when & then
@@ -244,7 +242,7 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("54321")
                                 .build();
@@ -265,7 +263,7 @@ class AuctionServiceTest {
                 List.of(secondRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         // when & then
@@ -288,7 +286,7 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -309,7 +307,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 1L,
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         // when & then
@@ -338,7 +336,7 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -392,13 +390,13 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -420,7 +418,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         final Auction auction = createAuctionDto.toEntity(seller, sub);
@@ -470,19 +468,19 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User stranger = User.builder()
                                   .name("회원3")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                                  .profileImage("profile.png")
                                   .reliability(4.7d)
                                   .oauthId("12347")
                                   .build();
@@ -505,7 +503,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         final Auction auction = createAuctionDto.toEntity(seller, sub);
@@ -555,13 +553,13 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -630,13 +628,13 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -658,7 +656,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         final Auction auction = createAuctionDto.toEntity(seller, sub);
@@ -705,19 +703,19 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User stranger = User.builder()
                                   .name("회원3")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                                  .profileImage("profile.png")
                                   .reliability(4.7d)
                                   .oauthId("12347")
                                   .build();
@@ -740,7 +738,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         final Auction auction = createAuctionDto.toEntity(seller, sub);
@@ -799,7 +797,7 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -821,7 +819,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
         final CreateAuctionDto createAuctionDto2 = new CreateAuctionDto(
                 "경매 상품 2",
@@ -832,7 +830,7 @@ class AuctionServiceTest {
                 List.of(thirdRegion.getId()),
                 sub.getId(),
                 List.of(auctionImage),
-                seller.getId()
+                1L
         );
 
         auctionService.create(createAuctionDto1);
@@ -857,7 +855,7 @@ class AuctionServiceTest {
         // given
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -910,7 +908,7 @@ class AuctionServiceTest {
                                        .build();
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -931,12 +929,11 @@ class AuctionServiceTest {
         // given
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         userRepository.save(seller);
-
         final Auction auction = Auction.builder()
                                        .title("경매 상품 1")
                                        .description("이것은 경매 상품 1 입니다.")
@@ -947,7 +944,7 @@ class AuctionServiceTest {
                                        .build();
         final User user = User.builder()
                               .name("회원2")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12346")
                               .build();
@@ -988,13 +985,13 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("123457")
                                .build();
@@ -1069,13 +1066,13 @@ class AuctionServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("123457")
                                .build();

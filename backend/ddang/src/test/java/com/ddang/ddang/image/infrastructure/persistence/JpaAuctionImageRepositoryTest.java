@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Import;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import(QuerydslConfiguration.class)
-class JpaAuctionProfileImageRepositoryTest {
+class JpaAuctionImageRepositoryTest {
 
     @PersistenceContext
     EntityManager em;

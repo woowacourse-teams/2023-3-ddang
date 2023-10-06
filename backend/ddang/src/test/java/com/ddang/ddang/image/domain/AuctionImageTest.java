@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 @SuppressWarnings("NonAsciiCharacters")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-class AuctionProfileImageTest {
+class AuctionImageTest {
 
     @Test
     void 경매_연관_관계를_세팅한다() {

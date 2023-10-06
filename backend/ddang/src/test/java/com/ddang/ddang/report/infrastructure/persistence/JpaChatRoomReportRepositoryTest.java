@@ -8,7 +8,6 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -59,7 +58,7 @@ class JpaChatRoomReportRepositoryTest {
                                        .build();
         final User buyer = User.builder()
                                .name("사용자")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();
@@ -92,7 +91,7 @@ class JpaChatRoomReportRepositoryTest {
                                        .build();
         final User buyer = User.builder()
                                .name("사용자")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();
@@ -132,7 +131,7 @@ class JpaChatRoomReportRepositoryTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -162,19 +161,19 @@ class JpaChatRoomReportRepositoryTest {
                                         .build();
         final User user1 = User.builder()
                                .name("사용자1")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User user2 = User.builder()
                                .name("사용자2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
         final User user3 = User.builder()
                                .name("사용자3")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12348")
                                .build();

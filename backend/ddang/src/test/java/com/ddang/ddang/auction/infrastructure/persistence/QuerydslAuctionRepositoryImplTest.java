@@ -9,7 +9,6 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
@@ -63,7 +62,7 @@ class QuerydslAuctionRepositoryImplTest {
         // given
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();

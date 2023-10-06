@@ -9,9 +9,9 @@ public record ReadChatRoomResponse(
         boolean isChatAvailable
 ) {
 
-    public static ReadChatRoomResponse from(final ReadParticipatingChatRoomDto chatRoomDto) {
+    public static ReadChatRoomResponse of(final ReadParticipatingChatRoomDto chatRoomDto, final String baseUrl) {
         final ReadChatPartnerResponse chatPartner = ReadChatPartnerResponse.from(chatRoomDto.partnerDto());
-        final ReadAuctionInChatRoomResponse auction = ReadAuctionInChatRoomResponse.from(chatRoomDto.auctionDto());
+        final ReadAuctionInChatRoomResponse auction = ReadAuctionInChatRoomResponse.of(chatRoomDto.auctionDto(), baseUrl);
 
         return new ReadChatRoomResponse(chatRoomDto.id(), chatPartner, auction, chatRoomDto.isChatAvailable());
     }

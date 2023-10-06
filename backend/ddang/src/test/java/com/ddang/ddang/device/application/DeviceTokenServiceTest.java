@@ -4,7 +4,6 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -37,7 +36,7 @@ class DeviceTokenServiceTest {
         final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -55,7 +54,7 @@ class DeviceTokenServiceTest {
         final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -80,7 +79,7 @@ class DeviceTokenServiceTest {
         final String deviceTokenValue = "deviceToken";
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

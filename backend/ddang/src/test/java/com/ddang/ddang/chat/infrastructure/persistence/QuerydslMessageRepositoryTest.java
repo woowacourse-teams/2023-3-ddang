@@ -7,7 +7,6 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -28,7 +27,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@SuppressWarnings("NonAsciiCharacters")
+@SuppressWarnings("NonAscillCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 class QuerydslMessageRepositoryTest {
 
@@ -65,16 +64,16 @@ class QuerydslMessageRepositoryTest {
         // given
         final User seller = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
         final User buyer = User.builder()
-                                  .name("구매자")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                                  .reliability(4.7d)
-                                  .oauthId("12345")
-                                  .build();
+                               .name("구매자")
+                               .profileImage("profile.png")
+                               .reliability(4.7d)
+                               .oauthId("12345")
+                               .build();
         final Auction auction = Auction.builder()
                                        .title("title")
                                        .build();
@@ -118,13 +117,13 @@ class QuerydslMessageRepositoryTest {
         // given
         final User writer = User.builder()
                                 .name("회원")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("78923")
                                 .build();
         final User receiver = User.builder()
                                   .name("구매자")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                                  .profileImage("profile.png")
                                   .reliability(4.7d)
                                   .oauthId("12345")
                                   .build();

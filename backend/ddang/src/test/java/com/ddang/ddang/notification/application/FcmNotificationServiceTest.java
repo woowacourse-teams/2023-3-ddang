@@ -4,7 +4,6 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.domain.User;
@@ -45,7 +44,7 @@ class FcmNotificationServiceTest {
         // given
         final User user = User.builder()
                               .name("회원")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -94,7 +93,7 @@ class FcmNotificationServiceTest {
         // given
         final User user = User.builder()
                               .name("회원")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();

@@ -23,7 +23,7 @@ public record ReadAuctionDto(
         String mainCategory,
         String subCategory,
         Long sellerId,
-        Long sellerProfileId,
+        String sellerProfile,
         String sellerName,
         double sellerReliability
 ) {
@@ -40,18 +40,18 @@ public record ReadAuctionDto(
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
                 convertReadRegionsDto(auction),
-                convertImageIds(auction),
+                convertImageUrls(auction),
                 auction.getAuctioneerCount(),
                 auction.getSubCategory().getMainCategory().getName(),
                 auction.getSubCategory().getName(),
                 auction.getSeller().getId(),
-                auction.getSeller().getProfileImage().getId(),
+                auction.getSeller().getProfileImage(),
                 auction.getSeller().getName(),
                 auction.getSeller().getReliability()
         );
     }
 
-    private static List<Long> convertImageIds(final Auction auction) {
+    private static List<Long> convertImageUrls(final Auction auction) {
         return auction.getAuctionImages()
                       .stream()
                       .map(AuctionImage::getId)

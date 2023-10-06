@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record ReadBidDto(
         String name,
-        Long profileImageId,
+        String profileImage,
         int price,
         LocalDateTime bidTime
 ) {
@@ -17,7 +17,7 @@ public record ReadBidDto(
 
         return new ReadBidDto(
                 bidder.getName(),
-                bidder.getProfileImage().getId(),
+                bidder.getProfileImage(),
                 bid.getPrice().getValue(),
                 bid.getCreatedTime()
         );

@@ -10,11 +10,11 @@ public record ReadChatRoomWithLastMessageResponse(
         boolean isChatAvailable
 ) {
 
-    public static ReadChatRoomWithLastMessageResponse from(final ReadChatRoomWithLastMessageDto dto) {
+    public static ReadChatRoomWithLastMessageResponse of(final ReadChatRoomWithLastMessageDto dto, final String baseUrl) {
         return new ReadChatRoomWithLastMessageResponse(
                 dto.id(),
                 ReadChatPartnerResponse.from(dto.partnerDto()),
-                ReadAuctionInChatRoomResponse.from(dto.auctionDto()),
+                ReadAuctionInChatRoomResponse.of(dto.auctionDto(), baseUrl),
                 ReadLastMessageResponse.from(dto.lastMessageDto()),
                 dto.isChatAvailable()
         );

@@ -25,7 +25,6 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.AuctionImage;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -78,16 +77,16 @@ class ChatRoomServiceTest {
         final Category sub = new Category("서브");
         main.addSubCategory(sub);
         categoryRepository.save(main);
-        
+
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -128,16 +127,16 @@ class ChatRoomServiceTest {
         final Category sub = new Category("서브");
         main.addSubCategory(sub);
         categoryRepository.save(main);
-        
+
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -175,7 +174,7 @@ class ChatRoomServiceTest {
         // given
         final User user = User.builder()
                               .name("회원1")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -202,13 +201,13 @@ class ChatRoomServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -251,7 +250,7 @@ class ChatRoomServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
@@ -288,19 +287,19 @@ class ChatRoomServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User stranger = User.builder()
                                   .name("회원3")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                                  .profileImage("profile.png")
                                   .reliability(4.7d)
                                   .oauthId("12347")
                                   .build();
@@ -344,13 +343,13 @@ class ChatRoomServiceTest {
 
         final User seller = User.builder()
                                 .name("회원1")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("회원2")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -399,25 +398,25 @@ class ChatRoomServiceTest {
 
         final User merry = User.builder()
                                .name("메리")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12345")
                                .build();
         final User encho = User.builder()
                                .name("엔초")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User jamie = User.builder()
                                .name("제이미")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12347")
                                .build();
         final User zeeto = User.builder()
                                .name("지토")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12348")
                                .build();
@@ -519,13 +518,13 @@ class ChatRoomServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -568,10 +567,9 @@ class ChatRoomServiceTest {
     @Test
     void 지정한_아이디에_해당하는_채팅방_조회시_조회를_요청한_사용자의_정보를_찾을_수_없다면_예외가_발생한다() {
         // given
-
         final User user = User.builder()
                               .name("구매자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12345")
                               .build();
@@ -600,8 +598,9 @@ class ChatRoomServiceTest {
         // given
         final User user = User.builder()
                               .name("구매자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                              .reliability(4.7d).oauthId("12345")
+                              .profileImage("profile.png")
+                              .reliability(4.7d)
+                              .oauthId("12345")
                               .build();
         userRepository.save(user);
 
@@ -620,19 +619,19 @@ class ChatRoomServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User stranger = User.builder()
                                   .name("일반인")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                                  .profileImage("profile.png")
                                   .reliability(4.7d)
                                   .oauthId("12347")
                                   .build();
@@ -660,13 +659,13 @@ class ChatRoomServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
@@ -708,19 +707,19 @@ class ChatRoomServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
         final User stranger = User.builder()
                                   .name("일반인")
-                                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                                  .profileImage("profile.png")
                                   .reliability(4.7d)
                                   .oauthId("12347")
                                   .build();
@@ -775,7 +774,7 @@ class ChatRoomServiceTest {
         // given
         final User user = User.builder()
                               .name("사용자")
-                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .profileImage("profile.png")
                               .reliability(4.7d)
                               .oauthId("12347")
                               .build();
@@ -796,13 +795,13 @@ class ChatRoomServiceTest {
         // given
         final User seller = User.builder()
                                 .name("판매자")
-                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .profileImage("profile.png")
                                 .reliability(4.7d)
                                 .oauthId("12345")
                                 .build();
         final User buyer = User.builder()
                                .name("구매자")
-                               .profileImage(new ProfileImage("upload.png", "store.png"))
+                               .profileImage("profile.png")
                                .reliability(4.7d)
                                .oauthId("12346")
                                .build();
