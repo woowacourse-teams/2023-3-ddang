@@ -3,6 +3,7 @@ package com.ddang.ddang.device.infrastructure.persistence.fixture;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -30,7 +31,7 @@ public class JpaDeviceTokenRepositoryFixture {
         사용자 = User.builder()
                     .name("사용자")
                     .profileImage(new ProfileImage("upload.png", "store.png"))
-                    .reliability(4.7d)
+                    .reliability(new Reliability(4.7d))
                     .oauthId("12345")
                     .build();
 

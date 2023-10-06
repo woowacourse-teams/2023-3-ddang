@@ -11,6 +11,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -53,7 +54,7 @@ public class JpaBidRepositoryFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(프로필_이미지)
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12345")
                   .build();
 
@@ -85,13 +86,13 @@ public class JpaBidRepositoryFixture {
         입찰자1 = User.builder()
                    .name("입찰자1")
                    .profileImage(프로필_이미지)
-                   .reliability(4.7d)
+                   .reliability(new Reliability(4.7d))
                    .oauthId("12346")
                    .build();
         final User 입찰자2 = User.builder()
                               .name("입찰자2")
                               .profileImage(프로필_이미지)
-                              .reliability(4.7d)
+                              .reliability(new Reliability(4.7d))
                               .oauthId("12346")
                               .build();
 

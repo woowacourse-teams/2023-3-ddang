@@ -12,6 +12,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -46,13 +47,13 @@ public class AuctionServiceFixture {
     protected User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
     protected User 구매자 = User.builder()
                            .name("구매자")
                            .profileImage(new ProfileImage("upload.png", "store.png"))
-                           .reliability(4.7d)
+                           .reliability(new Reliability(4.7d))
                            .oauthId("54321")
                            .build();
 

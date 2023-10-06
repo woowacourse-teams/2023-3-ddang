@@ -10,7 +10,7 @@ public record ReadReporterDto(Long id, String name, Long profileImageId, double 
                 reporter.getId(),
                 reporter.getName(),
                 ImageIdProcessor.process(reporter.getProfileImage()),
-                reporter.getReliability(),
+                reporter.getReliability().getValue(),
                 reporter.isDeleted()
         );
     }

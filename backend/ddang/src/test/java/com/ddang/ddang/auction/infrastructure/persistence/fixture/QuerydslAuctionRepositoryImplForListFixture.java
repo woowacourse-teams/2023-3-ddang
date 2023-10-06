@@ -10,14 +10,16 @@ import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslAuctionRepositoryImplForListFixture {
@@ -69,43 +71,43 @@ public class QuerydslAuctionRepositoryImplForListFixture {
         판매자_4_7점 = User.builder()
                        .name("판매자 4.7점")
                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                       .reliability(4.7d)
+                       .reliability(new Reliability(4.7d))
                        .oauthId("1")
                        .build();
         판매자_3_5점 = User.builder()
                        .name("판매자 3.5점")
                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                       .reliability(3.5d)
+                       .reliability(new Reliability(3.5d))
                        .oauthId("2")
                        .build();
         판매자_2_1점 = User.builder()
                        .name("판매자 2.1점 ")
                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                       .reliability(2.1d)
+                       .reliability(new Reliability(2.1d))
                        .oauthId("3")
                        .build();
         판매자_5_0점 = User.builder()
                        .name("판매자 5.0점")
                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                       .reliability(5.0d)
+                       .reliability(new Reliability(5.0d))
                        .oauthId("4")
                        .build();
         판매자_1_5점 = User.builder()
                        .name("판매자 1.5점")
                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                       .reliability(1.5d)
+                       .reliability(new Reliability(1.5d))
                        .oauthId("5")
                        .build();
         판매자_0_3점_1 = User.builder()
                          .name("판매자 0.3점 1")
                          .profileImage(new ProfileImage("upload.png", "store.png"))
-                         .reliability(0.3d)
+                         .reliability(new Reliability(0.3d))
                          .oauthId("6")
                          .build();
         판매자_0_3점_2 = User.builder()
                          .name("판매자 0.3점 2")
                          .profileImage(new ProfileImage("upload.png", "store.png"))
-                         .reliability(0.3d)
+                         .reliability(new Reliability(0.3d))
                          .oauthId("7")
                          .build();
 
