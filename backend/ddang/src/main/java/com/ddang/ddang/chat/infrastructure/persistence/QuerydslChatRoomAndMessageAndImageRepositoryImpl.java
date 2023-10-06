@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Objects;
 
 import static com.ddang.ddang.auction.domain.QAuction.auction;
 import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
@@ -57,11 +56,8 @@ public class QuerydslChatRoomAndMessageAndImageRepositoryImpl implements Queryds
             final List<ChatRoomAndMessageAndImageQueryProjectionDto> unsortedDtos
     ) {
         return unsortedDtos.stream()
-                           .filter((ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) ->
-                                   Objects.nonNull(unsortedDto.message())
-                           ).sorted(comparing(
-                                           (ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) ->
-                                                   unsortedDto.message().getId()
+                           .sorted(comparing(
+                                           (ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) -> unsortedDto.message().getId()
                                    ).reversed()
                            ).map(ChatRoomAndMessageAndImageQueryProjectionDto::toSortedDto)
                            .toList();
