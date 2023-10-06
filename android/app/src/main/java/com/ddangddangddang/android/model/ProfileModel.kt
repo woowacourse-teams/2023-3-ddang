@@ -7,5 +7,5 @@ import kotlinx.parcelize.Parcelize
 data class ProfileModel(
     val name: String,
     val profileImage: String?,
-    val reliability: Double,
+    val reliability: Float?,
 ) : Parcelable

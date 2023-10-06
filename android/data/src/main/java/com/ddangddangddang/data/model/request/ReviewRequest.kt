@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class ReviewRequest(
     val auctionId: Long,
     val targetId: Long,
-    val score: Double,
+    val score: Float,
     val content: String,
 )

@@ -50,7 +50,7 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
                     val score = response.body.score
                     val content = response.body.content
                     if (score != null && content != null) {
-                        ratingGrade.value = score.toFloat()
+                        ratingGrade.value = score
                         reviewDetailContent.value = content
                         _isCompletedAlready.value = true
                     }
@@ -79,7 +79,7 @@ class UserReviewViewModel @Inject constructor(private val reviewRepository: Revi
         val request = ReviewRequest(
             auctionId,
             partnerId,
-            ratingGrade.value?.toDouble() ?: 0.0,
+            ratingGrade.value ?: 0f,
             reviewDetailContent.value ?: "",
         )
         viewModelScope.launch {
