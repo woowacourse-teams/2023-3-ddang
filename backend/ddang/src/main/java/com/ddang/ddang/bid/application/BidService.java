@@ -3,7 +3,6 @@ package com.ddang.ddang.bid.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
@@ -12,61 +11,35 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
-import com.ddang.ddang.image.domain.AuctionImage;
-import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
-import com.ddang.ddang.notification.application.NotificationService;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
 public class BidService {
 
-    private final NotificationService notificationService;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaBidRepository bidRepository;
 
     @Transactional
-    public Long create(final CreateBidDto bidDto, final String baseUrl) {
+    public Long create(final CreateBidDto bidDto) {
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final AuctionAndImageDto auctionAndImageDto =
-                auctionRepository.findDtoByAuctionId(bidDto.auctionId())
-                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
-
-        final Auction auction = auctionAndImageDto.auction();
+        final Auction auction = auctionRepository.findById(bidDto.auctionId())
+                                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
-        final Optional<User> previousBidder = auction.findLastBidder();
-
         final Bid saveBid = saveBid(bidDto, auction, bidder);
-
-        if (previousBidder.isEmpty()) {
-            return saveBid.getId();
-        }
-
-        try {
-            final String sendNotificationMessage = sendNotification(auctionAndImageDto, previousBidder.get(), baseUrl);
-            log.info(sendNotificationMessage);
-        } catch (Exception ex) {
-            log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
-        }
-
         return saveBid.getId();
     }
 
@@ -134,29 +107,6 @@ public class BidService {
         auction.updateLastBid(saveBid);
 
         return saveBid;
-    }
-
-    private String sendNotification(
-            final AuctionAndImageDto auctionAndImageDto,
-            final User previousBidder,
-            final String baseUrl
-    ) {
-        final Auction auction = auctionAndImageDto.auction();
-        final AuctionImage auctionImage = auctionAndImageDto.auctionImage();
-        final CreateNotificationDto dto = new CreateNotificationDto(
-                NotificationType.BID,
-                previousBidder.getId(),
-                auction.getTitle(),
-                String.valueOf(auction.getLastBid().getPrice()),
-                calculateRedirectUrl(auction.getId()),
-                ImageUrlCalculator.calculateAuctionImageUrl(auctionImage, baseUrl)
-        );
-
-        return notificationService.send(dto);
-    }
-
-    private String calculateRedirectUrl(final Long auctionId) {
-        return "/auctions/" + auctionId;
     }
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {

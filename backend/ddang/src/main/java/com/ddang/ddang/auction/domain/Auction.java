@@ -169,12 +169,4 @@ public class Auction extends BaseTimeEntity {
     private boolean isWinnerExist(final LocalDateTime targetTime) {
         return auctioneerCount != 0 && isClosed(targetTime);
     }
-
-    public Optional<User> findLastBidder() {
-        if (lastBid == null) {
-            return Optional.empty();
-        }
-
-        return Optional.of(lastBid.getBidder());
-    }
 }
