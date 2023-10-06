@@ -4,7 +4,8 @@ import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
-import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
+import com.ddang.ddang.report.application.dto.ReadAnswerReportDto;
+import com.ddang.ddang.report.application.exception.InvalidAnswererReportException;
 import com.ddang.ddang.report.domain.AnswerReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -13,6 +14,8 @@ import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,10 +44,18 @@ public class AnswerReportService {
 
     private void checkInvalidAnswerReport(final User reporter, final Answer answer) {
         if (answer.isWriter(reporter)) {
-            throw new InvalidQuestionReportException("본인 질문입니다.");
+            throw new InvalidAnswererReportException("본인 답변입니다.");
         }
         if (answerReportRepository.existsByIdAndReporterId(answer.getId(), reporter.getId())) {
-            throw new InvalidQuestionReportException("이미 신고한 답변입니다.");
+            throw new InvalidAnswererReportException("이미 신고한 답변입니다.");
         }
+    }
+
+    public List<ReadAnswerReportDto> readAll() {
+        final List<AnswerReport> answerReports = answerReportRepository.findAllByOrderByIdAsc();
+
+        return answerReports.stream()
+                            .map(ReadAnswerReportDto::from)
+                            .toList();
     }
 }

@@ -55,4 +55,8 @@ public class Answer extends BaseCreateTimeEntity {
     public void delete() {
         deleted = DELETED_STATUS;
     }
+
+    public User getWriter() {
+        return question.getWriter();
+    }
 }

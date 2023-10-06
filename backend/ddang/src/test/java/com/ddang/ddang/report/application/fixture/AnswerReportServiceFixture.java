@@ -13,6 +13,8 @@ import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
+import com.ddang.ddang.report.domain.AnswerReport;
+import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,16 +41,26 @@ public class AnswerReportServiceFixture {
     @Autowired
     private JpaAnswerRepository answerRepository;
 
-    protected User 신고자;
-    protected Answer 답변;
-    protected String 신고_내용 = "신고합니다.";
+    @Autowired
+    private JpaAnswerReportRepository answerReportRepository;
 
-    protected CreateAnswerReportDto 질문_신고_요청_dto;
+    protected User 신고자;
+    protected User 이미_신고한_신고자1;
+    protected User 이미_신고한_신고자2;
+    protected User 이미_신고한_신고자3;
+    protected Answer 답변;
+    protected AnswerReport 답변_신고1;
+    protected AnswerReport 답변_신고2;
+    protected AnswerReport 답변_신고3;
+    protected CreateAnswerReportDto 답변_신고_요청_dto;
+    protected CreateAnswerReportDto 존재하지_않는_답변_신고_요청_dto;
+    protected CreateAnswerReportDto 존재하지_않는_사용자가_답변_신고_요청_dto;
+    protected CreateAnswerReportDto 답변자가_본인_답변_신고_요청_dto;
+    protected CreateAnswerReportDto 이미_신고한_답변_신고_요청_dto;
 
     @BeforeEach
     void setUp() {
-
-        final Long 존재하지_않는_질문_아이디 = -999L;
+        final Long 존재하지_않는_답변_아이디 = -999L;
         final Long 존재하지_않는_사용자_아이디 = -999L;
 
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
@@ -64,18 +76,31 @@ public class AnswerReportServiceFixture {
                              .reliability(4.7d)
                              .oauthId("12346")
                              .build();
-        final User 답변자 = User.builder()
-                             .name("답변자")
-                             .profileImage(프로필_이미지)
-                             .reliability(4.7d)
-                             .oauthId("12347")
-                             .build();
+        final User 답변자 = 판매자;
         신고자 = User.builder()
                   .name("신고자")
                   .profileImage(프로필_이미지)
                   .reliability(4.7d)
-                  .oauthId("12348")
+                  .oauthId("12347")
                   .build();
+        이미_신고한_신고자1 = User.builder()
+                          .name("이미 신고한 신고자1")
+                          .profileImage(프로필_이미지)
+                          .reliability(4.7d)
+                          .oauthId("12348")
+                          .build();
+        이미_신고한_신고자2 = User.builder()
+                          .name("이미 신고한 신고자2")
+                          .profileImage(프로필_이미지)
+                          .reliability(4.7d)
+                          .oauthId("12349")
+                          .build();
+        이미_신고한_신고자3 = User.builder()
+                          .name("이미 신고한 신고자3")
+                          .profileImage(프로필_이미지)
+                          .reliability(4.7d)
+                          .oauthId("12350")
+                          .build();
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
@@ -95,11 +120,21 @@ public class AnswerReportServiceFixture {
         final Question 질문 = new Question(경매, 질문자, "질문드립니다.");
         답변 = new Answer("답변드립니다.");
         질문.addAnswer(답변);
+        답변_신고1 = new AnswerReport(이미_신고한_신고자1, 답변, "신고합니다.");
+        답변_신고2 = new AnswerReport(이미_신고한_신고자2, 답변, "신고합니다.");
+        답변_신고3 = new AnswerReport(이미_신고한_신고자3, 답변, "신고합니다.");
 
-        userRepository.saveAll(List.of(판매자, 질문자, 답변자, 신고자));
+        userRepository.saveAll(List.of(판매자, 질문자, 답변자, 신고자, 이미_신고한_신고자1, 이미_신고한_신고자2, 이미_신고한_신고자3));
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionRepository.save(경매);
         questionRepository.save(질문);
         answerRepository.save(답변);
+        answerReportRepository.saveAll(List.of(답변_신고1, 답변_신고2, 답변_신고3));
+
+        답변_신고_요청_dto = new CreateAnswerReportDto(답변.getId(), "신고합니다.", 신고자.getId());
+        존재하지_않는_답변_신고_요청_dto = new CreateAnswerReportDto(존재하지_않는_답변_아이디, "신고합니다.", 신고자.getId());
+        존재하지_않는_사용자가_답변_신고_요청_dto = new CreateAnswerReportDto(답변.getId(), "신고합니다.", 존재하지_않는_사용자_아이디);
+        답변자가_본인_답변_신고_요청_dto = new CreateAnswerReportDto(답변.getId(), "신고합니다.", 답변자.getId());
+        이미_신고한_답변_신고_요청_dto = new CreateAnswerReportDto(답변.getId(), "신고합니다.", 이미_신고한_신고자1.getId());
     }
 }

@@ -10,6 +10,6 @@ public interface JpaAnswerReportRepository extends JpaRepository<AnswerReport, L
 
     boolean existsByIdAndReporterId(Long id, Long ReporterId);
 
-    @EntityGraph(attributePaths = {"reporter", "answer"})
+    @EntityGraph(attributePaths = {"reporter", "answer", "answer.question", "answer.question.auction", "answer.question.auction.seller"})
     List<AnswerReport> findAllByOrderByIdAsc();
 }

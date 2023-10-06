@@ -51,7 +51,7 @@ class QuestionReportServiceTest extends QuestionReportServiceFixture {
     }
 
     @Test
-    void 질문자가_본_질문_신고시_예외가_발생한다() {
+    void 질문자가_본인_질문_신고시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionReportService.create(질문자가_본인_질문_신고_요청_dto))
                 .isInstanceOf(InvalidQuestionReportException.class)
