@@ -93,9 +93,9 @@ jobs:
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
+          SLACK_MESSAGE+="\n>\n>*PR 제목*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
-          SLACK_MESSAGE+="\n>\n>분석 결과\n>"
+          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":white_check_mark:"
           SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"
           SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS_SLACK_ID }}"
@@ -112,9 +112,9 @@ jobs:
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
+          SLACK_MESSAGE+="\n>\n>*PR 제목*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
-          SLACK_MESSAGE+="\n>\n>분석 결과\n>"
+          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":x:"
           SLACK_MESSAGE+='"}}]}'
           
@@ -129,9 +129,9 @@ jobs:
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
+          SLACK_MESSAGE+="\n>\n>*PR 제목*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
-          SLACK_MESSAGE+="\n>\n>분석 결과\n>"
+          SLACK_MESSAGE+="> \n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":black_square_for_stop:"
           SLACK_MESSAGE+='"}}]}'
           
