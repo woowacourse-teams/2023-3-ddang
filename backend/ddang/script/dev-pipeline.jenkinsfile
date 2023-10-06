@@ -7,7 +7,7 @@ pipeline {
                 slackSend (
                     channel: '#빌드-결과',
                     color: '#FFFF00',
-                    message: "빌드 시작!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.EC2_PUBLIC_IP}/jenkins)"
+                    message: "빌드 시작!: pipeline : ${env.JOB_NAME}#${env.BUILD_NUMBER} (http://${env.INFRA_EC2_PUBLIC_IP}/jenkins)"
                 )
             }
         }
