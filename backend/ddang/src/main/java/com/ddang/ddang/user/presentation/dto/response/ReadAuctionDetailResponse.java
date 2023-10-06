@@ -19,12 +19,16 @@ public record ReadAuctionDetailResponse(
         final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(dto.auctionDto());
         final String profileImageUrl = ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.auctionDto().sellerId());
 
+        final Float floatReliability = Float.valueOf(String.valueOf(dto.auctionDto().sellerReliability()
+        ));
+
         final SellerResponse sellerResponse = new SellerResponse(
                 dto.auctionDto().sellerId(),
                 profileImageUrl,
                 dto.auctionDto().sellerName(),
-                dto.auctionDto().sellerReliability()
+                floatReliability
         );
+
         final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(dto.chatRoomDto());
 
         return new ReadAuctionDetailResponse(
