@@ -17,11 +17,17 @@ public record ReadAuctionResponse(
         return new ReadAuctionResponse(
                 dto.id(),
                 dto.title(),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, dto.id()),
+                calculateThumbnailImageUrl(dto),
                 processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                 dto.auctionStatus().name(),
                 dto.auctioneerCount()
         );
+    }
+
+    private static String calculateThumbnailImageUrl(final ReadAuctionDto dto) {
+        final Long thumbnailAuctionImage = dto.auctionImageIds().get(0);
+
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, thumbnailAuctionImage);
     }
 
     private static int processAuctionPrice(final Integer startPrice, final Integer lastBidPrice) {
