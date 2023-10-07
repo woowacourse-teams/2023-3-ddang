@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
+import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.repository.UserRepository
@@ -64,9 +65,13 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             val id = remoteMessage.data["redirectUrl"]?.split("/")?.last()?.toLong() ?: -1
             when (type) {
                 NotificationType.MESSAGE -> {
-                    val notification = createMessageNotification(tag, id, remoteMessage)
-                    sendBroadcastToMessageReceiver(id)
-                    notificationManager.notify(tag, id.toInt(), notification)
+                    val activeRoomId = (application as DdangDdangDdang).activeMessageRoomId
+                    if (activeRoomId == id) {
+                        sendBroadcastToMessageReceiver(id)
+                    } else {
+                        val notification = createMessageNotification(tag, id, remoteMessage)
+                        notificationManager.notify(tag, id.toInt(), notification)
+                    }
                 }
 
                 NotificationType.BID -> {

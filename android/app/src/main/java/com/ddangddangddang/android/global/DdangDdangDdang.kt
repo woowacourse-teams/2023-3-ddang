@@ -10,6 +10,8 @@ import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
 class DdangDdangDdang : Application() {
+    var activeMessageRoomId: Long? = null
+
     override fun onCreate() {
         super.onCreate()
         _firebaseAnalytics = FirebaseAnalytics.getInstance(this)

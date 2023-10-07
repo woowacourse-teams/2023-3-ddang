@@ -13,10 +13,11 @@ import com.ddangddangddang.android.feature.messageRoom.review.UserReviewDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
+import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.android.model.ReportType
-import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
+import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -120,12 +121,14 @@ class MessageRoomActivity :
 
     override fun onResume() {
         super.onResume()
+        (application as DdangDdangDdang).activeMessageRoomId = roomId
         registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
         if (viewModel.messageRoomInfo.value != null) viewModel.loadMessages()
     }
 
     override fun onPause() {
         super.onPause()
+        (application as DdangDdangDdang).activeMessageRoomId = null
         unregisterReceiver(messageReceiver)
         cancelNotification()
     }
