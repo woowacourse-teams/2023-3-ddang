@@ -35,8 +35,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (viewModel.currentFragmentType.value == FragmentType.HOME) return backKeyHandler.onBackPressed()
-            binding.bnvNavigation.selectedItemId = R.id.menu_item_home
+            backKeyHandler.onBackPressed()
         }
     }
 
