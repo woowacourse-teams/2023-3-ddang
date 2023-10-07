@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -19,7 +20,7 @@ public class QuestionFixture {
     protected User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
     private Auction 경매 = Auction.builder()
@@ -32,7 +33,7 @@ public class QuestionFixture {
                                 .build();
     private User 질문_작성자 = User.builder()
                               .name("질문 작성자")
-                              .reliability(4.7d)
+                              .reliability(new Reliability(4.7d))
                               .oauthId("12345")
                               .build();
     private String 질문_내용 = "궁금한 점이 있어요.";

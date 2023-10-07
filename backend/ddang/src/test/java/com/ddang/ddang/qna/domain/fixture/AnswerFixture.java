@@ -4,6 +4,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -22,7 +23,7 @@ public class AnswerFixture {
                                 .build();
     private User 질문_작성자 = User.builder()
                               .name("질문 작성자")
-                              .reliability(4.7d)
+                              .reliability(new Reliability(4.7d))
                               .oauthId("12345")
                               .build();
     private String 질문_내용 = "궁금한 점이 있어요.";

@@ -13,6 +13,7 @@ import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.domain.QuestionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaQuestionReportRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,37 +62,37 @@ public class QuestionReportServiceFixture {
         final User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
         final User 질문자 = User.builder()
                              .name("질문자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12346")
                              .build();
         final User 신고자 = User.builder()
                              .name("신고자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12347")
                              .build();
         이미_신고한_신고자1 = User.builder()
                           .name("이미 신고한 신고자1")
                           .profileImage(프로필_이미지)
-                          .reliability(4.7d)
+                          .reliability(new Reliability(4.7d))
                           .oauthId("12348")
                           .build();
         이미_신고한_신고자2 = User.builder()
                           .name("이미 신고한 신고자2")
                           .profileImage(프로필_이미지)
-                          .reliability(4.7d)
+                          .reliability(new Reliability(4.7d))
                           .oauthId("12349")
                           .build();
         이미_신고한_신고자3 = User.builder()
                           .name("이미 신고한 신고자3")
                           .profileImage(프로필_이미지)
-                          .reliability(4.7d)
+                          .reliability(new Reliability(4.7d))
                           .oauthId("12350")
                           .build();
 

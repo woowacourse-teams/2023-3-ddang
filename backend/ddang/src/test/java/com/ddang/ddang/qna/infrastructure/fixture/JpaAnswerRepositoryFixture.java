@@ -9,6 +9,7 @@ import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -50,7 +51,7 @@ public class JpaAnswerRepositoryFixture {
         final User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
         final Auction 경매 = Auction.builder()
@@ -64,7 +65,7 @@ public class JpaAnswerRepositoryFixture {
         final User 질문자 = User.builder()
                              .name("질문자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12346")
                              .build();
         질문 = new Question(경매, 질문자, "궁금한 점이 있어요.");
