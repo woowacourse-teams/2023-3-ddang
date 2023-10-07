@@ -60,7 +60,6 @@
                     android:selected="@{true}"
                     android:singleLine="true"
                     android:text="@{viewModel.auctionDetailModel.title}"
-                    android:textIsSelectable="true"
                     tools:text="M1 맥북 에어" />
 
                 <ImageView
@@ -220,11 +219,11 @@
                     android:id="@+id/iv_auctioneer_count_icon"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
+                    android:layout_marginTop="12dp"
                     android:contentDescription="@string/detail_auctioneer_count_icon_description"
                     android:src="@drawable/ic_people_alt_24"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toBottomOf="@id/tv_start_price"
-                    android:layout_marginTop="12dp"
                     app:tint="@color/grey_700" />
 
                 <TextView
