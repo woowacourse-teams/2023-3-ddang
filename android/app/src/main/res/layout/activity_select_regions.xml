@@ -53,14 +53,16 @@
         <TextView
             android:id="@+id/tv_region_first_title"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="0dp"
+            android:paddingVertical="10dp"
             android:background="#1A98989E"
             android:gravity="center"
             android:text="@string/select_regions_first_title"
             style="@style/Header2"
             app:layout_constraintEnd_toStartOf="@id/tv_region_second_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips"
+            app:layout_constraintBottom_toBottomOf="@id/tv_region_second_title" />
 
         <View
             android:id="@+id/v_regions_divider_first"
@@ -75,7 +77,9 @@
         <TextView
             android:id="@+id/tv_region_second_title"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
+            android:paddingVertical="10dp"
             android:background="#1A98989E"
             android:gravity="center"
             android:text="@string/select_regions_second_title"
@@ -97,7 +101,9 @@
         <TextView
             android:id="@+id/tv_region_third_title"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
+            android:minHeight="60dp"
+            android:paddingVertical="10dp"
             android:background="#1A98989E"
             android:gravity="center"
             android:text="@string/select_regions_third_title"
@@ -145,7 +151,8 @@
             android:id="@+id/btn_select_submit"
             style="@style/BigButton"
             android:layout_width="0dp"
-            android:layout_height="@dimen/height_submit_button"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/height_submit_button"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
             android:layout_marginBottom="8dp"
             android:onClick="@{() -> viewModel.submit()}"

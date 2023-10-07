@@ -17,7 +17,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_main_category_item"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
+        android:minHeight="60dp"
+        android:paddingVertical="10dp"
         android:background="@color/grey_50_to_primary_selected"
         android:onClick="@{() -> onItemClick.invoke(category.id)}">
 

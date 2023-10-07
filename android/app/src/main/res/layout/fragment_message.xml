@@ -46,7 +46,7 @@
         <TextView
             style="@style/Header2"
             isVisible="@{viewModel.messageRooms.size == 0 ? true : false}"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/message_not_exist_rooms"

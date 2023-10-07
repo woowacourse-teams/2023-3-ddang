@@ -64,7 +64,7 @@
     <string name="detail_auction_category">%s > %s</string>
     <string name="detail_auction_price_status">%s %,d원</string>
     <string name="detail_auction_start_price">시작가 %,d원</string>
-    <string name="detail_auction_remain_time">마감까지 %s</string>
+    <string name="detail_auction_remain_time">%s</string>
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_dialog_auction_does_not_exist_message">존재하지 않는 경매입니다.</string>

@@ -82,7 +82,8 @@
         <Button
             style="@style/BigButton"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/height_submit_button"
             android:layout_marginTop="12dp"
             android:onClick="@{() -> viewModel.submit()}"
             android:text="@string/report_submit"

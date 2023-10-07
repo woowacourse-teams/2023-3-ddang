@@ -47,9 +47,7 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="20dp"
                     app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintStart_toStartOf="@id/gl_begin"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:id="@+id/iv_profile"
@@ -60,10 +58,6 @@
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/message_room_profile_description"
                         android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         tools:src="@drawable/ic_launcher_background" />
 
                 </androidx.cardview.widget.CardView>
@@ -131,7 +125,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_auction_item"
             android:layout_width="0dp"
-            android:layout_height="96dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="40dp"
             android:background="@drawable/bg_stroke_gray_radius_1dp"
             android:backgroundTint="@color/grey_100"
             android:onClick="@{()->viewModel.setNavigateToAuctionDetailEvent()}"
@@ -143,12 +139,11 @@
                 android:id="@+id/cv_auction_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="16dp"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="0dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
                     android:id="@+id/iv_auction_image"
@@ -173,13 +168,13 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="19dp"
-                android:layout_marginTop="31dp"
-                android:layout_marginEnd="40dp"
                 android:maxLines="1"
                 android:textFontWeight="400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cv_auction_image"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@id/cv_auction_image"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintBottom_toTopOf="@id/tv_auction_pirce"
                 tools:text="맥북 14인치" />
 
             <TextView
@@ -193,6 +188,7 @@
                 app:layout_constraintEnd_toEndOf="@id/tv_auction_title"
                 app:layout_constraintStart_toStartOf="@id/tv_auction_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_auction_title"
+                app:layout_constraintBottom_toBottomOf="@id/cv_auction_image"
                 tools:text="12,000원" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
