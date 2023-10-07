@@ -13,6 +13,7 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepositor
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,31 +64,31 @@ public class AuctionReportServiceFixture {
         final User 판매자 = User.builder()
                              .name("판매자")
                              .profileImage(프로필_이미지)
-                             .reliability(4.7d)
+                             .reliability(new Reliability(4.7d))
                              .oauthId("12345")
                              .build();
         final User 새로운_신고자 = User.builder()
                                  .name("새로운_신고자")
                                  .profileImage(프로필_이미지)
-                                 .reliability(4.7d)
+                                 .reliability(new Reliability(4.7d))
                                  .oauthId("12346")
                                  .build();
         이미_신고한_신고자1 = User.builder()
                           .name("신고자1")
                           .profileImage(프로필_이미지)
-                          .reliability(4.7d)
+                          .reliability(new Reliability(4.7d))
                           .oauthId("12347")
                           .build();
         이미_신고한_신고자2 = User.builder()
                           .name("신고자2")
                           .profileImage(프로필_이미지)
-                          .reliability(4.7d)
+                          .reliability(new Reliability(4.7d))
                           .oauthId("12348")
                           .build();
         이미_신고한_신고자3 = User.builder()
                           .name("신고자3")
                           .profileImage(프로필_이미지)
-                          .reliability(4.7d)
+                          .reliability(new Reliability(4.7d))
                           .oauthId("12349")
                           .build();
 

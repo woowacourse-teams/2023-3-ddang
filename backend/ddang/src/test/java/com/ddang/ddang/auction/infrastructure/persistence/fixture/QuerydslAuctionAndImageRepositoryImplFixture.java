@@ -7,14 +7,16 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslAuctionAndImageRepositoryImplFixture {
@@ -51,7 +53,7 @@ public class QuerydslAuctionAndImageRepositoryImplFixture {
         사용자 = User.builder()
                   .name("사용자")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12345")
                   .build();
 

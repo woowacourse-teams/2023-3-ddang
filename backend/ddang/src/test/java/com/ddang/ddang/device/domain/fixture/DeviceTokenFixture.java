@@ -1,6 +1,7 @@
 package com.ddang.ddang.device.domain.fixture;
 
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -16,7 +17,7 @@ public class DeviceTokenFixture {
         사용자 = User.builder()
                     .name("사용자")
                     .profileImage(new ProfileImage("upload.png", "store.png"))
-                    .reliability(4.7d)
+                    .reliability(new Reliability(4.7d))
                     .oauthId("12345")
                     .build();
     }

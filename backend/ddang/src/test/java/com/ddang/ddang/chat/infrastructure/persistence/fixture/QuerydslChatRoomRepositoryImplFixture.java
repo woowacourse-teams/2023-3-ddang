@@ -13,6 +13,7 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
@@ -56,13 +57,13 @@ public class QuerydslChatRoomRepositoryImplFixture {
         final User 판매자 = User.builder()
                               .name("판매자")
                               .profileImage(프로필_이미지)
-                              .reliability(4.7d)
+                              .reliability(new Reliability(4.7d))
                               .oauthId("12345")
                               .build();
         final User 구매자 = User.builder()
                               .name("구매자")
                               .profileImage(프로필_이미지)
-                              .reliability(4.7d)
+                              .reliability(new Reliability(4.7d))
                               .oauthId("12346")
                               .build();
         final AuctionImage 대표_이미지가_아닌_경매_이미지 =

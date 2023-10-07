@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -28,7 +29,7 @@ public class BidFixture {
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(프로필_이미지)
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12345")
                   .build();
 
@@ -46,7 +47,7 @@ public class BidFixture {
         입찰자 = User.builder()
                   .name("입찰자")
                   .profileImage(프로필_이미지)
-                  .reliability(4.7d)
+                  .reliability(new Reliability(4.7d))
                   .oauthId("12346")
                   .build();
 
