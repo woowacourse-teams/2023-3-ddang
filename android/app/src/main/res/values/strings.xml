@@ -29,6 +29,7 @@
     <string name="all_date_format">yyyy년 M월 d일</string>
     <string name="all_time_format">h:mm a</string>
     <string name="all_default_reliability">( - )</string>
+    <string name="all_back_key_check_message">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다</string>
 
     <!-- splash -->
     <string name="splash_app_update_request_dialog_title">업데이트 알림</string>

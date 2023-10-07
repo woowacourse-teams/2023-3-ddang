@@ -35,7 +35,7 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bnv_navigation"
-            onNavigationItemSelected="@{viewModel::setCurrentFragment}"
+            onNavigationItemSelected="@{viewModel.fragmentChange}"
             android:layout_width="0dp"
             android:layout_height="65dp"
             app:backgroundTint="@color/base_background"

@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.ACTION_APP_NOTIFICATION_SETTINGS
 import android.provider.Settings.EXTRA_APP_PACKAGE
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
@@ -21,6 +22,7 @@ import com.ddangddangddang.android.feature.mypage.MyPageFragment
 import com.ddangddangddang.android.feature.search.SearchFragment
 import com.ddangddangddang.android.global.screenViewLogEvent
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.view.BackKeyHandler
 import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +31,14 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main) {
     private val viewModel: MainViewModel by viewModels()
     private var isInitialized = false
+    private val backKeyHandler = BackKeyHandler(this)
+
+    private val callback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            if (viewModel.currentFragmentType.value == FragmentType.HOME) return backKeyHandler.onBackPressed()
+            binding.bnvNavigation.selectedItemId = R.id.menu_item_home
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     private val requestNotificationPermissionLauncher = registerForActivityResult(
@@ -52,8 +62,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         binding.viewModel = viewModel
 
         setupViewModel()
-
         askNotificationPermission()
+        onBackPressedDispatcher.addCallback(this, callback)
     }
 
     override fun onResume() {
@@ -80,7 +90,8 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     }
 
     private fun scrollHomeToTop() {
-        val homeFragment = supportFragmentManager.findFragmentByTag(FragmentType.HOME.tag) as? HomeFragment
+        val homeFragment =
+            supportFragmentManager.findFragmentByTag(FragmentType.HOME.tag) as? HomeFragment
         homeFragment?.scrollToTop()
     }
 
