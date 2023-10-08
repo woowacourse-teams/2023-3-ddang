@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.detail
+package com.ddangddangddang.android.feature.detail.info
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
