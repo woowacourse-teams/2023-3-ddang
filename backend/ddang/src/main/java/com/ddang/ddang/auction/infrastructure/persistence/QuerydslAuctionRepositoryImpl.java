@@ -1,5 +1,11 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
+import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.bid.domain.QBid.bid;
+import static com.ddang.ddang.category.domain.QCategory.category;
+import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
+import static com.ddang.ddang.region.domain.QRegion.region;
+
 import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.UnsupportedSortConditionException;
@@ -8,26 +14,18 @@ import com.ddang.ddang.common.helper.QuerydslSliceHelper;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static com.ddang.ddang.auction.domain.QAuction.auction;
-import static com.ddang.ddang.bid.domain.QBid.bid;
-import static com.ddang.ddang.category.domain.QCategory.category;
-import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
-import static com.ddang.ddang.region.domain.QRegion.region;
 
 @Repository
 @RequiredArgsConstructor
@@ -75,25 +73,23 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
 
     private List<OrderSpecifier<?>> processOrderSpecifierByCondition(final Order order) {
         if (AuctionSortConditionConsts.RELIABILITY.equals(order.getProperty())) {
-            return List.of(auction.seller.reliability.value.desc());
+            return List.of(closingTimeOrderSpecifier(), auction.seller.reliability.value.desc());
         }
         if (AuctionSortConditionConsts.AUCTIONEER_COUNT.equals(order.getProperty())) {
-            return List.of(auction.auctioneerCount.desc());
+
+            return List.of(closingTimeOrderSpecifier(), auction.auctioneerCount.desc());
         }
         if (AuctionSortConditionConsts.CLOSING_TINE.equals(order.getProperty())) {
-            final LocalDateTime now = LocalDateTime.now();
-            final NumberExpression<Integer> closingTimeOrder = new CaseBuilder()
-                    .when(auction.closingTime.after(now)).then(1)
-                    .otherwise(2);
-            final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-
-            orderSpecifiers.add(closingTimeOrder.asc());
-            orderSpecifiers.add(auction.closingTime.asc());
-
-            return orderSpecifiers;
+            return List.of(closingTimeOrderSpecifier(), auction.closingTime.asc());
         }
-
         throw new UnsupportedSortConditionException("지원하지 않는 정렬 방식입니다.");
+    }
+
+    private OrderSpecifier<Integer> closingTimeOrderSpecifier() {
+        final LocalDateTime now = LocalDateTime.now();
+        return new CaseBuilder()
+                .when(auction.closingTime.after(now)).then(1)
+                .otherwise(2).asc();
     }
 
     private List<BooleanExpression> calculateBooleanExpressions(final ReadAuctionSearchCondition searchCondition) {
