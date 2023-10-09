@@ -25,6 +25,24 @@ class AnswerTest extends AnswerFixture {
     }
 
     @Test
+    void 삭제되지_않은_답변이라면_삭제_여부_확인시_거짓을_반환한다() {
+        // when
+        final boolean actual = 답변.isDeleted();
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 삭제된_답변이라면_삭제_여부_확인시_참을_반환한다() {
+        // when
+        final boolean actual = 삭제된_답변.isDeleted();
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
     void 답변의_작성자_조회시_질문에_해당하는_경매의_판매자_정보를_가져온다() {
         // when
         final User actual = 답변.getWriter();
