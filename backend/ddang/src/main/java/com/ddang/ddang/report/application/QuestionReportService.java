@@ -46,7 +46,7 @@ public class QuestionReportService {
         if (question.isWriter(reporter)) {
             throw new InvalidQuestionReportException("본인 질문입니다.");
         }
-        if (questionReportRepository.existsByIdAndReporterId(question.getId(), reporter.getId())) {
+        if (questionReportRepository.existsByQuestionIdAndReporterId(question.getId(), reporter.getId())) {
             throw new InvalidQuestionReportException("이미 신고한 질문입니다.");
         }
     }

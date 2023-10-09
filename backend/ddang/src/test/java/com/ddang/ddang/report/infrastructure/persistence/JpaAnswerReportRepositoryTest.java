@@ -40,16 +40,16 @@ class JpaAnswerReportRepositoryTest extends JpaAnswerReportRepositoryFixture {
     @Test
     void 신고한_답변이라면_참을_반환한다() {
         // when
-        final boolean actual = answerReportRepository.existsByIdAndReporterId(이미_신고된_답변.getId(), 신고자.getId());
+        final boolean actual = answerReportRepository.existsByAnswerIdAndReporterId(이미_신고된_답변.getId(), 신고자.getId());
 
         // then
-        assertThat(actual).isFalse();
+        assertThat(actual).isTrue();
     }
 
     @Test
     void 신고_전인_답변이라면_거짓을_반환한다() {
         // when
-        final boolean actual = answerReportRepository.existsByIdAndReporterId(답변.getId(), 신고자.getId());
+        final boolean actual = answerReportRepository.existsByAnswerIdAndReporterId(답변.getId(), 신고자.getId());
 
         // then
         assertThat(actual).isFalse();

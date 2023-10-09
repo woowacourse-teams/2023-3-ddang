@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface JpaQuestionReportRepository extends JpaRepository<QuestionReport, Long> {
 
-    boolean existsByIdAndReporterId(final Long id, final Long reporterId);
+    boolean existsByQuestionIdAndReporterId(final Long questionId, final Long reporterId);
 
     @EntityGraph(attributePaths = {"reporter", "question"})
     List<QuestionReport> findAllByOrderByIdAsc();

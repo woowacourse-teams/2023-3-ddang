@@ -46,7 +46,7 @@ public class AnswerReportService {
         if (answer.isWriter(reporter)) {
             throw new InvalidAnswererReportException("본인 답변입니다.");
         }
-        if (answerReportRepository.existsByIdAndReporterId(answer.getId(), reporter.getId())) {
+        if (answerReportRepository.existsByAnswerIdAndReporterId(answer.getId(), reporter.getId())) {
             throw new InvalidAnswererReportException("이미 신고한 답변입니다.");
         }
     }
