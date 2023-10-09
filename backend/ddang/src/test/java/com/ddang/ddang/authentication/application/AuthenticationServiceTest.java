@@ -231,7 +231,10 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         authenticationService.withdrawal(지원하는_소셜_로그인_타입, 유효한_액세스_토큰, 유효한_리프레시_토큰);
 
         // then
-        assertThat(사용자.isDeleted()).isTrue();
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(사용자.isDeleted()).isTrue();
+            softAssertions.assertThat(사용자.getName()).isNotEqualTo(사용자_이름);
+        });
     }
 
     @Test

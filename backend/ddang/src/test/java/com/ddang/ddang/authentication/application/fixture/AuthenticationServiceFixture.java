@@ -30,6 +30,7 @@ public class AuthenticationServiceFixture {
 
     protected String 디바이스_토큰 = "deviceToken";
 
+    protected String 사용자_이름;
     protected User 사용자;
     protected User 탈퇴한_사용자;
 
@@ -68,6 +69,7 @@ public class AuthenticationServiceFixture {
                   .reliability(new Reliability(0.0d))
                   .oauthId("12345")
                   .build();
+        사용자_이름 = 사용자.getName();
 
         탈퇴한_사용자 = User.builder()
                       .name("kakao12346")

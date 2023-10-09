@@ -24,6 +24,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -87,6 +88,7 @@ public class User extends BaseTimeEntity {
 
     public void withdrawal() {
         this.deleted = DELETED_STATUS;
+        this.name = UUID.randomUUID().toString();
     }
 
     public void updateReliability(final List<Review> reviews) {
