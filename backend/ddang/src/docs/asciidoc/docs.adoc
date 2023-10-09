@@ -265,6 +265,18 @@ include::{snippets}/qna-controller-test/질문을_등록한다/request-fields.ad
 
 include::{snippets}/qna-controller-test/질문을_등록한다/http-response.adoc[]
 
+=== 질문 삭제
+
+==== 요청
+
+include::{snippets}/qna-controller-test/질문을_삭제한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/질문을_삭제한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/질문을_삭제한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/qna-controller-test/질문을_삭제한다/http-response.adoc[]
+
 === 답변 등록
 
 ==== 요청
@@ -276,6 +288,18 @@ include::{snippets}/qna-controller-test/답변을_등록한다/request-fields.ad
 ==== 응답
 
 include::{snippets}/qna-controller-test/답변을_등록한다/http-response.adoc[]
+
+=== 답변 삭제
+
+==== 요청
+
+include::{snippets}/qna-controller-test/답변을_삭제한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/답변을_삭제한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/답변을_삭제한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/qna-controller-test/답변을_삭제한다/http-response.adoc[]
 
 === Q&A 조회
 
@@ -427,6 +451,52 @@ include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조
 
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/http-response.adoc[]
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/response-fields.adoc[]
+
+=== 질문 신고 등록
+
+==== 요청
+
+include::{snippets}/report-controller-test/질문_신고를_등록한다/http-request.adoc[]
+include::{snippets}/report-controller-test/질문_신고를_등록한다/request-headers.adoc[]
+include::{snippets}/report-controller-test/질문_신고를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/질문_신고를_등록한다/http-response.adoc[]
+
+=== 채팅방 신고 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/전체_질문_신고_목록을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/전체_질문_신고_목록을_조회한다/http-response.adoc[]
+include::{snippets}/report-controller-test/전체_질문_신고_목록을_조회한다/response-fields.adoc[]
+
+=== 답변 신고 등록
+
+==== 요청
+
+include::{snippets}/report-controller-test/답변_신고를_등록한다/http-request.adoc[]
+include::{snippets}/report-controller-test/답변_신고를_등록한다/request-headers.adoc[]
+include::{snippets}/report-controller-test/답변_신고를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/답변_신고를_등록한다/http-response.adoc[]
+
+=== 채팅방 신고 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/전체_답변_신고_목록을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/전체_답변_신고_목록을_조회한다/http-response.adoc[]
+include::{snippets}/report-controller-test/전체_답변_신고_목록을_조회한다/response-fields.adoc[]
 
 == 디바이스 토큰 API
 
