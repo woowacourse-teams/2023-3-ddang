@@ -34,7 +34,7 @@ class AnswerTest extends AnswerFixture {
     }
 
     @Test
-    void 답변의_작성자가_아니라면_참을_반환한다() {
+    void 답변의_작성자가_아니라면_거짓을_반환한다() {
         // when
         final boolean actual = 답변.isWriter(답변_작성자가_아닌_사용자);
 
