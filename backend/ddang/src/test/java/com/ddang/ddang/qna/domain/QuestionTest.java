@@ -43,6 +43,24 @@ class QuestionTest extends QuestionFixture {
     }
 
     @Test
+    void 질문_작성자라면_참을_반환한다() {
+        // when
+        final boolean actual = 질문.isWriter(질문_작성자);
+
+        // given
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 질문_작성자라면_거짓을_반환한다() {
+        // when
+        final boolean actual = 질문.isWriter(작성자가_아닌_사용자);
+
+        // given
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void 삭제되지_않은_질문의_삭제_여부_확인시_거짓을_반환한다() {
         // when
         final boolean actual = 질문.isDeleted();

@@ -31,11 +31,12 @@ public class QuestionFixture {
                                 .startPrice(new Price(1_000))
                                 .closingTime(LocalDateTime.now())
                                 .build();
-    private User 질문_작성자 = User.builder()
+    protected User 질문_작성자 = User.builder()
                               .name("질문 작성자")
                               .reliability(new Reliability(4.7d))
                               .oauthId("12345")
                               .build();
+    protected User 작성자가_아닌_사용자 = 판매자;
     private String 질문_내용 = "궁금한 점이 있어요.";
     protected User 판매자가_아닌_사용자 = 질문_작성자;
 
