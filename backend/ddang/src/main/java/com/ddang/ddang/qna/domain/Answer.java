@@ -57,6 +57,6 @@ public class Answer extends BaseCreateTimeEntity {
     }
 
     public User getWriter() {
-        return question.getWriter();
+        return question.getAuction().getSeller();
     }
 }
