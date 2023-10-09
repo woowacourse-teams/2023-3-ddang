@@ -112,9 +112,9 @@ public class JpaQuestionReportRepositoryFixture {
         이미_신고한_질문 = new Question(경매, 질문자, "질문드립니다.");
 
         질문_신고1 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
-        질문_신고2 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
-        질문_신고3 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
-        질문_신고4 = new QuestionReport(신고자, 이미_신고한_질문, "신고합니다");
+        질문_신고2 = new QuestionReport(신고자2, 이미_신고한_질문, "신고합니다");
+        질문_신고3 = new QuestionReport(신고자3, 이미_신고한_질문, "신고합니다");
+        질문_신고4 = new QuestionReport(신고자4, 이미_신고한_질문, "신고합니다");
 
         userRepository.saveAll(List.of(판매자, 질문자, 신고자, 신고자2, 신고자3, 신고자4));
 
