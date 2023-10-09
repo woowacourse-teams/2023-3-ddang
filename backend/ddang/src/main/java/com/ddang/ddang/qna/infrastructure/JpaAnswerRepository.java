@@ -11,5 +11,5 @@ public interface JpaAnswerRepository extends JpaRepository<Answer, Long> {
     boolean existsByQuestionId(Long questionId);
 
     @EntityGraph(attributePaths = {"question", "question.auction", "question.auction.seller"})
-    Optional<Answer> findByIdAndDeletedIsFalse(Long answerId);
+    Optional<Answer> findByIdAndDeletedIsFalse(final Long answerId);
 }
