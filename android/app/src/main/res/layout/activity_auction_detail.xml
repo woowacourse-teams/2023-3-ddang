@@ -113,6 +113,8 @@
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/vp_image_list"
                     android:layout_width="match_parent"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:layout_height="250dp"
                     app:layout_constraintTop_toTopOf="parent" />
 

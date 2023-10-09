@@ -2,10 +2,8 @@ package com.ddangddangddang.android.feature.detail
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.viewpager2.widget.MarginPageTransformer
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
@@ -29,6 +27,11 @@ class AuctionDetailActivity :
     BindingActivity<ActivityAuctionDetailBinding>(R.layout.activity_auction_detail) {
     private val viewModel: AuctionDetailViewModel by viewModels()
     private val auctionId: Long by lazy { intent.getLongExtra(AUCTION_ID_KEY, -1L) }
+
+    private val pageMarginPx by lazy {
+        resources.getDimensionPixelOffset(R.dimen.auction_detail_image_page_margin)
+    }
+    private val offsetPx by lazy { resources.getDimensionPixelOffset(R.dimen.auction_detail_image_offset) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,20 +129,15 @@ class AuctionDetailActivity :
 
     private fun setupAuctionImages(images: List<String>) {
         binding.vpImageList.apply {
-            clipToPadding = false
-            clipChildren = false
-            offscreenPageLimit = 1
+            offscreenPageLimit = 3
+            setPageTransformer { page, position ->
+                val offset = position * -(2 * offsetPx + pageMarginPx)
+                page.translationX = offset
+            }
             adapter = AuctionImageAdapter(images) { viewModel.navigateToImageDetail(it) }
-            setPageTransformer(MarginPageTransformer(convertDpToPx(20f)))
-            setPadding(200, 0, 200, 0)
         }
 
         TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { _, _ -> }.attach()
-    }
-
-    private fun convertDpToPx(dp: Float): Int {
-        val density = Resources.getSystem().displayMetrics.density
-        return (dp * density + 0.5f).toInt()
     }
 
     private fun setupDirectRegions(regions: List<RegionModel>) {
