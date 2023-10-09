@@ -11,6 +11,7 @@ public record ReadAnswerReportDto(
         ReadAnswerInReportDto answerDto,
         String description
 ) {
+
     public static ReadAnswerReportDto from(final AnswerReport answerReport) {
         return new ReadAnswerReportDto(
                 answerReport.getId(),
