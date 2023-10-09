@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository {
 
     private static final long SLICE_OFFSET = 1L;
-    private static final int HIGH_PRIORITY = 0;
+    private static final int HIGH_PRIORITY = 2;
     private static final int LOW_PRIORITY = 1;
 
     private final JPAQueryFactory queryFactory;
