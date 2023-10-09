@@ -32,6 +32,8 @@ import org.springframework.stereotype.Repository;
 public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository {
 
     private static final long SLICE_OFFSET = 1L;
+    private static final int HIGH_PRIORITY = 0;
+    private static final int LOW_PRIORITY = 1;
 
     private final JPAQueryFactory queryFactory;
 
@@ -76,20 +78,22 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
             return List.of(closingTimeOrderSpecifier(), auction.seller.reliability.value.desc());
         }
         if (AuctionSortConditionConsts.AUCTIONEER_COUNT.equals(order.getProperty())) {
-
             return List.of(closingTimeOrderSpecifier(), auction.auctioneerCount.desc());
         }
         if (AuctionSortConditionConsts.CLOSING_TINE.equals(order.getProperty())) {
             return List.of(closingTimeOrderSpecifier(), auction.closingTime.asc());
         }
+        
         throw new UnsupportedSortConditionException("지원하지 않는 정렬 방식입니다.");
     }
 
     private OrderSpecifier<Integer> closingTimeOrderSpecifier() {
         final LocalDateTime now = LocalDateTime.now();
+
         return new CaseBuilder()
-                .when(auction.closingTime.after(now)).then(1)
-                .otherwise(2).asc();
+                .when(auction.closingTime.after(now)).then(LOW_PRIORITY)
+                .otherwise(HIGH_PRIORITY)
+                .asc();
     }
 
     private List<BooleanExpression> calculateBooleanExpressions(final ReadAuctionSearchCondition searchCondition) {
