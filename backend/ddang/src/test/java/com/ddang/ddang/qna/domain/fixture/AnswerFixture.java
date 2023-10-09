@@ -33,6 +33,7 @@ public class AnswerFixture {
                               .reliability(new Reliability(4.7d))
                               .oauthId("12346")
                               .build();
+    protected User 답변_작성자가_아닌_사용자 = 질문_작성자;
 
     protected Question 질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");
     private Question 답변이_있는_질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");

@@ -61,6 +61,15 @@ class QuestionTest extends QuestionFixture {
     }
 
     @Test
+    void 질문을_삭제한다() {
+        // when
+        질문.delete();
+
+        // given
+        assertThat(질문.isDeleted()).isTrue();
+    }
+
+    @Test
     void 삭제되지_않은_질문의_삭제_여부_확인시_거짓을_반환한다() {
         // when
         final boolean actual = 질문.isDeleted();

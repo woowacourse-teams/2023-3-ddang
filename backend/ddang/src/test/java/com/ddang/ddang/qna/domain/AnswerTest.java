@@ -25,6 +25,24 @@ class AnswerTest extends AnswerFixture {
     }
 
     @Test
+    void 답변의_작성자_즉_판매자라면_참을_반환한다() {
+        // when
+        final boolean actual = 답변.isWriter(판매자);
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 답변의_작성자가_아니라면_참을_반환한다() {
+        // when
+        final boolean actual = 답변.isWriter(답변_작성자가_아닌_사용자);
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void 삭제되지_않은_답변이라면_삭제_여부_확인시_거짓을_반환한다() {
         // when
         final boolean actual = 답변.isDeleted();
