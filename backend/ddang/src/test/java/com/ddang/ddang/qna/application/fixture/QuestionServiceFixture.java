@@ -56,6 +56,8 @@ public class QuestionServiceFixture {
     protected ReadAnswerDto 답변_정보_dto1;
     protected ReadAnswerDto 답변_정보_dto2;
 
+    protected String 이미지_절대_경로 = "/imageUrl";
+
     @BeforeEach
     void setUp() {
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");

@@ -106,8 +106,7 @@ public class NotificationEventListener {
                     question.getContent(),
                     answer.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    // TODO: 2023/10/09 이미지 url 수정 필요
-                    ImageUrlCalculator.calculateBy("absoluteImageUrl", auctionImage.getId())
+                    ImageUrlCalculator.calculateBy(answerNotificationEvent.absoluteImageUrl(), auctionImage.getId())
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {

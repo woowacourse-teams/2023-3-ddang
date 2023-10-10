@@ -30,7 +30,7 @@ public class AnswerService {
     private final JpaAnswerRepository answerRepository;
 
     @Transactional
-    public Long create(final CreateAnswerDto answerDto) {
+    public Long create(final CreateAnswerDto answerDto, final String absoluteImageUrl) {
         final User writer = userRepository.findById(answerDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Question question = questionRepository.findById(answerDto.questionId())
@@ -44,7 +44,7 @@ public class AnswerService {
         final Answer answer = answerDto.toEntity();
         question.addAnswer(answer);
 
-        answerEventPublisher.publishEvent(new AnswerNotificationEvent(answer));
+        answerEventPublisher.publishEvent(new AnswerNotificationEvent(answer, absoluteImageUrl));
 
         return answerRepository.save(answer)
                                .getId();

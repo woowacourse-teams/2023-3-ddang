@@ -131,6 +131,6 @@ public class NotificationEventListenerFixture {
         final Answer 응답_내용 = new Answer("응답 내용");
         final QuestionDto 질문_DTO = new QuestionDto(경매, 발신자_겸_판매자, "질문 내용", 응답_내용, false, 이미지_절대_경로);
         질문_알림_이벤트 = new QuestionNotificationEvent(질문_DTO);
-        응답_알림_이벤트 = new AnswerNotificationEvent(응답_내용);
+        응답_알림_이벤트 = new AnswerNotificationEvent(응답_내용, 이미지_절대_경로);
     }
 }
