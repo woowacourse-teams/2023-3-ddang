@@ -23,10 +23,17 @@ import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
+import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
+import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
+import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
+import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
+import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
+import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
+import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
@@ -343,6 +350,62 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAuctionToAskQuestionException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidAuctionToAskQuestionException(final InvalidAuctionToAskQuestionException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidQuestionerException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidQuestionerException(final InvalidQuestionerException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleQuestionNotFoundException(final QuestionNotFoundException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AnswerNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleAnswerNotFoundException(final AnswerNotFoundException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidAnswererException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidAnswererException(final InvalidAnswererException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(InvalidQuestionReportException.class)
+    public ResponseEntity<ExceptionResponse> handleInvalidQuestionReportException(final InvalidQuestionReportException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyAnsweredException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyAnsweredException(final AlreadyAnsweredException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 

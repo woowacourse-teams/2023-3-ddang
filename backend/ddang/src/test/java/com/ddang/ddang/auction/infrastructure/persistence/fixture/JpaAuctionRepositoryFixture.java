@@ -9,6 +9,8 @@ import jakarta.persistence.PersistenceContext;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -38,10 +40,19 @@ public class JpaAuctionRepositoryFixture {
                                           .startPrice(new Price(1_000))
                                           .closingTime(시간.atZone(위치).toLocalDateTime())
                                           .build();
+    protected Auction 삭제된_경매_엔티티 = Auction.builder()
+                                          .title("경매 상품 1")
+                                          .description("이것은 경매 상품 1 입니다.")
+                                          .bidUnit(new BidUnit(1_000))
+                                          .startPrice(new Price(1_000))
+                                          .closingTime(시간.atZone(위치).toLocalDateTime())
+                                          .build();
 
     @BeforeEach
     void setUp() {
-        auctionRepository.save(저장된_경매_엔티티);
+        삭제된_경매_엔티티.delete();
+
+        auctionRepository.saveAll(List.of(저장된_경매_엔티티, 삭제된_경매_엔티티));
 
         em.flush();
         em.clear();

@@ -2,6 +2,7 @@ package com.ddang.ddang.configuration;
 
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.presentation.AuctionController;
+import com.ddang.ddang.auction.presentation.AuctionQnaController;
 import com.ddang.ddang.auction.presentation.AuctionReviewController;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
@@ -18,10 +19,15 @@ import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.presentation.DeviceTokenController;
 import com.ddang.ddang.image.application.ImageService;
 import com.ddang.ddang.image.presentation.ImageController;
+import com.ddang.ddang.qna.application.AnswerService;
+import com.ddang.ddang.qna.application.QuestionService;
+import com.ddang.ddang.qna.presentation.QnaController;
 import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.presentation.RegionController;
+import com.ddang.ddang.report.application.AnswerReportService;
 import com.ddang.ddang.report.application.AuctionReportService;
 import com.ddang.ddang.report.application.ChatRoomReportService;
+import com.ddang.ddang.report.application.QuestionReportService;
 import com.ddang.ddang.report.presentation.ReportController;
 import com.ddang.ddang.review.application.ReviewService;
 import com.ddang.ddang.review.presentation.ReviewController;
@@ -45,6 +51,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @WebMvcTest(
         controllers = {
                 AuctionController.class,
+                AuctionQnaController.class,
                 AuthenticationController.class,
                 BidController.class,
                 CategoryController.class,
@@ -55,6 +62,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
                 ReportController.class,
                 UserAuctionController.class,
                 UserController.class,
+                QnaController.class,
                 ReviewController.class,
                 AuctionReviewController.class
         },
@@ -79,6 +87,9 @@ public abstract class CommonControllerSliceTest {
 
     @Autowired
     protected AuctionController auctionController;
+
+    @Autowired
+    protected AuctionQnaController auctionQnaController;
 
     @Autowired
     protected AuthenticationController authenticationController;
@@ -109,6 +120,9 @@ public abstract class CommonControllerSliceTest {
 
     @Autowired
     protected UserController userController;
+
+    @Autowired
+    protected QnaController qnaController;
 
     @Autowired
     protected ReviewController reviewController;
@@ -156,7 +170,19 @@ public abstract class CommonControllerSliceTest {
     protected ChatRoomReportService chatRoomReportService;
 
     @MockBean
+    protected QuestionReportService questionReportService;
+
+    @MockBean
+    protected AnswerReportService answerReportService;
+
+    @MockBean
     protected UserService userService;
+
+    @MockBean
+    protected QuestionService questionService;
+
+    @MockBean
+    protected AnswerService answerService;
 
     @MockBean
     protected ReviewService reviewService;
