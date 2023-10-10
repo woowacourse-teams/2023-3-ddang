@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.register.region
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ItemSelectRegionSecondBinding
@@ -20,12 +21,12 @@ class SecondRegionViewHolder(
         binding.region = region
         if (region.isChecked) {
             binding.clSecondRegionItem.isSelected = true
-            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.red_100))
-            binding.tvRegion.setTypeface(null, Typeface.BOLD)
+            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.selected_second_region_text))
+            binding.tvRegion.typeface = Typeface.create(ResourcesCompat.getFont(binding.root.context, R.font.pretendard), 700, false)
         } else {
             binding.clSecondRegionItem.isSelected = false
-            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.black_600))
-            binding.tvRegion.setTypeface(null, Typeface.NORMAL)
+            binding.tvRegion.setTextColor(binding.root.context.getColor(R.color.grey_700))
+            binding.tvRegion.typeface = Typeface.create(ResourcesCompat.getFont(binding.root.context, R.font.pretendard), 400, false)
         }
     }
 

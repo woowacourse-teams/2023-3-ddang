@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DdangDdangDdang</string>
+    <string name="app_name">땅땅땅</string>
 
     <string name="bottom_navigation_home">홈</string>
     <string name="bottom_navigation_search">검색</string>
@@ -10,10 +10,12 @@
     <string name="all_current_price">현재가</string>
     <string name="all_start_price">시작가</string>
     <string name="all_winning_bid_price">낙찰가</string>
+    <string name="all_auction_unbidden">입찰전</string>
     <string name="all_auction_ongoing">경매중</string>
     <string name="all_auction_success">낙찰 완료</string>
     <string name="all_auction_failure">경매 유찰</string>
     <string name="all_app_bar_back_key_description">뒤로가기 버튼</string>
+    <string name="all_app_bar_close_description">닫기 버튼</string>
     <string name="all_dialog_default_negative_button">취소</string>
     <string name="all_dialog_default_positive_button">확인</string>
     <string name="all_snackbar_default_action">확인</string>
@@ -21,6 +23,19 @@
     <string name="all_profile_image_description">프로필 사진</string>
     <string name="all_reliability_icon_description">유저 신뢰도</string>
     <string name="all_reliability">(%.1f)</string>
+    <string name="all_network_error_message">인터넷이 연결되어 있는지 확인해주세요.</string>
+    <string name="all_unexpected_error_message">예기치 못한 오류가 발생했습니다. 다시 시도해주세요.</string>
+    <string name="all_must_update_to_latest_version">최신 버전으로 업데이트가 필요합니다.</string>
+    <string name="all_date_format">yyyy년 M월 d일</string>
+    <string name="all_time_format">h:mm a</string>
+    <string name="all_default_reliability">( - )</string>
+    <string name="all_back_key_check_message">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다</string>
+
+    <!-- splash -->
+    <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
+    <string name="splash_app_update_request_dialog_message">더 새로워진 땅땅땅을 준비했습니다!\n업데이트 부탁드립니다!</string>
+    <string name="splash_app_update_denied">업데이트를 해주셔야 서비스를 정상 사용가능합니다.</string>
+    <string name="splash_app_default_error_message">땅땅땅을 실행하는데 실패했습니다.\n문제가 지속되는 경우, 문의해주세요!</string>
 
     <!-- home -->
     <string name="home">경매 상품 목록</string>
@@ -33,12 +48,10 @@
     <string name="home_auctioneer_count">(%d)</string>
     <string name="home_auctioneer_count_description">경매 참여 인원수</string>
     <string name="home_register_auction_button_description">경매 등록 페이지로 이동하는 버튼</string>
+    <string name="home_default_error_message">경매 목록을 성공적으로 불러오지 못했습니다.</string>
 
     <!-- detail -->
-    <string name="detail_auction_description">상품 설명</string>
     <string name="detail_auctioneer_count_icon_description">경매 참여자 수</string>
-    <string name="detail_direct_exchange_regions_description">직거래 가능 지역</string>
-    <string name="detail_seller_info">판매자 정보</string>
     <string name="detail_seller_profile_description">유저 프로필</string>
     <string name="detail_auction_submit">입찰하기</string>
     <string name="detail_auction_finish">경매 마감</string>
@@ -48,10 +61,18 @@
     <string name="detail_auction_category">%s > %s</string>
     <string name="detail_auction_price_status">%s %,d원</string>
     <string name="detail_auction_start_price">시작가 %,d원</string>
-    <string name="detail_auction_remain_time">마감까지 %s</string>
+    <string name="detail_auction_remain_time">%s</string>
     <string name="detail_auction_remain_time_finish">마감</string>
     <string name="detail_auction_auctioneer_count">%d명 경매 참여중</string>
     <string name="detail_auction_dialog_auction_does_not_exist_message">존재하지 않는 경매입니다.</string>
+    <string name="detail_auction_delete_failure">게시글을 삭제하는데 실패했습니다</string>
+    <string name="detail_auction_load_failure">게시글을 불러오는데 실패했습니다</string>
+    <string name="detail_auction_enter_chat_room_failure">채팅방에 입장하는데 실패했습니다</string>
+
+    <!-- detail_auction_info -->
+    <string name="detail_auction_info_description">상품 설명</string>
+    <string name="detail_auction_info_direct_exchange_regions_description">직거래 가능 지역</string>
+    <string name="detail_auction_info_seller_info">판매자 정보</string>
 
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>
@@ -61,12 +82,7 @@
     <string name="detail_auction_bid_dialog_submit">입찰</string>
     <string name="detail_auction_bid_dialog_success">%,d원에 입찰 성공!</string>
     <string name="detail_auction_bid_dialog_toast_under_price">더 높은 금액을 제시해주세요</string>
-    <string name="detail_auction_bid_dialog_failure_finish">이미 종료된 경매입니다</string>
-    <string name="detail_auction_bid_dialog_failure_deleted">삭제된 경매입니다</string>
-    <string name="detail_auction_bid_dialog_failure_already_exist_higher_bidder">더 높은 입찰자가 등장했습니다</string>
-    <string name="detail_auction_bid_dialog_failure_already_highest_bidder">이미 최고 입찰자입니다</string>
-    <string name="detail_auction_bid_dialog_failure_seller_can_not_bid">판매자는 입찰할 수 없습니다</string>
-    <string name="detail_auction_bid_dialog_failure_else">잠시 후에 다시 시도해주세요</string>
+    <string name="detail_auction_bid_dialog_failure_default_message">경매 입찰에 실패했습니다\n잠시 후에 다시 시도해주세요</string>
     <string name="auction_detail_dialog_check_delete_message">정말로 이 경매를 삭제하시겠습니까?</string>
     <string name="auction_detail_delete_complete">삭제가 완료되었습니다.</string>
 
@@ -89,6 +105,7 @@
     <string name="register_auction_dialog_delete_image_message">사진을 삭제하시겠습니까?</string>
     <string name="register_auction_dialog_delete_image_positive_button">삭제</string>
     <string name="register_autcion_snackbar_image_limit">사진은 최대 10개까지 등록 가능합니다.</string>
+    <string name="register_autcion_default_error_message">예기치 못한 오류로 인해 경매 등록에 실패했습니다.</string>
 
     <!-- category -->
     <string name="select_category">카테고리 선택</string>
@@ -96,7 +113,12 @@
     <string name="select_regions_first_title">시 • 도</string>
     <string name="select_regions_second_title">시 • 군 • 구</string>
     <string name="select_regions_third_title">동 • 읍 • 면</string>
-    <string name="seelct_regions_submit">선택 완료</string>
+    <string name="select_regions_submit">선택 완료</string>
+    <string name="select_category_main_load_failure">메인 카테고리 정보를 불러오는데 실패했습니다</string>
+    <string name="select_category_sub_load_failure">서브 카테고리 정보를 불러오는데 실패했습니다</string>
+    <string name="select_regions_first_failure">시 • 도 정보를 불러오는데 실패했습니다</string>
+    <string name="select_regions_second_failure">시 • 군 • 구 정보를 불러오는데 실패했습니다</string>
+    <string name="select_regions_third_failure">동 • 읍 • 면 정보를 불러오는데 실패했습니다</string>
 
     <!-- login -->
     <string name="login_kakao_login_button_description">카카오 로그인 버튼</string>
@@ -105,6 +127,7 @@
     <!-- message -->
     <string name="message_profile_description">상대방 프로필입니다</string>
     <string name="message_not_exist_rooms">쪽지방이 존재하지 않습니다</string>
+    <string name="message_rooms_load_failure">쪽지방 목록을 불러오는데 실패했습니다</string>
 
     <!-- message_room -->
     <string name="message_room_auction_item_description">경매 상품 이미지입니다</string>
@@ -113,17 +136,31 @@
     <string name="message_room_report_description">쪽지 상대 신고 버튼입니다</string>
     <string name="message_room_message_input_hint">메시지를 입력해주세요</string>
     <string name="message_room_message_submit">전송</string>
-    <string name="message_room_toast_load_room_info_failed">채팅방 정보를 불러오는데 문제가 생겼습니다\n잠시후에 다시 시도해주세요</string>
+    <string name="message_room_load_room_info_failed">채팅방 정보를 불러오는데 실패했습니다\n잠시 후에 다시 시도해주세요</string>
+    <string name="message_room_load_messages_failed">메시지 정보를 불러오는데 실패했습니다\n잠시 후에 다시 시도해주세요</string>
+    <string name="message_room_send_message_failed">메시지 전송에 실패했습니다\n잠시 후에 다시 시도해주세요</string>
     <string name="message_room_created_introduce_text">쪽지방이 생성됐습니다.</string>
     <string name="message_room_auction_bid_price">%,d원</string>
 
     <!-- mypage -->
     <string name="mypage">마이페이지</string>
+    <string name="mypage_user_info_change_button">회원 정보 수정</string>
+    <string name="mypage_my_auction_list_button">나의 경매 목록</string>
+    <string name="mypage_my_participate_auction_list_button">내가 참여한 경매 목록</string>
+    <string name="mypage_notification_settings_button">알림 설정</string>
+    <string name="mypage_announcement_button">공지사항</string>
+    <string name="mypage_contact_us_button">문의하기</string>
     <string name="mypage_privacy_policy_button">개인정보처리방침</string>
     <string name="mypage_logout_button">로그아웃</string>
     <string name="mypage_delete_account_button">탈퇴하기</string>
     <string name="mypage_toast_logout_successfully_message">성공적으로 로그아웃 되었습니다</string>
     <string name="mypage_snackbar_logout_failed_title">로그아웃에 실패했습니다</string>
+    <string name="mypage_dialog_withdrawal_title">정말 탈퇴하시겠습니까?</string>
+    <string name="mypage_dialog_withdrawal_message">탈퇴 시 개인정보는 모두 삭제되며, 복구가 불가능합니다.</string>
+    <string name="mypage_dialog_withdrawal_positive_button">탈퇴</string>
+    <string name="mypage_toast_withdrawal_successfully_message">성공적으로 탈퇴 되었습니다</string>
+    <string name="mypage_snackbar_withdrawal_failed_title">탈퇴에 실패했습니다</string>
+    <string name="mypage_snackbar_load_profile_failed_title">프로필 정보를 불러오는데 실패했습니다</string>
 
     <!-- report -->
     <string name="report">신고하기</string>
@@ -131,5 +168,58 @@
     <string name="report_submit">신고 접수하기</string>
     <string name="report_snackbar_complete">신고 접수가 완료되었습니다.</string>
     <string name="report_snackbar_blank_contents">신고 내용이 비었습니다.</string>
-    <string name="report_snackbar_auction_id_not_delivered">경매 정보가 넘어오지 않았습니다.</string>
+    <string name="report_snackbar_navigate_to_report_page_failed">신고 페이지로 이동하는데 실패했습니다</string>
+    <string name="report_submit_failure">신고하는데 실패했습니다</string>
+
+    <!-- alarm -->
+    <string name="alarm_channel_name">전체 알림</string>
+    <string name="alarm_channel_description">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받습니다.</string>
+    <string name="alarm_dialog_check_permission_title">알림 수신 설정</string>
+    <string name="alarm_dialog_check_permission_message">채팅방 생성 및 채팅 수신, 자신보다 높은 입찰가를 제시한 사용자의 등장, 공지사항에 대한 알림을 받기 위해 알림 권한이 필요합니다.</string>
+    <string name="alarm_dialog_check_permission_positive_button">알겠습니다</string>
+    <string name="alarm_snackbar_how_to_grant_permission">알림을 수신하고 싶으신 경우, 앱 설정에서 알림 권한을 허용할 수 있습니다</string>
+    <string name="alarm_dialog_check_permission_under_tiramisu_message">알림 수신을 허용하시겠습니까?</string>
+    <string name="alarm_dialog_check_permission_under_tiramisu_positive_button">허용</string>
+
+    <!-- search -->
+    <string name="search">경매 상품 검색</string>
+    <string name="search_keyword_hint">상품명 검색</string>
+    <string name="search_keyword">검색</string>
+    <string name="search_notice_no_auction">아이쿠! 올라온 경매가 없습니다!</string>
+    <string name="search_notice_input_keyword">검색창에 상품명을 입력해주세요.</string>
+    <string name="search_notice_keyword_limit">검색어를 2~20자 사이로 입력해주세요.</string>
+    <string name="search_notice_default_error">에러가 발생했습니다. 다시 시도해주세요.</string>
+
+    <!-- profile_change -->
+    <string name="profile_change">회원 정보 수정</string>
+    <string name="profile_change_profile_image_button_description">회원 프로필 수정 버튼</string>
+    <string name="profile_change_nickname">닉네임</string>
+    <string name="profile_change_nickname_text_hint">닉네임은 25자 이내입니다.</string>
+    <string name="profile_change_profile_image_description">선택된 회원 프로필 이미지</string>
+    <string name="profile_change_confirm">확인</string>
+    <string name="profile_change_success">회원 정보 수정 성공</string>
+    <string name="profile_change_failed">프로필 정보 수정에 실패했습니다</string>
+
+    <!-- my_participate_auction -->
+    <string name="my_participate_auction_list_title">내가 참여한 경매 목록</string>
+    <string name="my_participate_auction_list_not_exist">아직 참여한 경매가 없습니다</string>
+    <string name="my_participate_auction_load_failed_title">참여한 경매목록을 불러오는데 실패했습니다</string>
+
+    <!-- my_auction -->
+    <string name="my_auction_list_title">나의 경매 목록</string>
+    <string name="my_auction_list_not_exist">등록한 경매 상품이 아직 없습니다</string>
+    <string name="my_auction_load_failed_title">내 경매 목록을 불러오는데 실패했습니다</string>
+
+    <!-- image_detail -->
+    <string name="image_detail_images_not_exist">이미지 목록이 존재하지 않습니다.</string>
+
+    <!-- user_rate -->
+    <string name="user_review">평가하기</string>
+    <string name="user_review_description_satisfied">상대방과의 거래에 만족하셨나요?</string>
+    <string name="user_review_submit">제출</string>
+    <string name="user_review_detail_hint">거래 후기를 남겨주세요! (선택)</string>
+    <string name="user_review_description">유저 상호 평가 버튼입니다</string>
+    <string name="user_review_failure">평가에 실패했습니다</string>
+    <string name="user_review_success">평가가 완료되었습니다</string>
+    <string name="user_review_load_failure">평가 내용을 가져오는데 실패했습니다</string>
 </resources>

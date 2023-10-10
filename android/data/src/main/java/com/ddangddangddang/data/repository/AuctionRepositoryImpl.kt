@@ -3,17 +3,19 @@ package com.ddangddangddang.data.repository
 import androidx.lifecycle.LiveData
 import com.ddangddangddang.data.datasource.AuctionLocalDataSource
 import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
-import com.ddangddangddang.data.model.request.ReportRequest
+import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
+import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuctionService
 import java.io.File
+import javax.inject.Inject
 
-class AuctionRepositoryImpl private constructor(
+class AuctionRepositoryImpl @Inject constructor(
     private val localDataSource: AuctionLocalDataSource,
     private val remoteDataSource: AuctionRemoteDataSource,
 ) : AuctionRepository {
@@ -23,15 +25,25 @@ class AuctionRepositoryImpl private constructor(
     }
 
     override suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int?,
+        sortType: SortType?,
+        title: String?,
     ): ApiResponse<AuctionPreviewsResponse> {
-        val response = remoteDataSource.getAuctionPreviews(lastAuctionId, size)
+        val response = remoteDataSource.getAuctionPreviews(page, size, sortType, title)
         if (response is ApiResponse.Success) {
-            if (lastAuctionId == null) localDataSource.clearAuctionPreviews()
+            if (page == 1) localDataSource.clearAuctionPreviews()
             localDataSource.addAuctionPreviews(response.body.auctions)
         }
         return response
+    }
+
+    override suspend fun getAuctionPreviewsByTitle(
+        page: Int,
+        size: Int?,
+        title: String,
+    ): ApiResponse<AuctionPreviewsResponse> {
+        return remoteDataSource.getAuctionPreviewsByTitle(page = page, size = size, title = title)
     }
 
     override suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> {
@@ -64,30 +76,16 @@ class AuctionRepositoryImpl private constructor(
     }
 
     override suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit> {
-        return remoteDataSource.reportAuction(ReportRequest(auctionId, description))
+        return remoteDataSource.reportAuction(ReportAuctionArticleRequest(auctionId, description))
+    }
+
+    override suspend fun reportMessageRoom(roomId: Long, description: String): ApiResponse<Unit> {
+        return remoteDataSource.reportMessageRoom(ReportMessageRoomRequest(roomId, description))
     }
 
     override suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit> {
         val response = remoteDataSource.deleteAuction(auctionId)
         if (response is ApiResponse.Success) localDataSource.removeAuctionPreview(auctionId)
         return response
-    }
-
-    companion object {
-        @Volatile
-        private var instance: AuctionRepositoryImpl? = null
-
-        fun getInstance(service: AuctionService): AuctionRepositoryImpl {
-            return instance ?: synchronized(this) {
-                instance ?: createInstance(service)
-            }
-        }
-
-        private fun createInstance(service: AuctionService): AuctionRepositoryImpl {
-            val localDataSource = AuctionLocalDataSource()
-            val remoteDataSource = AuctionRemoteDataSource(service)
-            return AuctionRepositoryImpl(localDataSource, remoteDataSource)
-                .also { instance = it }
-        }
     }
 }

@@ -8,13 +8,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentHomeBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home) {
-    private val viewModel: HomeViewModel by viewModels { viewModelFactory }
+    private val viewModel: HomeViewModel by viewModels()
     private val auctionScrollListener = object : RecyclerView.OnScrollListener() {
         override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
@@ -25,7 +27,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
                 val lastVisibleItemPosition =
                     (binding.rvAuction.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
                 val auctionsSize = viewModel.auctions.value?.size ?: 0
-                if (lastVisibleItemPosition + 5 >= auctionsSize) {
+                if (lastVisibleItemPosition + 10 >= auctionsSize) {
                     viewModel.loadAuctions()
                 }
             }
@@ -40,14 +42,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         binding.viewModel = viewModel
         setupViewModel()
         setupAuctionRecyclerView()
-        if (viewModel.lastAuctionId.value == null) {
-            viewModel.loadAuctions()
-        }
+        if (viewModel.page == 0) viewModel.loadAuctions()
         setupReloadAuctions()
     }
 
     private fun setupViewModel() {
-        viewModel.auctions.observe(viewLifecycleOwner) { auctionAdapter.setAuctions(it) }
+        viewModel.auctions.observe(viewLifecycleOwner) {
+            auctionAdapter.setAuctions(it) {
+                if (viewModel.page == 1) binding.rvAuction.scrollToPosition(0)
+            }
+        }
         viewModel.event.observe(viewLifecycleOwner) { handleEvent(it) }
     }
 
@@ -59,6 +63,13 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
 
             is HomeViewModel.HomeEvent.NavigateToRegisterAuction -> {
                 navigateToRegisterAuction()
+            }
+
+            is HomeViewModel.HomeEvent.FailureLoadAuctions -> {
+                requireActivity().notifyFailureMessage(
+                    event.errorType,
+                    R.string.home_default_error_message,
+                )
             }
         }
     }
@@ -77,7 +88,9 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private fun setupAuctionRecyclerView() {
         with(binding.rvAuction) {
             adapter = auctionAdapter
-            addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = 20))
+
+            val space = resources.getDimensionPixelSize(R.dimen.margin_side_layout)
+            addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = space))
             addOnScrollListener(auctionScrollListener)
         }
     }
@@ -86,6 +99,16 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
         binding.srlReloadAuctions.setOnRefreshListener {
             viewModel.reloadAuctions()
             binding.srlReloadAuctions.isRefreshing = false
+        }
+    }
+
+    fun scrollToTop() {
+        val position =
+            (binding.rvAuction.layoutManager as GridLayoutManager).findLastCompletelyVisibleItemPosition()
+        if (position < 30) {
+            binding.rvAuction.smoothScrollToPosition(0)
+        } else {
+            binding.rvAuction.scrollToPosition(0)
         }
     }
 }

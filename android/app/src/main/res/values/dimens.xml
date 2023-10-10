@@ -7,6 +7,10 @@
     <dimen name="textsize_main_header">24sp</dimen>
     <dimen name="textsize_sub_header">16sp</dimen>
     <dimen name="textsize_body">14sp</dimen>
-    <dimen name="textsize_submit_button">20sp</dimen>
+    <dimen name="textsize_submit_button">18sp</dimen>
     <dimen name="textsize_filter_chips">14sp</dimen>
+    <dimen name="textsize_caption">12sp</dimen>
+
+    <dimen name="auction_detail_image_page_offset">20dp</dimen>
+    <dimen name="auction_detail_image_page_margin">80dp</dimen>
 </resources>

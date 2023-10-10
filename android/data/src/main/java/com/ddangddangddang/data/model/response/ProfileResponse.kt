@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class ProfileResponse(
     val name: String,
     val profileImage: String?,
-    val reliability: Double,
+    val reliability: Float?,
 )

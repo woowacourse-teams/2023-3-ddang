@@ -9,30 +9,17 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class AuthRetrofit private constructor(retrofit: Retrofit) {
-    val service: AuthService = retrofit.create(AuthService::class.java)
-
+class AuthRetrofit {
     companion object {
         private val HTTP_LOG_TAG = "HTTP_LOG"
 
-        @Volatile
-        private var instance: AuthRetrofit? = null
-
-        fun getInstance(): AuthRetrofit {
-            return instance ?: synchronized(this) {
-                instance ?: createInstance()
-            }
-        }
-
-        private fun createInstance(): AuthRetrofit {
-            return AuthRetrofit(
-                Retrofit.Builder()
-                    .baseUrl(BuildConfig.BASE_URL)
-                    .client(createOkHttpClient())
-                    .addCallAdapterFactory(CallAdapterFactory())
-                    .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
-                    .build(),
-            ).also { instance = it }
+        fun createInstance(): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl(BuildConfig.BASE_URL)
+                .client(createOkHttpClient())
+                .addCallAdapterFactory(CallAdapterFactory())
+                .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+                .build()
         }
 
         private fun createOkHttpClient(): OkHttpClient {

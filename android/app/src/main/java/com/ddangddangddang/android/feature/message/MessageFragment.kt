@@ -7,12 +7,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMessageBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.util.binding.BindingFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragment_message) {
-    private val viewModel: MessageViewModel by viewModels { viewModelFactory }
+    private val viewModel: MessageViewModel by viewModels()
     private val messageRoomAdapter: MessageRoomAdapter = MessageRoomAdapter { roomId ->
         viewModel.navigateToMessageRoom(roomId)
     }
@@ -49,6 +51,12 @@ class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragmen
     private fun handleEvent(event: MessageViewModel.MessageEvent) {
         when (event) {
             is MessageViewModel.MessageEvent.NavigateToMessageRoom -> navigateToMessageRoom(event.roomId)
+            is MessageViewModel.MessageEvent.MessageLoadFailure -> {
+                requireActivity().notifyFailureMessage(
+                    event.error,
+                    R.string.message_rooms_load_failure,
+                )
+            }
         }
     }
 

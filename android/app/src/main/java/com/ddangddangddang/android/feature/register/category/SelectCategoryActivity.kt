@@ -8,14 +8,16 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivitySelectCategoryBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SelectCategoryActivity :
     BindingActivity<ActivitySelectCategoryBinding>(R.layout.activity_select_category) {
-    private val viewModel by viewModels<SelectCategoryViewModel> { viewModelFactory }
+    private val viewModel: SelectCategoryViewModel by viewModels()
     private val mainAdapter by lazy {
         MainCategoryAdapter { id ->
             viewModel.setMainCategorySelection(id)
@@ -66,8 +68,17 @@ class SelectCategoryActivity :
             is SelectCategoryViewModel.SelectCategoryEvent.Exit -> {
                 finish()
             }
+
             is SelectCategoryViewModel.SelectCategoryEvent.Submit -> {
                 submit(event.category)
+            }
+
+            is SelectCategoryViewModel.SelectCategoryEvent.MainCategoriesLoadFailure -> {
+                notifyFailureMessage(event.error, R.string.select_category_main_load_failure)
+            }
+
+            is SelectCategoryViewModel.SelectCategoryEvent.SubCategoriesLoadFailure -> {
+                notifyFailureMessage(event.error, R.string.select_category_sub_load_failure)
             }
         }
     }
@@ -79,6 +90,7 @@ class SelectCategoryActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, SelectCategoryActivity::class.java)
+        fun getIntent(context: Context): Intent =
+            Intent(context, SelectCategoryActivity::class.java)
     }
 }

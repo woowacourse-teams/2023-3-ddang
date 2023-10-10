@@ -1,37 +1,41 @@
 package com.ddangddangddang.android.feature.register
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import androidx.exifinterface.media.ExifInterface
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.CategoryModel
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.model.RegisterImageModel
+import com.ddangddangddang.android.util.image.toAdjustImageFile
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import org.json.JSONObject
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
+import java.math.BigInteger
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class RegisterAuctionViewModel(private val repository: AuctionRepository) : ViewModel() {
+@HiltViewModel
+class RegisterAuctionViewModel @Inject constructor(private val repository: AuctionRepository) :
+    ViewModel() {
     // EditText Values - Two Way Binding
     val title: MutableLiveData<String> = MutableLiveData("")
     val description: MutableLiveData<String> = MutableLiveData("")
-    val startPrice: MutableLiveData<String> = MutableLiveData()
-    val bidUnit: MutableLiveData<String> = MutableLiveData()
+    private val _startPrice: MutableLiveData<BigInteger> = MutableLiveData()
+    val startPrice: LiveData<BigInteger>
+        get() = _startPrice
+    private val _bidUnit: MutableLiveData<BigInteger> = MutableLiveData()
+    val bidUnit: LiveData<BigInteger>
+        get() = _bidUnit
 
     // Images
     private val _images: MutableLiveData<List<RegisterImageModel>> = MutableLiveData()
@@ -93,17 +97,17 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
                 }
 
                 is ApiResponse.Failure -> {
-                    if (response.responseCode == 400) {
-                        response.error?.let {
-                            val jsonObject = JSONObject(it)
-                            val message = jsonObject.getString("message")
-                            _event.value = RegisterAuctionEvent.SubmitError(message)
-                        }
-                    }
+                    _event.value =
+                        RegisterAuctionEvent.SubmitError(ErrorType.FAILURE(response.error))
                 }
 
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.NetworkError -> {
+                    _event.value = RegisterAuctionEvent.SubmitError(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = RegisterAuctionEvent.SubmitError(ErrorType.UNEXPECTED)
+                }
             }
             isLoading = false
         }
@@ -114,7 +118,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val title = title.value
         val category = _category.value?.id
         val description = description.value
-        val startPrice = startPrice.value
+        val startPrice = _startPrice.value
         val bidUnit = bidUnit.value
         val closingTime = closingTime.value
         val directRegion = _directRegion.value?.size ?: 0
@@ -123,17 +127,12 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             title.isNullOrBlank() ||
             category == null ||
             description.isNullOrBlank() ||
-            startPrice.isNullOrBlank() ||
-            bidUnit.isNullOrBlank() ||
+            startPrice == null ||
+            bidUnit == null ||
             closingTime == null ||
             directRegion == 0
         ) {
             setBlankExistEvent()
-            return false
-        }
-
-        if (startPrice.toIntOrNull() == null || bidUnit.toIntOrNull() == null) {
-            setInvalidValueInputEvent()
             return false
         }
         return true
@@ -143,9 +142,10 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         val title = title.value ?: ""
         val category = _category.value?.id ?: -1
         val description = description.value ?: ""
-        val startPrice = startPrice.value?.toInt() ?: 0
+        val startPrice = _startPrice.value?.toInt() ?: 0
         val bidUnit = bidUnit.value?.toInt() ?: 0
-        val closingTime = closingTime.value.toString() + ":00" // seconds
+        val closingTime =
+            closingTime.value?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm':00'")) ?: ""
         val regions = _directRegion.value?.map { it.id } ?: emptyList()
 
         return RegisterAuctionRequest(
@@ -157,46 +157,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             closingTime,
             regions,
         )
-    }
-
-    private fun Uri.toAdjustImageFile(context: Context): File? {
-        val bitmap = toBitmap(context) ?: return null
-
-        val file = createAdjustImageFile(bitmap, context.cacheDir)
-
-        val orientation = context.contentResolver
-            .openInputStream(this)?.use {
-            ExifInterface(it)
-        }?.getAttribute(ExifInterface.TAG_ORIENTATION)
-        orientation?.let { file.setOrientation(it) }
-
-        return file
-    }
-
-    private fun Uri.toBitmap(context: Context): Bitmap? {
-        return context.contentResolver
-            .openInputStream(this)?.use {
-            BitmapFactory.decodeStream(it)
-        }
-    }
-
-    private fun createAdjustImageFile(bitmap: Bitmap, directory: File): File {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        Bitmap.createScaledBitmap(bitmap, bitmap.width / 2, bitmap.height / 2, true)
-            .compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream)
-
-        val tempFile = File.createTempFile("resized_image", ".jpg", directory)
-        FileOutputStream(tempFile).use {
-            it.write(byteArrayOutputStream.toByteArray())
-        }
-        return tempFile
-    }
-
-    private fun File.setOrientation(orientation: String) {
-        ExifInterface(this.path).apply {
-            setAttribute(ExifInterface.TAG_ORIENTATION, orientation)
-            saveAttributes()
-        }
     }
 
     fun addImages(images: List<RegisterImageModel>) {
@@ -216,6 +176,25 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
             RegisterAuctionEvent.ClosingTimePicker(_closingTime.value ?: LocalDateTime.now())
     }
 
+    fun setStartPrice(text: String) {
+        val convertedPrice = convertStringPriceToInt(text)
+        _startPrice.value = convertedPrice
+    }
+
+    fun setBidUnit(text: String) {
+        val convertedPrice = convertStringPriceToInt(text)
+        _bidUnit.value = convertedPrice
+    }
+
+    private fun convertStringPriceToInt(text: String): BigInteger {
+        val originalValue = text.replace(",", "") // 문자열 내 들어있는 콤마를 모두 제거
+        val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE.trim()).trim() // " 원"
+        val parsedValue =
+            priceValue.toBigIntegerOrNull() ?: return ZERO.toBigInteger() // 입력에 문자가 섞인 경우
+        if (parsedValue > MAX_PRICE.toBigInteger()) return MAX_PRICE.toBigInteger()
+        return parsedValue
+    }
+
     fun setExitEvent() {
         _event.value = RegisterAuctionEvent.Exit
     }
@@ -232,10 +211,6 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
         _event.value = RegisterAuctionEvent.InputErrorEvent.BlankExistEvent
     }
 
-    private fun setInvalidValueInputEvent() {
-        _event.value = RegisterAuctionEvent.InputErrorEvent.InvalidValueInputEvent
-    }
-
     fun setDeleteImageEvent(image: RegisterImageModel) {
         _event.value = RegisterAuctionEvent.DeleteImage(image)
     }
@@ -250,7 +225,7 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     sealed class RegisterAuctionEvent {
         object Exit : RegisterAuctionEvent()
-        data class SubmitError(val message: String) : RegisterAuctionEvent()
+        data class SubmitError(val errorType: ErrorType) : RegisterAuctionEvent()
         class ClosingTimePicker(val dateTime: LocalDateTime) : RegisterAuctionEvent()
         class SubmitResult(val id: Long) : RegisterAuctionEvent()
         sealed class InputErrorEvent : RegisterAuctionEvent() {
@@ -267,5 +242,8 @@ class RegisterAuctionViewModel(private val repository: AuctionRepository) : View
 
     companion object {
         const val MAXIMUM_IMAGE_SIZE = 10
+        const val SUFFIX_INPUT_PRICE = " 원"
+        private const val ZERO = 0
+        private const val MAX_PRICE = 2100000000
     }
 }

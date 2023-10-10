@@ -3,8 +3,9 @@ package com.ddangddangddang.data.datasource
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
+import javax.inject.Inject
 
-class CategoryRemoteDataSource(private val service: AuctionService) {
+class CategoryRemoteDataSource @Inject constructor(private val service: AuctionService) {
     suspend fun getMainCategories(): ApiResponse<List<EachCategoryResponse>> =
         service.fetchMainCategories()
 

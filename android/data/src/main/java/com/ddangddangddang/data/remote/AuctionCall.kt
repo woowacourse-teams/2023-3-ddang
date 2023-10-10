@@ -3,6 +3,7 @@ package com.ddangddangddang.data.remote
 import okhttp3.Request
 import okio.IOException
 import okio.Timeout
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -39,12 +40,17 @@ class AuctionCall<T : Any>(private val call: Call<T>, private val responseType: 
                         )
                     }
                 } else {
+                    val message = runCatching {
+                        response.errorBody()?.let {
+                            JSONObject(it.string()).getString("message")
+                        }
+                    }.getOrNull()
                     callback.onResponse(
                         this@AuctionCall,
                         Response.success(
                             ApiResponse.Failure(
                                 response.code(),
-                                response.errorBody()?.string(),
+                                message,
                             ),
                         ),
                     )
