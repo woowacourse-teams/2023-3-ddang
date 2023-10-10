@@ -2,14 +2,20 @@ package com.ddang.ddang.report.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
+import com.ddang.ddang.report.application.dto.ReadAnswerInReportDto;
+import com.ddang.ddang.report.application.dto.ReadAnswerReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionInReportDto;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomInReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.ReadQuestionInReportDto;
+import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadReporterDto;
 import com.ddang.ddang.report.application.dto.ReadUserInReportDto;
+import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +24,8 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
 
     protected Long 생성된_경매_신고_아이디 = 1L;
     protected Long 생성된_채팅방_신고_아이디 = 1L;
+    protected Long 생성된_질문_신고_아이디 = 1L;
+    protected Long 생성된_답변_신고_아이디 = 1L;
     protected String 엑세스_토큰_값 = "Bearer accessToken";
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(-999L);
@@ -80,7 +88,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
     private ReadUserInReportDto 구매자_정보_dto1 = new ReadUserInReportDto(2L, "구매자1", 2L, 4.0d, "12346", false);
     private ReadReporterDto 신고자_정보_dto1 = new ReadReporterDto(2L, "구매자1", 2L, 4.0d, false);
-    protected ReadChatRoomReportDto 채팅방_신고1 = new ReadChatRoomReportDto(
+    protected ReadChatRoomReportDto 채팅방_신고_dto1 = new ReadChatRoomReportDto(
             1L,
             신고자_정보_dto1,
             LocalDateTime.now(),
@@ -127,4 +135,42 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
             new ReadChatRoomInReportDto(1L, 신고할_채팅방의_경매_정보_dto3, 구매자_정보_dto3),
             "신고합니다."
     );
+
+    protected CreateQuestionReportRequest 질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 존재하지_않는_질문_신고_request = new CreateQuestionReportRequest(1L, 999L, "신고합니다.");
+    protected CreateQuestionReportRequest 본인의_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 이미_신고한_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 경매_아이디가_null인_질문_신고_request = new CreateQuestionReportRequest(null, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 경매_아이디가_음수인_질문_신고_request = new CreateQuestionReportRequest(-1L, 1L, "신고합니다.");
+    protected CreateQuestionReportRequest 질문_아이디가_null인_질문_신고_request = new CreateQuestionReportRequest(1L, null, "신고합니다.");
+    protected CreateQuestionReportRequest 질문_아이디가_음수인_질문_신고_request = new CreateQuestionReportRequest(1L, -1L, "신고합니다.");
+    protected static CreateQuestionReportRequest 신고_내용이_null인_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, null);
+    protected static CreateQuestionReportRequest 신고_내용이_빈값인_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "");
+
+    private ReadUserInReportDto 질문자_dto = new ReadUserInReportDto(1L, "사용자", 1L, 5.0d, "12345", false);
+    private ReadQuestionInReportDto 질문_dto1 = new ReadQuestionInReportDto(1L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
+    private ReadQuestionInReportDto 질문_dto2 = new ReadQuestionInReportDto(2L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
+    private ReadQuestionInReportDto 질문_dto3 = new ReadQuestionInReportDto(3L, 질문자_dto, "질문드립니다.", LocalDateTime.now());
+    protected ReadQuestionReportDto 질문_신고_dto1 = new ReadQuestionReportDto(1L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto1, "신고합니다.");
+    protected ReadQuestionReportDto 질문_신고_dto2 = new ReadQuestionReportDto(2L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto2, "신고합니다.");
+    protected ReadQuestionReportDto 질문_신고_dto3 = new ReadQuestionReportDto(3L, 신고자_정보_dto1, LocalDateTime.now(), 질문_dto3, "신고합니다.");
+
+    protected CreateAnswerReportRequest 답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 존재하지_않는_답변_신고_request = new CreateAnswerReportRequest(1L, 999L, "신고합니다.");
+    protected CreateAnswerReportRequest 본인의_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 이미_신고한_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 경매_아이디가_null인_답변_신고_request = new CreateAnswerReportRequest(null, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 경매_아이디가_음수인_답변_신고_request = new CreateAnswerReportRequest(-1L, 1L, "신고합니다.");
+    protected CreateAnswerReportRequest 질문_아이디가_null인_답변_신고_request = new CreateAnswerReportRequest(1L, null, "신고합니다.");
+    protected CreateAnswerReportRequest 답변_아이디가_음수인_질문_신고_request = new CreateAnswerReportRequest(1L, -1L, "신고합니다.");
+    protected static CreateAnswerReportRequest 신고_내용이_null인_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, null);
+    protected static CreateAnswerReportRequest 신고_내용이_빈값인_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "");
+    private ReadUserInReportDto 답변자_dto = new ReadUserInReportDto(1L, "사용자", 1L, 5.0d, "12345", false);
+    private ReadAnswerInReportDto 답변_dto1 = new ReadAnswerInReportDto(1L, 답변자_dto, "답변드립니다.", LocalDateTime.now());
+    private ReadAnswerInReportDto 답변_dto2 = new ReadAnswerInReportDto(2L, 답변자_dto, "답변드립니다.", LocalDateTime.now());
+    private ReadAnswerInReportDto 답변_dto3 = new ReadAnswerInReportDto(3L, 답변자_dto, "답변드립니다.", LocalDateTime.now());
+    protected ReadAnswerReportDto 답변_신고_dto1 = new ReadAnswerReportDto(1L, 신고자_정보_dto1, LocalDateTime.now(), 답변_dto1, "신고합니다.");
+    protected ReadAnswerReportDto 답변_신고_dto2 = new ReadAnswerReportDto(2L, 신고자_정보_dto1, LocalDateTime.now(), 답변_dto2, "신고합니다.");
+    protected ReadAnswerReportDto 답변_신고_dto3 = new ReadAnswerReportDto(3L, 신고자_정보_dto1, LocalDateTime.now(), 답변_dto3, "신고합니다.");
+
 }
