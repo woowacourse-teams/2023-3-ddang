@@ -1,0 +1,52 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        show_sql: true
+        use_sql_comments: true
+        default_batch_fetch_size: 5000
+    open-in-view: false
+
+  flyway:
+    enabled: false
+
+open:
+  api:
+    region:
+      service: service
+      key: key
+
+data:
+  init:
+    region:
+      enabled: false
+    auction:
+      enabled: false
+    user:
+      enabled: false
+
+image:
+  store:
+    dir: ./
+
+token:
+  jwt:
+    access-key: thisistoolargeaccesstokenkeyfordummykeydataforlocal
+    refresh-key: thisistoolargerefreshtokenkeyfordummykeydataforlocal
+    access-expired-hours: 12
+    refresh-expired-hours: 1460
+
+oauth2:
+  client:
+    providers:
+      kakao:
+        user-info-uri: https://kapi.kakao.com/v2/user/me

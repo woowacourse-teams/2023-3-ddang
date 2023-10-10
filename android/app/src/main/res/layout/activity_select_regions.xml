@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.register.region.SelectRegionsViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        tools:context=".feature.register.region.SelectRegionsActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_select_regions"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:onClick="@{() -> viewModel.setExitEvent()}"
+                android:src="@drawable/ic_left_24"
+                app:tint="@color/black_900" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/select_direct_regions"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/textsize_main_header"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_region_chips"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_select_regions" />
+
+        <TextView
+            android:id="@+id/tv_region_first_title"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="#1A98989E"
+            android:gravity="center"
+            android:text="@string/select_regions_first_title"
+            android:textColor="@color/black_900"
+            android:textSize="@dimen/textsize_sub_header"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tv_region_second_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
+
+        <View
+            android:id="@+id/v_regions_divider_first"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@id/btn_select_submit"
+            app:layout_constraintEnd_toStartOf="@id/tv_region_second_title"
+            app:layout_constraintStart_toEndOf="@id/tv_region_first_title"
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
+
+        <TextView
+            android:id="@+id/tv_region_second_title"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="#1A98989E"
+            android:gravity="center"
+            android:text="@string/select_regions_second_title"
+            android:textColor="@color/black_900"
+            android:textSize="@dimen/textsize_sub_header"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/tv_region_third_title"
+            app:layout_constraintStart_toEndOf="@id/tv_region_first_title"
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
+
+        <View
+            android:id="@+id/v_regions_divider_second"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintBottom_toTopOf="@id/btn_select_submit"
+            app:layout_constraintEnd_toStartOf="@id/tv_region_third_title"
+            app:layout_constraintStart_toEndOf="@id/tv_region_second_title"
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
+
+        <TextView
+            android:id="@+id/tv_region_third_title"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:background="#1A98989E"
+            android:gravity="center"
+            android:text="@string/select_regions_third_title"
+            android:textColor="@color/black_900"
+            android:textSize="@dimen/textsize_sub_header"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tv_region_second_title"
+            app:layout_constraintTop_toBottomOf="@id/rv_region_chips" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_regions_first"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/btn_select_submit"
+            app:layout_constraintEnd_toStartOf="@id/v_regions_divider_first"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_region_first_title"
+            tools:listitem="@layout/item_select_region_first" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_regions_second"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/btn_select_submit"
+            app:layout_constraintEnd_toStartOf="@id/v_regions_divider_second"
+            app:layout_constraintStart_toEndOf="@id/v_regions_divider_first"
+            app:layout_constraintTop_toBottomOf="@id/tv_region_second_title"
+            tools:listitem="@layout/item_select_region_second" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_regions_third"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@id/btn_select_submit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/v_regions_divider_second"
+            app:layout_constraintTop_toBottomOf="@id/tv_region_third_title"
+            tools:listitem="@layout/item_select_region_third" />
+
+        <Button
+            android:id="@+id/btn_select_submit"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_submit_button"
+            android:layout_marginHorizontal="@dimen/margin_side_layout"
+            android:layout_marginBottom="8dp"
+            android:onClick="@{() -> viewModel.submit()}"
+            android:text="@string/seelct_regions_submit"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

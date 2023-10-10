@@ -1,0 +1,368 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.ddangddangddang.android.feature.detail.AuctionDetailFormatter" />
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.detail.AuctionDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.detail.AuctionDetailActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_detail_auction"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical|start"
+                android:orientation="horizontal">
+
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:contentDescription="@string/all_app_bar_back_key_description"
+                    android:onClick="@{()->viewModel.setExitEvent()}"
+                    android:src="@drawable/ic_left_24"
+                    app:tint="@color/black_900" />
+
+                <TextView
+                    android:id="@+id/tv_detail_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="@{viewModel.auctionDetailModel.title}"
+                    android:textColor="@color/black_900"
+                    android:textSize="@dimen/textsize_main_header"
+                    android:textStyle="bold"
+                    tools:text="M1 맥북 에어" />
+
+                <ImageView
+                    android:id="@+id/iv_report"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/margin_side_layout"
+                    android:onClick="@{() -> viewModel.reportAuction()}"
+                    android:src="@drawable/ic_report_24"
+                    android:visibility="@{viewModel.auctionDetailModel.owner ? View.GONE : View.VISIBLE}" />
+
+                <ImageView
+                    android:id="@+id/iv_delete"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/margin_side_layout"
+                    android:onClick="@{() -> viewModel.setDeleteAuctionEvent()}"
+                    android:src="@drawable/ic_delete_24"
+                    android:visibility="@{viewModel.auctionDetailModel.owner ? View.VISIBLE : View.GONE}" />
+
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_auction_detail_bottom_button"
+            app:layout_constraintTop_toBottomOf="@id/tb_detail_auction">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="24dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_begin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_begin="@dimen/margin_side_layout" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/gl_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_end="@dimen/margin_side_layout" />
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_image_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_indicator"
+                    style="@style/Widget.Design.TabLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/vp_image_list"
+                    app:tabBackground="@drawable/bg_detail_normal_dot_to_selected_dot"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
+
+                <TextView
+                    android:id="@+id/tv_auction_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/detail_auction_category(viewModel.auctionDetailModel.mainCategory,viewModel.auctionDetailModel.subCategory)}"
+                    android:textColor="@color/black_400"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tl_indicator"
+                    tools:text="가전 > 노트북" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.auctionDetailModel.registerTime.toLocalDate().toString()}"
+                    android:textColor="@color/black_400"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_auction_category"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintTop_toTopOf="@id/tv_auction_category"
+                    tools:text="2023-07-11" />
+
+                <TextView
+                    android:id="@+id/tv_auction_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:background="@{viewModel.auctionDetailModel.auctionDetailStatusModel.colorId==0 ? @color/red_100 : context.getColor(viewModel.auctionDetailModel.auctionDetailStatusModel.colorId)}"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="@{viewModel.auctionDetailModel.auctionDetailStatusModel.progressStatus}"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_category"
+                    tools:background="@color/red_100"
+                    tools:text="경매중" />
+
+                <TextView
+                    android:id="@+id/tv_auction_closingTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:text="@{viewModel.auctionDetailModel.closingTime==null ? null :AuctionDetailFormatter.INSTANCE.formatClosingTime(viewModel.auctionDetailModel.closingTime)}"
+                    android:textColor="@color/black_900"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/tv_auction_status"
+                    app:layout_constraintStart_toEndOf="@id/tv_auction_status"
+                    app:layout_constraintTop_toTopOf="@id/tv_auction_status"
+                    tools:text="~ 2023.07.13 오후 12:00" />
+
+                <TextView
+                    android:id="@+id/tv_last_bid_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="@{viewModel.auctionDetailModel==null ? null :AuctionDetailFormatter.INSTANCE.formatAuctionDetailStatus(viewModel.auctionDetailModel)}"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_main_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_status"
+                    tools:text="현재가 400,000원" />
+
+                <TextView
+                    android:id="@+id/tv_remain_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.auctionDetailModel.remainTime.isEmpty() ? @string/detail_auction_remain_time_finish : @string/detail_auction_remain_time(viewModel.auctionDetailModel.remainTime)}"
+                    android:textColor="@color/red_100"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintTop_toTopOf="@id/tv_start_price"
+                    tools:text="마감까지 1시간 35분" />
+
+                <TextView
+                    android:id="@+id/tv_start_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{@string/detail_auction_start_price(viewModel.auctionDetailModel.startPrice)}"
+                    android:textColor="@color/black_400"
+                    android:textSize="@dimen/textsize_sub_header"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_last_bid_price"
+                    tools:text="시작가 100,000원" />
+
+                <ImageView
+                    android:id="@+id/iv_auctioneer_count_icon"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:contentDescription="@string/detail_auctioneer_count_icon_description"
+                    android:src="@drawable/ic_people_alt_24"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_start_price" />
+
+                <TextView
+                    android:id="@+id/tv_auctioneer_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@{@string/detail_auction_auctioneer_count(viewModel.auctionDetailModel.auctioneerCount)}"
+                    android:textColor="@color/black_900"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_auctioneer_count_icon"
+                    app:layout_constraintStart_toEndOf="@id/iv_auctioneer_count_icon"
+                    app:layout_constraintTop_toTopOf="@id/iv_auctioneer_count_icon"
+                    tools:text="26명 경매 참여중" />
+
+                <TextView
+                    android:id="@+id/tv_auction_explain"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/detail_auction_description"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/iv_auctioneer_count_icon" />
+
+                <TextView
+                    android:id="@+id/tv_auction_description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@{viewModel.auctionDetailModel.description}"
+                    android:textSize="14sp"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_explain"
+                    tools:text="잠깐 쓰고 구석에 짱박아둔 맥북 에어 올려봅니다.\n상태 S급이고 사이클 50 이하입니다." />
+
+                <TextView
+                    android:id="@+id/tv_direct_exchange_regions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/detail_direct_exchange_regions_description"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_auction_description" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_direct_exchange_regions"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_direct_exchange_regions"
+                    tools:itemCount="3" />
+
+                <TextView
+                    android:id="@+id/tv_seller_info"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:text="@string/detail_seller_info"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textsize_sub_header"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/rv_direct_exchange_regions" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cv_profile"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_marginTop="8dp"
+                    app:cardCornerRadius="32dp"
+                    app:cardElevation="0dp"
+                    app:layout_constraintStart_toStartOf="@id/gl_begin"
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_info">
+
+                    <ImageView
+                        android:id="@+id/iv_seller_profile"
+                        imageUrl="@{viewModel.auctionDetailModel.sellerModel.profileUrl}"
+                        placeholder="@{@drawable/img_default_profile}"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:contentDescription="@string/detail_seller_profile_description"
+                        android:scaleType="centerCrop" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/tv_seller_nickname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="@{viewModel.auctionDetailModel.sellerModel.nickname}"
+                    app:layout_constraintStart_toEndOf="@id/cv_profile"
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_info"
+                    tools:text="카붕이" />
+
+                <ImageView
+                    android:id="@+id/iv_reliability_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="@string/all_reliability_icon_description"
+                    android:src="@drawable/ic_star_18"
+                    app:layout_constraintStart_toStartOf="@id/tv_seller_nickname"
+                    app:layout_constraintTop_toBottomOf="@id/tv_seller_nickname" />
+
+                <TextView
+                    android:id="@+id/tv_seller_reliability_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="@{@string/all_reliability(viewModel.auctionDetailModel.sellerModel.reliability)}"
+                    app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
+                    app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
+                    app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"
+                    tools:text="(9.7)" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+        <Button
+            android:id="@+id/btn_auction_detail_bottom_button"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_submit_button"
+            android:layout_marginHorizontal="@dimen/margin_side_layout"
+            android:enabled="@{viewModel.auctionDetailBottomButtonStatus == null ? false :viewModel.auctionDetailBottomButtonStatus.enabled }"
+            android:gravity="center"
+            android:onClick="@{()->viewModel.handleAuctionDetailBottomButton()}"
+            android:padding="0dp"
+            android:text="@{AuctionDetailFormatter.INSTANCE.getAuctionBottomButtonText(context,viewModel.auctionDetailBottomButtonStatus)}"
+            android:textSize="@dimen/textsize_submit_button"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="입찰하기" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.report.ReportViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.report.ReportActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_report"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="@dimen/margin_side_layout"
+                android:onClick="@{() -> viewModel.setExitEvent()}"
+                android:src="@drawable/ic_left_24"
+                app:tint="@color/black_900" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/report"
+                android:textColor="@color/black_900"
+                android:textSize="@dimen/textsize_main_header"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="@dimen/margin_side_layout" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="@dimen/margin_side_layout" />
+
+        <TextView
+            android:id="@+id/tv_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:text="@string/report_contents"
+            android:textSize="@dimen/textsize_sub_header"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/gl_start"
+            app:layout_constraintTop_toBottomOf="@id/tb_report" />
+
+        <EditText
+            android:id="@+id/et_report_contents"
+            android:layout_width="0dp"
+            android:layout_height="190dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_stroke_gray_radius_1dp"
+            android:gravity="top"
+            android:hint="@string/register_auction_description"
+            android:inputType="textMultiLine"
+            android:padding="16dp"
+            android:text="@={viewModel.reportContents}"
+            android:textCursorDrawable="@drawable/ic_edittext_cursor"
+            android:textSize="@dimen/textsize_body"
+            app:layout_constraintEnd_toStartOf="@id/gl_end"
+            app:layout_constraintStart_toEndOf="@id/gl_start"
+            app:layout_constraintTop_toBottomOf="@id/tv_report" />
+
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:onClick="@{() -> viewModel.submit()}"
+            android:text="@string/report_submit"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@id/gl_end"
+            app:layout_constraintStart_toEndOf="@id/gl_start"
+            app:layout_constraintTop_toBottomOf="@id/et_report_contents" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
