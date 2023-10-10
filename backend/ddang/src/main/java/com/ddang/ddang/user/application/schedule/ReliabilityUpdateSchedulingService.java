@@ -9,6 +9,7 @@ import com.ddang.ddang.user.domain.UserReliability;
 import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserReliabilityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ public class ReliabilityUpdateSchedulingService {
     private final JpaUserReliabilityRepository userReliabilityRepository;
 
     @Transactional
+    @Scheduled(cron = "0 0 4 ? * MON")  // 매주 월요일 새벽 4시에 동작
     public void updateAllUserReliability() {
         final ReliabilityUpdateHistory updateHistory = updateHistoryRepository.findFirstByOrderByIdDesc()
                                                                               .orElse(new ReliabilityUpdateHistory());
