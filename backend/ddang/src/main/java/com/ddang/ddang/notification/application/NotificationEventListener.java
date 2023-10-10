@@ -3,14 +3,13 @@ package com.ddang.ddang.notification.application;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
-import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
+import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
-import com.ddang.ddang.qna.application.dto.QuestionDto;
 import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.domain.Answer;
@@ -37,15 +36,15 @@ public class NotificationEventListener {
     @TransactionalEventListener
     public void sendMessageNotification(final MessageNotificationEvent messageNotificationEvent) {
         try {
-            final MessageDto messageDto = messageNotificationEvent.messageDto();
-            final ProfileImage profileImage = messageDto.receiver().getProfileImage();
+            final Message message = messageNotificationEvent.message();
+            final ProfileImage profileImage = message.getReceiver().getProfileImage();
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.MESSAGE,
-                    messageDto.receiver().getId(),
-                    messageDto.writer().getName(),
-                    messageDto.contents(),
-                    calculateRedirectUrl(MESSAGE_NOTIFICATION_REDIRECT_URI, messageDto.chatRoom().getId()),
-                    ImageUrlCalculator.calculateBy(messageDto.profileImageAbsoluteUrl(), profileImage.getId())
+                    message.getReceiver().getId(),
+                    message.getWriter().getName(),
+                    message.getContents(),
+                    calculateRedirectUrl(MESSAGE_NOTIFICATION_REDIRECT_URI, message.getChatRoom().getId()),
+                    ImageUrlCalculator.calculateBy(messageNotificationEvent.profileImageAbsoluteUrl(), profileImage.getId())
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -76,16 +75,16 @@ public class NotificationEventListener {
     @TransactionalEventListener
     public void sendQuestionNotification(final QuestionNotificationEvent questionNotificationEvent) {
         try {
-            final QuestionDto questionDto = questionNotificationEvent.questionDto();
-            final Auction auction = questionDto.auction();
+            final Question question = questionNotificationEvent.question();
+            final Auction auction = question.getAuction();
             final AuctionImage auctionImage = auction.getAuctionImages().get(FIRST_IMAGE_INDEX);
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.QUESTION,
                     auction.getSeller().getId(),
                     auction.getTitle(),
-                    questionDto.content(),
+                    question.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(questionDto.auctionImageAbsoluteUrl(), auctionImage.getId())
+                    ImageUrlCalculator.calculateBy(questionNotificationEvent.absoluteImageUrl(), auctionImage.getId())
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {

@@ -142,12 +142,12 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
     }
 
     @Test
-    void 이벤트가_호출되면_응답_알림을_전송한다() throws FirebaseMessagingException {
+    void 이벤트가_호출되면_답변_알림을_전송한다() throws FirebaseMessagingException {
         // given
         given(notificationService.send(any())).willReturn(NotificationStatus.SUCCESS);
 
         // when
-        notificationEventListener.sendAnswerNotification(응답_알림_이벤트);
+        notificationEventListener.sendAnswerNotification(답변_알림_이벤트);
 
         // then
         verify(notificationService).send(any());
