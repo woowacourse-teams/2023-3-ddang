@@ -40,7 +40,7 @@ public class BidService {
 
     @Transactional
     public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
-        final User bidder = userRepository.findById(bidDto.userId())
+        final User bidder = userRepository.findByIdAndDeletedIsFalse(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final AuctionAndImageDto auctionAndImageDto =
                 auctionRepository.findDtoByAuctionId(bidDto.auctionId())

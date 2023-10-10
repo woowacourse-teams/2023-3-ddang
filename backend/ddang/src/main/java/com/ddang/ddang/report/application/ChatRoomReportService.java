@@ -29,7 +29,7 @@ public class ChatRoomReportService {
 
     @Transactional
     public Long create(final CreateChatRoomReportDto chatRoomReportDto) {
-        final User reporter = userRepository.findById(chatRoomReportDto.reporterId())
+        final User reporter = userRepository.findByIdAndDeletedIsFalse(chatRoomReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final ChatRoom chatRoom =
                 chatRoomRepository.findById(chatRoomReportDto.chatRoomId())

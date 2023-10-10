@@ -20,7 +20,7 @@ public class UserService {
     private final StoreImageProcessor imageProcessor;
 
     public ReadUserDto readById(final Long userId) {
-        final User user = userRepository.findById(userId)
+        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
                                         .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
 
         return ReadUserDto.from(user);

@@ -39,10 +39,10 @@ public class MessageService {
         final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
-        final User writer = userRepository.findById(dto.writerId())
+        final User writer = userRepository.findByIdAndDeletedIsFalse(dto.writerId())
                                           .orElseThrow(() -> new UserNotFoundException(
                                                   "지정한 아이디에 대한 발신자를 찾을 수 없습니다."));
-        final User receiver = userRepository.findById(dto.receiverId())
+        final User receiver = userRepository.findByIdAndDeletedIsFalse(dto.receiverId())
                                             .orElseThrow(() -> new UserNotFoundException(
                                                     "지정한 아이디에 대한 수신자를 찾을 수 없습니다."));
 

@@ -43,7 +43,7 @@ public class ChatRoomService {
 
     @Transactional
     public Long create(final Long userId, final CreateChatRoomDto chatRoomDto) {
-        final User findUser = userRepository.findById(userId)
+        final User findUser = userRepository.findByIdAndDeletedIsFalse(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final Auction findAuction = auctionRepository.findAuctionById(chatRoomDto.auctionId())
                                                      .orElseThrow(() ->
@@ -84,7 +84,7 @@ public class ChatRoomService {
     }
 
     public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
-        final User findUser = userRepository.findById(userId)
+        final User findUser = userRepository.findByIdAndDeletedIsFalse(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final List<ChatRoomAndMessageAndImageDto> chatRoomAndMessageAndImageQueryProjectionDtos =
                 querydslChatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
@@ -95,7 +95,7 @@ public class ChatRoomService {
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
-        final User findUser = userRepository.findById(userId)
+        final User findUser = userRepository.findByIdAndDeletedIsFalse(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final ChatRoomAndImageDto chatRoomAndImageDto =
                 querydslChatRoomAndImageRepository.findChatRoomById(chatRoomId)
@@ -114,7 +114,7 @@ public class ChatRoomService {
     }
 
     public ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
-        final User findUser = userRepository.findById(userInfo.userId())
+        final User findUser = userRepository.findByIdAndDeletedIsFalse(userInfo.userId())
                                             .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
         final Auction findAuction = auctionRepository.findAuctionById(auctionId)
                                                      .orElseThrow(() -> new AuctionNotFoundException(

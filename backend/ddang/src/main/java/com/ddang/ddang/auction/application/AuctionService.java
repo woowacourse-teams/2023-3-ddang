@@ -43,7 +43,7 @@ public class AuctionService {
 
     @Transactional
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
-        final User seller = userRepository.findById(dto.sellerId())
+        final User seller = userRepository.findByIdAndDeletedIsFalse(dto.sellerId())
                                           .orElseThrow(() -> new UserNotFoundException(
                                                   "지정한 판매자를 찾을 수 없습니다."
                                           ));
@@ -116,7 +116,7 @@ public class AuctionService {
                                                  .orElseThrow(() -> new AuctionNotFoundException(
                                                          "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                  ));
-        final User user = userRepository.findById(userId)
+        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
                                         .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
 
         if (!auction.isOwner(user)) {

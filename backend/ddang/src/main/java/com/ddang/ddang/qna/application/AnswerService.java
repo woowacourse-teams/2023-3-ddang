@@ -28,7 +28,7 @@ public class AnswerService {
 
     @Transactional
     public Long create(final CreateAnswerDto answerDto) {
-        final User writer = userRepository.findById(answerDto.userId())
+        final User writer = userRepository.findByIdAndDeletedIsFalse(answerDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Question question = questionRepository.findById(answerDto.questionId())
                                                     .orElseThrow(() ->

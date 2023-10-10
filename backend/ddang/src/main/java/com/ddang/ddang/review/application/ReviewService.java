@@ -36,9 +36,9 @@ public class ReviewService {
                                                      .orElseThrow(() ->
                                                              new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
                                                      );
-        final User writer = userRepository.findById(reviewDto.writerId())
+        final User writer = userRepository.findByIdAndDeletedIsFalse(reviewDto.writerId())
                                           .orElseThrow(() -> new UserNotFoundException("작성자 정보를 찾을 수 없습니다."));
-        final User target = userRepository.findById(reviewDto.targetId())
+        final User target = userRepository.findByIdAndDeletedIsFalse(reviewDto.targetId())
                                           .orElseThrow(() -> new UserNotFoundException("평가 상대의 정보를 찾을 수 없습니다."));
 
         validateWriterCanReview(findAuction, writer);

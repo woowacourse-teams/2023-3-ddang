@@ -30,7 +30,7 @@ public class AuctionReportService {
 
     @Transactional
     public Long create(final CreateAuctionReportDto auctionReportDto) {
-        final User reporter = userRepository.findById(auctionReportDto.reporterId())
+        final User reporter = userRepository.findByIdAndDeletedIsFalse(auctionReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findById(auctionReportDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
