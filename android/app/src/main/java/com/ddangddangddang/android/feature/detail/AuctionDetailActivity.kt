@@ -2,7 +2,6 @@ package com.ddangddangddang.android.feature.detail
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -13,12 +12,12 @@ import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
-import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.convertDpToPx
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -49,7 +48,6 @@ class AuctionDetailActivity :
         }
         viewModel.auctionDetailModel.observe(this) {
             setupAuctionImages(it.images)
-            setupDirectRegions(it.directRegions)
         }
     }
 
@@ -135,15 +133,6 @@ class AuctionDetailActivity :
         }
 
         TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { _, _ -> }.attach()
-    }
-
-    private fun convertDpToPx(dp: Float): Int {
-        val density = Resources.getSystem().displayMetrics.density
-        return (dp * density + 0.5f).toInt()
-    }
-
-    private fun setupDirectRegions(regions: List<RegionModel>) {
-        binding.rvDirectExchangeRegions.adapter = AuctionDirectRegionsAdapter(regions)
     }
 
     override fun onResume() {
