@@ -25,14 +25,15 @@ class ReliabilityTest extends ReliabilityFixture {
     }
 
     @Test
-    void 신뢰도_기록이_없다면_신뢰도_점수는_null이다() {
+    void 신뢰도_기록이_없다면_신뢰도_점수는_0점0이다() {
         // given
         final List<Review> targetReviews = Collections.emptyList();
+        final double expected = 0.0d;
 
         // when
         평가_대상.updateReliability(targetReviews);
 
         // then
-        assertThat(평가_대상.getReliability().getValue()).isNull();
+        assertThat(평가_대상.getReliability().getValue()).isEqualTo(expected);
     }
 }

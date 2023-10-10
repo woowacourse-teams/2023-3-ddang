@@ -29,7 +29,7 @@ public class UserFixture {
     protected User 평가_대상 = User.builder()
                                .name("평가 대상")
                                .profileImage(new ProfileImage("profile.png", "profile.png"))
-                               .reliability(new Reliability(null))
+                               .reliability(new Reliability(0.0d))
                                .oauthId("12345")
                                .build();
     private Review 평가1 = Review.builder()
@@ -46,5 +46,5 @@ public class UserFixture {
                                .build();
 
     protected List<Review> 평가_대상이_받은_평가_목록 = List.of(평가1, 평가2);
-    protected Double 평가_대상의_신뢰도_점수 = (평가1_점수 + 평가2_점수) / 2;
+    protected double 평가_대상의_신뢰도_점수 = (평가1_점수 + 평가2_점수) / 2;
 }

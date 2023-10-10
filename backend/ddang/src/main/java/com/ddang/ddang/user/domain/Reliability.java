@@ -17,18 +17,16 @@ import java.util.List;
 @ToString
 public class Reliability {
 
-    public static final Reliability INITIAL_RELIABILITY = new Reliability(null);
+    public static final Reliability INITIAL_RELIABILITY = new Reliability(0.0d);
 
-    private Double value;
+    private double value;
 
-    public Reliability(final Double value) {
+    public Reliability(final double value) {
         this.value = value;
     }
 
     public void updateReliability(final List<Review> reviews) {
         if (reviews.isEmpty()) {
-            this.value = null;
-
             return;
         }
 
