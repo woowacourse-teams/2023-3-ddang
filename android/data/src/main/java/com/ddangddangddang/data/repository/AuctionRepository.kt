@@ -1,6 +1,7 @@
 package com.ddangddangddang.data.repository
 
 import androidx.lifecycle.LiveData
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -12,8 +13,16 @@ interface AuctionRepository {
     fun observeAuctionPreviews(): LiveData<List<AuctionPreviewResponse>>
 
     suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int? = null,
+        sortType: SortType? = null,
+        title: String? = null,
+    ): ApiResponse<AuctionPreviewsResponse>
+
+    suspend fun getAuctionPreviewsByTitle(
+        page: Int,
+        size: Int?,
+        title: String,
     ): ApiResponse<AuctionPreviewsResponse>
 
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse>
@@ -29,5 +38,6 @@ interface AuctionRepository {
     ): ApiResponse<Unit>
 
     suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit>
+    suspend fun reportMessageRoom(roomId: Long, description: String): ApiResponse<Unit>
     suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit>
 }

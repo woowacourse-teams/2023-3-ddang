@@ -1,8 +1,10 @@
 package com.ddangddangddang.data.datasource
 
+import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
-import com.ddangddangddang.data.model.request.ReportRequest
+import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
+import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -15,13 +17,23 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.File
+import javax.inject.Inject
 
-class AuctionRemoteDataSource(private val service: AuctionService) {
+class AuctionRemoteDataSource @Inject constructor(private val service: AuctionService) {
     suspend fun getAuctionPreviews(
-        lastAuctionId: Long?,
-        size: Int,
+        page: Int,
+        size: Int?,
+        sortType: SortType?,
+        title: String?,
     ): ApiResponse<AuctionPreviewsResponse> =
-        service.fetchAuctionPreviews(lastAuctionId, size)
+        service.fetchAuctionPreviews(page, size, sortType?.nameBy, title)
+
+    suspend fun getAuctionPreviewsByTitle(
+        page: Int,
+        size: Int?,
+        title: String,
+    ): ApiResponse<AuctionPreviewsResponse> =
+        service.fetchAuctionPreviews(page = page, size = size, sortType = null, title = title)
 
     suspend fun getAuctionDetail(id: Long): ApiResponse<AuctionDetailResponse> =
         service.fetchAuctionDetail(id)
@@ -43,8 +55,11 @@ class AuctionRemoteDataSource(private val service: AuctionService) {
         auctionBidRequest: AuctionBidRequest,
     ): ApiResponse<Unit> = service.submitAuctionBid(auctionBidRequest)
 
-    suspend fun reportAuction(reportRequest: ReportRequest): ApiResponse<Unit> =
+    suspend fun reportAuction(reportRequest: ReportAuctionArticleRequest): ApiResponse<Unit> =
         service.reportAuction(reportRequest)
+
+    suspend fun reportMessageRoom(reportRequest: ReportMessageRoomRequest): ApiResponse<Unit> =
+        service.reportMessageRoom(reportRequest)
 
     suspend fun deleteAuction(id: Long): ApiResponse<Unit> = service.deleteAuction(id)
 }

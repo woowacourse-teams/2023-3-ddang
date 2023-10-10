@@ -32,16 +32,14 @@
                 android:layout_marginStart="@dimen/margin_side_layout"
                 android:onClick="@{() -> viewModel.setExitEvent()}"
                 android:src="@drawable/ic_left_24"
-                app:tint="@color/black_900" />
+                app:tint="@color/grey_900" />
 
             <TextView
+                style="@style/Header1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="@string/register_auction"
-                android:textColor="@color/black_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                android:text="@string/register_auction" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
@@ -86,13 +84,13 @@
                         android:layout_height="24dp"
                         android:scaleType="center"
                         android:src="@drawable/ic_camera_24"
-                        app:tint="@color/black_900" />
+                        app:tint="@color/grey_800" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@{@string/register_auction_default_image_count(viewModel.images.size, viewModel.MAXIMUM_IMAGE_SIZE)}"
-                        android:textColor="@color/black_900"
+                        android:textColor="@color/grey_800"
                         android:textSize="12sp"
                         tools:text="(0/10)" />
                 </LinearLayout>
@@ -114,20 +112,19 @@
 
                 <TextView
                     android:id="@+id/tv_title"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_title"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/ll_register_image" />
 
                 <EditText
                     android:id="@+id/et_title"
+                    style="@style/Body"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:hint="@string/register_auction_title"
@@ -135,26 +132,24 @@
                     android:padding="16dp"
                     android:text="@={viewModel.title}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
-                    android:textSize="@dimen/textsize_body"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_title" />
 
                 <TextView
                     android:id="@+id/tv_category"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_category"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_title" />
 
                 <EditText
                     android:id="@+id/et_category"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:focusable="false"
@@ -171,17 +166,17 @@
 
                 <TextView
                     android:id="@+id/tv_description"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_description"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_category" />
 
                 <EditText
-                    android:id="@+id/et_description"
+                    android:id="@+id/et_detail_description"
+                    style="@style/Body"
                     android:layout_width="0dp"
                     android:layout_height="190dp"
                     android:layout_marginTop="12dp"
@@ -192,80 +187,75 @@
                     android:padding="16dp"
                     android:text="@={viewModel.description}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
-                    android:textSize="@dimen/textsize_body"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_description" />
 
                 <TextView
                     android:id="@+id/tv_start_price"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_start_price"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
-                    app:layout_constraintTop_toBottomOf="@id/et_description" />
+                    app:layout_constraintTop_toBottomOf="@id/et_detail_description" />
 
                 <EditText
                     android:id="@+id/et_start_price"
+                    style="@style/Body"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:hint="@string/register_auction_start_price"
                     android:inputType="numberDecimal"
                     android:padding="16dp"
-                    android:text="@={viewModel.startPrice}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
-                    android:textSize="@dimen/textsize_body"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_start_price" />
 
                 <TextView
                     android:id="@+id/tv_bid_unit"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_bid_unit"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_start_price" />
 
                 <EditText
                     android:id="@+id/et_bid_unit"
+                    style="@style/Body"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:hint="@string/register_auction_bid_unit"
                     android:inputType="numberDecimal"
                     android:padding="16dp"
-                    android:text="@={viewModel.bidUnit}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
-                    android:textSize="@dimen/textsize_body"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_bid_unit" />
 
                 <TextView
                     android:id="@+id/tv_closing_time"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_closing_time"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_bid_unit" />
 
                 <EditText
                     android:id="@+id/et_closing_time"
+                    style="@style/Body"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:cursorVisible="false"
@@ -276,26 +266,25 @@
                     android:padding="16dp"
                     android:text="@{viewModel.closingTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
-                    android:textSize="@dimen/textsize_body"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_closing_time" />
 
                 <TextView
                     android:id="@+id/tv_direct_region"
+                    style="@style/Header2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="22dp"
                     android:text="@string/register_auction_enable_direct_region"
-                    android:textSize="@dimen/textsize_sub_header"
-                    android:textStyle="bold"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/et_closing_time" />
 
                 <EditText
                     android:id="@+id/et_direct_region"
+                    style="@style/Body"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:background="@drawable/bg_stroke_gray_radius_1dp"
                     android:focusable="false"
@@ -305,21 +294,21 @@
                     android:padding="16dp"
                     android:text="@{viewModel.directRegion}"
                     android:textCursorDrawable="@drawable/ic_edittext_cursor"
-                    android:textSize="@dimen/textsize_body"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"
                     app:layout_constraintStart_toEndOf="@id/gl_start"
                     app:layout_constraintTop_toBottomOf="@id/tv_direct_region" />
 
                 <Button
                     android:id="@+id/btn_register"
+                    style="@style/BigButton"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_height="wrap_content"
+                    android:minHeight="@dimen/height_submit_button"
                     android:layout_marginVertical="22dp"
                     android:onClick="@{() -> viewModel.submitAuction(context)}"
                     android:padding="0dp"
                     android:text="@string/register_auction"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
+                    android:textColor="@color/text_active_fixed"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/gl_end"

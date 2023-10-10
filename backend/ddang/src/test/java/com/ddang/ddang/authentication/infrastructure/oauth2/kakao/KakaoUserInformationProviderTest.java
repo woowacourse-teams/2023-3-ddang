@@ -11,6 +11,7 @@ import com.ddang.ddang.authentication.configuration.KakaoProvidersConfigurationP
 import com.ddang.ddang.authentication.configuration.Oauth2PropertiesConfiguration;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
+import com.ddang.ddang.authentication.infrastructure.oauth2.kakao.fixture.KakaoUserInformationProviderFixture;
 import com.ddang.ddang.configuration.RestTemplateConfiguration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,25 +29,24 @@ import org.springframework.web.client.RestTemplate;
 @Import({RestTemplateConfiguration.class, Oauth2PropertiesConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class KakaoUserInformationProviderTest {
-
-    MockRestServiceServer mockRestServiceServer;
+class KakaoUserInformationProviderTest extends KakaoUserInformationProviderFixture {
 
     @Autowired
     RestTemplate restTemplate;
 
     @Autowired
-    KakaoUserInformationProvider provider;
-
-    @Autowired
     KakaoProvidersConfigurationProperties kakaoProperties;
 
     @Autowired
-    ObjectMapper objectMapper;
+    KakaoUserInformationProvider provider;
+
+    MockRestServiceServer kakaoServer;
+
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
     void setUp() {
-        mockRestServiceServer = MockRestServiceServer.createServer(restTemplate);
+        kakaoServer = MockRestServiceServer.createServer(restTemplate);
     }
 
     @Test
@@ -59,36 +59,48 @@ class KakaoUserInformationProviderTest {
     @Test
     void 유효한_카카오_토큰을_전달한_경우_회원_정보를_조회한다() throws Exception {
         // given
-        final UserInformationDto userInformationDto = new UserInformationDto(12345L);
-
-        mockRestServiceServer.expect(requestTo(matchesPattern(kakaoProperties.userInfoUri())))
-                             .andRespond(
-                                     withSuccess(
-                                             objectMapper.writeValueAsString(userInformationDto),
-                                             MediaType.APPLICATION_JSON
-                                     )
-                             );
-
-        final String accessToken = "Bearer accessToken";
+        kakaoServer.expect(requestTo(matchesPattern(kakaoProperties.userInfoUri())))
+                   .andRespond(
+                         withSuccess(
+                                 objectMapper.writeValueAsString(회원_정보),
+                                 MediaType.APPLICATION_JSON
+                         )
+                 );
 
         // when
-        final UserInformationDto actual = provider.findUserInformation(accessToken);
+        final UserInformationDto actual = provider.findUserInformation(유효한_토큰);
 
         // then
-        assertThat(actual.id()).isEqualTo(userInformationDto.id());
+        assertThat(actual).isEqualTo(회원_정보);
     }
 
     @Test
     void 유효하지_않은_카카오_토큰을_전달한_경우_예외가_발생한다() {
         // given
-        final String invalidAccessToken = "Bearer accessToken";
-
-        mockRestServiceServer.expect(requestTo(matchesPattern(kakaoProperties.userInfoUri())))
-                             .andRespond(withUnauthorizedRequest());
+        kakaoServer.expect(requestTo(matchesPattern(kakaoProperties.userInfoUri())))
+                   .andRespond(withUnauthorizedRequest());
 
         // when & then
-        assertThatThrownBy(() -> provider.findUserInformation(invalidAccessToken))
+        assertThatThrownBy(() -> provider.findUserInformation(유효하지_않은_토큰))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("401 Unauthorized");
+    }
+
+    @Test
+    void 유효한_카카오_토큰을_전달한_경우_카카오_연결을_끊는다() throws Exception {
+        // given
+        kakaoServer.expect(requestTo(matchesPattern(kakaoProperties.userUnlinkUri())))
+                   .andRespond(
+                         withSuccess(
+                                 objectMapper.writeValueAsString(회원_정보),
+                                 MediaType.APPLICATION_JSON
+                         )
+                 );
+
+        // when
+        final UserInformationDto actual = provider.unlinkUserBy(카카오_회원_식별자);
+
+        // then
+        assertThat(actual).isEqualTo(회원_정보);
     }
 }

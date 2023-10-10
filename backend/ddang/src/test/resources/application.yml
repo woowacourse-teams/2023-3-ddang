@@ -1,4 +1,7 @@
 spring:
+  profiles:
+    default: test
+
   datasource:
     url: jdbc:h2:mem:testdb
     username: sa
@@ -40,3 +43,9 @@ oauth2:
     providers:
       kakao:
         user-info-uri: https://kapi.kakao.com/v2/user/me
+        user-unlink-uri: https://kapi.kakao.com/v1/user/unlink
+
+fcm:
+  enabled: false
+  key:
+    path: firebase/private-key.json

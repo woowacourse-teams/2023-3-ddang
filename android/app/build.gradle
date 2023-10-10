@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
     id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
@@ -19,14 +20,15 @@ android {
         minSdk 28
         targetSdk 33
 
-        versionCode 3
-        versionName "2.1.0"
+        versionCode 12
+        versionName "5.1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         manifestPlaceholders = [KEY_KAKAO: properties['key.kakao']]
         buildConfigField 'String', 'KEY_KAKAO', properties['key.kakao.string']
         buildConfigField "String", "PRIVACY_POLICY_URL", properties['url.privacyPolicy']
+        buildConfigField "String", "DDANG_EMAIL_ADDRESS", properties['email.address.ddangddangddang']
     }
 
     buildTypes {
@@ -94,7 +96,21 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:32.2.0')
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.2.1'
 
     // 카카오 로그인
     implementation 'com.kakao.sdk:v2-user:2.11.1'
+
+    // lottie 애니메이션
+    implementation 'com.airbnb.android:lottie:6.1.0'
+
+    // hilt
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+
+    // app update manager
+    implementation 'com.google.android.play:app-update-ktx:2.1.0'
+}
+kapt {
+    correctErrorTypes true
 }

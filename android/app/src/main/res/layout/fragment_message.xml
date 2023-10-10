@@ -23,13 +23,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                style="@style/Header1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_side_layout"
-                android:text="@string/bottom_navigation_message"
-                android:textColor="@color/black_900"
-                android:textSize="@dimen/textsize_main_header"
-                android:textStyle="bold" />
+                android:text="@string/bottom_navigation_message" />
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -46,11 +44,13 @@
             tools:listitem="@layout/item_message_room" />
 
         <TextView
+            style="@style/Header2"
             isVisible="@{viewModel.messageRooms.size == 0 ? true : false}"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center"
             android:text="@string/message_not_exist_rooms"
+            android:textColor="@color/grey_500"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Header1">
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:textSize">@dimen/textsize_main_header</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
+    <style name="Header2">
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:textSize">@dimen/textsize_sub_header</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
+    <style name="Body">
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:textSize">@dimen/textsize_body</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="Caption">
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:textSize">@dimen/textsize_caption</item>
+        <item name="android:fontWeight">400</item>
+        <item name="android:textFontWeight">400</item>
+    </style>
+
+    <style name="AuctionStatusCaption">
+        <item name="android:textColor">@color/grey_50</item>
+        <item name="android:textSize">@dimen/textsize_caption</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
+    <style name="BigButton">
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="android:textSize">@dimen/textsize_submit_button</item>
+        <item name="android:fontWeight">700</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
+    <style name="ChipText">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+        <item name="android:textSize">@dimen/textsize_filter_chips</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:fontWeight">700</item>
+    </style>
+</resources>

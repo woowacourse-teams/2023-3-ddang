@@ -453,6 +453,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_accesstoken_재발급">AccessToken 재발급</a></li>
 <li><a href="#_accesstoken_유효성_검사">AccessToken 유효성 검사</a></li>
 <li><a href="#_로그아웃">로그아웃</a></li>
+<li><a href="#_탈퇴">탈퇴</a></li>
+</ul>
+</li>
+<li><a href="#_사용자_정보_api">사용자 정보 API</a>
+<ul class="sectlevel2">
+<li><a href="#_사용자_정보_조회">사용자 정보 조회</a></li>
+<li><a href="#_사용자_정보_수정">사용자 정보 수정</a></li>
 </ul>
 </li>
 <li><a href="#_카테고리_api">카테고리 API</a>
@@ -472,8 +479,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_경매_등록">경매 등록</a></li>
 <li><a href="#_경매_목록_조회">경매 목록 조회</a></li>
+<li><a href="#_자신이_등록한_경매_목록_조회">자신이 등록한 경매 목록 조회</a></li>
+<li><a href="#_자신이_참여한_경매_목록_조회">자신이 참여한 경매 목록 조회</a></li>
 <li><a href="#_경매_상세_조회">경매 상세 조회</a></li>
 <li><a href="#_경매_삭제">경매 삭제</a></li>
+</ul>
+</li>
+<li><a href="#_qa_api">Q&amp;A API</a>
+<ul class="sectlevel2">
+<li><a href="#_질문_등록">질문 등록</a></li>
+<li><a href="#_질문_삭제">질문 삭제</a></li>
+<li><a href="#_답변_등록">답변 등록</a></li>
+<li><a href="#_답변_삭제">답변 삭제</a></li>
+<li><a href="#_qa_조회">Q&amp;A 조회</a></li>
 </ul>
 </li>
 <li><a href="#_입찰_api">입찰 API</a>
@@ -497,6 +515,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_경매_신고_조회">경매 신고 조회</a></li>
 <li><a href="#_채팅방_신고_등록">채팅방 신고 등록</a></li>
 <li><a href="#_채팅방_신고_조회">채팅방 신고 조회</a></li>
+<li><a href="#_질문_신고_등록">질문 신고 등록</a></li>
+<li><a href="#_채팅방_신고_조회_2">채팅방 신고 조회</a></li>
+<li><a href="#_답변_신고_등록">답변 신고 등록</a></li>
+<li><a href="#_채팅방_신고_조회_3">채팅방 신고 조회</a></li>
+</ul>
+</li>
+<li><a href="#_디바이스_토큰_api">디바이스 토큰 API</a>
+<ul class="sectlevel2">
+<li><a href="#_디바이스_토큰_갱신">디바이스 토큰 갱신</a></li>
+</ul>
+</li>
+<li><a href="#_유저_상호_평가_api">유저 상호 평가 API</a>
+<ul class="sectlevel2">
+<li><a href="#_사용자_평가_등록">사용자 평가 등록</a></li>
+<li><a href="#_지정한_평가_아이디에_해당하는_평가_조회">지정한 평가 아이디에 해당하는 평가 조회</a></li>
+<li><a href="#_지정한_사용자가_받은_평가_목록_조회">지정한 사용자가 받은 평가 목록 조회</a></li>
+<li><a href="#_사용자가_경매_거래_상대에게_작성한_평가를_조회한다">사용자가_경매_거래_상대에게_작성한_평가를_조회한다</a></li>
 </ul>
 </li>
 </ul>
@@ -559,7 +594,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 Content-Type: application/json
 
 {
-  "accessToken" : "kakaoAccessToken"
+  "accessToken" : "kakaoAccessToken",
+  "deviceToken" : "deviceToken"
 }</code></pre>
 </div>
 </div>
@@ -601,6 +637,11 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">소셜 로그인 AccessToken</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>deviceToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">기기 디바이스 토큰</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -612,8 +653,8 @@ Content-Type: application/json
 Content-Type: application/json
 
 {
-  "accessToken" : "accessToken",
-  "refreshToken" : "refreshToken"
+  "accessToken" : "Bearer accessToken",
+  "refreshToken" : "Bearer refreshToken"
 }</code></pre>
 </div>
 </div>
@@ -655,7 +696,7 @@ Content-Type: application/json
 Content-Type: application/json
 
 {
-  "refreshToken" : "refreshToken"
+  "refreshToken" : "Bearer refreshToken"
 }</code></pre>
 </div>
 </div>
@@ -689,8 +730,8 @@ Content-Type: application/json
 Content-Type: application/json
 
 {
-  "accessToken" : "accessToken",
-  "refreshToken" : "refreshToken"
+  "accessToken" : "Bearer accessToken",
+  "refreshToken" : "Bearer refreshToken"
 }</code></pre>
 </div>
 </div>
@@ -851,6 +892,211 @@ Authorization: Bearer accessToken
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_탈퇴"><a class="link" href="#_탈퇴">탈퇴</a></h3>
+<div class="sect3">
+<h4 id="_요청_5"><a class="link" href="#_요청_5">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /oauth2/withdrawal/kakao HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+
+{
+  "refreshToken" : "Bearer refreshToken"
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. /oauth2/withdrawal/{oauth2Type}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>oauth2Type</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">소셜 로그인을 할 서비스 선택(kakao로 고정)</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>refreshToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">refreshToken</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_5"><a class="link" href="#_응답_5">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_사용자_정보_api"><a class="link" href="#_사용자_정보_api">사용자 정보 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_사용자_정보_조회"><a class="link" href="#_사용자_정보_조회">사용자 정보 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_6"><a class="link" href="#_요청_6">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users HTTP/1.1
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_응답_6"><a class="link" href="#_응답_6">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "name" : "사용자1",
+  "profileImage" : "http://localhost:8080/users/images/1",
+  "reliability" : 4.6
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 이미지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reliability</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 신뢰도</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_사용자_정보_수정"><a class="link" href="#_사용자_정보_수정">사용자 정보 수정</a></h3>
+<div class="sect3">
+<h4 id="_요청_7"><a class="link" href="#_요청_7">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /users HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_응답_7"><a class="link" href="#_응답_7">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "name" : "updateName",
+  "profileImage" : "http://localhost:8080/users/images/1",
+  "reliability" : 4.6
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 프로필 이미지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reliability</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 신뢰도</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -859,7 +1105,7 @@ Authorization: Bearer accessToken
 <div class="sect2">
 <h3 id="_메인_카테고리_조회"><a class="link" href="#_메인_카테고리_조회">메인 카테고리 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_5"><a class="link" href="#_요청_5">요청</a></h4>
+<h4 id="_요청_8"><a class="link" href="#_요청_8">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /categories HTTP/1.1
@@ -868,7 +1114,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_응답_5"><a class="link" href="#_응답_5">응답</a></h4>
+<h4 id="_응답_8"><a class="link" href="#_응답_8">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -914,7 +1160,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_서브_카테고리_조회"><a class="link" href="#_서브_카테고리_조회">서브 카테고리 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_6"><a class="link" href="#_요청_6">요청</a></h4>
+<h4 id="_요청_9"><a class="link" href="#_요청_9">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /categories/1 HTTP/1.1
@@ -923,7 +1169,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_응답_6"><a class="link" href="#_응답_6">응답</a></h4>
+<h4 id="_응답_9"><a class="link" href="#_응답_9">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -974,7 +1220,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_첫_번째_직거래_지역_조회"><a class="link" href="#_첫_번째_직거래_지역_조회">첫 번째 직거래 지역 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_7"><a class="link" href="#_요청_7">요청</a></h4>
+<h4 id="_요청_10"><a class="link" href="#_요청_10">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /regions HTTP/1.1
@@ -983,7 +1229,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_응답_7"><a class="link" href="#_응답_7">응답</a></h4>
+<h4 id="_응답_10"><a class="link" href="#_응답_10">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1034,7 +1280,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_두_번째_직거래_지역_조회"><a class="link" href="#_두_번째_직거래_지역_조회">두 번째 직거래 지역 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_8"><a class="link" href="#_요청_8">요청</a></h4>
+<h4 id="_요청_11"><a class="link" href="#_요청_11">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /regions/1 HTTP/1.1
@@ -1042,7 +1288,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. /regions/{firstId}</caption>
+<caption class="title">Table 3. /regions/{firstId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1062,17 +1308,17 @@ Content-Type: application/json</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_8"><a class="link" href="#_응답_8">응답</a></h4>
+<h4 id="_응답_11"><a class="link" href="#_응답_11">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 
 [ {
-  "id" : 2,
+  "id" : 4,
   "name" : "강남구"
 }, {
-  "id" : 3,
+  "id" : 5,
   "name" : "강동구"
 } ]</code></pre>
 </div>
@@ -1113,15 +1359,15 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_세_번째_직거래_지역_조회"><a class="link" href="#_세_번째_직거래_지역_조회">세 번째 직거래 지역 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_9"><a class="link" href="#_요청_9">요청</a></h4>
+<h4 id="_요청_12"><a class="link" href="#_요청_12">요청</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /regions/1/2 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /regions/1/4 HTTP/1.1
 Content-Type: application/json</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. /regions/{firstId}/{secondId}</caption>
+<caption class="title">Table 4. /regions/{firstId}/{secondId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1145,17 +1391,17 @@ Content-Type: application/json</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_9"><a class="link" href="#_응답_9">응답</a></h4>
+<h4 id="_응답_12"><a class="link" href="#_응답_12">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
 
 [ {
-  "id" : 3,
+  "id" : 7,
   "name" : "개포1동"
 }, {
-  "id" : 4,
+  "id" : 8,
   "name" : "개포2동"
 } ]</code></pre>
 </div>
@@ -1201,7 +1447,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_경매_등록"><a class="link" href="#_경매_등록">경매 등록</a></h3>
 <div class="sect3">
-<h4 id="_요청_10"><a class="link" href="#_요청_10">요청</a></h4>
+<h4 id="_요청_13"><a class="link" href="#_요청_13">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /auctions HTTP/1.1
@@ -1217,7 +1463,7 @@ Content-Type: image/png
 Content-Disposition: form-data; name=request; filename=request
 Content-Type: application/json
 
-{"title":"경매 상품 1","description":"이것은 경매 상품 1 입니다.","bidUnit":1000,"startPrice":1000,"closingTime":"2023-08-19T16:30:53.364176","subCategoryId":2,"thirdRegionIds":[3]}
+{"title":"제목","description":"내용","bidUnit":1000,"startPrice":1000,"closingTime":"2023-10-12T11:02:42.5505268","subCategoryId":2,"thirdRegionIds":[3]}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -1263,7 +1509,7 @@ Content-Type: application/json
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_10"><a class="link" href="#_응답_10">응답</a></h4>
+<h4 id="_응답_13"><a class="link" href="#_응답_13">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -1272,7 +1518,7 @@ Content-Type: application/json
 
 {
   "id" : 1,
-  "title" : "title",
+  "title" : "제목",
   "image" : "http://localhost:8080/auctions/images/1",
   "auctionPrice" : 1000,
   "status" : "UNBIDDEN",
@@ -1331,11 +1577,12 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_경매_목록_조회"><a class="link" href="#_경매_목록_조회">경매 목록 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_11"><a class="link" href="#_요청_11">요청</a></h4>
+<h4 id="_요청_14"><a class="link" href="#_요청_14">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /auctions?size=10 HTTP/1.1
-Content-Type: application/json</code></pre>
+Content-Type: application/json
+Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -1360,9 +1607,169 @@ Content-Type: application/json</code></pre>
 </tr>
 </tbody>
 </table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
-<h4 id="_응답_11"><a class="link" href="#_응답_11">응답</a></h4>
+<h4 id="_응답_14"><a class="link" href="#_응답_14">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "auctions" : [ {
+    "id" : 2,
+    "title" : "경매 상품 1",
+    "image" : "http://localhost:8080/auctions/images/1",
+    "auctionPrice" : 1000,
+    "status" : "UNBIDDEN",
+    "auctioneerCount" : 2
+  }, {
+    "id" : 1,
+    "title" : "경매 상품 1",
+    "image" : "http://localhost:8080/auctions/images/1",
+    "auctionPrice" : 1000,
+    "status" : "UNBIDDEN",
+    "auctioneerCount" : 2
+  } ],
+  "isLast" : true
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회한 경매 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회한 단일 경매 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 글 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 대표 이미지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].auctionPrice</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매가(시작가, 현재가, 낙찰가 중 하나)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 상태</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].auctioneerCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 참여자 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isLast</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마지막 페이지 여부</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_자신이_등록한_경매_목록_조회"><a class="link" href="#_자신이_등록한_경매_목록_조회">자신이 등록한 경매 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_15"><a class="link" href="#_요청_15">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/auctions/mine?size=10&amp;page=1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_15"><a class="link" href="#_응답_15">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1374,14 +1781,156 @@ Content-Type: application/json
     "title" : "경매 상품 2",
     "image" : "http://localhost:8080/auctions/images/1",
     "auctionPrice" : 1000,
-    "status" : "FAILURE",
+    "status" : "UNBIDDEN",
     "auctioneerCount" : 2
   }, {
     "id" : 1,
     "title" : "경매 상품 1",
     "image" : "http://localhost:8080/auctions/images/1",
     "auctionPrice" : 1000,
-    "status" : "FAILURE",
+    "status" : "UNBIDDEN",
+    "auctioneerCount" : 2
+  } ],
+  "isLast" : true
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회한 경매 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회한 단일 경매 정보</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].title</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 글 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 대표 이미지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].auctionPrice</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매가(시작가, 현재가, 낙찰가 중 하나)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 상태</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctions.[].auctioneerCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 참여자 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isLast</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">마지막 페이지 여부</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_자신이_참여한_경매_목록_조회"><a class="link" href="#_자신이_참여한_경매_목록_조회">자신이 참여한 경매 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_16"><a class="link" href="#_요청_16">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /users/auctions/bids?size=10&amp;page=1 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 크기</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_16"><a class="link" href="#_응답_16">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "auctions" : [ {
+    "id" : 2,
+    "title" : "경매 상품 2",
+    "image" : "http://localhost:8080/auctions/images/1",
+    "auctionPrice" : 1000,
+    "status" : "UNBIDDEN",
+    "auctioneerCount" : 2
+  }, {
+    "id" : 1,
+    "title" : "경매 상품 1",
+    "image" : "http://localhost:8080/auctions/images/1",
+    "auctionPrice" : 1000,
+    "status" : "UNBIDDEN",
     "auctioneerCount" : 2
   } ],
   "isLast" : true
@@ -1454,7 +2003,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_경매_상세_조회"><a class="link" href="#_경매_상세_조회">경매 상세 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_12"><a class="link" href="#_요청_12">요청</a></h4>
+<h4 id="_요청_17"><a class="link" href="#_요청_17">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /auctions/1 HTTP/1.1
@@ -1463,7 +2012,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. /auctions/{auctionId}</caption>
+<caption class="title">Table 5. /auctions/{auctionId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1481,9 +2030,27 @@ Authorization: Bearer accessToken</code></pre>
 </tr>
 </tbody>
 </table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect3">
-<h4 id="_응답_12"><a class="link" href="#_응답_12">응답</a></h4>
+<h4 id="_응답_17"><a class="link" href="#_응답_17">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1501,10 +2068,10 @@ Content-Type: application/json
     "description" : "이것은 경매 상품 1 입니다.",
     "startPrice" : 1000,
     "lastBidPrice" : null,
-    "status" : "FAILURE",
+    "status" : "UNBIDDEN",
     "bidUnit" : 1000,
-    "registerTime" : "2023-08-16T16:30:53",
-    "closingTime" : "2023-08-16T16:30:53",
+    "registerTime" : "2023-10-09T11:02:42",
+    "closingTime" : "2023-10-09T11:02:42",
     "directRegions" : [ {
       "first" : "서울특별시",
       "second" : "강서구",
@@ -1514,7 +2081,7 @@ Content-Type: application/json
   },
   "seller" : {
     "id" : 1,
-    "image" : "https://profile.com",
+    "image" : "http://localhost:8080/users/images/1",
     "nickname" : "판매자",
     "reliability" : 3.5
   },
@@ -1682,7 +2249,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_경매_삭제"><a class="link" href="#_경매_삭제">경매 삭제</a></h3>
 <div class="sect3">
-<h4 id="_요청_13"><a class="link" href="#_요청_13">요청</a></h4>
+<h4 id="_요청_18"><a class="link" href="#_요청_18">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /auctions/1 HTTP/1.1
@@ -1691,7 +2258,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. /auctions/{auctionId}</caption>
+<caption class="title">Table 6. /auctions/{auctionId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1729,7 +2296,7 @@ Authorization: Bearer accessToken</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_13"><a class="link" href="#_응답_13">응답</a></h4>
+<h4 id="_응답_18"><a class="link" href="#_응답_18">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
@@ -1740,12 +2307,442 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <div class="sect1">
+<h2 id="_qa_api"><a class="link" href="#_qa_api">Q&amp;A API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_질문_등록"><a class="link" href="#_질문_등록">질문 등록</a></h3>
+<div class="sect3">
+<h4 id="_요청_19"><a class="link" href="#_요청_19">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /questions HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+
+{
+  "auctionId" : 1,
+  "content" : "궁금한 점이 있습니다."
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문할 경매 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_19"><a class="link" href="#_응답_19">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /auctions/1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_질문_삭제"><a class="link" href="#_질문_삭제">질문 삭제</a></h3>
+<div class="sect3">
+<h4 id="_요청_20"><a class="link" href="#_요청_20">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /questions/1 HTTP/1.1
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 7. /questions/{questionId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제할 질문 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_20"><a class="link" href="#_응답_20">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_답변_등록"><a class="link" href="#_답변_등록">답변 등록</a></h3>
+<div class="sect3">
+<h4 id="_요청_21"><a class="link" href="#_요청_21">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /questions/1/answers HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+
+{
+  "auctionId" : 1,
+  "content" : "답변 드립니다."
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변할 질문의 경매 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_21"><a class="link" href="#_응답_21">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /auctions/1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_답변_삭제"><a class="link" href="#_답변_삭제">답변 삭제</a></h3>
+<div class="sect3">
+<h4 id="_요청_22"><a class="link" href="#_요청_22">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">DELETE /questions/answers/1 HTTP/1.1
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 8. /questions/answers/{answerId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>answerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">삭제할 답변 ID</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_22"><a class="link" href="#_응답_22">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 204 No Content</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_qa_조회"><a class="link" href="#_qa_조회">Q&amp;A 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_23"><a class="link" href="#_요청_23">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /auctions/1/questions HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_응답_23"><a class="link" href="#_응답_23">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "qnas" : [ {
+    "question" : {
+      "id" : 1,
+      "writer" : {
+        "id" : 1,
+        "name" : "질문자",
+        "image" : "http://localhost:8080/users/images/1"
+      },
+      "createdTime" : "2023-10-09T11:02:42",
+      "content" : "질문1"
+    },
+    "answer" : {
+      "id" : 1,
+      "writer" : {
+        "id" : 2,
+        "name" : "판매자",
+        "image" : "http://localhost:8080/users/images/2"
+      },
+      "createdTime" : "2023-10-09T11:02:42",
+      "content" : "답변1"
+    }
+  }, {
+    "question" : {
+      "id" : 2,
+      "writer" : {
+        "id" : 1,
+        "name" : "질문자",
+        "image" : "http://localhost:8080/users/images/1"
+      },
+      "createdTime" : "2023-10-09T11:02:42",
+      "content" : "질문2"
+    },
+    "answer" : {
+      "id" : 2,
+      "writer" : {
+        "id" : 2,
+        "name" : "판매자",
+        "image" : "http://localhost:8080/users/images/2"
+      },
+      "createdTime" : "2023-10-09T11:02:42",
+      "content" : "답변1"
+    }
+  } ]
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">모든 경매 질문과 답변 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 정보 JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 질문 글 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문자 정보 JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문자의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문자의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.writer.image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문자의 프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.createdTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 등록 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변 정보 JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">경매 답변 글 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변자 정보 JSON</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변자의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변자의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.writer.image</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변자의 프로필 이미지 URL</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.createdTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변 등록 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer.content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="_입찰_api"><a class="link" href="#_입찰_api">입찰 API</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_입찰_등록"><a class="link" href="#_입찰_등록">입찰 등록</a></h3>
 <div class="sect3">
-<h4 id="_요청_14"><a class="link" href="#_요청_14">요청</a></h4>
+<h4 id="_요청_24"><a class="link" href="#_요청_24">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /bids HTTP/1.1
@@ -1804,7 +2801,7 @@ Authorization: Bearer accessToken
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_14"><a class="link" href="#_응답_14">응답</a></h4>
+<h4 id="_응답_24"><a class="link" href="#_응답_24">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -1816,16 +2813,16 @@ Location: /auctions/1</code></pre>
 <div class="sect2">
 <h3 id="_입찰_조회"><a class="link" href="#_입찰_조회">입찰 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_15"><a class="link" href="#_요청_15">요청</a></h4>
+<h4 id="_요청_25"><a class="link" href="#_요청_25">요청</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /bids/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /bids/-999 HTTP/1.1
 Content-Type: application/json</code></pre>
 </div>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_응답_15"><a class="link" href="#_응답_15">응답</a></h4>
+<h4 id="_응답_25"><a class="link" href="#_응답_25">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -1834,14 +2831,14 @@ Content-Type: application/json
 {
   "bids" : [ {
     "name" : "사용자1",
-    "profileImage" : "이미지1",
+    "profileImage" : "http://localhost:8080/users/images/1",
     "price" : 10000,
-    "bidTime" : "2023-08-16T16:30:54"
+    "bidTime" : "2023-10-09T11:02:50"
   }, {
     "name" : "사용자2",
-    "profileImage" : "이미지2",
+    "profileImage" : "http://localhost:8080/users/images/2",
     "price" : 12000,
-    "bidTime" : "2023-08-16T16:30:54"
+    "bidTime" : "2023-10-09T11:02:50"
   } ]
 }</code></pre>
 </div>
@@ -1897,7 +2894,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_채팅방_등록"><a class="link" href="#_채팅방_등록">채팅방 등록</a></h3>
 <div class="sect3">
-<h4 id="_요청_16"><a class="link" href="#_요청_16">요청</a></h4>
+<h4 id="_요청_26"><a class="link" href="#_요청_26">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /chattings HTTP/1.1
@@ -1950,7 +2947,7 @@ Authorization: Bearer accessToken
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_16"><a class="link" href="#_응답_16">응답</a></h4>
+<h4 id="_응답_26"><a class="link" href="#_응답_26">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -1988,7 +2985,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_채팅방_목록_조회"><a class="link" href="#_채팅방_목록_조회">채팅방 목록 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_17"><a class="link" href="#_요청_17">요청</a></h4>
+<h4 id="_요청_27"><a class="link" href="#_요청_27">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /chattings HTTP/1.1
@@ -2016,7 +3013,7 @@ Authorization: Bearer accessToken</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_17"><a class="link" href="#_응답_17">응답</a></h4>
+<h4 id="_응답_27"><a class="link" href="#_응답_27">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2026,8 +3023,8 @@ Content-Type: application/json
   "id" : 1,
   "chatPartner" : {
     "id" : 2,
-    "name" : "사용자2",
-    "profileImage" : "profile.png"
+    "name" : "구매자1",
+    "profileImage" : "http://localhost:8080/users/images/2"
   },
   "auction" : {
     "id" : 1,
@@ -2036,7 +3033,7 @@ Content-Type: application/json
     "price" : 10000
   },
   "lastMessage" : {
-    "createdAt" : "2023-08-16T16:30:55",
+    "createdAt" : "2023-10-09T11:02:52",
     "contents" : "메시지1"
   },
   "isChatAvailable" : true
@@ -2044,8 +3041,8 @@ Content-Type: application/json
   "id" : 2,
   "chatPartner" : {
     "id" : 3,
-    "name" : "사용자3",
-    "profileImage" : "profile.png"
+    "name" : "구매자2",
+    "profileImage" : "http://localhost:8080/users/images/3"
   },
   "auction" : {
     "id" : 2,
@@ -2054,7 +3051,7 @@ Content-Type: application/json
     "price" : 20000
   },
   "lastMessage" : {
-    "createdAt" : "2023-08-16T16:30:55",
+    "createdAt" : "2023-10-09T11:02:52",
     "contents" : "메시지2"
   },
   "isChatAvailable" : true
@@ -2157,7 +3154,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_채팅방_상세_조회"><a class="link" href="#_채팅방_상세_조회">채팅방 상세 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_18"><a class="link" href="#_요청_18">요청</a></h4>
+<h4 id="_요청_28"><a class="link" href="#_요청_28">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /chattings/1 HTTP/1.1
@@ -2166,7 +3163,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. /chattings/{chatRoomId}</caption>
+<caption class="title">Table 9. /chattings/{chatRoomId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2204,7 +3201,7 @@ Authorization: Bearer accessToken</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_18"><a class="link" href="#_응답_18">응답</a></h4>
+<h4 id="_응답_28"><a class="link" href="#_응답_28">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2213,15 +3210,15 @@ Content-Type: application/json
 {
   "id" : 1,
   "chatPartner" : {
-    "id" : 2,
-    "name" : "채팅 상대방",
-    "profileImage" : "profile.png"
+    "id" : 1,
+    "name" : "판매자",
+    "profileImage" : "http://localhost:8080/users/images/1"
   },
   "auction" : {
     "id" : 1,
-    "title" : "경매 상품 1",
+    "title" : "경매1",
     "image" : "http://localhost:8080/auctions/images/1",
-    "price" : 3000
+    "price" : 10000
   },
   "isChatAvailable" : true
 }</code></pre>
@@ -2303,7 +3300,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_메시지_전송"><a class="link" href="#_메시지_전송">메시지 전송</a></h3>
 <div class="sect3">
-<h4 id="_요청_19"><a class="link" href="#_요청_19">요청</a></h4>
+<h4 id="_요청_29"><a class="link" href="#_요청_29">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /chattings/1/messages HTTP/1.1
@@ -2317,7 +3314,7 @@ Authorization: Bearer accessToken
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. /chattings/{chatRoomId}/messages</caption>
+<caption class="title">Table 10. /chattings/{chatRoomId}/messages</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2381,7 +3378,7 @@ Authorization: Bearer accessToken
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_19"><a class="link" href="#_응답_19">응답</a></h4>
+<h4 id="_응답_29"><a class="link" href="#_응답_29">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -2419,7 +3416,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_메시지_목록_조회"><a class="link" href="#_메시지_목록_조회">메시지 목록 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_20"><a class="link" href="#_요청_20">요청</a></h4>
+<h4 id="_요청_30"><a class="link" href="#_요청_30">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /chattings/1/messages?lastMessageId=1 HTTP/1.1
@@ -2428,7 +3425,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. /chattings/{chatRoomId}/messages</caption>
+<caption class="title">Table 11. /chattings/{chatRoomId}/messages</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2484,7 +3481,7 @@ Authorization: Bearer accessToken</code></pre>
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_20"><a class="link" href="#_응답_20">응답</a></h4>
+<h4 id="_응답_30"><a class="link" href="#_응답_30">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2492,7 +3489,7 @@ Content-Type: application/json
 
 [ {
   "id" : 1,
-  "createdAt" : "2023-08-16T16:30:55",
+  "createdAt" : "2023-10-09T11:02:52",
   "isMyMessage" : true,
   "contents" : "메시지내용"
 } ]</code></pre>
@@ -2549,7 +3546,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_경매_신고_등록"><a class="link" href="#_경매_신고_등록">경매 신고 등록</a></h3>
 <div class="sect3">
-<h4 id="_요청_21"><a class="link" href="#_요청_21">요청</a></h4>
+<h4 id="_요청_31"><a class="link" href="#_요청_31">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /reports/auctions HTTP/1.1
@@ -2608,7 +3605,7 @@ Authorization: Bearer accessToken
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_21"><a class="link" href="#_응답_21">응답</a></h4>
+<h4 id="_응답_31"><a class="link" href="#_응답_31">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -2620,7 +3617,7 @@ Location: /auctions/1</code></pre>
 <div class="sect2">
 <h3 id="_경매_신고_조회"><a class="link" href="#_경매_신고_조회">경매 신고 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_22"><a class="link" href="#_요청_22">요청</a></h4>
+<h4 id="_요청_32"><a class="link" href="#_요청_32">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reports/auctions HTTP/1.1
@@ -2629,7 +3626,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_응답_22"><a class="link" href="#_응답_22">응답</a></h4>
+<h4 id="_응답_32"><a class="link" href="#_응답_32">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2639,10 +3636,10 @@ Content-Type: application/json
   "reports" : [ {
     "id" : 1,
     "reporter" : {
-      "id" : 1,
+      "id" : 2,
       "name" : "회원1"
     },
-    "createdTime" : "2023-08-16T16:30:57",
+    "createdTime" : "2023-10-09T11:03:02",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -2651,10 +3648,10 @@ Content-Type: application/json
   }, {
     "id" : 2,
     "reporter" : {
-      "id" : 2,
+      "id" : 3,
       "name" : "회원2"
     },
-    "createdTime" : "2023-08-16T16:30:57",
+    "createdTime" : "2023-10-09T11:03:02",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -2663,10 +3660,10 @@ Content-Type: application/json
   }, {
     "id" : 3,
     "reporter" : {
-      "id" : 3,
+      "id" : 4,
       "name" : "회원3"
     },
-    "createdTime" : "2023-08-16T16:30:57",
+    "createdTime" : "2023-10-09T11:03:02",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -2737,7 +3734,7 @@ Content-Type: application/json
 <div class="sect2">
 <h3 id="_채팅방_신고_등록"><a class="link" href="#_채팅방_신고_등록">채팅방 신고 등록</a></h3>
 <div class="sect3">
-<h4 id="_요청_23"><a class="link" href="#_요청_23">요청</a></h4>
+<h4 id="_요청_33"><a class="link" href="#_요청_33">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /reports/chat-rooms HTTP/1.1
@@ -2796,7 +3793,7 @@ Authorization: Bearer accessToken
 </table>
 </div>
 <div class="sect3">
-<h4 id="_응답_23"><a class="link" href="#_응답_23">응답</a></h4>
+<h4 id="_응답_33"><a class="link" href="#_응답_33">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
@@ -2808,7 +3805,7 @@ Location: /chattings/1</code></pre>
 <div class="sect2">
 <h3 id="_채팅방_신고_조회"><a class="link" href="#_채팅방_신고_조회">채팅방 신고 조회</a></h3>
 <div class="sect3">
-<h4 id="_요청_24"><a class="link" href="#_요청_24">요청</a></h4>
+<h4 id="_요청_34"><a class="link" href="#_요청_34">요청</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reports/chat-rooms HTTP/1.1
@@ -2817,7 +3814,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_응답_24"><a class="link" href="#_응답_24">응답</a></h4>
+<h4 id="_응답_34"><a class="link" href="#_응답_34">응답</a></h4>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
@@ -2827,10 +3824,10 @@ Content-Type: application/json
   "reports" : [ {
     "id" : 1,
     "reporter" : {
-      "id" : 1,
-      "name" : "회원1"
+      "id" : 2,
+      "name" : "구매자1"
     },
-    "createdTime" : "2023-08-16T16:30:57",
+    "createdTime" : "2023-10-09T11:03:02",
     "chatRoom" : {
       "id" : 1
     },
@@ -2838,10 +3835,10 @@ Content-Type: application/json
   }, {
     "id" : 2,
     "reporter" : {
-      "id" : 1,
-      "name" : "회원1"
+      "id" : 3,
+      "name" : "구매자2"
     },
-    "createdTime" : "2023-08-16T16:30:57",
+    "createdTime" : "2023-10-09T11:03:02",
     "chatRoom" : {
       "id" : 1
     },
@@ -2849,10 +3846,10 @@ Content-Type: application/json
   }, {
     "id" : 3,
     "reporter" : {
-      "id" : 1,
-      "name" : "회원1"
+      "id" : 3,
+      "name" : "구매자2"
     },
-    "createdTime" : "2023-08-16T16:30:57",
+    "createdTime" : "2023-10-09T11:03:02",
     "chatRoom" : {
       "id" : 1
     },
@@ -2914,13 +3911,821 @@ Content-Type: application/json
 </table>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_질문_신고_등록"><a class="link" href="#_질문_신고_등록">질문 신고 등록</a></h3>
+<div class="sect3">
+<h4 id="_요청_35"><a class="link" href="#_요청_35">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /reports/questions HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+
+{
+  "auctionId" : 1,
+  "questionId" : 1,
+  "description" : "신고합니다."
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문의 경매 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>questionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고할 질문 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_35"><a class="link" href="#_응답_35">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /auctions/1/questions</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_채팅방_신고_조회_2"><a class="link" href="#_채팅방_신고_조회_2">채팅방 신고 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_36"><a class="link" href="#_요청_36">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reports/questions HTTP/1.1
+Content-Type: application/json</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_응답_36"><a class="link" href="#_응답_36">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "reports" : [ {
+    "id" : 1,
+    "reporter" : {
+      "id" : 2,
+      "name" : "구매자1"
+    },
+    "createdTime" : "2023-10-09T11:03:02",
+    "question" : {
+      "id" : 1
+    },
+    "description" : "신고합니다."
+  }, {
+    "id" : 2,
+    "reporter" : {
+      "id" : 2,
+      "name" : "구매자1"
+    },
+    "createdTime" : "2023-10-09T11:03:02",
+    "question" : {
+      "id" : 2
+    },
+    "description" : "신고합니다."
+  }, {
+    "id" : 3,
+    "reporter" : {
+      "id" : 2,
+      "name" : "구매자1"
+    },
+    "createdTime" : "2023-10-09T11:03:02",
+    "question" : {
+      "id" : 3
+    },
+    "description" : "신고합니다."
+  } ]
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">모든 질문 신고 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 신고 글 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].reporter.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문을 신고한 사용자의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].reporter.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문을 신고한 사용자의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].createdTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 신고 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].question.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고한 질문 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_답변_신고_등록"><a class="link" href="#_답변_신고_등록">답변 신고 등록</a></h3>
+<div class="sect3">
+<h4 id="_요청_37"><a class="link" href="#_요청_37">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /reports/answers HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+
+{
+  "auctionId" : 1,
+  "answerId" : 1,
+  "description" : "신고합니다."
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문의 경매 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>answerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고할 답변 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_37"><a class="link" href="#_응답_37">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /auctions/1/questions</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_채팅방_신고_조회_3"><a class="link" href="#_채팅방_신고_조회_3">채팅방 신고 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_38"><a class="link" href="#_요청_38">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reports/answers HTTP/1.1
+Content-Type: application/json</code></pre>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_응답_38"><a class="link" href="#_응답_38">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "reports" : [ {
+    "id" : 1,
+    "reporter" : {
+      "id" : 2,
+      "name" : "구매자1"
+    },
+    "createdTime" : "2023-10-09T11:03:02",
+    "answer" : {
+      "id" : 1
+    },
+    "description" : "신고합니다."
+  }, {
+    "id" : 2,
+    "reporter" : {
+      "id" : 2,
+      "name" : "구매자1"
+    },
+    "createdTime" : "2023-10-09T11:03:02",
+    "answer" : {
+      "id" : 2
+    },
+    "description" : "신고합니다."
+  }, {
+    "id" : 3,
+    "reporter" : {
+      "id" : 2,
+      "name" : "구매자1"
+    },
+    "createdTime" : "2023-10-09T11:03:02",
+    "answer" : {
+      "id" : 3
+    },
+    "description" : "신고합니다."
+  } ]
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">모든 답변 신고 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변 신고 글 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].reporter.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변을 신고한 사용자의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].reporter.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변을 신고한 사용자의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].createdTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">답변 신고 시간</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].answer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고한 답변 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reports.[].description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">신고 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_디바이스_토큰_api"><a class="link" href="#_디바이스_토큰_api">디바이스 토큰 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_디바이스_토큰_갱신"><a class="link" href="#_디바이스_토큰_갱신">디바이스 토큰 갱신</a></h3>
+<div class="sect3">
+<h4 id="_요청_39"><a class="link" href="#_요청_39">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">PATCH /device-token HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+
+{
+  "deviceToken" : "newDeviceToken"
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>deviceToken</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">디바이스 토큰</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_39"><a class="link" href="#_응답_39">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_유저_상호_평가_api"><a class="link" href="#_유저_상호_평가_api">유저 상호 평가 API</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_사용자_평가_등록"><a class="link" href="#_사용자_평가_등록">사용자 평가 등록</a></h3>
+<div class="sect3">
+<h4 id="_요청_40"><a class="link" href="#_요청_40">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /reviews HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken
+
+{
+  "auctionId" : 1,
+  "targetId" : 2,
+  "content" : "친절하다.",
+  "score" : 5.0
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">거래한 경매 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>targetId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 대상 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>score</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 점수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_40"><a class="link" href="#_응답_40">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 201 Created
+Location: /reviews/1</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_지정한_평가_아이디에_해당하는_평가_조회"><a class="link" href="#_지정한_평가_아이디에_해당하는_평가_조회">지정한 평가 아이디에 해당하는 평가 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_41"><a class="link" href="#_요청_41">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reviews/2 HTTP/1.1
+Content-Type: application/json</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 12. /reviews/{reviewId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>reviewId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가와_관련된_경매_아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_41"><a class="link" href="#_응답_41">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "score" : 5.0,
+  "content" : "친절하다."
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>score</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 점수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_지정한_사용자가_받은_평가_목록_조회"><a class="link" href="#_지정한_사용자가_받은_평가_목록_조회">지정한 사용자가 받은 평가 목록 조회</a></h3>
+<div class="sect3">
+<h4 id="_요청_42"><a class="link" href="#_요청_42">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /reviews/users/3 HTTP/1.1
+Content-Type: application/json</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 13. /reviews/users/{userId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>userId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 목록 조회 대상 유저의 아이디</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_42"><a class="link" href="#_응답_42">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+[ {
+  "id" : 3,
+  "writer" : {
+    "id" : 2,
+    "name" : "판매자2",
+    "profileImage" : "http://localhost:8080/users/images/2"
+  },
+  "content" : "친절하다.",
+  "score" : 5.0,
+  "createdTime" : "2023-10-09T11:03:03"
+}, {
+  "id" : 2,
+  "writer" : {
+    "id" : 1,
+    "name" : "판매자1",
+    "profileImage" : "http://localhost:8080/users/images/1"
+  },
+  "content" : "친절하다.",
+  "score" : 5.0,
+  "createdTime" : "2023-10-09T11:03:03"
+} ]</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">조회 대상 사용자가 받은 모든 평가 목록</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 평가 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가를 작성한 사용자의 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가를 작성한 사용자의 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].writer.profileImage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가를 작성한 사용자의 프로필 이미지 url</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].score</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 점수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 작성 시간</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_사용자가_경매_거래_상대에게_작성한_평가를_조회한다"><a class="link" href="#_사용자가_경매_거래_상대에게_작성한_평가를_조회한다">사용자가_경매_거래_상대에게_작성한_평가를_조회한다</a></h3>
+<div class="sect3">
+<h4 id="_요청_43"><a class="link" href="#_요청_43">요청</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /auctions/1/reviews HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer accessToken</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 14. /auctions/{auctionId}/reviews</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>auctionId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가와_관련된_경매_아이디</p></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_응답_43"><a class="link" href="#_응답_43">응답</a></h4>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "score" : 5.0,
+  "content" : "친절하다."
+}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>score</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 점수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">평가 내용</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-08-16 16:29:20 +0900
+Last updated 2023-10-09 11:02:20 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

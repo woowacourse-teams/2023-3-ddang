@@ -9,10 +9,10 @@ enum class AuctionHomeStatusModel(
     @StringRes val progressStatusId: Int,
     @ColorRes val colorId: Int,
 ) {
-    ONGOING(R.string.all_current_price, R.string.all_auction_ongoing, R.color.red_100),
+    ONGOING(R.string.all_current_price, R.string.all_auction_ongoing, R.color.red_300),
     UNBIDDEN(R.string.all_start_price, R.string.all_auction_ongoing, R.color.green),
-    SUCCESS(R.string.all_winning_bid_price, R.string.all_auction_success, R.color.black_600),
-    FAILURE(R.string.all_start_price, R.string.all_auction_failure, R.color.black_600),
+    SUCCESS(R.string.all_winning_bid_price, R.string.all_auction_success, R.color.grey_700),
+    FAILURE(R.string.all_start_price, R.string.all_auction_failure, R.color.grey_700),
     ;
 
     companion object {

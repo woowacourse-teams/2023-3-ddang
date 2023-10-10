@@ -37,7 +37,7 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(callSuper = false, of = {"id"})
-@ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime"})
+@ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime", "auctioneerCount"})
 public class Auction extends BaseTimeEntity {
 
     private static final boolean DELETED_STATUS = true;
@@ -122,6 +122,19 @@ public class Auction extends BaseTimeEntity {
         }
     }
 
+    public AuctionStatus findAuctionStatus(final LocalDateTime targetTime) {
+        if (targetTime.isBefore(closingTime) && lastBid == null) {
+            return AuctionStatus.UNBIDDEN;
+        }
+        if (targetTime.isBefore(closingTime) && lastBid != null) {
+            return AuctionStatus.ONGOING;
+        }
+        if (targetTime.isAfter(closingTime) && lastBid == null) {
+            return AuctionStatus.FAILURE ;
+        }
+        return AuctionStatus.SUCCESS;
+    }
+
     public boolean isOwner(final User user) {
         return this.seller.equals(user);
     }
@@ -132,6 +145,7 @@ public class Auction extends BaseTimeEntity {
 
     public boolean isInvalidFirstBidPrice(final BidPrice bidPrice) {
         final BidPrice startBidPrice = new BidPrice(startPrice.getValue());
+
         return startBidPrice.isGreaterThan(bidPrice);
     }
 
@@ -168,5 +182,13 @@ public class Auction extends BaseTimeEntity {
 
     private boolean isWinnerExist(final LocalDateTime targetTime) {
         return auctioneerCount != 0 && isClosed(targetTime);
+    }
+
+    public Optional<User> findLastBidder() {
+        if (lastBid == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(lastBid.getBidder());
     }
 }

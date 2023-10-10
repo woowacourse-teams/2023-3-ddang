@@ -12,12 +12,12 @@ public record ReadChatRoomReportDto(
         String description
 ) {
 
-    public static ReadChatRoomReportDto from(final ChatRoomReport chatRoomReport, final LocalDateTime targetTime) {
+    public static ReadChatRoomReportDto from(final ChatRoomReport chatRoomReport) {
         return new ReadChatRoomReportDto(
                 chatRoomReport.getId(),
                 ReadReporterDto.from(chatRoomReport.getReporter()),
                 chatRoomReport.getCreatedTime(),
-                ReadChatRoomInReportDto.from(chatRoomReport.getChatRoom(), targetTime),
+                ReadChatRoomInReportDto.from(chatRoomReport.getChatRoom()),
                 chatRoomReport.getDescription()
         );
     }

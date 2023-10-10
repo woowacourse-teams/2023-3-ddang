@@ -7,5 +7,5 @@ data class SellerResponse(
     val id: Long,
     val image: String? = null,
     val nickname: String,
-    val reliability: Double,
+    val reliability: Float?,
 )

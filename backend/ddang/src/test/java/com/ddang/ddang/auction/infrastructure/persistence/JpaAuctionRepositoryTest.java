@@ -1,18 +1,9 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.domain.BidUnit;
-import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.infrastructure.persistence.fixture.JpaAuctionRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,69 +12,50 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
+@Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class JpaAuctionRepositoryTest {
-
-    @PersistenceContext
-    EntityManager em;
+class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
 
     @Autowired
     JpaAuctionRepository auctionRepository;
 
     @Test
     void 경매를_저장한다() {
-        // given
-        final Auction auction = Auction.builder()
-                                       .title("경매 상품 1")
-                                       .description("이것은 경매 상품 1 입니다.")
-                                       .bidUnit(new BidUnit(1_000))
-                                       .startPrice(new Price(1_000))
-                                       .closingTime(LocalDateTime.now())
-                                       .build();
-
         // when
-        auctionRepository.save(auction);
+        final Auction actual = auctionRepository.save(저장하기_전_경매_엔티티);
 
-        // then
-        em.flush();
-        em.clear();
-
-        assertThat(auction.getId()).isPositive();
+        assertThat(actual.getId()).isPositive();
     }
 
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
-        // given
-        final Instant instant = Instant.parse("2023-07-08T22:21:20Z");
-        final ZoneId zoneId = ZoneId.of("UTC");
-        final Auction expected = Auction.builder()
-                                        .title("경매 상품 1")
-                                        .description("이것은 경매 상품 1 입니다.")
-                                        .bidUnit(new BidUnit(1_000))
-                                        .startPrice(new Price(1_000))
-                                        .closingTime(instant.atZone(zoneId).toLocalDateTime())
-                                        .build();
-
-        auctionRepository.save(expected);
-
-        em.flush();
-        em.clear();
-
         // when
-        final Optional<Auction> actual = auctionRepository.findById(expected.getId());
+        final Optional<Auction> actual = auctionRepository.findByIdAndDeletedIsFalse(저장된_경매_엔티티.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get().getId()).isEqualTo(expected.getId());
-            softAssertions.assertThat(actual.get().getTitle()).isEqualTo(expected.getTitle());
-            softAssertions.assertThat(actual.get().getDescription()).isEqualTo(expected.getDescription());
-            softAssertions.assertThat(actual.get().getBidUnit()).isEqualTo(expected.getBidUnit());
-            softAssertions.assertThat(actual.get().getStartPrice()).isEqualTo(expected.getStartPrice());
-            softAssertions.assertThat(actual.get().getClosingTime()).isEqualTo(expected.getClosingTime());
+            softAssertions.assertThat(actual.get().getId()).isEqualTo(저장된_경매_엔티티.getId());
+            softAssertions.assertThat(actual.get().getTitle()).isEqualTo(저장된_경매_엔티티.getTitle());
+            softAssertions.assertThat(actual.get().getDescription()).isEqualTo(저장된_경매_엔티티.getDescription());
+            softAssertions.assertThat(actual.get().getBidUnit()).isEqualTo(저장된_경매_엔티티.getBidUnit());
+            softAssertions.assertThat(actual.get().getStartPrice()).isEqualTo(저장된_경매_엔티티.getStartPrice());
+            softAssertions.assertThat(actual.get().getClosingTime()).isEqualTo(저장된_경매_엔티티.getClosingTime());
         });
+    }
+
+    @Test
+    void 삭제된_아이디에_대한_경매_조회시_빈_optional을_반환한다() {
+        // when
+        final Optional<Auction> actual = auctionRepository.findByIdAndDeletedIsFalse(삭제된_경매_엔티티.getId());
+
+        // then
+        assertThat(actual).isEmpty();
     }
 }

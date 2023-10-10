@@ -2,6 +2,48 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.DdangDdangDdang" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="android:datePickerDialogTheme">@style/App.Custom.Picker</item>
+        <item name="android:timePickerDialogTheme">@style/App.Custom.Picker</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@color/base_background</item>
+        <item name="colorControlActivated">@color/red_300</item>
+        <item name="android:textColorHighlight">@color/red_100</item>
+        <item name="android:textColor">@color/grey_900</item>
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:fontFamily">@font/pretendard</item>
+    </style>
+
+    <style name="Theme.DdangDdangDdang" parent="Base.Theme.DdangDdangDdang" />
+
+    <style name="App.Custom.Picker" parent="ThemeOverlay.MaterialComponents.Dialog">
+        <item name="android:datePickerStyle">@style/DatePicker</item>
+        <item name="android:timePickerStyle">@style/TimePicker</item>
+        <item name="android:buttonBarPositiveButtonStyle">@style/PositiveButtonStyle
+        </item>
+        <item name="android:buttonBarNegativeButtonStyle">@style/NegativeButtonStyle
+        </item>
+    </style>
+
+    <style name="DatePicker" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:datePickerMode">calendar</item>
+        <item name="android:headerBackground">@color/primary</item>
+    </style>
+
+    <style name="TimePicker" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:timePickerMode">spinner</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="android:Widget.Material.Button.Borderless">
+        <item name="android:textColor">@color/grey_500</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="android:Widget.Material.Button.Borderless">
+        <item name="android:textColor">@color/red_500</item>
+    </style>
+
+    <style name="RatingBar" parent="Theme.AppCompat">
+        <item name="colorControlNormal">@color/grey_500</item>
+        <item name="colorControlActivated">@color/primary</item>
     </style>
 </resources>

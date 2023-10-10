@@ -2,8 +2,9 @@ package com.ddangddangddang.data.datasource
 
 import com.ddangddangddang.data.local.AuthSharedPreference
 import com.ddangddangddang.data.model.response.TokenResponse
+import javax.inject.Inject
 
-class AuthLocalDataSource(private val sharedPreferences: AuthSharedPreference) {
+class AuthLocalDataSource @Inject constructor(private val sharedPreferences: AuthSharedPreference) {
     fun saveToken(token: TokenResponse) {
         sharedPreferences.accessToken = token.accessToken
         sharedPreferences.refreshToken = token.refreshToken

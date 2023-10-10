@@ -9,21 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentAuctionBidDialogBinding
-import com.ddangddangddang.android.feature.common.viewModelFactory
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.view.Toaster
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AuctionBidDialog : DialogFragment() {
     private var _binding: FragmentAuctionBidDialogBinding? = null
     private val binding: FragmentAuctionBidDialogBinding
         get() = _binding!!
 
-    private val viewModel: AuctionBidViewModel by viewModels { viewModelFactory }
-    private val activityViewModel: AuctionDetailViewModel by activityViewModels { viewModelFactory }
+    private val viewModel: AuctionBidViewModel by viewModels()
+    private val activityViewModel: AuctionDetailViewModel by activityViewModels()
 
     private val watcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -84,14 +87,10 @@ class AuctionBidDialog : DialogFragment() {
         when (event) {
             is AuctionBidViewModel.AuctionBidEvent.Cancel -> exit()
             is AuctionBidViewModel.AuctionBidEvent.SubmitSuccess -> submitSuccess(event.price)
-            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureCustomEvent -> {
-                showMessage(event.message)
-                exit()
-            }
             is AuctionBidViewModel.AuctionBidEvent.UnderPrice -> notifyUnderPriceSubmitFailed()
-            is AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent -> handleSubmitFailureEvent(
-                event,
-            )
+            is AuctionBidViewModel.AuctionBidEvent.FailureSubmitEvent -> {
+                handleSubmitFailureEvent(event.type)
+            }
         }
     }
 
@@ -104,8 +103,9 @@ class AuctionBidDialog : DialogFragment() {
         exit()
     }
 
-    private fun handleSubmitFailureEvent(event: AuctionBidViewModel.AuctionBidEvent.SubmitFailureEvent) {
-        showMessage(getString(event.messageId))
+    private fun handleSubmitFailureEvent(errorType: ErrorType) {
+        val defaultMessage = getString(R.string.detail_auction_bid_dialog_failure_default_message)
+        Toaster.showShort(requireContext(), errorType.message ?: defaultMessage)
         exit()
     }
 
@@ -133,5 +133,13 @@ class AuctionBidDialog : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val BID_DIALOG_TAG = "bid_dialog_tag"
+
+        fun show(fragmentManager: FragmentManager) {
+            AuctionBidDialog().show(fragmentManager, BID_DIALOG_TAG)
+        }
     }
 }
