@@ -11,7 +11,6 @@
     <dimen name="textsize_filter_chips">14sp</dimen>
     <dimen name="textsize_caption">12sp</dimen>
 
-    <dimen name="auction_detail_image_page_margin">20dp</dimen>
-    <dimen name="auction_detail_image_offset">60dp</dimen>
-    <dimen name="auction_detail_image_page_margin_and_offset">80dp</dimen>
+    <dimen name="auction_detail_image_page_offset">20dp</dimen>
+    <dimen name="auction_detail_image_page_margin">80dp</dimen>
 </resources>

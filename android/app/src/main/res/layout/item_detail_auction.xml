@@ -16,7 +16,7 @@
         imageUrl="@{imageUrl}"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="@dimen/auction_detail_image_page_margin_and_offset"
+        android:layout_marginHorizontal="@dimen/auction_detail_image_page_margin"
         android:contentDescription="@string/app_name"
         android:onClick="@{()->onImageClickListener.invoke(imageUrl)}"
         android:scaleType="centerCrop" />

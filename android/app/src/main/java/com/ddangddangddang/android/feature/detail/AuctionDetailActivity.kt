@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.viewpager2.widget.ViewPager2
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
@@ -27,11 +28,6 @@ class AuctionDetailActivity :
     BindingActivity<ActivityAuctionDetailBinding>(R.layout.activity_auction_detail) {
     private val viewModel: AuctionDetailViewModel by viewModels()
     private val auctionId: Long by lazy { intent.getLongExtra(AUCTION_ID_KEY, -1L) }
-
-    private val pageMarginPx by lazy {
-        resources.getDimensionPixelOffset(R.dimen.auction_detail_image_page_margin)
-    }
-    private val offsetPx by lazy { resources.getDimensionPixelOffset(R.dimen.auction_detail_image_offset) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -130,14 +126,21 @@ class AuctionDetailActivity :
     private fun setupAuctionImages(images: List<String>) {
         binding.vpImageList.apply {
             offscreenPageLimit = 3
-            setPageTransformer { page, position ->
-                val offset = position * -(2 * offsetPx + pageMarginPx)
-                page.translationX = offset
-            }
+            setSideVisiblePageTransformer()
             adapter = AuctionImageAdapter(images) { viewModel.navigateToImageDetail(it) }
         }
 
         TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { _, _ -> }.attach()
+    }
+
+    private fun ViewPager2.setSideVisiblePageTransformer() {
+        val pageMarginPx =
+            resources.getDimensionPixelOffset(R.dimen.auction_detail_image_page_margin)
+        val offsetPx = resources.getDimensionPixelOffset(R.dimen.auction_detail_image_page_offset)
+        setPageTransformer { page, position ->
+            val offset = position * (-2 * pageMarginPx + offsetPx)
+            page.translationX = offset
+        }
     }
 
     private fun setupDirectRegions(regions: List<RegionModel>) {
