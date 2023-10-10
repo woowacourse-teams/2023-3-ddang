@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -114,12 +115,14 @@ public class ChatRoomService {
     }
 
     public ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
-        final User findUser = userRepository.findById(userInfo.userId())
-                                            .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
-        final Auction findAuction = auctionRepository.findAuctionById(auctionId)
-                                                     .orElseThrow(() -> new AuctionNotFoundException(
-                                                             "지정한 아이디에 대한 경매를 찾을 수 없습니다."
-                                                     ));
+        final Optional<User> nullableUser = userRepository.findById(userInfo.userId());
+        final Optional<Auction> nullableAuction = auctionRepository.findAuctionById(auctionId);
+        if (nullableUser.isEmpty() || nullableAuction.isEmpty()) {
+            return ReadChatRoomDto.CANNOT_CHAT_DTO;
+        }
+
+        final User findUser = nullableUser.get();
+        final Auction findAuction = nullableAuction.get();
         final Long chatRoomId = chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                                   .orElse(DEFAULT_CHAT_ROOM_ID);
 
