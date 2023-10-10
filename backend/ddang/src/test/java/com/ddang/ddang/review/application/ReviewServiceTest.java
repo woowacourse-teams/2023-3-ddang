@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @IsolateDatabase
@@ -28,15 +29,12 @@ class ReviewServiceTest extends ReviewServiceFixture {
     ReviewService reviewService;
 
     @Test
-    void 평가를_등록한고_평가_상대의_신뢰도를_갱신한다() {
+    void 평가를_등록한다() {
         // when
         final Long actual = reviewService.create(구매자에_대한_평가_등록을_위한_DTO);
 
         // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).isPositive();
-            softAssertions.assertThat(구매자.getReliability().getValue()).isEqualTo(구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수);
-        });
+        assertThat(actual).isPositive();
     }
 
     @Test
