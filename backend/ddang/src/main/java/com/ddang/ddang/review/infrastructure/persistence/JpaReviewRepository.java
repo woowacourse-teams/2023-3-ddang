@@ -19,4 +19,6 @@ public interface JpaReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findAllByTargetId(final Long targetId);
 
     Optional<Review> findByAuctionIdAndWriterId(final Long auctionId, final Long writerId);
+
+    List<Review> findAllByIdGreaterThan(final Long id);
 }

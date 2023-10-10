@@ -93,4 +93,16 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
         // then
         assertThat(actual).isEmpty();
     }
+
+    @Test
+    void 지정한_평가_아이디보다_아이디가_큰_평가_목록을_조회한다() {
+        // when
+        final List<Review> actual = reviewRepository.findAllByIdGreaterThan(구매자가_판매자1에게_받은_평가.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(1);
+            softAssertions.assertThat(actual.get(0)).isEqualTo(구매자가_판매자2에게_받은_평가);
+        });
+    }
 }
