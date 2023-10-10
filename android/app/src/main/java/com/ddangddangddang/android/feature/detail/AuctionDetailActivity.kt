@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityAuctionDetailBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
@@ -17,7 +17,6 @@ import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
-import com.ddangddangddang.android.util.view.convertDpToPx
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -124,15 +123,22 @@ class AuctionDetailActivity :
 
     private fun setupAuctionImages(images: List<String>) {
         binding.vpImageList.apply {
-            clipToPadding = false
-            clipChildren = false
-            offscreenPageLimit = 1
+            offscreenPageLimit = 3
+            setSideVisiblePageTransformer()
             adapter = AuctionImageAdapter(images) { viewModel.navigateToImageDetail(it) }
-            setPageTransformer(MarginPageTransformer(convertDpToPx(20f)))
-            setPadding(200, 0, 200, 0)
         }
 
         TabLayoutMediator(binding.tlIndicator, binding.vpImageList) { _, _ -> }.attach()
+    }
+
+    private fun ViewPager2.setSideVisiblePageTransformer() {
+        val pageMarginPx =
+            resources.getDimensionPixelOffset(R.dimen.auction_detail_image_page_margin)
+        val offsetPx = resources.getDimensionPixelOffset(R.dimen.auction_detail_image_page_offset)
+        setPageTransformer { page, position ->
+            val offset = position * (-2 * pageMarginPx + offsetPx)
+            page.translationX = offset
+        }
     }
 
     override fun onResume() {
