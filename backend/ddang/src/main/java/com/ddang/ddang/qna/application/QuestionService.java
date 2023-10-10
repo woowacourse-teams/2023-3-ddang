@@ -4,7 +4,9 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.notification.application.dto.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
+import com.ddang.ddang.qna.application.dto.QuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
@@ -15,6 +17,7 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final ApplicationEventPublisher questionEventPublisher;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaQuestionRepository questionRepository;
@@ -41,6 +45,9 @@ public class QuestionService {
         checkInvalidQuestioner(auction, questioner);
 
         final Question question = questionDto.toEntity(auction, questioner);
+        // TODO: 2023/10/10 이미지 url 변경
+        final QuestionDto eventQuestionDto = QuestionDto.from(question, "url");
+        questionEventPublisher.publishEvent(new QuestionNotificationEvent(eventQuestionDto));
 
         return questionRepository.save(question)
                                  .getId();

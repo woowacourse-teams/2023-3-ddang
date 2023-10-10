@@ -3,6 +3,7 @@ package com.ddang.ddang.qna.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
+import com.ddang.ddang.notification.application.dto.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 
@@ -22,12 +25,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
+@RecordApplicationEvents
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class QuestionServiceTest extends QuestionServiceFixture {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    ApplicationEvents events;
 
     @Test
     void 질문을_등록한다() {
@@ -141,5 +148,15 @@ class QuestionServiceTest extends QuestionServiceFixture {
         assertThatThrownBy(() -> questionService.deleteById(질문.getId(), 질문하지_않은_사용자.getId()))
                 .isInstanceOf(UserForbiddenException.class)
                 .hasMessage("삭제할 권한이 없습니다.");
+    }
+
+    @Test
+    void 질문이_생성되면_판매자에게_알림을_보낸다() {
+        // when
+        questionService.create(경매_질문_등록_요청_dto);
+        final long actual = events.stream(QuestionNotificationEvent.class).count();
+
+        // then
+        assertThat(actual).isEqualTo(1);
     }
 }
