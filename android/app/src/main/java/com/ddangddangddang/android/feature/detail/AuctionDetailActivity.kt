@@ -12,12 +12,12 @@ import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
-import com.ddangddangddang.android.model.RegionModel
 import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.convertDpToPx
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -48,7 +48,6 @@ class AuctionDetailActivity :
         }
         viewModel.auctionDetailModel.observe(this) {
             setupAuctionImages(it.images)
-            setupDirectRegions(it.directRegions)
         }
     }
 
@@ -141,10 +140,6 @@ class AuctionDetailActivity :
             val offset = position * (-2 * pageMarginPx + offsetPx)
             page.translationX = offset
         }
-    }
-
-    private fun setupDirectRegions(regions: List<RegionModel>) {
-        binding.rvDirectExchangeRegions.adapter = AuctionDirectRegionsAdapter(regions)
     }
 
     override fun onResume() {
