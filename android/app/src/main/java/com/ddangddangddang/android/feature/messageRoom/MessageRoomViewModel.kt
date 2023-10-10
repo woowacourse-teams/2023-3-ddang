@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.MessageModel
 import com.ddangddangddang.android.model.MessageRoomDetailModel
 import com.ddangddangddang.android.model.mapper.MessageModelMapper.toPresentation
@@ -12,9 +13,12 @@ import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MessageRoomViewModel(
+@HiltViewModel
+class MessageRoomViewModel @Inject constructor(
     private val repository: ChatRepository,
 ) : ViewModel() {
     val inputMessage: MutableLiveData<String> = MutableLiveData("")
@@ -44,11 +48,18 @@ class MessageRoomViewModel(
                 }
 
                 is ApiResponse.Failure -> {
-                    _event.value = MessageRoomEvent.LoadRoomInfoFailed
+                    _event.value =
+                        MessageRoomEvent.FailureEvent.LoadRoomInfo(ErrorType.FAILURE(response.error))
                 }
 
-                is ApiResponse.NetworkError -> {}
-                is ApiResponse.Unexpected -> {}
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        MessageRoomEvent.FailureEvent.LoadRoomInfo(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = MessageRoomEvent.FailureEvent.LoadRoomInfo(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
@@ -61,12 +72,23 @@ class MessageRoomViewModel(
             viewModelScope.launch {
                 when (val response = repository.getMessages(it.roomId, lastMessageId)) {
                     is ApiResponse.Success -> {
-                        addMessages(response.body.map { it.toPresentation().toViewItem() })
+                        addMessages(response.body.map { it.toPresentation() }.toViewItems())
                     }
 
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            MessageRoomEvent.FailureEvent.LoadMessages(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            MessageRoomEvent.FailureEvent.LoadMessages(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value =
+                            MessageRoomEvent.FailureEvent.LoadMessages(ErrorType.UNEXPECTED)
+                    }
                 }
                 isMessageLoading = false
             }
@@ -77,11 +99,23 @@ class MessageRoomViewModel(
         _messages.value = _messages.value?.plus(messages) ?: messages
     }
 
-    private fun MessageModel.toViewItem(): MessageViewItem {
+    private fun List<MessageModel>.toViewItems(): List<MessageViewItem> {
+        var previousSendDate = _messages.value?.lastOrNull()?.createdDateTime?.toLocalDate()
+        return map { messageModel ->
+            val sendDate = messageModel.createdDateTime.toLocalDate()
+            val isFirstAtDate = (sendDate == previousSendDate).not()
+            previousSendDate = sendDate
+            messageModel.toViewItem(isFirstAtDate)
+        }
+    }
+
+    private fun MessageModel.toViewItem(
+        isFirstAtDate: Boolean,
+    ): MessageViewItem {
         return if (isMyMessage) {
-            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents)
+            MessageViewItem.MyMessageViewItem(id, createdDateTime, contents, isFirstAtDate)
         } else {
-            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents)
+            MessageViewItem.PartnerMessageViewItem(id, createdDateTime, contents, isFirstAtDate)
         }
     }
 
@@ -98,9 +132,20 @@ class MessageRoomViewModel(
                         loadMessages()
                     }
 
-                    is ApiResponse.Failure -> {}
-                    is ApiResponse.NetworkError -> {}
-                    is ApiResponse.Unexpected -> {}
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            MessageRoomEvent.FailureEvent.SendMessage(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            MessageRoomEvent.FailureEvent.SendMessage(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value =
+                            MessageRoomEvent.FailureEvent.SendMessage(ErrorType.UNEXPECTED)
+                    }
                 }
             }
         }
@@ -111,7 +156,11 @@ class MessageRoomViewModel(
     }
 
     fun setReportEvent() {
-        _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.auctionId) }
+        _messageRoomInfo.value?.let { _event.value = MessageRoomEvent.Report(it.roomId) }
+    }
+
+    fun setRateEvent() {
+        _event.value = MessageRoomEvent.Rate
     }
 
     fun setNavigateToAuctionDetailEvent() {
@@ -123,7 +172,12 @@ class MessageRoomViewModel(
     sealed class MessageRoomEvent {
         object Exit : MessageRoomEvent()
         data class Report(val roomId: Long) : MessageRoomEvent()
+        object Rate : MessageRoomEvent()
         data class NavigateToAuctionDetail(val auctionId: Long) : MessageRoomEvent()
-        object LoadRoomInfoFailed : MessageRoomEvent()
+        sealed class FailureEvent(val type: ErrorType) : MessageRoomEvent() {
+            class LoadRoomInfo(type: ErrorType) : FailureEvent(type)
+            class LoadMessages(type: ErrorType) : FailureEvent(type)
+            class SendMessage(type: ErrorType) : FailureEvent(type)
+        }
     }
 }

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.profile.ProfileChangeViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".feature.profile.ProfileChangeActivity">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_user_info_change"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:contentDescription="@string/all_app_bar_back_key_description"
+                    android:onClick="@{() -> viewModel.setExitEvent()}"
+                    android:src="@drawable/ic_left_24"
+                    app:tint="@color/grey_900" />
+
+                <TextView
+                    style="@style/Header1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_weight="1"
+                    android:text="@string/profile_change" />
+
+                <TextView
+                    style="@style/Body"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="end"
+                    android:onClick="@{()->viewModel.submitProfile(context)}"
+                    android:text="@string/profile_change_confirm" />
+            </LinearLayout>
+        </androidx.appcompat.widget.Toolbar>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_image"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="38dp"
+            app:cardCornerRadius="65dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tb_user_info_change">
+
+            <ImageView
+                imageUri="@{viewModel.profile}"
+                placeholder="@{@drawable/img_default_profile}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/register_auction_image_description"
+                android:onClick="@{()->viewModel.selectProfileImage()}"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_background" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_camera"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="38dp"
+            android:backgroundTint="#D9D9D9"
+            android:onClick="@{()->viewModel.selectProfileImage()}"
+            app:cardCornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/cv_image"
+            app:layout_constraintEnd_toEndOf="@id/cv_image">
+
+            <ImageView
+                android:id="@+id/iv_delete_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/profile_change_profile_image_button_description"
+                android:scaleType="fitXY"
+                android:src="@drawable/ic_camera_20_18" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_user_nickname"
+            style="@style/Header2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/profile_change_nickname"
+            app:layout_constraintStart_toStartOf="@id/et_user_nickname"
+            app:layout_constraintTop_toBottomOf="@id/cv_image" />
+
+        <EditText
+            android:id="@+id/et_user_nickname"
+            style="@style/Body"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_white_grey_radius_10dp"
+            android:hint="@string/profile_change_nickname_text_hint"
+            android:inputType="text"
+            android:maxLength="25"
+            android:maxLines="1"
+            android:paddingHorizontal="16dp"
+            android:text="@={viewModel.userNickname}"
+            android:textCursorDrawable="@drawable/ic_edittext_cursor"
+            app:layout_constraintTop_toBottomOf="@id/tv_user_nickname" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

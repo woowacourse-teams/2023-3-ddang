@@ -1,37 +1,33 @@
 package com.ddangddangddang.android.global
 
 import android.app.Application
+import android.content.res.Resources
 import com.ddangddangddang.android.BuildConfig
-import com.ddangddangddang.data.remote.AuctionRetrofit
-import com.ddangddangddang.data.remote.AuthRetrofit
-import com.ddangddangddang.data.repository.AuthRepositoryImpl
+import com.ddangddangddang.android.notification.createNotificationChannel
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.kakao.sdk.common.KakaoSdk
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class DdangDdangDdang : Application() {
+    var activeMessageRoomId: Long? = null
+
     override fun onCreate() {
         super.onCreate()
         _firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-
-        _authRepository =
-            AuthRepositoryImpl.getInstance(this, AuthRetrofit.getInstance().service)
-
-        _auctionRetrofit = AuctionRetrofit.getInstance(authRepository)
+        _resources = resources
 
         KakaoSdk.init(this, BuildConfig.KEY_KAKAO)
+
+        createNotificationChannel(this)
     }
 
     companion object {
-        private var _firebaseAnalytics: FirebaseAnalytics? = null
-        val firebaseAnalytics: FirebaseAnalytics?
+        private lateinit var _firebaseAnalytics: FirebaseAnalytics
+        val firebaseAnalytics: FirebaseAnalytics
             get() = _firebaseAnalytics
-
-        private var _authRepository: AuthRepositoryImpl? = null
-        val authRepository: AuthRepositoryImpl
-            get() = _authRepository ?: throw NullPointerException("AuthRepository가 존재하지 않습니다.")
-
-        private var _auctionRetrofit: AuctionRetrofit? = null
-        val auctionRetrofit: AuctionRetrofit
-            get() = _auctionRetrofit ?: throw NullPointerException("AunctionRetrofit이 존재하지 않습니다.")
+        private lateinit var _resources: Resources
+        val resources: Resources
+            get() = _resources
     }
 }

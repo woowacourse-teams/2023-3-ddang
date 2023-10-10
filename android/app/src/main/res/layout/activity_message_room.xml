@@ -39,7 +39,7 @@
                     android:contentDescription="@string/all_app_bar_back_key_description"
                     android:onClick="@{()->viewModel.setExitEvent()}"
                     android:src="@drawable/ic_left_24"
-                    app:tint="@color/black_900" />
+                    app:tint="@color/grey_900" />
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cv_profile"
@@ -47,9 +47,7 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="20dp"
                     app:cardCornerRadius="25dp"
-                    app:cardElevation="0dp"
-                    app:layout_constraintStart_toStartOf="@id/gl_begin"
-                    app:layout_constraintTop_toTopOf="parent">
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:id="@+id/iv_profile"
@@ -60,26 +58,23 @@
                         android:adjustViewBounds="true"
                         android:contentDescription="@string/message_room_profile_description"
                         android:scaleType="centerCrop"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
                         tools:src="@drawable/ic_launcher_background" />
 
                 </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:id="@+id/tv_detail_title"
+                    style="@style/Header1"
                     setTextOrEmpty="@{viewModel.messageRoomInfo.messagePartnerName}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_weight="1"
-                    android:ellipsize="end"
+                    android:ellipsize="marquee"
+                    android:marqueeRepeatLimit="marquee_forever"
                     android:maxLines="1"
-                    android:textColor="@color/black_900"
-                    android:textSize="@dimen/textsize_main_header"
-                    android:textStyle="bold"
+                    android:selected="@{true}"
+                    android:singleLine="true"
                     tools:text="쪽지 상대방 이름" />
 
                 <ImageView
@@ -87,9 +82,19 @@
                     android:layout_height="24dp"
                     android:layout_marginStart="@dimen/margin_side_layout"
                     android:contentDescription="@string/message_room_refresh_description"
-                    android:onClick="@{()->viewModel.loadMessages()}"
+                    android:onClick="@{() -> viewModel.loadMessages()}"
                     android:src="@drawable/ic_refresh_24"
-                    app:tint="@color/black_900" />
+                    app:tint="@color/grey_900" />
+
+                <ImageView
+                    android:id="@+id/iv_user_rate"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginStart="@dimen/margin_side_layout"
+                    android:contentDescription="@string/user_review_description"
+                    android:onClick="@{() -> viewModel.setRateEvent()}"
+                    android:src="@drawable/ic_rate_24"
+                    app:tint="@color/green" />
 
                 <ImageView
                     android:layout_width="24dp"
@@ -98,7 +103,8 @@
                     android:layout_marginEnd="20dp"
                     android:contentDescription="@string/message_room_report_description"
                     android:onClick="@{()->viewModel.setReportEvent()}"
-                    android:src="@drawable/ic_report_24" />
+                    android:src="@drawable/ic_report_24"
+                    app:tint="@color/primary" />
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
@@ -119,9 +125,11 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_auction_item"
             android:layout_width="0dp"
-            android:layout_height="96dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="20dp"
+            android:paddingHorizontal="40dp"
             android:background="@drawable/bg_stroke_gray_radius_1dp"
-            android:backgroundTint="#F8F8F8"
+            android:backgroundTint="@color/grey_100"
             android:onClick="@{()->viewModel.setNavigateToAuctionDetailEvent()}"
             app:layout_constraintEnd_toEndOf="@id/gl_end"
             app:layout_constraintStart_toStartOf="@id/gl_begin"
@@ -131,12 +139,11 @@
                 android:id="@+id/cv_auction_image"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:layout_marginStart="40dp"
-                android:layout_marginTop="16dp"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="0dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
                 <ImageView
                     android:id="@+id/iv_auction_image"
@@ -156,31 +163,32 @@
 
             <TextView
                 android:id="@+id/tv_auction_title"
+                style="@style/Header2"
                 setTextOrEmpty="@{viewModel.messageRoomInfo.auctionTitle}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="19dp"
-                android:layout_marginTop="31dp"
-                android:layout_marginEnd="40dp"
                 android:maxLines="1"
-                android:textColor="#000E08"
-                android:textSize="@dimen/textsize_sub_header"
+                android:textFontWeight="400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/cv_auction_image"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toTopOf="@id/cv_auction_image"
+                app:layout_constraintVertical_chainStyle="packed"
+                app:layout_constraintBottom_toTopOf="@id/tv_auction_pirce"
                 tools:text="맥북 14인치" />
 
             <TextView
                 android:id="@+id/tv_auction_pirce"
+                style="@style/Caption"
                 setTextOrEmpty="@{viewModel.messageRoomInfo == null ? null : @string/message_room_auction_bid_price(viewModel.messageRoomInfo.auctionPrice)}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
-                android:textColor="#797C7B"
-                android:textSize="12sp"
+                android:textColor="@color/grey_500"
                 app:layout_constraintEnd_toEndOf="@id/tv_auction_title"
                 app:layout_constraintStart_toStartOf="@id/tv_auction_title"
                 app:layout_constraintTop_toBottomOf="@id/tv_auction_title"
+                app:layout_constraintBottom_toBottomOf="@id/cv_auction_image"
                 tools:text="12,000원" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -208,29 +216,31 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
             <EditText
+                style="@style/Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
-                android:backgroundTint="#F3F6F6"
+                android:backgroundTint="@color/grey_100"
                 android:hint="@string/message_room_message_input_hint"
                 android:padding="16dp"
                 android:singleLine="true"
-                android:text="@={viewModel.inputMessage}"
-                android:textSize="@dimen/textsize_body" />
+                android:text="@={viewModel.inputMessage}" />
 
             <Button
+                style="@style/Header2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginStart="12dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
+                android:enabled="@{viewModel.messageRoomInfo.chatAvailable}"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:onClick="@{()->viewModel.sendMessage()}"
                 android:text="@string/message_room_message_submit"
-                android:textSize="@dimen/textsize_body" />
+                android:textColor="@color/text_active_fixed" />
 
         </LinearLayout>
 

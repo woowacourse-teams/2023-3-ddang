@@ -4,5 +4,5 @@ data class SellerModel(
     val id: Long,
     val profileUrl: String,
     val nickname: String,
-    val reliability: Double,
+    val reliability: Float?,
 )
