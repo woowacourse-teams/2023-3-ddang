@@ -1,4 +1,4 @@
-package com.ddang.ddang.notification.application.dto;
+package com.ddang.ddang.qna.application.event;
 
 import com.ddang.ddang.qna.domain.Answer;
 

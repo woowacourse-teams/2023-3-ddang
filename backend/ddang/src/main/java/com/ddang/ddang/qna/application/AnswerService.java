@@ -1,8 +1,8 @@
 package com.ddang.ddang.qna.application;
 
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
-import com.ddang.ddang.notification.application.dto.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
+import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
 import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
