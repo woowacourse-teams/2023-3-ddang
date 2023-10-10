@@ -1,10 +1,17 @@
 package com.ddang.ddang.chat.application.dto;
 
+import com.ddang.ddang.image.application.util.ImageIdProcessor;
 import com.ddang.ddang.user.domain.User;
 
-public record ReadUserInChatRoomDto(Long id, String name, String profileImage, double reliability) {
+public record ReadUserInChatRoomDto(Long id, String name, Long profileImageId, double reliability, boolean isDeleted) {
 
     public static ReadUserInChatRoomDto from(final User user) {
-        return new ReadUserInChatRoomDto(user.getId(), user.getName(), user.getProfileImage(), user.getReliability());
+        return new ReadUserInChatRoomDto(
+                user.getId(),
+                user.getName(),
+                ImageIdProcessor.process(user.getProfileImage()),
+                user.getReliability().getValue(),
+                user.isDeleted()
+        );
     }
 }

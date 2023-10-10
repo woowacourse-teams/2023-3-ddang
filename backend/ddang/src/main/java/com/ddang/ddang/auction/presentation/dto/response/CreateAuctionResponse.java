@@ -1,6 +1,9 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
+import com.ddang.ddang.auction.domain.AuctionStatus;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
+import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
 public record CreateAuctionResponse(
         Long id,
@@ -11,15 +14,18 @@ public record CreateAuctionResponse(
         int auctioneerCount
 ) {
 
-    public static CreateAuctionResponse of(final CreateInfoAuctionDto dto, final String baseUrl) {
+    public static CreateAuctionResponse from(final CreateInfoAuctionDto dto) {
         return new CreateAuctionResponse(
                 dto.id(),
                 dto.title(),
-                baseUrl.concat(String.valueOf(dto.auctionImageId())),
+                convertAuctionImageUrl(dto.auctionImageId()),
                 dto.startPrice(),
-                // TODO 2차 데모데이 이후 enum으로 처리
-                "UNBIDDEN",
+                AuctionStatus.UNBIDDEN.name(),
                 0
         );
+    }
+
+    private static String convertAuctionImageUrl(final Long id) {
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id);
     }
 }

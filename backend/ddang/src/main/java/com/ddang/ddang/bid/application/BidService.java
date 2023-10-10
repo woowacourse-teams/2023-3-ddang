@@ -3,8 +3,11 @@ package com.ddang.ddang.bid.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
+import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
+import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
@@ -15,32 +18,62 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class BidService {
 
+    private final ApplicationEventPublisher bidEventPublisher;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaBidRepository bidRepository;
 
     @Transactional
-    public Long create(final CreateBidDto bidDto) {
+    public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final Auction auction = auctionRepository.findById(bidDto.auctionId())
-                                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+        final AuctionAndImageDto auctionAndImageDto =
+                auctionRepository.findDtoByAuctionId(bidDto.auctionId())
+                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+
+        final Auction auction = auctionAndImageDto.auction();
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
-        final Bid saveBid = saveBid(bidDto, auction, bidder);
+        final Optional<User> previousBidder = auction.findLastBidder();
+
+        final Bid saveBid = saveAndUpdateLastBid(bidDto, auction, bidder);
+
+        publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder);
+
         return saveBid.getId();
+    }
+
+    private void publishBidNotificationEvent(
+            final String auctionImageAbsoluteUrl,
+            final AuctionAndImageDto auctionAndImageDto,
+            final Optional<User> previousBidder
+    ) {
+        if (previousBidder.isEmpty()) {
+            return;
+        }
+
+        final BidDto bidDto = new BidDto(
+                previousBidder.get().getId(),
+                auctionAndImageDto,
+                auctionImageAbsoluteUrl
+        );
+        bidEventPublisher.publishEvent(new BidNotificationEvent(bidDto));
     }
 
     private void checkInvalidAuction(final Auction auction) {
@@ -100,7 +133,7 @@ public class BidService {
         }
     }
 
-    private Bid saveBid(final CreateBidDto bidDto, final Auction auction, final User bidder) {
+    private Bid saveAndUpdateLastBid(final CreateBidDto bidDto, final Auction auction, final User bidder) {
         final Bid createBid = bidDto.toEntity(auction, bidder);
         final Bid saveBid = bidRepository.save(createBid);
 
@@ -111,7 +144,7 @@ public class BidService {
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
         if (auctionRepository.existsById(auctionId)) {
-            final List<Bid> bids = bidRepository.findByAuctionId(auctionId);
+            final List<Bid> bids = bidRepository.findByAuctionIdOrderByIdAsc(auctionId);
 
             return bids.stream()
                        .map(ReadBidDto::from)

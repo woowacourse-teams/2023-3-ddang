@@ -75,6 +75,42 @@ include::{snippets}/authentication-controller-test/access-token과_refresh-token
 
 include::{snippets}/authentication-controller-test/access-token과_refresh-token을_전달하면_로그아웃한다/http-response.adoc[]
 
+=== 탈퇴
+
+==== 요청
+
+include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/http-request.adoc[]
+include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/path-parameters.adoc[]
+include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/request-headers.adoc[]
+include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/http-response.adoc[]
+
+== 사용자 정보 API
+=== 사용자 정보 조회
+
+==== 요청
+
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/http-response.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_조회한다/response-fields.adoc[]
+
+=== 사용자 정보 수정
+
+==== 요청
+
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/http-response.adoc[]
+include::{snippets}/user-controller-test/사용자_정보를_모두_수정한다/response-fields.adoc[]
+
 == 카테고리 API
 
 === 메인 카테고리 조회
@@ -157,11 +193,38 @@ include::{snippets}/auction-controller-test/경매를_등록한다/response-fiel
 
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/http-request.adoc[]
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/query-parameters.adoc[]
+include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/request-headers.adoc[]
 
 ==== 응답
 
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/http-response.adoc[]
 include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록을_조회한다/response-fields.adoc[]
+
+=== 자신이 등록한 경매 목록 조회
+
+==== 요청
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/http-request.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/query-parameters.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/http-response.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_등록한_경매_목록을_조회한다/response-fields.adoc[]
+
+=== 자신이 참여한 경매 목록 조회
+
+==== 요청
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/http-request.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/query-parameters.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/request-headers.adoc[]
+
+==== 응답
+
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/http-response.adoc[]
+include::{snippets}/user-auction-controller-test/로그인한_회원이_참여한_경매_목록을_조회한다/response-fields.adoc[]
 
 === 경매 상세 조회
 
@@ -169,6 +232,7 @@ include::{snippets}/auction-controller-test/첫번째_페이지의_경매_목록
 
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/http-request.adoc[]
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/path-parameters.adoc[]
+include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_조회한다/request-headers.adoc[]
 
 ==== 응답
 
@@ -186,6 +250,67 @@ include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_
 ==== 응답
 
 include::{snippets}/auction-controller-test/지정한_아이디에_해당하는_경매를_삭제한다/http-response.adoc[]
+
+== Q&A API
+
+=== 질문 등록
+
+==== 요청
+
+include::{snippets}/qna-controller-test/질문을_등록한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/질문을_등록한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/질문을_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/qna-controller-test/질문을_등록한다/http-response.adoc[]
+
+=== 질문 삭제
+
+==== 요청
+
+include::{snippets}/qna-controller-test/질문을_삭제한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/질문을_삭제한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/질문을_삭제한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/qna-controller-test/질문을_삭제한다/http-response.adoc[]
+
+=== 답변 등록
+
+==== 요청
+
+include::{snippets}/qna-controller-test/답변을_등록한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/답변을_등록한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/답변을_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/qna-controller-test/답변을_등록한다/http-response.adoc[]
+
+=== 답변 삭제
+
+==== 요청
+
+include::{snippets}/qna-controller-test/답변을_삭제한다/http-request.adoc[]
+include::{snippets}/qna-controller-test/답변을_삭제한다/request-headers.adoc[]
+include::{snippets}/qna-controller-test/답변을_삭제한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/qna-controller-test/답변을_삭제한다/http-response.adoc[]
+
+=== Q&A 조회
+
+==== 요청
+
+include::{snippets}/auction-qna-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/auction-qna-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/http-response.adoc[]
+include::{snippets}/auction-qna-controller-test/경매_아이디를_통해_질문과_답변을_모두_조회한다/response-fields.adoc[]
 
 == 입찰 API
 
@@ -326,3 +451,111 @@ include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조
 
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/http-response.adoc[]
 include::{snippets}/report-controller-test/전체_채팅방_신고_목록을_조회한다/response-fields.adoc[]
+
+=== 질문 신고 등록
+
+==== 요청
+
+include::{snippets}/report-controller-test/질문_신고를_등록한다/http-request.adoc[]
+include::{snippets}/report-controller-test/질문_신고를_등록한다/request-headers.adoc[]
+include::{snippets}/report-controller-test/질문_신고를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/질문_신고를_등록한다/http-response.adoc[]
+
+=== 채팅방 신고 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/전체_질문_신고_목록을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/전체_질문_신고_목록을_조회한다/http-response.adoc[]
+include::{snippets}/report-controller-test/전체_질문_신고_목록을_조회한다/response-fields.adoc[]
+
+=== 답변 신고 등록
+
+==== 요청
+
+include::{snippets}/report-controller-test/답변_신고를_등록한다/http-request.adoc[]
+include::{snippets}/report-controller-test/답변_신고를_등록한다/request-headers.adoc[]
+include::{snippets}/report-controller-test/답변_신고를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/답변_신고를_등록한다/http-response.adoc[]
+
+=== 채팅방 신고 조회
+
+==== 요청
+
+include::{snippets}/report-controller-test/전체_답변_신고_목록을_조회한다/http-request.adoc[]
+
+==== 응답
+
+include::{snippets}/report-controller-test/전체_답변_신고_목록을_조회한다/http-response.adoc[]
+include::{snippets}/report-controller-test/전체_답변_신고_목록을_조회한다/response-fields.adoc[]
+
+== 디바이스 토큰 API
+
+=== 디바이스 토큰 갱신
+
+==== 요청
+
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/http-request.adoc[]
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/request-headers.adoc[]
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/device-token-controller-test/디바이스_토큰을_저장_또는_갱신한다/http-response.adoc[]
+
+== 유저 상호 평가 API
+
+=== 사용자 평가 등록
+
+==== 요청
+
+include::{snippets}/review-controller-test/평가를_등록한다/http-request.adoc[]
+include::{snippets}/review-controller-test/평가를_등록한다/request-headers.adoc[]
+include::{snippets}/review-controller-test/평가를_등록한다/request-fields.adoc[]
+
+==== 응답
+
+include::{snippets}/review-controller-test/평가를_등록한다/http-response.adoc[]
+
+=== 지정한 평가 아이디에 해당하는 평가 조회
+
+==== 요청
+
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/http-request.adoc[]
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/path-parameters.adoc[]
+
+==== 응답
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/http-response.adoc[]
+include::{snippets}/review-controller-test/지정한_평가_아이디에_해당하는_평가를_조회한다/response-fields.adoc[]
+
+=== 지정한 사용자가 받은 평가 목록 조회
+
+==== 요청
+
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/http-request.adoc[]
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/path-parameters.adoc[]
+
+==== 응답
+
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/http-response.adoc[]
+include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/response-fields.adoc[]
+
+=== 사용자가_경매_거래_상대에게_작성한_평가를_조회한다
+
+==== 요청
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-request.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/path-parameters.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/request-headers.adoc[]
+
+==== 응답
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-response.adoc[]
+include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/response-fields.adoc[]
