@@ -21,6 +21,10 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
+import com.ddang.ddang.notification.application.dto.AnswerNotificationEvent;
+import com.ddang.ddang.notification.application.dto.QuestionNotificationEvent;
+import com.ddang.ddang.qna.application.dto.QuestionDto;
+import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -55,6 +59,8 @@ public class NotificationEventListenerFixture {
     protected CreateBidDto 입찰_생성_DTO;
     protected MessageNotificationEvent 메시지_알림_이벤트;
     protected BidNotificationEvent 입찰_알림_이벤트;
+    protected QuestionNotificationEvent 질문_알림_이벤트;
+    protected AnswerNotificationEvent 응답_알림_이벤트;
 
     protected String 이미지_절대_경로 = "/imageUrl";
 
@@ -121,5 +127,10 @@ public class NotificationEventListenerFixture {
         final AuctionAndImageDto auctionAndImageDto = new AuctionAndImageDto(경매, 경매_이미지);
         final BidDto 입찰_DTO = new BidDto(수신자_겸_기존_입찰자.getId(), auctionAndImageDto, 이미지_절대_경로);
         입찰_알림_이벤트 = new BidNotificationEvent(입찰_DTO);
+
+        final Answer 응답_내용 = new Answer("응답 내용");
+        final QuestionDto 질문_DTO = new QuestionDto(경매, 발신자_겸_판매자, "질문 내용", 응답_내용, false, 이미지_절대_경로);
+        질문_알림_이벤트 = new QuestionNotificationEvent(질문_DTO);
+        응답_알림_이벤트 = new AnswerNotificationEvent(응답_내용);
     }
 }
