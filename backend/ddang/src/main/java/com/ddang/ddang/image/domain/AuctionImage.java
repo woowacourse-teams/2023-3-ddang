@@ -1,6 +1,7 @@
 package com.ddang.ddang.image.domain;
 
 import com.ddang.ddang.auction.domain.Auction;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -19,16 +20,16 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id")
-@ToString(of = {"id", "uploadName", "storeName", "authenticated"})
+@ToString(of = {"id", "image", "authenticated"})
+// TODO: 9/29/23 추후 대표 이미지 구분을 위한 필드 추가
 public class AuctionImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String uploadName;
-
-    private String storeName;
+    @Embedded
+    private Image image;
 
     private boolean authenticated = false;
 
@@ -37,8 +38,7 @@ public class AuctionImage {
     private Auction auction;
 
     public AuctionImage(final String uploadName, final String storeName) {
-        this.uploadName = uploadName;
-        this.storeName = storeName;
+        this.image = new Image(uploadName, storeName);
     }
 
     public void initAuction(final Auction auction) {

@@ -6,7 +6,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.ChatRoomReportNotAccessibleException;
+import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,7 +27,7 @@ public class ChatRoomReportService {
     private final JpaChatRoomRepository chatRoomRepository;
     private final JpaChatRoomReportRepository chatRoomReportRepository;
 
-
+    @Transactional
     public Long create(final CreateChatRoomReportDto chatRoomReportDto) {
         final User reporter = userRepository.findById(chatRoomReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
@@ -45,7 +44,7 @@ public class ChatRoomReportService {
 
     private void checkInvalidChatRoomReport(final User reporter, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(reporter)) {
-            throw new ChatRoomReportNotAccessibleException("해당 채팅방을 신고할 권한이 없습니다.");
+            throw new InvalidChatRoomReportException("해당 채팅방을 신고할 권한이 없습니다.");
         }
         if (chatRoomReportRepository.existsByChatRoomIdAndReporterId(chatRoom.getId(), reporter.getId())) {
             throw new AlreadyReportChatRoomException("이미 신고한 채팅방입니다.");
@@ -53,10 +52,10 @@ public class ChatRoomReportService {
     }
 
     public List<ReadChatRoomReportDto> readAll() {
-        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAll();
+        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAllByOrderByIdAsc();
 
         return auctionReports.stream()
-                             .map(auctionReport -> ReadChatRoomReportDto.from(auctionReport, LocalDateTime.now()))
+                             .map(ReadChatRoomReportDto::from)
                              .toList();
     }
 }
