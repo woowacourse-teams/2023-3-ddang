@@ -27,7 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -115,14 +114,15 @@ public class ChatRoomService {
     }
 
     public ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
-        final Optional<User> nullableUser = userRepository.findById(userInfo.userId());
-        final Optional<Auction> nullableAuction = auctionRepository.findAuctionById(auctionId);
-        if (nullableUser.isEmpty() || nullableAuction.isEmpty()) {
+        final User findUser = userRepository.findById(userInfo.userId())
+                                            .orElse(User.EMPTY_USER);
+        final Auction findAuction = auctionRepository.findAuctionById(auctionId)
+                                                     .orElse(Auction.EMPTY_AUCTION);
+
+        if (findUser == User.EMPTY_USER || findAuction == Auction.EMPTY_AUCTION) {
             return ReadChatRoomDto.CANNOT_CHAT_DTO;
         }
 
-        final User findUser = nullableUser.get();
-        final Auction findAuction = nullableAuction.get();
         final Long chatRoomId = chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                                   .orElse(DEFAULT_CHAT_ROOM_ID);
 
