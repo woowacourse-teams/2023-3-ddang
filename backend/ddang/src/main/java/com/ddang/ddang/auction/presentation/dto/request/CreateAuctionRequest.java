@@ -1,10 +1,9 @@
 package com.ddang.ddang.auction.presentation.dto.request;
 
-import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +23,7 @@ public record CreateAuctionRequest(
         Integer startPrice,
 
         @NotNull(message = "마감 시간이 입력되지 않았습니다.")
-        @FutureOrPresent(message = "마감 시간은 과거를 입력할 수 없습니다.")
+        @Future(message = "마감 시간은 과거를 입력할 수 없습니다.")
         LocalDateTime closingTime,
 
         @NotNull(message = "하위 카테고리가 입력되지 않았습니다.")
