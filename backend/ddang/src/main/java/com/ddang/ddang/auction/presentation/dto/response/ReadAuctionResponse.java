@@ -4,7 +4,6 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
-// TODO: 9/29/23 추후 대표 이미지 관련 필드 추가
 public record ReadAuctionResponse(
         Long id,
         String title,

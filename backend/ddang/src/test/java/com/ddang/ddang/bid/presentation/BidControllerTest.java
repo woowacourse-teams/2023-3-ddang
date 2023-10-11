@@ -99,7 +99,6 @@ class BidControllerTest extends BidControllerFixture {
         create_문서화(resultActions);
     }
 
-    // TODO: 2023-08-06 예외 케이스 api 문서화의 경우 예외에 대한 변경이 없을 때 추가할 것
     @Test
     void 해당_경매가_없는_경우_입찰시_404를_반환한다() throws Exception {
         // given
