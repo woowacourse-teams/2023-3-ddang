@@ -6,7 +6,9 @@ import lombok.Getter;
 public enum NotificationType {
 
     MESSAGE("message"),
-    BID("bid");
+    BID("bid"),
+    QUESTION("question"),
+    ANSWER("answer");
 
     private final String value;
 
