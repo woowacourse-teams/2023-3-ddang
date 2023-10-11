@@ -44,10 +44,11 @@ public class AnswerService {
         final Answer answer = answerDto.toEntity();
         question.addAnswer(answer);
 
-        answerEventPublisher.publishEvent(new AnswerNotificationEvent(answer, absoluteImageUrl));
+        final Answer persistAnswer = answerRepository.save(answer);
 
-        return answerRepository.save(answer)
-                               .getId();
+        answerEventPublisher.publishEvent(new AnswerNotificationEvent(persistAnswer, absoluteImageUrl));
+
+        return persistAnswer.getId();
     }
 
     private void checkInvalidAnswerer(final Question question, final User writer) {

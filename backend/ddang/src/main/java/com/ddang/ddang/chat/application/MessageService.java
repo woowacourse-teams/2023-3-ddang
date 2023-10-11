@@ -53,7 +53,7 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        messageEventPublisher.publishEvent(new MessageNotificationEvent(message, profileImageAbsoluteUrl));
+        messageEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
 
         return persistMessage.getId();
     }

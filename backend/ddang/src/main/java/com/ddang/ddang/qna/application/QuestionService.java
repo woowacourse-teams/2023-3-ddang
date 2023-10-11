@@ -45,10 +45,11 @@ public class QuestionService {
 
         final Question question = questionDto.toEntity(auction, questioner);
 
-        questionEventPublisher.publishEvent(new QuestionNotificationEvent(question, absoluteImageUrl));
+        final Question persistQuestion = questionRepository.save(question);
 
-        return questionRepository.save(question)
-                                 .getId();
+        questionEventPublisher.publishEvent(new QuestionNotificationEvent(persistQuestion, absoluteImageUrl));
+
+        return persistQuestion.getId();
     }
 
     private void checkInvalidAuction(final Auction auction) {
