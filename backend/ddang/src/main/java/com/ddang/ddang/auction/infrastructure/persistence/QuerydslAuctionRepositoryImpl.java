@@ -51,8 +51,10 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     }
 
     private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(processOrderSpecifiers(pageable));
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
+        orderSpecifiers.add(closingTimeOrderSpecifier());
+        orderSpecifiers.addAll(processOrderSpecifiers(pageable));
         orderSpecifiers.add(auction.id.desc());
 
         return orderSpecifiers;
@@ -67,21 +69,21 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 return Collections.emptyList();
             }
 
-            orderSpecifiers.addAll(processOrderSpecifierByCondition(order));
+            orderSpecifiers.add(processOrderSpecifierByCondition(order));
         }
 
         return orderSpecifiers;
     }
 
-    private List<OrderSpecifier<?>> processOrderSpecifierByCondition(final Order order) {
+    private OrderSpecifier<?> processOrderSpecifierByCondition(final Order order) {
         if (AuctionSortConditionConsts.RELIABILITY.equals(order.getProperty())) {
-            return List.of(closingTimeOrderSpecifier(), auction.seller.reliability.value.desc());
+            return auction.seller.reliability.value.desc();
         }
         if (AuctionSortConditionConsts.AUCTIONEER_COUNT.equals(order.getProperty())) {
-            return List.of(closingTimeOrderSpecifier(), auction.auctioneerCount.desc());
+            return auction.auctioneerCount.desc();
         }
         if (AuctionSortConditionConsts.CLOSING_TINE.equals(order.getProperty())) {
-            return List.of(closingTimeOrderSpecifier(), auction.closingTime.asc());
+            return auction.closingTime.asc();
         }
         
         throw new UnsupportedSortConditionException("지원하지 않는 정렬 방식입니다.");
