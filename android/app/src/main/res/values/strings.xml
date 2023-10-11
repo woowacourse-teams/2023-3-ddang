@@ -89,14 +89,19 @@
     <!-- register -->
     <string name="register_auction">경매 상품 등록</string>
     <string name="register_auction_default_image_count">(%d/%d)</string>
+    <string name="register_auction_necessary_introduce">* 는 필수입력 사항입니다.</string>
+    <string name="register_auction_image">사진</string>
     <string name="register_auction_title">제목</string>
     <string name="register_auction_category">카테고리</string>
     <string name="register_auction_description">상품 설명</string>
     <string name="register_auction_start_price">경매 시작가</string>
+    <string name="register_auction_start_price_hint">경매 시작가는 0원보다 커야 합니다</string>
     <string name="register_auction_closing_time">경매 마감 시간</string>
+    <string name="register_auction_closing_time_hint">당일로부터 30일 이내까지 선택 가능합니다</string>
     <string name="register_auction_enable_direct_region">직거래 가능 지역</string>
     <string name="register_auction_image_url">이미지 주소</string>
     <string name="register_auction_bid_unit">경매 입찰 단위</string>
+    <string name="register_auction_bid_unit_hint">100원 이상부터 100원 단위로 입력 가능합니다</string>
     <string name="register_auction_blank_exist_error">채우지 않은 필드가 존재합니다.</string>
     <string name="register_auction_invalid_input_error">필드에 유효하지 않은 값이 존재합니다.</string>
     <string name="register_auction_ok">확인</string>
