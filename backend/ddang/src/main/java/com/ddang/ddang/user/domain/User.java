@@ -1,5 +1,6 @@
 package com.ddang.ddang.user.domain;
 
+import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.domain.Review;
@@ -8,6 +9,8 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -29,12 +32,12 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", "name", "reliability", "oauthId", "deleted"})
+@ToString(of = {"id", "name", "reliability", "oauthId", "deleted", "oauth2Type"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
     private static final boolean DELETED_STATUS = true;
-    private static final String UNKOWN_NAME = "알 수 없음";
+    private static final String UNKNOWN_NAME = "알 수 없음";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,17 +59,22 @@ public class User extends BaseTimeEntity {
     @Column(name = "is_deleted")
     private boolean deleted = false;
 
+    @Enumerated(EnumType.STRING)
+    private Oauth2Type oauth2Type;
+
     @Builder
     private User(
             final String name,
             final ProfileImage profileImage,
             final Reliability reliability,
-            final String oauthId
+            final String oauthId,
+            final Oauth2Type oauth2Type
     ) {
         this.name = name;
         this.profileImage = profileImage;
         this.reliability = processReliability(reliability);
         this.oauthId = oauthId;
+        this.oauth2Type = oauth2Type;
     }
 
     private Reliability processReliability(final Reliability reliability) {
