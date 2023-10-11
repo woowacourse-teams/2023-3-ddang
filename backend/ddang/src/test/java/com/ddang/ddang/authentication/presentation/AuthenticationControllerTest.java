@@ -71,7 +71,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                                status().isOk(),
                                jsonPath("$.accessToken").exists(),
                                jsonPath("$.refreshToken").exists(),
-                               jsonPath("$.persisted").exists()
+                               jsonPath("$.isSignUpUser").exists()
                        );
 
         login_문서화(resultActions);
