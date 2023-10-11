@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -54,8 +53,7 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        final MessageDto messageDto = MessageDto.of(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
-        messageEventPublisher.publishEvent(new MessageNotificationEvent(messageDto));
+        messageEventPublisher.publishEvent(new MessageNotificationEvent(message, profileImageAbsoluteUrl));
 
         return persistMessage.getId();
     }

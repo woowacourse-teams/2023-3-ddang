@@ -5,7 +5,6 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
-import com.ddang.ddang.qna.application.dto.QuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
@@ -46,8 +45,7 @@ public class QuestionService {
 
         final Question question = questionDto.toEntity(auction, questioner);
 
-        final QuestionDto eventQuestionDto = QuestionDto.from(question, absoluteImageUrl);
-        questionEventPublisher.publishEvent(new QuestionNotificationEvent(eventQuestionDto));
+        questionEventPublisher.publishEvent(new QuestionNotificationEvent(question, absoluteImageUrl));
 
         return questionRepository.save(question)
                                  .getId();

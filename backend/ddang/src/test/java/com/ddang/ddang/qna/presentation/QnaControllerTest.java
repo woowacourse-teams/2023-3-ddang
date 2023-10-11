@@ -92,7 +92,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 질문을_등록한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(questionService.create(any(CreateQuestionDto.class), 이미지_절대_경로)).willReturn(생성된_질문_아이디);
+        given(questionService.create(any(CreateQuestionDto.class), anyString())).willReturn(생성된_질문_아이디);
 
         // when & then
         final ResultActions resultActions = mockMvc.perform(post("/questions")
@@ -168,7 +168,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 존재하지_않은_사용자가_질문시_404를_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
-        given(questionService.create(any(CreateQuestionDto.class), 이미지_절대_경로))
+        given(questionService.create(any(CreateQuestionDto.class), anyString()))
                 .willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         // when & then
@@ -187,7 +187,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 존재하지_않은_경매에_질문시_404를_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(questionService.create(any(CreateQuestionDto.class), 이미지_절대_경로))
+        given(questionService.create(any(CreateQuestionDto.class), anyString()))
                 .willThrow(new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
 
         // when & then
@@ -206,7 +206,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 이미_종료된_경매에_질문시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(questionService.create(any(CreateQuestionDto.class), 이미지_절대_경로))
+        given(questionService.create(any(CreateQuestionDto.class), anyString()))
                 .willThrow(new InvalidAuctionToAskQuestionException("이미 종료된 경매입니다"));
 
         // when & then
@@ -225,7 +225,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 삭제된_경매에_질문시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(questionService.create(any(CreateQuestionDto.class), 이미지_절대_경로))
+        given(questionService.create(any(CreateQuestionDto.class), anyString()))
                 .willThrow(new InvalidAuctionToAskQuestionException("삭제된 경매입니다"));
 
         // when & then
@@ -244,7 +244,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 경매자가_본인이_등록한_경매에_질문시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(questionService.create(any(CreateQuestionDto.class), 이미지_절대_경로))
+        given(questionService.create(any(CreateQuestionDto.class), anyString()))
                 .willThrow(new InvalidQuestionerException("경매 등록자는 질문할 수 없습니다"));
 
         // when & then
@@ -263,7 +263,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 답변을_등록한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(answerService.create(any(CreateAnswerDto.class), 이미지_절대_경로)).willReturn(생성된_답변_아이디);
+        given(answerService.create(any(CreateAnswerDto.class), anyString())).willReturn(생성된_답변_아이디);
 
         // when & then
         final ResultActions resultActions =
@@ -340,7 +340,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 존재하지_않은_사용자가_답변시_404을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
-        given(answerService.create(any(CreateAnswerDto.class), 이미지_절대_경로))
+        given(answerService.create(any(CreateAnswerDto.class), anyString()))
                 .willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         // when & then
@@ -359,7 +359,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 존재하지_않은_질문에_답변시_404을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(answerService.create(any(CreateAnswerDto.class), 이미지_절대_경로))
+        given(answerService.create(any(CreateAnswerDto.class), anyString()))
                 .willThrow(new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));
 
         // when & then
@@ -378,7 +378,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 판매자가_아닌_사용자가_질문에_답변시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(answerService.create(any(CreateAnswerDto.class), 이미지_절대_경로))
+        given(answerService.create(any(CreateAnswerDto.class), anyString()))
                 .willThrow(new InvalidAnswererException("판매자만 답변할 수 있습니다."));
 
         // when & then
@@ -397,7 +397,7 @@ class QnaControllerTest extends QnaControllerFixture {
     void 이미_답변한_질문에_답변시_400을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(answerService.create(any(CreateAnswerDto.class), 이미지_절대_경로))
+        given(answerService.create(any(CreateAnswerDto.class), anyString()))
                 .willThrow(new AlreadyAnsweredException("이미 답변한 질문입니다."));
 
         // when & then
