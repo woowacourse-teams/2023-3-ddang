@@ -8,11 +8,11 @@ import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
-import com.ddang.ddang.notification.application.dto.AnswerNotificationEvent;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.application.dto.QuestionNotificationEvent;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.qna.application.dto.QuestionDto;
+import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
+import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.google.firebase.messaging.FirebaseMessagingException;
@@ -106,8 +106,7 @@ public class NotificationEventListener {
                     question.getContent(),
                     answer.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    // TODO: 2023/10/09 이미지 url 수정 필요
-                    ImageUrlCalculator.calculateBy("absoluteImageUrl", auctionImage.getId())
+                    ImageUrlCalculator.calculateBy(answerNotificationEvent.absoluteImageUrl(), auctionImage.getId())
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {

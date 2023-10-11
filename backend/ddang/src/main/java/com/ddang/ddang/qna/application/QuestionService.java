@@ -4,10 +4,10 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.notification.application.dto.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
 import com.ddang.ddang.qna.application.dto.QuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
+import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
@@ -35,7 +35,7 @@ public class QuestionService {
     private final JpaQuestionRepository questionRepository;
 
     @Transactional
-    public Long create(final CreateQuestionDto questionDto) {
+    public Long create(final CreateQuestionDto questionDto, final String absoluteImageUrl) {
         final User questioner = userRepository.findByIdAndDeletedIsFalse(questionDto.userId())
                                               .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findByIdAndDeletedIsFalse(questionDto.auctionId())
@@ -45,8 +45,8 @@ public class QuestionService {
         checkInvalidQuestioner(auction, questioner);
 
         final Question question = questionDto.toEntity(auction, questioner);
-        // TODO: 2023/10/10 이미지 url 변경
-        final QuestionDto eventQuestionDto = QuestionDto.from(question, "url");
+
+        final QuestionDto eventQuestionDto = QuestionDto.from(question, absoluteImageUrl);
         questionEventPublisher.publishEvent(new QuestionNotificationEvent(eventQuestionDto));
 
         return questionRepository.save(question)
