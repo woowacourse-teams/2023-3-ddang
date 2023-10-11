@@ -40,7 +40,6 @@ import java.util.Optional;
 @ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime", "auctioneerCount"})
 public class Auction extends BaseTimeEntity {
 
-    public static final Auction EMPTY_AUCTION = null;
     private static final boolean DELETED_STATUS = true;
 
     @Id

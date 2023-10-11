@@ -117,9 +117,11 @@ public class ChatRoomService {
         final User findUser = userRepository.findById(userInfo.userId())
                                             .orElse(User.EMPTY_USER);
         final Auction findAuction = auctionRepository.findAuctionById(auctionId)
-                                                     .orElse(Auction.EMPTY_AUCTION);
+                                                     .orElseThrow(() -> new AuctionNotFoundException(
+                                                             "지정한 아이디에 대한 경매를 찾을 수 없습니다."
+                                                     ));
 
-        if (findUser == User.EMPTY_USER || findAuction == Auction.EMPTY_AUCTION) {
+        if (findUser == User.EMPTY_USER) {
             return ReadChatRoomDto.CANNOT_CHAT_DTO;
         }
 
