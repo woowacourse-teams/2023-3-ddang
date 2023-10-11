@@ -144,10 +144,10 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                            .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
                            .leftJoin(region.firstRegion).fetchJoin()
                            .leftJoin(region.secondRegion).fetchJoin()
-                           .leftJoin(auction.subCategory, category).fetchJoin()
-                           .leftJoin(category.mainCategory).fetchJoin()
-                           .leftJoin(auction.seller).fetchJoin()
                            .leftJoin(auction.lastBid).fetchJoin()
+                           .join(auction.subCategory, category).fetchJoin()
+                           .join(category.mainCategory).fetchJoin()
+                           .join(auction.seller).fetchJoin()
                            .where(auction.id.in(targetIds.toArray(Long[]::new)))
                            .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                            .fetch();
