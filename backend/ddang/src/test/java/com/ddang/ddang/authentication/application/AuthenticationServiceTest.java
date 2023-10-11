@@ -129,7 +129,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty().contains("Bearer ");
             softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty().contains("Bearer ");
-            softAssertions.assertThat(actual.persisted()).isFalse();
+            softAssertions.assertThat(actual.isSignUpUser()).isFalse();
         });
     }
 

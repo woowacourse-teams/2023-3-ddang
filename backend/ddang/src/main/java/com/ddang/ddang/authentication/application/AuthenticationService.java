@@ -69,7 +69,7 @@ public class AuthenticationService {
             final Oauth2Type oauth2Type,
             final UserInformationDto userInformationDto
     ) {
-        final AtomicBoolean persisted = new AtomicBoolean(false);
+        final AtomicBoolean isSignUpUser = new AtomicBoolean(false);
 
         final User signInUser = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
                                          .orElseGet(() -> {
@@ -81,11 +81,11 @@ public class AuthenticationService {
                                                                    .oauthId(userInformationDto.findUserId())
                                                                    .build();
 
-                                             persisted.set(true);
+                                             isSignUpUser.set(true);
                                              return userRepository.save(user);
                                          });
 
-        return new LoginUserInformationDto(signInUser, persisted.get());
+        return new LoginUserInformationDto(signInUser, isSignUpUser.get());
     }
 
     private ProfileImage findDefaultProfileImage() {

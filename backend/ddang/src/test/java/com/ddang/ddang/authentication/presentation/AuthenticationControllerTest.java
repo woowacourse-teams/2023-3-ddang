@@ -251,7 +251,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                                                             .description("Access Token"),
                                 fieldWithPath("refreshToken").type(JsonFieldType.STRING)
                                                              .description("Refresh Token"),
-                                fieldWithPath("persisted").type(JsonFieldType.BOOLEAN)
+                                fieldWithPath("isSignUpUser").type(JsonFieldType.BOOLEAN)
                                                           .description("최초 로그인 여부(회원가입)")
                         )
                 )
