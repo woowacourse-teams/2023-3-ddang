@@ -164,7 +164,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     }
 
     @Test
-    void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_조회를_요청한_사용자_정보를_찾을_수_없다면_채팅방_아이디_null과_참여가능여부_거짓을_반환한다() {
+    void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_조회를_요청한_사용자_정보를_찾을_수_없다면_무조건_채팅방_아이디_null과_참여가능여부_거짓을_반환한다() {
         // when
         final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 존재하지_않는_사용자_정보);
 
