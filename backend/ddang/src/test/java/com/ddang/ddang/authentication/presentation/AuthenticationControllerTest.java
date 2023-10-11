@@ -59,7 +59,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void 소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_accessToken과_refreshToken을_반환한다() throws Exception {
         // given
-        given(authenticationService.login(eq(지원하는_소셜_로그인_타입), anyString(), anyString())).willReturn(발급된_토큰);
+        given(authenticationService.login(eq(지원하는_소셜_로그인_타입), anyString(), anyString())).willReturn(로그인한_사용자_정보);
 
         // when & then
         final ResultActions resultActions =
@@ -70,7 +70,8 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                        .andExpectAll(
                                status().isOk(),
                                jsonPath("$.accessToken").exists(),
-                               jsonPath("$.refreshToken").exists()
+                               jsonPath("$.refreshToken").exists(),
+                               jsonPath("$.persisted").exists()
                        );
 
         login_문서화(resultActions);
@@ -249,7 +250,9 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                                 fieldWithPath("accessToken").type(JsonFieldType.STRING)
                                                             .description("Access Token"),
                                 fieldWithPath("refreshToken").type(JsonFieldType.STRING)
-                                                             .description("Refresh Token")
+                                                             .description("Refresh Token"),
+                                fieldWithPath("persisted").type(JsonFieldType.BOOLEAN)
+                                                          .description("최초 로그인 여부(회원가입)")
                         )
                 )
         );

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
+import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.fixture.AuthenticationServiceFixture;
@@ -122,12 +123,13 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
 
         // when
-        final TokenDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
+        final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.accessToken()).isNotEmpty().contains("Bearer ");
-            softAssertions.assertThat(actual.refreshToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.persisted()).isFalse();
         });
     }
 
@@ -150,12 +152,12 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
 
         // when
-        final TokenDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
+        final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.accessToken()).isNotEmpty();
-            softAssertions.assertThat(actual.refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty();
+            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty();
         });
     }
 
@@ -166,12 +168,12 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
 
         // when
-        final TokenDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
+        final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.accessToken()).isNotEmpty();
-            softAssertions.assertThat(actual.refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty();
+            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty();
         });
     }
 
@@ -273,13 +275,13 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
 
         // when
-        final TokenDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
+        final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
 
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.accessToken()).isNotEmpty().contains("Bearer ");
-            softAssertions.assertThat(actual.refreshToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty().contains("Bearer ");
         });
     }
 }

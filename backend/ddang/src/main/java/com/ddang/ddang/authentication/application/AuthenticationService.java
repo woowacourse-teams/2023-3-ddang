@@ -1,5 +1,9 @@
 package com.ddang.ddang.authentication.application;
 
+import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
+
+import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
+import com.ddang.ddang.authentication.application.dto.LoginUserInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.util.RandomNameGenerator;
@@ -21,14 +25,12 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepositor
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Map;
-
-import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
 
 @Service
 @Transactional(readOnly = true)
@@ -47,33 +49,43 @@ public class AuthenticationService {
     private final JpaDeviceTokenRepository deviceTokenRepository;
 
     @Transactional
-    public TokenDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken, final String deviceToken) {
+    public LoginInformationDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken, final String deviceToken) {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
-        final User persistUser = findOrPersistUser(oauth2Type, userInformationDto);
+        final LoginUserInformationDto loginUserInfo = findOrPersistUser(oauth2Type, userInformationDto);
 
-        updateOrPersistDeviceToken(deviceToken, persistUser);
+        updateOrPersistDeviceToken(deviceToken, loginUserInfo.user());
 
-        return convertTokenDto(persistUser);
+        return LoginInformationDto.of(convertTokenDto(loginUserInfo), loginUserInfo);
     }
 
     private void updateOrPersistDeviceToken(final String deviceToken, final User persistUser) {
         final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(deviceToken);
+
         deviceTokenService.persist(persistUser.getId(), persistDeviceTokenDto);
     }
 
-    private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {
-        return userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
-                             .orElseGet(() -> {
-                                 final User user = User.builder()
-                                                       .name(oauth2Type.calculateNickname(calculateRandomNumber()))
-                                                       .profileImage(findDefaultProfileImage())
-                                                       .reliability(new Reliability(0.0d))
-                                                       .oauthId(userInformationDto.findUserId())
-                                                       .build();
+    private LoginUserInformationDto findOrPersistUser(
+            final Oauth2Type oauth2Type,
+            final UserInformationDto userInformationDto
+    ) {
+        final AtomicBoolean persisted = new AtomicBoolean(false);
 
-                                 return userRepository.save(user);
-                             });
+        final User signInUser = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
+                                         .orElseGet(() -> {
+                                             final User user = User.builder()
+                                                                   .name(oauth2Type.calculateNickname(
+                                                                           calculateRandomNumber()))
+                                                                   .profileImage(findDefaultProfileImage())
+                                                                   .reliability(new Reliability(0.0d))
+                                                                   .oauthId(userInformationDto.findUserId())
+                                                                   .build();
+
+                                             persisted.set(true);
+                                             return userRepository.save(user);
+                                         });
+
+        return new LoginUserInformationDto(signInUser, persisted.get());
     }
 
     private ProfileImage findDefaultProfileImage() {
@@ -95,16 +107,18 @@ public class AuthenticationService {
         return userRepository.existsByNameEndingWith(name);
     }
 
-    private TokenDto convertTokenDto(final User persistUser) {
+    private TokenDto convertTokenDto(LoginUserInformationDto signInUserInfo) {
+        final User loginUser = signInUserInfo.user();
+
         final String accessToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.ACCESS,
-                Map.of(PRIVATE_CLAIMS_KEY, persistUser.getId())
+                Map.of(PRIVATE_CLAIMS_KEY, loginUser.getId())
         );
         final String refreshToken = tokenEncoder.encode(
                 LocalDateTime.now(),
                 TokenType.REFRESH,
-                Map.of(PRIVATE_CLAIMS_KEY, persistUser.getId())
+                Map.of(PRIVATE_CLAIMS_KEY, loginUser.getId())
         );
 
         return new TokenDto(accessToken, refreshToken);
