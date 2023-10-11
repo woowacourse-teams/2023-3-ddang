@@ -67,13 +67,12 @@ public class AuthenticationController {
                              .build();
     }
 
-    @PostMapping("/withdrawal/{oauth2Type}")
+    @PostMapping("/withdrawal")
     public ResponseEntity<Void> withdrawal(
-            @PathVariable final Oauth2Type oauth2Type,
             @RequestHeader(HttpHeaders.AUTHORIZATION) final String accessToken,
             @RequestBody @Valid final WithdrawalRequest request
     ) {
-        authenticationService.withdrawal(oauth2Type, accessToken, request.refreshToken());
+        authenticationService.withdrawal(accessToken, request.refreshToken());
 
         return ResponseEntity.noContent()
                              .build();

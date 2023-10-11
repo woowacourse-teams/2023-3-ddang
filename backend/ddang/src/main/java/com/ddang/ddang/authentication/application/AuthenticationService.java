@@ -1,5 +1,7 @@
 package com.ddang.ddang.authentication.application;
 
+import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
+
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.util.RandomNameGenerator;
@@ -21,14 +23,11 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepositor
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Map;
-
-import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
 
 @Service
 @Transactional(readOnly = true)
@@ -131,17 +130,16 @@ public class AuthenticationService {
 
     @Transactional
     public void withdrawal(
-            final Oauth2Type oauth2Type,
             final String accessToken,
             final String refreshToken
     ) throws InvalidWithdrawalException {
-        final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
                                                         .orElseThrow(() ->
                                                                 new InvalidTokenException("유효한 토큰이 아닙니다.")
                                                         );
         final User user = userRepository.findByIdAndDeletedIsFalse(privateClaims.userId())
-                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다."));
+                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한이 없습니다."));
+        final OAuth2UserInformationProvider provider = providerComposite.findProvider(user.getOauth2Type());
 
         user.withdrawal();
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
