@@ -1,5 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.request;
 
+import com.ddang.ddang.auction.configuration.validator.ClosingTimeLimit;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,7 @@ public record CreateAuctionRequest(
 
         @NotNull(message = "마감 시간이 입력되지 않았습니다.")
         @Future(message = "마감 시간은 과거를 입력할 수 없습니다.")
+        @ClosingTimeLimit
         LocalDateTime closingTime,
 
         @NotNull(message = "하위 카테고리가 입력되지 않았습니다.")
