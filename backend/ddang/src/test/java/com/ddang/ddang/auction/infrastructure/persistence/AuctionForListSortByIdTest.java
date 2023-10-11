@@ -40,9 +40,9 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
-            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(첫번째_페이지_인덱스_0_id_16);
-            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(첫번째_페이지_인덱스_1_id_15);
-            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(첫번째_페이지_인덱스_2_id_14);
+            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(첫번째_페이지_인덱스_0_4일_후_마감_id_15);
+            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(첫번째_페이지_인덱스_1_4일_후_마감_id_14);
+            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(첫번째_페이지_인덱스_2_4일_후_마감_id_12);
             softAssertions.assertThat(actual.hasNext()).isTrue();
         });
     }
@@ -58,9 +58,9 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
-            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(두번째_페이지_인덱스_0_id_13);
-            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(두번째_페이지_인덱스_1_id_12);
-            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(두번째_페이지_인덱스_2_id_11);
+            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(두번째_페이지_인덱스_0_4일_후_마감_id_11);
+            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(두번째_페이지_인덱스_1_4일_후_마감_id_10);
+            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(두번째_페이지_인덱스_2_1일_후_마감_id_5);
             softAssertions.assertThat(actual.hasNext()).isTrue();
         });
     }
@@ -76,9 +76,9 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
-            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(세번째_페이지_인덱스_0_id_10);
-            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(세번째_페이지_인덱스_1_id_9);
-            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(세번째_페이지_인덱스_2_id_8);
+            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(세번째_페이지_인덱스_0_2일_후_마감_id_4);
+            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(세번째_페이지_인덱스_1_3일_후_마감_id_3);
+            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(세번째_페이지_인덱스_2_4일_후_마감_id_2);
             softAssertions.assertThat(actual.hasNext()).isTrue();
         });
     }
@@ -94,9 +94,9 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
-            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(네번째_페이지_인덱스_0_id_7);
-            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(네번째_페이지_인덱스_1_id_6);
-            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(네번째_페이지_인덱스_2_id_5);
+            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(네번째_페이지_인덱스_0_4일_전_마감_id_16);
+            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(네번째_페이지_인덱스_1_4일_전_마감_id_13);
+            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(네번째_페이지_인덱스_2_4일_전_마감_id_9);
             softAssertions.assertThat(actual.hasNext()).isTrue();
         });
     }
@@ -111,9 +111,9 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
 
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
-            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(다섯번째_페이지_인덱스_0_id_4);
-            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(다섯번째_페이지_인덱스_1_id_3);
-            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(다섯번째_페이지_인덱스_2_id_2);
+            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(다섯번째_페이지_인덱스_0_4일_전_마감_id_8);
+            softAssertions.assertThat(actual.getContent().get(1)).isEqualTo(다섯번째_페이지_인덱스_1_4일_전_마감_id_7);
+            softAssertions.assertThat(actual.getContent().get(2)).isEqualTo(다섯번째_페이지_인덱스_2_2일_전_마감_id_6);
             softAssertions.assertThat(actual.hasNext()).isTrue();
         });
     }
@@ -128,7 +128,7 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
 
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(1);
-            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(여섯번째_페이지_인덱스_0_id_1);
+            softAssertions.assertThat(actual.getContent().get(0)).isEqualTo(여섯번째_페이지_인덱스_0_5일_전_마감_id_1);
             softAssertions.assertThat(actual.hasNext()).isFalse();
         });
     }
