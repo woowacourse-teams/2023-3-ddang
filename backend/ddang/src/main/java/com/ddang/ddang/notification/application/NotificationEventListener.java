@@ -32,7 +32,7 @@ public class NotificationEventListener {
     public void sendMessageNotification(final MessageNotificationEvent messageNotificationEvent) {
         try {
             final MessageDto messageDto = messageNotificationEvent.messageDto();
-            final ProfileImage profileImage = messageDto.receiver().getProfileImage();
+            final ProfileImage profileImage = messageDto.writer().getProfileImage();
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.MESSAGE,
                     messageDto.receiver().getId(),

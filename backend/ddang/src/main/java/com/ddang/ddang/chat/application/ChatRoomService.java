@@ -115,11 +115,16 @@ public class ChatRoomService {
 
     public ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
         final User findUser = userRepository.findById(userInfo.userId())
-                                            .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+                                            .orElse(User.EMPTY_USER);
         final Auction findAuction = auctionRepository.findAuctionById(auctionId)
                                                      .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                      ));
+
+        if (findUser == User.EMPTY_USER) {
+            return ReadChatRoomDto.CANNOT_CHAT_DTO;
+        }
+
         final Long chatRoomId = chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                                   .orElse(DEFAULT_CHAT_ROOM_ID);
 
