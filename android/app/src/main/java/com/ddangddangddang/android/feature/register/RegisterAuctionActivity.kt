@@ -149,8 +149,8 @@ class RegisterAuctionActivity :
                 navigationToCategorySelection()
             }
 
-            RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
-                navigationToRegionSelection()
+            is RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
+                navigationToRegionSelection(event.directRegion)
             }
         }
     }
@@ -216,8 +216,8 @@ class RegisterAuctionActivity :
         categoryActivityLauncher.launch(SelectCategoryActivity.getIntent(this))
     }
 
-    private fun navigationToRegionSelection() {
-        regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
+    private fun navigationToRegionSelection(directRegion: List<RegionSelectionModel>) {
+        regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this, directRegion))
     }
 
     private fun setPrice(editText: EditText, watcher: DefaultTextWatcher, price: Int) {

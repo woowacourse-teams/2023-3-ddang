@@ -99,6 +99,12 @@ class SelectRegionsActivity :
     }
 
     companion object {
-        fun getIntent(context: Context): Intent = Intent(context, SelectRegionsActivity::class.java)
+        private const val KEY_DIRECT_REGION = "direct_region"
+
+        fun getIntent(context: Context, directRegion: List<RegionSelectionModel>): Intent {
+            val intent = Intent(context, SelectRegionsActivity::class.java)
+            intent.putExtra(KEY_DIRECT_REGION, directRegion.toTypedArray())
+            return intent
+        }
     }
 }

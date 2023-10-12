@@ -204,7 +204,7 @@ class RegisterAuctionViewModel @Inject constructor(private val repository: Aucti
     }
 
     fun setPickRegionEvent() {
-        _event.value = RegisterAuctionEvent.PickRegion
+        _event.value = RegisterAuctionEvent.PickRegion(_directRegion.value ?: emptyList())
     }
 
     private fun setBlankExistEvent() {
@@ -237,7 +237,7 @@ class RegisterAuctionViewModel @Inject constructor(private val repository: Aucti
         object MultipleMediaPicker : RegisterAuctionEvent()
 
         object PickCategory : RegisterAuctionEvent()
-        object PickRegion : RegisterAuctionEvent()
+        class PickRegion(val directRegion: List<RegionSelectionModel>) : RegisterAuctionEvent()
     }
 
     companion object {
