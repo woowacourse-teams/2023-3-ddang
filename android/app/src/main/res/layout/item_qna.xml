@@ -6,8 +6,12 @@
     <data>
 
         <variable
+            name="onItemClick"
+            type="kotlin.jvm.functions.Function1" />
+
+        <variable
             name="model"
-            type="com.ddangddangddang.android.model.QnAModel" />
+            type="com.ddangddangddang.android.model.QnAModel.QuestionAndAnswer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,9 +20,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_question_title"
+            isSelected="@{model.isPicked}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/grey_50_to_selected_second_region_bg_selected"
+            android:onClick="@{() -> onItemClick.invoke(model.id)}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="18dp"
             app:layout_constraintEnd_toEndOf="parent"
