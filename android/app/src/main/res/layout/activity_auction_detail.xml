@@ -157,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14dp"
-                    android:background="@drawable/bg_radius_5dp"
+                    android:background="@drawable/bg_radius_8dp"
                     android:backgroundTint="@{AuctionDetailFormatter.INSTANCE.formatAuctionStatusColor(context, viewModel.auctionDetailModel.auctionDetailStatusModel.colorId)}"
                     android:paddingHorizontal="10dp"
                     android:paddingVertical="4dp"
