@@ -70,9 +70,16 @@
     <string name="detail_auction_enter_chat_room_failure">채팅방에 입장하는데 실패했습니다</string>
 
     <!-- detail_auction_info -->
+    <string name="detail_auction_info_title">상품 정보</string>
     <string name="detail_auction_info_description">상품 설명</string>
     <string name="detail_auction_info_direct_exchange_regions_description">직거래 가능 지역</string>
     <string name="detail_auction_info_seller_info">판매자 정보</string>
+
+    <!-- detail_auction_qua -->
+    <string name="detail_auction_qna_title">Q&amp;A</string>
+
+    <!-- detail_auction_qua -->
+    <string name="detail_auction_bid_history">입찰 내역</string>
 
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>

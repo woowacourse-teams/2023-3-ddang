@@ -31,9 +31,17 @@ class AuctionDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
+        setupDetailView()
         setupViewModel()
 
         if (savedInstanceState == null) viewModel.loadAuctionDetail(auctionId)
+    }
+
+    private fun setupDetailView() {
+        binding.vpDetailInfo.adapter = DetailFragmentAdapter(supportFragmentManager, lifecycle)
+        TabLayoutMediator(binding.tbDetailInfo, binding.vpDetailInfo) { tab, position ->
+            tab.text = getString(DetailFragmentType.getTypeFrom(position).nameId)
+        }.attach()
     }
 
     private fun setupViewModel() {

@@ -90,11 +90,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
 
     private fun scrollHomeToTop() {
         val homeFragment =
-            supportFragmentManager.findFragmentByTag(FragmentType.HOME.tag) as? HomeFragment
+            supportFragmentManager.findFragmentByTag(MainFragmentType.HOME.tag) as? HomeFragment
         homeFragment?.scrollToTop()
     }
 
-    private fun changeFragment(type: FragmentType) {
+    private fun changeFragment(type: MainFragmentType) {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
 
@@ -108,12 +108,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         }
     }
 
-    private fun createFragment(type: FragmentType): Fragment {
+    private fun createFragment(type: MainFragmentType): Fragment {
         return when (type) {
-            FragmentType.HOME -> HomeFragment()
-            FragmentType.SEARCH -> SearchFragment()
-            FragmentType.MESSAGE -> MessageFragment()
-            FragmentType.MY_PAGE -> MyPageFragment()
+            MainFragmentType.HOME -> HomeFragment()
+            MainFragmentType.SEARCH -> SearchFragment()
+            MainFragmentType.MESSAGE -> MessageFragment()
+            MainFragmentType.MY_PAGE -> MyPageFragment()
         }
     }
 

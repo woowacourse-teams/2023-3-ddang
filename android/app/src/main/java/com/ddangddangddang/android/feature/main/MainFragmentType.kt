@@ -1,6 +1,6 @@
 package com.ddangddangddang.android.feature.main
 
-enum class FragmentType(val tag: String) {
+enum class MainFragmentType(val tag: String) {
     HOME("fragment_home_tag"),
     SEARCH("fragment_search_tag"),
     MESSAGE("fragment_message_tag"),
