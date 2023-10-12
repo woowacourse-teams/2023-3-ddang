@@ -1,136 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="model"
+            type="com.ddangddangddang.android.model.QnAModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_question_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/grey_50_to_selected_second_region_bg_selected"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="18dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-
-        <TextView
-            style="@style/Body"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_question_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Q. 사이클 50 맞음?" />
-
-        <TextView
-            style="@style/AuctionStatusCaption"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_radius_8dp"
-            android:paddingHorizontal="10dp"
-            android:paddingVertical="4dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@color/grey_50_to_selected_second_region_bg_selected"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="18dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:backgroundTint="@color/red_900"
-            tools:text="답변 대기" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{@string/detail_auction_qna_question_prefix(model.questionTitle)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Q. 사이클 50 맞음?" />
+
+            <TextView
+                style="@style/AuctionStatusCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_radius_8dp"
+                android:backgroundTint="@{model.status.colorId}"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="@{model.status.questionStatus}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:backgroundTint="@color/red_900"
+                tools:text="답변 대기" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_content_n_answer"
+            isVisible="false"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_question_title">
+
+            <TextView
+                android:id="@+id/tv_content"
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{model.contents}"
+                android:textColor="@color/grey_800"
+                app:layout_constraintBottom_toTopOf="@id/tv_delete_question"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="힝잉잉" />
+
+            <TextView
+                android:id="@+id/tv_delete_question"
+                style="@style/Body"
+                isVisible="@{model.isQuestioner}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/detail_auction_qna_delete"
+                android:textColor="@color/grey_800"
+                app:drawableEndCompat="@drawable/ic_delete_24"
+                app:drawableTint="@color/grey_800"
+                app:layout_constraintBottom_toTopOf="@id/tv_seller_answer_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_content" />
+
+            <TextView
+                android:id="@+id/tv_seller_answer_title"
+                style="@style/Header2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:textColor="@color/grey_800"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_delete_question"
+                tools:text="@string/detail_auction_qna_seller_answer_title" />
+
+            <TextView
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                android:text="@{model.answer == null ? @string/detail_auction_qna_no_answer : model.answer}"
+                android:textColor="@color/grey_800"
+                app:layout_constraintBottom_toTopOf="@id/tv_write_answer"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_seller_answer_title" />
+
+            <TextView
+                android:id="@+id/tv_write_answer"
+                style="@style/Body"
+                isVisible="@{model.isOwner &amp;&amp; model.answer == null}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/detail_auction_qna_answer_write"
+                android:textColor="@color/grey_800"
+                app:drawableEndCompat="@drawable/ic_create_24"
+                app:drawableTint="@color/grey_800"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_delete_answer"
+                style="@style/Body"
+                isVisible="@{model.isOwner &amp;&amp; model.answer != null}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:text="@string/detail_auction_qna_delete"
+                android:textColor="@color/grey_800"
+                app:drawableEndCompat="@drawable/ic_delete_24"
+                app:drawableTint="@color/grey_800"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_content_n_answer"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        isVisible="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cl_question_title">
-
-        <TextView
-            android:id="@+id/tv_content"
-            style="@style/Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/grey_800"
-            app:layout_constraintBottom_toTopOf="@id/tv_delete_question"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="힝잉잉" />
-
-        <TextView
-            android:id="@+id/tv_delete_question"
-            style="@style/Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:drawablePadding="4dp"
-            android:gravity="center_vertical"
-            android:text="@string/detail_auction_qna_delete"
-            android:textColor="@color/grey_800"
-            app:drawableEndCompat="@drawable/ic_delete_24"
-            app:drawableTint="@color/grey_800"
-            app:layout_constraintBottom_toTopOf="@id/tv_seller_answer_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_content" />
-
-        <TextView
-            android:id="@+id/tv_seller_answer_title"
-            style="@style/Header2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:textColor="@color/grey_800"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_delete_question"
-            tools:text="@string/detail_auction_qna_seller_answer_title" />
-
-        <TextView
-            style="@style/Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="20dp"
-            android:text="@string/detail_auction_qna_no_answer"
-            android:textColor="@color/grey_800"
-            app:layout_constraintBottom_toTopOf="@id/tv_write_answer"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_seller_answer_title" />
-
-        <TextView
-            android:id="@+id/tv_write_answer"
-            style="@style/Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="4dp"
-            android:gravity="center_vertical"
-            android:text="@string/detail_auction_qna_answer_write"
-            android:textColor="@color/grey_800"
-            app:drawableEndCompat="@drawable/ic_create_24"
-            app:drawableTint="@color/grey_800"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_delete_answer"
-            style="@style/Body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawablePadding="4dp"
-            android:gravity="center_vertical"
-            android:text="@string/detail_auction_qna_delete"
-            android:textColor="@color/grey_800"
-            android:visibility="gone"
-            app:drawableEndCompat="@drawable/ic_delete_24"
-            app:drawableTint="@color/grey_800"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
