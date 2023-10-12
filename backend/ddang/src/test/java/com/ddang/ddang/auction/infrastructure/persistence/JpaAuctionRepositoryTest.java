@@ -35,7 +35,7 @@ class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
         // when
-        final Optional<Auction> actual = auctionRepository.findAuctionById(저장된_경매_엔티티.getId());
+        final Optional<Auction> actual = auctionRepository.findTotalAuctionById(저장된_경매_엔티티.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -52,7 +52,7 @@ class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
     @Test
     void 삭제된_아이디에_대한_경매_조회시_빈_optional을_반환한다() {
         // when
-        final Optional<Auction> actual = auctionRepository.findAuctionById(삭제된_경매_엔티티.getId());
+        final Optional<Auction> actual = auctionRepository.findTotalAuctionById(삭제된_경매_엔티티.getId());
 
         // then
         assertThat(actual).isEmpty();

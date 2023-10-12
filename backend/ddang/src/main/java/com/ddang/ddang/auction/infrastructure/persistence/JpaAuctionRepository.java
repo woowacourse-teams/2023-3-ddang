@@ -21,5 +21,5 @@ public interface JpaAuctionRepository extends JpaRepository<Auction, Long>, Quer
         JOIN FETCH a.seller
         WHERE a.deleted = false AND a.id = :id
     """)
-    Optional<Auction> findAuctionById(final Long id);
+    Optional<Auction> findTotalAuctionById(final Long id);
 }
