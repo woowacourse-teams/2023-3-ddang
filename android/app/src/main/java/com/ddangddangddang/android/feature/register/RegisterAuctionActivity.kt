@@ -29,6 +29,7 @@ import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Calendar
 
 @AndroidEntryPoint
 class RegisterAuctionActivity :
@@ -168,7 +169,12 @@ class RegisterAuctionActivity :
             selectedDateTime.year,
             selectedDateTime.monthValue - 1,
             selectedDateTime.dayOfMonth,
-        ).show()
+        ).apply {
+            val calendar: Calendar = Calendar.getInstance()
+            this.datePicker.minDate = calendar.timeInMillis
+            calendar.add(Calendar.DATE, 29)
+            this.datePicker.maxDate = calendar.timeInMillis
+        }.show()
     }
 
     private fun showTimePicker(selectedTime: LocalTime) {
