@@ -22,4 +22,7 @@ public interface JpaAuctionRepository extends JpaRepository<Auction, Long>, Quer
         WHERE a.deleted = false AND a.id = :id
     """)
     Optional<Auction> findTotalAuctionById(final Long id);
+
+    @Query("SELECT a FROM Auction a WHERE a.deleted = false AND a.id = :id")
+    Optional<Auction> findPureAuctionById(final Long id);
 }
