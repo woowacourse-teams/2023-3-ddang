@@ -9,6 +9,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentMessageBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
+import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,17 +20,37 @@ class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragmen
         viewModel.navigateToMessageRoom(roomId)
     }
 
+    private val messageReceiver: MessageReceiver by lazy {
+        MessageReceiver { viewModel.loadMessageRooms() } // 필터링 없이 모든 수신을 받아서 처리 한다.
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewModel()
         setupMessageRoomsRecyclerView()
         binding.viewModel = viewModel
-        if (viewModel.messageRooms.value == null) viewModel.loadMessageRooms()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireContext().registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
+        viewModel.loadMessageRooms() // 홈 키에서 돌아올 때, 메시지 방에서 돌아올 때 갱신 되도록 하기 위해 여기 배치
+    }
+
+    override fun onPause() {
+        super.onPause()
+        unregisterMessageReceiver()
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
         super.onHiddenChanged(hidden)
-        if (hidden.not()) viewModel.loadMessageRooms()
+        if (hidden) return unregisterMessageReceiver()
+        requireContext().registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
+        viewModel.loadMessageRooms()
+    }
+
+    private fun unregisterMessageReceiver() {
+        runCatching { requireContext().unregisterReceiver(messageReceiver) }
     }
 
     private fun setupViewModel() {
