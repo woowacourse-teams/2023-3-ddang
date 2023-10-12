@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_radius_8dp"
-                android:backgroundTint="@{model.status.colorId}"
+                android:backgroundTint="@{context.getColor(model.status.colorId)}"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="4dp"
                 android:text="@{model.status.questionStatus}"
@@ -61,7 +61,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_content_n_answer"
-            isVisible="false"
+            isVisible="@{model.isPicked}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:padding="16dp"
