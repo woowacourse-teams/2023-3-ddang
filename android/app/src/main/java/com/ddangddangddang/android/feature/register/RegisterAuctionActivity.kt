@@ -150,7 +150,7 @@ class RegisterAuctionActivity :
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
-                navigationToRegionSelection(event.directRegion)
+                navigationToRegionSelection(event.regionSelected)
             }
         }
     }

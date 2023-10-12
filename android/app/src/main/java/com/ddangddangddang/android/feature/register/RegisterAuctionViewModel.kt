@@ -237,7 +237,7 @@ class RegisterAuctionViewModel @Inject constructor(private val repository: Aucti
         object MultipleMediaPicker : RegisterAuctionEvent()
 
         object PickCategory : RegisterAuctionEvent()
-        class PickRegion(val directRegion: List<RegionSelectionModel>) : RegisterAuctionEvent()
+        class PickRegion(val regionSelected: List<RegionSelectionModel>) : RegisterAuctionEvent()
     }
 
     companion object {

@@ -10,6 +10,7 @@ import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.register.RegisterAuctionActivity
 import com.ddangddangddang.android.model.RegionSelectionModel
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.compat.getSerializableExtraCompat
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,6 +44,7 @@ class SelectRegionsActivity :
         setupAdapter()
         setupObserve()
         viewModel.loadFirstRegions()
+        setupRegionSelected()
     }
 
     private fun setupAdapter() {
@@ -98,12 +100,18 @@ class SelectRegionsActivity :
         finish()
     }
 
-    companion object {
-        private const val KEY_DIRECT_REGION = "direct_region"
+    private fun setupRegionSelected() {
+        val regionSelected =
+            intent.getSerializableExtraCompat<Array<RegionSelectionModel>>(KEY_REGION_SELECTED)
+        regionSelected?.let { viewModel.setupRegionSelected(it.toList()) }
+    }
 
-        fun getIntent(context: Context, directRegion: List<RegionSelectionModel>): Intent {
+    companion object {
+        private const val KEY_REGION_SELECTED = "region_selected"
+
+        fun getIntent(context: Context, regionSelected: List<RegionSelectionModel>): Intent {
             val intent = Intent(context, SelectRegionsActivity::class.java)
-            intent.putExtra(KEY_DIRECT_REGION, directRegion.toTypedArray())
+            intent.putExtra(KEY_REGION_SELECTED, regionSelected.toTypedArray())
             return intent
         }
     }
