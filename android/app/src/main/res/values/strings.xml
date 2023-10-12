@@ -71,6 +71,7 @@
 
     <!-- detail_auction_bid_history -->
     <string name="detail_auction_bid_history_price_format">%,d원</string>
+    <string name="detail_auction_bid_history_load_failure">경매 입찰 내역을 불러오는데 실패했습니다</string>
 
     <!-- detail_auction_info -->
     <string name="detail_auction_info_description">상품 설명</string>

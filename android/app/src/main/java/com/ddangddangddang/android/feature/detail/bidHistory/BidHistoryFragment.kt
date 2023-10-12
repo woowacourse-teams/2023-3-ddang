@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentBidHistoryBinding
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,10 +35,24 @@ class BidHistoryFragment :
 
     private fun setupViewModel() {
         activityViewModel.auctionDetailModel.observe(viewLifecycleOwner) {
-            viewModel.loadBidHistory()
+            viewModel.loadBidHistory(it.id)
         }
         viewModel.histories.observe(viewLifecycleOwner) {
             adapter.changeBidHistories(it)
+        }
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
+        }
+    }
+
+    private fun handleEvent(event: BidHistoryViewModel.Event) {
+        when (event) {
+            is BidHistoryViewModel.Event.BidHistoryLoadFailure -> {
+                requireActivity().notifyFailureMessage(
+                    event.error,
+                    R.string.detail_auction_bid_history_load_failure,
+                )
+            }
         }
     }
 }

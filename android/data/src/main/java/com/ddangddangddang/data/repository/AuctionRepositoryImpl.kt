@@ -11,6 +11,7 @@ import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.BidHistoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import java.io.File
 import javax.inject.Inject
@@ -87,5 +88,9 @@ class AuctionRepositoryImpl @Inject constructor(
         val response = remoteDataSource.deleteAuction(auctionId)
         if (response is ApiResponse.Success) localDataSource.removeAuctionPreview(auctionId)
         return response
+    }
+
+    override suspend fun getBidHistories(auctionId: Long): ApiResponse<List<BidHistoryResponse>> {
+        return remoteDataSource.getBidHistories(auctionId)
     }
 }

@@ -6,6 +6,7 @@ import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.BidHistoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import java.io.File
 
@@ -40,4 +41,5 @@ interface AuctionRepository {
     suspend fun reportAuction(auctionId: Long, description: String): ApiResponse<Unit>
     suspend fun reportMessageRoom(roomId: Long, description: String): ApiResponse<Unit>
     suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit>
+    suspend fun getBidHistories(auctionId: Long): ApiResponse<List<BidHistoryResponse>>
 }
