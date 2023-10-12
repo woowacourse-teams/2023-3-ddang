@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.detail.bidHistrory
+package com.ddangddangddang.android.feature.detail.bidHistory
 
 import android.os.Bundle
 import android.view.View

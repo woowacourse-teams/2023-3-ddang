@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.detail.bidHistrory
+package com.ddangddangddang.android.feature.detail.bidHistory
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil

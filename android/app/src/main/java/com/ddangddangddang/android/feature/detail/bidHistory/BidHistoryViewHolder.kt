@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.detail.bidHistrory
+package com.ddangddangddang.android.feature.detail.bidHistory
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -11,6 +11,7 @@ class BidHistoryViewHolder private constructor(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: BidHistoryModel) {
+        binding.item = item
     }
 
     companion object {
