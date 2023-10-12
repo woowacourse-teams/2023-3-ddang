@@ -81,6 +81,8 @@
     <string name="detail_auction_qna_no_answer">아직 작성된 답변이 없습니다.</string>
     <string name="detail_auction_qna_answer_write">작성하기</string>
     <string name="detail_auction_qna_delete">삭제하기</string>
+    <string name="detail_auction_qna_waiting">답변대기</string>
+    <string name="detail_auction_qna_complete">답변완료</string>
 
     <!-- detail_auction_qua -->
     <string name="detail_auction_bid_history">입찰 내역</string>
