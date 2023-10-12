@@ -62,7 +62,7 @@ public class AuthenticationService {
     }
 
     private User findOrPersistUser(final Oauth2Type oauth2Type, final UserInformationDto userInformationDto) {
-        return userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
+        return userRepository.findByOauthId(userInformationDto.findUserId())
                              .orElseGet(() -> {
                                  final User user = User.builder()
                                                        .name(oauth2Type.calculateNickname(calculateRandomNumber()))
@@ -139,11 +139,12 @@ public class AuthenticationService {
                                                         );
         final User user = userRepository.findByIdAndDeletedIsFalse(privateClaims.userId())
                                         .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한이 없습니다."));
-        final OAuth2UserInformationProvider provider = providerComposite.findProvider(user.getOauth2Type());
+        final OAuth2UserInformationProvider provider = providerComposite.findProvider(user.getOauthInformation()
+                                                                                          .getOauth2Type());
 
         user.withdrawal();
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
         deviceTokenRepository.deleteByUserId(user.getId());
-        provider.unlinkUserBy(user.getOauthId());
+        provider.unlinkUserBy(user.getOauthInformation().getOauthId());
     }
 }

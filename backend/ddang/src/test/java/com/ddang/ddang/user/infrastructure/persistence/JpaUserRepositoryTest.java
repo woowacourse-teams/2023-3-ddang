@@ -1,5 +1,7 @@
 package com.ddang.ddang.user.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.Reliability;
@@ -7,16 +9,13 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.fixture.JpaUserRepositoryFixture;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
@@ -53,7 +52,7 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
     @Test
     void 존재하는_oauthId를_전달하면_해당_회원을_Optional로_감싸_반환한다() {
         // when
-        final Optional<User> actual = userRepository.findByOauthIdAndDeletedIsFalse(사용자.getOauthId());
+        final Optional<User> actual = userRepository.findByOauthId(사용자.getOauthInformation().getOauthId());
 
         // then
         assertThat(actual).contains(사용자);
@@ -62,7 +61,7 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
     @Test
     void 존재하지_않는_oauthId를_전달하면_해당_회원을_빈_Optional로_반환한다() {
         // when
-        final Optional<User> actual = userRepository.findByOauthIdAndDeletedIsFalse(존재하지_않는_oauth_아이디);
+        final Optional<User> actual = userRepository.findByOauthId(존재하지_않는_oauth_아이디);
 
         // then
         assertThat(actual).isEmpty();

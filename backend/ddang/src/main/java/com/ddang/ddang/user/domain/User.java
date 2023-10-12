@@ -9,8 +9,6 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
@@ -54,13 +52,11 @@ public class User extends BaseTimeEntity {
     @AttributeOverride(name = "value", column = @Column(name = "reliability"))
     private Reliability reliability;
 
-    private String oauthId;
+    @Embedded
+    private OauthInformation oauthInformation;
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
-
-    @Enumerated(EnumType.STRING)
-    private Oauth2Type oauth2Type;
 
     @Builder
     private User(
@@ -73,8 +69,7 @@ public class User extends BaseTimeEntity {
         this.name = name;
         this.profileImage = profileImage;
         this.reliability = processReliability(reliability);
-        this.oauthId = oauthId;
-        this.oauth2Type = oauth2Type;
+        this.oauthInformation = new OauthInformation(oauthId, oauth2Type);
     }
 
     private Reliability processReliability(final Reliability reliability) {
