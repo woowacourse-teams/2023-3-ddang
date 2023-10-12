@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -10,8 +12,47 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/margin_side_layout">
 
+        <TextView
+            android:id="@+id/tv_name"
+            style="@style/Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@{item.name}"
+            android:textColor="@color/grey_800"
+            app:layout_constraintEnd_toStartOf="@id/tv_bid_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="둘리" />
+
+        <TextView
+            android:id="@+id/tv_bid_price"
+            style="@style/Header2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@{@string/detail_auction_bid_history_price_format(item.price)}"
+            android:textColor="@color/grey_800"
+            app:layout_constraintEnd_toStartOf="@id/tv_bid_time"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_name"
+            tools:text="40,000원" />
+
+        <TextView
+            android:id="@+id/tv_bid_time"
+            style="@style/Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@{item.bidDateTime.toString()}"
+            android:textColor="@color/grey_500"
+            app:layout_constraintBottom_toBottomOf="@id/tv_bid_price"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_name"
+            tools:text="2023-10-12 10:45:44" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

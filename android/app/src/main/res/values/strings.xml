@@ -69,6 +69,9 @@
     <string name="detail_auction_load_failure">게시글을 불러오는데 실패했습니다</string>
     <string name="detail_auction_enter_chat_room_failure">채팅방에 입장하는데 실패했습니다</string>
 
+    <!-- detail_auction_bid_history -->
+    <string name="detail_auction_bid_history_price_format">%,d원</string>
+
     <!-- detail_auction_info -->
     <string name="detail_auction_info_description">상품 설명</string>
     <string name="detail_auction_info_direct_exchange_regions_description">직거래 가능 지역</string>
