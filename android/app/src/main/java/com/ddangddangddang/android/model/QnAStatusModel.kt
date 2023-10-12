@@ -8,8 +8,8 @@ enum class QnAStatusModel(
     @StringRes val questionStatus: Int,
     @ColorRes val colorId: Int,
 ) {
-    WAITING(R.string.detail_auction_qna_waiting, R.color.red_300),
-    COMPLETE(R.string.detail_auction_qna_complete, R.color.green),
+    WAITING(R.string.detail_auction_qna_waiting, R.color.grey_700),
+    COMPLETE(R.string.detail_auction_qna_complete, R.color.red_300),
     ;
 
     companion object {
