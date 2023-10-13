@@ -10,6 +10,7 @@ import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.BidHistoryResponse
 import com.ddangddangddang.data.model.response.ChatMessageIdResponse
 import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
@@ -134,4 +135,7 @@ interface AuctionService {
 
     @GET("/auctions/{auctionId}/reviews")
     suspend fun getReviewUser(@Path("auctionId") auctionId: Long): ApiResponse<UserReviewResponse>
+
+    @GET("/bids/{auctionId}")
+    suspend fun getBidHistories(@Path("auctionId") auctionId: Long): ApiResponse<List<BidHistoryResponse>>
 }
