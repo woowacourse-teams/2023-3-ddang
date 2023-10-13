@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class QuerydslAuctionAndImageRepositoryImplFixture {
+public class QuerydslAuctionAndImageRepositoryFixture {
 
     @PersistenceContext
     private EntityManager em;

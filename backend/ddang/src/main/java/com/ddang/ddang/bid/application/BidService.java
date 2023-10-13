@@ -3,7 +3,8 @@ package com.ddang.ddang.bid.application;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
-import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
+import com.ddang.ddang.auction.domain.dto.AuctionAndImageDto;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionAndImageRepository;
 import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
@@ -35,6 +36,7 @@ public class BidService {
 
     private final ApplicationEventPublisher bidEventPublisher;
     private final JpaAuctionRepository auctionRepository;
+    private final QuerydslAuctionAndImageRepository querydslAuctionAndImageRepository;
     private final JpaUserRepository userRepository;
     private final JpaBidRepository bidRepository;
 
@@ -43,7 +45,7 @@ public class BidService {
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final AuctionAndImageDto auctionAndImageDto =
-                auctionRepository.findDtoByAuctionId(bidDto.auctionId())
+                querydslAuctionAndImageRepository.findDtoByAuctionId(bidDto.auctionId())
                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
 
         final Auction auction = auctionAndImageDto.auction();

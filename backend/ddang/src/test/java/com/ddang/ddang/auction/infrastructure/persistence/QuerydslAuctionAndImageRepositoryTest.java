@@ -1,11 +1,13 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
-import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
-import com.ddang.ddang.auction.infrastructure.persistence.fixture.QuerydslAuctionAndImageRepositoryImplFixture;
+import com.ddang.ddang.auction.domain.dto.AuctionAndImageDto;
+import com.ddang.ddang.auction.infrastructure.persistence.fixture.QuerydslAuctionAndImageRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -17,15 +19,19 @@ import org.springframework.context.annotation.Import;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class QuerydslAuctionAndImageRepositoryImplTest extends QuerydslAuctionAndImageRepositoryImplFixture {
+class QuerydslAuctionAndImageRepositoryTest extends QuerydslAuctionAndImageRepositoryFixture {
 
-    @Autowired
-    JpaAuctionRepository auctionRepository;
+    QuerydslAuctionAndImageRepository querydslAuctionAndImageRepository;
+
+    @BeforeEach
+    void setUp(@Autowired JPAQueryFactory queryFactory) {
+        querydslAuctionAndImageRepository = new QuerydslAuctionAndImageRepository(queryFactory);
+    }
 
     @Test
     void 경매와_경매_대표이미지를_조회한다() {
         // when
-        final Optional<AuctionAndImageDto> actual = auctionRepository.findDtoByAuctionId(경매.getId());
+        final Optional<AuctionAndImageDto> actual = querydslAuctionAndImageRepository.findDtoByAuctionId(경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
