@@ -53,6 +53,7 @@ public class ReliabilityUpdateSchedulingService {
         }
 
         final ReliabilityUpdateHistory newHistory = new ReliabilityUpdateHistory(newReviews.findLastReviewId());
+
         updateHistoryRepository.save(newHistory);
     }
 

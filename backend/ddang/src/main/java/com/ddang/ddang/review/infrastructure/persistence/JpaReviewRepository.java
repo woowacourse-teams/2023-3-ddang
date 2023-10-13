@@ -12,7 +12,9 @@ public interface JpaReviewRepository extends JpaRepository<Review, Long> {
     boolean existsByAuctionIdAndWriterId(final Long auctionId, final Long writerId);
 
     @Query("""
-            SELECT r FROM Review r JOIN FETCH r.writer w JOIN FETCH r.target t 
+            SELECT r FROM Review r 
+            JOIN FETCH r.writer w 
+            JOIN FETCH r.target t 
             WHERE t.id = :targetId 
             ORDER BY r.id DESC
            """)
