@@ -224,7 +224,6 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     @Test
     void 가입한_회원이_탈퇴하는_경우_정상처리한다() throws InvalidWithdrawalException {
         // given
-        //given(tokenDecoder.decode(TokenType.ACCESS, anyString())).willReturn(Optional.of(사용자_id_클레임));
         given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
         given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
 
