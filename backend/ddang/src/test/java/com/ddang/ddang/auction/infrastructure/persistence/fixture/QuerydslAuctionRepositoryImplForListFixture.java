@@ -129,6 +129,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.minusDays(2))
                      .seller(판매자_0_3점_1)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         bidding(경매6, 판매자_4_7점);
         addAuctioneerCount(경매6, 7);
@@ -138,7 +139,8 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .bidUnit(new BidUnit(1_000))
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.minusDays(4))
-                     .seller(판매자_3_5점) // ㅇㅋ
+                     .seller(판매자_3_5점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         bidding(경매8, 판매자_4_7점);
         addAuctioneerCount(경매8, 5);
@@ -148,7 +150,8 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                       .bidUnit(new BidUnit(1_000))
                       .startPrice(new Price(1_000))
                       .closingTime(현재시간.minusDays(4))
-                      .seller(판매자_3_5점) // ㅇㅋ
+                      .seller(판매자_3_5점)
+                      .subCategory(기타_서브_기타_카테고리)
                       .build();
         bidding(경매16, 판매자_4_7점);
         addAuctioneerCount(경매16, 4);
@@ -159,6 +162,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.minusDays(4))
                      .seller(판매자_2_1점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         bidding(경매9, 판매자_4_7점);
         addAuctioneerCount(경매9, 5);
@@ -169,6 +173,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                       .startPrice(new Price(1_000))
                       .closingTime(현재시간.minusDays(4))
                       .seller(판매자_2_1점)
+                      .subCategory(기타_서브_기타_카테고리)
                       .build();
         bidding(경매13, 판매자_4_7점);
         addAuctioneerCount(경매13, 5);
@@ -179,6 +184,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.minusDays(3))
                      .seller(판매자_4_7점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         addAuctioneerCount(경매7, 3);
         경매1 = Auction.builder()
@@ -188,6 +194,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.minusDays(5))
                      .seller(판매자_4_7점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         addAuctioneerCount(경매1, 2);
         bidding(경매16, 판매자_4_7점);
@@ -198,6 +205,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.plusDays(4))
                      .seller(판매자_2_1점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         addAuctioneerCount(경매2, 1);
         경매3 = Auction.builder()
@@ -207,6 +215,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.plusDays(3))
                      .seller(판매자_2_1점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         addAuctioneerCount(경매3, 4);
         경매4 = Auction.builder()
@@ -216,6 +225,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.plusDays(2))
                      .seller(판매자_5_0점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         addAuctioneerCount(경매4, 7);
         경매5 = Auction.builder()
@@ -225,6 +235,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                      .startPrice(new Price(1_000))
                      .closingTime(현재시간.plusDays(1))
                      .seller(판매자_1_5점)
+                     .subCategory(기타_서브_기타_카테고리)
                      .build();
         addAuctioneerCount(경매5, 4);
         경매10 = Auction.builder()
@@ -233,7 +244,8 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                       .bidUnit(new BidUnit(1_000))
                       .startPrice(new Price(1_000))
                       .closingTime(현재시간.plusDays(4))
-                      .seller(판매자_3_5점) // ㅇㅋ
+                      .seller(판매자_3_5점)
+                      .subCategory(기타_서브_기타_카테고리)
                       .build();
         addAuctioneerCount(경매10, 6);
         경매11 = Auction.builder()
@@ -243,6 +255,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                       .startPrice(new Price(1_000))
                       .closingTime(현재시간.plusDays(4))
                       .seller(판매자_2_1점)
+                      .subCategory(기타_서브_기타_카테고리)
                       .build();
         addAuctioneerCount(경매11, 6);
         경매12 = Auction.builder()
@@ -251,7 +264,8 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                       .bidUnit(new BidUnit(1_000))
                       .startPrice(new Price(1_000))
                       .closingTime(현재시간.plusDays(4))
-                      .seller(판매자_3_5점) // ㅇㅋ
+                      .seller(판매자_3_5점)
+                      .subCategory(기타_서브_기타_카테고리)
                       .build();
         addAuctioneerCount(경매12, 6);
         경매14 = Auction.builder()
@@ -260,7 +274,8 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                       .bidUnit(new BidUnit(1_000))
                       .startPrice(new Price(1_000))
                       .closingTime(현재시간.plusDays(4))
-                      .seller(판매자_3_5점) // ㅇㅋ
+                      .seller(판매자_3_5점)
+                      .subCategory(기타_서브_기타_카테고리)
                       .build();
         addAuctioneerCount(경매14, 6);
         경매15 = Auction.builder()
@@ -270,6 +285,7 @@ public class QuerydslAuctionRepositoryImplForListFixture {
                       .startPrice(new Price(1_000))
                       .closingTime(현재시간.plusDays(4))
                       .seller(판매자_2_1점)
+                      .subCategory(기타_서브_기타_카테고리)
                       .build();
         addAuctioneerCount(경매15, 6);
 

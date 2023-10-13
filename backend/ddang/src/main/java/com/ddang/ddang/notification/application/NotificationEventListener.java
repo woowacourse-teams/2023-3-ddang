@@ -37,7 +37,7 @@ public class NotificationEventListener {
     public void sendMessageNotification(final MessageNotificationEvent messageNotificationEvent) {
         try {
             final Message message = messageNotificationEvent.message();
-            final ProfileImage profileImage = message.getReceiver().getProfileImage();
+            final ProfileImage profileImage = message.getWriter().getProfileImage();
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.MESSAGE,
                     message.getReceiver().getId(),
