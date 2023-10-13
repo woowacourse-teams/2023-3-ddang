@@ -14,7 +14,7 @@ import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -60,7 +60,6 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     JpaDeviceTokenRepository deviceTokenRepository;
 
     AuthenticationService authenticationService;
-    AuthenticationService profileImageNotFoundAuthenticationService;
 
     @BeforeEach
     void setUp() {
