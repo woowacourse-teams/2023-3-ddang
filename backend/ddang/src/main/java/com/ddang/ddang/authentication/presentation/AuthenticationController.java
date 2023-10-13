@@ -2,12 +2,14 @@ package com.ddang.ddang.authentication.presentation;
 
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
+import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.RefreshTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.WithdrawalRequest;
+import com.ddang.ddang.authentication.presentation.dto.response.LoginInformationResponse;
 import com.ddang.ddang.authentication.presentation.dto.response.TokenResponse;
 import com.ddang.ddang.authentication.presentation.dto.response.ValidatedTokenResponse;
 import jakarta.validation.Valid;
@@ -31,17 +33,18 @@ public class AuthenticationController {
     private final BlackListTokenService blackListTokenService;
 
     @PostMapping("/login/{oauth2Type}")
-    public ResponseEntity<Object> login(
+    public ResponseEntity<LoginInformationResponse> login(
             @PathVariable final Oauth2Type oauth2Type,
             @RequestBody final LoginTokenRequest request
     ) {
-        final TokenDto tokenDto = authenticationService.login(oauth2Type, request.accessToken(), request.deviceToken());
+        final LoginInformationDto loginInformationDto =
+                authenticationService.login(oauth2Type, request.accessToken(), request.deviceToken());
 
-        return ResponseEntity.ok(TokenResponse.from(tokenDto));
+        return ResponseEntity.ok(LoginInformationResponse.from(loginInformationDto));
     }
 
     @PostMapping("/refresh-token")
-    public ResponseEntity<Object> refreshToken(@RequestBody final RefreshTokenRequest request) {
+    public ResponseEntity<TokenResponse> refreshToken(@RequestBody final RefreshTokenRequest request) {
         final TokenDto tokenDto = authenticationService.refreshToken(request.refreshToken());
 
         return ResponseEntity.ok(TokenResponse.from(tokenDto));
