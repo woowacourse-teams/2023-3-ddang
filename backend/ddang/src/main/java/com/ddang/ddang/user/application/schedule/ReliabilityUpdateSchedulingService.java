@@ -26,7 +26,7 @@ public class ReliabilityUpdateSchedulingService {
     private final JpaUserReliabilityRepository userReliabilityRepository;
 
     @Transactional
-    @Scheduled(cron = "0 0 4 ? * MON")  // 매주 월요일 새벽 4시에 동작
+    @Scheduled(cron = "0 0 4 ? * MON")
     public void updateAllUserReliability() {
         final ReliabilityUpdateHistory updateHistory = updateHistoryRepository.findFirstByOrderByIdDesc()
                                                                               .orElse(new ReliabilityUpdateHistory());
