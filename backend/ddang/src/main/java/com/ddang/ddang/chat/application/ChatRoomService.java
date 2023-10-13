@@ -4,7 +4,7 @@ import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
@@ -21,12 +21,11 @@ import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAnd
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,7 +38,7 @@ public class ChatRoomService {
     private final QuerydslChatRoomAndImageRepositoryImpl querydslChatRoomAndImageRepository;
     private final QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
     private final JpaUserRepository userRepository;
-    private final JpaAuctionRepository auctionRepository;
+    private final AuctionRepository auctionRepository;
 
     @Transactional
     public Long create(final Long userId, final CreateChatRoomDto chatRoomDto) {

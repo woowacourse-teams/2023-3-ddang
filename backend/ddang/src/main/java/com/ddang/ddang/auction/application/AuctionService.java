@@ -7,7 +7,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuctionService {
 
     private final JpaUserRepository userRepository;
-    private final JpaAuctionRepository auctionRepository;
+    private final AuctionRepository auctionRepository;
     private final QuerydslAuctionRepository querydslAuctionRepository;
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
