@@ -12,6 +12,7 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +27,10 @@ class MessageViewModel @Inject constructor(
     val messageRooms: LiveData<List<MessageRoomModel>>
         get() = _messageRooms
 
+    private var isLoading: AtomicBoolean = AtomicBoolean(false)
+
     fun loadMessageRooms() {
+        if (isLoading.getAndSet(true)) return
         viewModelScope.launch {
             when (val response = repository.getChatRoomPreviews()) {
                 is ApiResponse.Success -> {
@@ -46,6 +50,7 @@ class MessageViewModel @Inject constructor(
                     _event.value = MessageEvent.MessageLoadFailure(ErrorType.UNEXPECTED)
                 }
             }
+            isLoading.set(false)
         }
     }
 

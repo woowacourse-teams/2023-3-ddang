@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.ddangddangddang.android.R
@@ -31,9 +32,40 @@ class AuctionDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
+        setupDetailView()
         setupViewModel()
-
+        setDynamicHeight(binding.vpDetailInfo, this)
         if (savedInstanceState == null) viewModel.loadAuctionDetail(auctionId)
+    }
+
+    // 액션바 높이를 반환하는 함수
+    private fun getActionBarHeight(context: Context): Int {
+        val styledAttributes =
+            context.theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+        val actionBarHeight = styledAttributes.getDimension(0, 0f).toInt()
+        styledAttributes.recycle()
+        return actionBarHeight
+    }
+
+    // 스크린 높이에서 액션바 높이를 뺀 높이를 계산하는 함수
+    private fun getRemainingHeight(context: Context): Int {
+        val screenHeight = context.resources.displayMetrics.heightPixels
+        val actionBarHeight = getActionBarHeight(context)
+        return screenHeight - actionBarHeight * 2
+    }
+
+    // 뷰의 높이를 동적으로 설정하는 함수
+    private fun setDynamicHeight(view: View, context: Context) {
+        val params = view.layoutParams
+        params.height = getRemainingHeight(context)
+        view.layoutParams = params
+    }
+
+    private fun setupDetailView() {
+        binding.vpDetailInfo.adapter = DetailFragmentAdapter(supportFragmentManager, lifecycle)
+        TabLayoutMediator(binding.tbDetailInfo, binding.vpDetailInfo) { tab, position ->
+            tab.text = getString(DetailFragmentType.getTypeFrom(position).nameId)
+        }.attach()
     }
 
     private fun setupViewModel() {

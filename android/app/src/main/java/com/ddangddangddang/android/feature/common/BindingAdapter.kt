@@ -45,3 +45,8 @@ fun Chip.onCloseClick(onCloseClick: () -> Unit) {
 fun TextView.setTextOrEmpty(text: String?) {
     this.text = text ?: ""
 }
+
+@BindingAdapter("isSelected")
+fun View.isSelected(isSelected: Boolean) {
+    this.isSelected = isSelected
+}

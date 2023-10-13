@@ -13,23 +13,36 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context=".feature.detail.info.AuctionInfoFragment">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingVertical="24dp"
             tools:context=".feature.detail.info.AuctionInfoFragment">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_begin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="@dimen/margin_side_layout" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_end"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="@dimen/margin_side_layout" />
 
             <TextView
                 android:id="@+id/tv_auction_explain"
                 style="@style/Header2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
                 android:text="@string/detail_auction_info_description"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintStart_toEndOf="@id/gl_begin"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -41,8 +54,8 @@
                 android:text="@{activityViewModel.auctionDetailModel.description}"
                 android:textColor="@color/grey_800"
                 android:textIsSelectable="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintStart_toEndOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_auction_explain"
                 tools:text="잠깐 쓰고 구석에 짱박아둔 맥북 에어 올려봅니다.\n상태 S급이고 사이클 50 이하입니다." />
 
@@ -53,8 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/detail_auction_info_direct_exchange_regions_description"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintStart_toEndOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_auction_description" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -64,8 +77,8 @@
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintStart_toEndOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_direct_exchange_regions"
                 tools:itemCount="3" />
 
@@ -76,8 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:text="@string/detail_auction_info_seller_info"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintStart_toEndOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/rv_direct_exchange_regions" />
 
             <androidx.cardview.widget.CardView
@@ -87,7 +100,7 @@
                 android:layout_marginTop="8dp"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="0dp"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_seller_info">
 
                 <ImageView
@@ -134,7 +147,6 @@
                 app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
                 app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"
                 tools:text="(9.7)" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

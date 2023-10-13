@@ -12,6 +12,7 @@
         <item name="android:textColor">@color/grey_900</item>
         <item name="fontFamily">@font/pretendard</item>
         <item name="android:fontFamily">@font/pretendard</item>
+        <item name="tabStyle">@style/TabLayout</item>
     </style>
 
     <style name="Theme.DdangDdangDdang" parent="Base.Theme.DdangDdangDdang" />
@@ -45,5 +46,17 @@
     <style name="RatingBar" parent="Theme.AppCompat">
         <item name="colorControlNormal">@color/grey_500</item>
         <item name="colorControlActivated">@color/primary</item>
+    </style>
+
+
+    <style name="TabLayout" parent="Widget.Material3.TabLayout">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.TabLayout</item>
+        <item name="tabTextAppearance">@style/Body</item>
+    </style>
+
+    <style name="ThemeOverlay.TabLayout" parent="">
+        <item name="colorPrimary">@color/red_500</item>
+        <item name="colorSurface">@color/grey_50</item>
+        <item name="colorOnSurface">@color/red_50</item>
     </style>
 </resources>

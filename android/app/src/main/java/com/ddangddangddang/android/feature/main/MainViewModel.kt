@@ -9,21 +9,21 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    private val _currentFragmentType: MutableLiveData<FragmentType> =
-        MutableLiveData(FragmentType.HOME)
-    val currentFragmentType: LiveData<FragmentType>
+    private val _currentFragmentType: MutableLiveData<MainFragmentType> =
+        MutableLiveData(MainFragmentType.HOME)
+    val currentFragmentType: LiveData<MainFragmentType>
         get() = _currentFragmentType
     private val _event: SingleLiveEvent<MainEvent> = SingleLiveEvent()
     val event: LiveData<MainEvent>
         get() = _event
 
-    val fragmentChange = { fragmentType: FragmentType ->
+    val fragmentChange = { fragmentType: MainFragmentType ->
         changeCurrentFragmentType(fragmentType)
     }
 
-    private fun changeCurrentFragmentType(fragmentType: FragmentType) {
+    private fun changeCurrentFragmentType(fragmentType: MainFragmentType) {
         if (currentFragmentType.value == fragmentType) {
-            if (fragmentType == FragmentType.HOME) {
+            if (fragmentType == MainFragmentType.HOME) {
                 _event.value = MainEvent.HomeToTop
             }
         }

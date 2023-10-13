@@ -29,6 +29,7 @@ import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Calendar
 
 @AndroidEntryPoint
 class RegisterAuctionActivity :
@@ -149,8 +150,8 @@ class RegisterAuctionActivity :
                 navigationToCategorySelection()
             }
 
-            RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
-                navigationToRegionSelection()
+            is RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
+                navigationToRegionSelection(event.regionSelected)
             }
         }
     }
@@ -168,7 +169,12 @@ class RegisterAuctionActivity :
             selectedDateTime.year,
             selectedDateTime.monthValue - 1,
             selectedDateTime.dayOfMonth,
-        ).show()
+        ).apply {
+            val calendar: Calendar = Calendar.getInstance()
+            this.datePicker.minDate = calendar.timeInMillis
+            calendar.add(Calendar.DATE, 29)
+            this.datePicker.maxDate = calendar.timeInMillis
+        }.show()
     }
 
     private fun showTimePicker(selectedTime: LocalTime) {
@@ -216,8 +222,8 @@ class RegisterAuctionActivity :
         categoryActivityLauncher.launch(SelectCategoryActivity.getIntent(this))
     }
 
-    private fun navigationToRegionSelection() {
-        regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
+    private fun navigationToRegionSelection(directRegion: List<RegionSelectionModel>) {
+        regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this, directRegion))
     }
 
     private fun setPrice(editText: EditText, watcher: DefaultTextWatcher, price: Int) {

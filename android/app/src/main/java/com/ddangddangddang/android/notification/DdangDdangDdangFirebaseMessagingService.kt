@@ -66,9 +66,8 @@ class DdangDdangDdangFirebaseMessagingService : FirebaseMessagingService() {
             when (type) {
                 NotificationType.MESSAGE -> {
                     val activeRoomId = (application as DdangDdangDdang).activeMessageRoomId
-                    if (activeRoomId == id) {
-                        sendBroadcastToMessageReceiver(id)
-                    } else {
+                    sendBroadcastToMessageReceiver(id) // 항상 호출. 이 리시버를 받을지 말지는 거기서 정함.
+                    if (activeRoomId != id) {
                         val notification = createMessageNotification(tag, id, remoteMessage)
                         notificationManager.notify(tag, id.toInt(), notification)
                     }
