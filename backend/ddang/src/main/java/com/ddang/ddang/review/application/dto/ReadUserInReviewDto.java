@@ -10,7 +10,7 @@ public record ReadUserInReviewDto(Long id, String name, Long profileImageId, dou
                 user.getName(),
                 user.getProfileImage().getId(),
                 user.getReliability().getValue(),
-                user.getOauthId()
+                user.getOauthInformation().getOauthId()
         );
     }
 }

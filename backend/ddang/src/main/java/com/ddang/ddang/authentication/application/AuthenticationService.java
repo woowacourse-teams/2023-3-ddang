@@ -75,19 +75,19 @@ public class AuthenticationService {
     ) {
         final AtomicBoolean isSignUpUser = new AtomicBoolean(false);
 
-        final User signInUser = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
-                                         .orElseGet(() -> {
-                                             final User user = User.builder()
-                                                                   .name(oauth2Type.calculateNickname(
-                                                                           calculateRandomNumber()))
-                                                                   .profileImage(findDefaultProfileImage())
-                                                                   .reliability(new Reliability(0.0d))
-                                                                   .oauthId(userInformationDto.findUserId())
-                                                                   .build();
+        final User signInUser = userRepository.findByOauthId(userInformationDto.findUserId())
+                                              .orElseGet(() -> {
+                                                  final User user = User.builder()
+                                                                        .name(oauth2Type.calculateNickname(
+                                                                                calculateRandomNumber()))
+                                                                        .profileImage(findDefaultProfileImage())
+                                                                        .reliability(new Reliability(0.0d))
+                                                                        .oauthId(userInformationDto.findUserId())
+                                                                        .build();
 
-                                             isSignUpUser.set(true);
-                                             return userRepository.save(user);
-                                         });
+                                                  isSignUpUser.set(true);
+                                                  return userRepository.save(user);
+                                              });
 
         return new LoginUserInformationDto(signInUser, isSignUpUser.get());
     }
@@ -139,7 +139,13 @@ public class AuthenticationService {
                 Map.of(PRIVATE_CLAIMS_KEY, privateClaims.userId())
         );
 
-        return new TokenDto(accessToken, refreshToken);
+        final String newRefreshToken = tokenEncoder.encode(
+                LocalDateTime.now(),
+                TokenType.REFRESH,
+                Map.of(PRIVATE_CLAIMS_KEY, privateClaims.userId())
+        );
+
+        return new TokenDto(accessToken, newRefreshToken);
     }
 
     public boolean validateToken(final String accessToken) {
@@ -149,21 +155,21 @@ public class AuthenticationService {
 
     @Transactional
     public void withdrawal(
-            final Oauth2Type oauth2Type,
             final String accessToken,
             final String refreshToken
     ) throws InvalidWithdrawalException {
-        final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
                                                         .orElseThrow(() ->
                                                                 new InvalidTokenException("유효한 토큰이 아닙니다.")
                                                         );
         final User user = userRepository.findByIdAndDeletedIsFalse(privateClaims.userId())
-                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다."));
+                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한이 없습니다."));
+        final OAuth2UserInformationProvider provider = providerComposite.findProvider(user.getOauthInformation()
+                                                                                          .getOauth2Type());
 
         user.withdrawal();
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
         deviceTokenRepository.deleteByUserId(user.getId());
-        provider.unlinkUserBy(user.getOauthId());
+        provider.unlinkUserBy(user.getOauthInformation().getOauthId());
     }
 }

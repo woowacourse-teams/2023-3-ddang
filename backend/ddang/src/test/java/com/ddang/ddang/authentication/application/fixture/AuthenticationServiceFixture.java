@@ -3,6 +3,7 @@ package com.ddang.ddang.authentication.application.fixture;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
@@ -32,6 +33,8 @@ public class AuthenticationServiceFixture {
 
     protected User 사용자;
     protected User 탈퇴한_사용자;
+
+    protected PrivateClaims 사용자_id_클레임 = new PrivateClaims(1L);
 
     protected UserInformationDto 사용자_회원_정보 = new UserInformationDto(12345L);
     protected UserInformationDto 탈퇴한_사용자_회원_정보 = new UserInformationDto(54321L);
@@ -67,6 +70,7 @@ public class AuthenticationServiceFixture {
                   .profileImage(new ProfileImage("upload.png", "store.png"))
                   .reliability(new Reliability(0.0d))
                   .oauthId("12345")
+                  .oauth2Type(Oauth2Type.KAKAO)
                   .build();
 
         탈퇴한_사용자 = User.builder()
@@ -74,6 +78,7 @@ public class AuthenticationServiceFixture {
                       .profileImage(new ProfileImage("upload.png", "store.png"))
                       .reliability(new Reliability(0.0d))
                       .oauthId("12346")
+                      .oauth2Type(Oauth2Type.KAKAO)
                       .build();
 
         userRepository.save(사용자);
@@ -90,7 +95,7 @@ public class AuthenticationServiceFixture {
         );
 
         만료된_리프레시_토큰 = tokenEncoder.encode(
-                LocalDateTime.ofInstant(Instant.parse("2023-01-01T22:21:20Z"),  ZoneId.of("UTC")),
+                LocalDateTime.ofInstant(Instant.parse("2023-01-01T22:21:20Z"), ZoneId.of("UTC")),
                 TokenType.REFRESH,
                 Map.of("userId", 1L)
         );

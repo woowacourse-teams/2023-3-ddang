@@ -230,7 +230,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
 
         // when
-        authenticationService.withdrawal(지원하는_소셜_로그인_타입, 유효한_액세스_토큰, 유효한_리프레시_토큰);
+        authenticationService.withdrawal(유효한_액세스_토큰, 유효한_리프레시_토큰);
 
         // then
         assertThat(사용자.isDeleted()).isTrue();
@@ -243,9 +243,9 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.unlinkUserBy(anyString())).willReturn(탈퇴한_사용자_회원_정보);
 
         // when && then
-        assertThatThrownBy(() -> authenticationService.withdrawal(지원하는_소셜_로그인_타입, 탈퇴한_사용자_액세스_토큰, 유효한_리프레시_토큰))
+        assertThatThrownBy(() -> authenticationService.withdrawal(탈퇴한_사용자_액세스_토큰, 유효한_리프레시_토큰))
                 .isInstanceOf(InvalidWithdrawalException.class)
-                .hasMessage("탈퇴에 대한 권한 없습니다.");
+                .hasMessage("탈퇴에 대한 권한이 없습니다.");
     }
 
     @Test
@@ -255,15 +255,15 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willThrow(new InvalidTokenException("401 Unauthorized"));
 
         // when & then
-        assertThatThrownBy(() -> authenticationService.withdrawal(지원하는_소셜_로그인_타입, 존재하지_않는_사용자_액세스_토큰, 유효한_리프레시_토큰))
+        assertThatThrownBy(() -> authenticationService.withdrawal(존재하지_않는_사용자_액세스_토큰, 유효한_리프레시_토큰))
                 .isInstanceOf(InvalidWithdrawalException.class)
-                .hasMessage("탈퇴에 대한 권한 없습니다.");
+                .hasMessage("탈퇴에 대한 권한이 없습니다.");
     }
 
     @Test
     void 탈퇴할_때_유효한_토큰이_아닌_경우_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> authenticationService.withdrawal(지원하는_소셜_로그인_타입, 유효하지_않은_액세스_토큰, 유효한_리프레시_토큰))
+        assertThatThrownBy(() -> authenticationService.withdrawal(유효하지_않은_액세스_토큰, 유효한_리프레시_토큰))
                 .isInstanceOf(InvalidTokenException.class)
                 .hasMessage("유효한 토큰이 아닙니다.");
     }
