@@ -15,9 +15,6 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
-import com.ddang.ddang.image.application.exception.ImageNotFoundException;
-import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -27,8 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Map;
-
-import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,7 +35,6 @@ public class AuthenticationService {
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final JpaUserRepository userRepository;
-    private final JpaProfileImageRepository profileImageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
@@ -67,18 +61,12 @@ public class AuthenticationService {
                              .orElseGet(() -> {
                                  final User user = User.builder()
                                                        .name(oauth2Type.calculateNickname(calculateRandomNumber()))
-                                                       .profileImage(findDefaultProfileImage())
                                                        .reliability(new Reliability(0.0d))
                                                        .oauthId(userInformationDto.findUserId())
                                                        .build();
 
                                  return userRepository.save(user);
                              });
-    }
-
-    private ProfileImage findDefaultProfileImage() {
-        return profileImageRepository.findByStoreName(DEFAULT_PROFILE_IMAGE_STORE_NAME)
-                                     .orElseThrow(() -> new ImageNotFoundException("기본 이미지를 찾을 수 없습니다."));
     }
 
     private String calculateRandomNumber() {
