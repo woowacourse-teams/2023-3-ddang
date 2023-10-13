@@ -1,10 +1,5 @@
 package com.ddang.ddang.authentication.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.fixture.AuthenticationServiceFixture;
@@ -17,25 +12,25 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformatio
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
-import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuthenticationServiceTest extends AuthenticationServiceFixture {
-
-    @Mock
-    JpaProfileImageRepository defaultProfileImageRepository;
 
     @MockBean
     Oauth2UserInformationProviderComposite providerComposite;
@@ -73,17 +68,6 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
                 deviceTokenService,
                 providerComposite,
                 userRepository,
-                profileImageRepository,
-                tokenEncoder,
-                tokenDecoder,
-                blackListTokenService,
-                deviceTokenRepository
-        );
-        profileImageNotFoundAuthenticationService = new AuthenticationService(
-                deviceTokenService,
-                providerComposite,
-                userRepository,
-                defaultProfileImageRepository,
                 tokenEncoder,
                 tokenDecoder,
                 blackListTokenService,
@@ -129,18 +113,6 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
             softAssertions.assertThat(actual.accessToken()).isNotEmpty().contains("Bearer ");
             softAssertions.assertThat(actual.refreshToken()).isNotEmpty().contains("Bearer ");
         });
-    }
-
-    @Test
-    void 가입하지_않은_회원이_소셜_로그인을_할_때_기본_프로필_이미지를_찾을_수_없으면_예외가_발생한다() {
-        // given
-        given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
-        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
-
-        // when & then
-        assertThatThrownBy(() -> profileImageNotFoundAuthenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰))
-                .isInstanceOf(ImageNotFoundException.class)
-                .hasMessage("기본 이미지를 찾을 수 없습니다.");
     }
 
     @Test
