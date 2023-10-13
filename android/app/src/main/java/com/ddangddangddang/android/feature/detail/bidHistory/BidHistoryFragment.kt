@@ -22,6 +22,7 @@ class BidHistoryFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
         binding.rvBidHistory.adapter = adapter
         setupAdapter()
         setupViewModel()
@@ -38,7 +39,7 @@ class BidHistoryFragment :
             viewModel.loadBidHistory(it.id)
         }
         viewModel.histories.observe(viewLifecycleOwner) {
-            adapter.changeBidHistories(it)
+            adapter.setBidHistories(it)
         }
         viewModel.event.observe(viewLifecycleOwner) {
             handleEvent(it)

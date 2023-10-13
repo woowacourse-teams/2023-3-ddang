@@ -14,7 +14,7 @@ class BidHistoryAdapter : ListAdapter<BidHistoryModel, BidHistoryViewHolder>(Bid
         holder.bind(currentList[position])
     }
 
-    fun changeBidHistories(histories: List<BidHistoryModel>) {
+    fun setBidHistories(histories: List<BidHistoryModel>) {
         submitList(histories)
     }
 
