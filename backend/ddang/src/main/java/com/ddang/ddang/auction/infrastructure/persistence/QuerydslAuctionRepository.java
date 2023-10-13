@@ -37,8 +37,8 @@ public class QuerydslAuctionRepository {
     private final JPAQueryFactory queryFactory;
 
     public Slice<Auction> findAuctionsAllByCondition(
-            final Pageable pageable,
-            final ReadAuctionSearchCondition readAuctionSearchCondition
+            final ReadAuctionSearchCondition readAuctionSearchCondition,
+            final Pageable pageable
     ) {
         final List<OrderSpecifier<?>> orderSpecifiers = calculateOrderSpecifiers(pageable);
         final List<BooleanExpression> booleanExpressions = calculateBooleanExpressions(readAuctionSearchCondition);

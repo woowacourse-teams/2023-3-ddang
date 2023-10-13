@@ -93,8 +93,8 @@ public class AuctionService {
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition) {
         final Slice<Auction> auctions = querydslAuctionRepository.findAuctionsAllByCondition(
-                pageable,
-                readAuctionSearchCondition
+                readAuctionSearchCondition,
+                pageable
         );
 
         return ReadAuctionsDto.of(auctions, LocalDateTime.now());

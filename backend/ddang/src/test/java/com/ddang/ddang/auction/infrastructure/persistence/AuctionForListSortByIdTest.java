@@ -33,8 +33,8 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
     void 페이지_크기_3_첫번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(0, 페이지_크기_3, id순_정렬),
-                검색어_없음
+                검색어_없음,
+                PageRequest.of(0, 페이지_크기_3, id순_정렬)
         );
 
         // then
@@ -51,8 +51,8 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
     void 페이지_크기_3_두번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(1, 페이지_크기_3, id순_정렬),
-                검색어_없음
+                검색어_없음,
+                PageRequest.of(1, 페이지_크기_3, id순_정렬)
         );
 
         // then
@@ -69,8 +69,8 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
     void 페이지_크기_3_세번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(2, 페이지_크기_3, id순_정렬),
-                검색어_없음
+                검색어_없음,
+                PageRequest.of(2, 페이지_크기_3, id순_정렬)
         );
 
         // then
@@ -87,8 +87,8 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
     void 페이지_크기_3_네번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(3, 페이지_크기_3, id순_정렬),
-                검색어_없음
+                검색어_없음,
+                PageRequest.of(3, 페이지_크기_3, id순_정렬)
         );
 
         // then
@@ -105,8 +105,8 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
     void 페이지_크기_3_다섯번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(4, 페이지_크기_3, id순_정렬),
-                검색어_없음
+                검색어_없음,
+                PageRequest.of(4, 페이지_크기_3, id순_정렬)
         );
 
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -122,8 +122,8 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
     void 페이지_크기_3_여섯번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(5, 페이지_크기_3, id순_정렬),
-                검색어_없음
+                검색어_없음,
+                PageRequest.of(5, 페이지_크기_3, id순_정렬)
         );
 
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -137,8 +137,8 @@ class AuctionForListSortByIdTest extends AuctionForListSortByIdFixture {
     void 페이지_크기_3_일곱번째_페이지_요청_테스트() {
         // when
         final Slice<Auction> actual = querydslAuctionRepository.findAuctionsAllByCondition(
-                PageRequest.of(6, 페이지_크기_3, id순_정렬),
-                검색어_없음
+                검색어_없음,
+                PageRequest.of(6, 페이지_크기_3, id순_정렬)
         );
 
         // then
