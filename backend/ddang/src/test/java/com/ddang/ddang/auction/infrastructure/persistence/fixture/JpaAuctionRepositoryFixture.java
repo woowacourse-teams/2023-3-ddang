@@ -44,6 +44,7 @@ public class JpaAuctionRepositoryFixture {
     private Instant 시간 = Instant.parse("2023-07-08T22:21:20Z");
     private ZoneId 위치 = ZoneId.of("UTC");
 
+    protected Long 존재하지_않는_경매_id = -999L;
     protected Auction 저장하기_전_경매_엔티티 = Auction.builder()
                                              .title("제목")
                                              .description("내용")

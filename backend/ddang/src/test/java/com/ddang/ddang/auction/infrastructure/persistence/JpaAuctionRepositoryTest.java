@@ -33,6 +33,24 @@ class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
     }
 
     @Test
+    void 지정한_id의_경매가_존재하는_경우_true를_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsById(저장된_경매_엔티티.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 지정한_id의_경매가_존재하지_않는_경우_false를_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsById(존재하지_않는_경매_id);
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
     void 지정한_아이디에_대한_경매와_관련된_데이터를_모두_조회한다() {
         // when
         final Optional<Auction> actual = auctionRepository.findTotalAuctionById(저장된_경매_엔티티.getId());
