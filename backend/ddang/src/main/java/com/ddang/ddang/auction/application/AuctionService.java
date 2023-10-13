@@ -11,7 +11,7 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
-import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.category.domain.repository.CategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
@@ -38,7 +38,7 @@ public class AuctionService {
     private final JpaUserRepository userRepository;
     private final JpaAuctionRepository auctionRepository;
     private final JpaRegionRepository regionRepository;
-    private final JpaCategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
     private final StoreImageProcessor imageProcessor;
 
     @Transactional
