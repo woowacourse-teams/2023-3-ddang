@@ -23,7 +23,7 @@
             isSelected="@{model.isPicked}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/grey_50_to_selected_second_region_bg_selected"
+            android:background="@color/grey_50_to_selected_second_region_bg_selected"
             android:onClick="@{() -> onItemClick.invoke(model.id)}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="18dp"
