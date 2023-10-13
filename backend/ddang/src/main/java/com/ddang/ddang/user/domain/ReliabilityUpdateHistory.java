@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", })
+@ToString(of = {"id", "lastAppliedReviewId"})
 public class ReliabilityUpdateHistory extends BaseCreateTimeEntity {
 
     @Id
