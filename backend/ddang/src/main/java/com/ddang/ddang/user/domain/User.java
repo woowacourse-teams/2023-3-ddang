@@ -3,7 +3,6 @@ package com.ddang.ddang.user.domain;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.review.domain.Review;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -24,16 +23,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", "name", "reliability", "oauthId", "deleted", "oauth2Type"})
+@ToString(of = {"id", "name", "reliability", "oauthId", "deleted", "oauthInformation"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
+    public static final User EMPTY_USER = null;
     private static final boolean DELETED_STATUS = true;
     private static final String UNKNOWN_NAME = "알 수 없음";
 
@@ -92,7 +90,7 @@ public class User extends BaseTimeEntity {
         this.deleted = DELETED_STATUS;
     }
 
-    public void updateReliability(final List<Review> reviews) {
-        reliability.updateReliability(reviews);
+    public void updateReliability(final Reliability reliability) {
+        this.reliability = reliability;
     }
 }

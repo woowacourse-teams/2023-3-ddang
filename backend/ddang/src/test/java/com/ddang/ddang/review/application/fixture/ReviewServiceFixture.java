@@ -36,11 +36,11 @@ public class ReviewServiceFixture {
     @Autowired
     private JpaReviewRepository reviewRepository;
 
-    private Double 구매자가_판매자1에게_받은_평가_점수 = 5.0d;
-    private Double 구매자가_판매자2에게_받은_평가_점수 = 1.0d;
-    private Double 구매자가_받을_새로운_평가_점수 = 4.5d;
+    private double 구매자가_판매자1에게_받은_평가_점수 = 5.0d;
+    private double 구매자가_판매자2에게_받은_평가_점수 = 1.0d;
+    private double 구매자가_받을_새로운_평가_점수 = 4.5d;
 
-    protected Double 구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수 =
+    protected double 구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수 =
             (구매자가_판매자1에게_받은_평가_점수 + 구매자가_판매자2에게_받은_평가_점수 + 구매자가_받을_새로운_평가_점수) / 3;
     protected Long 존재하지_않는_사용자 = -999L;
     protected User 판매자1;
