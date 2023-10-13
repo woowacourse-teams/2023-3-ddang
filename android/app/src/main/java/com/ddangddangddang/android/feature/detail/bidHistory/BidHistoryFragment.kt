@@ -23,15 +23,15 @@ class BidHistoryFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
-        binding.rvBidHistory.adapter = adapter
         setupAdapter()
         setupViewModel()
     }
 
     private fun setupAdapter() {
-        binding.rvBidHistory.addItemDecoration(
-            DividerItemDecoration(requireContext(), LinearLayout.VERTICAL),
-        )
+        with(binding.rvBidHistory) {
+            adapter = adapter
+            addItemDecoration(DividerItemDecoration(requireContext(), LinearLayout.VERTICAL))
+        }
     }
 
     private fun setupViewModel() {
