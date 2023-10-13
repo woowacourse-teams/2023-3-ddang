@@ -64,7 +64,7 @@
             android:layout_width="54dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:background="@drawable/bg_radius_5dp"
+            android:background="@drawable/bg_radius_8dp"
             android:backgroundTint="@{context.getColor(auction.status.colorId)}"
             android:gravity="center"
             android:paddingVertical="4dp"

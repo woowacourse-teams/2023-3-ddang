@@ -70,9 +70,23 @@
     <string name="detail_auction_enter_chat_room_failure">채팅방에 입장하는데 실패했습니다</string>
 
     <!-- detail_auction_info -->
+    <string name="detail_auction_info_title">상품 정보</string>
     <string name="detail_auction_info_description">상품 설명</string>
     <string name="detail_auction_info_direct_exchange_regions_description">직거래 가능 지역</string>
     <string name="detail_auction_info_seller_info">판매자 정보</string>
+
+    <!-- detail_auction_qua -->
+    <string name="detail_auction_qna_title">Q&amp;A</string>
+    <string name="detail_auction_qna_seller_answer_title">판매자 답변</string>
+    <string name="detail_auction_qna_no_answer">아직 작성된 답변이 없습니다.</string>
+    <string name="detail_auction_qna_answer_write">작성하기</string>
+    <string name="detail_auction_qna_delete">삭제하기</string>
+    <string name="detail_auction_qna_waiting">답변대기</string>
+    <string name="detail_auction_qna_complete">답변완료</string>
+    <string name="detail_auction_qna_question_prefix">Q. %s</string>
+
+    <!-- detail_auction_bid_history -->
+    <string name="detail_auction_bid_history">입찰 내역</string>
 
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>
