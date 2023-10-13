@@ -2,7 +2,6 @@ package com.ddang.ddang.user.domain;
 
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.review.domain.Review;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,8 +21,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
-import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -90,7 +87,7 @@ public class User extends BaseTimeEntity {
         this.deleted = DELETED_STATUS;
     }
 
-    public void updateReliability(final List<Review> reviews) {
-        reliability.updateReliability(reviews);
+    public void updateReliability(final Reliability reliability) {
+        this.reliability = reliability;
     }
 }

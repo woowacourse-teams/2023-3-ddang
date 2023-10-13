@@ -44,9 +44,9 @@ public class ReviewService {
         validateWriterCanReview(findAuction, writer);
 
         final Review review = reviewDto.toEntity(findAuction, writer, target);
-        final Review persistReview = saveReviewAndUpdateReliability(review, target);
 
-        return persistReview.getId();
+        return reviewRepository.save(review)
+                               .getId();
     }
 
     private void validateWriterCanReview(final Auction auction, final User writer) {
@@ -63,18 +63,9 @@ public class ReviewService {
         }
     }
 
-    private Review saveReviewAndUpdateReliability(final Review review, final User target) {
-        final Review persistReview = reviewRepository.save(review);
-
-        final List<Review> targetReviews = reviewRepository.findAllByTargetId(target.getId());
-        target.updateReliability(targetReviews);
-
-        return persistReview;
-    }
-
     public ReadReviewDetailDto readByReviewId(final Long reviewId) {
         final Review findReview = reviewRepository.findById(reviewId)
-                                              .orElseThrow(() -> new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
+                                                  .orElseThrow(() -> new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
 
         return ReadReviewDetailDto.from(findReview);
     }
