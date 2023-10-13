@@ -12,13 +12,16 @@ import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 
 @AndroidEntryPoint
 class BidHistoryFragment :
     BindingFragment<FragmentBidHistoryBinding>(R.layout.fragment_bid_history) {
     private val activityViewModel: AuctionDetailViewModel by activityViewModels()
     private val viewModel: BidHistoryViewModel by viewModels()
-    private val adapter by lazy { BidHistoryAdapter() }
+    private val bidHistoryAdapter by lazy {
+        BidHistoryAdapter(DateTimeFormatter.ofPattern(requireContext().getString(R.string.all_date_time_format)))
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,7 +32,7 @@ class BidHistoryFragment :
 
     private fun setupAdapter() {
         with(binding.rvBidHistory) {
-            adapter = adapter
+            adapter = bidHistoryAdapter
             addItemDecoration(DividerItemDecoration(requireContext(), LinearLayout.VERTICAL))
         }
     }
@@ -39,7 +42,7 @@ class BidHistoryFragment :
             viewModel.loadBidHistory(it.id)
         }
         viewModel.histories.observe(viewLifecycleOwner) {
-            adapter.setBidHistories(it)
+            bidHistoryAdapter.setBidHistories(it)
         }
         viewModel.event.observe(viewLifecycleOwner) {
             handleEvent(it)

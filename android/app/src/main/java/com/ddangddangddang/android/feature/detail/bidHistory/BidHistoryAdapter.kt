@@ -4,10 +4,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.ddangddangddang.android.model.BidHistoryModel
+import java.time.format.DateTimeFormatter
 
-class BidHistoryAdapter : ListAdapter<BidHistoryModel, BidHistoryViewHolder>(BidHistoryDiffUtil) {
+class BidHistoryAdapter(
+    private val dateTimeFormatter: DateTimeFormatter,
+) : ListAdapter<BidHistoryModel, BidHistoryViewHolder>(BidHistoryDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BidHistoryViewHolder {
-        return BidHistoryViewHolder.create(parent)
+        return BidHistoryViewHolder.create(parent, dateTimeFormatter)
     }
 
     override fun onBindViewHolder(holder: BidHistoryViewHolder, position: Int) {
