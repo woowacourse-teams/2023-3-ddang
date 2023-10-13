@@ -21,7 +21,6 @@ import lombok.ToString;
 @Getter
 @EqualsAndHashCode(of = "id")
 @ToString(of = {"id", "image", "authenticated"})
-// TODO: 9/29/23 추후 대표 이미지 구분을 위한 필드 추가
 public class AuctionImage {
 
     @Id
