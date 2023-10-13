@@ -66,5 +66,4 @@ then
     sleep 10
 else
     echo "블루 서버가 종료되었습니다. port number: ${blue_port}"
-    break;
 fi
