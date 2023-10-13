@@ -2,6 +2,7 @@ package com.ddang.ddang.qna.application;
 
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
+import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
 import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
@@ -14,6 +15,7 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,12 +24,13 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AnswerService {
 
+    private final ApplicationEventPublisher answerEventPublisher;
     private final JpaUserRepository userRepository;
     private final JpaQuestionRepository questionRepository;
     private final JpaAnswerRepository answerRepository;
 
     @Transactional
-    public Long create(final CreateAnswerDto answerDto) {
+    public Long create(final CreateAnswerDto answerDto, final String absoluteImageUrl) {
         final User writer = userRepository.findById(answerDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Question question = questionRepository.findById(answerDto.questionId())
@@ -41,8 +44,11 @@ public class AnswerService {
         final Answer answer = answerDto.toEntity();
         question.addAnswer(answer);
 
-        return answerRepository.save(answer)
-                               .getId();
+        final Answer persistAnswer = answerRepository.save(answer);
+
+        answerEventPublisher.publishEvent(new AnswerNotificationEvent(persistAnswer, absoluteImageUrl));
+
+        return persistAnswer.getId();
     }
 
     private void checkInvalidAnswerer(final Question question, final User writer) {

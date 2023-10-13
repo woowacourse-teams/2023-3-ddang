@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
+import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
@@ -15,6 +16,7 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,12 +28,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionService {
 
+    private final ApplicationEventPublisher questionEventPublisher;
     private final JpaAuctionRepository auctionRepository;
     private final JpaUserRepository userRepository;
     private final JpaQuestionRepository questionRepository;
 
     @Transactional
-    public Long create(final CreateQuestionDto questionDto) {
+    public Long create(final CreateQuestionDto questionDto, final String absoluteImageUrl) {
         final User questioner = userRepository.findByIdAndDeletedIsFalse(questionDto.userId())
                                               .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findPureAuctionById(questionDto.auctionId())
@@ -42,8 +45,11 @@ public class QuestionService {
 
         final Question question = questionDto.toEntity(auction, questioner);
 
-        return questionRepository.save(question)
-                                 .getId();
+        final Question persistQuestion = questionRepository.save(question);
+
+        questionEventPublisher.publishEvent(new QuestionNotificationEvent(persistQuestion, absoluteImageUrl));
+
+        return persistQuestion.getId();
     }
 
     private void checkInvalidAuction(final Auction auction) {

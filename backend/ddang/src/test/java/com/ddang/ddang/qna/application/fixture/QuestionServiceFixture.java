@@ -66,6 +66,8 @@ public class QuestionServiceFixture {
     protected ReadAnswerDto 답변_정보_dto1;
     protected ReadAnswerDto 답변_정보_dto2;
 
+    protected String 이미지_절대_경로 = "/imageUrl";
+
     @BeforeEach
     void setUp() {
         final Region 서울특별시 = new Region("서울특별시");

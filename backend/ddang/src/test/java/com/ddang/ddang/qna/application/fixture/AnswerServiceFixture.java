@@ -36,6 +36,8 @@ public class AnswerServiceFixture {
 
     protected Long 존재하지_않는_답변_아이디 = -999L;
     protected Long 존재하지_않는_사용자_아이디 = -999L;
+    protected String 이미지_절대_경로 = "/imageUrl";
+
     protected Answer 답변;
     protected User 판매자;
     protected User 판매자가_아닌_사용자;

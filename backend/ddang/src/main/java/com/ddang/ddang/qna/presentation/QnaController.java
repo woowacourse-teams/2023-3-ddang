@@ -2,12 +2,13 @@ package com.ddang.ddang.qna.presentation;
 
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.qna.application.AnswerService;
 import com.ddang.ddang.qna.application.QuestionService;
-import com.ddang.ddang.qna.presentation.dto.request.CreateAnswerRequest;
-import com.ddang.ddang.qna.presentation.dto.request.CreateQuestionRequest;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
+import com.ddang.ddang.qna.presentation.dto.request.CreateAnswerRequest;
+import com.ddang.ddang.qna.presentation.dto.request.CreateQuestionRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class QnaController {
             @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateQuestionRequest questionRequest
     ) {
-        questionService.create(CreateQuestionDto.of(questionRequest, userInfo.userId()));
+        questionService.create(CreateQuestionDto.of(questionRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.calculateAbsoluteUrl());
 
         return ResponseEntity.created(URI.create("/auctions/" + questionRequest.auctionId()))
                              .build();
@@ -45,7 +46,7 @@ public class QnaController {
             @PathVariable final Long questionId,
             @RequestBody @Valid final CreateAnswerRequest answerRequest
     ) {
-        answerService.create(CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()));
+        answerService.create(CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.calculateAbsoluteUrl());
 
         return ResponseEntity.created(URI.create("/auctions/" + answerRequest.auctionId()))
                              .build();

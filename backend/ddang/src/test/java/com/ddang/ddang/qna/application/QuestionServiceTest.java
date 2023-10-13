@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
+import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
@@ -15,6 +16,8 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 
@@ -22,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
+@RecordApplicationEvents
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class QuestionServiceTest extends QuestionServiceFixture {
@@ -29,10 +33,13 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    ApplicationEvents events;
+
     @Test
     void 질문을_등록한다() {
         // when
-        final Long actual = questionService.create(경매_질문_등록_요청_dto);
+        final Long actual = questionService.create(경매_질문_등록_요청_dto, 이미지_절대_경로);
 
         // then
         assertThat(actual).isPositive();
@@ -41,7 +48,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 존재하지_않는_사용자가_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.create(존재하지_않는_사용자가_경매_질문_등록_요청_dto))
+        assertThatThrownBy(() -> questionService.create(존재하지_않는_사용자가_경매_질문_등록_요청_dto, 이미지_절대_경로))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessage("해당 사용자를 찾을 수 없습니다.");
     }
@@ -49,7 +56,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 존재하지_않는_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.create(존재하지_않는_경매_질문_등록_요청_dto))
+        assertThatThrownBy(() -> questionService.create(존재하지_않는_경매_질문_등록_요청_dto, 이미지_절대_경로))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
@@ -57,7 +64,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 이미_종료된_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.create(종료된_경매_질문_등록_요청_dto))
+        assertThatThrownBy(() -> questionService.create(종료된_경매_질문_등록_요청_dto, 이미지_절대_경로))
                 .isInstanceOf(InvalidAuctionToAskQuestionException.class)
                 .hasMessage("이미 종료된 경매입니다.");
     }
@@ -65,7 +72,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 삭제된_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.create(삭제된_경매_질문_등록_요청_dto))
+        assertThatThrownBy(() -> questionService.create(삭제된_경매_질문_등록_요청_dto, 이미지_절대_경로))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
@@ -73,7 +80,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 판매자가_본인_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.create(판매자가_본인_경매_질문_등록_요청_dto))
+        assertThatThrownBy(() -> questionService.create(판매자가_본인_경매_질문_등록_요청_dto, 이미지_절대_경로))
                 .isInstanceOf(InvalidQuestionerException.class)
                 .hasMessage("경매 등록자는 질문할 수 없습니다.");
     }
@@ -141,5 +148,15 @@ class QuestionServiceTest extends QuestionServiceFixture {
         assertThatThrownBy(() -> questionService.deleteById(질문.getId(), 질문하지_않은_사용자.getId()))
                 .isInstanceOf(UserForbiddenException.class)
                 .hasMessage("삭제할 권한이 없습니다.");
+    }
+
+    @Test
+    void 질문이_생성되면_판매자에게_알림을_보낸다() {
+        // when
+        questionService.create(경매_질문_등록_요청_dto, 이미지_절대_경로);
+        final long actual = events.stream(QuestionNotificationEvent.class).count();
+
+        // then
+        assertThat(actual).isEqualTo(1);
     }
 }
