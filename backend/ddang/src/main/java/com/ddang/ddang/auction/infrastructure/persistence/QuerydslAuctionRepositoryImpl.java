@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -51,8 +50,10 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
     }
 
     private List<OrderSpecifier<?>> calculateOrderSpecifiers(final Pageable pageable) {
-        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>(processOrderSpecifiers(pageable));
+        final List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
+        orderSpecifiers.add(closingTimeOrderSpecifier());
+        orderSpecifiers.addAll(processOrderSpecifiers(pageable));
         orderSpecifiers.add(auction.id.desc());
 
         return orderSpecifiers;
@@ -67,21 +68,21 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                 return Collections.emptyList();
             }
 
-            orderSpecifiers.addAll(processOrderSpecifierByCondition(order));
+            orderSpecifiers.add(processOrderSpecifierByCondition(order));
         }
 
         return orderSpecifiers;
     }
 
-    private List<OrderSpecifier<?>> processOrderSpecifierByCondition(final Order order) {
+    private OrderSpecifier<?> processOrderSpecifierByCondition(final Order order) {
         if (AuctionSortConditionConsts.RELIABILITY.equals(order.getProperty())) {
-            return List.of(closingTimeOrderSpecifier(), auction.seller.reliability.value.desc());
+            return auction.seller.reliability.value.desc();
         }
         if (AuctionSortConditionConsts.AUCTIONEER_COUNT.equals(order.getProperty())) {
-            return List.of(closingTimeOrderSpecifier(), auction.auctioneerCount.desc());
+            return auction.auctioneerCount.desc();
         }
         if (AuctionSortConditionConsts.CLOSING_TINE.equals(order.getProperty())) {
-            return List.of(closingTimeOrderSpecifier(), auction.closingTime.asc());
+            return auction.closingTime.asc();
         }
         
         throw new UnsupportedSortConditionException("지원하지 않는 정렬 방식입니다.");
@@ -143,30 +144,13 @@ public class QuerydslAuctionRepositoryImpl implements QuerydslAuctionRepository 
                            .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
                            .leftJoin(region.firstRegion).fetchJoin()
                            .leftJoin(region.secondRegion).fetchJoin()
-                           .leftJoin(auction.subCategory, category).fetchJoin()
-                           .leftJoin(category.mainCategory).fetchJoin()
-                           .leftJoin(auction.seller).fetchJoin()
                            .leftJoin(auction.lastBid).fetchJoin()
+                           .join(auction.subCategory, category).fetchJoin()
+                           .join(category.mainCategory).fetchJoin()
+                           .join(auction.seller).fetchJoin()
                            .where(auction.id.in(targetIds.toArray(Long[]::new)))
                            .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                            .fetch();
-    }
-
-    @Override
-    public Optional<Auction> findAuctionById(final Long auctionId) {
-        final Auction findAuction = queryFactory.selectFrom(auction)
-                                                .leftJoin(auction.auctionRegions, auctionRegion).fetchJoin()
-                                                .leftJoin(auctionRegion.thirdRegion, region).fetchJoin()
-                                                .leftJoin(region.firstRegion).fetchJoin()
-                                                .leftJoin(region.secondRegion).fetchJoin()
-                                                .leftJoin(auction.subCategory, category).fetchJoin()
-                                                .leftJoin(category.mainCategory).fetchJoin()
-                                                .leftJoin(auction.seller).fetchJoin()
-                                                .leftJoin(auction.lastBid).fetchJoin()
-                                                .where(auction.deleted.isFalse(), auction.id.eq(auctionId))
-                                                .fetchOne();
-
-        return Optional.ofNullable(findAuction);
     }
 
     @Override

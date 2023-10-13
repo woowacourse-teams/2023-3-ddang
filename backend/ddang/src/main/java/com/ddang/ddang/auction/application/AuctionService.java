@@ -79,7 +79,7 @@ public class AuctionService {
     }
 
     public ReadAuctionDto readByAuctionId(final Long auctionId) {
-        final Auction findAuction = auctionRepository.findAuctionById(auctionId)
+        final Auction findAuction = auctionRepository.findTotalAuctionById(auctionId)
                                                      .orElseThrow(() -> new AuctionNotFoundException(
                                                              "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                      ));
@@ -112,7 +112,7 @@ public class AuctionService {
 
     @Transactional
     public void deleteByAuctionId(final Long auctionId, final Long userId) {
-        final Auction auction = auctionRepository.findAuctionById(auctionId)
+        final Auction auction = auctionRepository.findTotalAuctionById(auctionId)
                                                  .orElseThrow(() -> new AuctionNotFoundException(
                                                          "지정한 아이디에 대한 경매를 찾을 수 없습니다."
                                                  ));
