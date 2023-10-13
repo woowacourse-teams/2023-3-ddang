@@ -45,7 +45,7 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "profile_image_id", foreignKey = @ForeignKey(name = "fk_user_profile_image"), nullable = false)
+    @JoinColumn(name = "profile_image_id", foreignKey = @ForeignKey(name = "fk_user_profile_image"))
     private ProfileImage profileImage;
 
     @Embedded
@@ -89,6 +89,7 @@ public class User extends BaseTimeEntity {
     public void withdrawal() {
         this.deleted = DELETED_STATUS;
         this.name = UUID.randomUUID().toString();
+        this.profileImage = null;
     }
 
     public void updateReliability(final List<Review> reviews) {

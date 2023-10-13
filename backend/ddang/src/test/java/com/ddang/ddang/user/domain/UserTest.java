@@ -108,6 +108,7 @@ class UserTest extends UserFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.isDeleted()).isTrue();
             softAssertions.assertThat(user.getName()).isNotEqualTo(userName);
+            softAssertions.assertThat(user.getProfileImage()).isNull();
         });
     }
 
