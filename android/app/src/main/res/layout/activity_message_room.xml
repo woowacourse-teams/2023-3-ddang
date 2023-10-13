@@ -220,11 +220,12 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLines="4"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
                 android:backgroundTint="@color/grey_100"
                 android:hint="@string/message_room_message_input_hint"
                 android:padding="16dp"
-                android:singleLine="true"
+                android:inputType="textMultiLine"
                 android:text="@={viewModel.inputMessage}" />
 
             <Button

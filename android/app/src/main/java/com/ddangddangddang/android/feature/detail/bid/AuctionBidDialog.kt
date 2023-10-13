@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.detail.bid
 
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -8,6 +9,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -62,6 +65,7 @@ class AuctionBidDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        setupKeyboard()
         setupListener()
         setupObserver()
     }
@@ -69,6 +73,21 @@ class AuctionBidDialog : DialogFragment() {
     override fun onResume() {
         super.onResume()
         binding.etBidPrice.requestFocus()
+    }
+
+    private fun setupKeyboard() {
+        binding.etBidPrice.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard()
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.etBidPrice.windowToken, 0)
     }
 
     private fun setupListener() {
