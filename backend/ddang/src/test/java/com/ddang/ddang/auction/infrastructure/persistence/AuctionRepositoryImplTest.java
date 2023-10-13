@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.auction.infrastructure.persistence.fixture.AuctionRepositoryFixture;
+import com.ddang.ddang.auction.infrastructure.persistence.fixture.AuctionRepositoryImplFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,7 +24,7 @@ import org.springframework.data.domain.Slice;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuctionRepositoryImplTest extends AuctionRepositoryFixture {
+class AuctionRepositoryImplTest extends AuctionRepositoryImplFixture {
 
     AuctionRepository auctionRepository;
 
@@ -38,7 +38,26 @@ class AuctionRepositoryImplTest extends AuctionRepositoryFixture {
         // when
         final Auction actual = auctionRepository.save(저장하기_전_경매_엔티티);
 
+        // then
         assertThat(actual.getId()).isPositive();
+    }
+
+    @Test
+    void 지정한_id의_경매가_존재하는_경우_true를_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsById(저장된_경매_엔티티.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 지정한_id의_경매가_존재하지_않는_경우_false를_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsById(존재하지_않는_경매_id);
+
+        // then
+        assertThat(actual).isFalse();
     }
 
     @Test

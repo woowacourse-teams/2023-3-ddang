@@ -22,6 +22,11 @@ public class AuctionRepositoryImpl implements AuctionRepository {
     }
 
     @Override
+    public boolean existsById(final Long id) {
+        return jpaAuctionRepository.existsById(id);
+    }
+
+    @Override
     public Optional<Auction> findTotalAuctionById(final Long id) {
         return jpaAuctionRepository.findTotalAuctionById(id);
     }

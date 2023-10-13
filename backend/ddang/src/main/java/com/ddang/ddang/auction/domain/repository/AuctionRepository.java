@@ -10,6 +10,8 @@ public interface AuctionRepository {
 
     Auction save(final Auction auction);
 
+    boolean existsById(final Long id);
+
     Optional<Auction> findTotalAuctionById(final Long id);
 
     Optional<Auction> findPureAuctionById(final Long id);

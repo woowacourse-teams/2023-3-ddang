@@ -27,7 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionRepositoryFixture {
+public class AuctionRepositoryImplFixture {
 
     @PersistenceContext
     private EntityManager em;
@@ -50,6 +50,7 @@ public class AuctionRepositoryFixture {
     private Instant 시간 = Instant.parse("2023-07-08T22:21:20Z");
     private ZoneId 위치 = ZoneId.of("UTC");
 
+    protected Long 존재하지_않는_경매_id = -999L;
     protected ReadAuctionSearchCondition 검색어_없음 = new ReadAuctionSearchCondition(null);
     protected int 페이지_1 = 0;
     protected int 페이지_크기 = 3;
