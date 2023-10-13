@@ -4,6 +4,8 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
@@ -13,6 +15,8 @@ import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.region.domain.Region;
+import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -37,6 +41,12 @@ public class QuestionServiceFixture {
     @Autowired
     private JpaAnswerRepository answerRepository;
 
+    @Autowired
+    private JpaRegionRepository regionRepository;
+
+    @Autowired
+    private JpaCategoryRepository categoryRepository;
+
     protected Long 질문_3개_답변_2개가_존재하는_경매_아이디;
     protected Long 존재하지_않는_경매_아이디 = -999L;
     protected Long 존재하지_않는_질문_아이디 = -999L;
@@ -58,6 +68,22 @@ public class QuestionServiceFixture {
 
     @BeforeEach
     void setUp() {
+        final Region 서울특별시 = new Region("서울특별시");
+        final Region 강남구 = new Region("강남구");
+        final Region 역삼동 = new Region("역삼동");
+
+        서울특별시.addSecondRegion(강남구);
+        강남구.addThirdRegion(역삼동);
+
+        regionRepository.save(서울특별시);
+
+        final Category 가구_카테고리 = new Category("가구");
+        final Category 가구_서브_의자_카테고리 = new Category("의자");
+
+        가구_카테고리.addSubCategory(가구_서브_의자_카테고리);
+
+        categoryRepository.save(가구_카테고리);
+
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
         final User 판매자 = User.builder()
                              .name("판매자")
@@ -72,6 +98,7 @@ public class QuestionServiceFixture {
                                   .bidUnit(new BidUnit(1_000))
                                   .startPrice(new Price(1_000))
                                   .closingTime(LocalDateTime.now().plusDays(7))
+                                  .subCategory(가구_서브_의자_카테고리)
                                   .build();
         final Auction 질문과_답변이_존재하는_경매 = Auction.builder()
                                                .seller(판매자)
@@ -80,6 +107,7 @@ public class QuestionServiceFixture {
                                                .bidUnit(new BidUnit(1_000))
                                                .startPrice(new Price(1_000))
                                                .closingTime(LocalDateTime.now().plusDays(7))
+                                               .subCategory(가구_서브_의자_카테고리)
                                                .build();
         final Auction 종료된_경매 = Auction.builder()
                                       .seller(판매자)
@@ -88,6 +116,7 @@ public class QuestionServiceFixture {
                                       .bidUnit(new BidUnit(1_000))
                                       .startPrice(new Price(1_000))
                                       .closingTime(LocalDateTime.now().minusDays(7))
+                                      .subCategory(가구_서브_의자_카테고리)
                                       .build();
         final Auction 삭제된_경매 = Auction.builder()
                                       .seller(판매자)
@@ -96,6 +125,7 @@ public class QuestionServiceFixture {
                                       .bidUnit(new BidUnit(1_000))
                                       .startPrice(new Price(1_000))
                                       .closingTime(LocalDateTime.now().plusDays(7))
+                                      .subCategory(가구_서브_의자_카테고리)
                                       .build();
         삭제된_경매.delete();
         질문자 = User.builder()

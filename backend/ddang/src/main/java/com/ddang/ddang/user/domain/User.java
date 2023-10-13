@@ -34,6 +34,7 @@ import java.util.UUID;
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
+    public static final User EMPTY_USER = null;
     private static final boolean DELETED_STATUS = true;
     private static final String UNKOWN_NAME = "알 수 없음";
 

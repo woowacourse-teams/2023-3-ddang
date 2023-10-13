@@ -82,6 +82,7 @@ public class ChatRoomServiceFixture {
     protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_가능;
     protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_불가능;
     protected ReadChatRoomDto 채팅방은_아직_없지만_참여_가능;
+    protected ReadChatRoomDto 채팅방_없고_참여_불가능;
     protected ReadChatRoomWithLastMessageDto 엔초_채팅_목록의_제이미_엔초_채팅방_정보;
     protected ReadChatRoomWithLastMessageDto 엔초_채팅_목록의_엔초_지토_채팅방_정보;
 
@@ -233,6 +234,7 @@ public class ChatRoomServiceFixture {
         엔초_지토_채팅방_정보_및_참여_가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), true);
         엔초_지토_채팅방_정보_및_참여_불가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), false);
         채팅방은_아직_없지만_참여_가능 = new ReadChatRoomDto(null, true);
+        채팅방_없고_참여_불가능 = new ReadChatRoomDto(null, false);
         엔초_채팅_목록의_제이미_엔초_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
                 제이미_엔초_채팅방.getId(),
                 ReadAuctionInChatRoomDto.of(판매자_제이미_구매자_엔초_경매, 제이미의_경매_대표_이미지),
