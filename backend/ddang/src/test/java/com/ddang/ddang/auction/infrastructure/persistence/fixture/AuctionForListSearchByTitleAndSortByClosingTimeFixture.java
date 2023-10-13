@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionForListSearchByTitleAndSortByClosingTimeFixture extends QuerydslAuctionRepositoryImplForListFixture {
+public class AuctionForListSearchByTitleAndSortByClosingTimeFixture extends QuerydslAuctionRepositoryForListFixture {
 
     protected Sort 마감_임박순_정렬 = Sort.by(Order.asc("closingTime"));
     protected ReadAuctionSearchCondition 검색어_맥북 = new ReadAuctionSearchCondition("맥북");

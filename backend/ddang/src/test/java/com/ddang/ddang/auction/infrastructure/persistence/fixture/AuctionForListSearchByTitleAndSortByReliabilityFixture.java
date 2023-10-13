@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionForListSearchByTitleAndSortByReliabilityFixture extends QuerydslAuctionRepositoryImplForListFixture {
+public class AuctionForListSearchByTitleAndSortByReliabilityFixture extends QuerydslAuctionRepositoryForListFixture {
 
     protected Sort 신뢰도순_정렬 = Sort.by(Order.asc("reliability"));
     protected ReadAuctionSearchCondition 검색어_맥북 = new ReadAuctionSearchCondition("맥북");

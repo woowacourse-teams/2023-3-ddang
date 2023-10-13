@@ -26,7 +26,7 @@ class AuctionForListSearchByTitleAndSortByIdTest extends AuctionForListSearchByT
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslAuctionRepository = new QuerydslAuctionRepositoryImpl(queryFactory);
+        querydslAuctionRepository = new QuerydslAuctionRepository(queryFactory);
     }
 
     @Test

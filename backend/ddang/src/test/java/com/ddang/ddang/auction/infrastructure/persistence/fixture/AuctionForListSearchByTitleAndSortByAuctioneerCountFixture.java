@@ -7,7 +7,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionForListSearchByTitleAndSortByAuctioneerCountFixture extends QuerydslAuctionRepositoryImplForListFixture {
+public class AuctionForListSearchByTitleAndSortByAuctioneerCountFixture extends
+        QuerydslAuctionRepositoryForListFixture {
 
     protected Sort 참여_인원순_정렬 = Sort.by(Order.asc("auctioneerCount"));
     protected ReadAuctionSearchCondition 검색어_맥북 = new ReadAuctionSearchCondition("맥북");

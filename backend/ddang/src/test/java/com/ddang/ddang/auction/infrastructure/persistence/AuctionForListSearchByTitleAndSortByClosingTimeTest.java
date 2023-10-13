@@ -26,7 +26,7 @@ class AuctionForListSearchByTitleAndSortByClosingTimeTest extends AuctionForList
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslAuctionRepository = new QuerydslAuctionRepositoryImpl(queryFactory);
+        querydslAuctionRepository = new QuerydslAuctionRepository(queryFactory);
     }
 
     @Test

@@ -27,7 +27,7 @@ class AuctionForListByBidderIdTest extends AuctionForListByBidderIdFixture {
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslAuctionRepository = new QuerydslAuctionRepositoryImpl(queryFactory);
+        querydslAuctionRepository = new QuerydslAuctionRepository(queryFactory);
     }
 
     @Nested

@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class QuerydslAuctionRepositoryImplForObjectFixture {
+public class QuerydslAuctionRepositoryForObjectFixture {
 
     @PersistenceContext
     EntityManager em;

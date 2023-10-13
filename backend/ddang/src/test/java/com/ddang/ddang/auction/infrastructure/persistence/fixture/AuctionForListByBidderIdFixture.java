@@ -5,7 +5,7 @@ import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionForListByBidderIdFixture extends QuerydslAuctionRepositoryImplForListFixture {
+public class AuctionForListByBidderIdFixture extends QuerydslAuctionRepositoryForListFixture {
 
     protected User 참여한_경매가_7개인_사용자;
     protected Auction 첫번째_페이지_인덱스_0;

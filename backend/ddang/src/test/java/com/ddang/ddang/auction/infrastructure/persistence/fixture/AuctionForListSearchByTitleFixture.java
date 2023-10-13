@@ -5,7 +5,7 @@ import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchConditi
 import org.junit.jupiter.api.BeforeEach;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionForListSearchByTitleFixture extends QuerydslAuctionRepositoryImplForListFixture {
+public class AuctionForListSearchByTitleFixture extends QuerydslAuctionRepositoryForListFixture {
 
     protected ReadAuctionSearchCondition 검색어_맥북 = new ReadAuctionSearchCondition("맥북");
 

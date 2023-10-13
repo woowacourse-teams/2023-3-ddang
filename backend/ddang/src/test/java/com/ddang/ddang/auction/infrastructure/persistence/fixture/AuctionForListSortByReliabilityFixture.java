@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionForListSortByReliabilityFixture extends QuerydslAuctionRepositoryImplForListFixture {
+public class AuctionForListSortByReliabilityFixture extends QuerydslAuctionRepositoryForListFixture {
 
     protected Sort 신뢰도순_정렬 = Sort.by(Order.asc("reliability"));
     protected ReadAuctionSearchCondition 검색어_없음 = new ReadAuctionSearchCondition(null);
