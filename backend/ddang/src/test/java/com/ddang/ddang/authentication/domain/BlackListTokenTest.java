@@ -16,6 +16,7 @@ class BlackListTokenTest {
 
     @Test
     void 생성자에_유효한_토큰을_전달하면_BlackListToken을_반환한다() {
+        // when & then
         assertDoesNotThrow(() -> new BlackListToken(TokenType.ACCESS, "accessToken"));
     }
 
