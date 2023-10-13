@@ -28,7 +28,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val deviceToken = repository.getDeviceToken()
             if (deviceToken.isNullOrBlank()) {
-                LoginEvent.FailureLoginEvent(ErrorType.UNEXPECTED)
+                _event.value = LoginEvent.FailureLoginEvent(ErrorType.UNEXPECTED)
                 return@launch
             }
 
