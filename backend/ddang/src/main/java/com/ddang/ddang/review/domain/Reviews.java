@@ -1,7 +1,6 @@
 package com.ddang.ddang.review.domain;
 
 import com.ddang.ddang.user.domain.User;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -13,7 +12,6 @@ import static java.util.stream.Collectors.toSet;
 
 @RequiredArgsConstructor
 @Getter
-@EqualsAndHashCode
 @ToString
 public class Reviews {
 
