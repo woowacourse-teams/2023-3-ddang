@@ -79,11 +79,14 @@
     <string name="detail_auction_qna_title">Q&amp;A</string>
     <string name="detail_auction_qna_seller_answer_title">판매자 답변</string>
     <string name="detail_auction_qna_no_answer">아직 작성된 답변이 없습니다.</string>
-    <string name="detail_auction_qna_answer_write">작성하기</string>
+    <string name="detail_auction_qna_question_write">질문하기</string>
+    <string name="detail_auction_qna_answer_write">답변하기</string>
     <string name="detail_auction_qna_delete">삭제하기</string>
     <string name="detail_auction_qna_waiting">답변대기</string>
     <string name="detail_auction_qna_complete">답변완료</string>
     <string name="detail_auction_qna_question_prefix">Q. %s</string>
+    <string name="detail_auction_qna_question_contents_hint">질문 내용을 입력해주세요.</string>
+    <string name="detail_auction_qna_answer_contents_hint">답변 내용을 입력해주세요.</string>
 
     <!-- detail_auction_bid_history -->
     <string name="detail_auction_bid_history">입찰 내역</string>
