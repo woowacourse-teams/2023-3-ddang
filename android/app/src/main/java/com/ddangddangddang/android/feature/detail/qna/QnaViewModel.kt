@@ -3,39 +3,39 @@ package com.ddangddangddang.android.feature.detail.qna
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ddangddangddang.android.model.QnAModel
-import com.ddangddangddang.android.model.QnAStatusModel
+import com.ddangddangddang.android.model.QnaModel
+import com.ddangddangddang.android.model.QnaStatusModel
 
 class QnaViewModel : ViewModel() {
 
     private val _qnas = MutableLiveData(
         listOf(
-            QnAModel.QuestionAndAnswer(
+            QnaModel.QuestionAndAnswer(
                 0,
                 "판매자고 질문자 아님",
                 "asdf",
                 "asdf",
-                QnAStatusModel.WAITING,
+                QnaStatusModel.WAITING,
                 true,
                 false,
                 false,
             ),
-            QnAModel.QuestionAndAnswer(
+            QnaModel.QuestionAndAnswer(
                 1,
                 "판매자 아니고 질문자 아님",
                 "asdf",
                 "asdf",
-                QnAStatusModel.COMPLETE,
+                QnaStatusModel.COMPLETE,
                 false,
                 true,
                 false,
             ),
-            QnAModel.QuestionAndAnswer(
+            QnaModel.QuestionAndAnswer(
                 2,
                 "둘다 아님",
                 "asdf",
                 "asdf",
-                QnAStatusModel.WAITING,
+                QnaStatusModel.WAITING,
                 false,
                 false,
                 false,
@@ -43,7 +43,7 @@ class QnaViewModel : ViewModel() {
         ),
     )
 
-    val qnas: LiveData<List<QnAModel.QuestionAndAnswer>>
+    val qnas: LiveData<List<QnaModel.QuestionAndAnswer>>
         get() = _qnas
 
     fun selectQna(id: Long) {

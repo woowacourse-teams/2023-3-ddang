@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ddangddangddang.android.databinding.ItemQnaBinding
-import com.ddangddangddang.android.model.QnAModel
+import com.ddangddangddang.android.model.QnaModel
 
 class QnaViewHolder private constructor(
     private val binding: ItemQnaBinding,
@@ -14,7 +14,7 @@ class QnaViewHolder private constructor(
         binding.onItemClick = onItemClick
     }
 
-    fun bind(qna: QnAModel.QuestionAndAnswer) {
+    fun bind(qna: QnaModel.QuestionAndAnswer) {
         binding.model = qna
     }
 

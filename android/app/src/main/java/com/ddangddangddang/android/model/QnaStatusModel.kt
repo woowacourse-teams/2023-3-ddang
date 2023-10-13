@@ -4,7 +4,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.StringRes
 import com.ddangddangddang.android.R
 
-enum class QnAStatusModel(
+enum class QnaStatusModel(
     @StringRes val questionStatus: Int,
     @ColorRes val colorId: Int,
 ) {
@@ -14,7 +14,7 @@ enum class QnAStatusModel(
 
     companion object {
         private const val ERROR_NOT_FOUND = "[ERROR] 매칭되는 Status가 존재하지 않습니다"
-        fun find(status: String): QnAStatusModel {
+        fun find(status: String): QnaStatusModel {
             return values().find { it.name == status } ?: throw IllegalArgumentException(
                 ERROR_NOT_FOUND,
             )

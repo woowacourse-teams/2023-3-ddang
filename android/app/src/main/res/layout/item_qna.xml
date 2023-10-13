@@ -11,7 +11,7 @@
 
         <variable
             name="model"
-            type="com.ddangddangddang.android.model.QnAModel.QuestionAndAnswer" />
+            type="com.ddangddangddang.android.model.QnaModel.QuestionAndAnswer" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -3,12 +3,12 @@ package com.ddangddangddang.android.feature.detail.qna
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.ddangddangddang.android.model.QnAModel
+import com.ddangddangddang.android.model.QnaModel
 
 class QnaAdapter(private val onItemClick: (Long) -> Unit) :
-    ListAdapter<QnAModel.QuestionAndAnswer, QnaViewHolder>(QnaDiffUtil) {
+    ListAdapter<QnaModel.QuestionAndAnswer, QnaViewHolder>(QnaDiffUtil) {
 
-    fun setQnas(list: List<QnAModel.QuestionAndAnswer>, callback: (() -> Unit)? = null) {
+    fun setQnas(list: List<QnaModel.QuestionAndAnswer>, callback: (() -> Unit)? = null) {
         submitList(list, callback)
     }
 
@@ -21,17 +21,17 @@ class QnaAdapter(private val onItemClick: (Long) -> Unit) :
     }
 
     companion object {
-        private val QnaDiffUtil = object : DiffUtil.ItemCallback<QnAModel.QuestionAndAnswer>() {
+        private val QnaDiffUtil = object : DiffUtil.ItemCallback<QnaModel.QuestionAndAnswer>() {
             override fun areItemsTheSame(
-                oldItem: QnAModel.QuestionAndAnswer,
-                newItem: QnAModel.QuestionAndAnswer,
+                oldItem: QnaModel.QuestionAndAnswer,
+                newItem: QnaModel.QuestionAndAnswer,
             ): Boolean {
                 return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
-                oldItem: QnAModel.QuestionAndAnswer,
-                newItem: QnAModel.QuestionAndAnswer,
+                oldItem: QnaModel.QuestionAndAnswer,
+                newItem: QnaModel.QuestionAndAnswer,
             ): Boolean {
                 return oldItem == newItem
             }
