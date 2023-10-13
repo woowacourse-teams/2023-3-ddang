@@ -16,7 +16,7 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndImageRepositoryImpl;
 import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndMessageAndImageRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
+import com.ddang.ddang.chat.domain.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;

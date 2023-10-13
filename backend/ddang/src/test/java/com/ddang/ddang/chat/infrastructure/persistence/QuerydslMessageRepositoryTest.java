@@ -1,7 +1,7 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslMessageRepositoryImplFixture;
+import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslMessageRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,13 +22,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFixture {
+class QuerydslMessageRepositoryTest extends QuerydslMessageRepositoryFixture {
 
-    QuerydslMessageRepositoryImpl querydslMessageRepository;
+    QuerydslMessageRepository querydslMessageRepository;
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslMessageRepository = new QuerydslMessageRepositoryImpl(queryFactory);
+        querydslMessageRepository = new QuerydslMessageRepository(queryFactory);
     }
 
     @Test

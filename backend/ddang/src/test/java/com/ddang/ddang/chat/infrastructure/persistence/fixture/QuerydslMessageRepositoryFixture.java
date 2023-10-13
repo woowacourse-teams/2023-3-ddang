@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class QuerydslMessageRepositoryImplFixture {
+public class QuerydslMessageRepositoryFixture {
 
     @PersistenceContext
     private EntityManager em;

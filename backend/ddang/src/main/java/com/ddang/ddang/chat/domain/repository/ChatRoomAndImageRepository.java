@@ -1,10 +1,10 @@
-package com.ddang.ddang.chat.infrastructure.persistence;
+package com.ddang.ddang.chat.domain.repository;
 
 import com.ddang.ddang.chat.domain.ChatRoomAndImageDto;
 
 import java.util.Optional;
 
-public interface QuerydslChatRoomAndImageRepository {
+public interface ChatRoomAndImageRepository {
 
     Optional<ChatRoomAndImageDto> findChatRoomById(final Long chatRoomId);
 }

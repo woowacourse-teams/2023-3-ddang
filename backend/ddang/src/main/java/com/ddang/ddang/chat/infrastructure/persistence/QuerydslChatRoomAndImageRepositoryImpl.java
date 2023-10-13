@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
+import com.ddang.ddang.chat.domain.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageQueryProjectionDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndImageQueryProjectionDto;
 import com.querydsl.jpa.JPAExpressions;
