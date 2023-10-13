@@ -1,7 +1,6 @@
 package com.ddangddangddang.android.feature.detail.qna
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.viewModels
@@ -21,19 +20,18 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupQnas()
+        setupViewModel()
+    }
+
+    private fun setupQnas() {
         binding.rvQna.adapter = qnaAdapter
         binding.rvQna.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-        setupViewModel()
     }
 
     private fun setupViewModel() {
         viewModel.qnas.observe(viewLifecycleOwner) {
             qnaAdapter.setQnas(it)
         }
-    }
-
-    override fun onHiddenChanged(hidden: Boolean) {
-        super.onHiddenChanged(hidden)
-        Log.d("changed", "change")
     }
 }
