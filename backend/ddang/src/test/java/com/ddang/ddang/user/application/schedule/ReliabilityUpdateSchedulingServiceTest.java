@@ -51,19 +51,19 @@ class ReliabilityUpdateSchedulingServiceTest extends ReliabilityUpdateScheduling
         reliabilityUpdateSchedulingService.updateAllUserReliability();
 
         // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            final Optional<UserReliability> actual1 = userReliabilityRepository.findByUserId(구매자1_기존_평가_2개_새로운_평가_1개.getId());
-            softAssertions.assertThat(actual1.get().getAppliedReviewCount()).isEqualTo(구매자1_최종_신뢰도_반영_개수);
-            final Optional<UserReliability> actual2 = userReliabilityRepository.findByUserId(구매자2_기존_평가_3개_새로운_평가_2개.getId());
-            softAssertions.assertThat(actual2.get().getAppliedReviewCount()).isEqualTo(구매자2_최종_신뢰도_반영_개수);
-            final Optional<UserReliability> actual3 = userReliabilityRepository.findByUserId(구매자3_기존_평가_5개_새로운_평가_1개.getId());
-            softAssertions.assertThat(actual3.get().getAppliedReviewCount()).isEqualTo(구매자3_최종_신뢰도_반영_개수);
-            final Optional<UserReliability> actual4 = userReliabilityRepository.findByUserId(구매자4_기존_평가_없고_새로운_평가_1개.getId());
-            softAssertions.assertThat(actual4.get().getAppliedReviewCount()).isEqualTo(구매자4_최종_신뢰도_반영_개수);
-            final Optional<UserReliability> actual5 = userReliabilityRepository.findByUserId(구매자5_기존_평가_없고_새로운_평가_3개.getId());
-            softAssertions.assertThat(actual5.get().getAppliedReviewCount()).isEqualTo(구매자5_최종_신뢰도_반영_개수);
+        final Optional<UserReliability> actual1 = userReliabilityRepository.findByUserId(구매자1_기존_평가_2개_새로운_평가_1개.getId());
+        final Optional<UserReliability> actual2 = userReliabilityRepository.findByUserId(구매자2_기존_평가_3개_새로운_평가_2개.getId());
+        final Optional<UserReliability> actual3 = userReliabilityRepository.findByUserId(구매자3_기존_평가_5개_새로운_평가_1개.getId());
+        final Optional<UserReliability> actual4 = userReliabilityRepository.findByUserId(구매자4_기존_평가_없고_새로운_평가_1개.getId());
+        final Optional<UserReliability> actual5 = userReliabilityRepository.findByUserId(구매자5_기존_평가_없고_새로운_평가_3개.getId());
+        final Optional<UserReliability> actual6 = userReliabilityRepository.findByUserId(구매자6_기존_평가_없고_새로운_평가_없음.getId());
 
-            final Optional<UserReliability> actual6 = userReliabilityRepository.findByUserId(구매자6_기존_평가_없고_새로운_평가_없음.getId());
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual1.get().getAppliedReviewCount()).isEqualTo(구매자1_최종_신뢰도_반영_개수);
+            softAssertions.assertThat(actual2.get().getAppliedReviewCount()).isEqualTo(구매자2_최종_신뢰도_반영_개수);
+            softAssertions.assertThat(actual3.get().getAppliedReviewCount()).isEqualTo(구매자3_최종_신뢰도_반영_개수);
+            softAssertions.assertThat(actual4.get().getAppliedReviewCount()).isEqualTo(구매자4_최종_신뢰도_반영_개수);
+            softAssertions.assertThat(actual5.get().getAppliedReviewCount()).isEqualTo(구매자5_최종_신뢰도_반영_개수);
             softAssertions.assertThat(actual6).isEmpty();
         });
     }
