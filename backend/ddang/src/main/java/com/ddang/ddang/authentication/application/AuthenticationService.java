@@ -49,7 +49,11 @@ public class AuthenticationService {
     private final JpaDeviceTokenRepository deviceTokenRepository;
 
     @Transactional
-    public LoginInformationDto login(final Oauth2Type oauth2Type, final String oauth2AccessToken, final String deviceToken) {
+    public LoginInformationDto login(
+            final Oauth2Type oauth2Type,
+            final String oauth2AccessToken,
+            final String deviceToken
+    ) {
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
         final LoginUserInformationDto loginUserInfo = findOrPersistUser(oauth2Type, userInformationDto);
@@ -107,7 +111,7 @@ public class AuthenticationService {
         return userRepository.existsByNameEndingWith(name);
     }
 
-    private TokenDto convertTokenDto(LoginUserInformationDto signInUserInfo) {
+    private TokenDto convertTokenDto(final LoginUserInformationDto signInUserInfo) {
         final User loginUser = signInUserInfo.user();
 
         final String accessToken = tokenEncoder.encode(
