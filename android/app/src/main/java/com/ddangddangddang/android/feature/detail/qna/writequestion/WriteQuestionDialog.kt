@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.databinding.FragmentWriteQuestionDialogBinding
-import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,9 +18,7 @@ class WriteQuestionDialog : DialogFragment() {
     private val binding: FragmentWriteQuestionDialogBinding
         get() = binding!!
 
-
-//    private val viewModel
-    private val activityViewModel: AuctionDetailViewModel by activityViewModels()
+    private val viewModel: WriteQuestionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,17 +27,28 @@ class WriteQuestionDialog : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = FragmentWriteQuestionDialogBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-//        binding.viewModel
-//        binding.activityViewModel = activityViewModel
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+    }
+
+    companion object {
+        private const val WRITE_QUESTION_TAG = "write_question_tag"
+        private const val AUCTION_ID_KEY = "auction_id"
+
+        fun show(fragmentManager: FragmentManager, auctionId: Long) {
+            val dialog = WriteQuestionDialog()
+            dialog.arguments = Bundle().apply {
+                putLong(AUCTION_ID_KEY, auctionId)
+            }
+            WriteQuestionDialog().show(fragmentManager, WRITE_QUESTION_TAG)
+        }
     }
 }

@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="onItemClick"
-            type="kotlin.jvm.functions.Function1" />
+            name="onClicks"
+            type="com.ddangddangddang.android.feature.detail.qna.QnaAdapter.OnClicks" />
 
         <variable
             name="model"
@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/grey_50_to_selected_second_region_bg_selected"
-            android:onClick="@{() -> onItemClick.invoke(model.question.id)}"
+            android:onClick="@{() -> onClicks.onQuestionClick(model.question.id)}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="18dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +95,7 @@
                 android:layout_marginTop="16dp"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
+                android:onClick="@{() -> onClicks.onDeleteQuestionClick(model.question.id)}"
                 android:text="@string/detail_auction_qna_delete"
                 android:textColor="@color/grey_800"
                 app:drawableEndCompat="@drawable/ic_delete_24"
@@ -134,6 +135,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
+                android:onClick="@{() -> onClicks.onSubmitAnswerClick(model.question.id)}"
                 android:text="@string/detail_auction_qna_answer_write"
                 android:textColor="@color/grey_800"
                 app:drawableEndCompat="@drawable/ic_create_24"
@@ -149,6 +151,7 @@
                 android:layout_height="wrap_content"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
+                android:onClick="@{() -> onClicks.onDeleteAnswerClick(model.answer.id)}"
                 android:text="@string/detail_auction_qna_delete"
                 android:textColor="@color/grey_800"
                 app:drawableEndCompat="@drawable/ic_delete_24"

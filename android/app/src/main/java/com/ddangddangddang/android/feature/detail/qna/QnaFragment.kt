@@ -10,6 +10,8 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentQnaBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
+import com.ddangddangddang.android.feature.detail.qna.writeanswer.WriteAnswerDialog
+import com.ddangddangddang.android.feature.detail.qna.writequestion.WriteQuestionDialog
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,10 +20,26 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
 
     private val viewModel: QnaViewModel by viewModels()
     private val activityViewModel: AuctionDetailViewModel by activityViewModels()
-    private val qnaAdapter = QnaAdapter { qnaId ->
-        viewModel.selectQna(qnaId)
-    }
+    private val onClicks = object : QnaAdapter.OnClicks {
+        override fun onQuestionClick(questionId: Long) {
+            viewModel.selectQna(questionId)
+        }
 
+        override fun onSubmitAnswerClick(questionId: Long) {
+            activityViewModel.auctionDetailModel.value?.let { model ->
+                WriteAnswerDialog.show(parentFragmentManager, model.id, questionId)
+            }
+        }
+
+        override fun onDeleteQuestionClick(questionId: Long) {
+            viewModel.deleteQuestion(questionId)
+        }
+
+        override fun onDeleteAnswerClick(answerId: Long) {
+            viewModel.deleteAnswer(answerId)
+        }
+    }
+    private val qnaAdapter = QnaAdapter(onClicks)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupQnas()
@@ -51,6 +69,14 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
         when (event) {
             is QnaViewModel.QnaEvent.FailureLoadQnas -> {
                 notifyFailureMessage(event.errorType, R.string.detail_auction_qna_loading_failure)
+            }
+
+            is QnaViewModel.QnaEvent.NavigateToWriteQuestion -> {
+                WriteQuestionDialog.show(parentFragmentManager, event.auctionId)
+            }
+
+            is QnaViewModel.QnaEvent.NavigateToWriteAnswer -> {
+                WriteAnswerDialog.show(parentFragmentManager, event.auctionId, event.questionId)
             }
         }
     }

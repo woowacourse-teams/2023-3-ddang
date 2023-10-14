@@ -25,6 +25,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
     private val isLoading = AtomicBoolean(false)
 
     private var isOwner: Boolean = false
+    private var auctionId: Long? = null
 
     private val _event: SingleLiveEvent<QnaEvent> = SingleLiveEvent()
     val event: LiveData<QnaEvent>
@@ -36,6 +37,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
 
     fun loadQnas(auctionId: Long) {
         if (isLoading.getAndSet(true)) return
+        this.auctionId = auctionId
         viewModelScope.launch {
             when (val response = repository.getAuctionQnas(auctionId)) {
                 is ApiResponse.Success ->
@@ -70,7 +72,29 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
         }
     }
 
+    fun navigateToWriteQuestion() {
+        auctionId?.let { auctionId ->
+            _event.value = QnaEvent.NavigateToWriteQuestion(auctionId)
+        }
+    }
+
+    fun navigateToWriteAnswer(questionId: Long) {
+        auctionId?.let { auctionId ->
+            _event.value = QnaEvent.NavigateToWriteAnswer(auctionId, questionId)
+        }
+    }
+
+    fun deleteQuestion(questionId: Long) {
+        TODO("Not yet implemented")
+    }
+
+    fun deleteAnswer(answerId: Long) {
+        TODO("Not yet implemented")
+    }
+
     sealed class QnaEvent {
         data class FailureLoadQnas(val errorType: ErrorType) : QnaEvent()
+        data class NavigateToWriteQuestion(val auctionId: Long) : QnaEvent()
+        data class NavigateToWriteAnswer(val auctionId: Long, val questionId: Long) : QnaEvent()
     }
 }

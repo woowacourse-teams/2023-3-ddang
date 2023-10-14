@@ -8,10 +8,10 @@ import com.ddangddangddang.android.model.QnaModel
 
 class QnaViewHolder private constructor(
     private val binding: ItemQnaBinding,
-    onItemClick: (Long) -> Unit,
+    onClicks: QnaAdapter.OnClicks,
 ) : RecyclerView.ViewHolder(binding.root) {
     init {
-        binding.onItemClick = onItemClick
+        binding.onClicks = onClicks
     }
 
     fun bind(qna: QnaModel.QuestionAndAnswerModel) {
@@ -19,10 +19,10 @@ class QnaViewHolder private constructor(
     }
 
     companion object {
-        fun create(parent: ViewGroup, onItemClick: (Long) -> Unit): QnaViewHolder {
+        fun create(parent: ViewGroup, onClicks: QnaAdapter.OnClicks): QnaViewHolder {
             val layoutInflater = LayoutInflater.from(parent.context)
             val binding = ItemQnaBinding.inflate(layoutInflater, parent, false)
-            return QnaViewHolder(binding, onItemClick)
+            return QnaViewHolder(binding, onClicks)
         }
     }
 }
