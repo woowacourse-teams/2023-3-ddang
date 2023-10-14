@@ -5,8 +5,6 @@ import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.fixture.JpaUserRepositoryFixture;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -23,9 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
-
-    @PersistenceContext
-    EntityManager em;
 
     @Autowired
     JpaUserRepository userRepository;
@@ -44,9 +39,6 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
         final User actual = userRepository.save(user);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(actual.getId()).isPositive();
     }
 
