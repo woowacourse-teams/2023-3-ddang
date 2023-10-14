@@ -155,7 +155,9 @@ public class ReviewServiceFixture {
                                   .content("별로다.")
                                   .score(new Score(구매자가_판매자2에게_받은_평가_점수))
                                   .build();
-        reviewRepository.saveAll(List.of(구매자가_판매자1에게_받은_평가, 구매자가_판매자2에게_받은_평가));
+
+        reviewRepository.save(구매자가_판매자1에게_받은_평가);
+        reviewRepository.save(구매자가_판매자2에게_받은_평가);
 
         구매자가_이전까지_받은_평가_총2개 = List.of(구매자가_판매자1에게_받은_평가, 구매자가_판매자2에게_받은_평가);
 
