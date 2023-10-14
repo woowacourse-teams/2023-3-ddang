@@ -14,6 +14,7 @@ public interface JpaUserRepository extends JpaRepository<User, Long> {
         WHERE u.deleted = false AND u.id = :id
     """)
     Optional<User> findById(final Long id);
+
     @Query("""
         SELECT u
         FROM User u
