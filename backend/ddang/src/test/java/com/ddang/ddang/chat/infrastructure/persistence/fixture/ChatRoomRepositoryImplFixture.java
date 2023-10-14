@@ -20,7 +20,9 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,7 @@ public class ChatRoomRepositoryImplFixture {
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
-    @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     private AuctionRepository auctionRepository;
 
@@ -55,9 +56,11 @@ public class ChatRoomRepositoryImplFixture {
     void fixtureSetUp(
             @Autowired final JPAQueryFactory queryFactory,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaChatRoomRepository jpaChatRoomRepository
     ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");
@@ -95,7 +98,8 @@ public class ChatRoomRepositoryImplFixture {
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
 
-        userRepository.saveAll(List.of(판매자, 구매자));
+        userRepository.save(판매자);
+        userRepository.save(구매자);
 
         경매.addAuctionImages(List.of(경매이미지1, 경매이미지2));
         auctionRepository.save(경매);

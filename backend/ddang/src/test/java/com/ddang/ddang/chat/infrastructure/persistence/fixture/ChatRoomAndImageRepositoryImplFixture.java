@@ -20,7 +20,9 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,17 +33,12 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomAndImageRepositoryImplFixture {
 
-    @Autowired
-    private JPAQueryFactory queryFactory;
-
-    @Autowired
-    private JpaAuctionRepository jpaAuctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
-    @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -52,7 +49,13 @@ public class ChatRoomAndImageRepositoryImplFixture {
     protected ChatRoom 채팅방;
 
     @BeforeEach
-    void fixtureSetUp(@Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
+    void fixtureSetUp(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");
@@ -85,16 +88,14 @@ public class ChatRoomAndImageRepositoryImplFixture {
 
         경매_대표_이미지 = new AuctionImage("경매_대표_이미지.png", "경매_대표_이미지.png");
         채팅방 = new ChatRoom(경매, 구매자);
-
-        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
-                jpaAuctionRepository,
-                new QuerydslAuctionRepository(queryFactory)
-        );
         auctionRepository.save(경매);
 
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
-        userRepository.saveAll(List.of(판매자, 구매자));
+
+        userRepository.save(판매자);
+        userRepository.save(구매자);
+
         경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         bidRepository.save(입찰);
         경매.updateLastBid(입찰);

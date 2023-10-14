@@ -22,7 +22,9 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,17 +35,12 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomAndMessageAndImageRepositoryImplFixture {
 
-    @Autowired
-    private JPAQueryFactory queryFactory;
-
-    @Autowired
-    private JpaAuctionRepository jpaAuctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
-    @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -65,7 +62,14 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
     protected Message 엔초가_지토에게_5시에_보낸_쪽지;
 
     @BeforeEach
-    void fixtureSetUp(@Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
+    void fixtureSetUp(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaChatRoomRepository jpaChatRoomRepository
+    ) {
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");
@@ -178,16 +182,14 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
 
-        userRepository.saveAll(List.of(메리, 엔초, 제이미, 지토));
+        userRepository.save(메리);
+        userRepository.save(엔초);
+        userRepository.save(제이미);
+        userRepository.save(지토);
 
         메리의_경매.addAuctionImages(List.of(메리의_경매_대표_이미지, 메리의_대표_이미지가_아닌_경매_이미지));
         엔초의_경매.addAuctionImages(List.of(엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지));
         제이미의_경매.addAuctionImages(List.of(제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지));
-
-        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
-                jpaAuctionRepository,
-                new QuerydslAuctionRepository(queryFactory)
-        );
 
         auctionRepository.save(메리의_경매);
         auctionRepository.save(엔초의_경매);
