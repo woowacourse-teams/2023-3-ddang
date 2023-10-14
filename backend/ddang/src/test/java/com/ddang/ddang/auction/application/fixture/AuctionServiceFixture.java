@@ -12,7 +12,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -31,7 +31,7 @@ public class AuctionServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -52,11 +52,11 @@ public class AuctionServiceFixture {
                              .oauthId("12345")
                              .build();
     protected User 구매자 = User.builder()
-                             .name("구매자")
-                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(new Reliability(4.7d))
-                             .oauthId("54321")
-                             .build();
+                              .name("구매자")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(new Reliability(4.7d))
+                              .oauthId("54321")
+                              .build();
 
     private MockMultipartFile 경매_이미지_파일 = new MockMultipartFile(
             "image.png",

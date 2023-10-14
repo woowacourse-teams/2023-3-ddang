@@ -16,7 +16,9 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.infrastructure.persistence.RegionRepositoryImpl;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -41,8 +43,7 @@ public class AuctionRepositoryImplFixture {
 
     private UserRepository userRepository;
 
-    @Autowired
-    private JpaRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -73,10 +74,12 @@ public class AuctionRepositoryImplFixture {
     void fixtureSetUp(
             @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
-            @Autowired final JpaUserRepository jpaUserRepository
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaRegionRepository jpaRegionRepository
     ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
+        regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
 
         final Region 서울특별시 = new Region("서울특별시");
         final Region 강남구 = new Region("강남구");

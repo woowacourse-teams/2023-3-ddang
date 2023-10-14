@@ -18,7 +18,7 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -38,7 +38,7 @@ public class AuctionService {
 
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
-    private final JpaRegionRepository regionRepository;
+    private final RegionRepository regionRepository;
     private final CategoryRepository categoryRepository;
     private final StoreImageProcessor imageProcessor;
 

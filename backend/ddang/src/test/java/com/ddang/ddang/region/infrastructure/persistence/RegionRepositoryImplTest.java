@@ -2,8 +2,10 @@ package com.ddang.ddang.region.infrastructure.persistence;
 
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.fixture.JpaRegionRepositoryFixture;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
+import com.ddang.ddang.region.infrastructure.persistence.fixture.RegionRepositoryImplFixture;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -20,10 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(QuerydslConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaRegionRepositoryTest extends JpaRegionRepositoryFixture {
+class RegionRepositoryImplTest extends RegionRepositoryImplFixture {
 
-    @Autowired
-    JpaRegionRepository regionRepository;
+    RegionRepository regionRepository;
+
+    @BeforeEach
+    void setUp(@Autowired final JpaRegionRepository jpaRegionRepository) {
+        regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
+    }
 
     @Test
     void 지역을_저장한다() {
