@@ -11,9 +11,9 @@ import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.UserReliability;
+import com.ddang.ddang.user.domain.repository.ReliabilityUpdateHistoryRepository;
 import com.ddang.ddang.user.domain.repository.UserReliabilityRepository;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,7 +35,7 @@ public class ReliabilityUpdateSchedulingServiceFixture {
     private UserReliabilityRepository userReliabilityRepository;
 
     @Autowired
-    private JpaReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
+    private ReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
 
     private double 구매자1_기존_신뢰도_점수 = 3.5d;
     private double 구매자2_기존_신뢰도_점수 = 4.0d;
