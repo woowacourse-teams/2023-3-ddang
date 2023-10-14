@@ -11,9 +11,9 @@ import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.UserReliability;
+import com.ddang.ddang.user.domain.repository.UserReliabilityRepository;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserReliabilityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,7 +32,7 @@ public class ReliabilityUpdateSchedulingServiceFixture {
     private JpaReviewRepository reviewRepository;
 
     @Autowired
-    private JpaUserReliabilityRepository userReliabilityRepository;
+    private UserReliabilityRepository userReliabilityRepository;
 
     @Autowired
     private JpaReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
@@ -293,7 +293,9 @@ public class ReliabilityUpdateSchedulingServiceFixture {
         final UserReliability 구매자3_기존_신뢰도_반영_정보 = new UserReliability(구매자3_기존_평가_5개_새로운_평가_1개);
         구매자3_기존_신뢰도_반영_정보.updateReliability(new Reviews(List.of(구매자3_기존_평가1, 구매자3_기존_평가2, 구매자3_기존_평가3, 구매자3_기존_평가4, 구매자3_기존_평가5)));
 
-        userReliabilityRepository.saveAll(List.of(구매자1_기존_신뢰도_반영_정보, 구매자2_기존_신뢰도_반영_정보, 구매자3_기존_신뢰도_반영_정보));
+        userReliabilityRepository.save(구매자1_기존_신뢰도_반영_정보);
+        userReliabilityRepository.save(구매자2_기존_신뢰도_반영_정보);
+        userReliabilityRepository.save(구매자3_기존_신뢰도_반영_정보);
 
         reliabilityUpdateHistoryRepository.save(new ReliabilityUpdateHistory(기존에_적용된_평가_중_마지막_평가의_아이디));
 
