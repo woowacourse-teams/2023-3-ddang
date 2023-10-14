@@ -4,10 +4,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ddang.ddang.authentication.domain.BlackListToken;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.infrastructure.persistence.fixture.JpaBlackListTokenRepositoryFixture;
+import com.ddang.ddang.authentication.domain.repository.BlackListTokenRepository;
+import com.ddang.ddang.authentication.infrastructure.persistence.fixture.BlackListTokenRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -19,10 +21,14 @@ import org.springframework.context.annotation.Import;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaBlackListTokenRepositoryTest extends JpaBlackListTokenRepositoryFixture {
+class BlackListTokenRepositoryImplTest extends BlackListTokenRepositoryFixture {
 
-    @Autowired
-    JpaBlackListTokenRepository blackListTokenRepository;
+    BlackListTokenRepository blackListTokenRepository;
+
+    @BeforeEach
+    void setUp(@Autowired JpaBlackListTokenRepository jpaBlackListTokenRepository) {
+        blackListTokenRepository = new BlackListTokenRepositoryImpl(jpaBlackListTokenRepository);
+    }
 
     @Test
     void BlackListToken_엔티티를_저장한다() {
