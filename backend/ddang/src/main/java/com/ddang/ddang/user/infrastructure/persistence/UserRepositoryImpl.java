@@ -40,6 +40,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean existsByNameEndingWith(final String name) {
-        return existsByNameEndingWith(name);
+        return jpaUserRepository.existsByNameEndingWith(name);
     }
 }
