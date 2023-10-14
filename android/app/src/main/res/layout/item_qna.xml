@@ -104,6 +104,15 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_content" />
 
+            <ImageView
+                isVisible="@{!model.question.isQuestioner}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_report_24"
+                app:layout_constraintBottom_toTopOf="@id/tv_seller_answer_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_content" />
+
             <TextView
                 android:id="@+id/tv_seller_answer_title"
                 style="@style/Header2"
@@ -156,6 +165,14 @@
                 android:textColor="@color/grey_800"
                 app:drawableEndCompat="@drawable/ic_delete_24"
                 app:drawableTint="@color/grey_800"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                isVisible="@{!model.isOwner}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_report_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
