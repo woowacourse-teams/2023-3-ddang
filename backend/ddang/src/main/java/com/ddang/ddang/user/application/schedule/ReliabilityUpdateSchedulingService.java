@@ -2,7 +2,7 @@ package com.ddang.ddang.user.application.schedule;
 
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Reviews;
-import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.UserReliability;
@@ -22,7 +22,7 @@ import java.util.Set;
 public class ReliabilityUpdateSchedulingService {
 
     private final ReliabilityUpdateHistoryRepository updateHistoryRepository;
-    private final JpaReviewRepository reviewRepository;
+    private final ReviewRepository reviewRepository;
     private final UserReliabilityRepository userReliabilityRepository;
 
     @Transactional

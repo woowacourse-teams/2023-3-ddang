@@ -10,7 +10,7 @@ import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.domain.Review;
-import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -26,7 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final JpaReviewRepository reviewRepository;
+    private final ReviewRepository reviewRepository;
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
 

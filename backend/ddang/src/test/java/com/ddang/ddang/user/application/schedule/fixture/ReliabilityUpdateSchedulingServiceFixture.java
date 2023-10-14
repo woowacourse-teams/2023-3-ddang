@@ -6,7 +6,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Reviews;
 import com.ddang.ddang.review.domain.Score;
-import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.User;
@@ -29,7 +29,7 @@ public class ReliabilityUpdateSchedulingServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private UserReliabilityRepository userReliabilityRepository;
@@ -281,8 +281,17 @@ public class ReliabilityUpdateSchedulingServiceFixture {
                                          .target(구매자3_기존_평가_5개_새로운_평가_1개)
                                          .score(new Score(구매자3_기존_신뢰도_점수))
                                          .build();
-        reviewRepository.saveAll(List.of(구매자1_기존_평가1, 구매자1_기존_평가2, 구매자2_기존_평가1, 구매자2_기존_평가2, 구매자2_기존_평가3, 구매자3_기존_평가1, 구매자3_기존_평가2, 구매자3_기존_평가3, 구매자3_기존_평가4, 구매자3_기존_평가5
-        ));
+
+        reviewRepository.save(구매자1_기존_평가1);
+        reviewRepository.save(구매자1_기존_평가2);
+        reviewRepository.save(구매자2_기존_평가1);
+        reviewRepository.save(구매자2_기존_평가2);
+        reviewRepository.save(구매자2_기존_평가3);
+        reviewRepository.save(구매자3_기존_평가1);
+        reviewRepository.save(구매자3_기존_평가2);
+        reviewRepository.save(구매자3_기존_평가3);
+        reviewRepository.save(구매자3_기존_평가4);
+        reviewRepository.save(구매자3_기존_평가5);
 
         final UserReliability 구매자1_기존_신뢰도_반영_정보 = new UserReliability(구매자1_기존_평가_2개_새로운_평가_1개);
         구매자1_기존_신뢰도_반영_정보.updateReliability(new Reviews(List.of(구매자1_기존_평가1, 구매자1_기존_평가2)));
@@ -347,7 +356,14 @@ public class ReliabilityUpdateSchedulingServiceFixture {
                              .target(구매자5_기존_평가_없고_새로운_평가_3개)
                              .score(new Score(구매자5_새로운_평가3_점수))
                              .build();
-        reviewRepository.saveAll(List.of(구매자1_새로운_평가1, 구매자2_새로운_평가1, 구매자2_새로운_평가2, 구매자3_새로운_평가1, 구매자4_새로운_평가1, 구매자5_새로운_평가1, 구매자5_새로운_평가2, 구매자5_새로운_평가3
-        ));
+
+        reviewRepository.save(구매자1_새로운_평가1);
+        reviewRepository.save(구매자2_새로운_평가1);
+        reviewRepository.save(구매자2_새로운_평가2);
+        reviewRepository.save(구매자3_새로운_평가1);
+        reviewRepository.save(구매자4_새로운_평가1);
+        reviewRepository.save(구매자5_새로운_평가1);
+        reviewRepository.save(구매자5_새로운_평가2);
+        reviewRepository.save(구매자5_새로운_평가3);
     }
 }
