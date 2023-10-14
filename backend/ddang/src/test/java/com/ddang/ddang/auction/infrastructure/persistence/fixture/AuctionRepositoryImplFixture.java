@@ -16,17 +16,20 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.infrastructure.persistence.RegionRepositoryImpl;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionRepositoryImplFixture {
@@ -40,8 +43,7 @@ public class AuctionRepositoryImplFixture {
     @Autowired
     private JpaUserRepository userRepository;
 
-    @Autowired
-    private JpaRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -69,7 +71,9 @@ public class AuctionRepositoryImplFixture {
     protected User 구매자;
 
     @BeforeEach
-    void fixtureSetUp() {
+    void fixtureSetUp(@Autowired JpaRegionRepository jpaRegionRepository) {
+        regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
+
         final Region 서울특별시 = new Region("서울특별시");
         final Region 강남구 = new Region("강남구");
         final Region 역삼동 = new Region("역삼동");
