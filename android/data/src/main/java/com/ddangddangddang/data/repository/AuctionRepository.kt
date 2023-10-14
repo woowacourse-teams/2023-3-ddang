@@ -2,6 +2,8 @@ package com.ddangddangddang.data.repository
 
 import androidx.lifecycle.LiveData
 import com.ddangddangddang.data.model.SortType
+import com.ddangddangddang.data.model.request.AskQuestionRequest
+import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
@@ -42,4 +44,12 @@ interface AuctionRepository {
     suspend fun reportMessageRoom(roomId: Long, description: String): ApiResponse<Unit>
     suspend fun deleteAuction(auctionId: Long): ApiResponse<Unit>
     suspend fun getAuctionQnas(auctionId: Long): ApiResponse<QnaResponse>
+    suspend fun askQuestion(askQuestionRequest: AskQuestionRequest): ApiResponse<Unit>
+    suspend fun registerAnswer(
+        questionId: Long,
+        registerAnswerRequest: RegisterAnswerRequest,
+    ): ApiResponse<Unit>
+
+    suspend fun deleteQuestion(questionId: Long): ApiResponse<Unit>
+    suspend fun deleteAnswer(answerId: Long): ApiResponse<Unit>
 }

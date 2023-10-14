@@ -88,6 +88,8 @@
     <string name="detail_auction_qna_question_contents_hint">질문 내용을 입력해주세요.</string>
     <string name="detail_auction_qna_answer_contents_hint">답변 내용을 입력해주세요.</string>
     <string name="detail_auction_qna_loading_failure">Q&amp;A를 로딩하는데 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_question_delete_failure">질문 삭제를 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_answer_delete_failure">답변 삭제를 실패했습니다. 다시 시도해주세요.</string>
 
     <!-- detail_auction_bid_history -->
     <string name="detail_auction_bid_history">입찰 내역</string>

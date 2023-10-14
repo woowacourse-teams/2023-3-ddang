@@ -72,29 +72,69 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
         }
     }
 
-    fun navigateToWriteQuestion() {
-        auctionId?.let { auctionId ->
-            _event.value = QnaEvent.NavigateToWriteQuestion(auctionId)
-        }
-    }
-
-    fun navigateToWriteAnswer(questionId: Long) {
-        auctionId?.let { auctionId ->
-            _event.value = QnaEvent.NavigateToWriteAnswer(auctionId, questionId)
-        }
-    }
-
     fun deleteQuestion(questionId: Long) {
-        TODO("Not yet implemented")
+        if (isLoading.getAndSet(true)) return
+        viewModelScope.launch {
+            val response = repository.deleteQuestion(questionId)
+            isLoading.set(false)
+            when (response) {
+                is ApiResponse.Success -> {
+                    auctionId?.let { auctionId ->
+                        loadQnas(auctionId)
+                    }
+                }
+
+                is ApiResponse.Failure -> {
+                    _event.value =
+                        QnaEvent.FailureDeleteQuestion(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        QnaEvent.FailureDeleteQuestion(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value =
+                        QnaEvent.FailureDeleteQuestion(ErrorType.UNEXPECTED)
+                }
+            }
+        }
     }
 
     fun deleteAnswer(answerId: Long) {
-        TODO("Not yet implemented")
+        if (isLoading.getAndSet(true)) return
+        viewModelScope.launch {
+            val response = repository.deleteAnswer(answerId)
+            isLoading.set(false)
+            when (response) {
+                is ApiResponse.Success -> {
+                    auctionId?.let { auctionId ->
+                        loadQnas(auctionId)
+                    }
+                }
+
+                is ApiResponse.Failure -> {
+                    _event.value =
+                        QnaEvent.FailureDeleteAnswer(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value =
+                        QnaEvent.FailureDeleteAnswer(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value =
+                        QnaEvent.FailureDeleteAnswer(ErrorType.UNEXPECTED)
+                }
+            }
+        }
     }
 
     sealed class QnaEvent {
         data class FailureLoadQnas(val errorType: ErrorType) : QnaEvent()
-        data class NavigateToWriteQuestion(val auctionId: Long) : QnaEvent()
-        data class NavigateToWriteAnswer(val auctionId: Long, val questionId: Long) : QnaEvent()
+        data class FailureDeleteQuestion(val errorType: ErrorType) : QnaEvent()
+        data class FailureDeleteAnswer(val errorType: ErrorType) : QnaEvent()
     }
 }

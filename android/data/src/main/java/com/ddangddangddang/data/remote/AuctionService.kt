@@ -1,8 +1,10 @@
 package com.ddangddangddang.data.remote
 
+import com.ddangddangddang.data.model.request.AskQuestionRequest
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
+import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
 import com.ddangddangddang.data.model.request.ReviewRequest
@@ -138,4 +140,19 @@ interface AuctionService {
 
     @GET("/auctions/{auctionId}/questions")
     suspend fun getQnas(@Path("auctionId") auctionId: Long): ApiResponse<QnaResponse>
+
+    @POST("/questions")
+    suspend fun askQuestion(@Body askQuestionRequest: AskQuestionRequest): ApiResponse<Unit>
+
+    @POST("/questions/{questionId}/answers")
+    suspend fun registerAnswer(
+        @Path("questionId") questionId: Long,
+        registerAnswerRequest: RegisterAnswerRequest,
+    ): ApiResponse<Unit>
+
+    @DELETE("/questions/{questionId}")
+    suspend fun deleteQuestion(@Path("questionId") questionId: Long): ApiResponse<Unit>
+
+    @DELETE("/questions/answers/{answerId}")
+    suspend fun deleteAnswer(@Path("answerId") answerId: Long): ApiResponse<Unit>
 }

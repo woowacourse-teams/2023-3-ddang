@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import com.ddangddangddang.data.datasource.AuctionLocalDataSource
 import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
 import com.ddangddangddang.data.model.SortType
+import com.ddangddangddang.data.model.request.AskQuestionRequest
 import com.ddangddangddang.data.model.request.AuctionBidRequest
+import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
@@ -92,5 +94,24 @@ class AuctionRepositoryImpl @Inject constructor(
 
     override suspend fun getAuctionQnas(auctionId: Long): ApiResponse<QnaResponse> {
         return remoteDataSource.getAuctionQnas(auctionId)
+    }
+
+    override suspend fun askQuestion(askQuestionRequest: AskQuestionRequest): ApiResponse<Unit> {
+        return remoteDataSource.askQuestion(askQuestionRequest)
+    }
+
+    override suspend fun registerAnswer(
+        questionId: Long,
+        registerAnswerRequest: RegisterAnswerRequest,
+    ): ApiResponse<Unit> {
+        return remoteDataSource.registerAnswer(questionId, registerAnswerRequest)
+    }
+
+    override suspend fun deleteQuestion(questionId: Long): ApiResponse<Unit> {
+        return remoteDataSource.deleteQuestion(questionId)
+    }
+
+    override suspend fun deleteAnswer(answerId: Long): ApiResponse<Unit> {
+        return remoteDataSource.deleteAnswer(answerId)
     }
 }

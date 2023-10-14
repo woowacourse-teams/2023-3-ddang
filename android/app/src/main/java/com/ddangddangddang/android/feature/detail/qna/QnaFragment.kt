@@ -11,7 +11,6 @@ import com.ddangddangddang.android.databinding.FragmentQnaBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.feature.detail.qna.writeanswer.WriteAnswerDialog
-import com.ddangddangddang.android.feature.detail.qna.writequestion.WriteQuestionDialog
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -71,12 +70,11 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
                 notifyFailureMessage(event.errorType, R.string.detail_auction_qna_loading_failure)
             }
 
-            is QnaViewModel.QnaEvent.NavigateToWriteQuestion -> {
-                WriteQuestionDialog.show(parentFragmentManager, event.auctionId)
+            is QnaViewModel.QnaEvent.FailureDeleteAnswer -> {
+                notifyFailureMessage(event.errorType, R.string.detail_auction_qna_answer_delete_failure)
             }
-
-            is QnaViewModel.QnaEvent.NavigateToWriteAnswer -> {
-                WriteAnswerDialog.show(parentFragmentManager, event.auctionId, event.questionId)
+            is QnaViewModel.QnaEvent.FailureDeleteQuestion -> {
+                notifyFailureMessage(event.errorType, R.string.detail_auction_qna_question_delete_failure)
             }
         }
     }
