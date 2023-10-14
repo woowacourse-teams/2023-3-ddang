@@ -14,7 +14,7 @@ public class ProfileImageRepositoryFixture {
     private EntityManager em;
 
     @Autowired
-    private JpaProfileImageRepository jpaProfileImageRepository;
+    private JpaProfileImageRepository profileImageRepository;
 
     protected ProfileImage 프로필_이미지;
 
@@ -22,7 +22,7 @@ public class ProfileImageRepositoryFixture {
     void setUpFixture() {
         프로필_이미지 = new ProfileImage("프로필이미지.png", "프로필이미지.png");
 
-        jpaProfileImageRepository.save(프로필_이미지);
+        profileImageRepository.save(프로필_이미지);
 
         em.flush();
         em.clear();
