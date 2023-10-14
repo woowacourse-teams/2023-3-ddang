@@ -33,7 +33,7 @@ class UserReliabilityRepositoryImplTest extends UserReliabilityRepositoryImplFix
     @Test
     void 사용자_신뢰도_정보를_저장한다() {
         // when
-        UserReliability actual = userReliabilityRepository.save(저장하기_전_사용자_신뢰도_엔티티);
+        final UserReliability actual = userReliabilityRepository.save(저장하기_전_사용자_신뢰도_엔티티);
 
         // then
         assertThat(actual.getId()).isPositive();
