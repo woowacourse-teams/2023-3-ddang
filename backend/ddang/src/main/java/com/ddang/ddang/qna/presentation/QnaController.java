@@ -34,21 +34,12 @@ public class QnaController {
             @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateQuestionRequest questionRequest
     ) {
-        questionService.create(CreateQuestionDto.of(questionRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.calculateAbsoluteUrl());
+        questionService.create(
+                CreateQuestionDto.of(questionRequest, userInfo.userId()),
+                ImageRelativeUrl.AUCTION.calculateAbsoluteUrl()
+        );
 
         return ResponseEntity.created(URI.create("/auctions/" + questionRequest.auctionId()))
-                             .build();
-    }
-
-    @PostMapping("/{questionId}/answers")
-    public ResponseEntity<Void> createAnswer(
-            @AuthenticateUser AuthenticationUserInfo userInfo,
-            @PathVariable final Long questionId,
-            @RequestBody @Valid final CreateAnswerRequest answerRequest
-    ) {
-        answerService.create(CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.calculateAbsoluteUrl());
-
-        return ResponseEntity.created(URI.create("/auctions/" + answerRequest.auctionId()))
                              .build();
     }
 
@@ -60,6 +51,21 @@ public class QnaController {
         questionService.deleteById(questionId, userInfo.userId());
 
         return ResponseEntity.noContent()
+                             .build();
+    }
+
+    @PostMapping("/{questionId}/answers")
+    public ResponseEntity<Void> createAnswer(
+            @AuthenticateUser AuthenticationUserInfo userInfo,
+            @PathVariable final Long questionId,
+            @RequestBody @Valid final CreateAnswerRequest answerRequest
+    ) {
+        answerService.create(
+                CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()),
+                ImageRelativeUrl.AUCTION.calculateAbsoluteUrl()
+        );
+
+        return ResponseEntity.created(URI.create("/auctions/" + answerRequest.auctionId()))
                              .build();
     }
 

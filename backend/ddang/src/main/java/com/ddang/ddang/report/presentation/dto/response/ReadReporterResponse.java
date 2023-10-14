@@ -7,6 +7,7 @@ public record ReadReporterResponse(Long id, String name) {
 
     public static ReadReporterResponse from(final ReadReporterDto reporterDto) {
         final String name = NameProcessor.process(reporterDto.isDeleted(), reporterDto.name());
+
         return new ReadReporterResponse(reporterDto.id(), name);
     }
 }
