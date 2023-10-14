@@ -71,7 +71,7 @@ public class AuctionRepositoryImplFixture {
     protected User 구매자;
 
     @BeforeEach
-    void fixtureSetUp(@Autowired JpaRegionRepository jpaRegionRepository) {
+    void fixtureSetUp(@Autowired final JpaRegionRepository jpaRegionRepository) {
         regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
 
         final Region 서울특별시 = new Region("서울특별시");

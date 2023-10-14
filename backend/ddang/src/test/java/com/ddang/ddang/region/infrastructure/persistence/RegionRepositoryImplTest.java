@@ -27,7 +27,7 @@ class RegionRepositoryImplTest extends RegionRepositoryImplFixture {
     RegionRepository regionRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaRegionRepository jpaRegionRepository) {
+    void setUp(@Autowired final JpaRegionRepository jpaRegionRepository) {
         regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
     }
 

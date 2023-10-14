@@ -20,7 +20,7 @@ public class RegionRepositoryImplFixture {
     protected Region 서울특별시_강남구_대치동;
 
     @BeforeEach
-    void setUpFixture(@Autowired JpaRegionRepository jpaRegionRepository) {
+    void fixtureSetUp(@Autowired final JpaRegionRepository jpaRegionRepository) {
         regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
 
         서울특별시 = new Region("서울특별시");
