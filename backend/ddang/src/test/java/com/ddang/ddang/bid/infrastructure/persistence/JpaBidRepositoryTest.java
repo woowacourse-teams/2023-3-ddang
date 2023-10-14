@@ -57,7 +57,7 @@ class JpaBidRepositoryTest extends JpaBidRepositoryFixture {
     @Test
     void 특정_경매의_입찰을_모두_조회한다() {
         // when
-        final List<Bid> actual = bidRepository.findByAuctionIdOrderByIdAsc(경매1.getId());
+        final List<Bid> actual = bidRepository.findAllByAuctionIdOrderByIdAsc(경매1.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
