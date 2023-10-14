@@ -14,6 +14,7 @@ public record ReadQuestionResponse(
         LocalDateTime createdTime,
 
         String content,
+
         boolean isQuestioner
 ) {
 

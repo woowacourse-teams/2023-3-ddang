@@ -49,8 +49,8 @@ public class QnaController {
             @PathVariable final Long questionId,
             @RequestBody @Valid final CreateAnswerRequest answerRequest
     ) {
-        answerService.create(CreateAnswerDto.of(
-                questionId, answerRequest, userInfo.userId()),
+        answerService.create(
+                CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()),
                 ImageRelativeUrl.AUCTION.calculateAbsoluteUrl()
         );
 
