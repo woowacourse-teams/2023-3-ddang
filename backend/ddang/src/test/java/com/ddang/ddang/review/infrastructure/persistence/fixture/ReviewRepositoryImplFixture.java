@@ -48,7 +48,7 @@ public class ReviewRepositoryImplFixture {
     protected Review 구매자가_판매자2에게_받은_평가;
 
     @BeforeEach
-    void setUpFixture(@Autowired JpaReviewRepository jpaReviewRepository) {
+    void fixtureSetUp(@Autowired final JpaReviewRepository jpaReviewRepository) {
         reviewRepository = new ReviewRepositoryImpl(jpaReviewRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");

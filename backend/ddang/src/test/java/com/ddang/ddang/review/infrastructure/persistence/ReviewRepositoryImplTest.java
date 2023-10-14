@@ -28,7 +28,7 @@ class ReviewRepositoryImplTest extends ReviewRepositoryImplFixture {
     ReviewRepository reviewRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaReviewRepository jpaReviewRepository) {
+    void setUp(@Autowired final JpaReviewRepository jpaReviewRepository) {
         reviewRepository = new ReviewRepositoryImpl(jpaReviewRepository);
     }
 
