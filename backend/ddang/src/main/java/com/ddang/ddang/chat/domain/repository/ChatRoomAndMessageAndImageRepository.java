@@ -1,10 +1,10 @@
-package com.ddang.ddang.chat.infrastructure.persistence;
+package com.ddang.ddang.chat.domain.repository;
 
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 
 import java.util.List;
 
-public interface QuerydslChatRoomAndMessageAndImageRepository {
+public interface ChatRoomAndMessageAndImageRepository {
 
     List<ChatRoomAndMessageAndImageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId);
 }

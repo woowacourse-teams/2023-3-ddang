@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
+import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageQueryProjectionDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageAndImageQueryProjectionDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
