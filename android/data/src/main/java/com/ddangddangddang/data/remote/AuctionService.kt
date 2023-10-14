@@ -16,6 +16,7 @@ import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.ProfileResponse
+import com.ddangddangddang.data.model.response.QnaResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.model.response.UserReviewResponse
 import okhttp3.MultipartBody
@@ -134,4 +135,7 @@ interface AuctionService {
 
     @GET("/auctions/{auctionId}/reviews")
     suspend fun getReviewUser(@Path("auctionId") auctionId: Long): ApiResponse<UserReviewResponse>
+
+    @GET("/auctions/{auctionId}/questions")
+    suspend fun getQnas(@Path("auctionId") auctionId: Long): ApiResponse<QnaResponse>
 }
