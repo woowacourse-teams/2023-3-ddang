@@ -69,7 +69,7 @@ public class QuestionService {
             throw new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
         }
 
-        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+        final User user = userRepository.findById(userId)
                                         .orElse(User.EMPTY_USER);
         final List<Question> questions = questionRepository.findAllByAuctionId(auctionId);
 
