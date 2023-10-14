@@ -5,6 +5,8 @@ import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AskQuestionRequest
 import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.ReportAnswerRequest
+import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -52,4 +54,6 @@ interface AuctionRepository {
 
     suspend fun deleteQuestion(questionId: Long): ApiResponse<Unit>
     suspend fun deleteAnswer(answerId: Long): ApiResponse<Unit>
+    suspend fun reportQuestion(reportQuestionRequest: ReportQuestionRequest): ApiResponse<Unit>
+    suspend fun reportAnswer(reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit>
 }

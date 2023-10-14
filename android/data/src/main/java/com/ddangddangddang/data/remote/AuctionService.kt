@@ -5,8 +5,10 @@ import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.request.RegisterAnswerRequest
+import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
+import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.model.request.ReviewRequest
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
@@ -155,4 +157,10 @@ interface AuctionService {
 
     @DELETE("/questions/answers/{answerId}")
     suspend fun deleteAnswer(@Path("answerId") answerId: Long): ApiResponse<Unit>
+
+    @POST("/reports/questions")
+    suspend fun reportQuestion(@Body reportQuestionRequest: ReportQuestionRequest): ApiResponse<Unit>
+
+    @POST("/reports/answer")
+    suspend fun reportAnswer(@Body reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit>
 }

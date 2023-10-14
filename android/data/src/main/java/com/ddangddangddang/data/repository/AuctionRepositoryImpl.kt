@@ -8,8 +8,10 @@ import com.ddangddangddang.data.model.request.AskQuestionRequest
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
+import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
@@ -113,5 +115,13 @@ class AuctionRepositoryImpl @Inject constructor(
 
     override suspend fun deleteAnswer(answerId: Long): ApiResponse<Unit> {
         return remoteDataSource.deleteAnswer(answerId)
+    }
+
+    override suspend fun reportQuestion(reportQuestionRequest: ReportQuestionRequest): ApiResponse<Unit> {
+        return remoteDataSource.reportQuestion(reportQuestionRequest)
+    }
+
+    override suspend fun reportAnswer(reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit> {
+        return remoteDataSource.reportAnswer(reportAnswerRequest)
     }
 }
