@@ -16,8 +16,8 @@ import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndImageRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -37,7 +37,7 @@ public class ChatRoomService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomAndImageRepository chatRoomAndImageRepository;
-    private final QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
+    private final ChatRoomAndMessageAndImageRepository chatRoomAndMessageAndImageRepository;
     private final JpaUserRepository userRepository;
     private final AuctionRepository auctionRepository;
 
@@ -87,7 +87,7 @@ public class ChatRoomService {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
         final List<ChatRoomAndMessageAndImageDto> chatRoomAndMessageAndImageQueryProjectionDtos =
-                querydslChatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
+                chatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
 
         return chatRoomAndMessageAndImageQueryProjectionDtos.stream()
                                                             .map(dto -> ReadChatRoomWithLastMessageDto.of(findUser, dto))
@@ -100,8 +100,8 @@ public class ChatRoomService {
         final ChatRoomAndImageDto chatRoomAndImageDto =
                 chatRoomAndImageRepository.findChatRoomById(chatRoomId)
                                           .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                          "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
-                                                  ));
+                                                  "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
+                                          ));
         checkAccessible(findUser, chatRoomAndImageDto.chatRoom());
 
         return ReadParticipatingChatRoomDto.of(findUser, chatRoomAndImageDto);
