@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class AuctionReportRepositoryFixture {
+public class AuctionReportRepositoryImplFixture {
 
     @PersistenceContext
     private EntityManager em;

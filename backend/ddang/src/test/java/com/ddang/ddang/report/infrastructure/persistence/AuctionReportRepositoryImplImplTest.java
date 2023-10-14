@@ -4,7 +4,7 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.domain.repository.AuctionReportRepository;
-import com.ddang.ddang.report.infrastructure.persistence.fixture.AuctionReportRepositoryFixture;
+import com.ddang.ddang.report.infrastructure.persistence.fixture.AuctionReportRepositoryImplFixture;
 import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuctionReportRepositoryImplTest extends AuctionReportRepositoryFixture {
+class AuctionReportRepositoryImplImplTest extends AuctionReportRepositoryImplFixture {
 
     AuctionReportRepository auctionReportRepository;
 

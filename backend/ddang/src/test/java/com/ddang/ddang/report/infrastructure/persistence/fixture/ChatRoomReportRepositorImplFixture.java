@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class ChatRoomReportRepositoryFixture {
+public class ChatRoomReportRepositorImplFixture {
 
     @PersistenceContext
     private EntityManager em;
