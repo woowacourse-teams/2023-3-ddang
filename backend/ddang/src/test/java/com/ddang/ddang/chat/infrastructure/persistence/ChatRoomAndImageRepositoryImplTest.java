@@ -1,7 +1,8 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
-import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslChatRoomAndImageRepositoryImplFixture;
+import com.ddang.ddang.chat.domain.repository.ChatRoomAndImageRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.fixture.ChatRoomAndImageRepositoryImplFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,19 +21,19 @@ import java.util.Optional;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class QuerydslChatRoomAndImageRepositoryImplTest extends QuerydslChatRoomAndImageRepositoryImplFixture {
+class ChatRoomAndImageRepositoryImplTest extends ChatRoomAndImageRepositoryImplFixture {
 
-    QuerydslChatRoomAndImageRepository querydslChatRoomAndImageRepository;
+    ChatRoomAndImageRepository chatRoomAndImageRepository;
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslChatRoomAndImageRepository = new QuerydslChatRoomAndImageRepositoryImpl(queryFactory);
+        chatRoomAndImageRepository = new ChatRoomAndImageRepositoryImpl(new QuerydslChatRoomAndImageRepository(queryFactory));
     }
 
     @Test
     void 지정한_채팅방_아이디에_해당하는_채팅방을_조회한다() {
         // when
-        final Optional<ChatRoomAndImageDto> actual = querydslChatRoomAndImageRepository.findChatRoomById(채팅방.getId());
+        final Optional<ChatRoomAndImageDto> actual = chatRoomAndImageRepository.findChatRoomById(채팅방.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

@@ -15,7 +15,7 @@ import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndImageRepositoryImpl;
+import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndImageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -36,7 +36,7 @@ public class ChatRoomService {
     private static final Long DEFAULT_CHAT_ROOM_ID = null;
 
     private final ChatRoomRepository chatRoomRepository;
-    private final QuerydslChatRoomAndImageRepositoryImpl querydslChatRoomAndImageRepository;
+    private final QuerydslChatRoomAndImageRepository querydslChatRoomAndImageRepository;
     private final QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
     private final JpaUserRepository userRepository;
     private final AuctionRepository auctionRepository;
