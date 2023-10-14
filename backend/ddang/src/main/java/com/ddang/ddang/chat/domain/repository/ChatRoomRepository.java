@@ -9,6 +9,8 @@ public interface ChatRoomRepository {
     ChatRoom save(final ChatRoom chatRoom);
 
     Optional<ChatRoom> findById(final Long id);
+
     Optional<Long> findChatRoomIdByAuctionId(final Long auctionId);
+
     boolean existsByAuctionId(final Long auctionId);
 }
