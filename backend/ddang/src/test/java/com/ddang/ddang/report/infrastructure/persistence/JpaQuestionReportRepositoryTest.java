@@ -58,7 +58,7 @@ class JpaQuestionReportRepositoryTest extends JpaQuestionReportRepositoryFixture
     @Test
     void 신고된_질문_목록을_조회한다() {
         // when
-        final List<QuestionReport> actual = questionReportRepository.findAllByOrderByIdAsc();
+        final List<QuestionReport> actual = questionReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
