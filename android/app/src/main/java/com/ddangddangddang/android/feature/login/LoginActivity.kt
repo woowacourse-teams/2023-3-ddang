@@ -8,6 +8,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityLoginBinding
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.main.MainActivity
+import com.ddangddangddang.android.feature.onboarding.OnBoardingActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -38,6 +39,7 @@ class LoginActivity :
                 is LoginViewModel.LoginEvent.KakaoLoginEvent -> loginByKakao()
                 is LoginViewModel.LoginEvent.CompleteLoginEvent -> navigateToMain()
                 is LoginViewModel.LoginEvent.FailureLoginEvent -> notifyLoginFailed(it.type)
+                LoginViewModel.LoginEvent.SignUpEvent -> navigateToOnBoarding()
             }
         }
     }
@@ -85,6 +87,11 @@ class LoginActivity :
 
     private fun navigateToMain() {
         startActivity(Intent(this, MainActivity::class.java))
+        finish()
+    }
+
+    private fun navigateToOnBoarding() {
+        startActivity(Intent(this, OnBoardingActivity::class.java))
         finish()
     }
 

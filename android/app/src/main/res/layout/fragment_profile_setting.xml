@@ -39,7 +39,6 @@
                         placeholder="@{@drawable/img_default_profile}"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:contentDescription="@string/register_auction_image_description"
                         android:onClick="@{()->viewModel.selectProfileImage()}"
                         android:scaleType="centerCrop"
                         tools:src="@drawable/ic_launcher_background" />

@@ -2,7 +2,6 @@ package com.ddangddangddang.android.feature.onboarding.profile
 
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -51,10 +50,9 @@ class ProfileSettingViewModel @Inject constructor(
                     val originProfileUri =
                         profileModel.profileImage?.let { Uri.parse(it) } ?: defaultUri
                     _profile.value = originProfileUri
-                    userNickname.value = profileModel.name
+                    userNickname.value = profileModel.name.trim()
                     currentProfileUri = originProfileUri
-                    currentProfileName = profileModel.name
-                    Log.d("mendel", "setupProfile, ${profile.value}, ${userNickname.value}")
+                    currentProfileName = profileModel.name.trim()
                 }
 
                 is ApiResponse.Failure -> {
@@ -87,7 +85,7 @@ class ProfileSettingViewModel @Inject constructor(
         val profileImageUri = profile.value?.takeIf { it.path != currentProfileUri.path }
 
         // 만약 이전과 상태가 같다면, 변경 요청 보내지 않을 것임. 그냥 다음 페이지로 이동
-        if (name == currentProfileName && profileImageUri == currentProfileUri) return setNavigateToNextEvent()
+        if (name == currentProfileName && profile.value?.path == currentProfileUri.path) return setNavigateToNextEvent()
 
         if (_isLoading.value == true) return
         _isLoading.value = true
