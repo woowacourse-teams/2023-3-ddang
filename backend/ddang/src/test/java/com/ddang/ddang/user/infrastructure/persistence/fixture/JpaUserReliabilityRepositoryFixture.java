@@ -24,6 +24,7 @@ public class JpaUserReliabilityRepositoryFixture {
     private JpaUserReliabilityRepository userReliabilityRepository;
 
     protected User 사용자;
+    protected UserReliability 저장하기_전_사용자_신뢰도_엔티티;
     protected UserReliability 사용자_신뢰도_정보;
 
     @BeforeEach
@@ -35,6 +36,8 @@ public class JpaUserReliabilityRepositoryFixture {
                   .oauthId("12345")
                   .build();
         userRepository.save(사용자);
+
+        저장하기_전_사용자_신뢰도_엔티티 = new UserReliability(사용자);
 
         사용자_신뢰도_정보 = new UserReliability(사용자);
         userReliabilityRepository.save(사용자_신뢰도_정보);
