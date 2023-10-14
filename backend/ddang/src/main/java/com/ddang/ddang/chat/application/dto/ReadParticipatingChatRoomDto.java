@@ -1,7 +1,7 @@
 package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
+import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.user.domain.User;
 
 public record ReadParticipatingChatRoomDto(

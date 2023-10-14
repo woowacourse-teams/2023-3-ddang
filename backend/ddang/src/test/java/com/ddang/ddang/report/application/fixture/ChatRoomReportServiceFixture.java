@@ -7,7 +7,7 @@ import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
@@ -18,6 +18,7 @@ import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportReposi
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,7 +47,7 @@ public class ChatRoomReportServiceFixture {
     private JpaChatRoomReportRepository chatRoomReportRepository;
 
     @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepository;
 
     protected User 이미_신고한_구매자1;
     protected User 이미_신고한_구매자2;
@@ -156,7 +157,9 @@ public class ChatRoomReportServiceFixture {
         auctionRepository.save(경매2);
         auctionRepository.save(경매3);
 
-        chatRoomRepository.saveAll(List.of(채팅방1, 채팅방2, 채팅방3));
+        chatRoomRepository.save(채팅방1);
+        chatRoomRepository.save(채팅방2);
+        chatRoomRepository.save(채팅방3);
 
         chatRoomReportRepository.saveAll(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
 

@@ -9,7 +9,7 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -36,7 +36,7 @@ public class MessageServiceFixture {
     private UserRepository userRepository;
 
     @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -97,7 +97,9 @@ public class MessageServiceFixture {
 
         final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
         final ChatRoom 탈퇴한_사용자와의_채팅방 = new ChatRoom(경매, 탈퇴한_사용자);
-        chatRoomRepository.saveAll(List.of(채팅방, 탈퇴한_사용자와의_채팅방));
+
+        chatRoomRepository.save(채팅방);
+        chatRoomRepository.save(탈퇴한_사용자와의_채팅방);
 
         메시지_생성_DTO = new CreateMessageDto(
                 채팅방.getId(),

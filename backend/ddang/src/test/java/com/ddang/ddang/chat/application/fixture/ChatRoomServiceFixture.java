@@ -19,14 +19,15 @@ import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,7 +50,7 @@ public class ChatRoomServiceFixture {
     private JpaBidRepository bidRepository;
 
     @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepository;
 
     @Autowired
     private JpaMessageRepository messageRepository;
@@ -157,23 +158,23 @@ public class ChatRoomServiceFixture {
                                .closingTime(LocalDateTime.now())
                                .build();
         final Auction 종료되지_않은_경매 = Auction.builder()
-                               .seller(판매자)
-                               .title("맥북")
-                               .description("맥북 팔아요")
-                               .subCategory(전자기기_서브_노트북_카테고리)
-                               .startPrice(new Price(10_000))
-                               .bidUnit(new BidUnit(1_000))
-                               .closingTime(LocalDateTime.now().plusDays(10L))
-                               .build();
+                                              .seller(판매자)
+                                              .title("맥북")
+                                              .description("맥북 팔아요")
+                                              .subCategory(전자기기_서브_노트북_카테고리)
+                                              .startPrice(new Price(10_000))
+                                              .bidUnit(new BidUnit(1_000))
+                                              .closingTime(LocalDateTime.now().plusDays(10L))
+                                              .build();
         final Auction 낙찰자가_없는_경매 = Auction.builder()
-                               .seller(판매자)
-                               .title("맥북")
-                               .description("맥북 팔아요")
-                               .subCategory(전자기기_서브_노트북_카테고리)
-                               .startPrice(new Price(10_000))
-                               .bidUnit(new BidUnit(1_000))
-                               .closingTime(LocalDateTime.now())
-                               .build();
+                                             .seller(판매자)
+                                             .title("맥북")
+                                             .description("맥북 팔아요")
+                                             .subCategory(전자기기_서브_노트북_카테고리)
+                                             .startPrice(new Price(10_000))
+                                             .bidUnit(new BidUnit(1_000))
+                                             .closingTime(LocalDateTime.now())
+                                             .build();
         판매자_엔초_구매자_지토_경매 = Auction.builder()
                                        .seller(엔초)
                                        .title("엔초 맥북")
@@ -184,14 +185,14 @@ public class ChatRoomServiceFixture {
                                        .closingTime(LocalDateTime.now())
                                        .build();
         final Auction 판매자_제이미_구매자_엔초_경매 = Auction.builder()
-                                         .seller(제이미)
-                                         .title("제이미 맥북")
-                                         .description("제이미 맥북 팔아요")
-                                         .subCategory(전자기기_서브_노트북_카테고리)
-                                         .startPrice(new Price(10_000))
-                                         .bidUnit(new BidUnit(1_000))
-                                         .closingTime(LocalDateTime.now())
-                                         .build();
+                                                       .seller(제이미)
+                                                       .title("제이미 맥북")
+                                                       .description("제이미 맥북 팔아요")
+                                                       .subCategory(전자기기_서브_노트북_카테고리)
+                                                       .startPrice(new Price(10_000))
+                                                       .bidUnit(new BidUnit(1_000))
+                                                       .closingTime(LocalDateTime.now())
+                                                       .build();
         채팅방이_없는_경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         판매자_엔초_구매자_지토_경매.addAuctionImages(List.of(엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지));
         판매자_제이미_구매자_엔초_경매.addAuctionImages(List.of(제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지));
@@ -212,7 +213,9 @@ public class ChatRoomServiceFixture {
 
         엔초_지토_채팅방 = new ChatRoom(판매자_엔초_구매자_지토_경매, 지토);
         제이미_엔초_채팅방 = new ChatRoom(판매자_제이미_구매자_엔초_경매, 엔초);
-        chatRoomRepository.saveAll(List.of(엔초_지토_채팅방, 제이미_엔초_채팅방));
+
+        chatRoomRepository.save(엔초_지토_채팅방);
+        chatRoomRepository.save(제이미_엔초_채팅방);
 
         엔초가_지토에게_1시에_보낸_쪽지 = Message.builder()
                                           .chatRoom(엔초_지토_채팅방)

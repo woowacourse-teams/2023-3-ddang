@@ -1,11 +1,11 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.fixture.JpaChatRoomRepositoryFixture;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.fixture.ChatRoomRepositoryImplFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -21,13 +21,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
+class ChatRoomRepositoryImplTest extends ChatRoomRepositoryImplFixture {
 
-    @PersistenceContext
-    EntityManager em;
+    ChatRoomRepository chatRoomRepository;
 
-    @Autowired
-    JpaChatRoomRepository chatRoomRepository;
+    @BeforeEach
+    void setUp(@Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
+        chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
+    }
 
     @Test
     void 채팅방을_저장한다() {
@@ -36,10 +37,6 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
 
         // when
         chatRoomRepository.save(chatRoom);
-
-        // then
-        em.flush();
-        em.clear();
 
         assertThat(chatRoom.getId()).isPositive();
     }
@@ -79,4 +76,5 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
         // then
         assertThat(actual).isFalse();
     }
+
 }
