@@ -5,8 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.feature.common.ErrorType
+import com.ddangddangddang.android.model.ReportInfo
 import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
+import com.ddangddangddang.data.model.request.ReportAnswerRequest
+import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,14 +23,14 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
         get() = _event
 
     private lateinit var reportType: ReportType
-    private var reportId: Long? = null
+    private lateinit var reportInfo: ReportInfo
     val reportContents = MutableLiveData<String>()
 
     private var isLoading: Boolean = false
 
-    fun setReportInfo(type: ReportType, id: Long) {
+    fun setReportInfo(type: ReportType, info: ReportInfo) {
         reportType = type
-        reportId = id
+        reportInfo = info
     }
 
     fun setExitEvent() {
@@ -39,10 +42,11 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
     }
 
     fun submit() {
-        val reportId: Long = reportId ?: return
-        when (reportType) {
-            ReportType.ArticleReport -> reportAuctionArticle(reportId)
-            ReportType.MessageRoomReport -> reportMessageRoom(reportId)
+        when (reportInfo) {
+            is ReportInfo.ArticleReportInfo -> reportAuctionArticle((reportInfo as ReportInfo.ArticleReportInfo).auctionId)
+            is ReportInfo.MessageRoomReportInfo -> reportMessageRoom((reportInfo as ReportInfo.MessageRoomReportInfo).roomId)
+            is ReportInfo.QuestionReportInfo -> reportQuestion(reportInfo as ReportInfo.QuestionReportInfo)
+            is ReportInfo.AnswerReportInfo -> reportAnswer(reportInfo as ReportInfo.AnswerReportInfo)
         }
     }
 
@@ -81,6 +85,64 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
                 when (val response = repository.reportMessageRoom(id, contents)) {
+                    is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.UNEXPECTED)
+                    }
+                }
+            }
+            isLoading = false
+        }
+    }
+
+    private fun reportQuestion(reportInfo: ReportInfo.QuestionReportInfo) {
+        if (isLoading) return
+        isLoading = true
+        viewModelScope.launch {
+            reportContents.value?.let { contents ->
+                if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
+                val request = ReportQuestionRequest(reportInfo.auctionId, reportInfo.questionId, contents)
+                when (val response = repository.reportQuestion(request)) {
+                    is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
+                    is ApiResponse.Failure -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.FAILURE(response.error))
+                    }
+
+                    is ApiResponse.NetworkError -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.NETWORK_ERROR)
+                    }
+
+                    is ApiResponse.Unexpected -> {
+                        _event.value =
+                            ReportEvent.ReportMessageRoomFailure(ErrorType.UNEXPECTED)
+                    }
+                }
+            }
+            isLoading = false
+        }
+    }
+
+    private fun reportAnswer(reportInfo: ReportInfo.AnswerReportInfo) {
+        if (isLoading) return
+        isLoading = true
+        viewModelScope.launch {
+            reportContents.value?.let { contents ->
+                if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
+                val request = ReportAnswerRequest(reportInfo.auctionId, reportInfo.answerId, contents)
+                when (val response = repository.reportAnswer(request)) {
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {
                         _event.value =

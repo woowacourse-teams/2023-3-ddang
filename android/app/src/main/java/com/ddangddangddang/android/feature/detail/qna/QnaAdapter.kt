@@ -13,6 +13,8 @@ class QnaAdapter(private val onClicks: OnClicks) :
         fun onSubmitAnswerClick(questionId: Long)
         fun onDeleteQuestionClick(questionId: Long)
         fun onDeleteAnswerClick(answerId: Long)
+        fun onReportQuestionClick(questionId: Long)
+        fun onReportAnswerClick(questionId: Long, answerId: Long)
     }
 
     fun setQnas(list: List<QnaModel.QuestionAndAnswerModel>, callback: (() -> Unit)? = null) {

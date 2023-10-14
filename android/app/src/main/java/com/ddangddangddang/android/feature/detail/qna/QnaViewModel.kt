@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.QnaModel
+import com.ddangddangddang.android.model.ReportInfo
 import com.ddangddangddang.android.model.mapper.QnaModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.remote.ApiResponse
@@ -132,9 +133,25 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
         }
     }
 
+    fun reportQuestion(questionId: Long) {
+        auctionId?.let { auctionId ->
+            _event.value =
+                QnaEvent.ReportQuestion(ReportInfo.QuestionReportInfo(auctionId, questionId))
+        }
+    }
+
+    fun reportAnswer(questionId: Long, answerId: Long) {
+        auctionId?.let { auctionId ->
+            _event.value =
+                QnaEvent.ReportAnswer(ReportInfo.AnswerReportInfo(auctionId, questionId, answerId))
+        }
+    }
+
     sealed class QnaEvent {
         data class FailureLoadQnas(val errorType: ErrorType) : QnaEvent()
         data class FailureDeleteQuestion(val errorType: ErrorType) : QnaEvent()
         data class FailureDeleteAnswer(val errorType: ErrorType) : QnaEvent()
+        data class ReportQuestion(val info: ReportInfo.QuestionReportInfo) : QnaEvent()
+        data class ReportAnswer(val info: ReportInfo.AnswerReportInfo) : QnaEvent()
     }
 }

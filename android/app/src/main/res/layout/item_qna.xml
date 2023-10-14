@@ -108,6 +108,7 @@
                 isVisible="@{!model.question.isQuestioner}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> onClicks.onReportQuestionClick(model.question.id)}"
                 android:src="@drawable/ic_report_24"
                 app:layout_constraintBottom_toTopOf="@id/tv_seller_answer_title"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -172,6 +173,7 @@
                 isVisible="@{!model.isOwner}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:onClick="@{() -> onClicks.onReportAnswerClick(model.question.id, model.answer.id)}"
                 android:src="@drawable/ic_report_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

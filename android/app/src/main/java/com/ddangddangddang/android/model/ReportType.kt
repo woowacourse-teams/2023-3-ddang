@@ -1,5 +1,5 @@
 package com.ddangddangddang.android.model
 
 enum class ReportType {
-    ArticleReport, MessageRoomReport
+    ArticleReport, MessageRoomReport, QuestionReport, AnswerReport
 }

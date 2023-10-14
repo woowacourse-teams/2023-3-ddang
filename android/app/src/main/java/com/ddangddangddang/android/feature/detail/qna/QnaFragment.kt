@@ -11,6 +11,9 @@ import com.ddangddangddang.android.databinding.FragmentQnaBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.feature.detail.qna.writeanswer.WriteAnswerDialog
+import com.ddangddangddang.android.feature.report.ReportActivity
+import com.ddangddangddang.android.model.ReportInfo
+import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -36,6 +39,14 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
 
         override fun onDeleteAnswerClick(answerId: Long) {
             viewModel.deleteAnswer(answerId)
+        }
+
+        override fun onReportQuestionClick(questionId: Long) {
+            viewModel.reportQuestion(questionId)
+        }
+
+        override fun onReportAnswerClick(questionId: Long, answerId: Long) {
+            viewModel.reportAnswer(questionId, answerId)
         }
     }
     private val qnaAdapter = QnaAdapter(onClicks)
@@ -76,6 +87,18 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
             is QnaViewModel.QnaEvent.FailureDeleteQuestion -> {
                 notifyFailureMessage(event.errorType, R.string.detail_auction_qna_question_delete_failure)
             }
+
+            is QnaViewModel.QnaEvent.ReportQuestion -> {
+                navigateToReport(ReportType.QuestionReport, event.info)
+            }
+
+            is QnaViewModel.QnaEvent.ReportAnswer -> {
+                navigateToReport(ReportType.AnswerReport, event.info)
+            }
         }
+    }
+
+    private fun navigateToReport(type: ReportType, info: ReportInfo) {
+        startActivity(ReportActivity.getIntent(requireContext(), type.ordinal, info))
     }
 }
