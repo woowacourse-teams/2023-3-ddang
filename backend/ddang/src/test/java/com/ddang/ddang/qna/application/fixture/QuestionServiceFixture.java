@@ -3,7 +3,7 @@ package com.ddang.ddang.qna.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -20,11 +20,10 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuestionServiceFixture {
@@ -33,7 +32,7 @@ public class QuestionServiceFixture {
     private JpaUserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaQuestionRepository questionRepository;
@@ -151,7 +150,10 @@ public class QuestionServiceFixture {
         질문2.addAnswer(답변2);
 
         userRepository.saveAll(List.of(판매자, 질문자, 질문하지_않은_사용자));
-        auctionRepository.saveAll(List.of(경매, 질문과_답변이_존재하는_경매, 종료된_경매, 삭제된_경매));
+        auctionRepository.save(경매);
+        auctionRepository.save(질문과_답변이_존재하는_경매);
+        auctionRepository.save(종료된_경매);
+        auctionRepository.save(삭제된_경매);
         questionRepository.saveAll(List.of(질문, 질문2, 질문3));
         answerRepository.saveAll(List.of(답변1, 답변2));
 

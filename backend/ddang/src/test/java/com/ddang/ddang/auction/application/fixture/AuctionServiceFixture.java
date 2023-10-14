@@ -2,7 +2,7 @@ package com.ddang.ddang.auction.application.fixture;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
@@ -16,19 +16,18 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionServiceFixture {
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaRegionRepository regionRepository;
@@ -222,6 +221,10 @@ public class AuctionServiceFixture {
         구매자가_입찰한_경매2.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         종료되는_날이_3일_뒤인_경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         종료된_경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
-        auctionRepository.saveAll(List.of(구매자가_입찰한_경매1, 구매자가_입찰한_경매2, 종료되는_날이_3일_뒤인_경매, 종료된_경매));
+
+        auctionRepository.save(구매자가_입찰한_경매1);
+        auctionRepository.save(구매자가_입찰한_경매2);
+        auctionRepository.save(종료되는_날이_3일_뒤인_경매);
+        auctionRepository.save(종료된_경매);
     }
 }

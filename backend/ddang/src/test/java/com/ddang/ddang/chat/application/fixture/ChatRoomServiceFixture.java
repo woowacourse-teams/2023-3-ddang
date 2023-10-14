@@ -4,7 +4,7 @@ import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
@@ -27,23 +27,22 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomServiceFixture {
+
+    @Autowired
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
     private JpaUserRepository userRepository;
-
-    @Autowired
-    private JpaAuctionRepository auctionRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -190,9 +189,12 @@ public class ChatRoomServiceFixture {
         채팅방이_없는_경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         판매자_엔초_구매자_지토_경매.addAuctionImages(List.of(엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지));
         판매자_제이미_구매자_엔초_경매.addAuctionImages(List.of(제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지));
-        auctionRepository.saveAll(
-                List.of(채팅방이_없는_경매, 종료되지_않은_경매, 낙찰자가_없는_경매, 판매자_엔초_구매자_지토_경매, 판매자_제이미_구매자_엔초_경매)
-        );
+
+        auctionRepository.save(채팅방이_없는_경매);
+        auctionRepository.save(종료되지_않은_경매);
+        auctionRepository.save(낙찰자가_없는_경매);
+        auctionRepository.save(판매자_엔초_구매자_지토_경매);
+        auctionRepository.save(판매자_제이미_구매자_엔초_경매);
 
         final Bid 채팅방_없는_경매_입찰 = new Bid(채팅방이_없는_경매, 구매자, new BidPrice(15_000));
         final Bid 지토가_엔초_경매에_입찰 = new Bid(판매자_엔초_구매자_지토_경매, 지토, new BidPrice(15_000));

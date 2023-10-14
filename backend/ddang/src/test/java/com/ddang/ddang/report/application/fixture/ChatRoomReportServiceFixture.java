@@ -3,7 +3,7 @@ package com.ddang.ddang.report.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -18,11 +18,10 @@ import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportReposi
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomReportServiceFixture {
@@ -40,7 +39,7 @@ public class ChatRoomReportServiceFixture {
     private JpaAuctionImageRepository auctionImageRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaChatRoomReportRepository chatRoomReportRepository;
@@ -147,7 +146,9 @@ public class ChatRoomReportServiceFixture {
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionImageRepository.save(경매_이미지);
-        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3));
+        auctionRepository.save(경매1);
+        auctionRepository.save(경매2);
+        auctionRepository.save(경매3);
 
         chatRoomRepository.saveAll(List.of(채팅방1, 채팅방2, 채팅방3));
 

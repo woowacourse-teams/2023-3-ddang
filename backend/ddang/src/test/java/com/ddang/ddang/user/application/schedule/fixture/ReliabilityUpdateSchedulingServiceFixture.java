@@ -1,7 +1,7 @@
 package com.ddang.ddang.user.application.schedule.fixture;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Reviews;
@@ -14,10 +14,9 @@ import com.ddang.ddang.user.domain.UserReliability;
 import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserReliabilityRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReliabilityUpdateSchedulingServiceFixture {
@@ -26,7 +25,7 @@ public class ReliabilityUpdateSchedulingServiceFixture {
     private JpaUserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaReviewRepository reviewRepository;
@@ -201,7 +200,25 @@ public class ReliabilityUpdateSchedulingServiceFixture {
                                     .title("경매18")
                                     .seller(판매자)
                                     .build();
-        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3, 경매4, 경매5, 경매6, 경매7, 경매8, 경매9, 경매10, 경매11, 경매12, 경매13, 경매14, 경매15, 경매16, 경매17, 경매18));
+
+        auctionRepository.save(경매1);
+        auctionRepository.save(경매2);
+        auctionRepository.save(경매3);
+        auctionRepository.save(경매4);
+        auctionRepository.save(경매5);
+        auctionRepository.save(경매6);
+        auctionRepository.save(경매7);
+        auctionRepository.save(경매8);
+        auctionRepository.save(경매9);
+        auctionRepository.save(경매10);
+        auctionRepository.save(경매11);
+        auctionRepository.save(경매12);
+        auctionRepository.save(경매13);
+        auctionRepository.save(경매14);
+        auctionRepository.save(경매15);
+        auctionRepository.save(경매16);
+        auctionRepository.save(경매17);
+        auctionRepository.save(경매18);
 
         final Review 구매자1_기존_평가1 = Review.builder()
                                          .auction(경매1)

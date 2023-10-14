@@ -7,7 +7,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuctionService {
 
     private final JpaUserRepository userRepository;
-    private final JpaAuctionRepository auctionRepository;
+    private final AuctionRepository auctionRepository;
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
     private final StoreImageProcessor imageProcessor;
@@ -91,8 +91,8 @@ public class AuctionService {
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition) {
         final Slice<Auction> auctions = auctionRepository.findAuctionsAllByCondition(
-                pageable,
-                readAuctionSearchCondition
+                readAuctionSearchCondition,
+                pageable
         );
 
         return ReadAuctionsDto.of(auctions, LocalDateTime.now());
