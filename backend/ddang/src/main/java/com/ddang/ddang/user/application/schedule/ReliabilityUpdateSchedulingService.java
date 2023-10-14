@@ -6,8 +6,8 @@ import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.UserReliability;
+import com.ddang.ddang.user.domain.repository.UserReliabilityRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserReliabilityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ReliabilityUpdateSchedulingService {
 
     private final JpaReliabilityUpdateHistoryRepository updateHistoryRepository;
     private final JpaReviewRepository reviewRepository;
-    private final JpaUserReliabilityRepository userReliabilityRepository;
+    private final UserReliabilityRepository userReliabilityRepository;
 
     @Transactional
     @Scheduled(cron = "0 0 4 ? * MON")
