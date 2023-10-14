@@ -88,7 +88,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 경매_아이디를_통해_질문과_답변을_모두_조회한다() {
         // when
-        final ReadQnasDto actual = questionService.readAllByAuctionId(질문_3개_답변_2개가_존재하는_경매_아이디);
+        final ReadQnasDto actual = questionService.readAllByAuctionId(질문_3개_답변_2개가_존재하는_경매_아이디, 두번째_질문을_작성한_사용자.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -97,14 +97,17 @@ class QuestionServiceTest extends QuestionServiceFixture {
 
             final ReadQnaDto 첫번째_질문 = questionAndAnswerDtos.get(0);
             softAssertions.assertThat(첫번째_질문.readQuestionDto()).isEqualTo(질문_정보_dto1);
+            softAssertions.assertThat(첫번째_질문.readQuestionDto().isQuestioner()).isFalse();
             softAssertions.assertThat(첫번째_질문.readAnswerDto()).isEqualTo(답변_정보_dto1);
 
             final ReadQnaDto 두번째_질문 = questionAndAnswerDtos.get(1);
             softAssertions.assertThat(두번째_질문.readQuestionDto()).isEqualTo(질문_정보_dto2);
+            softAssertions.assertThat(두번째_질문.readQuestionDto().isQuestioner()).isTrue();
             softAssertions.assertThat(두번째_질문.readAnswerDto()).isEqualTo(답변_정보_dto2);
 
             final ReadQnaDto 세번째_질문 = questionAndAnswerDtos.get(2);
             softAssertions.assertThat(세번째_질문.readQuestionDto()).isEqualTo(질문_정보_dto3);
+            softAssertions.assertThat(세번째_질문.readQuestionDto().isQuestioner()).isFalse();
             softAssertions.assertThat(세번째_질문.readAnswerDto()).isNull();
         });
     }
@@ -112,7 +115,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 존재하지_않는_경매_아이디를_통해_질문과_답변을_모두_조회할시_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> questionService.readAllByAuctionId(존재하지_않는_경매_아이디))
+        assertThatThrownBy(() -> questionService.readAllByAuctionId(존재하지_않는_경매_아이디, 질문하지_않은_사용자.getId()))
                 .isInstanceOf(AuctionNotFoundException.class)
                 .hasMessage("해당 경매를 찾을 수 없습니다.");
     }

@@ -14,8 +14,8 @@ import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,14 +64,16 @@ public class QuestionService {
         }
     }
 
-    public ReadQnasDto readAllByAuctionId(final Long auctionId) {
+    public ReadQnasDto readAllByAuctionId(final Long auctionId, final Long userId) {
         if (!auctionRepository.existsById(auctionId)) {
             throw new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.");
         }
 
+        final User user = userRepository.findById(userId)
+                                        .orElse(User.EMPTY_USER);
         final List<Question> questions = questionRepository.findAllByAuctionId(auctionId);
 
-        return ReadQnasDto.from(questions);
+        return ReadQnasDto.of(questions, user);
     }
 
     @Transactional
