@@ -13,6 +13,7 @@ import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.QnaResponse
+import com.ddangddangddang.data.model.response.BidHistoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
 import kotlinx.serialization.json.Json
@@ -88,4 +89,7 @@ class AuctionRemoteDataSource @Inject constructor(private val service: AuctionSe
 
     suspend fun reportAnswer(reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit> =
         service.reportAnswer(reportAnswerRequest)
+
+    suspend fun getBidHistories(auctionId: Long): ApiResponse<List<BidHistoryResponse>> =
+        service.getBidHistories(auctionId)
 }

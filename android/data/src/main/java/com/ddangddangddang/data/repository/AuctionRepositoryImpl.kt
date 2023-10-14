@@ -16,6 +16,7 @@ import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.QnaResponse
+import com.ddangddangddang.data.model.response.BidHistoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import java.io.File
 import javax.inject.Inject
@@ -123,5 +124,8 @@ class AuctionRepositoryImpl @Inject constructor(
 
     override suspend fun reportAnswer(reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit> {
         return remoteDataSource.reportAnswer(reportAnswerRequest)
+        
+    override suspend fun getBidHistories(auctionId: Long): ApiResponse<List<BidHistoryResponse>> {
+        return remoteDataSource.getBidHistories(auctionId)
     }
 }
