@@ -377,14 +377,14 @@ class BidControllerTest extends BidControllerFixture {
                                                    )
                                                    .andExpectAll(
                                                            status().isOk(),
-                                                           jsonPath("$.bids.[0].name", is(입찰_정보_dto1.name())),
-                                                           jsonPath("$.bids.[0].profileImage").exists(),
-                                                           jsonPath("$.bids.[0].price", is(입찰_정보_dto1.price())),
-                                                           jsonPath("$.bids.[0].bidTime").exists(),
-                                                           jsonPath("$.bids.[1].name", is(입찰_정보_dto2.name())),
-                                                           jsonPath("$.bids.[1].profileImage").exists(),
-                                                           jsonPath("$.bids.[1].price", is(입찰_정보_dto2.price())),
-                                                           jsonPath("$.bids.[1].bidTime").exists()
+                                                           jsonPath("$.[0].name", is(입찰_정보_dto1.name())),
+                                                           jsonPath("$.[0].profileImage").exists(),
+                                                           jsonPath("$.[0].price", is(입찰_정보_dto1.price())),
+                                                           jsonPath("$.[0].bidTime").exists(),
+                                                           jsonPath("$.[1].name", is(입찰_정보_dto2.name())),
+                                                           jsonPath("$.[1].profileImage").exists(),
+                                                           jsonPath("$.[1].price", is(입찰_정보_dto2.price())),
+                                                           jsonPath("$.[1].bidTime").exists()
                                                    );
 
         readAllByAuctionId_문서화(resultActions);
@@ -423,16 +423,16 @@ class BidControllerTest extends BidControllerFixture {
         resultActions.andDo(
                 restDocs.document(
                         responseFields(
-                                fieldWithPath("bids.[]").type(JsonFieldType.ARRAY)
-                                                        .description("특정 경매의 모든 입찰 목록"),
-                                fieldWithPath("bids.[].name").type(JsonFieldType.STRING)
-                                                             .description("입찰한 사용자의 닉네임"),
-                                fieldWithPath("bids.[].profileImage").type(JsonFieldType.STRING)
-                                                                     .description("입찰한 사용자의 프로필 이미지 URL"),
-                                fieldWithPath("bids.[].price").type(JsonFieldType.NUMBER)
-                                                              .description("입찰한 금액"),
-                                fieldWithPath("bids.[].bidTime").type(JsonFieldType.STRING)
-                                                                .description("입찰한 시간")
+                                fieldWithPath("[]").type(JsonFieldType.ARRAY)
+                                                   .description("특정 경매의 모든 입찰 목록"),
+                                fieldWithPath("[].name").type(JsonFieldType.STRING)
+                                                        .description("입찰한 사용자의 닉네임"),
+                                fieldWithPath("[].profileImage").type(JsonFieldType.STRING)
+                                                                .description("입찰한 사용자의 프로필 이미지 URL"),
+                                fieldWithPath("[].price").type(JsonFieldType.NUMBER)
+                                                         .description("입찰한 금액"),
+                                fieldWithPath("[].bidTime").type(JsonFieldType.STRING)
+                                                           .description("입찰한 시간")
                         )
                 )
         );
