@@ -7,7 +7,6 @@ import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
 import com.ddang.ddang.bid.presentation.dto.response.ReadBidResponse;
-import com.ddang.ddang.bid.presentation.dto.response.ReadBidsResponse;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -41,13 +40,11 @@ public class BidController {
     }
 
     @GetMapping("/{auctionId}")
-    public ResponseEntity<ReadBidsResponse> readAllByAuctionId(@PathVariable final Long auctionId) {
+    public ResponseEntity<List<ReadBidResponse>> readAllByAuctionId(@PathVariable final Long auctionId) {
         final List<ReadBidDto> readBidDtos = bidService.readAllByAuctionId(auctionId);
-        final List<ReadBidResponse> readBidResponses = readBidDtos.stream()
+        final List<ReadBidResponse> response = readBidDtos.stream()
                                                                   .map(ReadBidResponse::from)
                                                                   .toList();
-
-        final ReadBidsResponse response = new ReadBidsResponse(readBidResponses);
 
         return ResponseEntity.ok(response);
     }
