@@ -69,7 +69,7 @@ class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
     @Test
     void 전체_경매_신고_목록을_조회한다() {
         // when
-        final List<AuctionReport> actual = auctionReportRepository.findAllByOrderByIdAsc();
+        final List<AuctionReport> actual = auctionReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
