@@ -34,7 +34,10 @@ public class QnaController {
             @AuthenticateUser AuthenticationUserInfo userInfo,
             @RequestBody @Valid final CreateQuestionRequest questionRequest
     ) {
-        questionService.create(CreateQuestionDto.of(questionRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.calculateAbsoluteUrl());
+        questionService.create(
+                CreateQuestionDto.of(questionRequest, userInfo.userId()),
+                ImageRelativeUrl.AUCTION.calculateAbsoluteUrl()
+        );
 
         return ResponseEntity.created(URI.create("/auctions/" + questionRequest.auctionId()))
                              .build();
@@ -46,7 +49,10 @@ public class QnaController {
             @PathVariable final Long questionId,
             @RequestBody @Valid final CreateAnswerRequest answerRequest
     ) {
-        answerService.create(CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()), ImageRelativeUrl.AUCTION.calculateAbsoluteUrl());
+        answerService.create(CreateAnswerDto.of(
+                questionId, answerRequest, userInfo.userId()),
+                ImageRelativeUrl.AUCTION.calculateAbsoluteUrl()
+        );
 
         return ResponseEntity.created(URI.create("/auctions/" + answerRequest.auctionId()))
                              .build();
