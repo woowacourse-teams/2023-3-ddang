@@ -8,7 +8,6 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
@@ -38,7 +37,6 @@ public class AuctionService {
 
     private final JpaUserRepository userRepository;
     private final AuctionRepository auctionRepository;
-    private final QuerydslAuctionRepository querydslAuctionRepository;
     private final JpaRegionRepository regionRepository;
     private final JpaCategoryRepository categoryRepository;
     private final StoreImageProcessor imageProcessor;
@@ -92,7 +90,7 @@ public class AuctionService {
     public ReadAuctionsDto readAllByCondition(
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition) {
-        final Slice<Auction> auctions = querydslAuctionRepository.findAuctionsAllByCondition(
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByCondition(
                 readAuctionSearchCondition,
                 pageable
         );
@@ -101,13 +99,13 @@ public class AuctionService {
     }
 
     public ReadAuctionsDto readAllByUserId(final Long userId, final Pageable pageable) {
-        final Slice<Auction> auctions = querydslAuctionRepository.findAuctionsAllByUserId(userId, pageable);
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByUserId(userId, pageable);
 
         return ReadAuctionsDto.of(auctions, LocalDateTime.now());
     }
 
     public ReadAuctionsDto readAllByBidderId(final Long userId, final Pageable pageable) {
-        final Slice<Auction> auctions = querydslAuctionRepository.findAuctionsAllByBidderId(userId, pageable);
+        final Slice<Auction> auctions = auctionRepository.findAuctionsAllByBidderId(userId, pageable);
 
         return ReadAuctionsDto.of(auctions, LocalDateTime.now());
     }
