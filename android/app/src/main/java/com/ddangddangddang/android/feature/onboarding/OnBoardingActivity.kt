@@ -45,7 +45,7 @@ class OnBoardingActivity :
 
     private fun handleEvent(event: OnBoardingViewModel.Event) {
         when (event) {
-            OnBoardingViewModel.Event.Skip -> showSkipDialog() // 건너뛰기 버튼을 누르는 경우
+            OnBoardingViewModel.Event.Skip -> showSkipDialog() // 건너 뛰기 버튼을 누르는 경우
             OnBoardingViewModel.Event.Exit -> navigateToMain() // 모든 과정을 완료했을때
         }
     }
@@ -55,6 +55,7 @@ class OnBoardingActivity :
             titleId = R.string.onboarding_page_skip_dialog_title,
             messageId = R.string.onboarding_page_skip_dialog_message,
             positiveStringId = R.string.onboarding_page_skip_dialog_positive_button,
+            negativeStringId = R.string.all_dialog_default_negative_button,
             actionPositive = { navigateToMain() },
             isCancelable = false,
         )
