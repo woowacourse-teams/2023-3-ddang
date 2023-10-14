@@ -9,6 +9,8 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
+import com.ddang.ddang.bid.infrastructure.persistence.BidRepositoryImpl;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -40,8 +42,7 @@ public class ChatRoomAndImageRepositoryImplFixture {
 
     private UserRepository userRepository;
 
-    @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     private ChatRoomRepository chatRoomRepository;
 
@@ -53,10 +54,13 @@ public class ChatRoomAndImageRepositoryImplFixture {
             @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JpaUserRepository jpaUserRepository,
-            @Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
+            @Autowired final JpaChatRoomRepository jpaChatRoomRepository,
+            @Autowired final JpaBidRepository jpaBidRepository
+    ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
+        bidRepository = new BidRepositoryImpl(jpaBidRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");

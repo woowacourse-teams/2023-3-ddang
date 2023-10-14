@@ -7,7 +7,7 @@ import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.domain.NotificationStatus;
@@ -30,7 +30,7 @@ public class BidServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     protected NotificationStatus 알림_성공 = NotificationStatus.SUCCESS;
     protected String 이미지_절대_url = "https://3-ddang.store/auctions/images";
