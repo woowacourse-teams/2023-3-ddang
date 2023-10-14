@@ -12,11 +12,12 @@ import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AnswerServiceFixture {
@@ -25,7 +26,7 @@ public class AnswerServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaQuestionRepository questionRepository;
@@ -81,7 +82,10 @@ public class AnswerServiceFixture {
         답변 = new Answer("답변드립니다.");
         답변한_질문.addAnswer(답변);
 
-        userRepository.saveAll(List.of(판매자, 질문자, 판매자가_아닌_사용자));
+        userRepository.save(판매자);
+        userRepository.save(질문자);
+        userRepository.save(판매자가_아닌_사용자);
+
         auctionRepository.save(경매);
         questionRepository.saveAll(List.of(질문, 답변한_질문));
         answerRepository.save(답변);
