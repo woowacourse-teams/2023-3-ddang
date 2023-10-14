@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentWriteAnswerDialogBinding
-import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
+import com.ddangddangddang.android.feature.common.notifyFailureMessage
+import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,11 +21,13 @@ class WriteAnswerDialog : DialogFragment() {
     private val binding: FragmentWriteAnswerDialogBinding
         get() = binding!!
 
-    //    private val viewModel
-    private val activityViewModel: AuctionDetailViewModel by activityViewModels()
+    private val viewModel: WriteAnswerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        arguments?.let {
+            viewModel.initIds(it.getLong(AUCTION_ID_KEY), it.getLong(QUESTION_ID_KEY))
+        }
     }
 
     override fun onCreateView(
@@ -33,9 +37,37 @@ class WriteAnswerDialog : DialogFragment() {
     ): View? {
         _binding = FragmentWriteAnswerDialogBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-//        binding.viewModel
-//        binding.activityViewModel = activityViewModel
+        setupViewModel()
         return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    private fun setupViewModel() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
+        }
+    }
+
+    private fun handleEvent(event: WriteAnswerViewModel.WriteAnswerEvent) {
+        when (event) {
+            WriteAnswerViewModel.WriteAnswerEvent.Cancel -> dismiss()
+            is WriteAnswerViewModel.WriteAnswerEvent.FailureSubmitAnswer -> {
+                notifyFailureMessage(
+                    event.errorType,
+                    R.string.detail_auction_qna_answer_register_failure,
+                )
+            }
+            WriteAnswerViewModel.WriteAnswerEvent.SubmitAnswer -> {
+                notifySuccessMessage()
+                dismiss()
+            }
+        }
+    }
+
+    private fun notifySuccessMessage() {
+        Toaster.showShort(
+            requireContext(),
+            getString(R.string.detail_auction_qna_answer_register_success),
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
