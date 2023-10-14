@@ -2,7 +2,7 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
@@ -11,7 +11,7 @@ import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChatRoomReportService {
 
-    private final JpaUserRepository userRepository;
-    private final JpaChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final JpaChatRoomReportRepository chatRoomReportRepository;
 
     @Transactional

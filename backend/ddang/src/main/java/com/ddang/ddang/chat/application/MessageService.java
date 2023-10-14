@@ -8,12 +8,12 @@ import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,8 +30,8 @@ public class MessageService {
 
     private final ApplicationEventPublisher messageEventPublisher;
     private final JpaMessageRepository messageRepository;
-    private final JpaChatRoomRepository chatRoomRepository;
-    private final JpaUserRepository userRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {

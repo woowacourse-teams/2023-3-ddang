@@ -9,18 +9,19 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MessageServiceFixture {
@@ -32,10 +33,10 @@ public class MessageServiceFixture {
     private JpaMessageRepository messageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -90,11 +91,15 @@ public class MessageServiceFixture {
                                  .oauthId("12347")
                                  .build();
         탈퇴한_사용자.withdrawal();
-        userRepository.saveAll(List.of(발신자, 수신자, 탈퇴한_사용자));
+        userRepository.save(발신자);
+        userRepository.save(수신자);
+        userRepository.save(탈퇴한_사용자);
 
         final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
         final ChatRoom 탈퇴한_사용자와의_채팅방 = new ChatRoom(경매, 탈퇴한_사용자);
-        chatRoomRepository.saveAll(List.of(채팅방, 탈퇴한_사용자와의_채팅방));
+
+        chatRoomRepository.save(채팅방);
+        chatRoomRepository.save(탈퇴한_사용자와의_채팅방);
 
         메시지_생성_DTO = new CreateMessageDto(
                 채팅방.getId(),

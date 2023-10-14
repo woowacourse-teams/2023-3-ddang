@@ -15,7 +15,7 @@ import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -37,7 +37,7 @@ public class AuctionServiceFixture {
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -52,11 +52,11 @@ public class AuctionServiceFixture {
                              .oauthId("12345")
                              .build();
     protected User 구매자 = User.builder()
-                             .name("구매자")
-                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(new Reliability(4.7d))
-                             .oauthId("54321")
-                             .build();
+                              .name("구매자")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(new Reliability(4.7d))
+                              .oauthId("54321")
+                              .build();
 
     private MockMultipartFile 경매_이미지_파일 = new MockMultipartFile(
             "image.png",
@@ -103,7 +103,8 @@ public class AuctionServiceFixture {
 
         categoryRepository.save(가구_카테고리);
 
-        userRepository.saveAll(List.of(판매자, 구매자));
+        userRepository.save(판매자);
+        userRepository.save(구매자);
 
         유효한_경매_생성_dto = new CreateAuctionDto(
                 "제목",

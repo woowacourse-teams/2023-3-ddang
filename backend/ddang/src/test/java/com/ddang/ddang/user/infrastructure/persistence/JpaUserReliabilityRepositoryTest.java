@@ -25,6 +25,15 @@ class JpaUserReliabilityRepositoryTest extends JpaUserReliabilityRepositoryFixtu
     JpaUserReliabilityRepository userReliabilityRepository;
 
     @Test
+    void 사용자_신뢰도_정보를_저장한다() {
+        // when
+        UserReliability actual = userReliabilityRepository.save(저장하기_전_사용자_신뢰도_엔티티);
+
+        // then
+        assertThat(actual.getId()).isPositive();
+    }
+
+    @Test
     void 주어진_사용자_아이디에_해당하는_사용자_신뢰도_정보를_반환한다() {
         // when
         final Optional<UserReliability> actual = userReliabilityRepository.findByUserId(사용자.getId());

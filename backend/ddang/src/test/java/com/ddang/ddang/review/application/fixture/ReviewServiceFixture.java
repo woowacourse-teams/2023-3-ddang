@@ -14,7 +14,7 @@ import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +28,7 @@ public class ReviewServiceFixture {
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AuctionRepository auctionRepository;
@@ -105,7 +105,11 @@ public class ReviewServiceFixture {
                              .reliability(new Reliability(4.7d))
                              .oauthId("12347")
                              .build();
-        userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자, 경매_참여자가_아닌_사용자));
+        userRepository.save(판매자1);
+        userRepository.save(판매자2);
+        userRepository.save(평가_안한_경매_판매자);
+        userRepository.save(구매자);
+        userRepository.save(경매_참여자가_아닌_사용자);
 
         판매자1이_평가한_경매 = Auction.builder()
                               .seller(판매자1)

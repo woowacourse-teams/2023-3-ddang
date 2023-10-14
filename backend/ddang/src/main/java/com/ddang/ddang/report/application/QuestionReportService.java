@@ -10,7 +10,7 @@ import com.ddang.ddang.report.domain.QuestionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaQuestionReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ import java.util.List;
 public class QuestionReportService {
 
     private final JpaQuestionRepository questionRepository;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaQuestionReportRepository questionReportRepository;
 
     @Transactional
@@ -32,7 +32,7 @@ public class QuestionReportService {
                                                     .orElseThrow(() ->
                                                             new QuestionNotFoundException("해당 질문을 찾을 수 없습니다.")
                                                     );
-        final User reporter = userRepository.findByIdAndDeletedIsFalse(questionReportDto.reporterId())
+        final User reporter = userRepository.findById(questionReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         checkInvalidQuestionReport(reporter, question);
 
@@ -55,7 +55,7 @@ public class QuestionReportService {
         final List<QuestionReport> questionReports = questionReportRepository.findAllByOrderByIdAsc();
 
         return questionReports.stream()
-                             .map(ReadQuestionReportDto::from)
-                             .toList();
+                              .map(ReadQuestionReportDto::from)
+                              .toList();
     }
 }

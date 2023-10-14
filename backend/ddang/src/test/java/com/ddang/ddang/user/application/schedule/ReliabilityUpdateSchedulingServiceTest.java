@@ -4,8 +4,8 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.application.schedule.fixture.ReliabilityUpdateSchedulingServiceFixture;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.UserReliability;
-import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserReliabilityRepository;
+import com.ddang.ddang.user.domain.repository.ReliabilityUpdateHistoryRepository;
+import com.ddang.ddang.user.domain.repository.UserReliabilityRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -25,10 +25,10 @@ class ReliabilityUpdateSchedulingServiceTest extends ReliabilityUpdateScheduling
     ReliabilityUpdateSchedulingService reliabilityUpdateSchedulingService;
 
     @Autowired
-    JpaReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
+    ReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
 
     @Autowired
-    JpaUserReliabilityRepository userReliabilityRepository;
+    UserReliabilityRepository userReliabilityRepository;
 
     @Test
     void 사용자의_신뢰도를_갱신한다() {

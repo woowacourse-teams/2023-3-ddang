@@ -21,7 +21,9 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.region.infrastructure.persistence.RegionRepositoryImpl;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +36,12 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionRepositoryImplFixture {
 
-    @Autowired
-    private JpaAuctionRepository jpaAuctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JPAQueryFactory queryFactory;
 
-    @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     private RegionRepository regionRepository;
 
@@ -71,7 +71,14 @@ public class AuctionRepositoryImplFixture {
     protected User 구매자;
 
     @BeforeEach
-    void fixtureSetUp(@Autowired final JpaRegionRepository jpaRegionRepository) {
+    void fixtureSetUp(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaRegionRepository jpaRegionRepository
+    ) {
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
         regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
 
         final Region 서울특별시 = new Region("서울특별시");
@@ -131,11 +138,6 @@ public class AuctionRepositoryImplFixture {
         삭제된_경매_엔티티.delete();
         bidding(저장된_경매_엔티티, 구매자);
         addAuctioneerCount(저장된_경매_엔티티, 1);
-
-        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
-                jpaAuctionRepository,
-                new QuerydslAuctionRepository(queryFactory)
-        );
 
         auctionRepository.save(삭제된_경매_엔티티);
         auctionRepository.save(저장된_경매_엔티티);

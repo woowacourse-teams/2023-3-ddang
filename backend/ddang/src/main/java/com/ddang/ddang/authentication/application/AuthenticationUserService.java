@@ -1,6 +1,6 @@
 package com.ddang.ddang.authentication.application;
 
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class AuthenticationUserService {
 
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
 
     public boolean isWithdrawal(final Long userId) {
         return userRepository.existsByIdAndDeletedIsTrue(userId);

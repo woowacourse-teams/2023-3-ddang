@@ -2,7 +2,6 @@ package com.ddang.ddang.user.domain;
 
 import com.ddang.ddang.review.domain.Reviews;
 import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -30,7 +29,7 @@ public class UserReliability {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "fk_user_reliability_user"), nullable = false)
     private User user;
 

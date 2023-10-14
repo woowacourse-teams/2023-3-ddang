@@ -1,10 +1,5 @@
 package com.ddang.ddang.authentication.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
@@ -20,7 +15,7 @@ import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -29,6 +24,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -48,7 +48,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     DeviceTokenService deviceTokenService;
 
     @Autowired
-    JpaUserRepository userRepository;
+    UserRepository userRepository;
 
     @Autowired
     JpaProfileImageRepository profileImageRepository;
