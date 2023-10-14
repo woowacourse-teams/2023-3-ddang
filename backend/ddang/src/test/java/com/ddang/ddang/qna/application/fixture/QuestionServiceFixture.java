@@ -54,6 +54,7 @@ public class QuestionServiceFixture {
     protected Question 질문;
     protected User 질문자;
     protected User 질문하지_않은_사용자;
+    protected User 두번째_질문을_작성한_사용자;
     protected CreateQuestionDto 경매_질문_등록_요청_dto;
     protected CreateQuestionDto 존재하지_않는_사용자가_경매_질문_등록_요청_dto;
     protected CreateQuestionDto 존재하지_않는_경매_질문_등록_요청_dto;
@@ -142,8 +143,14 @@ public class QuestionServiceFixture {
                           .reliability(new Reliability(4.7d))
                           .oauthId("12346")
                           .build();
+        두번째_질문을_작성한_사용자 = User.builder()
+                              .name("두번째 질문자")
+                              .profileImage(프로필_이미지)
+                              .reliability(new Reliability(4.7d))
+                              .oauthId("12347")
+                              .build();
         질문 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문1");
-        final Question 질문2 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문2");
+        final Question 질문2 = new Question(질문과_답변이_존재하는_경매, 두번째_질문을_작성한_사용자, "질문2");
         final Question 질문3 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문3");
         final Answer 답변1 = new Answer("답변1");
         final Answer 답변2 = new Answer("답변2");
@@ -153,6 +160,7 @@ public class QuestionServiceFixture {
         userRepository.save(판매자);
         userRepository.save(질문자);
         userRepository.save(질문하지_않은_사용자);
+        userRepository.save(두번째_질문을_작성한_사용자);
 
         auctionRepository.save(경매);
         auctionRepository.save(질문과_답변이_존재하는_경매);
@@ -172,9 +180,10 @@ public class QuestionServiceFixture {
 
         final ReadUserInQnaDto 판매자_정보_dto = ReadUserInQnaDto.from(판매자);
         final ReadUserInQnaDto 질문자_정보_dto = ReadUserInQnaDto.from(질문자);
-        질문_정보_dto1 = new ReadQuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime());
-        질문_정보_dto2 = new ReadQuestionDto(질문2.getId(), 질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime());
-        질문_정보_dto3 = new ReadQuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime());
+        final ReadUserInQnaDto 두번째_질문자_정보_dto = ReadUserInQnaDto.from(두번째_질문을_작성한_사용자);
+        질문_정보_dto1 = new ReadQuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime(), false);
+        질문_정보_dto2 = new ReadQuestionDto(질문2.getId(), 두번째_질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime(), true);
+        질문_정보_dto3 = new ReadQuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime(), false);
         답변_정보_dto1 = new ReadAnswerDto(답변1.getId(), 판매자_정보_dto, 답변1.getContent(), 답변1.getCreatedTime());
         답변_정보_dto2 = new ReadAnswerDto(답변2.getId(), 판매자_정보_dto, 답변2.getContent(), 답변2.getCreatedTime());
     }

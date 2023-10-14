@@ -13,7 +13,8 @@ public record ReadQuestionResponse(
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime createdTime,
 
-        String content
+        String content,
+        boolean isQuestioner
 ) {
 
     public static ReadQuestionResponse from(final ReadQuestionDto readQuestionDto) {
@@ -21,7 +22,8 @@ public record ReadQuestionResponse(
                 readQuestionDto.id(),
                 ReadUserInAuctionQuestionResponse.from(readQuestionDto.readUserInQnaDto()),
                 readQuestionDto.createdTime(),
-                readQuestionDto.content()
+                readQuestionDto.content(),
+                readQuestionDto.isQuestioner()
         );
     }
 }
