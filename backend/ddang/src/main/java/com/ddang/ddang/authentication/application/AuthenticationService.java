@@ -37,6 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    private static final Reliability INITIALIZE_USER_RELIABILITY = new Reliability(0.0d);
     private static final String PRIVATE_CLAIMS_KEY = "userId";
 
     private final DeviceTokenService deviceTokenService;
@@ -82,7 +83,7 @@ public class AuthenticationService {
                                                                                 calculateRandomNumber())
                                                                         )
                                                                         .profileImage(findDefaultProfileImage())
-                                                                        .reliability(Reliability.INITIAL_RELIABILITY)
+                                                                        .reliability(INITIALIZE_USER_RELIABILITY)
                                                                         .oauthId(userInformationDto.findUserId())
                                                                         .oauth2Type(oauth2Type)
                                                                         .build();
