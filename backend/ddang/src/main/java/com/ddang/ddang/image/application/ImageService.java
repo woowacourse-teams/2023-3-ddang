@@ -2,7 +2,7 @@ package com.ddang.ddang.image.application;
 
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
+import com.ddang.ddang.image.domain.repository.AuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,7 +23,7 @@ public class ImageService {
     private String imageStoreDir;
 
     private final JpaProfileImageRepository profileImageRepository;
-    private final JpaAuctionImageRepository auctionImageRepository;
+    private final AuctionImageRepository auctionImageRepository;
 
     public Resource readProfileImage(final Long id) throws MalformedURLException {
         final ProfileImage profileImage = profileImageRepository.findById(id)
