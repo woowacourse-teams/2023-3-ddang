@@ -8,7 +8,7 @@ import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -30,7 +30,7 @@ public class MessageService {
 
     private final ApplicationEventPublisher messageEventPublisher;
     private final JpaMessageRepository messageRepository;
-    private final JpaChatRoomRepository chatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final JpaUserRepository userRepository;
 
     @Transactional

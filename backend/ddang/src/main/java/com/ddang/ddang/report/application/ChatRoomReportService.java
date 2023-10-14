@@ -2,7 +2,7 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
@@ -24,7 +24,7 @@ import java.util.List;
 public class ChatRoomReportService {
 
     private final JpaUserRepository userRepository;
-    private final JpaChatRoomRepository chatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final JpaChatRoomReportRepository chatRoomReportRepository;
 
     @Transactional

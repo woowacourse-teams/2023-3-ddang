@@ -13,7 +13,7 @@ import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndImageRepositoryImpl;
 import com.ddang.ddang.chat.infrastructure.persistence.QuerydslChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndImageDto;
@@ -21,11 +21,12 @@ import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAnd
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,7 +35,7 @@ public class ChatRoomService {
 
     private static final Long DEFAULT_CHAT_ROOM_ID = null;
 
-    private final JpaChatRoomRepository chatRoomRepository;
+    private final ChatRoomRepository chatRoomRepository;
     private final QuerydslChatRoomAndImageRepositoryImpl querydslChatRoomAndImageRepository;
     private final QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
     private final JpaUserRepository userRepository;
