@@ -22,12 +22,12 @@ public class ImageService {
     @Value("${image.store.dir}")
     private String imageStoreDir;
 
-    private final JpaProfileImageRepository imageRepository;
+    private final JpaProfileImageRepository profileImageRepository;
     private final JpaAuctionImageRepository auctionImageRepository;
 
     public Resource readProfileImage(final Long id) throws MalformedURLException {
-        final ProfileImage profileImage = imageRepository.findById(id)
-                                                         .orElse(null);
+        final ProfileImage profileImage = profileImageRepository.findById(id)
+                                                                .orElse(null);
 
         if (profileImage == null) {
             return null;
