@@ -20,7 +20,7 @@ import com.ddang.ddang.chat.domain.repository.ChatRoomAndMessageAndImageReposito
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +38,7 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomAndImageRepository chatRoomAndImageRepository;
     private final ChatRoomAndMessageAndImageRepository chatRoomAndMessageAndImageRepository;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
 
     @Transactional

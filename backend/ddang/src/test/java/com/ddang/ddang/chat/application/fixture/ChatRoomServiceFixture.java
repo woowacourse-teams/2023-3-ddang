@@ -26,6 +26,7 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +44,7 @@ public class ChatRoomServiceFixture {
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -105,88 +106,93 @@ public class ChatRoomServiceFixture {
                 new AuctionImage("제이미의_대표 이미지가_아닌_경매_이미지.png", "제이미의_대표 이미지가_아닌_경매_이미지.png");
 
         판매자 = User.builder()
-                  .name("판매자")
-                  .profileImage(프로필_이미지)
-                  .reliability(new Reliability(4.7d))
-                  .oauthId("12345")
-                  .build();
+                    .name("판매자")
+                    .profileImage(프로필_이미지)
+                    .reliability(new Reliability(4.7d))
+                    .oauthId("12345")
+                    .build();
         구매자 = User.builder()
-                  .name("구매자")
+                    .name("구매자")
+                    .profileImage(프로필_이미지)
+                    .reliability(new Reliability(4.7d))
+                    .oauthId("12346")
+                    .build();
+        엔초 = User.builder()
+                  .name("엔초")
                   .profileImage(프로필_이미지)
                   .reliability(new Reliability(4.7d))
                   .oauthId("12346")
                   .build();
-        엔초 = User.builder()
-                 .name("엔초")
-                 .profileImage(프로필_이미지)
-                 .reliability(new Reliability(4.7d))
-                 .oauthId("12346")
-                 .build();
         제이미 = User.builder()
-                  .name("제이미")
+                   .name("제이미")
+                   .profileImage(프로필_이미지)
+                   .reliability(new Reliability(4.7d))
+                   .oauthId("12347")
+                   .build();
+        지토 = User.builder()
+                  .name("지토")
                   .profileImage(프로필_이미지)
                   .reliability(new Reliability(4.7d))
-                  .oauthId("12347")
+                  .oauthId("12348")
                   .build();
-        지토 = User.builder()
-                 .name("지토")
-                 .profileImage(프로필_이미지)
-                 .reliability(new Reliability(4.7d))
-                 .oauthId("12348")
-                 .build();
         경매에_참여한_적_없는_사용자 = User.builder()
-                               .name("외부인")
-                               .profileImage(프로필_이미지)
-                               .reliability(new Reliability(4.7d))
-                               .oauthId("12349")
-                               .build();
-        userRepository.saveAll(List.of(판매자, 구매자, 엔초, 제이미, 지토, 경매에_참여한_적_없는_사용자));
+                                    .name("외부인")
+                                    .profileImage(프로필_이미지)
+                                    .reliability(new Reliability(4.7d))
+                                    .oauthId("12349")
+                                    .build();
+        userRepository.save(판매자);
+        userRepository.save(구매자);
+        userRepository.save(엔초);
+        userRepository.save(제이미);
+        userRepository.save(지토);
+        userRepository.save(경매에_참여한_적_없는_사용자);
 
         채팅방이_없는_경매 = Auction.builder()
-                            .seller(판매자)
-                            .title("맥북")
-                            .description("맥북 팔아요")
-                            .subCategory(전자기기_서브_노트북_카테고리)
-                            .startPrice(new Price(10_000))
-                            .bidUnit(new BidUnit(1_000))
-                            .closingTime(LocalDateTime.now())
-                            .build();
+                               .seller(판매자)
+                               .title("맥북")
+                               .description("맥북 팔아요")
+                               .subCategory(전자기기_서브_노트북_카테고리)
+                               .startPrice(new Price(10_000))
+                               .bidUnit(new BidUnit(1_000))
+                               .closingTime(LocalDateTime.now())
+                               .build();
         final Auction 종료되지_않은_경매 = Auction.builder()
-                                          .seller(판매자)
-                                          .title("맥북")
-                                          .description("맥북 팔아요")
-                                          .subCategory(전자기기_서브_노트북_카테고리)
-                                          .startPrice(new Price(10_000))
-                                          .bidUnit(new BidUnit(1_000))
-                                          .closingTime(LocalDateTime.now().plusDays(10L))
-                                          .build();
+                                              .seller(판매자)
+                                              .title("맥북")
+                                              .description("맥북 팔아요")
+                                              .subCategory(전자기기_서브_노트북_카테고리)
+                                              .startPrice(new Price(10_000))
+                                              .bidUnit(new BidUnit(1_000))
+                                              .closingTime(LocalDateTime.now().plusDays(10L))
+                                              .build();
         final Auction 낙찰자가_없는_경매 = Auction.builder()
-                                          .seller(판매자)
-                                          .title("맥북")
-                                          .description("맥북 팔아요")
-                                          .subCategory(전자기기_서브_노트북_카테고리)
-                                          .startPrice(new Price(10_000))
-                                          .bidUnit(new BidUnit(1_000))
-                                          .closingTime(LocalDateTime.now())
-                                          .build();
+                                             .seller(판매자)
+                                             .title("맥북")
+                                             .description("맥북 팔아요")
+                                             .subCategory(전자기기_서브_노트북_카테고리)
+                                             .startPrice(new Price(10_000))
+                                             .bidUnit(new BidUnit(1_000))
+                                             .closingTime(LocalDateTime.now())
+                                             .build();
         판매자_엔초_구매자_지토_경매 = Auction.builder()
-                                  .seller(엔초)
-                                  .title("엔초 맥북")
-                                  .description("엔초 맥북 팔아요")
-                                  .subCategory(전자기기_서브_노트북_카테고리)
-                                  .startPrice(new Price(10_000))
-                                  .bidUnit(new BidUnit(1_000))
-                                  .closingTime(LocalDateTime.now())
-                                  .build();
+                                       .seller(엔초)
+                                       .title("엔초 맥북")
+                                       .description("엔초 맥북 팔아요")
+                                       .subCategory(전자기기_서브_노트북_카테고리)
+                                       .startPrice(new Price(10_000))
+                                       .bidUnit(new BidUnit(1_000))
+                                       .closingTime(LocalDateTime.now())
+                                       .build();
         final Auction 판매자_제이미_구매자_엔초_경매 = Auction.builder()
-                                                 .seller(제이미)
-                                                 .title("제이미 맥북")
-                                                 .description("제이미 맥북 팔아요")
-                                                 .subCategory(전자기기_서브_노트북_카테고리)
-                                                 .startPrice(new Price(10_000))
-                                                 .bidUnit(new BidUnit(1_000))
-                                                 .closingTime(LocalDateTime.now())
-                                                 .build();
+                                                       .seller(제이미)
+                                                       .title("제이미 맥북")
+                                                       .description("제이미 맥북 팔아요")
+                                                       .subCategory(전자기기_서브_노트북_카테고리)
+                                                       .startPrice(new Price(10_000))
+                                                       .bidUnit(new BidUnit(1_000))
+                                                       .closingTime(LocalDateTime.now())
+                                                       .build();
         채팅방이_없는_경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         판매자_엔초_구매자_지토_경매.addAuctionImages(List.of(엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지));
         판매자_제이미_구매자_엔초_경매.addAuctionImages(List.of(제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지));
@@ -212,17 +218,17 @@ public class ChatRoomServiceFixture {
         chatRoomRepository.save(제이미_엔초_채팅방);
 
         엔초가_지토에게_1시에_보낸_쪽지 = Message.builder()
-                                    .chatRoom(엔초_지토_채팅방)
-                                    .contents("엔초가 지토에게 1시애 보낸 쪽지")
-                                    .writer(엔초)
-                                    .receiver(지토)
-                                    .build();
+                                          .chatRoom(엔초_지토_채팅방)
+                                          .contents("엔초가 지토에게 1시애 보낸 쪽지")
+                                          .writer(엔초)
+                                          .receiver(지토)
+                                          .build();
         제이미가_엔초에게_2시에_보낸_쪽지 = Message.builder()
-                                     .chatRoom(제이미_엔초_채팅방)
-                                     .contents("제이미가 엔초에게 2시애 보낸 쪽지")
-                                     .writer(제이미)
-                                     .receiver(엔초)
-                                     .build();
+                                           .chatRoom(제이미_엔초_채팅방)
+                                           .contents("제이미가 엔초에게 2시애 보낸 쪽지")
+                                           .writer(제이미)
+                                           .receiver(엔초)
+                                           .build();
         messageRepository.saveAll(List.of(엔초가_지토에게_1시에_보낸_쪽지, 제이미가_엔초에게_2시에_보낸_쪽지));
 
         final ChatRoomAndImageDto 엔초_지토_채팅방_정보 = new ChatRoomAndImageDto(엔초_지토_채팅방, 엔초의_경매_대표_이미지);

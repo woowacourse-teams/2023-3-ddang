@@ -17,6 +17,7 @@ import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class ChatRoomReportServiceFixture {
     private JpaProfileImageRepository profileImageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
@@ -143,7 +144,12 @@ public class ChatRoomReportServiceFixture {
         final ChatRoomReport 채팅방_신고3 = new ChatRoomReport(이미_신고한_구매자3, 채팅방3, "신고합니다.");
 
         profileImageRepository.save(프로필_이미지);
-        userRepository.saveAll(List.of(판매자겸_아직_신고하지_않은_신고자, 이미_신고한_구매자1, 이미_신고한_구매자2, 이미_신고한_구매자3, 채팅방_참여자가_아닌_사용자));
+
+        userRepository.save(판매자겸_아직_신고하지_않은_신고자);
+        userRepository.save(이미_신고한_구매자1);
+        userRepository.save(이미_신고한_구매자2);
+        userRepository.save(이미_신고한_구매자3);
+        userRepository.save(채팅방_참여자가_아닌_사용자);
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionImageRepository.save(경매_이미지);

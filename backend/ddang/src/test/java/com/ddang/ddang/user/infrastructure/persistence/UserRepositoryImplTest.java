@@ -4,7 +4,9 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.fixture.JpaUserRepositoryFixture;
+import com.ddang.ddang.user.domain.repository.UserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.fixture.UserRepositoryImplFixture;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -20,10 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
+class UserRepositoryImplTest extends UserRepositoryImplFixture {
 
-    @Autowired
-    JpaUserRepository userRepository;
+    UserRepository userRepository;
+
+    @BeforeEach
+    void setUp(@Autowired final JpaUserRepository jpaUserRepository) {
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
+    }
 
     @Test
     void 사용자를_저장한다() {

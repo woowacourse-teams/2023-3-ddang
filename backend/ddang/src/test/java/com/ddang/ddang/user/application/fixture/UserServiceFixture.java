@@ -5,7 +5,7 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.user.application.dto.UpdateUserDto;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,7 +15,7 @@ import org.springframework.mock.web.MockMultipartFile;
 public class UserServiceFixture {
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     protected Long 존재하지_않는_사용자_아이디 = -999L;
 

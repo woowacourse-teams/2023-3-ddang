@@ -13,7 +13,7 @@ import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnswerService {
 
     private final ApplicationEventPublisher answerEventPublisher;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaQuestionRepository questionRepository;
     private final JpaAnswerRepository answerRepository;
 
@@ -67,7 +67,7 @@ public class AnswerService {
     public void deleteById(final Long answerId, final Long userId) {
         final Answer answer = answerRepository.findByIdAndDeletedIsFalse(answerId)
                                               .orElseThrow(() -> new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."));
-        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+        final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         if (!answer.isWriter(user)) {

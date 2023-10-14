@@ -14,13 +14,14 @@ import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,12 +30,12 @@ public class QuestionService {
 
     private final ApplicationEventPublisher questionEventPublisher;
     private final AuctionRepository auctionRepository;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaQuestionRepository questionRepository;
 
     @Transactional
     public Long create(final CreateQuestionDto questionDto, final String absoluteImageUrl) {
-        final User questioner = userRepository.findByIdAndDeletedIsFalse(questionDto.userId())
+        final User questioner = userRepository.findById(questionDto.userId())
                                               .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findPureAuctionById(questionDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
@@ -77,7 +78,7 @@ public class QuestionService {
     public void deleteById(final Long questionId, final Long userId) {
         final Question question = questionRepository.findById(questionId)
                                                     .orElseThrow(() -> new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));
-        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+        final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         if (!question.isWriter(user)) {

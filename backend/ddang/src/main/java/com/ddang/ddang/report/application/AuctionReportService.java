@@ -11,11 +11,12 @@ import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.util.List;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -23,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuctionReportService {
 
     private final AuctionRepository auctionRepository;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaAuctionReportRepository auctionReportRepository;
 
     @Transactional

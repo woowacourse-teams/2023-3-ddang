@@ -3,6 +3,8 @@ package com.ddang.ddang.user.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
+import com.ddang.ddang.user.domain.repository.ReliabilityUpdateHistoryRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -10,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,10 +20,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaReliabilityUpdateHistoryRepositoryTest {
+class ReliabilityUpdateHistoryRepositoryImplTest {
 
-    @Autowired
-    JpaReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
+    ReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
+
+    @BeforeEach
+    void setUp(@Autowired final JpaReliabilityUpdateHistoryRepository jpaReliabilityUpdateHistoryRepository) {
+        reliabilityUpdateHistoryRepository = new ReliabilityUpdateHistoryRepositoryImpl(jpaReliabilityUpdateHistoryRepository);
+    }
 
     @Test
     void 신뢰도_업데이트_기록을_저장한다() {
@@ -52,7 +57,9 @@ class JpaReliabilityUpdateHistoryRepositoryTest {
         final ReliabilityUpdateHistory history2 = new ReliabilityUpdateHistory();
         final ReliabilityUpdateHistory history3 = new ReliabilityUpdateHistory();
 
-        reliabilityUpdateHistoryRepository.saveAll(List.of(history1, history2, history3));
+        reliabilityUpdateHistoryRepository.save(history1);
+        reliabilityUpdateHistoryRepository.save(history2);
+        reliabilityUpdateHistoryRepository.save(history3);
 
         // when
         final Optional<ReliabilityUpdateHistory> actual = reliabilityUpdateHistoryRepository.findFirstByOrderByIdDesc();
