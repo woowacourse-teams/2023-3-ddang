@@ -19,7 +19,7 @@ import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -43,7 +43,7 @@ public class AuthenticationService {
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final UserRepository userRepository;
-    private final JpaProfileImageRepository profileImageRepository;
+    private final ProfileImageRepository profileImageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
