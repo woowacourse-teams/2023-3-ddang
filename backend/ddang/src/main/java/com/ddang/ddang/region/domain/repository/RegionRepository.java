@@ -19,5 +19,5 @@ public interface RegionRepository {
 
     Optional<Region> findThirdRegionById(final Long thirdRegionId);
 
-   List<Region> findAllThirdRegionByIds(final List<Long> thirdRegionIds);
+    List<Region> findAllThirdRegionByIds(final List<Long> thirdRegionIds);
 }
