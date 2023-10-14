@@ -34,8 +34,7 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionRepositoryImplFixture {
 
-    @Autowired
-    private JpaAuctionRepository jpaAuctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JPAQueryFactory queryFactory;
@@ -72,8 +71,11 @@ public class AuctionRepositoryImplFixture {
 
     @BeforeEach
     void fixtureSetUp(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JpaUserRepository jpaUserRepository
     ) {
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
 
         final Region 서울특별시 = new Region("서울특별시");
@@ -133,11 +135,6 @@ public class AuctionRepositoryImplFixture {
         삭제된_경매_엔티티.delete();
         bidding(저장된_경매_엔티티, 구매자);
         addAuctioneerCount(저장된_경매_엔티티, 1);
-
-        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
-                jpaAuctionRepository,
-                new QuerydslAuctionRepository(queryFactory)
-        );
 
         auctionRepository.save(삭제된_경매_엔티티);
         auctionRepository.save(저장된_경매_엔티티);
