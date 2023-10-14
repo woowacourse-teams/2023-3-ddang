@@ -21,7 +21,7 @@ public class BlackListTokenRepositoryFixture {
     protected BlackListToken 만료된_토큰 = new BlackListToken(TokenType.ACCESS, 만료_토큰_내용);
 
     @BeforeEach
-    void setUp() {
+    void fixtureSetUp() {
         final BlackListTokenRepository blackListTokenRepository =
                 new BlackListTokenRepositoryImpl(jpaBlackListTokenRepository);
 
