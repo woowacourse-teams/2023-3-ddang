@@ -13,7 +13,7 @@ class OnBoardingViewModel @Inject constructor() : ViewModel() {
     val event: LiveData<Event>
         get() = _event
 
-    private val _currentPageType = MutableLiveData(OnBoardingPageType.ProfileChange)
+    private val _currentPageType = MutableLiveData(OnBoardingPageType.ProfileSetting)
     val currentPageType: LiveData<OnBoardingPageType>
         get() = _currentPageType
 
@@ -26,19 +26,21 @@ class OnBoardingViewModel @Inject constructor() : ViewModel() {
 
     fun nextPage() {
         _currentPageType.value?.let {
-            if (it.ordinal == OnBoardingPageType.values().size - 1) {
-                _event.value = Event.CompleteExit
-            }
+            if (it.ordinal == OnBoardingPageType.values().size - 1) return done()
             _currentPageType.value = OnBoardingPageType.values()[it.ordinal + 1]
         }
     }
 
-    fun setExitEvent() {
+    private fun done() {
         _event.value = Event.Exit
     }
 
+    fun setSkipEvent() {
+        _event.value = Event.Skip
+    }
+
     sealed class Event {
+        object Skip : Event()
         object Exit : Event()
-        object CompleteExit : Event()
     }
 }

@@ -16,7 +16,9 @@ class OnBoardingActivity :
     BindingActivity<ActivityOnboardingBinding>(R.layout.activity_onboarding) {
     private val viewModel: OnBoardingViewModel by viewModels()
     private val callback = object : OnBackPressedCallback(true) {
-        override fun handleOnBackPressed() {}
+        override fun handleOnBackPressed() {
+            viewModel.previousPage()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +30,8 @@ class OnBoardingActivity :
     }
 
     private fun setupOnBoardingFragmentAdapter() {
-        binding.vpOnboarding.isUserInputEnabled = false
+        binding.vpOnboarding.adapter = OnBoardingFragmentAdapter(this)
+        binding.vpOnboarding.isUserInputEnabled = false // 유저가 직접 스와이프 이동 못하게 막기.
     }
 
     private fun setupViewModel() {
@@ -42,19 +45,17 @@ class OnBoardingActivity :
 
     private fun handleEvent(event: OnBoardingViewModel.Event) {
         when (event) {
-            OnBoardingViewModel.Event.Exit -> showExitDialog()
-            OnBoardingViewModel.Event.CompleteExit -> navigateToMain()
+            OnBoardingViewModel.Event.Skip -> showSkipDialog() // 건너뛰기 버튼을 누르는 경우
+            OnBoardingViewModel.Event.Exit -> navigateToMain() // 모든 과정을 완료했을때
         }
     }
 
-    private fun showExitDialog() {
+    private fun showSkipDialog() {
         showDialog(
-            titleId = R.string.onboarding_page_exit_dialog_title,
-            messageId = R.string.onboarding_page_exit_dialog_message,
-            positiveStringId = R.string.onboarding_page_exit_dialog_positive_button,
-            actionPositive = {
-                navigateToMain()
-            },
+            titleId = R.string.onboarding_page_skip_dialog_title,
+            messageId = R.string.onboarding_page_skip_dialog_message,
+            positiveStringId = R.string.onboarding_page_skip_dialog_positive_button,
+            actionPositive = { navigateToMain() },
             isCancelable = false,
         )
     }

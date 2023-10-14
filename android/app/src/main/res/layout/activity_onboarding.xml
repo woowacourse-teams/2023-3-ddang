@@ -5,6 +5,10 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <import type="com.ddangddangddang.android.feature.onboarding.OnBoardingPageType" />
+
         <variable
             name="viewModel"
             type="com.ddangddangddang.android.feature.onboarding.OnBoardingViewModel" />
@@ -47,8 +51,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/margin_side_layout"
-                    android:onClick="@{() -> viewModel.setExitEvent()}"
-                    android:text="@string/onboarding_page_exit_dialog_title"
+                    android:onClick="@{() -> viewModel.setSkipEvent()}"
+                    android:text="@string/onboarding_page_skip_dialog_title"
                     android:textColor="@color/grey_700"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

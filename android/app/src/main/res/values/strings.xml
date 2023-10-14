@@ -249,8 +249,8 @@
 
     <!-- onboarding -->
     <string name="onboarding_profile_setting_title">프로필 설정</string>
-    <string name="onboarding_page_exit_dialog_title">건너뛰기</string>
-    <string name="onboarding_page_exit_dialog_message">정말 건너뛰시겠습니까?</string>
-    <string name="onboarding_page_exit_dialog_positive_button">확인</string>
-    <string name="onboarding_profile_page_title">프로필 수정</string>
+    <string name="onboarding_page_skip_dialog_title">건너뛰기</string>
+    <string name="onboarding_page_skip_dialog_message">정말 건너뛰시겠습니까?</string>
+    <string name="onboarding_page_skip_dialog_positive_button">확인</string>
+    <string name="onboarding_all_done">마치기</string>
 </resources>
