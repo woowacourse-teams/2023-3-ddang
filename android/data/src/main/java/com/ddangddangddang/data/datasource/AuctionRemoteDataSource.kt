@@ -1,10 +1,10 @@
 package com.ddangddangddang.data.datasource
 
 import com.ddangddangddang.data.model.SortType
-import com.ddangddangddang.data.model.request.AskQuestionRequest
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.RegisterQuestionRequest
 import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
@@ -71,8 +71,8 @@ class AuctionRemoteDataSource @Inject constructor(private val service: AuctionSe
     suspend fun getAuctionQnas(auctionId: Long): ApiResponse<QnaResponse> =
         service.getQnas(auctionId)
 
-    suspend fun askQuestion(askQuestionRequest: AskQuestionRequest): ApiResponse<Unit> =
-        service.askQuestion(askQuestionRequest)
+    suspend fun registerQuestion(registerQuestionRequest: RegisterQuestionRequest): ApiResponse<Unit> =
+        service.registerQuestion(registerQuestionRequest)
 
     suspend fun registerAnswer(
         questionId: Long,

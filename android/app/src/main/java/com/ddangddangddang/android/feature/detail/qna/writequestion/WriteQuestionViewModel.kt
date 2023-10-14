@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
-import com.ddangddangddang.data.model.request.AskQuestionRequest
+import com.ddangddangddang.data.model.request.RegisterQuestionRequest
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,7 +37,7 @@ class WriteQuestionViewModel @Inject constructor(private val repository: Auction
         if (isLoading.getAndSet(true) || auctionId == null) return
         viewModelScope.launch {
             auctionId?.let { id ->
-                when (val response = repository.askQuestion(AskQuestionRequest(id, content.value ?: ""))) {
+                when (val response = repository.registerQuestion(RegisterQuestionRequest(id, content.value ?: ""))) {
                     is ApiResponse.Success ->
                         _event.value = WriteQuestionEvent.SubmitQuestion
 

@@ -4,10 +4,10 @@ import androidx.lifecycle.LiveData
 import com.ddangddangddang.data.datasource.AuctionLocalDataSource
 import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
 import com.ddangddangddang.data.model.SortType
-import com.ddangddangddang.data.model.request.AskQuestionRequest
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.RegisterQuestionRequest
 import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
@@ -98,8 +98,8 @@ class AuctionRepositoryImpl @Inject constructor(
         return remoteDataSource.getAuctionQnas(auctionId)
     }
 
-    override suspend fun askQuestion(askQuestionRequest: AskQuestionRequest): ApiResponse<Unit> {
-        return remoteDataSource.askQuestion(askQuestionRequest)
+    override suspend fun registerQuestion(registerQuestionRequest: RegisterQuestionRequest): ApiResponse<Unit> {
+        return remoteDataSource.registerQuestion(registerQuestionRequest)
     }
 
     override suspend fun registerAnswer(

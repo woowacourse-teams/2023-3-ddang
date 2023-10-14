@@ -1,10 +1,10 @@
 package com.ddangddangddang.data.remote
 
-import com.ddangddangddang.data.model.request.AskQuestionRequest
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.request.RegisterAnswerRequest
+import com.ddangddangddang.data.model.request.RegisterQuestionRequest
 import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
@@ -144,7 +144,7 @@ interface AuctionService {
     suspend fun getQnas(@Path("auctionId") auctionId: Long): ApiResponse<QnaResponse>
 
     @POST("/questions")
-    suspend fun askQuestion(@Body askQuestionRequest: AskQuestionRequest): ApiResponse<Unit>
+    suspend fun registerQuestion(@Body registerQuestionRequest: RegisterQuestionRequest): ApiResponse<Unit>
 
     @POST("/questions/{questionId}/answers")
     suspend fun registerAnswer(
