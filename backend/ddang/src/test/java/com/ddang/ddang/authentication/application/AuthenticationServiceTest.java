@@ -1,5 +1,10 @@
 package com.ddang.ddang.authentication.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
@@ -24,11 +29,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -149,7 +149,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     void 가입하지_않은_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
         given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
-        given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
 
         // when
         final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
@@ -158,6 +158,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty();
             softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.isSignUpUser()).isTrue();
         });
     }
 
@@ -174,6 +175,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty();
             softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.isSignUpUser()).isFalse();
         });
     }
 
