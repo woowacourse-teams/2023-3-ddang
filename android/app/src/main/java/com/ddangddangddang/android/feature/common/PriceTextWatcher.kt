@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.register
+package com.ddangddangddang.android.feature.common
 
 import android.text.Editable
 import android.text.TextWatcher
@@ -27,5 +27,18 @@ class PriceTextWatcher(private val onAfterChanged: (Int, String) -> Unit) : Text
 
     override fun afterTextChanged(s: Editable?) {
         s?.let { onAfterChanged(cursorPositionFromEnd, s.toString()) }
+    }
+
+    companion object {
+        fun getCursorPosition(
+            textLength: Int,
+            prevCursorPositionFromEnd: Int,
+            defaultCursorPositionFromEnd: Int,
+        ): Int {
+            val cursorPositionFromEnd =
+                if (prevCursorPositionFromEnd > 0) prevCursorPositionFromEnd else defaultCursorPositionFromEnd
+            val cursorPosition = textLength - cursorPositionFromEnd
+            return if (cursorPosition > 0) cursorPosition else 0
+        }
     }
 }
