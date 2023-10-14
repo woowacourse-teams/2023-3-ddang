@@ -3,7 +3,10 @@ package com.ddang.ddang.review.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -15,7 +18,10 @@ import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
 import com.ddang.ddang.review.infrastructure.persistence.ReviewRepositoryImpl;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,11 +34,9 @@ public class ReviewRepositoryImplFixture {
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
-    @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     private ReviewRepository reviewRepository;
 
@@ -48,7 +52,14 @@ public class ReviewRepositoryImplFixture {
     protected Review 구매자가_판매자2에게_받은_평가;
 
     @BeforeEach
-    void fixtureSetUp(@Autowired final JpaReviewRepository jpaReviewRepository) {
+    void fixtureSetUp(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaReviewRepository jpaReviewRepository
+    ) {
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
         reviewRepository = new ReviewRepositoryImpl(jpaReviewRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");
@@ -85,7 +96,11 @@ public class ReviewRepositoryImplFixture {
                   .reliability(new Reliability(4.7d))
                   .oauthId("12347")
                   .build();
-        userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자));
+
+        userRepository.save(판매자1);
+        userRepository.save(판매자2);
+        userRepository.save(평가_안한_경매_판매자);
+        userRepository.save(구매자);
 
         final AuctionImage 경매1_대표_이미지 = new AuctionImage("경매1_대표_이미지.png", "경매1_대표_이미지.png");
         final AuctionImage 경매2_대표_이미지 = new AuctionImage("경매2_대표_이미지.png", "경매2_대표_이미지.png");
@@ -122,7 +137,9 @@ public class ReviewRepositoryImplFixture {
         판매자1이_평가한_경매.addAuctionImages(List.of(경매1_대표_이미지));
         판매자2가_평가한_경매.addAuctionImages(List.of(경매2_대표_이미지));
         평가_안한_경매.addAuctionImages(List.of(평가_안한_경매_대표_이미지));
-        auctionRepository.saveAll(List.of(판매자1이_평가한_경매, 판매자2가_평가한_경매, 평가_안한_경매));
+        auctionRepository.save(판매자1이_평가한_경매);
+        auctionRepository.save(판매자2가_평가한_경매);
+        auctionRepository.save(평가_안한_경매);
 
         저장하려는_평가 = Review.builder()
                          .auction(평가_안한_경매)
