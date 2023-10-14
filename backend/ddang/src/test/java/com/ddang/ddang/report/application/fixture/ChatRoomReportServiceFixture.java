@@ -7,7 +7,7 @@ import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
@@ -17,11 +17,13 @@ import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomReportServiceFixture {
@@ -33,7 +35,7 @@ public class ChatRoomReportServiceFixture {
     private JpaProfileImageRepository profileImageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
@@ -45,7 +47,7 @@ public class ChatRoomReportServiceFixture {
     private JpaChatRoomReportRepository chatRoomReportRepository;
 
     @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepository;
 
     protected User 이미_신고한_구매자1;
     protected User 이미_신고한_구매자2;
@@ -142,7 +144,12 @@ public class ChatRoomReportServiceFixture {
         final ChatRoomReport 채팅방_신고3 = new ChatRoomReport(이미_신고한_구매자3, 채팅방3, "신고합니다.");
 
         profileImageRepository.save(프로필_이미지);
-        userRepository.saveAll(List.of(판매자겸_아직_신고하지_않은_신고자, 이미_신고한_구매자1, 이미_신고한_구매자2, 이미_신고한_구매자3, 채팅방_참여자가_아닌_사용자));
+
+        userRepository.save(판매자겸_아직_신고하지_않은_신고자);
+        userRepository.save(이미_신고한_구매자1);
+        userRepository.save(이미_신고한_구매자2);
+        userRepository.save(이미_신고한_구매자3);
+        userRepository.save(채팅방_참여자가_아닌_사용자);
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionImageRepository.save(경매_이미지);
@@ -150,7 +157,9 @@ public class ChatRoomReportServiceFixture {
         auctionRepository.save(경매2);
         auctionRepository.save(경매3);
 
-        chatRoomRepository.saveAll(List.of(채팅방1, 채팅방2, 채팅방3));
+        chatRoomRepository.save(채팅방1);
+        chatRoomRepository.save(채팅방2);
+        chatRoomRepository.save(채팅방3);
 
         chatRoomReportRepository.saveAll(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
 

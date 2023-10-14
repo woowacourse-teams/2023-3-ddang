@@ -1,7 +1,7 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
-import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslChatRoomAndMessageAndImageRepositoryImplFixture;
+import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
+import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslChatRoomAndMessageAndImageRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,13 +20,13 @@ import java.util.List;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class QuerydslChatRoomAndMessageAndImageRepositoryImplTest extends QuerydslChatRoomAndMessageAndImageRepositoryImplFixture {
+class QuerydslChatRoomAndMessageAndImageRepositoryTest extends QuerydslChatRoomAndMessageAndImageRepositoryFixture {
 
     QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslChatRoomAndMessageAndImageRepository = new QuerydslChatRoomAndMessageAndImageRepositoryImpl(queryFactory);
+        querydslChatRoomAndMessageAndImageRepository = new QuerydslChatRoomAndMessageAndImageRepository(queryFactory);
     }
 
     @Test

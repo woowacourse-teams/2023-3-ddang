@@ -1,4 +1,4 @@
-package com.ddang.ddang.chat.infrastructure.persistence.dto;
+package com.ddang.ddang.chat.domain.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.image.domain.AuctionImage;

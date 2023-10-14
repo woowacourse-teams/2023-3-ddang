@@ -13,17 +13,18 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class BidServiceFixture {
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AuctionRepository auctionRepository;
@@ -125,7 +126,10 @@ public class BidServiceFixture {
                                       .build();
         삭제된_경매.delete();
 
-        userRepository.saveAll(List.of(판매자, 입찰자1, 입찰자2));
+        userRepository.save(판매자);
+        userRepository.save(입찰자1);
+        userRepository.save(입찰자2);
+
         경매1.addAuctionImages(List.of(경매_이미지1));
         경매2.addAuctionImages(List.of(경매_이미지2));
         경매3.addAuctionImages(List.of(경매_이미지3));

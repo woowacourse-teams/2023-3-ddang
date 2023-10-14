@@ -17,14 +17,15 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,7 +35,7 @@ public class BidService {
     private final ApplicationEventPublisher bidEventPublisher;
     private final AuctionRepository auctionRepository;
     private final AuctionAndImageRepository auctionAndImageRepository;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaBidRepository bidRepository;
 
     @Transactional

@@ -15,11 +15,12 @@ import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionReportServiceFixture {
@@ -31,7 +32,7 @@ public class AuctionReportServiceFixture {
     private JpaProfileImageRepository profileImageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
@@ -107,14 +108,14 @@ public class AuctionReportServiceFixture {
         경매.addAuctionImages(List.of(경매_이미지));
 
         final Auction 삭제된_경매 = Auction.builder()
-                        .seller(판매자)
-                        .title("삭제된 경매 상품")
-                        .description("이것은 삭제된 경매 상품입니다.")
-                        .subCategory(전자기기_서브_노트북_카테고리)
-                        .bidUnit(new BidUnit(1_000))
-                        .startPrice(new Price(1_000))
-                        .closingTime(LocalDateTime.now())
-                        .build();
+                                      .seller(판매자)
+                                      .title("삭제된 경매 상품")
+                                      .description("이것은 삭제된 경매 상품입니다.")
+                                      .subCategory(전자기기_서브_노트북_카테고리)
+                                      .bidUnit(new BidUnit(1_000))
+                                      .startPrice(new Price(1_000))
+                                      .closingTime(LocalDateTime.now())
+                                      .build();
         삭제된_경매.addAuctionImages(List.of(경매_이미지));
         삭제된_경매.delete();
 
@@ -123,7 +124,12 @@ public class AuctionReportServiceFixture {
         final AuctionReport 경매_신고3 = new AuctionReport(이미_신고한_신고자3, 경매, "신고합니다");
 
         profileImageRepository.save(프로필_이미지);
-        userRepository.saveAll(List.of(판매자, 새로운_신고자, 이미_신고한_신고자1, 이미_신고한_신고자2, 이미_신고한_신고자3));
+
+        userRepository.save(판매자);
+        userRepository.save(새로운_신고자);
+        userRepository.save(이미_신고한_신고자1);
+        userRepository.save(이미_신고한_신고자2);
+        userRepository.save(이미_신고한_신고자3);
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionImageRepository.save(경매_이미지);

@@ -13,7 +13,7 @@ import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +28,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final AuctionRepository auctionRepository;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long create(final CreateReviewDto reviewDto) {

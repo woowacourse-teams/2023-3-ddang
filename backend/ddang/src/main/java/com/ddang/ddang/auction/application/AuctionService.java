@@ -18,26 +18,27 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.List;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuctionService {
 
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
-    private final JpaRegionRepository regionRepository;
+    private final RegionRepository regionRepository;
     private final CategoryRepository categoryRepository;
     private final StoreImageProcessor imageProcessor;
 

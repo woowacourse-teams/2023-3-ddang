@@ -5,7 +5,7 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.application.fixture.RegionServiceFixture;
 import com.ddang.ddang.region.domain.InitializationRegionProcessor;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -33,7 +34,7 @@ class RegionServiceTest extends RegionServiceFixture {
     RegionService regionService;
 
     @Autowired
-    JpaRegionRepository regionRepository;
+    RegionRepository regionRepository;
 
     @Test
     void 대한민국_전국의_지역을_초기화한다() {
@@ -44,25 +45,29 @@ class RegionServiceTest extends RegionServiceFixture {
         regionService.createRegions();
 
         // then
-        final List<Region> actual = regionRepository.findAll();
+        final List<Region> actualAllFirsts = regionRepository.findFirstAll();
 
-        final Region actualFirstRegion1 = actual.get(0);
-        final Region actualFirstRegion2 = actual.get(5);
-        final Region actualSecondRegion1OfFirstRegion1 = actualFirstRegion1.getSecondRegions().get(0);
-        final Region actualSecondRegion2OfFirstRegion1 = actualFirstRegion1.getSecondRegions().get(1);
-        final Region actualThirdRegion1OfSecondRegion1 = actualSecondRegion1OfFirstRegion1.getThirdRegions().get(0);
-        final Region actualThirdRegion2OfSecondRegion1 = actualSecondRegion1OfFirstRegion1.getThirdRegions().get(1);
+        List<Region> actualAllSeconds = new ArrayList<>();
+        for (final Region first : actualAllFirsts) {
+            actualAllSeconds.addAll(regionRepository.findSecondAllByFirstRegionId(first.getId()));
+        }
+
+        List<Region> actualAllThirds = new ArrayList<>();
+        for (final Region second : actualAllSeconds) {
+            final Region first = second.getFirstRegion();
+            actualAllThirds.addAll(regionRepository.findThirdAllByFirstAndSecondRegionId(first.getId(), second.getId()));
+        }
 
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).hasSize(6);
-            softAssertions.assertThat(actualFirstRegion1).isEqualTo(서울특별시);
-            softAssertions.assertThat(actualFirstRegion2).isEqualTo(두번째_지역이_없는_첫번째_지역);
-            softAssertions.assertThat(actualFirstRegion1.getSecondRegions()).hasSize(2);
-            softAssertions.assertThat(actualSecondRegion1OfFirstRegion1).isEqualTo(서울특별시_강남구);
-            softAssertions.assertThat(actualSecondRegion2OfFirstRegion1).isEqualTo(세번째_지역이_없는_두번째_지역);
-            softAssertions.assertThat(actualSecondRegion1OfFirstRegion1.getThirdRegions()).hasSize(2);
-            softAssertions.assertThat(actualThirdRegion1OfSecondRegion1).isEqualTo(서울특별시_강남구_삼성동);
-            softAssertions.assertThat(actualThirdRegion2OfSecondRegion1).isEqualTo(서울특별시_강남구_대치동);
+            softAssertions.assertThat(actualAllFirsts).hasSize(2);
+            softAssertions.assertThat(actualAllSeconds).hasSize(2);
+            softAssertions.assertThat(actualAllThirds).hasSize(2);
+            softAssertions.assertThat(actualAllFirsts.get(0)).isEqualTo(서울특별시);
+            softAssertions.assertThat(actualAllFirsts.get(1)).isEqualTo(두번째_지역이_없는_첫번째_지역);
+            softAssertions.assertThat(actualAllSeconds.get(0)).isEqualTo(서울특별시_강남구);
+            softAssertions.assertThat(actualAllSeconds.get(1)).isEqualTo(세번째_지역이_없는_두번째_지역);
+            softAssertions.assertThat(actualAllThirds.get(0)).isEqualTo(서울특별시_강남구_삼성동);
+            softAssertions.assertThat(actualAllThirds.get(1)).isEqualTo(서울특별시_강남구_대치동);
         });
     }
 
@@ -103,7 +108,7 @@ class RegionServiceTest extends RegionServiceFixture {
     @Test
     void 두번째_지역에_해당하는_모든_세번째_지역을_조회한다() {
         // when
-        final List<ReadRegionDto> actual = 
+        final List<ReadRegionDto> actual =
                 regionService.readAllThirdByFirstAndSecondRegionId(서울특별시.getId(), 서울특별시_강남구.getId());
 
         // then
