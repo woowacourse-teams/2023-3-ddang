@@ -1,7 +1,10 @@
 package com.ddang.ddang.chat.infrastructure.persistence.fixture;
 
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
@@ -10,13 +13,13 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslMessageRepositoryImplFixture {
@@ -25,10 +28,13 @@ public class QuerydslMessageRepositoryImplFixture {
     private EntityManager em;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private JPAQueryFactory queryFactory;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private JpaAuctionRepository jpaAuctionRepository;
+
+    @Autowired
+    private JpaUserRepository userRepository;
 
     @Autowired
     private JpaChatRoomRepository chatRoomRepository;
@@ -72,6 +78,11 @@ public class QuerydslMessageRepositoryImplFixture {
         경매 = Auction.builder()
                     .title("title")
                     .build();
+
+        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
+        );
 
         auctionRepository.save(경매);
 

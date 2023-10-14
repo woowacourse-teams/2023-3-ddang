@@ -3,7 +3,10 @@ package com.ddang.ddang.chat.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
@@ -18,13 +21,13 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslChatRoomAndMessageAndImageRepositoryImplFixture {
@@ -33,13 +36,16 @@ public class QuerydslChatRoomAndMessageAndImageRepositoryImplFixture {
     private EntityManager em;
 
     @Autowired
+    private JPAQueryFactory queryFactory;
+
+    @Autowired
+    private JpaAuctionRepository jpaAuctionRepository;
+
+    @Autowired
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
     private JpaUserRepository userRepository;
-
-    @Autowired
-    private JpaAuctionRepository auctionRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -178,7 +184,15 @@ public class QuerydslChatRoomAndMessageAndImageRepositoryImplFixture {
         메리의_경매.addAuctionImages(List.of(메리의_경매_대표_이미지, 메리의_대표_이미지가_아닌_경매_이미지));
         엔초의_경매.addAuctionImages(List.of(엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지));
         제이미의_경매.addAuctionImages(List.of(제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지));
-        auctionRepository.saveAll(List.of(메리의_경매, 엔초의_경매, 제이미의_경매));
+
+        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
+        );
+
+        auctionRepository.save(메리의_경매);
+        auctionRepository.save(엔초의_경매);
+        auctionRepository.save(제이미의_경매);
 
         bidRepository.saveAll(List.of(엔초가_메리_경매에_입찰, 지토가_엔초_경매에_입찰, 엔초가_제이미_경매에_입찰));
         메리의_경매.updateLastBid(엔초가_메리_경매에_입찰);

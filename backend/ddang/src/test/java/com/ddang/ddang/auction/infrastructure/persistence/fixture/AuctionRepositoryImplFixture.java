@@ -3,7 +3,10 @@ package com.ddang.ddang.auction.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
@@ -17,8 +20,7 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -29,14 +31,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionRepositoryImplFixture {
 
-    @PersistenceContext
-    private EntityManager em;
+    @Autowired
+    private JpaAuctionRepository jpaAuctionRepository;
+
+    @Autowired
+    private JPAQueryFactory queryFactory;
 
     @Autowired
     private JpaUserRepository userRepository;
-
-    @Autowired
-    private JpaAuctionRepository auctionRepository;
 
     @Autowired
     private JpaRegionRepository regionRepository;
@@ -67,7 +69,7 @@ public class AuctionRepositoryImplFixture {
     protected User 구매자;
 
     @BeforeEach
-    void setUp() {
+    void fixtureSetUp() {
         final Region 서울특별시 = new Region("서울특별시");
         final Region 강남구 = new Region("강남구");
         final Region 역삼동 = new Region("역삼동");
@@ -126,10 +128,13 @@ public class AuctionRepositoryImplFixture {
         bidding(저장된_경매_엔티티, 구매자);
         addAuctioneerCount(저장된_경매_엔티티, 1);
 
-        auctionRepository.saveAll(List.of(저장된_경매_엔티티, 삭제된_경매_엔티티));
+        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
+        );
 
-        em.flush();
-        em.clear();
+        auctionRepository.save(삭제된_경매_엔티티);
+        auctionRepository.save(저장된_경매_엔티티);
     }
 
     private void bidding(final Auction targetAuction, final User bidder) {

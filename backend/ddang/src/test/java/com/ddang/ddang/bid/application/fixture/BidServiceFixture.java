@@ -3,7 +3,7 @@ package com.ddang.ddang.bid.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
@@ -14,11 +14,10 @@ import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class BidServiceFixture {
@@ -27,7 +26,7 @@ public class BidServiceFixture {
     private JpaUserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaBidRepository bidRepository;
@@ -130,7 +129,13 @@ public class BidServiceFixture {
         경매1.addAuctionImages(List.of(경매_이미지1));
         경매2.addAuctionImages(List.of(경매_이미지2));
         경매3.addAuctionImages(List.of(경매_이미지3));
-        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3, 입찰_내역이_하나_있던_경매, 종료된_경매, 삭제된_경매));
+
+        auctionRepository.save(경매1);
+        auctionRepository.save(경매2);
+        auctionRepository.save(경매3);
+        auctionRepository.save(입찰_내역이_하나_있던_경매);
+        auctionRepository.save(종료된_경매);
+        auctionRepository.save(삭제된_경매);
 
         final Bid bid1 = new Bid(경매1, 입찰자1, new BidPrice(1_000));
         final Bid bid2 = new Bid(경매2, 입찰자1, new BidPrice(1_000));

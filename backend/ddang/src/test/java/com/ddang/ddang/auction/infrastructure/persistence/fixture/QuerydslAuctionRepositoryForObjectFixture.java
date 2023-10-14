@@ -3,7 +3,10 @@ package com.ddang.ddang.auction.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -13,31 +16,34 @@ import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslAuctionRepositoryForObjectFixture {
 
     @PersistenceContext
-    EntityManager em;
+    private EntityManager em;
 
     @Autowired
-    JpaUserRepository userRepository;
+    private JPAQueryFactory queryFactory;
 
     @Autowired
-    JpaAuctionRepository auctionRepository;
+    private JpaAuctionRepository jpaAuctionRepository;
 
     @Autowired
-    JpaRegionRepository regionRepository;
+    private JpaUserRepository userRepository;
 
     @Autowired
-    JpaCategoryRepository categoryRepository;
+    private JpaRegionRepository regionRepository;
+
+    @Autowired
+    private JpaCategoryRepository categoryRepository;
 
     protected Auction 경매;
     protected Region 서울특별시;
@@ -86,6 +92,13 @@ public class QuerydslAuctionRepositoryForObjectFixture {
 
         경매.addAuctionRegions(List.of(직거래_지역));
 
+        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
+        );
         auctionRepository.save(경매);
+
+        em.flush();
+        em.clear();
     }
 }

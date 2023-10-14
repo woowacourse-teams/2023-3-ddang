@@ -26,11 +26,20 @@ import org.springframework.data.domain.Slice;
 @SuppressWarnings("NonAsciiCharacters")
 class AuctionRepositoryImplTest extends AuctionRepositoryImplFixture {
 
+    @Autowired
+    JpaAuctionRepository jpaAuctionRepository;
+
+    @Autowired
+    JPAQueryFactory queryFactory;
+
     AuctionRepository auctionRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaAuctionRepository jpaAuctionRepository, @Autowired JPAQueryFactory queryFactory) {
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
+    void setUp() {
+        auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
+        );
     }
 
     @Test
@@ -77,8 +86,10 @@ class AuctionRepositoryImplTest extends AuctionRepositoryImplFixture {
             softAssertions.assertThat(actual.get().getAuctionRegions()).isNotNull();
             softAssertions.assertThat(actual.get().getAuctionRegions().get(0)).isNotNull();
             softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion()).isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getFirstRegion()).isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getSecondRegion()).isNotNull();
+            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getFirstRegion())
+                          .isNotNull();
+            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getSecondRegion())
+                          .isNotNull();
             softAssertions.assertThat(actual.get().getSubCategory()).isNotNull();
             softAssertions.assertThat(actual.get().getSubCategory().getMainCategory()).isNotNull();
             softAssertions.assertThat(actual.get().getSeller()).isNotNull();

@@ -3,7 +3,10 @@ package com.ddang.ddang.auction.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
@@ -13,13 +16,13 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslAuctionRepositoryForListFixture {
@@ -28,10 +31,13 @@ public class QuerydslAuctionRepositoryForListFixture {
     private EntityManager em;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private JPAQueryFactory queryFactory;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private JpaAuctionRepository jpaAuctionRepository;
+
+    @Autowired
+    private JpaUserRepository userRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -289,25 +295,27 @@ public class QuerydslAuctionRepositoryForListFixture {
                       .build();
         addAuctioneerCount(경매15, 6);
 
-        final List<Auction> 경매들 = List.of(
-                경매1,
-                경매2,
-                경매3,
-                경매4,
-                경매5,
-                경매6,
-                경매7,
-                경매8,
-                경매9,
-                경매10,
-                경매11,
-                경매12,
-                경매13,
-                경매14,
-                경매15,
-                경매16
+        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
         );
-        auctionRepository.saveAll(경매들);
+
+        auctionRepository.save(경매1);
+        auctionRepository.save(경매2);
+        auctionRepository.save(경매3);
+        auctionRepository.save(경매4);
+        auctionRepository.save(경매5);
+        auctionRepository.save(경매6);
+        auctionRepository.save(경매7);
+        auctionRepository.save(경매8);
+        auctionRepository.save(경매9);
+        auctionRepository.save(경매10);
+        auctionRepository.save(경매11);
+        auctionRepository.save(경매12);
+        auctionRepository.save(경매13);
+        auctionRepository.save(경매14);
+        auctionRepository.save(경매15);
+        auctionRepository.save(경매16);
 
         em.flush();
         em.clear();

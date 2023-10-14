@@ -3,20 +3,23 @@ package com.ddang.ddang.auction.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslAuctionAndImageRepositoryFixture {
@@ -25,7 +28,10 @@ public class QuerydslAuctionAndImageRepositoryFixture {
     private EntityManager em;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private JPAQueryFactory queryFactory;
+
+    @Autowired
+    private JpaAuctionRepository jpaAuctionRepository;
 
     @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
@@ -57,6 +63,10 @@ public class QuerydslAuctionAndImageRepositoryFixture {
                   .oauthId("12345")
                   .build();
 
+        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
+        );
         auctionRepository.save(경매);
         userRepository.save(사용자);
 
