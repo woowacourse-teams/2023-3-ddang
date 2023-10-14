@@ -68,7 +68,7 @@ class JpaChatRoomReportRepositoryTest extends JpaChatRoomReportRepositoryFixture
     @Test
     void 전체_채팅방_신고_목록을_조회한다() {
         // when
-        final List<ChatRoomReport> actual = chatRoomReportRepository.findAllByOrderByIdAsc();
+        final List<ChatRoomReport> actual = chatRoomReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

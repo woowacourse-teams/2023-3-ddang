@@ -52,7 +52,7 @@ public class ChatRoomReportService {
     }
 
     public List<ReadChatRoomReportDto> readAll() {
-        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAllByOrderByIdAsc();
+        final List<ChatRoomReport> auctionReports = chatRoomReportRepository.findAll();
 
         return auctionReports.stream()
                              .map(ReadChatRoomReportDto::from)
