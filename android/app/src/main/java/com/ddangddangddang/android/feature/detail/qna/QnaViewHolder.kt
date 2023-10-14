@@ -14,7 +14,7 @@ class QnaViewHolder private constructor(
         binding.onItemClick = onItemClick
     }
 
-    fun bind(qna: QnaModel.QuestionAndAnswer) {
+    fun bind(qna: QnaModel.QuestionAndAnswerModel) {
         binding.model = qna
     }
 

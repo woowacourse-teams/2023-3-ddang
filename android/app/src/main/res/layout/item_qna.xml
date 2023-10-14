@@ -11,7 +11,7 @@
 
         <variable
             name="model"
-            type="com.ddangddangddang.android.model.QnaModel.QuestionAndAnswer" />
+            type="com.ddangddangddang.android.model.QnaModel.QuestionAndAnswerModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -24,7 +24,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@color/grey_50_to_selected_second_region_bg_selected"
-            android:onClick="@{() -> onItemClick.invoke(model.id)}"
+            android:onClick="@{() -> onItemClick.invoke(model.question.id)}"
             android:paddingHorizontal="16dp"
             android:paddingVertical="18dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,15 +34,20 @@
 
             <TextView
                 style="@style/Body"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{@string/detail_auction_qna_question_prefix(model.questionTitle)}"
+                android:layout_marginEnd="32dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{@string/detail_auction_qna_question_prefix(model.question.content)}"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_qna_status"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Q. 사이클 50 맞음?" />
 
             <TextView
+                android:id="@+id/tv_qna_status"
                 style="@style/AuctionStatusCaption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,7 +79,7 @@
                 style="@style/Body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{model.contents}"
+                android:text="@{model.question.content}"
                 android:textColor="@color/grey_800"
                 app:layout_constraintBottom_toTopOf="@id/tv_delete_question"
                 app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +89,7 @@
             <TextView
                 android:id="@+id/tv_delete_question"
                 style="@style/Body"
-                isVisible="@{model.isQuestioner}"
+                isVisible="@{model.question.isQuestioner}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -115,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="20dp"
-                android:text="@{model.answer == null ? @string/detail_auction_qna_no_answer : model.answer}"
+                android:text="@{model.answer ?? @string/detail_auction_qna_no_answer}"
                 android:textColor="@color/grey_800"
                 app:layout_constraintBottom_toTopOf="@id/tv_write_answer"
                 app:layout_constraintStart_toStartOf="parent"

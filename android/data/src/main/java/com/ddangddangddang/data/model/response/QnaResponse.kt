@@ -3,9 +3,9 @@ package com.ddangddangddang.data.model.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class QnaResponse(val questionAndAnswers: List<QuestionAndAnswer>) {
+data class QnaResponse(val qnas: List<Qna>) {
     @Serializable
-    data class QuestionAndAnswer(val question: Question, val answer: Answer?)
+    data class Qna(val question: Question, val answer: Answer?)
 
     @Serializable
     data class Question(

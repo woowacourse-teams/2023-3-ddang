@@ -13,11 +13,12 @@ enum class QnaStatusModel(
     ;
 
     companion object {
-        private const val ERROR_NOT_FOUND = "[ERROR] 매칭되는 Status가 존재하지 않습니다"
-        fun find(status: String): QnaStatusModel {
-            return values().find { it.name == status } ?: throw IllegalArgumentException(
-                ERROR_NOT_FOUND,
-            )
+        fun find(isExistAnswer: Boolean): QnaStatusModel {
+            return if (isExistAnswer) {
+                COMPLETE
+            } else {
+                WAITING
+            }
         }
     }
 }
