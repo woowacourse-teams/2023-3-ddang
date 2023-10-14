@@ -15,12 +15,13 @@ import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class MessageServiceFixture {
@@ -32,7 +33,7 @@ public class MessageServiceFixture {
     private JpaMessageRepository messageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaChatRoomRepository chatRoomRepository;
@@ -90,7 +91,9 @@ public class MessageServiceFixture {
                                  .oauthId("12347")
                                  .build();
         탈퇴한_사용자.withdrawal();
-        userRepository.saveAll(List.of(발신자, 수신자, 탈퇴한_사용자));
+        userRepository.save(발신자);
+        userRepository.save(수신자);
+        userRepository.save(탈퇴한_사용자);
 
         final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
         final ChatRoom 탈퇴한_사용자와의_채팅방 = new ChatRoom(경매, 탈퇴한_사용자);

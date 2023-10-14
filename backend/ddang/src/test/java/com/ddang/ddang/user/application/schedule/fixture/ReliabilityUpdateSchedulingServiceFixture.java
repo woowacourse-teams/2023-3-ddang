@@ -11,18 +11,19 @@ import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.UserReliability;
-import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserReliabilityRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.util.List;
+import com.ddang.ddang.user.domain.repository.ReliabilityUpdateHistoryRepository;
+import com.ddang.ddang.user.domain.repository.UserReliabilityRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReliabilityUpdateSchedulingServiceFixture {
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private AuctionRepository auctionRepository;
@@ -31,10 +32,10 @@ public class ReliabilityUpdateSchedulingServiceFixture {
     private JpaReviewRepository reviewRepository;
 
     @Autowired
-    private JpaUserReliabilityRepository userReliabilityRepository;
+    private UserReliabilityRepository userReliabilityRepository;
 
     @Autowired
-    private JpaReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
+    private ReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
 
     private double 구매자1_기존_신뢰도_점수 = 3.5d;
     private double 구매자2_기존_신뢰도_점수 = 4.0d;
@@ -120,14 +121,14 @@ public class ReliabilityUpdateSchedulingServiceFixture {
                                       .reliability(Reliability.INITIAL_RELIABILITY)
                                       .oauthId("1006")
                                       .build();
-        userRepository.saveAll(List.of(판매자,
-                구매자1_기존_평가_2개_새로운_평가_1개,
-                구매자2_기존_평가_3개_새로운_평가_2개,
-                구매자3_기존_평가_5개_새로운_평가_1개,
-                구매자4_기존_평가_없고_새로운_평가_1개,
-                구매자5_기존_평가_없고_새로운_평가_3개,
-                구매자6_기존_평가_없고_새로운_평가_없음
-        ));
+        userRepository.save(판매자);
+        userRepository.save(구매자1_기존_평가_2개_새로운_평가_1개);
+        userRepository.save(구매자2_기존_평가_3개_새로운_평가_2개);
+        userRepository.save(구매자3_기존_평가_5개_새로운_평가_1개);
+        userRepository.save(구매자4_기존_평가_없고_새로운_평가_1개);
+        userRepository.save(구매자5_기존_평가_없고_새로운_평가_3개);
+        userRepository.save(구매자6_기존_평가_없고_새로운_평가_없음);
+
         final Auction 경매1 = Auction.builder()
                                    .title("경매1")
                                    .seller(판매자)
@@ -292,7 +293,9 @@ public class ReliabilityUpdateSchedulingServiceFixture {
         final UserReliability 구매자3_기존_신뢰도_반영_정보 = new UserReliability(구매자3_기존_평가_5개_새로운_평가_1개);
         구매자3_기존_신뢰도_반영_정보.updateReliability(new Reviews(List.of(구매자3_기존_평가1, 구매자3_기존_평가2, 구매자3_기존_평가3, 구매자3_기존_평가4, 구매자3_기존_평가5)));
 
-        userReliabilityRepository.saveAll(List.of(구매자1_기존_신뢰도_반영_정보, 구매자2_기존_신뢰도_반영_정보, 구매자3_기존_신뢰도_반영_정보));
+        userReliabilityRepository.save(구매자1_기존_신뢰도_반영_정보);
+        userReliabilityRepository.save(구매자2_기존_신뢰도_반영_정보);
+        userReliabilityRepository.save(구매자3_기존_신뢰도_반영_정보);
 
         reliabilityUpdateHistoryRepository.save(new ReliabilityUpdateHistory(기존에_적용된_평가_중_마지막_평가의_아이디));
 

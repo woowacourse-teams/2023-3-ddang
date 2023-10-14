@@ -3,7 +3,7 @@ package com.ddang.ddang.authentication.application.fixture;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class AuthenticationUserServiceFixture {
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     protected User 사용자;
     protected User 탈퇴한_사용자;
