@@ -21,6 +21,10 @@ class MainViewModel @Inject constructor() : ViewModel() {
         changeCurrentFragmentType(fragmentType)
     }
 
+    init {
+        _event.value = MainEvent.NotificationPermissionCheck
+    }
+
     private fun changeCurrentFragmentType(fragmentType: MainFragmentType) {
         if (currentFragmentType.value == fragmentType) {
             if (fragmentType == MainFragmentType.HOME) {
@@ -33,5 +37,6 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     sealed class MainEvent {
         object HomeToTop : MainEvent()
+        object NotificationPermissionCheck : MainEvent()
     }
 }

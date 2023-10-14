@@ -61,7 +61,6 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         binding.viewModel = viewModel
 
         setupViewModel()
-        askNotificationPermission()
         onBackPressedDispatcher.addCallback(this, callback)
     }
 
@@ -85,6 +84,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     private fun handleEvent(event: MainViewModel.MainEvent) {
         when (event) {
             MainViewModel.MainEvent.HomeToTop -> scrollHomeToTop()
+            MainViewModel.MainEvent.NotificationPermissionCheck -> askNotificationPermission()
         }
     }
 
