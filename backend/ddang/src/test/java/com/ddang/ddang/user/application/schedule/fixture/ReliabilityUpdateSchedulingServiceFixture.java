@@ -6,7 +6,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Reviews;
 import com.ddang.ddang.review.domain.Score;
-import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.ReliabilityUpdateHistory;
 import com.ddang.ddang.user.domain.User;
@@ -14,9 +14,10 @@ import com.ddang.ddang.user.domain.UserReliability;
 import com.ddang.ddang.user.infrastructure.persistence.JpaReliabilityUpdateHistoryRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserReliabilityRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ReliabilityUpdateSchedulingServiceFixture {
@@ -28,7 +29,7 @@ public class ReliabilityUpdateSchedulingServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
     @Autowired
     private JpaUserReliabilityRepository userReliabilityRepository;

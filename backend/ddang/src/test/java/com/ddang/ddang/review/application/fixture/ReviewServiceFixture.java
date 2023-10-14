@@ -11,7 +11,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Score;
-import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
@@ -34,7 +34,7 @@ public class ReviewServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
     private double 구매자가_판매자1에게_받은_평가_점수 = 5.0d;
     private double 구매자가_판매자2에게_받은_평가_점수 = 1.0d;
