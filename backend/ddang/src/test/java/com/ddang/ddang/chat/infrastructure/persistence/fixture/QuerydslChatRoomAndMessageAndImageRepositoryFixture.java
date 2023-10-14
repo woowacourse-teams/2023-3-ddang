@@ -24,13 +24,14 @@ import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @SuppressWarnings("NonAsciiCharacters")
-public class QuerydslChatRoomAndMessageAndImageRepositoryImplFixture {
+public class QuerydslChatRoomAndMessageAndImageRepositoryFixture {
 
     @PersistenceContext
     private EntityManager em;
