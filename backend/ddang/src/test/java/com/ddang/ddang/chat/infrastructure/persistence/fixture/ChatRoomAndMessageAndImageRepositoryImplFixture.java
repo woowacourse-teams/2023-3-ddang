@@ -65,7 +65,7 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
     protected Message 엔초가_지토에게_5시에_보낸_쪽지;
 
     @BeforeEach
-    void setUpFixture(@Autowired JpaChatRoomRepository jpaChatRoomRepository) {
+    void fixtureSetUp(@Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");

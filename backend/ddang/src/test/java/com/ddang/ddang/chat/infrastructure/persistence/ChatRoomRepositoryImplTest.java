@@ -26,7 +26,7 @@ class ChatRoomRepositoryImplTest extends ChatRoomRepositoryImplFixture {
     ChatRoomRepository chatRoomRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaChatRoomRepository jpaChatRoomRepository) {
+    void setUp(@Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
     }
 

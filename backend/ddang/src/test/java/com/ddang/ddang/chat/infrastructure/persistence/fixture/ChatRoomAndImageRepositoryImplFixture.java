@@ -52,7 +52,7 @@ public class ChatRoomAndImageRepositoryImplFixture {
     protected ChatRoom 채팅방;
 
     @BeforeEach
-    void setUpFixture(@Autowired JpaChatRoomRepository jpaChatRoomRepository) {
+    void fixtureSetUp(@Autowired final JpaChatRoomRepository jpaChatRoomRepository) {
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");

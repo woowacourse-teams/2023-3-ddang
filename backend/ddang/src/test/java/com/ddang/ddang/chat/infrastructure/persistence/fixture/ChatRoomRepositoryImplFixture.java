@@ -52,10 +52,10 @@ public class ChatRoomRepositoryImplFixture {
     protected Long 존재하지_않는_채팅방_아이디 = -999L;
 
     @BeforeEach
-    void setUpFixture(
-            @Autowired JPAQueryFactory queryFactory,
-            @Autowired JpaAuctionRepository jpaAuctionRepository,
-            @Autowired JpaChatRoomRepository jpaChatRoomRepository
+    void fixtureSetUp(
+            @Autowired final JPAQueryFactory queryFactory,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final JpaChatRoomRepository jpaChatRoomRepository
     ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
