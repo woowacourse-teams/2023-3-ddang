@@ -31,11 +31,7 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
                 ReportViewModel.ReportEvent.ExitEvent -> finish()
                 ReportViewModel.ReportEvent.SubmitEvent -> submit()
                 ReportViewModel.ReportEvent.BlankContentsEvent -> notifyBlankContents()
-                is ReportViewModel.ReportEvent.ReportArticleFailure -> {
-                    notifyFailureMessage(event.error, R.string.report_submit_failure)
-                }
-
-                is ReportViewModel.ReportEvent.ReportMessageRoomFailure -> {
+                is ReportViewModel.ReportEvent.ReportFailure -> {
                     notifyFailureMessage(event.error, R.string.report_submit_failure)
                 }
             }

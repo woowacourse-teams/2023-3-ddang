@@ -60,17 +60,17 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {
                         _event.value =
-                            ReportEvent.ReportArticleFailure(ErrorType.FAILURE(response.error))
+                            ReportEvent.ReportFailure(ErrorType.FAILURE(response.error))
                     }
 
                     is ApiResponse.NetworkError -> {
                         _event.value =
-                            ReportEvent.ReportArticleFailure(ErrorType.NETWORK_ERROR)
+                            ReportEvent.ReportFailure(ErrorType.NETWORK_ERROR)
                     }
 
                     is ApiResponse.Unexpected -> {
                         _event.value =
-                            ReportEvent.ReportArticleFailure(ErrorType.UNEXPECTED)
+                            ReportEvent.ReportFailure(ErrorType.UNEXPECTED)
                     }
                 }
             }
@@ -88,17 +88,17 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.FAILURE(response.error))
+                            ReportEvent.ReportFailure(ErrorType.FAILURE(response.error))
                     }
 
                     is ApiResponse.NetworkError -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.NETWORK_ERROR)
+                            ReportEvent.ReportFailure(ErrorType.NETWORK_ERROR)
                     }
 
                     is ApiResponse.Unexpected -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.UNEXPECTED)
+                            ReportEvent.ReportFailure(ErrorType.UNEXPECTED)
                     }
                 }
             }
@@ -117,17 +117,17 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.FAILURE(response.error))
+                            ReportEvent.ReportFailure(ErrorType.FAILURE(response.error))
                     }
 
                     is ApiResponse.NetworkError -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.NETWORK_ERROR)
+                            ReportEvent.ReportFailure(ErrorType.NETWORK_ERROR)
                     }
 
                     is ApiResponse.Unexpected -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.UNEXPECTED)
+                            ReportEvent.ReportFailure(ErrorType.UNEXPECTED)
                     }
                 }
             }
@@ -146,17 +146,17 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.FAILURE(response.error))
+                            ReportEvent.ReportFailure(ErrorType.FAILURE(response.error))
                     }
 
                     is ApiResponse.NetworkError -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.NETWORK_ERROR)
+                            ReportEvent.ReportFailure(ErrorType.NETWORK_ERROR)
                     }
 
                     is ApiResponse.Unexpected -> {
                         _event.value =
-                            ReportEvent.ReportMessageRoomFailure(ErrorType.UNEXPECTED)
+                            ReportEvent.ReportFailure(ErrorType.UNEXPECTED)
                     }
                 }
             }
@@ -168,7 +168,6 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
         object ExitEvent : ReportEvent()
         object SubmitEvent : ReportEvent()
         object BlankContentsEvent : ReportEvent()
-        data class ReportArticleFailure(val error: ErrorType) : ReportEvent()
-        data class ReportMessageRoomFailure(val error: ErrorType) : ReportEvent()
+        data class ReportFailure(val error: ErrorType) : ReportEvent()
     }
 }
