@@ -26,7 +26,7 @@ class UserReliabilityRepositoryImplTest extends UserReliabilityRepositoryImplFix
     UserReliabilityRepository userReliabilityRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaUserReliabilityRepository jpaUserReliabilityRepository) {
+    void setUp(@Autowired final JpaUserReliabilityRepository jpaUserReliabilityRepository) {
         userReliabilityRepository = new UserReliabilityRepositoryImpl(jpaUserReliabilityRepository);
     }
 

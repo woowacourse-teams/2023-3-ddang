@@ -25,7 +25,7 @@ class ReliabilityUpdateHistoryRepositoryImplTest {
     ReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaReliabilityUpdateHistoryRepository jpaReliabilityUpdateHistoryRepository) {
+    void setUp(@Autowired final JpaReliabilityUpdateHistoryRepository jpaReliabilityUpdateHistoryRepository) {
         reliabilityUpdateHistoryRepository = new ReliabilityUpdateHistoryRepositoryImpl(jpaReliabilityUpdateHistoryRepository);
     }
 

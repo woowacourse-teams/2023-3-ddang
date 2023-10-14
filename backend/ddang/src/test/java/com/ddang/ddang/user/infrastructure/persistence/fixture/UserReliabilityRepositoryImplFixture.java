@@ -25,8 +25,8 @@ public class UserReliabilityRepositoryImplFixture {
 
     @BeforeEach
     void setUp(
-            @Autowired JpaUserRepository jpaUserRepository,
-            @Autowired JpaUserReliabilityRepository jpaUserReliabilityRepository
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaUserReliabilityRepository jpaUserReliabilityRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
         userReliabilityRepository = new UserReliabilityRepositoryImpl(jpaUserReliabilityRepository);

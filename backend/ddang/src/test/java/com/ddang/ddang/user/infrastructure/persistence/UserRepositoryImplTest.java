@@ -27,7 +27,7 @@ class UserRepositoryImplTest extends UserRepositoryImplFixture {
     UserRepository userRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaUserRepository jpaUserRepository) {
+    void setUp(@Autowired final JpaUserRepository jpaUserRepository) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
     }
 

@@ -72,7 +72,7 @@ public class AuctionRepositoryImplFixture {
 
     @BeforeEach
     void fixtureSetUp(
-            @Autowired JpaUserRepository jpaUserRepository
+            @Autowired final JpaUserRepository jpaUserRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
 

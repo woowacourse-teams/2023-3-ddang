@@ -23,7 +23,7 @@ public class UserRepositoryImplFixture {
     protected User 탈퇴한_사용자;
 
     @BeforeEach
-    void setUpFixture(@Autowired JpaUserRepository jpaUserRepository) {
+    void fixtureSetUp(@Autowired final JpaUserRepository jpaUserRepository) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
 
         final ProfileImage 사용자_프로필_이미지 = new ProfileImage("upload.png", "store.png");
