@@ -39,7 +39,6 @@ public class QuerydslAuctionRepositoryForObjectFixture {
     @Autowired
     JpaCategoryRepository categoryRepository;
 
-    protected Long 존재하지_않는_경매 = -999L;
     protected Auction 경매;
     protected Region 서울특별시;
     protected Region 강남구;

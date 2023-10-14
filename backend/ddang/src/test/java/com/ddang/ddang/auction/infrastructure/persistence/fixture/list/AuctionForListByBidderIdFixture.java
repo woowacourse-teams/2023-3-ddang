@@ -1,6 +1,7 @@
-package com.ddang.ddang.auction.infrastructure.persistence.fixture;
+package com.ddang.ddang.auction.infrastructure.persistence.fixture.list;
 
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.auction.infrastructure.persistence.fixture.QuerydslAuctionRepositoryForListFixture;
 import com.ddang.ddang.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 

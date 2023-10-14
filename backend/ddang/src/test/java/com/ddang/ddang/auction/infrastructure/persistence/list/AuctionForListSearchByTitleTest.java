@@ -1,7 +1,8 @@
-package com.ddang.ddang.auction.infrastructure.persistence;
+package com.ddang.ddang.auction.infrastructure.persistence.list;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.fixture.AuctionForListSearchByTitleFixture;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.fixture.list.AuctionForListSearchByTitleFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
