@@ -43,13 +43,13 @@ class RegisterAuctionActivity :
     private var startPriceCursorPositionFromEnd: Int = 0
     private var bidUnitCursorPositionFromEnd: Int = 0
     private val startPriceWatcher by lazy {
-        DefaultTextWatcher { cursorPositionFromEnd: Int, startPrice: String ->
+        PriceTextWatcher { cursorPositionFromEnd: Int, startPrice: String ->
             startPriceCursorPositionFromEnd = cursorPositionFromEnd
             viewModel.setStartPrice(startPrice)
         }
     }
     private val bidUnitWatcher by lazy {
-        DefaultTextWatcher { cursorPositionFromEnd: Int, bidUnit: String ->
+        PriceTextWatcher { cursorPositionFromEnd: Int, bidUnit: String ->
             bidUnitCursorPositionFromEnd = cursorPositionFromEnd
             viewModel.setBidUnit(bidUnit)
         }
@@ -238,7 +238,7 @@ class RegisterAuctionActivity :
         regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
     }
 
-    private fun setPrice(editText: EditText, watcher: DefaultTextWatcher, price: Int, cursorPositionFromEnd: Int) {
+    private fun setPrice(editText: EditText, watcher: PriceTextWatcher, price: Int, cursorPositionFromEnd: Int) {
         val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
         editText.removeTextChangedListener(watcher)
         editText.setText(displayPrice)
