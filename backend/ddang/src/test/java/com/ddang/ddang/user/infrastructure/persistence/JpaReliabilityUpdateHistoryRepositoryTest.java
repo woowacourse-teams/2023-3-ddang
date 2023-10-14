@@ -30,6 +30,21 @@ class JpaReliabilityUpdateHistoryRepositoryTest {
     JpaReliabilityUpdateHistoryRepository reliabilityUpdateHistoryRepository;
 
     @Test
+    void 신뢰도_업데이트_기록을_저장한다() {
+        // given
+        final ReliabilityUpdateHistory reliabilityUpdateHistory = new ReliabilityUpdateHistory();
+
+        // when
+        final ReliabilityUpdateHistory actual = reliabilityUpdateHistoryRepository.save(reliabilityUpdateHistory);
+
+        em.flush();
+        em.clear();
+
+        // then
+        assertThat(actual.getId()).isPositive();
+    }
+
+    @Test
     void 신뢰도_업데이트_기록이_없으면_빈_Optional을_반환한다() {
         // when
         final Optional<ReliabilityUpdateHistory> actual = reliabilityUpdateHistoryRepository.findFirstByOrderByIdDesc();
