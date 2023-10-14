@@ -69,6 +69,15 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
     }
 
     @Test
+    void 회원탈퇴한_사용자의_id를_전달하면_빈_Optional을_반환한다() {
+        // when
+        final Optional<User> actual = userRepository.findById(탈퇴한_사용자.getId());
+
+        // then
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
     void 존재하는_oauthId를_전달하면_해당_사용자를_Optional로_감싸_반환한다() {
         // when
         final Optional<User> actual = userRepository.findByOauthId(사용자.getOauthInformation().getOauthId());
@@ -81,33 +90,6 @@ class JpaUserRepositoryTest extends JpaUserRepositoryFixture {
     void 존재하지_않는_oauthId를_전달하면_해당_사용자를_빈_Optional로_반환한다() {
         // when
         final Optional<User> actual = userRepository.findByOauthId(존재하지_않는_oauth_아이디);
-
-        // then
-        assertThat(actual).isEmpty();
-    }
-
-    @Test
-    void 회원가입과_탈퇴하지_않은_사용자_id를_전달하면_해당_사용자를_Optional로_감싸_반환한다() {
-        // when
-        final Optional<User> actual = userRepository.findByIdAndDeletedIsFalse(사용자.getId());
-
-        // then
-        assertThat(actual).contains(사용자);
-    }
-
-    @Test
-    void 회원탈퇴한_사용자의_id를_전달하면_빈_Optional을_반환한다() {
-        // when
-        final Optional<User> actual = userRepository.findByIdAndDeletedIsFalse(탈퇴한_사용자.getId());
-
-        // then
-        assertThat(actual).isEmpty();
-    }
-
-    @Test
-    void 없는_id를_전달하면_빈_Optional을_반환한다() {
-        // when
-        final Optional<User> actual = userRepository.findByIdAndDeletedIsFalse(존재하지_않는_사용자_아이디);
 
         // then
         assertThat(actual).isEmpty();

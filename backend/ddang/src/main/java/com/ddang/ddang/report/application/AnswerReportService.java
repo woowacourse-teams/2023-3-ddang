@@ -32,7 +32,7 @@ public class AnswerReportService {
                                               .orElseThrow(() ->
                                                       new AnswerNotFoundException("해당 답변을 찾을 수 없습니다.")
                                               );
-        final User reporter = userRepository.findByIdAndDeletedIsFalse(answerReportDto.reporterId())
+        final User reporter = userRepository.findById(answerReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         checkInvalidAnswerReport(reporter, answer);
 

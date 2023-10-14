@@ -35,7 +35,7 @@ public class QuestionService {
 
     @Transactional
     public Long create(final CreateQuestionDto questionDto, final String absoluteImageUrl) {
-        final User questioner = userRepository.findByIdAndDeletedIsFalse(questionDto.userId())
+        final User questioner = userRepository.findById(questionDto.userId())
                                               .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final Auction auction = auctionRepository.findPureAuctionById(questionDto.auctionId())
                                                  .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
@@ -78,7 +78,7 @@ public class QuestionService {
     public void deleteById(final Long questionId, final Long userId) {
         final Question question = questionRepository.findById(questionId)
                                                     .orElseThrow(() -> new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));
-        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+        final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         if (!question.isWriter(user)) {

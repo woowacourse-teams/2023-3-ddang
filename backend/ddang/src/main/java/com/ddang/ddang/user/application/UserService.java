@@ -28,7 +28,7 @@ public class UserService {
 
     @Transactional
     public ReadUserDto updateById(final Long userId, final UpdateUserDto userDto) {
-        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+        final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
 
         updateUserByRequest(userDto, user);

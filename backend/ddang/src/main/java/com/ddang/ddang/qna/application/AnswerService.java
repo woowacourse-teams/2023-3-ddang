@@ -67,7 +67,7 @@ public class AnswerService {
     public void deleteById(final Long answerId, final Long userId) {
         final Answer answer = answerRepository.findByIdAndDeletedIsFalse(answerId)
                                               .orElseThrow(() -> new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."));
-        final User user = userRepository.findByIdAndDeletedIsFalse(userId)
+        final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 
         if (!answer.isWriter(user)) {

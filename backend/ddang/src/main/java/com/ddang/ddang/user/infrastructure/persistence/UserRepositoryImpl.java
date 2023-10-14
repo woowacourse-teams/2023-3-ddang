@@ -34,11 +34,6 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByIdAndDeletedIsFalse(final Long id) {
-        return jpaUserRepository.findByIdAndDeletedIsFalse(id);
-    }
-
-    @Override
     public boolean existsByIdAndDeletedIsTrue(final Long id) {
         return jpaUserRepository.existsByIdAndDeletedIsTrue(id);
     }

@@ -163,7 +163,7 @@ public class AuthenticationService {
                                                         .orElseThrow(() ->
                                                                 new InvalidTokenException("유효한 토큰이 아닙니다.")
                                                         );
-        final User user = userRepository.findByIdAndDeletedIsFalse(privateClaims.userId())
+        final User user = userRepository.findById(privateClaims.userId())
                                         .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한이 없습니다."));
         final OAuth2UserInformationProvider provider = providerComposite.findProvider(user.getOauthInformation()
                                                                                           .getOauth2Type());

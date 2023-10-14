@@ -32,7 +32,7 @@ public class QuestionReportService {
                                                     .orElseThrow(() ->
                                                             new QuestionNotFoundException("해당 질문을 찾을 수 없습니다.")
                                                     );
-        final User reporter = userRepository.findByIdAndDeletedIsFalse(questionReportDto.reporterId())
+        final User reporter = userRepository.findById(questionReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         checkInvalidQuestionReport(reporter, question);
 
