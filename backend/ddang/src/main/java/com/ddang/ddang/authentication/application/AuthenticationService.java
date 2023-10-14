@@ -1,7 +1,5 @@
 package com.ddang.ddang.authentication.application;
 
-import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
-
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.LoginUserInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
@@ -24,13 +22,16 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,7 +42,7 @@ public class AuthenticationService {
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaProfileImageRepository profileImageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;

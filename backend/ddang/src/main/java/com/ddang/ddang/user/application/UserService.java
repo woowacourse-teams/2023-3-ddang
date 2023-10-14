@@ -6,7 +6,7 @@ import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.dto.UpdateUserDto;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final StoreImageProcessor imageProcessor;
 
     public ReadUserDto readById(final Long userId) {

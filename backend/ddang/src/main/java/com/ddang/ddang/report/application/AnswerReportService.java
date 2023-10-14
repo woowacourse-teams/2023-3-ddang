@@ -10,7 +10,7 @@ import com.ddang.ddang.report.domain.AnswerReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ import java.util.List;
 public class AnswerReportService {
 
     private final JpaAnswerRepository answerRepository;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaAnswerReportRepository answerReportRepository;
 
     @Transactional

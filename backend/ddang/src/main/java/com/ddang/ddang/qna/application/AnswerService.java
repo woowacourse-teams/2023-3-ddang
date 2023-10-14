@@ -13,7 +13,7 @@ import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AnswerService {
 
     private final ApplicationEventPublisher answerEventPublisher;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
     private final JpaQuestionRepository questionRepository;
     private final JpaAnswerRepository answerRepository;
 
