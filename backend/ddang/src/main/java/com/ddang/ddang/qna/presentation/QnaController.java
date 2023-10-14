@@ -43,6 +43,17 @@ public class QnaController {
                              .build();
     }
 
+    @DeleteMapping("/{questionId}")
+    public ResponseEntity<Void> deleteQuestion(
+            @AuthenticateUser AuthenticationUserInfo userInfo,
+            @PathVariable final Long questionId
+    ) {
+        questionService.deleteById(questionId, userInfo.userId());
+
+        return ResponseEntity.noContent()
+                             .build();
+    }
+
     @PostMapping("/{questionId}/answers")
     public ResponseEntity<Void> createAnswer(
             @AuthenticateUser AuthenticationUserInfo userInfo,
@@ -55,17 +66,6 @@ public class QnaController {
         );
 
         return ResponseEntity.created(URI.create("/auctions/" + answerRequest.auctionId()))
-                             .build();
-    }
-
-    @DeleteMapping("/{questionId}")
-    public ResponseEntity<Void> deleteQuestion(
-            @AuthenticateUser AuthenticationUserInfo userInfo,
-            @PathVariable final Long questionId
-    ) {
-        questionService.deleteById(questionId, userInfo.userId());
-
-        return ResponseEntity.noContent()
                              .build();
     }
 
