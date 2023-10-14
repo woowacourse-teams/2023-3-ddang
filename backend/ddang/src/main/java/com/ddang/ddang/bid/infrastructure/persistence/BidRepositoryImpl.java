@@ -3,9 +3,11 @@ package com.ddang.ddang.bid.infrastructure.persistence;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 @RequiredArgsConstructor
 public class BidRepositoryImpl implements BidRepository {
 
