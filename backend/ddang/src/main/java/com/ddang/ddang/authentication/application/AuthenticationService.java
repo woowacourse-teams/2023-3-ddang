@@ -82,7 +82,7 @@ public class AuthenticationService {
                                                                                 calculateRandomNumber())
                                                                         )
                                                                         .profileImage(findDefaultProfileImage())
-                                                                        .reliability(new Reliability(0.0d))
+                                                                        .reliability(Reliability.INITIAL_RELIABILITY)
                                                                         .oauthId(userInformationDto.findUserId())
                                                                         .oauth2Type(oauth2Type)
                                                                         .build();
