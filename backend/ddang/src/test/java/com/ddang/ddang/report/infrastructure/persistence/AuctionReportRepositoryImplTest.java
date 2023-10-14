@@ -1,10 +1,11 @@
 package com.ddang.ddang.report.infrastructure.persistence;
 
-import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.AuctionReport;
-import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaAuctionReportRepositoryFixture;
+import com.ddang.ddang.report.domain.repository.AuctionReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.fixture.AuctionReportRepositoryFixture;
 import org.assertj.core.api.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -17,13 +18,17 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({JpaConfiguration.class, QuerydslConfiguration.class})
+@Import(QuerydslConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
+class AuctionReportRepositoryImplTest extends AuctionReportRepositoryFixture {
 
-    @Autowired
-    JpaAuctionReportRepository auctionReportRepository;
+    AuctionReportRepository auctionReportRepository;
+
+    @BeforeEach
+    void setUp(@Autowired JpaAuctionReportRepository jpaAuctionReportRepository) {
+        auctionReportRepository = new AuctionReportRepositoryImpl(jpaAuctionReportRepository);
+    }
 
     @Test
     void 경매_신고를_저장한다() {
