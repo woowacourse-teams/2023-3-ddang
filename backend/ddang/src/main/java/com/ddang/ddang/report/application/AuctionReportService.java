@@ -8,7 +8,7 @@ import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.domain.AuctionReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
+import com.ddang.ddang.report.domain.repository.AuctionReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -25,7 +25,7 @@ public class AuctionReportService {
 
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
-    private final JpaAuctionReportRepository auctionReportRepository;
+    private final AuctionReportRepository auctionReportRepository;
 
     @Transactional
     public Long create(final CreateAuctionReportDto auctionReportDto) {
