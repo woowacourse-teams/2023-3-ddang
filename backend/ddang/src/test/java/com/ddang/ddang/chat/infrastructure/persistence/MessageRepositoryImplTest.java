@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
+@SuppressWarnings("NonAsciiCharacters")
 public class MessageRepositoryImplTest extends MessageRepositoryImplFixture {
 
     MessageRepository messageRepository;

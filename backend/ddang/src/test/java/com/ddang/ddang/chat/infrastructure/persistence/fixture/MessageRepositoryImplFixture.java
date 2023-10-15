@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("NonAsciiCharacters")
 public class MessageRepositoryImplFixture {
 
     private MessageRepository messageRepository;
