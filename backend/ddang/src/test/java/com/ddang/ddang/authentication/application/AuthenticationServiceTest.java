@@ -19,7 +19,9 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
+import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.image.infrastructure.persistence.ProfileImageRepositoryImpl;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,7 +38,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
     @Mock
-    JpaProfileImageRepository defaultProfileImageRepository;
+    ProfileImageRepository defaultProfileImageRepository;
 
     @MockBean
     Oauth2UserInformationProviderComposite providerComposite;
@@ -50,8 +52,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    JpaProfileImageRepository profileImageRepository;
+    ProfileImageRepository profileImageRepository;
 
     @Autowired
     TokenEncoder tokenEncoder;
@@ -69,7 +70,9 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     AuthenticationService profileImageNotFoundAuthenticationService;
 
     @BeforeEach
-    void setUp() {
+    void fixtureSetUp(@Autowired final JpaProfileImageRepository jpaProfileImageRepository) {
+        profileImageRepository = new ProfileImageRepositoryImpl(jpaProfileImageRepository);
+
         authenticationService = new AuthenticationService(
                 deviceTokenService,
                 providerComposite,
