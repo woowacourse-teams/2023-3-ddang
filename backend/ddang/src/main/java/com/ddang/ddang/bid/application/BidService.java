@@ -87,18 +87,18 @@ public class BidService {
     }
 
     private void checkInvalidBid(final Auction auction, final User bidder, final CreateBidDto bidDto) {
-        final Bid lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
+        final Optional<Bid> lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
         final BidPrice bidPrice = processBidPrice(bidDto.bidPrice());
 
         checkIsSeller(auction, bidder);
 
-        if (lastBid == null) {
-            checkInvalidFirstBidPrice(auction, bidPrice);
+        if (lastBid.isPresent()) {
+            checkIsNotLastBidder(lastBid.get(), bidder);
+            checkInvalidBidPrice(lastBid.get(), bidPrice);
             return;
         }
 
-        checkIsNotLastBidder(lastBid, bidder);
-        checkInvalidBidPrice(lastBid, bidPrice);
+        checkInvalidFirstBidPrice(auction, bidPrice);
     }
 
     private BidPrice processBidPrice(final int value) {

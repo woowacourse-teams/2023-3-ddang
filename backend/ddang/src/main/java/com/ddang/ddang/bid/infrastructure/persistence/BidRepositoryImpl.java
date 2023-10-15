@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -24,7 +25,7 @@ public class BidRepositoryImpl implements BidRepository {
     }
 
     @Override
-    public Bid findLastBidByAuctionId(final Long auctionId) {
+    public Optional<Bid> findLastBidByAuctionId(final Long auctionId) {
         return jpaBidRepository.findLastBidByAuctionId(auctionId);
     }
 }
