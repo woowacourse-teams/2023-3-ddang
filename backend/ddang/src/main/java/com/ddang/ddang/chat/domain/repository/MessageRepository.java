@@ -17,6 +17,4 @@ public interface MessageRepository {
             final Long chatRoomId,
             final Long lastMessageId
     );
-
-    BooleanExpression isGreaterThanLastId(final Long lastMessageId);
 }
