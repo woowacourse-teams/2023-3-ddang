@@ -80,7 +80,7 @@
     <string name="detail_auction_info_direct_exchange_regions_description">직거래 가능 지역</string>
     <string name="detail_auction_info_seller_info">판매자 정보</string>
 
-    <!-- detail_auction_qua -->
+    <!-- detail_auction_qna -->
     <string name="detail_auction_qna_title">Q&amp;A</string>
     <string name="detail_auction_qna_seller_answer_title">판매자 답변</string>
     <string name="detail_auction_qna_no_answer">아직 작성된 답변이 없습니다.</string>
