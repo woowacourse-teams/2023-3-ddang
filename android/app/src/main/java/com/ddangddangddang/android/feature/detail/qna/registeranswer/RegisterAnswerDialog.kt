@@ -85,6 +85,7 @@ class RegisterAnswerDialog : DialogFragment() {
     }
 
     private fun setupViewModel() {
+        binding.viewModel = viewModel
         viewModel.event.observe(viewLifecycleOwner) {
             handleEvent(it)
         }

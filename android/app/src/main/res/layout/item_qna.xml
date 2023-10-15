@@ -151,7 +151,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="20dp"
-                android:text="@{model.answer ?? @string/detail_auction_qna_no_answer}"
+                android:text="@{model.answer.content ?? @string/detail_auction_qna_no_answer}"
                 android:textColor="@color/grey_800"
                 app:layout_constraintBottom_toTopOf="@id/br_answer_btn"
                 app:layout_constraintStart_toStartOf="parent"
