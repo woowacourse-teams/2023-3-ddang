@@ -27,7 +27,7 @@ class AnswerReportRepositoryImplTest extends AnswerReportRepositoryImplFixture {
     AnswerReportRepository answerReportRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaAnswerReportRepository jpaAnswerReportRepository) {
+    void setUp(@Autowired final JpaAnswerReportRepository jpaAnswerReportRepository) {
         answerReportRepository = new AnswerReportRepositoryImpl(jpaAnswerReportRepository);
     }
 

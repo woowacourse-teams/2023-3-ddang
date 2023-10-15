@@ -27,7 +27,7 @@ class QuestionReportRepositoryImplTest extends QuestionReportRepositoryImplFixtu
     QuestionReportRepository questionReportRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaQuestionReportRepository jpaQuestionReportRepository) {
+    void setUp(@Autowired final JpaQuestionReportRepository jpaQuestionReportRepository) {
         questionReportRepository = new QuestionReportRepositoryImpl(jpaQuestionReportRepository);
     }
 

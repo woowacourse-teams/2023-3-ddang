@@ -27,7 +27,7 @@ class AuctionReportRepositoryImplImplTest extends AuctionReportRepositoryImplFix
     AuctionReportRepository auctionReportRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaAuctionReportRepository jpaAuctionReportRepository) {
+    void setUp(@Autowired final JpaAuctionReportRepository jpaAuctionReportRepository) {
         auctionReportRepository = new AuctionReportRepositoryImpl(jpaAuctionReportRepository);
     }
 
