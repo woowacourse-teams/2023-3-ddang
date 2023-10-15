@@ -266,13 +266,17 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                  jsonPath("$.auction.bidUnit", is(경매_조회_dto.bidUnit())),
                                  jsonPath("$.auction.registerTime").exists(),
                                  jsonPath("$.auction.closingTime").exists(),
-                                 jsonPath("$.auction.directRegions[0].first", is(경매_조회_dto.auctionRegions().get(0).firstRegionDto().regionName())),
-                                 jsonPath("$.auction.directRegions[0].second", is(경매_조회_dto.auctionRegions().get(0).secondRegionDto().regionName())),
-                                 jsonPath("$.auction.directRegions[0].third", is(경매_조회_dto.auctionRegions().get(0).thirdRegionDto().regionName())),
+                                 jsonPath("$.auction.directRegions[0].first",
+                                         is(경매_조회_dto.auctionRegions().get(0).firstRegionDto().regionName())),
+                                 jsonPath("$.auction.directRegions[0].second",
+                                         is(경매_조회_dto.auctionRegions().get(0).secondRegionDto().regionName())),
+                                 jsonPath("$.auction.directRegions[0].third",
+                                         is(경매_조회_dto.auctionRegions().get(0).thirdRegionDto().regionName())),
                                  jsonPath("$.auction.auctioneerCount", is(경매_조회_dto.auctioneerCount())),
                                  jsonPath("$.chat.id").exists(),
                                  jsonPath("$.chat.isChatParticipant", is(true)),
                                  jsonPath("$.isOwner", is(true)),
+                                 jsonPath("$.isLastBidder", is(false)),
                                  jsonPath("$.seller.nickname", is(경매_조회_dto.sellerName())),
                                  jsonPath("$.seller.id", is(경매_조회_dto.sellerId()), Long.class),
                                  jsonPath("$.seller.image", containsString(프로필_이미지_상대_주소))
@@ -313,18 +317,26 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                                    )
                                                    .andExpectAll(
                                                            status().isOk(),
-                                                           jsonPath("$.auctions.[0].id", is(두번째_경매_조회_dto.id()), Long.class),
+                                                           jsonPath("$.auctions.[0].id", is(두번째_경매_조회_dto.id()),
+                                                                   Long.class),
                                                            jsonPath("$.auctions.[0].title", is(두번째_경매_조회_dto.title())),
-                                                           jsonPath("$.auctions.[0].image", containsString(경매_이미지_상대_주소)),
-                                                           jsonPath("$.auctions.[0].auctionPrice", is(두번째_경매_조회_dto.startPrice())),
+                                                           jsonPath("$.auctions.[0].image",
+                                                                   containsString(경매_이미지_상대_주소)),
+                                                           jsonPath("$.auctions.[0].auctionPrice",
+                                                                   is(두번째_경매_조회_dto.startPrice())),
                                                            jsonPath("$.auctions.[0].status").exists(),
-                                                           jsonPath("$.auctions.[0].auctioneerCount", is(두번째_경매_조회_dto.auctioneerCount())),
-                                                           jsonPath("$.auctions.[1].id", is(첫번째_경매_조회_dto.id()), Long.class),
+                                                           jsonPath("$.auctions.[0].auctioneerCount",
+                                                                   is(두번째_경매_조회_dto.auctioneerCount())),
+                                                           jsonPath("$.auctions.[1].id", is(첫번째_경매_조회_dto.id()),
+                                                                   Long.class),
                                                            jsonPath("$.auctions.[1].title", is(첫번째_경매_조회_dto.title())),
-                                                           jsonPath("$.auctions.[1].image", containsString(경매_이미지_상대_주소)),
-                                                           jsonPath("$.auctions.[1].auctionPrice", is(첫번째_경매_조회_dto.startPrice())),
+                                                           jsonPath("$.auctions.[1].image",
+                                                                   containsString(경매_이미지_상대_주소)),
+                                                           jsonPath("$.auctions.[1].auctionPrice",
+                                                                   is(첫번째_경매_조회_dto.startPrice())),
                                                            jsonPath("$.auctions.[1].status").exists(),
-                                                           jsonPath("$.auctions.[1].auctioneerCount", is(첫번째_경매_조회_dto.auctioneerCount())),
+                                                           jsonPath("$.auctions.[1].auctioneerCount",
+                                                                   is(첫번째_경매_조회_dto.auctioneerCount())),
                                                            jsonPath("$.isLast").exists()
                                                    );
 
@@ -410,7 +422,7 @@ class AuctionControllerTest extends AuctionControllerFixture {
         resultActions.andDo(
                 restDocs.document(
                         requestHeaders(
-                                headerWithName("Authorization").description("회원 Bearer 인증 정보")
+                                headerWithName("Authorization").description("사용자 Bearer 인증 정보")
                         ),
                         pathParameters(
                                 parameterWithName("auctionId").description("조회하고자 하는 경매 ID")
@@ -458,9 +470,12 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                                                    .description("판매자 신뢰도"),
                                 fieldWithPath("chat.id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
                                 fieldWithPath("chat.isChatParticipant").type(JsonFieldType.BOOLEAN)
-                                                                       .description("채팅방을 생성 가능 유저 여부"),
+                                                                       .description(
+                                                                               "로그인한 사용자가 채팅방 생성이 가능한 사용자인지에 대한 여부"),
                                 fieldWithPath("isOwner").type(JsonFieldType.BOOLEAN)
-                                                        .description("유저가 해당 경매 글을 작성한 유저인지에 대한 여부")
+                                                        .description("로그인한 사용자가 해당 경매 글을 작성한 사용자인지에 대한 여부"),
+                                fieldWithPath("isLastBidder").type(JsonFieldType.BOOLEAN)
+                                                             .description("로그인한 사용자가 해당 경매의 최고 입찰자인지에 대한 여부")
                         )
                 )
         );

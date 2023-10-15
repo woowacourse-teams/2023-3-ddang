@@ -913,25 +913,9 @@ Authorization: Bearer accessToken
 }</code></pre>
 </div>
 </div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. /oauth2/withdrawal/{oauth2Type}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>oauth2Type</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">소셜 로그인을 할 서비스 선택(kakao로 고정)</p></td>
-</tr>
-</tbody>
-</table>
+<div class="paragraph">
+<p>Unresolved directive in docs.adoc - include::/Users/labtop/intellij/test-ddang/2023-3-ddang/backend/ddang/build/generated-snippets/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/path-parameters.adoc[]</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 50%;">
@@ -1294,7 +1278,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 3. /regions/{firstId}</caption>
+<caption class="title">Table 2. /regions/{firstId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1373,7 +1357,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 4. /regions/{firstId}/{secondId}</caption>
+<caption class="title">Table 3. /regions/{firstId}/{secondId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -1469,7 +1453,7 @@ Content-Type: image/png
 Content-Disposition: form-data; name=request; filename=request
 Content-Type: application/json
 
-{"title":"제목","description":"내용","bidUnit":1000,"startPrice":1000,"closingTime":"2023-10-18T00:23:05.544558","subCategoryId":2,"thirdRegionIds":[3]}
+{"title":"제목","description":"내용","bidUnit":1000,"startPrice":1000,"closingTime":"2023-10-18T21:12:06.450773","subCategoryId":2,"thirdRegionIds":[3]}
 --6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
 </div>
 </div>
@@ -2018,7 +2002,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 5. /auctions/{auctionId}</caption>
+<caption class="title">Table 4. /auctions/{auctionId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2050,7 +2034,7 @@ Authorization: Bearer accessToken</code></pre>
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Authorization</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원 Bearer 인증 정보</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자 Bearer 인증 정보</p></td>
 </tr>
 </tbody>
 </table>
@@ -2076,8 +2060,8 @@ Content-Type: application/json
     "lastBidPrice" : null,
     "status" : "UNBIDDEN",
     "bidUnit" : 1000,
-    "registerTime" : "2023-10-15T00:23:05",
-    "closingTime" : "2023-10-15T00:23:05",
+    "registerTime" : "2023-10-15T21:12:06",
+    "closingTime" : "2023-10-15T21:12:06",
     "directRegions" : [ {
       "first" : "서울특별시",
       "second" : "강서구",
@@ -2095,7 +2079,8 @@ Content-Type: application/json
     "id" : 1,
     "isChatParticipant" : true
   },
-  "isOwner" : true
+  "isOwner" : true,
+  "isLastBidder" : false
 }</code></pre>
 </div>
 </div>
@@ -2241,12 +2226,17 @@ Content-Type: application/json
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>chat.isChatParticipant</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">채팅방을 생성 가능 유저 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자가 채팅방 생성이 가능한 사용자인지에 대한 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>isOwner</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">유저가 해당 경매 글을 작성한 유저인지에 대한 여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자가 해당 경매 글을 작성한 사용자인지에 대한 여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>isLastBidder</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">로그인한 사용자가 해당 경매의 최고 입찰자인지에 대한 여부</p></td>
 </tr>
 </tbody>
 </table>
@@ -2264,7 +2254,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 6. /auctions/{auctionId}</caption>
+<caption class="title">Table 5. /auctions/{auctionId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2415,7 +2405,7 @@ Authorization: Bearer accessToken</code></pre>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 7. /questions/{questionId}</caption>
+<caption class="title">Table 6. /questions/{questionId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2543,7 +2533,7 @@ Authorization: Bearer accessToken</code></pre>
 </tbody>
 </table>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 8. /questions/answers/{answerId}</caption>
+<caption class="title">Table 7. /questions/answers/{answerId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -2599,8 +2589,9 @@ Content-Type: application/json
         "name" : "질문자",
         "image" : "http://localhost:8080/users/images/1"
       },
-      "createdTime" : "2023-10-15T00:23:05",
-      "content" : "질문1"
+      "createdTime" : "2023-10-15T21:12:06",
+      "content" : "질문1",
+      "isQuestioner" : false
     },
     "answer" : {
       "id" : 1,
@@ -2609,7 +2600,7 @@ Content-Type: application/json
         "name" : "판매자",
         "image" : "http://localhost:8080/users/images/2"
       },
-      "createdTime" : "2023-10-15T00:23:05",
+      "createdTime" : "2023-10-15T21:12:06",
       "content" : "답변1"
     }
   }, {
@@ -2620,8 +2611,9 @@ Content-Type: application/json
         "name" : "질문자",
         "image" : "http://localhost:8080/users/images/1"
       },
-      "createdTime" : "2023-10-15T00:23:05",
-      "content" : "질문2"
+      "createdTime" : "2023-10-15T21:12:06",
+      "content" : "질문2",
+      "isQuestioner" : false
     },
     "answer" : {
       "id" : 2,
@@ -2630,7 +2622,7 @@ Content-Type: application/json
         "name" : "판매자",
         "image" : "http://localhost:8080/users/images/2"
       },
-      "createdTime" : "2023-10-15T00:23:05",
+      "createdTime" : "2023-10-15T21:12:06",
       "content" : "답변1"
     }
   } ]
@@ -2695,6 +2687,11 @@ Content-Type: application/json
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">질문 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].question.isQuestioner</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">질문 작성자 여부 확인</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>qnas.[].answer</code></p></td>
@@ -2838,12 +2835,12 @@ Content-Type: application/json
   "name" : "사용자1",
   "profileImage" : "http://localhost:8080/users/images/1",
   "price" : 10000,
-  "bidTime" : "2023-10-15T00:23:10"
+  "bidTime" : "2023-10-15T21:12:13"
 }, {
   "name" : "사용자2",
   "profileImage" : "http://localhost:8080/users/images/2",
   "price" : 12000,
-  "bidTime" : "2023-10-15T00:23:10"
+  "bidTime" : "2023-10-15T21:12:13"
 } ]</code></pre>
 </div>
 </div>
@@ -3037,7 +3034,7 @@ Content-Type: application/json
     "price" : 10000
   },
   "lastMessage" : {
-    "createdAt" : "2023-10-15T00:23:11",
+    "createdAt" : "2023-10-15T21:12:16",
     "contents" : "메시지1"
   },
   "isChatAvailable" : true
@@ -3055,7 +3052,7 @@ Content-Type: application/json
     "price" : 20000
   },
   "lastMessage" : {
-    "createdAt" : "2023-10-15T00:23:11",
+    "createdAt" : "2023-10-15T21:12:16",
     "contents" : "메시지2"
   },
   "isChatAvailable" : true
@@ -3167,7 +3164,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 9. /chattings/{chatRoomId}</caption>
+<caption class="title">Table 8. /chattings/{chatRoomId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3318,7 +3315,7 @@ Authorization: Bearer accessToken
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 10. /chattings/{chatRoomId}/messages</caption>
+<caption class="title">Table 9. /chattings/{chatRoomId}/messages</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3429,7 +3426,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 11. /chattings/{chatRoomId}/messages</caption>
+<caption class="title">Table 10. /chattings/{chatRoomId}/messages</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -3493,7 +3490,7 @@ Content-Type: application/json
 
 [ {
   "id" : 1,
-  "createdAt" : "2023-10-15T00:23:11",
+  "createdAt" : "2023-10-15T21:12:16",
   "isMyMessage" : true,
   "contents" : "메시지내용"
 } ]</code></pre>
@@ -3643,7 +3640,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "회원1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:26",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3655,7 +3652,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "회원2"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:26",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3667,7 +3664,7 @@ Content-Type: application/json
       "id" : 4,
       "name" : "회원3"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:26",
     "auction" : {
       "id" : 1,
       "title" : "제목"
@@ -3831,7 +3828,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "chatRoom" : {
       "id" : 1
     },
@@ -3842,7 +3839,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "구매자2"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "chatRoom" : {
       "id" : 1
     },
@@ -3853,7 +3850,7 @@ Content-Type: application/json
       "id" : 3,
       "name" : "구매자2"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "chatRoom" : {
       "id" : 1
     },
@@ -4017,7 +4014,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "question" : {
       "id" : 1
     },
@@ -4028,7 +4025,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "question" : {
       "id" : 2
     },
@@ -4039,7 +4036,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "question" : {
       "id" : 3
     },
@@ -4203,7 +4200,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "answer" : {
       "id" : 1
     },
@@ -4214,7 +4211,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "answer" : {
       "id" : 2
     },
@@ -4225,7 +4222,7 @@ Content-Type: application/json
       "id" : 2,
       "name" : "구매자1"
     },
-    "createdTime" : "2023-10-15T00:23:18",
+    "createdTime" : "2023-10-15T21:12:27",
     "answer" : {
       "id" : 3
     },
@@ -4455,7 +4452,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 12. /reviews/{reviewId}</caption>
+<caption class="title">Table 11. /reviews/{reviewId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4526,7 +4523,7 @@ Content-Type: application/json</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 13. /reviews/users/{userId}</caption>
+<caption class="title">Table 12. /reviews/users/{userId}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4561,7 +4558,7 @@ Content-Type: application/json
   },
   "content" : "친절하다.",
   "score" : 5.0,
-  "createdTime" : "2023-10-15T00:23:19"
+  "createdTime" : "2023-10-15T21:12:29"
 }, {
   "id" : 2,
   "writer" : {
@@ -4571,7 +4568,7 @@ Content-Type: application/json
   },
   "content" : "친절하다.",
   "score" : 5.0,
-  "createdTime" : "2023-10-15T00:23:19"
+  "createdTime" : "2023-10-15T21:12:29"
 } ]</code></pre>
 </div>
 </div>
@@ -4645,7 +4642,7 @@ Authorization: Bearer accessToken</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 14. /auctions/{auctionId}/reviews</caption>
+<caption class="title">Table 13. /auctions/{auctionId}/reviews</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -4729,7 +4726,7 @@ Content-Type: application/json
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2023-10-11 10:31:11 +0900
+Last updated 2023-10-11 10:23:49 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
