@@ -18,6 +18,7 @@ import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
+import com.ddangddangddang.android.util.view.convertDpToPx
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -41,7 +42,7 @@ class AuctionDetailActivity :
     // 액션바 높이를 반환하는 함수
     private fun getActionBarHeight(context: Context): Int {
         val styledAttributes =
-            context.theme.obtainStyledAttributes(intArrayOf(android.R.attr.actionBarSize))
+            context.theme.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.actionBarSize))
         val actionBarHeight = styledAttributes.getDimension(0, 0f).toInt()
         styledAttributes.recycle()
         return actionBarHeight
@@ -51,7 +52,9 @@ class AuctionDetailActivity :
     private fun getRemainingHeight(context: Context): Int {
         val screenHeight = context.resources.displayMetrics.heightPixels
         val actionBarHeight = getActionBarHeight(context)
-        return screenHeight - actionBarHeight * 2
+        val tabLayoutHeight = convertDpToPx(48f + 24f)
+        val bottomButtonHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
+        return screenHeight - actionBarHeight - tabLayoutHeight - bottomButtonHeight
     }
 
     // 뷰의 높이를 동적으로 설정하는 함수

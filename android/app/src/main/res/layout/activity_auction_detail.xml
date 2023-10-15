@@ -21,7 +21,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/height_submit_button">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/tb_detail_auction"
@@ -260,7 +261,7 @@
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tb_detail_info"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_marginTop="24dp"
                         android:backgroundTint="@color/grey_50"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -282,7 +283,7 @@
             android:id="@+id/btn_auction_detail_bottom_button"
             style="@style/BigButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/height_submit_button"
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="@dimen/margin_side_layout"
             android:enabled="@{viewModel.auctionDetailBottomButtonStatus.enabled}"
@@ -292,6 +293,7 @@
             android:padding="0dp"
             android:text="@{AuctionDetailFormatter.INSTANCE.getAuctionBottomButtonText(context,viewModel.auctionDetailBottomButtonStatus)}"
             android:textColor="@color/text_active_fixed"
+            android:textSize="18dp"
             tools:text="입찰하기" />
     </FrameLayout>
 </layout>
