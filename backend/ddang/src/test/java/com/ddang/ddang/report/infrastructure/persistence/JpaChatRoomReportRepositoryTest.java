@@ -4,7 +4,7 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaChatRoomReportRepositoryFixture;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
