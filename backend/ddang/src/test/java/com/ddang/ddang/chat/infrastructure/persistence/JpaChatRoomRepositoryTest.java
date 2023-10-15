@@ -23,9 +23,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
     JpaChatRoomRepository jpaChatRoomRepository;
 
