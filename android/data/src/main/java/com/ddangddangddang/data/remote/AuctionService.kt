@@ -150,7 +150,7 @@ interface AuctionService {
     @POST("/questions/{questionId}/answers")
     suspend fun registerAnswer(
         @Path("questionId") questionId: Long,
-        registerAnswerRequest: RegisterAnswerRequest,
+        @Body registerAnswerRequest: RegisterAnswerRequest,
     ): ApiResponse<Unit>
 
     @DELETE("/questions/{questionId}")
