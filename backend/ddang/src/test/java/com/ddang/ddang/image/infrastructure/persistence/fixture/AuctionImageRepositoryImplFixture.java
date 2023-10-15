@@ -1,28 +1,28 @@
 package com.ddang.ddang.image.infrastructure.persistence.fixture;
 
-import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class ProfileImageRepositoryFixture {
+public class AuctionImageRepositoryImplFixture {
 
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
-    private JpaProfileImageRepository profileImageRepository;
+    private JpaAuctionImageRepository jpaAuctionImageRepository;
 
-    protected ProfileImage 프로필_이미지;
+    protected AuctionImage 경매_이미지;
 
     @BeforeEach
     void fixtureSetUp() {
-        프로필_이미지 = new ProfileImage("프로필이미지.png", "프로필이미지.png");
+        경매_이미지 = new AuctionImage("경매이미지.png", "경매이미지.png");
 
-        profileImageRepository.save(프로필_이미지);
+        jpaAuctionImageRepository.save(경매_이미지);
 
         em.flush();
         em.clear();

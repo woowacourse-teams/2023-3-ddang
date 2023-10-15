@@ -3,7 +3,7 @@ package com.ddang.ddang.image.infrastructure.persistence;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.repository.AuctionImageRepository;
-import com.ddang.ddang.image.infrastructure.persistence.fixture.AuctionImageRepositoryFixture;
+import com.ddang.ddang.image.infrastructure.persistence.fixture.AuctionImageRepositoryImplFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import(QuerydslConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuctionImageRepositoryImplTest extends AuctionImageRepositoryFixture {
+class AuctionImageRepositoryImplTest extends AuctionImageRepositoryImplFixture {
 
     AuctionImageRepository auctionImageRepository;
 
