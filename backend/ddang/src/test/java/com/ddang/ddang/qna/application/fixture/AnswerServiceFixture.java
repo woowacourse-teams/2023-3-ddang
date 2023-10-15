@@ -8,8 +8,8 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AnswerServiceFixture {
@@ -29,7 +28,7 @@ public class AnswerServiceFixture {
     private UserRepository userRepository;
 
     @Autowired
-    private JpaQuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     private JpaAnswerRepository answerRepository;
@@ -87,7 +86,8 @@ public class AnswerServiceFixture {
         userRepository.save(판매자가_아닌_사용자);
 
         auctionRepository.save(경매);
-        questionRepository.saveAll(List.of(질문, 답변한_질문));
+        questionRepository.save(질문);
+        questionRepository.save(답변한_질문);
         answerRepository.save(답변);
 
         답변_등록_요청_dto = new CreateAnswerDto(질문.getId(), "답변 드립니다.", 판매자.getId());

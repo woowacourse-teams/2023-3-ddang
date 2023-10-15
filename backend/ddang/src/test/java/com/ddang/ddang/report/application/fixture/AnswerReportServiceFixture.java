@@ -10,8 +10,8 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
 import com.ddang.ddang.report.domain.AnswerReport;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
@@ -37,7 +37,7 @@ public class AnswerReportServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaQuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
     private JpaAnswerRepository answerRepository;
