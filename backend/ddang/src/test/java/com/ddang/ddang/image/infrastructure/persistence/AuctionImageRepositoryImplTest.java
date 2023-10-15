@@ -25,7 +25,7 @@ class AuctionImageRepositoryImplTest extends AuctionImageRepositoryFixture {
     AuctionImageRepository auctionImageRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaAuctionImageRepository jpaAuctionImageRepository) {
+    void setUp(@Autowired final JpaAuctionImageRepository jpaAuctionImageRepository) {
         auctionImageRepository = new AuctionImageRepositoryImpl(jpaAuctionImageRepository);
     }
 
