@@ -71,7 +71,7 @@ public class MessageService {
             validateLastMessageId(request.lastMessageId());
         }
 
-        final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
+        final List<Message> readMessages = messageRepository.findAllByLastMessageId(
                 request.messageReaderId(),
                 chatRoom.getId(),
                 request.lastMessageId()

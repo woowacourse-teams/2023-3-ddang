@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface QuerydslMessageRepository {
 
-    List<Message> findMessagesAllByLastMessageId(
+    List<Message> findAllByLastMessageId(
             final Long messageReaderId,
             final Long chatRoomId,
             final Long lastMessageId);

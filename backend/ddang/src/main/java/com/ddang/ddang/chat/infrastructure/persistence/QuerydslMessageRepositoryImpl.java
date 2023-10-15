@@ -16,7 +16,7 @@ public class QuerydslMessageRepositoryImpl implements QuerydslMessageRepository 
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Message> findMessagesAllByLastMessageId(
+    public List<Message> findAllByLastMessageId(
             final Long messageReaderId,
             final Long chatRoomId,
             final Long lastMessageId
