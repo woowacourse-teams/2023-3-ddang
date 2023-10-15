@@ -10,5 +10,5 @@ public interface DeviceTokenRepository {
 
     Optional<DeviceToken> findByUserId(final Long userId);
 
-    void deleteByUserId(Long id);
+    void deleteByUserId(final Long id);
 }
