@@ -13,8 +13,8 @@ import com.ddang.ddang.qna.application.dto.ReadQuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadUserInQnaDto;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
-import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.qna.domain.repository.AnswerRepository;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
@@ -24,7 +24,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuestionServiceFixture {
@@ -36,10 +35,10 @@ public class QuestionServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaQuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private JpaAnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
     private RegionRepository regionRepository;
@@ -166,8 +165,11 @@ public class QuestionServiceFixture {
         auctionRepository.save(질문과_답변이_존재하는_경매);
         auctionRepository.save(종료된_경매);
         auctionRepository.save(삭제된_경매);
-        questionRepository.saveAll(List.of(질문, 질문2, 질문3));
-        answerRepository.saveAll(List.of(답변1, 답변2));
+        questionRepository.save(질문);
+        questionRepository.save(질문2);
+        questionRepository.save(질문3);
+        answerRepository.save(답변1);
+        answerRepository.save(답변2);
 
         질문_3개_답변_2개가_존재하는_경매_아이디 = 질문과_답변이_존재하는_경매.getId();
 
