@@ -32,9 +32,6 @@ class JpaMessageRepositoryTest extends JpaMessageRepositoryFixture {
         // when
         final Message actual = messageRepository.save(메시지);
 
-        em.flush();
-        em.clear();
-
         // then
         assertThat(actual.getId()).isPositive();
     }
