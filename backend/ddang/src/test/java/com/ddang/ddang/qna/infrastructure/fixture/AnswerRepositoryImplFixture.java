@@ -47,14 +47,14 @@ public class AnswerRepositoryImplFixture {
 
     @BeforeEach
     void setUpFixture(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
-            @Autowired final JPAQueryFactory queryFactory,
             @Autowired final JpaQuestionRepository jpaQuestionRepository,
             @Autowired final JpaAnswerRepository jpaAnswerRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         questionRepository = new QuestionRepositoryImpl(jpaQuestionRepository);
         answerRepository = new AnswerRepositoryImpl(jpaAnswerRepository);
 

@@ -1,14 +1,11 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.fixture.AuctionRepositoryImplFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -20,6 +17,10 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -29,16 +30,13 @@ class AuctionRepositoryImplTest extends AuctionRepositoryImplFixture {
     @Autowired
     JpaAuctionRepository jpaAuctionRepository;
 
-    @Autowired
-    JPAQueryFactory queryFactory;
-
     AuctionRepository auctionRepository;
 
     @BeforeEach
-    void setUp() {
+    void setUp(@Autowired final JPAQueryFactory jpaQueryFactory) {
         auctionRepository = new AuctionRepositoryImpl(
                 jpaAuctionRepository,
-                new QuerydslAuctionRepository(queryFactory)
+                new QuerydslAuctionRepository(jpaQueryFactory)
         );
     }
 

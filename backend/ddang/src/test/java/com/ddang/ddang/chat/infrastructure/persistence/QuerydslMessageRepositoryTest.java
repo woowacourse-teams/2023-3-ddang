@@ -27,8 +27,8 @@ class QuerydslMessageRepositoryTest extends QuerydslMessageRepositoryFixture {
     QuerydslMessageRepository querydslMessageRepository;
 
     @BeforeEach
-    void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslMessageRepository = new QuerydslMessageRepository(queryFactory);
+    void setUp(@Autowired final JPAQueryFactory jpaQueryFactory) {
+        querydslMessageRepository = new QuerydslMessageRepository(jpaQueryFactory);
     }
 
     @Test

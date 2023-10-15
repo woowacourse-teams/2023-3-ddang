@@ -28,7 +28,7 @@ public class QuerydslAuctionAndImageRepositoryFixture {
     private EntityManager em;
 
     @Autowired
-    private JPAQueryFactory queryFactory;
+    private JPAQueryFactory jpaQueryFactory;
 
     @Autowired
     private JpaAuctionRepository jpaAuctionRepository;
@@ -65,7 +65,7 @@ public class QuerydslAuctionAndImageRepositoryFixture {
 
         final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
                 jpaAuctionRepository,
-                new QuerydslAuctionRepository(queryFactory)
+                new QuerydslAuctionRepository(jpaQueryFactory)
         );
         auctionRepository.save(경매);
         userRepository.save(사용자);
