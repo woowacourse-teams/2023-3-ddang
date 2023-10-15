@@ -14,6 +14,11 @@ public class DeviceTokenRepositoryImpl implements DeviceTokenRepository {
     private final JpaDeviceTokenRepository jpaDeviceTokenRepository;
 
     @Override
+    public DeviceToken save(final DeviceToken deviceToken) {
+        return jpaDeviceTokenRepository.save(deviceToken);
+    }
+
+    @Override
     public Optional<DeviceToken> findByUserId(final Long userId) {
         return jpaDeviceTokenRepository.findByUserId(userId);
     }

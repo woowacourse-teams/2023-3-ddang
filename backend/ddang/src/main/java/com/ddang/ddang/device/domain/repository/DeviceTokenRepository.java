@@ -6,6 +6,8 @@ import java.util.Optional;
 
 public interface DeviceTokenRepository {
 
+    DeviceToken save(final DeviceToken deviceToken);
+
     Optional<DeviceToken> findByUserId(final Long userId);
 
     void deleteByUserId(Long id);
