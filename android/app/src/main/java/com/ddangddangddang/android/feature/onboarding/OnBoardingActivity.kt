@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.onboarding
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
@@ -62,7 +63,13 @@ class OnBoardingActivity :
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(MainActivity.getIntent(this))
         finish()
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, OnBoardingActivity::class.java)
+        }
     }
 }

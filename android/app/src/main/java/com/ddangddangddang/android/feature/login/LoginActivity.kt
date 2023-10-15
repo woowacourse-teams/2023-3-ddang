@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -86,12 +87,12 @@ class LoginActivity :
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(MainActivity.getIntent(this))
         finish()
     }
 
     private fun navigateToOnBoarding() {
-        startActivity(Intent(this, OnBoardingActivity::class.java))
+        startActivity(OnBoardingActivity.getIntent(this))
         finish()
     }
 
@@ -102,5 +103,11 @@ class LoginActivity :
             message = type.message ?: defaultMessage,
             actionMessage = actionMessage,
         )
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, LoginActivity::class.java)
+        }
     }
 }

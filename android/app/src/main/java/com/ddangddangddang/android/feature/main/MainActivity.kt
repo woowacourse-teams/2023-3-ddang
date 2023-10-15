@@ -1,6 +1,7 @@
 package com.ddangddangddang.android.feature.main
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -163,5 +164,11 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         val intent = Intent(ACTION_APP_NOTIFICATION_SETTINGS)
         intent.putExtra(EXTRA_APP_PACKAGE, this.packageName)
         startActivity(intent)
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, MainActivity::class.java)
+        }
     }
 }
