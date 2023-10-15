@@ -5,7 +5,7 @@ import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.fixture.NotificationEventListenerFixture;
 import com.ddang.ddang.notification.domain.NotificationStatus;
@@ -47,7 +47,7 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
     MessageService messageService;
 
     @Autowired
-    JpaMessageRepository messageRepository;
+    MessageRepository messageRepository;
 
     @Autowired
     JpaBidRepository bidRepository;
@@ -85,7 +85,7 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(messageRepository.findById(actualSavedMessageId)).isPresent();
+            softAssertions.assertThat(messageRepository.existsById(actualSavedMessageId)).isTrue();
 
             final long actual = events.stream(MessageNotificationEvent.class).count();
             softAssertions.assertThat(actual).isEqualTo(1);
