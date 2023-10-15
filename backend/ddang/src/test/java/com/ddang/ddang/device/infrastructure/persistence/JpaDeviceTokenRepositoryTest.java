@@ -22,12 +22,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 class JpaDeviceTokenRepositoryTest extends JpaDeviceTokenRepositoryFixture {
 
     @Autowired
-    JpaDeviceTokenRepository userDeviceTokenRepository;
+    JpaDeviceTokenRepository jpaDeviceTokenRepository;
 
     @Test
     void 주어진_사용자_아이디에_해당하는_기기토큰을_조회한다() {
         // when
-        final Optional<DeviceToken> actual = userDeviceTokenRepository.findByUserId(사용자.getId());
+        final Optional<DeviceToken> actual = jpaDeviceTokenRepository.findByUserId(사용자.getId());
 
         // then
         assertThat(actual).contains(사용자의_디바이스_토큰);

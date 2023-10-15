@@ -21,7 +21,7 @@ public class JpaDeviceTokenRepositoryFixture {
     private JpaUserRepository userRepository;
 
     @Autowired
-    private JpaDeviceTokenRepository deviceTokenRepository;
+    private JpaDeviceTokenRepository jpaDeviceTokenRepository;
 
     protected User 사용자;
     protected DeviceToken 사용자의_디바이스_토큰;
@@ -38,7 +38,7 @@ public class JpaDeviceTokenRepositoryFixture {
         사용자의_디바이스_토큰 = new DeviceToken(사용자, "deviceToken");
 
         userRepository.save(사용자);
-        deviceTokenRepository.save(사용자의_디바이스_토큰);
+        jpaDeviceTokenRepository.save(사용자의_디바이스_토큰);
 
         em.flush();
         em.clear();
