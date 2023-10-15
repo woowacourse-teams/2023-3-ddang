@@ -8,7 +8,7 @@ import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
@@ -27,7 +27,6 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,7 +46,7 @@ public class ChatRoomServiceFixture {
     private UserRepository userRepository;
 
     @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
@@ -206,7 +205,9 @@ public class ChatRoomServiceFixture {
         final Bid 채팅방_없는_경매_입찰 = new Bid(채팅방이_없는_경매, 구매자, new BidPrice(15_000));
         final Bid 지토가_엔초_경매에_입찰 = new Bid(판매자_엔초_구매자_지토_경매, 지토, new BidPrice(15_000));
         final Bid 엔초가_제이미_경매에_입찰 = new Bid(판매자_제이미_구매자_엔초_경매, 엔초, new BidPrice(15_000));
-        bidRepository.saveAll(List.of(채팅방_없는_경매_입찰, 지토가_엔초_경매에_입찰, 엔초가_제이미_경매에_입찰));
+        bidRepository.save(채팅방_없는_경매_입찰);
+        bidRepository.save(지토가_엔초_경매에_입찰);
+        bidRepository.save(엔초가_제이미_경매에_입찰);
         채팅방이_없는_경매.updateLastBid(채팅방_없는_경매_입찰);
         판매자_엔초_구매자_지토_경매.updateLastBid(지토가_엔초_경매에_입찰);
         판매자_제이미_구매자_엔초_경매.updateLastBid(엔초가_제이미_경매에_입찰);

@@ -6,7 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
@@ -46,7 +46,7 @@ public class FcmNotificationServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     @Autowired
     private JpaAuctionImageRepository auctionImageRepository;

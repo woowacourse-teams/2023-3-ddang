@@ -5,7 +5,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -40,7 +40,7 @@ public class AuctionServiceFixture {
     private UserRepository userRepository;
 
     @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     private Category 가구_카테고리 = new Category("가구");
     private Category 가구_서브_의자_카테고리 = new Category("의자");
@@ -214,7 +214,8 @@ public class AuctionServiceFixture {
         구매자가_입찰한_경매1_입찰 = new Bid(구매자가_입찰한_경매1, 구매자, 구매자가_입찰한_경매1_입찰_가격);
         구매자가_입찰한_경매2_입찰 = new Bid(구매자가_입찰한_경매2, 구매자, 구매자가_입찰한_경매2_입찰_가격);
 
-        bidRepository.saveAll(List.of(구매자가_입찰한_경매1_입찰, 구매자가_입찰한_경매2_입찰));
+        bidRepository.save(구매자가_입찰한_경매1_입찰);
+        bidRepository.save(구매자가_입찰한_경매2_입찰);
 
         구매자가_입찰한_경매1.updateLastBid(구매자가_입찰한_경매1_입찰);
         구매자가_입찰한_경매2.updateLastBid(구매자가_입찰한_경매2_입찰);

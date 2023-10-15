@@ -10,7 +10,7 @@ import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -49,7 +49,7 @@ public class NotificationEventListenerFixture {
     private JpaAuctionImageRepository auctionImageRepository;
 
     @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     @Autowired
     private JpaMessageRepository messageRepository;
@@ -64,7 +64,7 @@ public class NotificationEventListenerFixture {
     protected String 이미지_절대_경로 = "/imageUrl";
 
     @BeforeEach
-    void setUp() {
+    void setUpFixture() {
         final User 발신자_겸_판매자 = User.builder()
                                    .name("발신자 겸 판매자")
                                    .profileImage(new ProfileImage("upload.png", "store.png"))
