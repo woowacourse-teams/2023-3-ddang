@@ -14,11 +14,10 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepositor
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.domain.ChatRoomReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
+import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -44,7 +43,7 @@ public class ChatRoomReportServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaChatRoomReportRepository chatRoomReportRepository;
+    private ChatRoomReportRepository chatRoomReportRepository;
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
@@ -161,7 +160,9 @@ public class ChatRoomReportServiceFixture {
         chatRoomRepository.save(채팅방2);
         chatRoomRepository.save(채팅방3);
 
-        chatRoomReportRepository.saveAll(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
+        chatRoomReportRepository.save(채팅방_신고1);
+        chatRoomReportRepository.save(채팅방_신고2);
+        chatRoomReportRepository.save(채팅방_신고3);
 
         채팅방_신고_요청_dto = new CreateChatRoomReportDto(
                 채팅방1.getId(),
