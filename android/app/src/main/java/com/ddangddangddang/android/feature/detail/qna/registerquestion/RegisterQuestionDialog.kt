@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.detail.qna.writequestion
+package com.ddangddangddang.android.feature.detail.qna.registerquestion
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,18 +10,18 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
-import com.ddangddangddang.android.databinding.FragmentWriteQuestionDialogBinding
+import com.ddangddangddang.android.databinding.FragmentRegisterQuestionDialogBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WriteQuestionDialog : DialogFragment() {
-    private var _binding: FragmentWriteQuestionDialogBinding? = null
-    private val binding: FragmentWriteQuestionDialogBinding
-        get() = binding!!
+class RegisterQuestionDialog : DialogFragment() {
+    private var _binding: FragmentRegisterQuestionDialogBinding? = null
+    private val binding: FragmentRegisterQuestionDialogBinding
+        get() = _binding!!
 
-    private val viewModel: WriteQuestionViewModel by viewModels()
+    private val viewModel: RegisterQuestionViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,34 +34,10 @@ class WriteQuestionDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentWriteQuestionDialogBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentRegisterQuestionDialogBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        setupViewModel()
-        return super.onCreateView(inflater, container, savedInstanceState)
-    }
-
-    private fun setupViewModel() {
-        viewModel.event.observe(viewLifecycleOwner) {
-            handleEvent(it)
-        }
-    }
-
-    private fun handleEvent(event: WriteQuestionViewModel.WriteQuestionEvent) {
-        when (event) {
-            WriteQuestionViewModel.WriteQuestionEvent.Cancel -> dismiss()
-            is WriteQuestionViewModel.WriteQuestionEvent.FailureSubmitQuestion -> {
-                notifyFailureMessage(
-                    event.errorType,
-                    R.string.detail_auction_qna_question_register_failure,
-                )
-            }
-
-            WriteQuestionViewModel.WriteQuestionEvent.SubmitQuestion -> {
-                notifySuccessMessage()
-                dismiss()
-            }
-        }
+        return binding.root
     }
 
     private fun notifySuccessMessage() {
@@ -74,6 +50,31 @@ class WriteQuestionDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setupViewModel()
+    }
+
+    private fun setupViewModel() {
+        binding.viewModel = viewModel
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
+        }
+    }
+
+    private fun handleEvent(event: RegisterQuestionViewModel.WriteQuestionEvent) {
+        when (event) {
+            RegisterQuestionViewModel.WriteQuestionEvent.Cancel -> dismiss()
+            is RegisterQuestionViewModel.WriteQuestionEvent.FailureSubmitQuestion -> {
+                notifyFailureMessage(
+                    event.errorType,
+                    R.string.detail_auction_qna_question_register_failure,
+                )
+            }
+
+            RegisterQuestionViewModel.WriteQuestionEvent.SubmitQuestion -> {
+                notifySuccessMessage()
+                dismiss()
+            }
+        }
     }
 
     companion object {
@@ -81,11 +82,11 @@ class WriteQuestionDialog : DialogFragment() {
         private const val AUCTION_ID_KEY = "auction_id"
 
         fun show(fragmentManager: FragmentManager, auctionId: Long) {
-            val dialog = WriteQuestionDialog()
+            val dialog = RegisterQuestionDialog()
             dialog.arguments = Bundle().apply {
                 putLong(AUCTION_ID_KEY, auctionId)
             }
-            WriteQuestionDialog().show(fragmentManager, WRITE_QUESTION_TAG)
+            dialog.show(fragmentManager, WRITE_QUESTION_TAG)
         }
     }
 }

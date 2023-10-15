@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.detail.qna.writeanswer
+package com.ddangddangddang.android.feature.detail.qna.registeranswer
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
-class WriteAnswerViewModel @Inject constructor(private val repository: AuctionRepository) : ViewModel() {
+class RegisterAnswerViewModel @Inject constructor(private val repository: AuctionRepository) : ViewModel() {
 
     private val _event: SingleLiveEvent<WriteAnswerEvent> = SingleLiveEvent()
     val event: LiveData<WriteAnswerEvent>

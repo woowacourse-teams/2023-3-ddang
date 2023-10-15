@@ -7,14 +7,14 @@
 
         <variable
             name="viewModel"
-            type="com.ddangddangddang.android.feature.detail.qna.writeanswer.WriteAnswerViewModel" />
+            type="com.ddangddangddang.android.feature.detail.qna.registerquestion.RegisterQuestionViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
-        tools:context=".feature.detail.qna.writeanswer.WriteAnswerDialog">
+        tools:context=".feature.detail.qna.registerquestion.RegisterQuestionDialog">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -37,25 +37,25 @@
                 app:layout_constraintGuide_end="24dp" />
 
             <TextView
-                android:id="@+id/tv_write_answer_title"
+                android:id="@+id/tv_write_question_title"
                 style="@style/Header2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@string/detail_auction_qna_answer_write"
+                android:text="@string/detail_auction_qna_question_write"
                 android:textColor="@color/grey_900"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintStart_toStartOf="@id/gl_begin"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/et_answer_contents"
+                android:id="@+id/et_question_contents"
                 style="@style/Body"
                 android:layout_width="264dp"
                 android:layout_height="300dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
                 android:gravity="top"
-                android:hint="@string/detail_auction_qna_answer_contents_hint"
+                android:hint="@string/detail_auction_qna_question_contents_hint"
                 android:importantForAutofill="no"
                 android:inputType="textMultiLine"
                 android:paddingHorizontal="12dp"
@@ -64,11 +64,11 @@
                 android:textColor="@color/grey_900"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintStart_toStartOf="@id/gl_begin"
-                app:layout_constraintTop_toBottomOf="@id/tv_write_answer_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_write_question_title"
                 tools:text="힝잉잉" />
 
             <Button
-                android:id="@+id/btn_answer_cancel"
+                android:id="@+id/btn_question_cancel"
                 style="@style/NegativeButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -79,11 +79,11 @@
                 android:onClick="@{() -> viewModel.cancel()}"
                 android:text="@string/detail_auction_bid_dialog_cancel"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintEnd_toStartOf="@id/btn_answer_submit"
-                app:layout_constraintTop_toBottomOf="@id/et_answer_contents" />
+                app:layout_constraintEnd_toStartOf="@id/btn_question_submit"
+                app:layout_constraintTop_toBottomOf="@id/et_question_contents" />
 
             <Button
-                android:id="@+id/btn_answer_submit"
+                android:id="@+id/btn_question_submit"
                 style="@style/PositiveButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,10 +93,10 @@
                 android:minWidth="0dp"
                 android:minHeight="0dp"
                 android:onClick="@{() -> viewModel.submit()}"
-                android:text="@string/detail_auction_bid_dialog_submit"
+                android:text="@string/detail_auction_qna_submit"
                 android:textSize="@dimen/textsize_body"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_answer_contents" />
+                app:layout_constraintTop_toBottomOf="@id/et_question_contents" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

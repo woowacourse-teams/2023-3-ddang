@@ -10,7 +10,8 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentQnaBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
-import com.ddangddangddang.android.feature.detail.qna.writeanswer.WriteAnswerDialog
+import com.ddangddangddang.android.feature.detail.qna.registeranswer.RegisterAnswerDialog
+import com.ddangddangddang.android.feature.detail.qna.registerquestion.RegisterQuestionDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.ReportInfo
 import com.ddangddangddang.android.model.ReportType
@@ -29,7 +30,7 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
 
         override fun onSubmitAnswerClick(questionId: Long) {
             activityViewModel.auctionDetailModel.value?.let { model ->
-                WriteAnswerDialog.show(parentFragmentManager, model.id, questionId)
+                RegisterAnswerDialog.show(parentFragmentManager, model.id, questionId)
             }
         }
 
@@ -54,6 +55,7 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
         super.onViewCreated(view, savedInstanceState)
         setupQnas()
         setupViewModel()
+        setupBinding()
     }
 
     private fun setupQnas() {
@@ -100,5 +102,13 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
 
     private fun navigateToReport(type: ReportType, info: ReportInfo) {
         startActivity(ReportActivity.getIntent(requireContext(), type.ordinal, info))
+    }
+
+    private fun setupBinding() {
+        binding.clWriteQuestion.setOnClickListener {
+            activityViewModel.auctionDetailModel.value?.let { model ->
+                RegisterQuestionDialog.show(parentFragmentManager, model.id)
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.ddangddangddang.android.feature.detail.qna.writeanswer
+package com.ddangddangddang.android.feature.detail.qna.registeranswer
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -10,18 +10,18 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
-import com.ddangddangddang.android.databinding.FragmentWriteAnswerDialogBinding
+import com.ddangddangddang.android.databinding.FragmentRegisterAnswerDialogBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WriteAnswerDialog : DialogFragment() {
-    private var _binding: FragmentWriteAnswerDialogBinding? = null
-    private val binding: FragmentWriteAnswerDialogBinding
-        get() = binding!!
+class RegisterAnswerDialog : DialogFragment() {
+    private var _binding: FragmentRegisterAnswerDialogBinding? = null
+    private val binding: FragmentRegisterAnswerDialogBinding
+        get() = _binding!!
 
-    private val viewModel: WriteAnswerViewModel by viewModels()
+    private val viewModel: RegisterAnswerViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,29 +34,23 @@ class WriteAnswerDialog : DialogFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
-        _binding = FragmentWriteAnswerDialogBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentRegisterAnswerDialogBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
-        setupViewModel()
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return binding.root
     }
 
-    private fun setupViewModel() {
-        viewModel.event.observe(viewLifecycleOwner) {
-            handleEvent(it)
-        }
-    }
-
-    private fun handleEvent(event: WriteAnswerViewModel.WriteAnswerEvent) {
+    private fun handleEvent(event: RegisterAnswerViewModel.WriteAnswerEvent) {
         when (event) {
-            WriteAnswerViewModel.WriteAnswerEvent.Cancel -> dismiss()
-            is WriteAnswerViewModel.WriteAnswerEvent.FailureSubmitAnswer -> {
+            RegisterAnswerViewModel.WriteAnswerEvent.Cancel -> dismiss()
+            is RegisterAnswerViewModel.WriteAnswerEvent.FailureSubmitAnswer -> {
                 notifyFailureMessage(
                     event.errorType,
                     R.string.detail_auction_qna_answer_register_failure,
                 )
             }
-            WriteAnswerViewModel.WriteAnswerEvent.SubmitAnswer -> {
+
+            RegisterAnswerViewModel.WriteAnswerEvent.SubmitAnswer -> {
                 notifySuccessMessage()
                 dismiss()
             }
@@ -73,6 +67,13 @@ class WriteAnswerDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setupViewModel()
+    }
+
+    private fun setupViewModel() {
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
+        }
     }
 
     companion object {
@@ -81,13 +82,13 @@ class WriteAnswerDialog : DialogFragment() {
         private const val QUESTION_ID_KEY = "question_id"
 
         fun show(fragmentManager: FragmentManager, auctionId: Long, questionId: Long) {
-            val dialog = WriteAnswerDialog()
+            val dialog = RegisterAnswerDialog()
             dialog.arguments =
                 Bundle().apply {
                     putLong(AUCTION_ID_KEY, auctionId)
                     putLong(QUESTION_ID_KEY, questionId)
                 }
-            WriteAnswerDialog().show(fragmentManager, WRITE_ANSWER_TAG)
+            dialog.show(fragmentManager, WRITE_ANSWER_TAG)
         }
     }
 }
