@@ -41,7 +41,6 @@ public class AuthenticationService {
     private static final Reliability INITIALIZE_USER_RELIABILITY = new Reliability(0.0d);
     private static final String PRIVATE_CLAIMS_KEY = "userId";
 
-    // TODO: 2023/10/15 [질문] deviceTokenService에 delete 메서드가 없어서 기기토큰 레포지토리가 사용되고 있는 것 같은데, 추후 리팩토링을 해야할까요?
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final UserRepository userRepository;
