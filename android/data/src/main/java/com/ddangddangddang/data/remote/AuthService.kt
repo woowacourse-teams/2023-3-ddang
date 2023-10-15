@@ -34,7 +34,7 @@ interface AuthService {
         @Header("Authorization") authorization: String,
     ): ApiResponse<ValidateTokenResponse>
 
-    @POST("/oauth2/withdrawal/kakao")
+    @POST("/oauth2/withdrawal")
     suspend fun withdrawal(
         @Header("Authorization") authorization: String,
         @Body request: WithdrawalRequest,
