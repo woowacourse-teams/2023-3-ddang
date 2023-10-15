@@ -6,11 +6,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface JpaBidRepository extends JpaRepository<Bid, Long> {
 
-    List<Bid> findByAuctionIdOrderByIdAsc(final Long id);
+    List<Bid> findAllByAuctionIdOrderByIdAsc(final Long auctionId);
 
-    @Query("select b from Bid b where b.auction.id = :auctionId order by b.id desc limit 1")
-    Bid findLastBidByAuctionId(@Param("auctionId") final Long id);
+    @Query("SELECT b FROM Bid b WHERE b.auction.id = :auctionId ORDER BY b.id DESC LIMIT 1")
+    Optional<Bid> findLastBidByAuctionId(@Param("auctionId") final Long auctionId);
 }

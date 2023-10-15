@@ -1,5 +1,10 @@
 package com.ddang.ddang.authentication.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
@@ -14,7 +19,9 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
+import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.image.infrastructure.persistence.ProfileImageRepositoryImpl;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,18 +32,13 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
     @Mock
-    JpaProfileImageRepository defaultProfileImageRepository;
+    ProfileImageRepository defaultProfileImageRepository;
 
     @MockBean
     Oauth2UserInformationProviderComposite providerComposite;
@@ -50,8 +52,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     @Autowired
     UserRepository userRepository;
 
-    @Autowired
-    JpaProfileImageRepository profileImageRepository;
+    ProfileImageRepository profileImageRepository;
 
     @Autowired
     TokenEncoder tokenEncoder;
@@ -69,7 +70,9 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     AuthenticationService profileImageNotFoundAuthenticationService;
 
     @BeforeEach
-    void setUp() {
+    void fixtureSetUp(@Autowired final JpaProfileImageRepository jpaProfileImageRepository) {
+        profileImageRepository = new ProfileImageRepositoryImpl(jpaProfileImageRepository);
+
         authenticationService = new AuthenticationService(
                 deviceTokenService,
                 providerComposite,
@@ -120,7 +123,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     void 가입한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
         given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
-        given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입한_사용자_회원_정보);
 
         // when
         final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
@@ -146,10 +149,10 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     }
 
     @Test
-    void 가입하지_않은_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
+    void 가입하지_않은_사용자가_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
         given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
-        given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
 
         // when
         final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
@@ -158,6 +161,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty();
             softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.isSignUpUser()).isTrue();
         });
     }
 
@@ -165,7 +169,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     void 탈퇴한_회원이_소셜_로그인을_할_경우_accessToken과_refreshToken을_반환한다() {
         // given
         given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
-        given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입한_사용자_회원_정보);
 
         // when
         final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
@@ -174,6 +178,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty();
             softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.isSignUpUser()).isFalse();
         });
     }
 
@@ -227,7 +232,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     void 가입한_회원이_탈퇴하는_경우_정상처리한다() throws InvalidWithdrawalException {
         // given
         given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
-        given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_회원_정보);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입한_사용자_회원_정보);
 
         // when
         authenticationService.withdrawal(유효한_액세스_토큰, 유효한_리프레시_토큰);

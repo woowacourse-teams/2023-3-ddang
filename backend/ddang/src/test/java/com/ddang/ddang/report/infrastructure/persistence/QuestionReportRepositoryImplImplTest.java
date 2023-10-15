@@ -3,8 +3,10 @@ package com.ddang.ddang.report.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.QuestionReport;
-import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaQuestionReportRepositoryFixture;
+import com.ddang.ddang.report.domain.repository.QuestionReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.fixture.QuestionReportRepositoryImplFixture;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -20,10 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaQuestionReportRepositoryTest extends JpaQuestionReportRepositoryFixture {
+class QuestionReportRepositoryImplTest extends QuestionReportRepositoryImplFixture {
 
-    @Autowired
-    JpaQuestionReportRepository questionReportRepository;
+    QuestionReportRepository questionReportRepository;
+
+    @BeforeEach
+    void setUp(@Autowired final JpaQuestionReportRepository jpaQuestionReportRepository) {
+        questionReportRepository = new QuestionReportRepositoryImpl(jpaQuestionReportRepository);
+    }
 
     @Test
     void 질문_신고를_등록한다() {
@@ -58,7 +64,7 @@ class JpaQuestionReportRepositoryTest extends JpaQuestionReportRepositoryFixture
     @Test
     void 신고된_질문_목록을_조회한다() {
         // when
-        final List<QuestionReport> actual = questionReportRepository.findAllByOrderByIdAsc();
+        final List<QuestionReport> actual = questionReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

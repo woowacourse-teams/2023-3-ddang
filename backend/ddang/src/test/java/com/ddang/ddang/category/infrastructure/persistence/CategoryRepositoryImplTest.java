@@ -26,7 +26,7 @@ class CategoryRepositoryImplTest extends CategoryRepositoryFixture {
     CategoryRepository categoryRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaCategoryRepository jpaCategoryRepository) {
+    void setUp(@Autowired final JpaCategoryRepository jpaCategoryRepository) {
         categoryRepository = new CategoryRepositoryImpl(jpaCategoryRepository);
     }
 

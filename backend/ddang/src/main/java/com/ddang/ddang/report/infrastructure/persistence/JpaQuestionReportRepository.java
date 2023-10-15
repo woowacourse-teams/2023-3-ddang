@@ -1,8 +1,8 @@
 package com.ddang.ddang.report.infrastructure.persistence;
 
 import com.ddang.ddang.report.domain.QuestionReport;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -10,6 +10,12 @@ public interface JpaQuestionReportRepository extends JpaRepository<QuestionRepor
 
     boolean existsByQuestionIdAndReporterId(final Long questionId, final Long reporterId);
 
-    @EntityGraph(attributePaths = {"reporter", "question"})
-    List<QuestionReport> findAllByOrderByIdAsc();
+    @Query("""
+        SELECT qr
+        FROM QuestionReport qr
+        JOIN FETCH qr.reporter
+        JOIN FETCH qr.question
+        ORDER BY qr.id ASC
+    """)
+    List<QuestionReport> findAll();
 }

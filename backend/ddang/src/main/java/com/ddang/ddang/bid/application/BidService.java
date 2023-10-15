@@ -14,7 +14,7 @@ import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
 import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -36,7 +36,7 @@ public class BidService {
     private final AuctionRepository auctionRepository;
     private final AuctionAndImageRepository auctionAndImageRepository;
     private final UserRepository userRepository;
-    private final JpaBidRepository bidRepository;
+    private final BidRepository bidRepository;
 
     @Transactional
     public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
@@ -87,18 +87,18 @@ public class BidService {
     }
 
     private void checkInvalidBid(final Auction auction, final User bidder, final CreateBidDto bidDto) {
-        final Bid lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
+        final Optional<Bid> lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
         final BidPrice bidPrice = processBidPrice(bidDto.bidPrice());
 
         checkIsSeller(auction, bidder);
 
-        if (lastBid == null) {
-            checkInvalidFirstBidPrice(auction, bidPrice);
+        if (lastBid.isPresent()) {
+            checkIsNotLastBidder(lastBid.get(), bidder);
+            checkInvalidBidPrice(lastBid.get(), bidPrice);
             return;
         }
 
-        checkIsNotLastBidder(lastBid, bidder);
-        checkInvalidBidPrice(lastBid, bidPrice);
+        checkInvalidFirstBidPrice(auction, bidPrice);
     }
 
     private BidPrice processBidPrice(final int value) {
@@ -144,7 +144,7 @@ public class BidService {
 
     public List<ReadBidDto> readAllByAuctionId(final Long auctionId) {
         if (auctionRepository.existsById(auctionId)) {
-            final List<Bid> bids = bidRepository.findByAuctionIdOrderByIdAsc(auctionId);
+            final List<Bid> bids = bidRepository.findAllByAuctionId(auctionId);
 
             return bids.stream()
                        .map(ReadBidDto::from)

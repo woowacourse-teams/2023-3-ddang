@@ -7,7 +7,7 @@ import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
 import com.ddang.ddang.report.application.dto.ReadAnswerReportDto;
 import com.ddang.ddang.report.application.exception.InvalidAnswererReportException;
 import com.ddang.ddang.report.domain.AnswerReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
+import com.ddang.ddang.report.domain.repository.AnswerReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -24,7 +24,7 @@ public class AnswerReportService {
 
     private final AnswerRepository answerRepository;
     private final UserRepository userRepository;
-    private final JpaAnswerReportRepository answerReportRepository;
+    private final AnswerReportRepository answerReportRepository;
 
     @Transactional
     public Long create(final CreateAnswerReportDto answerReportDto) {
@@ -52,7 +52,7 @@ public class AnswerReportService {
     }
 
     public List<ReadAnswerReportDto> readAll() {
-        final List<AnswerReport> answerReports = answerReportRepository.findAllByOrderByIdAsc();
+        final List<AnswerReport> answerReports = answerReportRepository.findAll();
 
         return answerReports.stream()
                             .map(ReadAnswerReportDto::from)

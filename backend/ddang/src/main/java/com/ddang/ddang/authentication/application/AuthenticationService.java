@@ -1,5 +1,7 @@
 package com.ddang.ddang.authentication.application;
 
+import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
+
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.LoginUserInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
@@ -19,31 +21,29 @@ import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
+import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    private static final Reliability INITIALIZE_USER_RELIABILITY = new Reliability(0.0d);
     private static final String PRIVATE_CLAIMS_KEY = "userId";
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final UserRepository userRepository;
-    private final JpaProfileImageRepository profileImageRepository;
+    private final ProfileImageRepository profileImageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
@@ -80,10 +80,12 @@ public class AuthenticationService {
                                               .orElseGet(() -> {
                                                   final User user = User.builder()
                                                                         .name(oauth2Type.calculateNickname(
-                                                                                calculateRandomNumber()))
+                                                                                calculateRandomNumber())
+                                                                        )
                                                                         .profileImage(findDefaultProfileImage())
-                                                                        .reliability(new Reliability(0.0d))
+                                                                        .reliability(INITIALIZE_USER_RELIABILITY)
                                                                         .oauthId(userInformationDto.findUserId())
+                                                                        .oauth2Type(oauth2Type)
                                                                         .build();
 
                                                   isSignUpUser.set(true);
