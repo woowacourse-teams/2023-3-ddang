@@ -67,8 +67,8 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
     DeviceTokenRepository deviceTokenRepository;
 
-    // TODO: 2023/10/15 개행 추가
     AuthenticationService authenticationService;
+
     AuthenticationService profileImageNotFoundAuthenticationService;
 
     @BeforeEach
