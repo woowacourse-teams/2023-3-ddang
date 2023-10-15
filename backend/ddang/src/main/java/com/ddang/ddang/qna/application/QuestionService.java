@@ -11,11 +11,11 @@ import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionExce
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import lombok.RequiredArgsConstructor;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +31,7 @@ public class QuestionService {
     private final ApplicationEventPublisher questionEventPublisher;
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
-    private final JpaQuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
 
     @Transactional
     public Long create(final CreateQuestionDto questionDto, final String absoluteImageUrl) {

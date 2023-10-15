@@ -9,8 +9,8 @@ import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -26,7 +26,7 @@ public class AnswerService {
 
     private final ApplicationEventPublisher answerEventPublisher;
     private final UserRepository userRepository;
-    private final JpaQuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
     private final JpaAnswerRepository answerRepository;
 
     @Transactional

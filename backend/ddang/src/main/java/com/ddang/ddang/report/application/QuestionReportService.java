@@ -2,7 +2,7 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
@@ -22,13 +22,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class QuestionReportService {
 
-    private final JpaQuestionRepository questionRepository;
+    private final QuestionRepository questionRepository;
     private final UserRepository userRepository;
     private final JpaQuestionReportRepository questionReportRepository;
 
     @Transactional
     public Long create(final CreateQuestionReportDto questionReportDto) {
-        final Question question = questionRepository.findByIdAndDeletedIsFalse(questionReportDto.questionId())
+        final Question question = questionRepository.findById(questionReportDto.questionId())
                                                     .orElseThrow(() ->
                                                             new QuestionNotFoundException("해당 질문을 찾을 수 없습니다.")
                                                     );
