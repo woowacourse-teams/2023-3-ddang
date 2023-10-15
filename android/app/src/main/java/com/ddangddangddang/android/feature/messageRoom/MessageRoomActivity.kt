@@ -15,7 +15,6 @@ import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.android.model.ReportInfo
-import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.reciever.MessageReceiver
@@ -87,7 +86,6 @@ class MessageRoomActivity :
         startActivity(
             ReportActivity.getIntent(
                 this,
-                ReportType.MessageRoomReport.ordinal,
                 ReportInfo.MessageRoomReportInfo(roomId),
             ),
         )

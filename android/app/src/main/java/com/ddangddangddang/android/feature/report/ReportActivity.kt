@@ -8,7 +8,6 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityReportBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.model.ReportInfo
-import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.compat.getSerializableExtraCompat
 import com.ddangddangddang.android.util.view.Toaster
@@ -45,7 +44,7 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
             notifyNavigateToReportPageFailed()
             return
         }
-        viewModel.setReportInfo(ReportType.values()[typeIndex], info)
+        viewModel.setReportInfo(info)
     }
 
     private fun submit() {
@@ -66,9 +65,8 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
         private const val DEFAULT_VALUE = -1L
         private const val REPORT_TYPE_KEY = "report_type_key"
         private const val REPORT_ID_KEY = "report_id_key"
-        fun getIntent(context: Context, reportTypeIndex: Int, info: ReportInfo): Intent =
+        fun getIntent(context: Context, info: ReportInfo): Intent =
             Intent(context, ReportActivity::class.java).apply {
-                putExtra(REPORT_TYPE_KEY, reportTypeIndex)
                 putExtra(REPORT_ID_KEY, info)
             }
     }

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.ReportInfo
-import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportQuestionRequest
@@ -22,14 +21,12 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
     val event: LiveData<ReportEvent>
         get() = _event
 
-    private lateinit var reportType: ReportType
     private lateinit var reportInfo: ReportInfo
     val reportContents = MutableLiveData<String>()
 
     private var isLoading: Boolean = false
 
-    fun setReportInfo(type: ReportType, info: ReportInfo) {
-        reportType = type
+    fun setReportInfo(info: ReportInfo) {
         reportInfo = info
     }
 
@@ -112,7 +109,8 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
         viewModelScope.launch {
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
-                val request = ReportQuestionRequest(reportInfo.auctionId, reportInfo.questionId, contents)
+                val request =
+                    ReportQuestionRequest(reportInfo.auctionId, reportInfo.questionId, contents)
                 when (val response = repository.reportQuestion(request)) {
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {
@@ -141,7 +139,8 @@ class ReportViewModel @Inject constructor(private val repository: AuctionReposit
         viewModelScope.launch {
             reportContents.value?.let { contents ->
                 if (contents.isEmpty()) return@launch setBlankContentsEvent() // 내용이 비어있는 경우
-                val request = ReportAnswerRequest(reportInfo.auctionId, reportInfo.answerId, contents)
+                val request =
+                    ReportAnswerRequest(reportInfo.auctionId, reportInfo.answerId, contents)
                 when (val response = repository.reportAnswer(request)) {
                     is ApiResponse.Success -> _event.value = ReportEvent.SubmitEvent // 정상적인 신고 접수
                     is ApiResponse.Failure -> {

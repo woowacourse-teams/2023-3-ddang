@@ -14,7 +14,6 @@ import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.ReportInfo
-import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -124,7 +123,7 @@ class AuctionDetailActivity :
     }
 
     private fun navigateToReport(auctionId: Long) {
-        startActivity(ReportActivity.getIntent(this, ReportType.ArticleReport.ordinal, ReportInfo.ArticleReportInfo(auctionId)))
+        startActivity(ReportActivity.getIntent(this, ReportInfo.ArticleReportInfo(auctionId)))
     }
 
     private fun navigateToImageDetail(images: List<String>, focusPosition: Int) {
