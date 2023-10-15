@@ -16,7 +16,7 @@ public interface JpaAnswerRepository extends JpaRepository<Answer, Long> {
         JOIN FETCH an.question q
         JOIN FETCH q.auction a
         JOIN FETCH a.seller
-        WHERE an.deleted = false AND a.id = :answerId
+        WHERE an.deleted = false AND an.id = :answerId
     """)
     Optional<Answer> findByIdAndDeletedIsFalse(final Long answerId);
 }
