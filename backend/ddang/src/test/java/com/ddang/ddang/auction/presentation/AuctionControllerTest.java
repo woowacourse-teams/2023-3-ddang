@@ -266,6 +266,7 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                  jsonPath("$.auction.bidUnit", is(경매_조회_dto.bidUnit())),
                                  jsonPath("$.auction.registerTime").exists(),
                                  jsonPath("$.auction.closingTime").exists(),
+                                 jsonPath("$.auction.hasLastBidder").exists(),
                                  jsonPath("$.auction.directRegions[0].first", is(경매_조회_dto.auctionRegions().get(0).firstRegionDto().regionName())),
                                  jsonPath("$.auction.directRegions[0].second", is(경매_조회_dto.auctionRegions().get(0).secondRegionDto().regionName())),
                                  jsonPath("$.auction.directRegions[0].third", is(경매_조회_dto.auctionRegions().get(0).thirdRegionDto().regionName())),
@@ -313,18 +314,26 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                                    )
                                                    .andExpectAll(
                                                            status().isOk(),
-                                                           jsonPath("$.auctions.[0].id", is(두번째_경매_조회_dto.id()), Long.class),
+                                                           jsonPath("$.auctions.[0].id", is(두번째_경매_조회_dto.id()),
+                                                                   Long.class),
                                                            jsonPath("$.auctions.[0].title", is(두번째_경매_조회_dto.title())),
-                                                           jsonPath("$.auctions.[0].image", containsString(경매_이미지_상대_주소)),
-                                                           jsonPath("$.auctions.[0].auctionPrice", is(두번째_경매_조회_dto.startPrice())),
+                                                           jsonPath("$.auctions.[0].image",
+                                                                   containsString(경매_이미지_상대_주소)),
+                                                           jsonPath("$.auctions.[0].auctionPrice",
+                                                                   is(두번째_경매_조회_dto.startPrice())),
                                                            jsonPath("$.auctions.[0].status").exists(),
-                                                           jsonPath("$.auctions.[0].auctioneerCount", is(두번째_경매_조회_dto.auctioneerCount())),
-                                                           jsonPath("$.auctions.[1].id", is(첫번째_경매_조회_dto.id()), Long.class),
+                                                           jsonPath("$.auctions.[0].auctioneerCount",
+                                                                   is(두번째_경매_조회_dto.auctioneerCount())),
+                                                           jsonPath("$.auctions.[1].id", is(첫번째_경매_조회_dto.id()),
+                                                                   Long.class),
                                                            jsonPath("$.auctions.[1].title", is(첫번째_경매_조회_dto.title())),
-                                                           jsonPath("$.auctions.[1].image", containsString(경매_이미지_상대_주소)),
-                                                           jsonPath("$.auctions.[1].auctionPrice", is(첫번째_경매_조회_dto.startPrice())),
+                                                           jsonPath("$.auctions.[1].image",
+                                                                   containsString(경매_이미지_상대_주소)),
+                                                           jsonPath("$.auctions.[1].auctionPrice",
+                                                                   is(첫번째_경매_조회_dto.startPrice())),
                                                            jsonPath("$.auctions.[1].status").exists(),
-                                                           jsonPath("$.auctions.[1].auctioneerCount", is(첫번째_경매_조회_dto.auctioneerCount())),
+                                                           jsonPath("$.auctions.[1].auctioneerCount",
+                                                                   is(첫번째_경매_조회_dto.auctioneerCount())),
                                                            jsonPath("$.isLast").exists()
                                                    );
 
@@ -448,6 +457,8 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                                                                .description("세 번째 직거래 지역"),
                                 fieldWithPath("auction.auctioneerCount").type(JsonFieldType.NUMBER)
                                                                         .description("경매 참여자 수"),
+                                fieldWithPath("auction.hasLastBidder").type(JsonFieldType.BOOLEAN)
+                                                                      .description("최종 입찰자가 존재하는지 여부"),
                                 fieldWithPath("seller").type(JsonFieldType.OBJECT).description("판매자 정보"),
                                 fieldWithPath("seller.id").type(JsonFieldType.NUMBER).description("판매자 ID"),
                                 fieldWithPath("seller.image").type(JsonFieldType.STRING)

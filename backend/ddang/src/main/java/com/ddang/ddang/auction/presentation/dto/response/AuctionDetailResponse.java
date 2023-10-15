@@ -35,7 +35,9 @@ public record AuctionDetailResponse(
 
         List<DirectRegionResponse> directRegions,
 
-        int auctioneerCount
+        int auctioneerCount,
+
+        boolean hasLastBidder
 ) {
 
     public static AuctionDetailResponse from(final ReadAuctionDto dto) {
@@ -52,7 +54,8 @@ public record AuctionDetailResponse(
                 dto.registerTime(),
                 dto.closingTime(),
                 convertDirectRegionsResponse(dto),
-                dto.auctioneerCount()
+                dto.auctioneerCount(),
+                convertHasLastBidder(dto)
         );
     }
 
@@ -68,5 +71,9 @@ public record AuctionDetailResponse(
                   .stream()
                   .map(DirectRegionResponse::from)
                   .toList();
+    }
+
+    private static boolean convertHasLastBidder(final ReadAuctionDto dto) {
+        return dto.lastBidPrice() != null;
     }
 }
