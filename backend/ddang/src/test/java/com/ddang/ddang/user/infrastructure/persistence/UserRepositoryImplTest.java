@@ -112,7 +112,7 @@ class UserRepositoryImplTest extends UserRepositoryImplFixture {
     }
 
     @Test
-    void 이름이_아직_없다면_거짓을_반환한다() {
+    void 마지막_이름이_동일한_이름이_아직_없다면_거짓을_반환한다() {
         // when
         final boolean actual = userRepository.existsByNameEndingWith(존재하지_않는_사용자_이름);
 
@@ -121,11 +121,29 @@ class UserRepositoryImplTest extends UserRepositoryImplFixture {
     }
 
     @Test
-    void 이름이_있다면_참을_반환한다() {
+    void 마지막_이름이_동일한_이름이_있다면_참을_반환한다() {
         // when
-        final boolean actual = userRepository.existsByNameEndingWith(존재하는_사용자_이름);
+        final boolean actual = userRepository.existsByNameEndingWith(끝이_동일한_이름);
 
         // then
         assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 이름이_있다면_참을_반환한다() {
+        // when
+        final boolean actual = userRepository.existsByName(존재하는_사용자_이름);
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 이름이_없다면_거짓을_반환한다() {
+        // when
+        final boolean actual = userRepository.existsByName(존재하지_않는_사용자_이름);
+
+        // then
+        assertThat(actual).isFalse();
     }
 }
