@@ -3,11 +3,15 @@ package com.ddangddangddang.android.feature.detail.bidHistory
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
+import com.ddangddangddang.android.di.DefaultDateTimeFormatter
 import com.ddangddangddang.android.model.BidHistoryModel
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class BidHistoryAdapter(
-    private val dateTimeFormatter: DateTimeFormatter,
+@ActivityRetainedScoped
+class BidHistoryAdapter @Inject constructor(
+    @DefaultDateTimeFormatter private val dateTimeFormatter: DateTimeFormatter,
 ) : ListAdapter<BidHistoryModel, BidHistoryViewHolder>(BidHistoryDiffUtil) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BidHistoryViewHolder {
         return BidHistoryViewHolder.create(parent, dateTimeFormatter)

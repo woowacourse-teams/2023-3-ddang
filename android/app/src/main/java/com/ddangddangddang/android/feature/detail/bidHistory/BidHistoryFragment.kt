@@ -12,16 +12,16 @@ import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
-import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class BidHistoryFragment :
     BindingFragment<FragmentBidHistoryBinding>(R.layout.fragment_bid_history) {
     private val activityViewModel: AuctionDetailViewModel by activityViewModels()
     private val viewModel: BidHistoryViewModel by viewModels()
-    private val bidHistoryAdapter by lazy {
-        BidHistoryAdapter(DateTimeFormatter.ofPattern(requireContext().getString(R.string.all_date_time_format)))
-    }
+
+    @Inject
+    lateinit var bidHistoryAdapter: BidHistoryAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
