@@ -36,7 +36,7 @@ public class AuthenticationServiceFixture {
 
     protected PrivateClaims 사용자_id_클레임 = new PrivateClaims(1L);
 
-    protected UserInformationDto 사용자_회원_정보 = new UserInformationDto(12345L);
+    protected UserInformationDto 가입한_사용자_회원_정보 = new UserInformationDto(12345L);
     protected UserInformationDto 탈퇴한_사용자_회원_정보 = new UserInformationDto(54321L);
     protected UserInformationDto 가입하지_않은_사용자_회원_정보 = new UserInformationDto(-99999L);
 
