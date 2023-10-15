@@ -7,8 +7,11 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
+import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.MessageRepositoryImpl;
+import com.ddang.ddang.chat.infrastructure.persistence.QuerydslMessageRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
@@ -16,13 +19,14 @@ import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SuppressWarnings("NonAsciiCharacters")
-public class QuerydslMessageRepositoryImplFixture {
+public class QuerydslMessageRepositoryFixture {
 
     @PersistenceContext
     private EntityManager em;
@@ -40,7 +44,7 @@ public class QuerydslMessageRepositoryImplFixture {
     private JpaChatRoomRepository chatRoomRepository;
 
     @Autowired
-    private JpaMessageRepository messageRepository;
+    private JpaMessageRepository jpaMessageRepository;
 
     protected User 판매자;
     protected User 구매자;
@@ -59,6 +63,15 @@ public class QuerydslMessageRepositoryImplFixture {
 
     @BeforeEach
     void setUp() {
+        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(queryFactory)
+        );
+        final MessageRepository messageRepository = new MessageRepositoryImpl(
+                jpaMessageRepository,
+                new QuerydslMessageRepository(queryFactory)
+        );
+
         판매자 = User.builder()
                   .name("판매자")
                   .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -79,11 +92,6 @@ public class QuerydslMessageRepositoryImplFixture {
                     .title("title")
                     .build();
 
-        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
-                jpaAuctionRepository,
-                new QuerydslAuctionRepository(queryFactory)
-        );
-
         auctionRepository.save(경매);
 
         채팅방 = new ChatRoom(경매, 구매자);
@@ -93,15 +101,15 @@ public class QuerydslMessageRepositoryImplFixture {
         메시지_총_개수 = 10;
         저장된_메시지들 = new ArrayList<>();
         for (int count = 0; count < 메시지_총_개수; count++) {
-            final Message message = Message.builder()
-                                           .chatRoom(채팅방)
-                                           .writer(판매자)
-                                           .receiver(구매자)
-                                           .contents("안녕하세요")
-                                           .build();
-            저장된_메시지들.add(message);
+            final Message 메시지 = Message.builder()
+                                       .chatRoom(채팅방)
+                                       .writer(판매자)
+                                       .receiver(구매자)
+                                       .contents("안녕하세요")
+                                       .build();
+            저장된_메시지들.add(메시지);
+            messageRepository.save(메시지);
         }
-        messageRepository.saveAll(저장된_메시지들);
 
         세_번째_메시지 = 저장된_메시지들.get(2);
         네_번째_메시지 = 저장된_메시지들.get(3);
