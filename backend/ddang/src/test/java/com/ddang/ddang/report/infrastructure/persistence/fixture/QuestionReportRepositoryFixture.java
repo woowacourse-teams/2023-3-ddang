@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class JpaQuestionReportRepositoryFixture {
+public class QuestionReportRepositoryFixture {
 
     @PersistenceContext
     private EntityManager em;
