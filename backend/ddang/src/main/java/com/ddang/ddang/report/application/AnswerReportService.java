@@ -52,7 +52,7 @@ public class AnswerReportService {
     }
 
     public List<ReadAnswerReportDto> readAll() {
-        final List<AnswerReport> answerReports = answerReportRepository.findAllByOrderByIdAsc();
+        final List<AnswerReport> answerReports = answerReportRepository.findAll();
 
         return answerReports.stream()
                             .map(ReadAnswerReportDto::from)
