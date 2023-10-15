@@ -8,7 +8,7 @@ public interface AnswerRepository {
 
     Answer save(final Answer answer);
 
-    boolean existsByQuestionId(Long questionId);
+    boolean existsByQuestionId(final Long questionId);
 
     Optional<Answer> findById(final Long id);
 }
