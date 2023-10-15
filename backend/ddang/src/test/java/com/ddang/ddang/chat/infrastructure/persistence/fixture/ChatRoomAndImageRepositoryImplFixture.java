@@ -35,10 +35,10 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomAndImageRepositoryImplFixture {
 
-    private AuctionRepository auctionRepository;
-
     @Autowired
     private JpaCategoryRepository categoryRepository;
+
+    private AuctionRepository auctionRepository;
 
     private UserRepository userRepository;
 
