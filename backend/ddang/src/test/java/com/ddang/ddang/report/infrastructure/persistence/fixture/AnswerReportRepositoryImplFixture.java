@@ -25,8 +25,6 @@ import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -36,21 +34,18 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class AnswerReportRepositoryImplFixture {
 
-    @PersistenceContext
-    private EntityManager em;
-
-    private UserRepository userRepository;
-
     @Autowired
     private JpaCategoryRepository categoryRepository;
-
-    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaQuestionRepository questionRepository;
 
     @Autowired
     private JpaAnswerRepository answerRepository;
+
+    private UserRepository userRepository;
+
+    private AuctionRepository auctionRepository;
 
     private AnswerReportRepository answerReportRepository;
 
@@ -157,8 +152,5 @@ public class AnswerReportRepositoryImplFixture {
         answerReportRepository.save(답변_신고2);
         answerReportRepository.save(답변_신고3);
         answerReportRepository.save(답변_신고4);
-
-        em.flush();
-        em.clear();
     }
 }

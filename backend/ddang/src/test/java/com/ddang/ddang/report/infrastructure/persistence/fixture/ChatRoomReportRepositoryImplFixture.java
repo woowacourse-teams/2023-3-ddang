@@ -27,8 +27,6 @@ import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -37,9 +35,6 @@ import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomReportRepositoryImplFixture {
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -169,8 +164,5 @@ public class ChatRoomReportRepositoryImplFixture {
         chatRoomReportRepository.save(채팅방_신고1);
         chatRoomReportRepository.save(채팅방_신고2);
         chatRoomReportRepository.save(채팅방_신고3);
-
-        em.flush();
-        em.clear();
     }
 }
