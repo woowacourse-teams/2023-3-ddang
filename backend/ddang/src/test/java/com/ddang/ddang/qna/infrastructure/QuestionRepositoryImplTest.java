@@ -67,8 +67,6 @@ class QuestionRepositoryImplTest extends QuestionRepositoryImplFixture {
         // when
         final List<Question> actual = questionRepository.findAllByAuctionId(질문이_3개_답변이_2개인_경매.getId());
 
-        System.out.println(actual.size());
-
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(3);
