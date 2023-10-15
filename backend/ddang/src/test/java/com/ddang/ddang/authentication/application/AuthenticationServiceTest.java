@@ -1,10 +1,5 @@
 package com.ddang.ddang.authentication.application;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.BDDMockito.given;
-
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
@@ -17,6 +12,8 @@ import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginExc
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
+import com.ddang.ddang.device.infrastructure.persistence.DeviceTokenRepositoryImpl;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
@@ -31,6 +28,11 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -63,15 +65,19 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     @Autowired
     BlackListTokenService blackListTokenService;
 
-    @Autowired
-    JpaDeviceTokenRepository deviceTokenRepository;
+    DeviceTokenRepository deviceTokenRepository;
 
+    // TODO: 2023/10/15 개행 추가
     AuthenticationService authenticationService;
     AuthenticationService profileImageNotFoundAuthenticationService;
 
     @BeforeEach
-    void fixtureSetUp(@Autowired final JpaProfileImageRepository jpaProfileImageRepository) {
+    void fixtureSetUp(
+            @Autowired final JpaProfileImageRepository jpaProfileImageRepository,
+            @Autowired final JpaDeviceTokenRepository jpaDeviceTokenRepository
+    ) {
         profileImageRepository = new ProfileImageRepositoryImpl(jpaProfileImageRepository);
+        deviceTokenRepository = new DeviceTokenRepositoryImpl(jpaDeviceTokenRepository);
 
         authenticationService = new AuthenticationService(
                 deviceTokenService,
