@@ -26,6 +26,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
     private val isLoading = AtomicBoolean(false)
 
     private var isOwner: Boolean = false
+
     private var auctionId: Long? = null
 
     private val _event: SingleLiveEvent<QnaEvent> = SingleLiveEvent()
@@ -39,7 +40,6 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
 
     fun loadQnas() {
         if (isLoading.getAndSet(true)) return
-//        this.auctionId = auctionId
         auctionId?.let { auctionId ->
 
             viewModelScope.launch {
@@ -84,9 +84,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
             isLoading.set(false)
             when (response) {
                 is ApiResponse.Success -> {
-                    auctionId?.let { auctionId ->
-                        loadQnas()
-                    }
+                    loadQnas()
                 }
 
                 is ApiResponse.Failure -> {
@@ -114,9 +112,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
             isLoading.set(false)
             when (response) {
                 is ApiResponse.Success -> {
-                    auctionId?.let { auctionId ->
-                        loadQnas()
-                    }
+                    loadQnas()
                 }
 
                 is ApiResponse.Failure -> {

@@ -30,7 +30,12 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
 
         override fun onSubmitAnswerClick(questionId: Long) {
             activityViewModel.auctionDetailModel.value?.let { model ->
-                RegisterAnswerDialog.show(parentFragmentManager, model.id, questionId)
+                RegisterAnswerDialog.show(
+                    parentFragmentManager,
+                    model.id,
+                    questionId,
+                    ::onAfterQnaDialogDismiss,
+                )
             }
         }
 
@@ -84,10 +89,17 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
             }
 
             is QnaViewModel.QnaEvent.FailureDeleteAnswer -> {
-                notifyFailureMessage(event.errorType, R.string.detail_auction_qna_answer_delete_failure)
+                notifyFailureMessage(
+                    event.errorType,
+                    R.string.detail_auction_qna_answer_delete_failure,
+                )
             }
+
             is QnaViewModel.QnaEvent.FailureDeleteQuestion -> {
-                notifyFailureMessage(event.errorType, R.string.detail_auction_qna_question_delete_failure)
+                notifyFailureMessage(
+                    event.errorType,
+                    R.string.detail_auction_qna_question_delete_failure,
+                )
             }
 
             is QnaViewModel.QnaEvent.ReportQuestion -> {
@@ -107,10 +119,15 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
     private fun setupBinding() {
         binding.clWriteQuestion.setOnClickListener {
             activityViewModel.auctionDetailModel.value?.let { model ->
-                RegisterQuestionDialog.show(parentFragmentManager, model.id) {
-                    viewModel.loadQnas()
-                }
+                RegisterQuestionDialog.show(parentFragmentManager, model.id, ::onAfterQnaDialogDismiss)
             }
         }
+        activityViewModel.auctionDetailModel.value?.let {
+            binding.isOwner = it.isOwner
+        }
+    }
+
+    private fun onAfterQnaDialogDismiss(isNeedRefresh: Boolean) {
+        if (isNeedRefresh) viewModel.loadQnas()
     }
 }

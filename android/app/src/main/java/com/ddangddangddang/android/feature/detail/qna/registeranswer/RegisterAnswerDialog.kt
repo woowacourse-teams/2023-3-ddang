@@ -22,6 +22,15 @@ class RegisterAnswerDialog : DialogFragment() {
         get() = _binding!!
 
     private val viewModel: RegisterAnswerViewModel by viewModels()
+    private lateinit var onDialogResult: OnDialogResult
+
+    fun interface OnDialogResult {
+        fun invoke(isNeedRefresh: Boolean)
+    }
+
+    fun setOnDialogResult(onDialogResult: OnDialogResult) {
+        this.onDialogResult = onDialogResult
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +51,11 @@ class RegisterAnswerDialog : DialogFragment() {
 
     private fun handleEvent(event: RegisterAnswerViewModel.WriteAnswerEvent) {
         when (event) {
-            RegisterAnswerViewModel.WriteAnswerEvent.Cancel -> dismiss()
+            RegisterAnswerViewModel.WriteAnswerEvent.Cancel -> {
+                onDialogResult.invoke(false)
+                dismiss()
+            }
+
             is RegisterAnswerViewModel.WriteAnswerEvent.FailureSubmitAnswer -> {
                 notifyFailureMessage(
                     event.errorType,
@@ -52,6 +65,7 @@ class RegisterAnswerDialog : DialogFragment() {
 
             RegisterAnswerViewModel.WriteAnswerEvent.SubmitAnswer -> {
                 notifySuccessMessage()
+                onDialogResult.invoke(true)
                 dismiss()
             }
         }
@@ -81,13 +95,19 @@ class RegisterAnswerDialog : DialogFragment() {
         private const val AUCTION_ID_KEY = "auction_id"
         private const val QUESTION_ID_KEY = "question_id"
 
-        fun show(fragmentManager: FragmentManager, auctionId: Long, questionId: Long) {
+        fun show(
+            fragmentManager: FragmentManager,
+            auctionId: Long,
+            questionId: Long,
+            onDialogResult: OnDialogResult,
+        ) {
             val dialog = RegisterAnswerDialog()
             dialog.arguments =
                 Bundle().apply {
                     putLong(AUCTION_ID_KEY, auctionId)
                     putLong(QUESTION_ID_KEY, questionId)
                 }
+            dialog.setOnDialogResult(onDialogResult)
             dialog.show(fragmentManager, WRITE_ANSWER_TAG)
         }
     }
