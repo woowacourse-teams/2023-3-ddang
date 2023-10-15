@@ -8,8 +8,8 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
-import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -31,7 +31,7 @@ public class AnswerServiceFixture {
     private QuestionRepository questionRepository;
 
     @Autowired
-    private JpaAnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
     protected Long 존재하지_않는_답변_아이디 = -999L;
     protected Long 존재하지_않는_사용자_아이디 = -999L;

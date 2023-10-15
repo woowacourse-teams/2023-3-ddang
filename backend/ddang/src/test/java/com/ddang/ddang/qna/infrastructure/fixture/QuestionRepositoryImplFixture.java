@@ -10,7 +10,9 @@ import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionReposit
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
+import com.ddang.ddang.qna.infrastructure.AnswerRepositoryImpl;
 import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.qna.infrastructure.QuestionRepositoryImpl;
@@ -20,19 +22,13 @@ import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuestionRepositoryImplFixture {
-
-    @PersistenceContext
-    private EntityManager em;
 
     private AuctionRepository auctionRepository;
 
@@ -40,8 +36,7 @@ public class QuestionRepositoryImplFixture {
 
     private QuestionRepository questionRepository;
 
-    @Autowired
-    private JpaAnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
     protected Auction 경매;
     protected Auction 질문이_3개_답변이_2개인_경매;
@@ -59,11 +54,13 @@ public class QuestionRepositoryImplFixture {
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JPAQueryFactory queryFactory,
             @Autowired final JpaUserRepository jpaUserRepository,
-            @Autowired final JpaQuestionRepository jpaQuestionRepository
-    ) {
+            @Autowired final JpaQuestionRepository jpaQuestionRepository,
+            @Autowired final JpaAnswerRepository jpaAnswerRepository
+            ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
         questionRepository = new QuestionRepositoryImpl(jpaQuestionRepository);
+        answerRepository = new AnswerRepositoryImpl(jpaAnswerRepository);
 
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
         final User 판매자 = User.builder()
@@ -114,9 +111,7 @@ public class QuestionRepositoryImplFixture {
         questionRepository.save(질문2);
         questionRepository.save(질문3);
         questionRepository.save(삭제된_질문);
-        answerRepository.saveAll(List.of(답변1, 답변2));
-
-        em.flush();
-        em.clear();
+        answerRepository.save(답변1);
+        answerRepository.save(답변2);
     }
 }

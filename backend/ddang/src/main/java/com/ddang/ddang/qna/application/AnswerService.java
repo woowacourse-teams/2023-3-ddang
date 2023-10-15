@@ -9,8 +9,8 @@ import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
-import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -27,7 +27,7 @@ public class AnswerService {
     private final ApplicationEventPublisher answerEventPublisher;
     private final UserRepository userRepository;
     private final QuestionRepository questionRepository;
-    private final JpaAnswerRepository answerRepository;
+    private final AnswerRepository answerRepository;
 
     @Transactional
     public Long create(final CreateAnswerDto answerDto, final String absoluteImageUrl) {
@@ -65,7 +65,7 @@ public class AnswerService {
 
     @Transactional
     public void deleteById(final Long answerId, final Long userId) {
-        final Answer answer = answerRepository.findByIdAndDeletedIsFalse(answerId)
+        final Answer answer = answerRepository.findById(answerId)
                                               .orElseThrow(() -> new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."));
         final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
