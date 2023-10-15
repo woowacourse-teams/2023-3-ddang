@@ -61,7 +61,7 @@ public class MessageRepositoryImplTest extends MessageRepositoryImplFixture {
     @Test
     void 마지막_메시지_이후에_저장된_모든_메시지를_조회한다() {
         // when
-        final List<Message> actual = messageRepository.findAllByLastMessageId(구매자.getId(), 메시지가_5개인_채팅방.getId(), 두_번째_메시지_아이디);
+        final List<Message> actual = messageRepository.findAllByLastMessageId(구매자_겸_수신자.getId(), 메시지가_5개인_채팅방.getId(), 두_번째_메시지_아이디);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

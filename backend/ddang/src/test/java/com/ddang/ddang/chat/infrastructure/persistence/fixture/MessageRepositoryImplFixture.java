@@ -34,8 +34,8 @@ public class MessageRepositoryImplFixture {
     private AuctionRepository auctionRepository;
     private ChatRoomRepository chatRoomRepository;
 
-    protected User 판매자;
-    protected User 구매자;
+    protected User 판매자_겸_발신자;
+    protected User 구매자_겸_수신자;
     protected Auction 경매;
     protected Auction 메시지가_5개인_경매;
     protected ChatRoom 채팅방;
@@ -63,20 +63,20 @@ public class MessageRepositoryImplFixture {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository((queryFactory)));
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
 
-        판매자 = User.builder()
-                  .name("판매자")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
-                  .oauthId("78923")
-                  .build();
-        구매자 = User.builder()
-                  .name("구매자")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
-                  .oauthId("12345")
-                  .build();
-        userRepository.save(판매자);
-        userRepository.save(구매자);
+        판매자_겸_발신자 = User.builder()
+                        .name("판매자")
+                        .profileImage(new ProfileImage("upload.png", "store.png"))
+                        .reliability(new Reliability(4.7d))
+                        .oauthId("78923")
+                        .build();
+        구매자_겸_수신자 = User.builder()
+                        .name("구매자")
+                        .profileImage(new ProfileImage("upload.png", "store.png"))
+                        .reliability(new Reliability(4.7d))
+                        .oauthId("12345")
+                        .build();
+        userRepository.save(판매자_겸_발신자);
+        userRepository.save(구매자_겸_수신자);
 
         경매 = Auction.builder()
                     .title("title")
@@ -87,21 +87,21 @@ public class MessageRepositoryImplFixture {
         auctionRepository.save(경매);
         auctionRepository.save(메시지가_5개인_경매);
 
-        채팅방 = new ChatRoom(경매, 구매자);
-        메시지가_5개인_채팅방 = new ChatRoom(메시지가_5개인_경매, 구매자);
+        채팅방 = new ChatRoom(경매, 구매자_겸_수신자);
+        메시지가_5개인_채팅방 = new ChatRoom(메시지가_5개인_경매, 구매자_겸_수신자);
         chatRoomRepository.save(채팅방);
         chatRoomRepository.save(메시지가_5개인_채팅방);
 
         저장할_메시지 = Message.builder()
                          .chatRoom(채팅방)
-                         .writer(판매자)
-                         .receiver(구매자)
+                         .writer(판매자_겸_발신자)
+                         .receiver(구매자_겸_수신자)
                          .contents(메시지_내용)
                          .build();
         저장된_메시지 = Message.builder()
                          .chatRoom(채팅방)
-                         .writer(판매자)
-                         .receiver(구매자)
+                         .writer(판매자_겸_발신자)
+                         .receiver(구매자_겸_수신자)
                          .contents("레포지토리에 저장된 메시지")
                          .build();
         messageRepository.save(저장된_메시지);
@@ -111,8 +111,8 @@ public class MessageRepositoryImplFixture {
         for (int count = 0; count < 메시지_총_개수; count++) {
             final Message 메시지 = Message.builder()
                                        .chatRoom(메시지가_5개인_채팅방)
-                                       .writer(판매자)
-                                       .receiver(구매자)
+                                       .writer(판매자_겸_발신자)
+                                       .receiver(구매자_겸_수신자)
                                        .contents("안녕하세요")
                                        .build();
             저장된_메시지들.add(메시지);
