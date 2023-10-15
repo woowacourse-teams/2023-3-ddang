@@ -22,6 +22,7 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,11 +62,11 @@ public class JpaQuestionReportRepositoryImplFixture {
     void setUpFixture(
             @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
-            @Autowired final QuerydslAuctionRepository querydslAuctionRepository,
+            @Autowired final JPAQueryFactory queryFactory,
             @Autowired final JpaQuestionReportRepository jpaQuestionReportRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, querydslAuctionRepository);
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
         questionReportRepository = new QuestionReportRepositoryImpl(jpaQuestionReportRepository);
 
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");

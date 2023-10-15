@@ -26,6 +26,7 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class ChatRoomReportRepositorImplFixture {
+public class ChatRoomReportRepositoryImplFixture {
 
     @PersistenceContext
     private EntityManager em;
@@ -70,12 +71,12 @@ public class ChatRoomReportRepositorImplFixture {
     void setUpFixture(
             @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
-            @Autowired final QuerydslAuctionRepository querydslAuctionRepository,
+            @Autowired final JPAQueryFactory queryFactory,
             @Autowired final JpaChatRoomRepository jpaChatRoomRepository,
             @Autowired final JpaChatRoomReportRepository jpaChatRoomReportRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, querydslAuctionRepository);
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
         chatRoomReportRepository = new ChatRoomReportRepositoryImpl(jpaChatRoomReportRepository);
 
@@ -150,6 +151,7 @@ public class ChatRoomReportRepositorImplFixture {
         채팅방_신고3 = new ChatRoomReport(구매자3겸_신고자, 채팅방3, "신고합니다.");
 
         profileImageRepository.save(프로필_이미지);
+        userRepository.save(판매자);
         userRepository.save(구매자1);
         userRepository.save(구매자2겸_신고자);
         userRepository.save(구매자3겸_신고자);

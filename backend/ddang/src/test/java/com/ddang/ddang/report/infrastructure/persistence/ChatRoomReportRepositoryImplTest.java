@@ -4,7 +4,7 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
-import com.ddang.ddang.report.infrastructure.persistence.fixture.ChatRoomReportRepositorImplFixture;
+import com.ddang.ddang.report.infrastructure.persistence.fixture.ChatRoomReportRepositoryImplFixture;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ChatRoomReportRepositoryImplTest extends ChatRoomReportRepositorImplFixture {
+class ChatRoomReportRepositoryImplTest extends ChatRoomReportRepositoryImplFixture {
 
     ChatRoomReportRepository chatRoomReportRepository;
 

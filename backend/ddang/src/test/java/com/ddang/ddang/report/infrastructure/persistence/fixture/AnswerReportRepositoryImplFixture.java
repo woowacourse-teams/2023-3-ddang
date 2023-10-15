@@ -24,6 +24,7 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,11 +67,11 @@ public class AnswerReportRepositoryImplFixture {
     void setUpFixture(
             @Autowired JpaUserRepository jpaUserRepository,
             @Autowired JpaAuctionRepository jpaAuctionRepository,
-            @Autowired QuerydslAuctionRepository querydslAuctionRepository,
+            @Autowired JPAQueryFactory queryFactory,
             @Autowired JpaAnswerReportRepository jpaAnswerReportRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, querydslAuctionRepository);
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
         answerReportRepository = new AnswerReportRepositoryImpl(jpaAnswerReportRepository);
 
 
