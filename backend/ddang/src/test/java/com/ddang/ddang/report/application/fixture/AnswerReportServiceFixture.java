@@ -14,7 +14,7 @@ import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
 import com.ddang.ddang.report.domain.AnswerReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
+import com.ddang.ddang.report.domain.repository.AnswerReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -43,7 +43,7 @@ public class AnswerReportServiceFixture {
     private JpaAnswerRepository answerRepository;
 
     @Autowired
-    private JpaAnswerReportRepository answerReportRepository;
+    private AnswerReportRepository answerReportRepository;
 
     protected User 신고자;
     protected User 이미_신고한_신고자1;
@@ -137,7 +137,9 @@ public class AnswerReportServiceFixture {
         auctionRepository.save(경매);
         questionRepository.save(질문);
         answerRepository.save(답변);
-        answerReportRepository.saveAll(List.of(답변_신고1, 답변_신고2, 답변_신고3));
+        answerReportRepository.save(답변_신고1);
+        answerReportRepository.save(답변_신고2);
+        answerReportRepository.save(답변_신고3);
 
         답변_신고_요청_dto = new CreateAnswerReportDto(답변.getId(), "신고합니다.", 신고자.getId());
         존재하지_않는_답변_신고_요청_dto = new CreateAnswerReportDto(존재하지_않는_답변_아이디, "신고합니다.", 신고자.getId());

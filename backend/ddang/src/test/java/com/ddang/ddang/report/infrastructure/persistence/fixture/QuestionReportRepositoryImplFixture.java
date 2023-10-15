@@ -3,7 +3,10 @@ package com.ddang.ddang.report.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -11,10 +14,14 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
 import com.ddang.ddang.report.domain.QuestionReport;
+import com.ddang.ddang.report.domain.repository.QuestionReportRepository;
 import com.ddang.ddang.report.infrastructure.persistence.JpaQuestionReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.QuestionReportRepositoryImpl;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,25 +31,22 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class QuestionReportRepositoryFixture {
+public class QuestionReportRepositoryImplFixture {
 
     @PersistenceContext
     private EntityManager em;
 
-    @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
-    @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
     private JpaQuestionRepository questionRepository;
 
-    @Autowired
-    private JpaQuestionReportRepository questionReportRepository;
+    private QuestionReportRepository questionReportRepository;
 
     protected User 신고자;
     protected Question 질문;
@@ -54,7 +58,16 @@ public class QuestionReportRepositoryFixture {
     protected QuestionReport 질문_신고4;
 
     @BeforeEach
-    void setUp() {
+    void setUpFixture(
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final QuerydslAuctionRepository querydslAuctionRepository,
+            @Autowired final JpaQuestionReportRepository jpaQuestionReportRepository
+    ) {
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, querydslAuctionRepository);
+        questionReportRepository = new QuestionReportRepositoryImpl(jpaQuestionReportRepository);
+
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
         final User 판매자 = User.builder()
                              .name("판매자")
@@ -116,13 +129,21 @@ public class QuestionReportRepositoryFixture {
         질문_신고3 = new QuestionReport(신고자3, 이미_신고한_질문, "신고합니다");
         질문_신고4 = new QuestionReport(신고자4, 이미_신고한_질문, "신고합니다");
 
-        userRepository.saveAll(List.of(판매자, 질문자, 신고자, 신고자2, 신고자3, 신고자4));
+        userRepository.save(판매자);
+        userRepository.save(질문자);
+        userRepository.save(신고자);
+        userRepository.save(신고자2);
+        userRepository.save(신고자3);
+        userRepository.save(신고자4);
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionRepository.save(경매);
 
         questionRepository.saveAll(List.of(질문, 이미_신고한_질문));
-        questionReportRepository.saveAll(List.of(질문_신고1, 질문_신고2, 질문_신고3, 질문_신고4));
+        questionReportRepository.save(질문_신고1);
+        questionReportRepository.save(질문_신고2);
+        questionReportRepository.save(질문_신고3);
+        questionReportRepository.save(질문_신고4);
 
         em.flush();
         em.clear();

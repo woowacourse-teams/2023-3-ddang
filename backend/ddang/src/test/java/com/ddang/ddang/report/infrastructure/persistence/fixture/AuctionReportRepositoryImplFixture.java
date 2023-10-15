@@ -3,7 +3,10 @@ package com.ddang.ddang.report.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -11,10 +14,14 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.report.domain.AuctionReport;
+import com.ddang.ddang.report.domain.repository.AuctionReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.AuctionReportRepositoryImpl;
 import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,16 +43,13 @@ public class AuctionReportRepositoryImplFixture {
     private JpaProfileImageRepository profileImageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
-
-    @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
 
-    @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    private JpaAuctionReportRepository auctionReportRepository;
+    private AuctionRepository auctionRepository;
+
+    private AuctionReportRepository auctionReportRepository;
 
     protected Long 존재하지_않는_경매_아이디 = -9999L;
     protected Long 존재하지_않는_사용자_아이디 = -9999L;
@@ -57,7 +61,16 @@ public class AuctionReportRepositoryImplFixture {
     protected AuctionReport 경매_신고3;
 
     @BeforeEach
-    void setUp() {
+    void setUpFixture(
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final QuerydslAuctionRepository querydslAuctionRepository,
+            @Autowired final JpaAuctionReportRepository jpaAuctionReportRepository
+    ) {
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, querydslAuctionRepository);
+        auctionReportRepository = new AuctionReportRepositoryImpl(jpaAuctionReportRepository);
+
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
         판매자 = User.builder()
                   .name("판매자")
@@ -105,13 +118,18 @@ public class AuctionReportRepositoryImplFixture {
 
 
         profileImageRepository.save(프로필_이미지);
-        userRepository.saveAll(List.of(판매자, 신고자1, 신고자2, 신고자3));
+        userRepository.save(판매자);
+        userRepository.save(신고자1);
+        userRepository.save(신고자2);
+        userRepository.save(신고자3);
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionImageRepository.save(경매_이미지);
         auctionRepository.save(경매);
 
-        auctionReportRepository.saveAll(List.of(경매_신고1, 경매_신고2, 경매_신고3));
+        auctionReportRepository.save(경매_신고1);
+        auctionReportRepository.save(경매_신고2);
+        auctionReportRepository.save(경매_신고3);
 
         em.flush();
         em.clear();

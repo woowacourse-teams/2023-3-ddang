@@ -3,20 +3,29 @@ package com.ddang.ddang.report.infrastructure.persistence.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.AuctionRepositoryImpl;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.ChatRoomRepositoryImpl;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.report.domain.ChatRoomReport;
+import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.ChatRoomReportRepositoryImpl;
 import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,19 +47,15 @@ public class ChatRoomReportRepositorImplFixture {
     private JpaProfileImageRepository profileImageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
-
-    @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
 
-    @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private UserRepository userRepository;
 
-    @Autowired
-    private JpaChatRoomReportRepository chatRoomReportRepository;
+    private AuctionRepository auctionRepository;
 
-    @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepository;
+
+    private ChatRoomReportRepository chatRoomReportRepository;
 
     protected Long 존재하지_않는_채팅방_아이디 = -9999L;
     protected Long 존재하지_않는_사용자_아이디 = -9999L;
@@ -62,7 +67,18 @@ public class ChatRoomReportRepositorImplFixture {
     protected ChatRoomReport 채팅방_신고3;
 
     @BeforeEach
-    void setUpFixture() {
+    void setUpFixture(
+            @Autowired final JpaUserRepository jpaUserRepository,
+            @Autowired final JpaAuctionRepository jpaAuctionRepository,
+            @Autowired final QuerydslAuctionRepository querydslAuctionRepository,
+            @Autowired final JpaChatRoomRepository jpaChatRoomRepository,
+            @Autowired final JpaChatRoomReportRepository jpaChatRoomReportRepository
+    ) {
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, querydslAuctionRepository);
+        chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
+        chatRoomReportRepository = new ChatRoomReportRepositoryImpl(jpaChatRoomReportRepository);
+
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
         final User 판매자 = User.builder()
                              .name("판매자")
@@ -134,15 +150,23 @@ public class ChatRoomReportRepositorImplFixture {
         채팅방_신고3 = new ChatRoomReport(구매자3겸_신고자, 채팅방3, "신고합니다.");
 
         profileImageRepository.save(프로필_이미지);
-        userRepository.saveAll(List.of(판매자, 구매자1, 구매자2겸_신고자, 구매자3겸_신고자));
+        userRepository.save(구매자1);
+        userRepository.save(구매자2겸_신고자);
+        userRepository.save(구매자3겸_신고자);
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionImageRepository.save(경매_이미지);
-        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3));
+        auctionRepository.save(경매1);
+        auctionRepository.save(경매2);
+        auctionRepository.save(경매3);
 
-        chatRoomRepository.saveAll(List.of(채팅방1, 채팅방2, 채팅방3));
+        chatRoomRepository.save(채팅방1);
+        chatRoomRepository.save(채팅방2);
+        chatRoomRepository.save(채팅방3);
 
-        chatRoomReportRepository.saveAll(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
+        chatRoomReportRepository.save(채팅방_신고1);
+        chatRoomReportRepository.save(채팅방_신고2);
+        chatRoomReportRepository.save(채팅방_신고3);
 
         em.flush();
         em.clear();

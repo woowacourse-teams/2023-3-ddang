@@ -4,8 +4,8 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.QuestionReport;
 import com.ddang.ddang.report.domain.repository.QuestionReportRepository;
-import com.ddang.ddang.report.infrastructure.persistence.fixture.QuestionReportRepositoryFixture;
-import org.assertj.core.api.SoftAssertions;
+import com.ddang.ddang.report.infrastructure.persistence.fixture.QuestionReportRepositoryImplFixture;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class QuestionReportRepositoryImplTest extends QuestionReportRepositoryFixture {
+class QuestionReportRepositoryImplTest extends QuestionReportRepositoryImplFixture {
 
     QuestionReportRepository questionReportRepository;
 
