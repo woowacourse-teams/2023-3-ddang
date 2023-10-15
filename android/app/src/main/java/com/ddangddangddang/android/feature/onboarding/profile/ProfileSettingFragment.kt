@@ -11,10 +11,10 @@ import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentProfileSettingBinding
 import com.ddangddangddang.android.feature.common.ErrorType
+import com.ddangddangddang.android.feature.common.notifyFailureSnackBar
 import com.ddangddangddang.android.feature.onboarding.OnBoardingViewModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
-import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -72,20 +72,20 @@ class ProfileSettingFragment :
     }
 
     private fun notifyProfileInitLoadFailed(type: ErrorType) {
-        val defaultMessage = getString(R.string.mypage_snackbar_load_profile_failed_title)
-        val actionMessage = getString(R.string.all_snackbar_default_action)
-        binding.root.showSnackbar(
-            message = type.message ?: defaultMessage,
-            actionMessage = actionMessage,
+        notifyFailureSnackBar(
+            binding.root,
+            type,
+            R.string.mypage_snackbar_load_profile_failed_title,
+            R.string.all_snackbar_default_action,
         )
     }
 
     private fun notifyProfileChangeFailed(type: ErrorType) {
-        val defaultMessage = getString(R.string.profile_change_failed)
-        val actionMessage = getString(R.string.all_snackbar_default_action)
-        binding.root.showSnackbar(
-            message = type.message ?: defaultMessage,
-            actionMessage = actionMessage,
+        notifyFailureSnackBar(
+            binding.root,
+            type,
+            R.string.profile_change_failed,
+            R.string.all_snackbar_default_action,
         )
     }
 }

@@ -85,7 +85,7 @@ class ProfileSettingViewModel @Inject constructor(
         val profileImageUri = profile.value?.takeIf { it.path != currentProfileUri.path }
 
         // 만약 이전과 상태가 같다면, 변경 요청 보내지 않을 것임. 그냥 다음 페이지로 이동
-        if (name == currentProfileName && profile.value?.path == currentProfileUri.path) return setNavigateToNextEvent()
+        if (name == currentProfileName && profileImageUri == null) return setNavigateToNextEvent()
 
         if (_isLoading.value == true) return
         _isLoading.value = true
