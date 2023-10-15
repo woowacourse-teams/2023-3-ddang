@@ -5,14 +5,14 @@ import com.ddangddangddang.android.model.QnaStatusModel
 import com.ddangddangddang.data.model.response.QnaResponse
 
 object QnaModelMapper {
-    fun QnaResponse.toPresentation(isOwner: Boolean): QnaModel {
+    fun QnaResponse.toPresentation(isOwner: Boolean, pickedQuestionId: Long? = null): QnaModel {
         return QnaModel(
             qnas.map {
                 QnaModel.QuestionAndAnswerModel(
                     it.question.toPresentation(),
                     it.answer?.toPresentation(),
                     isOwner,
-                    false,
+                    pickedQuestionId != null && it.question.id == pickedQuestionId,
                     QnaStatusModel.find(it.answer != null),
                 )
             },

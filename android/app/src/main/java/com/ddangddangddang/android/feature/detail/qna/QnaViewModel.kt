@@ -29,6 +29,8 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
 
     private var auctionId: Long? = null
 
+    private var pickedQuestionId: Long? = null
+
     private val _event: SingleLiveEvent<QnaEvent> = SingleLiveEvent()
     val event: LiveData<QnaEvent>
         get() = _event
@@ -41,12 +43,11 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
     fun loadQnas() {
         if (isLoading.getAndSet(true)) return
         auctionId?.let { auctionId ->
-
             viewModelScope.launch {
                 when (val response = repository.getAuctionQnas(auctionId)) {
                     is ApiResponse.Success ->
                         _qnas.value =
-                            response.body.toPresentation(isOwner).questionAndAnswers
+                            response.body.toPresentation(isOwner, pickedQuestionId).questionAndAnswers
 
                     is ApiResponse.Failure ->
                         _event.value =
@@ -67,8 +68,10 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
 
     fun selectQna(questionId: Long) {
         _qnas.value?.let {
+            pickedQuestionId = questionId
             _qnas.value = it.map { model ->
                 if (model.isPicked && model.question.id == questionId) {
+                    pickedQuestionId = null
                     model.copy(isPicked = false)
                 } else {
                     model.copy(isPicked = model.question.id == questionId)
@@ -84,6 +87,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
             isLoading.set(false)
             when (response) {
                 is ApiResponse.Success -> {
+                    pickedQuestionId = null
                     loadQnas()
                 }
 
