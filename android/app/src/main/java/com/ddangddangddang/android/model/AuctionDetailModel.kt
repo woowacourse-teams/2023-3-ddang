@@ -20,5 +20,5 @@ data class AuctionDetailModel(
     val sellerModel: SellerModel,
     val chatAuctionDetailModel: ChatAuctionDetailModel,
     val isOwner: Boolean,
-    val hasLastBidder: Boolean,
+    val isLastBidder: Boolean,
 )

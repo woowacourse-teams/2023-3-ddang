@@ -17,7 +17,6 @@ data class AuctionResponse(
     val closingTime: String,
     val directRegions: List<DirectRegionResponse>,
     val auctioneerCount: Int,
-    val hasLastBidder: Boolean? = false, // 아직 api 수정 안돼서 일단 이걸로 설정함.
 ) {
     fun toPreview(): AuctionPreviewResponse = AuctionPreviewResponse(
         id,

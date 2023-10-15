@@ -32,7 +32,7 @@ enum class AuctionDetailBottomButtonStatus(
             return when {
                 canEnterMessageRoom(chatStatus) -> EnterAuctionChatRoom
                 canBidAuction(auctionStatus, isOwner) -> {
-                    if (auctionDetailModel.hasLastBidder) {
+                    if (auctionDetailModel.isLastBidder) {
                         AlreadyLastBidder
                     } else {
                         BidAuction
