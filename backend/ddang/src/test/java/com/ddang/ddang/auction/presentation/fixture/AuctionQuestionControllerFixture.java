@@ -34,10 +34,10 @@ public class AuctionQuestionControllerFixture extends CommonControllerSliceTest 
             "12346",
             false
     );
-    protected ReadQuestionDto 질문_정보_dto1 = new ReadQuestionDto(1L, 질문자_정보_dto, "질문1", LocalDateTime.now(), false);
-    protected ReadQuestionDto 질문_정보_dto2 = new ReadQuestionDto(2L, 질문자_정보_dto, "질문2", LocalDateTime.now(), false);
-    protected ReadAnswerDto 답변_정보_dto1 = new ReadAnswerDto(1L, 판매자_정보_dto, "답변1", LocalDateTime.now());
-    protected ReadAnswerDto 답변_정보_dto2 = new ReadAnswerDto(2L, 판매자_정보_dto, "답변1", LocalDateTime.now());
+    protected ReadQuestionDto 질문_정보_dto1 = new ReadQuestionDto(1L, 질문자_정보_dto, "질문1", LocalDateTime.now(), false, false);
+    protected ReadQuestionDto 질문_정보_dto2 = new ReadQuestionDto(2L, 질문자_정보_dto, "질문2", LocalDateTime.now(), false, false);
+    protected ReadAnswerDto 답변_정보_dto1 = new ReadAnswerDto(1L, 판매자_정보_dto, "답변1", LocalDateTime.now(), false);
+    protected ReadAnswerDto 답변_정보_dto2 = new ReadAnswerDto(2L, 판매자_정보_dto, "답변1", LocalDateTime.now(), false);
     private ReadQnaDto 질문과_답변_정보_dto1 = new ReadQnaDto(질문_정보_dto1, 답변_정보_dto1);
     private ReadQnaDto 질문과_답변_정보_dto2 = new ReadQnaDto(질문_정보_dto2, 답변_정보_dto2);
     protected ReadQnasDto 질문과_답변_정보들_dto =

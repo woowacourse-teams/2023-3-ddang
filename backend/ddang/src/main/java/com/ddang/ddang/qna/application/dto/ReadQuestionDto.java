@@ -10,6 +10,7 @@ public record ReadQuestionDto(
         ReadUserInQnaDto readUserInQnaDto,
         String content,
         LocalDateTime createdTime,
+        boolean isDeleted,
         boolean isQuestioner
 ) {
 
@@ -21,6 +22,7 @@ public record ReadQuestionDto(
                 ReadUserInQnaDto.from(question.getWriter()),
                 question.getContent(),
                 question.getCreatedTime(),
+                question.isDeleted(),
                 isWriter(question, user)
         );
     }

@@ -183,10 +183,10 @@ public class QuestionServiceFixture {
         final ReadUserInQnaDto 판매자_정보_dto = ReadUserInQnaDto.from(판매자);
         final ReadUserInQnaDto 질문자_정보_dto = ReadUserInQnaDto.from(질문자);
         final ReadUserInQnaDto 두번째_질문자_정보_dto = ReadUserInQnaDto.from(두번째_질문을_작성한_사용자);
-        질문_정보_dto1 = new ReadQuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime(), false);
-        질문_정보_dto2 = new ReadQuestionDto(질문2.getId(), 두번째_질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime(), true);
-        질문_정보_dto3 = new ReadQuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime(), false);
-        답변_정보_dto1 = new ReadAnswerDto(답변1.getId(), 판매자_정보_dto, 답변1.getContent(), 답변1.getCreatedTime());
-        답변_정보_dto2 = new ReadAnswerDto(답변2.getId(), 판매자_정보_dto, 답변2.getContent(), 답변2.getCreatedTime());
+        질문_정보_dto1 = new ReadQuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime(), false, false);
+        질문_정보_dto2 = new ReadQuestionDto(질문2.getId(), 두번째_질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime(), false, true);
+        질문_정보_dto3 = new ReadQuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime(), false, false);
+        답변_정보_dto1 = new ReadAnswerDto(답변1.getId(), 판매자_정보_dto, 답변1.getContent(), 답변1.getCreatedTime(), false);
+        답변_정보_dto2 = new ReadAnswerDto(답변2.getId(), 판매자_정보_dto, 답변2.getContent(), 답변2.getCreatedTime(), false);
     }
 }
