@@ -3,6 +3,7 @@ package com.ddang.ddang.user.application;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
+import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.application.fixture.UserServiceFixture;
 import org.assertj.core.api.SoftAssertions;
@@ -76,6 +77,14 @@ class UserServiceTest extends UserServiceFixture {
             softAssertions.assertThat(사용자.getName()).isEqualTo(사용자_이름만_수정_요청_dto.name());
             softAssertions.assertThat(사용자.getProfileImage()).isEqualTo(프로필_이미지);
         });
+    }
+
+    @Test
+    void 사용자_정보_수정시_동일한_이름이_이미_존재한다_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> userService.updateById(사용자.getId(), 이미_존재하는_사용자_이름으로_수정_요청_dto))
+                .isInstanceOf(AlreadyExistsNameException.class)
+                .hasMessage("이미 존재하는 닉네임입니다.");
     }
 
     @Test

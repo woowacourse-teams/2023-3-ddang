@@ -17,4 +17,6 @@ public interface UserRepository {
     boolean existsByIdAndDeletedIsTrue(final Long id);
 
     boolean existsByNameEndingWith(final String name);
+
+    boolean existsByName(final String name);
 }
