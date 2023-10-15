@@ -11,14 +11,14 @@ public interface JpaAnswerReportRepository extends JpaRepository<AnswerReport, L
     boolean existsByAnswerIdAndReporterId(final Long answerId, final Long reportId);
 
     @Query("""
-        select ar
-        from AnswerReport ar
-        join fetch ar.reporter
-        join fetch ar.answer an
-        join fetch an.question q
-        join fetch q.auction a
-        join fetch a.seller
-        order by ar.id asc
+        SELECT ar
+        FROM AnswerReport ar
+        JOIN FETCH ar.reporter
+        JOIN FETCH ar.answer an
+        JOIN FETCH an.question q
+        JOIN FETCH q.auction a
+        JOIN FETCH a.seller
+        ORDER BY ar.id ASC
     """)
     List<AnswerReport> findAll();
 }

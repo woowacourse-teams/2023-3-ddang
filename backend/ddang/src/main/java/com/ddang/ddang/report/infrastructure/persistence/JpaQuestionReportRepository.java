@@ -11,11 +11,11 @@ public interface JpaQuestionReportRepository extends JpaRepository<QuestionRepor
     boolean existsByQuestionIdAndReporterId(final Long questionId, final Long reporterId);
 
     @Query("""
-        select qr
-        from QuestionReport qr
-        join fetch qr.reporter
-        join fetch qr.question
-        order by qr.id asc
+        SELECT qr
+        FROM QuestionReport qr
+        JOIN FETCH qr.reporter
+        JOIN FETCH qr.question
+        ORDER BY qr.id ASC
     """)
     List<QuestionReport> findAll();
 }

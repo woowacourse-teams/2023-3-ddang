@@ -11,14 +11,14 @@ public interface JpaChatRoomReportRepository extends JpaRepository<ChatRoomRepor
     boolean existsByChatRoomIdAndReporterId(final Long chatRoomId, final Long reporterId);
 
     @Query("""
-        select crr
-        from ChatRoomReport crr
-        join fetch crr.reporter
-        join fetch crr.chatRoom cr
-        join fetch cr.buyer
-        join fetch cr.auction a
-        join fetch a.seller
-        order by crr.id asc
+        SELECT crr
+        FROM ChatRoomReport crr
+        JOIN FETCH crr.reporter
+        JOIN FETCH crr.chatRoom cr
+        JOIN FETCH cr.buyer
+        JOIN FETCH cr.auction a
+        JOIN FETCH a.seller
+        ORDER BY crr.id ASC
     """)
     List<ChatRoomReport> findAll();
 }
