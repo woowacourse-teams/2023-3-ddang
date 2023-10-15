@@ -65,8 +65,8 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
 
     private fun setupViewModel() {
         activityViewModel.auctionDetailModel.value?.let {
-            viewModel.initIsOwner(it.isOwner)
-            viewModel.loadQnas(it.id)
+            viewModel.initAuctionInfo(it.isOwner, it.id)
+            viewModel.loadQnas()
         }
 
         viewModel.qnas.observe(viewLifecycleOwner) {
@@ -107,7 +107,9 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
     private fun setupBinding() {
         binding.clWriteQuestion.setOnClickListener {
             activityViewModel.auctionDetailModel.value?.let { model ->
-                RegisterQuestionDialog.show(parentFragmentManager, model.id)
+                RegisterQuestionDialog.show(parentFragmentManager, model.id) {
+                    viewModel.loadQnas()
+                }
             }
         }
     }

@@ -32,32 +32,36 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
     val event: LiveData<QnaEvent>
         get() = _event
 
-    fun initIsOwner(isOwner: Boolean) {
+    fun initAuctionInfo(isOwner: Boolean, auctionId: Long) {
         this.isOwner = isOwner
+        this.auctionId = auctionId
     }
 
-    fun loadQnas(auctionId: Long) {
+    fun loadQnas() {
         if (isLoading.getAndSet(true)) return
-        this.auctionId = auctionId
-        viewModelScope.launch {
-            when (val response = repository.getAuctionQnas(auctionId)) {
-                is ApiResponse.Success ->
-                    _qnas.value =
-                        response.body.toPresentation(isOwner).questionAndAnswers
+//        this.auctionId = auctionId
+        auctionId?.let { auctionId ->
 
-                is ApiResponse.Failure ->
-                    _event.value =
-                        QnaEvent.FailureLoadQnas(ErrorType.FAILURE(response.error))
+            viewModelScope.launch {
+                when (val response = repository.getAuctionQnas(auctionId)) {
+                    is ApiResponse.Success ->
+                        _qnas.value =
+                            response.body.toPresentation(isOwner).questionAndAnswers
 
-                is ApiResponse.NetworkError ->
-                    _event.value =
-                        QnaEvent.FailureLoadQnas(ErrorType.NETWORK_ERROR)
+                    is ApiResponse.Failure ->
+                        _event.value =
+                            QnaEvent.FailureLoadQnas(ErrorType.FAILURE(response.error))
 
-                is ApiResponse.Unexpected ->
-                    _event.value =
-                        QnaEvent.FailureLoadQnas(ErrorType.UNEXPECTED)
+                    is ApiResponse.NetworkError ->
+                        _event.value =
+                            QnaEvent.FailureLoadQnas(ErrorType.NETWORK_ERROR)
+
+                    is ApiResponse.Unexpected ->
+                        _event.value =
+                            QnaEvent.FailureLoadQnas(ErrorType.UNEXPECTED)
+                }
+                isLoading.set(false)
             }
-            isLoading.set(false)
         }
     }
 
@@ -81,7 +85,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
             when (response) {
                 is ApiResponse.Success -> {
                     auctionId?.let { auctionId ->
-                        loadQnas(auctionId)
+                        loadQnas()
                     }
                 }
 
@@ -111,7 +115,7 @@ class QnaViewModel @Inject constructor(private val repository: AuctionRepository
             when (response) {
                 is ApiResponse.Success -> {
                     auctionId?.let { auctionId ->
-                        loadQnas(auctionId)
+                        loadQnas()
                     }
                 }
 

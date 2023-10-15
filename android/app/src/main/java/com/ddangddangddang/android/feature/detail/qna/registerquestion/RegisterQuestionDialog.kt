@@ -22,6 +22,15 @@ class RegisterQuestionDialog : DialogFragment() {
         get() = _binding!!
 
     private val viewModel: RegisterQuestionViewModel by viewModels()
+    private lateinit var onDialogResult: OnDialogResult
+
+    fun interface OnDialogResult {
+        fun invoke(isNeedRefresh: Boolean)
+    }
+
+    fun setOnDialogResult(onDialogResult: OnDialogResult) {
+        this.onDialogResult = onDialogResult
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +71,10 @@ class RegisterQuestionDialog : DialogFragment() {
 
     private fun handleEvent(event: RegisterQuestionViewModel.WriteQuestionEvent) {
         when (event) {
-            RegisterQuestionViewModel.WriteQuestionEvent.Cancel -> dismiss()
+            RegisterQuestionViewModel.WriteQuestionEvent.Cancel -> {
+                onDialogResult.invoke(false)
+                dismiss()
+            }
             is RegisterQuestionViewModel.WriteQuestionEvent.FailureSubmitQuestion -> {
                 notifyFailureMessage(
                     event.errorType,
@@ -72,6 +84,7 @@ class RegisterQuestionDialog : DialogFragment() {
 
             RegisterQuestionViewModel.WriteQuestionEvent.SubmitQuestion -> {
                 notifySuccessMessage()
+                onDialogResult.invoke(true)
                 dismiss()
             }
         }
@@ -81,11 +94,12 @@ class RegisterQuestionDialog : DialogFragment() {
         private const val WRITE_QUESTION_TAG = "write_question_tag"
         private const val AUCTION_ID_KEY = "auction_id"
 
-        fun show(fragmentManager: FragmentManager, auctionId: Long) {
+        fun show(fragmentManager: FragmentManager, auctionId: Long, onDialogResult: OnDialogResult) {
             val dialog = RegisterQuestionDialog()
             dialog.arguments = Bundle().apply {
                 putLong(AUCTION_ID_KEY, auctionId)
             }
+            dialog.setOnDialogResult(onDialogResult)
             dialog.show(fragmentManager, WRITE_QUESTION_TAG)
         }
     }
