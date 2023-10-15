@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AuctionReportRepositoryImplImplTest extends AuctionReportRepositoryImplFixture {
+class AuctionReportRepositoryImplTest extends AuctionReportRepositoryImplFixture {
 
     AuctionReportRepository auctionReportRepository;
 
