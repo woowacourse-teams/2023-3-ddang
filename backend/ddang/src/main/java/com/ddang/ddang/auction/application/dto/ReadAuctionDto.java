@@ -87,8 +87,6 @@ public record ReadAuctionDto(
             return null;
         }
 
-        return auction.getLastBid()
-                      .getBidder()
-                      .getId();
+        return auction.getLastBid().getBidder().getId();
     }
 }
