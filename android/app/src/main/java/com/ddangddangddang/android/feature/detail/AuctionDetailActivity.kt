@@ -48,13 +48,13 @@ class AuctionDetailActivity :
         return actionBarHeight
     }
 
-    // 스크린 높이에서 액션바 높이를 뺀 높이를 계산하는 함수
     private fun getRemainingHeight(context: Context): Int {
         val screenHeight = context.resources.displayMetrics.heightPixels
+        val statusBarHeight = convertDpToPx(24f) // 탭 레이아웃의 톱 마진과도 같은 값임.
         val actionBarHeight = getActionBarHeight(context)
-        val tabLayoutHeight = convertDpToPx(48f + 24f)
+        val tabLayoutHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
         val bottomButtonHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
-        return screenHeight - actionBarHeight - tabLayoutHeight - bottomButtonHeight
+        return screenHeight - statusBarHeight - actionBarHeight - tabLayoutHeight - bottomButtonHeight
     }
 
     // 뷰의 높이를 동적으로 설정하는 함수
