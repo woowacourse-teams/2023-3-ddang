@@ -52,9 +52,6 @@ public class FcmNotificationServiceFixture {
     private JpaAuctionImageRepository auctionImageRepository;
 
     protected User 메시지_조회자_겸_발신자;
-    private User 메시지_수신자;
-    private User 새로운_입찰자;
-    private User 기기토큰이_없는_사용자;
     protected DeviceToken 기기토큰;
     protected CreateNotificationDto 기기토큰이_없는_사용자의_알림_생성_DTO;
     protected CreateNotificationDto 알림_생성_DTO;
@@ -69,24 +66,24 @@ public class FcmNotificationServiceFixture {
                             .reliability(new Reliability(4.7d))
                             .oauthId("12345")
                             .build();
-        메시지_수신자 = User.builder()
-                      .name("메시지_수신자")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(new Reliability(4.7d))
-                      .oauthId("12347")
-                      .build();
-        새로운_입찰자 = User.builder()
-                      .name("입찰자1")
-                      .profileImage(new ProfileImage("upload.png", "store.png"))
-                      .reliability(new Reliability(4.7d))
-                      .oauthId("56789")
-                      .build();
-        기기토큰이_없는_사용자 = User.builder()
-                           .name("기기토큰이 없는 사용자")
+        final User 메시지_수신자 = User.builder()
+                           .name("메시지_수신자")
                            .profileImage(new ProfileImage("upload.png", "store.png"))
                            .reliability(new Reliability(4.7d))
-                           .oauthId("12234")
+                           .oauthId("12347")
                            .build();
+        final User 새로운_입찰자 = User.builder()
+                           .name("입찰자1")
+                           .profileImage(new ProfileImage("upload.png", "store.png"))
+                           .reliability(new Reliability(4.7d))
+                           .oauthId("56789")
+                           .build();
+        final User 기기토큰이_없는_사용자 = User.builder()
+                                .name("기기토큰이 없는 사용자")
+                                .profileImage(new ProfileImage("upload.png", "store.png"))
+                                .reliability(new Reliability(4.7d))
+                                .oauthId("12234")
+                                .build();
 
         userRepository.save(메시지_조회자_겸_발신자);
         userRepository.save(메시지_수신자);

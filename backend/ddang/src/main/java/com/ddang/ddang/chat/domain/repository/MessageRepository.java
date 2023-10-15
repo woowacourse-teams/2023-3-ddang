@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.domain.repository;
 
 import com.ddang.ddang.chat.domain.Message;
-import com.querydsl.core.types.dsl.BooleanExpression;
 
 import java.util.List;
 
