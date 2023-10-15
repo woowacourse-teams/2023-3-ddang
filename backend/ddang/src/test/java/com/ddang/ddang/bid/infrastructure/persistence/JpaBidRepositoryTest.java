@@ -25,9 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaBidRepositoryTest extends JpaBidRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
     JpaBidRepository bidRepository;
 
@@ -40,9 +37,6 @@ class JpaBidRepositoryTest extends JpaBidRepositoryFixture {
         final Bid actual = bidRepository.save(bid);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(actual.getId()).isPositive();
     }
 

@@ -6,6 +6,8 @@ import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.domain.DeviceToken;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
+import com.ddang.ddang.device.infrastructure.persistence.DeviceTokenRepositoryImpl;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
@@ -58,11 +60,12 @@ public class AuthenticationServiceFixture {
     @Autowired
     private TokenEncoder tokenEncoder;
 
-    @Autowired
-    private JpaDeviceTokenRepository deviceTokenRepository;
+    private DeviceTokenRepository deviceTokenRepository;
 
     @BeforeEach
-    void fixtureSetUp() {
+    void fixtureSetUp(@Autowired final JpaDeviceTokenRepository jpaDeviceTokenRepository) {
+        deviceTokenRepository = new DeviceTokenRepositoryImpl(jpaDeviceTokenRepository);
+
         profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
 
         사용자 = User.builder()

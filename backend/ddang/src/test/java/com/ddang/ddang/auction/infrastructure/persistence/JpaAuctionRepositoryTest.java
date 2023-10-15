@@ -29,6 +29,7 @@ class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
         // when
         final Auction actual = auctionRepository.save(저장하기_전_경매_엔티티);
 
+        // then
         assertThat(actual.getId()).isPositive();
     }
 

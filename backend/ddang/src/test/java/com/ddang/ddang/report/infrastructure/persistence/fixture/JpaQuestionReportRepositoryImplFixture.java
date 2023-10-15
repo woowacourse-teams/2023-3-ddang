@@ -37,15 +37,15 @@ public class JpaQuestionReportRepositoryImplFixture {
     @PersistenceContext
     private EntityManager em;
 
-    private UserRepository userRepository;
-
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
-    private AuctionRepository auctionRepository;
-
     @Autowired
     private JpaQuestionRepository questionRepository;
+
+    private UserRepository userRepository;
+
+    private AuctionRepository auctionRepository;
 
     private QuestionReportRepository questionReportRepository;
 
@@ -60,13 +60,13 @@ public class JpaQuestionReportRepositoryImplFixture {
 
     @BeforeEach
     void setUpFixture(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
-            @Autowired final JPAQueryFactory queryFactory,
             @Autowired final JpaQuestionReportRepository jpaQuestionReportRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         questionReportRepository = new QuestionReportRepositoryImpl(jpaQuestionReportRepository);
 
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");

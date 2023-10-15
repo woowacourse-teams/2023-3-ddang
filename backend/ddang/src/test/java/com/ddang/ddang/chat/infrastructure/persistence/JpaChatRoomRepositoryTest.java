@@ -23,11 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
-    JpaChatRoomRepository chatRoomRepository;
+    JpaChatRoomRepository jpaChatRoomRepository;
 
     @Test
     void 채팅방을_저장한다() {
@@ -35,19 +32,16 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
         final ChatRoom chatRoom = new ChatRoom(경매, 구매자);
 
         // when
-        chatRoomRepository.save(chatRoom);
+        jpaChatRoomRepository.save(chatRoom);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(chatRoom.getId()).isPositive();
     }
 
     @Test
     void 지정한_아이디에_대한_채팅방을_조회한다() {
         // when
-        final Optional<ChatRoom> actual = chatRoomRepository.findById(채팅방.getId());
+        final Optional<ChatRoom> actual = jpaChatRoomRepository.findById(채팅방.getId());
 
         // then
         assertThat(actual).contains(채팅방);
@@ -56,7 +50,7 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
     @Test
     void 지정한_경매_아이디가_포함된_채팅방의_아이디를_조회한다() {
         // when
-        final Optional<Long> actual = chatRoomRepository.findChatRoomIdByAuctionId(경매.getId());
+        final Optional<Long> actual = jpaChatRoomRepository.findChatRoomIdByAuctionId(경매.getId());
 
         // then
         assertThat(actual).contains(채팅방.getId());
@@ -65,7 +59,7 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
     @Test
     void 지정한_경매_아이디가_포함된_채팅방이_존재한다면_참을_반환한다() {
         // when
-        final boolean actual = chatRoomRepository.existsByAuctionId(경매.getId());
+        final boolean actual = jpaChatRoomRepository.existsByAuctionId(경매.getId());
 
         // then
         assertThat(actual).isTrue();
@@ -74,7 +68,7 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
     @Test
     void 지정한_경매_아이디가_포함된_채팅방이_존재하지_않는다면_거짓을_반환한다() {
         // when
-        final boolean actual = chatRoomRepository.existsByAuctionId(존재하지_않는_채팅방_아이디);
+        final boolean actual = jpaChatRoomRepository.existsByAuctionId(존재하지_않는_채팅방_아이디);
 
         // then
         assertThat(actual).isFalse();

@@ -40,7 +40,6 @@ public class JpaReviewRepositoryFixture {
     @Autowired
     private JpaReviewRepository reviewRepository;
 
-
     protected User 판매자1;
     protected User 판매자2;
     protected User 평가_안한_경매_판매자;

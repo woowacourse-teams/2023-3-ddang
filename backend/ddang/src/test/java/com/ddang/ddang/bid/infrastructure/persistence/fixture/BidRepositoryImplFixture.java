@@ -50,13 +50,13 @@ public class BidRepositoryImplFixture {
 
     @BeforeEach
     void fixtureSetUp(
+            @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
-            @Autowired final JPAQueryFactory queryFactory,
             @Autowired final JpaBidRepository jpaBidRepository
     ) {
         userRepository = new UserRepositoryImpl(jpaUserRepository);
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         bidRepository = new BidRepositoryImpl(jpaBidRepository);
 
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");

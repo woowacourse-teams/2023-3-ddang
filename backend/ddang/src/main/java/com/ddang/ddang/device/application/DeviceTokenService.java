@@ -2,7 +2,7 @@ package com.ddang.ddang.device.application;
 
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
-import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DeviceTokenService {
 
-    private final JpaDeviceTokenRepository deviceTokenRepository;
+    private final DeviceTokenRepository deviceTokenRepository;
     private final UserRepository userRepository;
 
     @Transactional

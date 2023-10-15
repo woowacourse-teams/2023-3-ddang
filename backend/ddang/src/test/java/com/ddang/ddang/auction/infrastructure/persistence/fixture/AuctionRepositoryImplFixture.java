@@ -38,14 +38,14 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionRepositoryImplFixture {
 
+    @Autowired
+    private JpaCategoryRepository categoryRepository;
+
     private AuctionRepository auctionRepository;
 
     private UserRepository userRepository;
 
     private RegionRepository regionRepository;
-
-    @Autowired
-    private JpaCategoryRepository categoryRepository;
 
     private BidRepository bidRepository;
 

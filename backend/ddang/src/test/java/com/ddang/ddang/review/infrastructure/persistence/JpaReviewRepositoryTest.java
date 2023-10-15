@@ -25,28 +25,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
-    JpaReviewRepository reviewRepository;
+    JpaReviewRepository jpaReviewRepository;
 
     @Test
     void 평가를_저장한다() {
         // when
-        reviewRepository.save(저장하려는_평가);
+        jpaReviewRepository.save(저장하려는_평가);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(저장하려는_평가.getId()).isPositive();
     }
 
     @Test
     void 지정한_경매_아이디와_작성자_아이디를_포함하는_평가가_존재하면_참을_반환한다() {
         // when
-        final boolean actual = reviewRepository.existsByAuctionIdAndWriterId(판매자1이_평가한_경매.getId(), 판매자1.getId());
+        final boolean actual = jpaReviewRepository.existsByAuctionIdAndWriterId(판매자1이_평가한_경매.getId(), 판매자1.getId());
 
         // then
         assertThat(actual).isTrue();
@@ -55,7 +49,7 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
     @Test
     void 지정한_채팅방_아이디를_포함하는_평가가_존재하지_않는다면_거짓을_반환한다() {
         // when
-        final boolean actual = reviewRepository.existsByAuctionIdAndWriterId(평가_안한_경매.getId(), 평가_안한_경매_판매자.getId());
+        final boolean actual = jpaReviewRepository.existsByAuctionIdAndWriterId(평가_안한_경매.getId(), 평가_안한_경매_판매자.getId());
 
         // then
         assertThat(actual).isFalse();
@@ -64,7 +58,7 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
     @Test
     void 지정한_아이디가_평가_대상_아이디에_해당하는_평가_목록을_최신순으로_조회한다() {
         // when
-        final List<Review> actual = reviewRepository.findAllByTargetId(구매자.getId());
+        final List<Review> actual = jpaReviewRepository.findAllByTargetId(구매자.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -78,7 +72,7 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
     void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재한다면_optional에_넣어_반환한다() {
         // when
         final Optional<Review> actual =
-                reviewRepository.findByAuctionIdAndWriterId(판매자1이_평가한_경매.getId(), 판매자1.getId());
+                jpaReviewRepository.findByAuctionIdAndWriterId(판매자1이_평가한_경매.getId(), 판매자1.getId());
 
         // then
         assertThat(actual).contains(구매자가_판매자1에게_받은_평가);
@@ -88,7 +82,7 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
     void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재하지_않는다면_빈_optional을_반환한다() {
         // when
         final Optional<Review> actual =
-                reviewRepository.findByAuctionIdAndWriterId(평가_안한_경매.getId(), 평가_안한_경매_판매자.getId());
+                jpaReviewRepository.findByAuctionIdAndWriterId(평가_안한_경매.getId(), 평가_안한_경매_판매자.getId());
 
         // then
         assertThat(actual).isEmpty();
@@ -97,7 +91,7 @@ class JpaReviewRepositoryTest extends JpaReviewRepositoryFixture {
     @Test
     void 지정한_평가_아이디보다_아이디가_큰_평가_목록을_조회한다() {
         // when
-        final List<Review> actual = reviewRepository.findAllByIdGreaterThan(구매자가_판매자1에게_받은_평가.getId());
+        final List<Review> actual = jpaReviewRepository.findAllByIdGreaterThan(구매자가_판매자1에게_받은_평가.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

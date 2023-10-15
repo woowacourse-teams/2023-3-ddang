@@ -2,7 +2,7 @@ package com.ddang.ddang.device.application.fixture;
 
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
-import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
@@ -14,10 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class DeviceTokenServiceFixture {
 
     @Autowired
-    private JpaDeviceTokenRepository deviceTokenRepository;
+    private DeviceTokenRepository deviceTokenRepository;
 
     @Autowired
     private UserRepository userRepository;
+
     private String 초기_디바이스_토큰_값 = "initialDeviceToken";
     private DeviceToken 사용자의_디바이스_토큰;
 

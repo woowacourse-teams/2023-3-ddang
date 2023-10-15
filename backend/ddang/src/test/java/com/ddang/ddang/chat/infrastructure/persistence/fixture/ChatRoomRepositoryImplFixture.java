@@ -55,13 +55,13 @@ public class ChatRoomRepositoryImplFixture {
 
     @BeforeEach
     void fixtureSetUp(
-            @Autowired final JPAQueryFactory queryFactory,
+            @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaChatRoomRepository jpaChatRoomRepository,
             @Autowired final JpaBidRepository jpaBidRepository
     ) {
-        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(queryFactory));
+        auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
         bidRepository = new BidRepositoryImpl(jpaBidRepository);

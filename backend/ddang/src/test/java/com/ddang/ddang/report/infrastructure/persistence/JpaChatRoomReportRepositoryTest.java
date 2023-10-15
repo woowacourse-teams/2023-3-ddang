@@ -27,6 +27,7 @@ class JpaChatRoomReportRepositoryTest extends JpaChatRoomReportRepositoryFixture
 
     @Test
     void 채팅방_신고를_저장한다() {
+        // given
         final ChatRoomReport chatRoomReport = new ChatRoomReport(구매자1, 채팅방1, "신고합니다.");
 
         // when

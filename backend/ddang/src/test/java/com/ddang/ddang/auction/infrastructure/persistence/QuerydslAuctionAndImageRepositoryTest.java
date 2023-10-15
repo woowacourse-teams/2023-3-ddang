@@ -24,8 +24,8 @@ class QuerydslAuctionAndImageRepositoryTest extends QuerydslAuctionAndImageRepos
     QuerydslAuctionAndImageRepository querydslAuctionAndImageRepository;
 
     @BeforeEach
-    void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslAuctionAndImageRepository = new QuerydslAuctionAndImageRepository(queryFactory);
+    void setUp(@Autowired final JPAQueryFactory jpaQueryFactory) {
+        querydslAuctionAndImageRepository = new QuerydslAuctionAndImageRepository(jpaQueryFactory);
     }
 
     @Test
