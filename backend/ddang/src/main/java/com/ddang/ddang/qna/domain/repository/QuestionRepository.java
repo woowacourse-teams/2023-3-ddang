@@ -11,7 +11,5 @@ public interface QuestionRepository {
 
     Optional<Question> findById(final Long id);
 
-    Optional<Question> findByIdIncludeDeleted(final Long id);
-
     List<Question> findAllByAuctionId(final Long auctionId);
 }

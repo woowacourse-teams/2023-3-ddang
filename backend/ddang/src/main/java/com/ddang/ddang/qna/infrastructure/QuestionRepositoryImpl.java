@@ -25,11 +25,6 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public Optional<Question> findByIdIncludeDeleted(final Long id) {
-        return jpaQuestionRepository.findById(id);
-    }
-
-    @Override
     public List<Question> findAllByAuctionId(final Long auctionId) {
         return jpaQuestionRepository.findAllByAuctionId(auctionId);
     }

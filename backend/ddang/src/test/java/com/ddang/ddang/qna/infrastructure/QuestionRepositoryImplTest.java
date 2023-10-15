@@ -63,15 +63,6 @@ class QuestionRepositoryImplTest extends QuestionRepositoryImplFixture {
     }
 
     @Test
-    void 삭제된_질문을_포함에_질문을_조회한다() {
-        // when
-        final Optional<Question> actual = questionRepository.findByIdIncludeDeleted(삭제된_질문.getId());
-
-        // then
-        assertThat(actual).contains(삭제된_질문);
-    }
-
-    @Test
     void 경매_아이디를_통해_질문과_답변들을_모두_조회한다() {
         // when
         final List<Question> actual = questionRepository.findAllByAuctionId(질문이_3개_답변이_2개인_경매.getId());
