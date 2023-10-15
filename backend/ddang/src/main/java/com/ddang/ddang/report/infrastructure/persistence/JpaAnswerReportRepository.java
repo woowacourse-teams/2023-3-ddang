@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface JpaAnswerReportRepository extends JpaRepository<AnswerReport, Long> {
 
-    boolean existsByAnswerIdAndReporterId(final Long answerId, final Long ReporterId);
+    boolean existsByAnswerIdAndReporterId(final Long answerId, final Long reportId);
 
     @Query("""
         select ar
