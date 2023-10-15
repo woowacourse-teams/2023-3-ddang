@@ -9,7 +9,7 @@ import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -29,7 +29,7 @@ import java.util.List;
 public class MessageService {
 
     private final ApplicationEventPublisher messageEventPublisher;
-    private final JpaMessageRepository messageRepository;
+    private final MessageRepository messageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
 
@@ -71,7 +71,7 @@ public class MessageService {
             validateLastMessageId(request.lastMessageId());
         }
 
-        final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
+        final List<Message> readMessages = messageRepository.findAllByLastMessageId(
                 request.messageReaderId(),
                 chatRoom.getId(),
                 request.lastMessageId()

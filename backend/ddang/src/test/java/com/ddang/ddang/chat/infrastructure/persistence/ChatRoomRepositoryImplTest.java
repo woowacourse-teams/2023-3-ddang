@@ -38,6 +38,7 @@ class ChatRoomRepositoryImplTest extends ChatRoomRepositoryImplFixture {
         // when
         chatRoomRepository.save(chatRoom);
 
+        // then
         assertThat(chatRoom.getId()).isPositive();
     }
 

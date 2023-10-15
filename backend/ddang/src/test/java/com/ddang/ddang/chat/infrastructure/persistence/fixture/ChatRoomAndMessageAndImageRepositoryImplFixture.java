@@ -17,9 +17,12 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.ChatRoomRepositoryImpl;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.infrastructure.persistence.MessageRepositoryImpl;
+import com.ddang.ddang.chat.infrastructure.persistence.QuerydslMessageRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
@@ -37,10 +40,10 @@ import java.util.List;
 @SuppressWarnings("NonAsciiCharacters")
 public class ChatRoomAndMessageAndImageRepositoryImplFixture {
 
-    private AuctionRepository auctionRepository;
-
     @Autowired
     private JpaCategoryRepository categoryRepository;
+
+    private AuctionRepository auctionRepository;
 
     private UserRepository userRepository;
 
@@ -48,8 +51,7 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
 
     private ChatRoomRepository chatRoomRepository;
 
-    @Autowired
-    private JpaMessageRepository messageRepository;
+    private MessageRepository messageRepository;
 
     protected User 엔초;
     protected AuctionImage 메리의_경매_대표_이미지;
@@ -68,12 +70,14 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JpaUserRepository jpaUserRepository,
             @Autowired final JpaChatRoomRepository jpaChatRoomRepository,
-            @Autowired final JpaBidRepository jpaBidRepository
+            @Autowired final JpaBidRepository jpaBidRepository,
+            @Autowired final JpaMessageRepository jpaMessageRepository
     ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
         bidRepository = new BidRepositoryImpl(jpaBidRepository);
+        messageRepository = new MessageRepositoryImpl(jpaMessageRepository, new QuerydslMessageRepository(jpaQueryFactory));
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
@@ -209,14 +213,10 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
         chatRoomRepository.save(엔초_지토_채팅방);
         chatRoomRepository.save(제이미_엔초_채팅방);
 
-        messageRepository.saveAll(
-                List.of(
-                        제이미가_엔초에게_1시에_보낸_쪽지,
-                        엔초가_지토에게_2시에_보낸_쪽지,
-                        메리가_엔초에게_3시에_보낸_쪽지,
-                        제이미가_엔초에게_4시에_보낸_쪽지,
-                        엔초가_지토에게_5시에_보낸_쪽지
-                )
-        );
+        messageRepository.save(제이미가_엔초에게_1시에_보낸_쪽지);
+        messageRepository.save(엔초가_지토에게_2시에_보낸_쪽지);
+        messageRepository.save(메리가_엔초에게_3시에_보낸_쪽지);
+        messageRepository.save(제이미가_엔초에게_4시에_보낸_쪽지);
+        messageRepository.save(엔초가_지토에게_5시에_보낸_쪽지);
     }
 }

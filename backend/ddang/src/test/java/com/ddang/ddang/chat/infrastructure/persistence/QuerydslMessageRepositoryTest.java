@@ -1,7 +1,7 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslMessageRepositoryImplFixture;
+import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslMessageRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -22,19 +22,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
-class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFixture {
+class QuerydslMessageRepositoryTest extends QuerydslMessageRepositoryFixture {
 
-    QuerydslMessageRepositoryImpl querydslMessageRepository;
+    QuerydslMessageRepository querydslMessageRepository;
 
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
-        querydslMessageRepository = new QuerydslMessageRepositoryImpl(queryFactory);
+        querydslMessageRepository = new QuerydslMessageRepository(queryFactory);
     }
 
     @Test
     void 마지막으로_읽은_메시지_이후에_추가된_메시지를_조회한다() {
         // when
-        final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
+        final List<Message> actual = querydslMessageRepository.findAllByLastMessageId(
                 판매자.getId(),
                 채팅방.getId(),
                 세_번째_메시지.getId()
@@ -56,7 +56,7 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 상대방이_메시지를_추가한_경우_마지막으로_읽은_메시지_이후의_메시지를_조회한다() {
         // when
-        final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
+        final List<Message> actual = querydslMessageRepository.findAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
                 세_번째_메시지.getId()
@@ -78,7 +78,7 @@ class QuerydslMessageRepositoryImplTest extends QuerydslMessageRepositoryImplFix
     @Test
     void 마지막으로_읽은_메시지_이후의_메시지가_없는_경우_빈_리스트를_반환한다() {
         // when
-        final List<Message> actual = querydslMessageRepository.findMessagesAllByLastMessageId(
+        final List<Message> actual = querydslMessageRepository.findAllByLastMessageId(
                 구매자.getId(),
                 채팅방.getId(),
                 열_번째_메시지.getId()
