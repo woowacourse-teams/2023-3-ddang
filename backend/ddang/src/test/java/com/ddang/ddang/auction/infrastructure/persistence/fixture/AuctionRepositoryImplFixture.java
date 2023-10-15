@@ -10,6 +10,8 @@ import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionReposit
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
+import com.ddang.ddang.bid.infrastructure.persistence.BidRepositoryImpl;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -38,9 +40,6 @@ public class AuctionRepositoryImplFixture {
 
     private AuctionRepository auctionRepository;
 
-    @Autowired
-    private JPAQueryFactory queryFactory;
-
     private UserRepository userRepository;
 
     private RegionRepository regionRepository;
@@ -48,8 +47,7 @@ public class AuctionRepositoryImplFixture {
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
-    @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     private Instant 시간 = Instant.parse("2023-07-08T22:21:20Z");
     private ZoneId 위치 = ZoneId.of("UTC");
@@ -75,11 +73,13 @@ public class AuctionRepositoryImplFixture {
             @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JpaUserRepository jpaUserRepository,
-            @Autowired final JpaRegionRepository jpaRegionRepository
+            @Autowired final JpaRegionRepository jpaRegionRepository,
+            @Autowired final JpaBidRepository jpaBidRepository
     ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
         regionRepository = new RegionRepositoryImpl(jpaRegionRepository);
+        bidRepository = new BidRepositoryImpl(jpaBidRepository);
 
         final Region 서울특별시 = new Region("서울특별시");
         final Region 강남구 = new Region("강남구");

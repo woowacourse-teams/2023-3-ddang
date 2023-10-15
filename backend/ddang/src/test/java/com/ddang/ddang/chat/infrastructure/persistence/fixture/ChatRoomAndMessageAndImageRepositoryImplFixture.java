@@ -9,6 +9,8 @@ import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.QuerydslAuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
+import com.ddang.ddang.bid.infrastructure.persistence.BidRepositoryImpl;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
@@ -42,8 +44,7 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
 
     private UserRepository userRepository;
 
-    @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     private ChatRoomRepository chatRoomRepository;
 
@@ -66,11 +67,13 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
             @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JpaUserRepository jpaUserRepository,
-            @Autowired final JpaChatRoomRepository jpaChatRoomRepository
+            @Autowired final JpaChatRoomRepository jpaChatRoomRepository,
+            @Autowired final JpaBidRepository jpaBidRepository
     ) {
         auctionRepository = new AuctionRepositoryImpl(jpaAuctionRepository, new QuerydslAuctionRepository(jpaQueryFactory));
         userRepository = new UserRepositoryImpl(jpaUserRepository);
         chatRoomRepository = new ChatRoomRepositoryImpl(jpaChatRoomRepository);
+        bidRepository = new BidRepositoryImpl(jpaBidRepository);
 
         final Category 전자기기_카테고리 = new Category("전자기기");
         final Category 전자기기_서브_노트북_카테고리 = new Category("노트북 카테고리");
@@ -195,7 +198,9 @@ public class ChatRoomAndMessageAndImageRepositoryImplFixture {
         auctionRepository.save(엔초의_경매);
         auctionRepository.save(제이미의_경매);
 
-        bidRepository.saveAll(List.of(엔초가_메리_경매에_입찰, 지토가_엔초_경매에_입찰, 엔초가_제이미_경매에_입찰));
+        bidRepository.save(엔초가_메리_경매에_입찰);
+        bidRepository.save(지토가_엔초_경매에_입찰);
+        bidRepository.save(엔초가_제이미_경매에_입찰);
         메리의_경매.updateLastBid(엔초가_메리_경매에_입찰);
         엔초의_경매.updateLastBid(지토가_엔초_경매에_입찰);
         제이미의_경매.updateLastBid(엔초가_제이미_경매에_입찰);

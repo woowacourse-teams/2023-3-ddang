@@ -1,12 +1,12 @@
 package com.ddang.ddang.bid.infrastructure.persistence;
 
 import com.ddang.ddang.bid.domain.Bid;
-import com.ddang.ddang.bid.infrastructure.persistence.fixture.JpaBidRepositoryFixture;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
+import com.ddang.ddang.bid.infrastructure.persistence.fixture.BidRepositoryImplFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -23,13 +23,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaBidRepositoryTest extends JpaBidRepositoryFixture {
+class BidRepositoryImplTest extends BidRepositoryImplFixture {
 
-    @PersistenceContext
-    EntityManager em;
+    BidRepository bidRepository;
 
-    @Autowired
-    JpaBidRepository bidRepository;
+    @BeforeEach
+    void setUp(@Autowired final JpaBidRepository jpaBidRepository) {
+        bidRepository = new BidRepositoryImpl(jpaBidRepository);
+    }
 
     @Test
     void 입찰을_저장한다() {
@@ -40,16 +41,13 @@ class JpaBidRepositoryTest extends JpaBidRepositoryFixture {
         final Bid actual = bidRepository.save(bid);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(actual.getId()).isPositive();
     }
 
     @Test
     void 특정_경매의_입찰을_모두_조회한다() {
         // when
-        final List<Bid> actual = bidRepository.findAllByAuctionIdOrderByIdAsc(경매1.getId());
+        final List<Bid> actual = bidRepository.findAllByAuctionId(경매1.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
