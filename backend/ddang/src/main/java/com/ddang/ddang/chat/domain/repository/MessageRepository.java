@@ -10,9 +10,5 @@ public interface MessageRepository {
 
     boolean existsById(final Long lastMessageId);
 
-    List<Message> findAllByLastMessageId(
-            final Long messageReaderId,
-            final Long chatRoomId,
-            final Long lastMessageId
-    );
+    List<Message> findAllByLastMessageId(final Long messageReaderId, final Long chatRoomId, final Long lastMessageId);
 }
