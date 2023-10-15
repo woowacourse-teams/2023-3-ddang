@@ -25,7 +25,7 @@ class ProfileImageRepositoryImplTest extends ProfileImageRepositoryFixture {
     ProfileImageRepository profileImageRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaProfileImageRepository jpaProfileImageRepository) {
+    void setUp(@Autowired final JpaProfileImageRepository jpaProfileImageRepository) {
         profileImageRepository = new ProfileImageRepositoryImpl(jpaProfileImageRepository);
     }
 
