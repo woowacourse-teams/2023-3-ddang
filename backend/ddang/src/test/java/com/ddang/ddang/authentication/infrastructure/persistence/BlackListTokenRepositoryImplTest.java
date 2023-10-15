@@ -26,7 +26,7 @@ class BlackListTokenRepositoryImplTest extends BlackListTokenRepositoryFixture {
     BlackListTokenRepository blackListTokenRepository;
 
     @BeforeEach
-    void setUp(@Autowired JpaBlackListTokenRepository jpaBlackListTokenRepository) {
+    void setUp(@Autowired final JpaBlackListTokenRepository jpaBlackListTokenRepository) {
         blackListTokenRepository = new BlackListTokenRepositoryImpl(jpaBlackListTokenRepository);
     }
 

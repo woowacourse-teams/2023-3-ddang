@@ -12,7 +12,7 @@ import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepositor
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
 import com.ddang.ddang.report.domain.AuctionReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaAuctionReportRepository;
+import com.ddang.ddang.report.domain.repository.AuctionReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -41,7 +41,7 @@ public class AuctionReportServiceFixture {
     private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaAuctionReportRepository auctionReportRepository;
+    private AuctionReportRepository auctionReportRepository;
 
     protected User 이미_신고한_신고자1;
     protected User 이미_신고한_신고자2;
@@ -136,8 +136,9 @@ public class AuctionReportServiceFixture {
         auctionRepository.save(경매);
         auctionRepository.save(삭제된_경매);
 
-
-        auctionReportRepository.saveAll(List.of(경매_신고1, 경매_신고2, 경매_신고3));
+        auctionReportRepository.save(경매_신고1);
+        auctionReportRepository.save(경매_신고2);
+        auctionReportRepository.save(경매_신고3);
 
         새로운_경매_신고_요청_dto = new CreateAuctionReportDto(
                 경매.getId(),

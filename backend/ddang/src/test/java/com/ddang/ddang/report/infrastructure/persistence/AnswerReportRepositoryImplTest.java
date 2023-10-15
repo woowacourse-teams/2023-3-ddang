@@ -3,8 +3,10 @@ package com.ddang.ddang.report.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.AnswerReport;
-import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaAnswerReportRepositoryFixture;
+import com.ddang.ddang.report.domain.repository.AnswerReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.fixture.AnswerReportRepositoryImplFixture;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -20,10 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaAnswerReportRepositoryTest extends JpaAnswerReportRepositoryFixture {
+class AnswerReportRepositoryImplTest extends AnswerReportRepositoryImplFixture {
 
-    @Autowired
-    JpaAnswerReportRepository answerReportRepository;
+    AnswerReportRepository answerReportRepository;
+
+    @BeforeEach
+    void setUp(@Autowired final JpaAnswerReportRepository jpaAnswerReportRepository) {
+        answerReportRepository = new AnswerReportRepositoryImpl(jpaAnswerReportRepository);
+    }
 
     @Test
     void 답변을_등록한다() {

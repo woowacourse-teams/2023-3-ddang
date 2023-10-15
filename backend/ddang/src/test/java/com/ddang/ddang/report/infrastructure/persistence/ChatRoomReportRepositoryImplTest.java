@@ -3,8 +3,10 @@ package com.ddang.ddang.report.infrastructure.persistence;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.ChatRoomReport;
-import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaChatRoomReportRepositoryFixture;
+import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
+import com.ddang.ddang.report.infrastructure.persistence.fixture.ChatRoomReportRepositoryImplFixture;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -20,10 +22,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class JpaChatRoomReportRepositoryTest extends JpaChatRoomReportRepositoryFixture {
+class ChatRoomReportRepositoryImplTest extends ChatRoomReportRepositoryImplFixture {
 
-    @Autowired
-    JpaChatRoomReportRepository chatRoomReportRepository;
+    ChatRoomReportRepository chatRoomReportRepository;
+
+    @BeforeEach
+    void setUp(@Autowired final JpaChatRoomReportRepository jpaChatRoomReportRepository) {
+        chatRoomReportRepository = new ChatRoomReportRepositoryImpl(jpaChatRoomReportRepository);
+    }
 
     @Test
     void 채팅방_신고를_저장한다() {
