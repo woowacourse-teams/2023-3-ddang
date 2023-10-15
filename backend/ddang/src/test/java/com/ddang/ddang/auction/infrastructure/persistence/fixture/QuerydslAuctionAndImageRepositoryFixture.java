@@ -12,14 +12,17 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuerydslAuctionAndImageRepositoryFixture {
@@ -28,23 +31,28 @@ public class QuerydslAuctionAndImageRepositoryFixture {
     private EntityManager em;
 
     @Autowired
-    private JPAQueryFactory jpaQueryFactory;
-
-    @Autowired
-    private JpaAuctionRepository jpaAuctionRepository;
-
-    @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
+    
+    private UserRepository userRepository;
 
-    @Autowired
-    private JpaUserRepository userRepository;
+    private AuctionRepository auctionRepository;
 
     private User 사용자;
     protected Auction 경매;
     protected AuctionImage 경매_이미지;
 
     @BeforeEach
-    void setUp() {
+    void fixtureSetUp(
+            @Autowired JPAQueryFactory jpaQueryFactory,
+            @Autowired JpaAuctionRepository jpaAuctionRepository,
+            @Autowired JpaUserRepository jpaUserRepository
+    ) {
+        auctionRepository = new AuctionRepositoryImpl(
+                jpaAuctionRepository,
+                new QuerydslAuctionRepository(jpaQueryFactory)
+        );
+        userRepository = new UserRepositoryImpl(jpaUserRepository);
+
         경매 = Auction.builder()
                     .title("경매 상품 1")
                     .description("이것은 경매 상품 1 입니다.")
@@ -63,10 +71,6 @@ public class QuerydslAuctionAndImageRepositoryFixture {
                   .oauthId("12345")
                   .build();
 
-        final AuctionRepository auctionRepository = new AuctionRepositoryImpl(
-                jpaAuctionRepository,
-                new QuerydslAuctionRepository(jpaQueryFactory)
-        );
         auctionRepository.save(경매);
         userRepository.save(사용자);
 
