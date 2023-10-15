@@ -85,7 +85,7 @@
                 app:layout_constraintBottom_toTopOf="@id/br_question_btn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="힝잉잉" />
+                tools:text="힝잉 " />
 
             <TextView
                 android:id="@+id/tv_delete_question"
@@ -94,7 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:drawablePadding="4dp"
                 android:gravity="center_vertical"
                 android:onClick="@{() -> onClicks.onDeleteQuestionClick(model.question.id)}"
@@ -117,7 +117,7 @@
                 isVisible="@{!model.question.isQuestioner}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="16dp"
                 android:onClick="@{() -> onClicks.onReportQuestionClick(model.question.id)}"
                 android:src="@drawable/ic_report_24"
                 app:layout_constraintBottom_toTopOf="@id/line_divider"
@@ -140,10 +140,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:text="@string/detail_auction_qna_seller_answer_title"
                 android:textColor="@color/grey_800"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/line_divider"
-                tools:text="@string/detail_auction_qna_seller_answer_title" />
+                app:layout_constraintTop_toBottomOf="@id/line_divider" />
 
             <TextView
                 style="@style/Body"
@@ -198,7 +198,7 @@
 
             <ImageView
                 android:id="@+id/iv_report_answer"
-                isVisible="@{!model.isOwner}"
+                isVisible="@{!model.isOwner &amp;&amp; model.answer != null}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:onClick="@{() -> onClicks.onReportAnswerClick(model.question.id, model.answer.id)}"
