@@ -10,7 +10,7 @@ import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -34,7 +34,7 @@ public class FcmNotificationServiceFixture {
     private UserRepository userRepository;
 
     @Autowired
-    private JpaMessageRepository messageRepository;
+    private MessageRepository messageRepository;
 
     @Autowired
     private ChatRoomRepository chatRoomRepository;
