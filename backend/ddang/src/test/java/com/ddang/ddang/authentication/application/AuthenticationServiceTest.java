@@ -70,7 +70,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     AuthenticationService profileImageNotFoundAuthenticationService;
 
     @BeforeEach
-    void setUpFixture(@Autowired final JpaProfileImageRepository jpaProfileImageRepository) {
+    void fixtureSetUp(@Autowired final JpaProfileImageRepository jpaProfileImageRepository) {
         profileImageRepository = new ProfileImageRepositoryImpl(jpaProfileImageRepository);
 
         authenticationService = new AuthenticationService(

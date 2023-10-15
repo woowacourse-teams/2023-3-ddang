@@ -19,7 +19,7 @@ public class ProfileImageRepositoryFixture {
     protected ProfileImage 프로필_이미지;
 
     @BeforeEach
-    void setUpFixture() {
+    void fixtureSetUp() {
         프로필_이미지 = new ProfileImage("프로필이미지.png", "프로필이미지.png");
 
         profileImageRepository.save(프로필_이미지);

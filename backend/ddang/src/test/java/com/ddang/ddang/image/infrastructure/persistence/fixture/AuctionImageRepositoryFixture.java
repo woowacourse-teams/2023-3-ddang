@@ -19,7 +19,7 @@ public class AuctionImageRepositoryFixture {
     protected AuctionImage 경매_이미지;
 
     @BeforeEach
-    void setUpFixture() {
+    void fixtureSetUp() {
         경매_이미지 = new AuctionImage("경매이미지.png", "경매이미지.png");
 
         jpaAuctionImageRepository.save(경매_이미지);
