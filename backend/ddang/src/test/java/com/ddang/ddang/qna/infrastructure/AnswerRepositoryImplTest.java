@@ -78,5 +78,4 @@ class AnswerRepositoryImplTest extends AnswerRepositoryImplFixture {
         // then
         assertThat(actual).contains(답변);
     }
-
 }

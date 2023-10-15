@@ -22,8 +22,6 @@ import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.UserRepositoryImpl;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,9 +29,6 @@ import java.time.LocalDateTime;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AnswerRepositoryImplFixture {
-
-    @PersistenceContext
-    private EntityManager em;
 
     private UserRepository userRepository;
 
@@ -103,8 +98,5 @@ public class AnswerRepositoryImplFixture {
         questionRepository.save(답변이_삭제된_질문);
         answerRepository.save(답변);
         answerRepository.save(삭제된_답변);
-
-        em.flush();
-        em.clear();
     }
 }
