@@ -8,7 +8,7 @@ import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.domain.ChatRoomReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
+import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -25,7 +25,7 @@ public class ChatRoomReportService {
 
     private final UserRepository userRepository;
     private final ChatRoomRepository chatRoomRepository;
-    private final JpaChatRoomReportRepository chatRoomReportRepository;
+    private final ChatRoomReportRepository chatRoomReportRepository;
 
     @Transactional
     public Long create(final CreateChatRoomReportDto chatRoomReportDto) {
