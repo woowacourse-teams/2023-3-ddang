@@ -15,7 +15,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterAnswerViewModel @Inject constructor(private val repository: AuctionRepository) : ViewModel() {
+class RegisterAnswerViewModel @Inject constructor(private val repository: AuctionRepository) :
+    ViewModel() {
 
     private val _event: SingleLiveEvent<WriteAnswerEvent> = SingleLiveEvent()
     val event: LiveData<WriteAnswerEvent>
@@ -24,15 +25,12 @@ class RegisterAnswerViewModel @Inject constructor(private val repository: Auctio
     val content = MutableLiveData("")
 
     private val isLoading = AtomicBoolean(false)
-    private var _auctionId: Long? = null
-    private val auctionId: Long
-        get() = _auctionId!!
-    private var _questionId: Long? = null
-    private val questionId: Long
-        get() = _questionId!!
+    private var auctionId: Long = -1L
+    private var questionId: Long = -1L
+
     fun initIds(auctionId: Long, questionId: Long) {
-        this._auctionId = auctionId
-        this._questionId = questionId
+        this.auctionId = auctionId
+        this.questionId = questionId
     }
 
     fun cancel() {
@@ -40,9 +38,11 @@ class RegisterAnswerViewModel @Inject constructor(private val repository: Auctio
     }
 
     fun submit() {
+        if (auctionId != -1L && questionId != -1L) return
         if (isLoading.getAndSet(true)) return
         viewModelScope.launch {
-            when (val response = repository.registerAnswer(questionId, RegisterAnswerRequest(auctionId, content.value ?: ""))) {
+            val request = RegisterAnswerRequest(auctionId, content.value ?: "")
+            when (val response = repository.registerAnswer(questionId, request)) {
                 is ApiResponse.Success -> _event.value = WriteAnswerEvent.SubmitAnswer
                 is ApiResponse.Failure -> {
                     _event.value =
