@@ -50,7 +50,7 @@ class AuctionDetailActivity :
 
     private fun getRemainingHeight(context: Context): Int {
         val screenHeight = context.resources.displayMetrics.heightPixels
-        val statusBarHeight = convertDpToPx(24f) // 탭 레이아웃의 톱 마진과도 같은 값임.
+        val statusBarHeight = convertDpToPx(ACTION_BAR_HEIGHT) // 탭 레이아웃의 톱 마진과도 같은 값임.
         val actionBarHeight = getActionBarHeight(context)
         val tabLayoutHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
         val bottomButtonHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
@@ -187,6 +187,7 @@ class AuctionDetailActivity :
 
     companion object {
         private const val AUCTION_ID_KEY = "auction_id_key"
+        private const val ACTION_BAR_HEIGHT = 24f
 
         fun getIntent(context: Context, auctionId: Long): Intent {
             return Intent(context, AuctionDetailActivity::class.java).apply {
