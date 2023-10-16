@@ -14,7 +14,6 @@ import com.ddangddangddang.android.feature.detail.qna.registeranswer.RegisterAns
 import com.ddangddangddang.android.feature.detail.qna.registerquestion.RegisterQuestionDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.ReportInfo
-import com.ddangddangddang.android.model.ReportType
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -103,23 +102,27 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
             }
 
             is QnaViewModel.QnaEvent.ReportQuestion -> {
-                navigateToReport(ReportType.QuestionReport, event.info)
+                navigateToReport(event.info)
             }
 
             is QnaViewModel.QnaEvent.ReportAnswer -> {
-                navigateToReport(ReportType.AnswerReport, event.info)
+                navigateToReport(event.info)
             }
         }
     }
 
-    private fun navigateToReport(type: ReportType, info: ReportInfo) {
-        startActivity(ReportActivity.getIntent(requireContext(), type.ordinal, info))
+    private fun navigateToReport(info: ReportInfo) {
+        startActivity(ReportActivity.getIntent(requireContext(), info))
     }
 
     private fun setupBinding() {
         binding.clWriteQuestion.setOnClickListener {
             activityViewModel.auctionDetailModel.value?.let { model ->
-                RegisterQuestionDialog.show(parentFragmentManager, model.id, ::onAfterQnaDialogDismiss)
+                RegisterQuestionDialog.show(
+                    parentFragmentManager,
+                    model.id,
+                    ::onAfterQnaDialogDismiss,
+                )
             }
         }
         activityViewModel.auctionDetailModel.value?.let {
