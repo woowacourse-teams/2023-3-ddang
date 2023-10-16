@@ -1,6 +1,7 @@
 package com.ddang.ddang.chat.domain;
 
 import com.ddang.ddang.user.domain.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
@@ -20,7 +21,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = "id")
+@ToString(of = {"id", "lastReadMessageId"})
 public class ReadMessageLog {
 
     @Id
@@ -31,21 +32,18 @@ public class ReadMessageLog {
     @JoinColumn(name = "chat_room_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_chat_room"))
     private ChatRoom chatRoom;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "reader_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_reader"))
     private User reader;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "last_message_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_last_read_message"))
-    private Message lastReadMessage;
+    private Long lastReadMessageId = 0L;
 
-    public ReadMessageLog(final ChatRoom chatRoom, final User reader, final Message lastReadMessage) {
+    public ReadMessageLog(final ChatRoom chatRoom, final User reader) {
         this.chatRoom = chatRoom;
         this.reader = reader;
-        this.lastReadMessage = lastReadMessage;
     }
 
-    public void updateLastReadMessage(final Message lastReadMessage) {
-        this.lastReadMessage = lastReadMessage;
+    public void updateLastReadMessage(final Long lastReadMessageId) {
+        this.lastReadMessageId = lastReadMessageId;
     }
 }

@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface JpaReadMessageLogRepository extends JpaRepository<ReadMessageLog, Long> {
 
     @Query("""
-        SELECT rml.id 
+        SELECT rml
         FROM ReadMessageLog rml 
         WHERE rml.chatRoom.id = :chatRoomId AND rml.reader.id = :readerId
     """)

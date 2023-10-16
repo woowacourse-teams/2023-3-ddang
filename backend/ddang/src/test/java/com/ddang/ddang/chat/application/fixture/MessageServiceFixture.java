@@ -49,9 +49,13 @@ public class MessageServiceFixture {
     protected ReadMessageRequest 마지막_조회_메시지_아이디가_없는_메시지_조회용_request;
     protected ReadMessageRequest 두_번째_메시지부터_모든_메시지_조회용_request;
     protected ReadMessageRequest 조회할_메시지가_더이상_없는_메시지_조회용_request;
+    protected ReadMessageRequest 조회한_마지막_메시지가_5인_메시지_조회용_request;
     protected ReadMessageRequest 유효하지_않은_사용자의_메시지_조회용_request;
     protected ReadMessageRequest 유효하지_않은_채팅방의_메시지_조회용_request;
     protected ReadMessageRequest 존재하지_않는_마지막_메시지_아이디의_메시지_조회용_request;
+    protected User 발신자;
+    protected ChatRoom 메시지가_5개인_채팅방;
+    protected Message 메시지가_5개인_채팅방_메시지의_마지막_메시지;
 
     protected String 이미지_절대_경로 = "/imageUrl";
     protected int 메시지_총_개수 = 10;
@@ -72,7 +76,7 @@ public class MessageServiceFixture {
                                   .build();
         auctionRepository.save(경매);
 
-        final User 발신자 = User.builder()
+        발신자 = User.builder()
                              .name("발신자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
                              .reliability(new Reliability(4.7d))
@@ -97,9 +101,11 @@ public class MessageServiceFixture {
 
         final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
         final ChatRoom 탈퇴한_사용자와의_채팅방 = new ChatRoom(경매, 탈퇴한_사용자);
+        메시지가_5개인_채팅방 = new ChatRoom(경매, 발신자);
 
         chatRoomRepository.save(채팅방);
         chatRoomRepository.save(탈퇴한_사용자와의_채팅방);
+        chatRoomRepository.save(메시지가_5개인_채팅방);
 
         메시지_생성_DTO = new CreateMessageDto(
                 채팅방.getId(),
@@ -144,6 +150,19 @@ public class MessageServiceFixture {
             messageRepository.save(메시지);
         }
 
+        final List<Message> 메시지가_5개인_채팅방_메시지들 = new ArrayList<>();
+        for (int count = 0; count < 5; count++) {
+            final Message 메시지 = Message.builder()
+                                       .writer(발신자)
+                                       .receiver(수신자)
+                                       .chatRoom(메시지가_5개인_채팅방)
+                                       .contents("메시지 내용")
+                                       .build();
+            메시지가_5개인_채팅방_메시지들.add(메시지);
+            messageRepository.save(메시지);
+        }
+        메시지가_5개인_채팅방_메시지의_마지막_메시지 = 메시지가_5개인_채팅방_메시지들.get(4);
+
         마지막_조회_메시지_아이디가_없는_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), null);
         두_번째_메시지부터_모든_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), 메시지들.get(0).getId());
         조회할_메시지가_더이상_없는_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), 메시지들.get(메시지_총_개수 - 1)
@@ -151,5 +170,6 @@ public class MessageServiceFixture {
         유효하지_않은_사용자의_메시지_조회용_request = new ReadMessageRequest(-999L, 채팅방.getId(), null);
         유효하지_않은_채팅방의_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), -999L, null);
         존재하지_않는_마지막_메시지_아이디의_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 채팅방.getId(), -999L);
+        조회한_마지막_메시지가_5인_메시지_조회용_request = new ReadMessageRequest(발신자.getId(), 메시지가_5개인_채팅방.getId(), null);
     }
 }
