@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentRegisterQuestionDialogBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
+import com.ddangddangddang.android.feature.detail.qna.QnaViewModel
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,15 +23,7 @@ class RegisterQuestionDialog : DialogFragment() {
         get() = _binding!!
 
     private val viewModel: RegisterQuestionViewModel by viewModels()
-    private lateinit var onDialogResult: OnDialogResult
-
-    fun interface OnDialogResult {
-        fun invoke(isNeedRefresh: Boolean)
-    }
-
-    fun setOnDialogResult(onDialogResult: OnDialogResult) {
-        this.onDialogResult = onDialogResult
-    }
+    private val parentViewModel: QnaViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +65,7 @@ class RegisterQuestionDialog : DialogFragment() {
     private fun handleEvent(event: RegisterQuestionViewModel.WriteQuestionEvent) {
         when (event) {
             RegisterQuestionViewModel.WriteQuestionEvent.Cancel -> {
-                onDialogResult.invoke(false)
+                parentViewModel.loadQnas()
                 dismiss()
             }
             is RegisterQuestionViewModel.WriteQuestionEvent.FailureSubmitQuestion -> {
@@ -84,7 +77,6 @@ class RegisterQuestionDialog : DialogFragment() {
 
             RegisterQuestionViewModel.WriteQuestionEvent.SubmitQuestion -> {
                 notifySuccessMessage()
-                onDialogResult.invoke(true)
                 dismiss()
             }
         }
@@ -94,12 +86,11 @@ class RegisterQuestionDialog : DialogFragment() {
         private const val WRITE_QUESTION_TAG = "write_question_tag"
         private const val AUCTION_ID_KEY = "auction_id"
 
-        fun show(fragmentManager: FragmentManager, auctionId: Long, onDialogResult: OnDialogResult) {
+        fun show(fragmentManager: FragmentManager, auctionId: Long) {
             val dialog = RegisterQuestionDialog()
             dialog.arguments = Bundle().apply {
                 putLong(AUCTION_ID_KEY, auctionId)
             }
-            dialog.setOnDialogResult(onDialogResult)
             dialog.show(fragmentManager, WRITE_QUESTION_TAG)
         }
     }

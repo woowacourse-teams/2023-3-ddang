@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentRegisterAnswerDialogBinding
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
+import com.ddangddangddang.android.feature.detail.qna.QnaViewModel
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,15 +23,7 @@ class RegisterAnswerDialog : DialogFragment() {
         get() = _binding!!
 
     private val viewModel: RegisterAnswerViewModel by viewModels()
-    private lateinit var onDialogResult: OnDialogResult
-
-    fun interface OnDialogResult {
-        fun invoke(isNeedRefresh: Boolean)
-    }
-
-    fun setOnDialogResult(onDialogResult: OnDialogResult) {
-        this.onDialogResult = onDialogResult
-    }
+    private val parentViewModel: QnaViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +58,6 @@ class RegisterAnswerDialog : DialogFragment() {
     private fun handleEvent(event: RegisterAnswerViewModel.WriteAnswerEvent) {
         when (event) {
             RegisterAnswerViewModel.WriteAnswerEvent.Cancel -> {
-                onDialogResult.invoke(false)
                 dismiss()
             }
 
@@ -78,7 +70,7 @@ class RegisterAnswerDialog : DialogFragment() {
 
             RegisterAnswerViewModel.WriteAnswerEvent.SubmitAnswer -> {
                 notifySuccessMessage()
-                onDialogResult.invoke(true)
+                parentViewModel.loadQnas()
                 dismiss()
             }
         }
@@ -100,7 +92,6 @@ class RegisterAnswerDialog : DialogFragment() {
             fragmentManager: FragmentManager,
             auctionId: Long,
             questionId: Long,
-            onDialogResult: OnDialogResult,
         ) {
             val dialog = RegisterAnswerDialog()
             dialog.arguments =
@@ -108,7 +99,6 @@ class RegisterAnswerDialog : DialogFragment() {
                     putLong(AUCTION_ID_KEY, auctionId)
                     putLong(QUESTION_ID_KEY, questionId)
                 }
-            dialog.setOnDialogResult(onDialogResult)
             dialog.show(fragmentManager, WRITE_ANSWER_TAG)
         }
     }

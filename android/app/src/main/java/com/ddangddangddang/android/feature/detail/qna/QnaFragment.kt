@@ -33,7 +33,6 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
                     parentFragmentManager,
                     model.id,
                     questionId,
-                    ::onAfterQnaDialogDismiss,
                 )
             }
         }
@@ -121,7 +120,7 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
                 RegisterQuestionDialog.show(
                     parentFragmentManager,
                     model.id,
-                    ::onAfterQnaDialogDismiss,
+//                    ::onAfterQnaDialogDismiss,
                 )
             }
         }
@@ -130,7 +129,7 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
         }
     }
 
-    private fun onAfterQnaDialogDismiss(isNeedRefresh: Boolean) {
-        if (isNeedRefresh) viewModel.loadQnas()
-    }
+//    private fun onAfterQnaDialogDismiss(isNeedRefresh: Boolean) {
+//        if (isNeedRefresh) viewModel.loadQnas()
+//    }
 }
