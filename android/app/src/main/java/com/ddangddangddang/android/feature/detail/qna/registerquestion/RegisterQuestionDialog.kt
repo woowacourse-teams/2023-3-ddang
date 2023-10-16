@@ -65,7 +65,6 @@ class RegisterQuestionDialog : DialogFragment() {
     private fun handleEvent(event: RegisterQuestionViewModel.WriteQuestionEvent) {
         when (event) {
             RegisterQuestionViewModel.WriteQuestionEvent.Cancel -> {
-                parentViewModel.loadQnas()
                 dismiss()
             }
             is RegisterQuestionViewModel.WriteQuestionEvent.FailureSubmitQuestion -> {
@@ -77,6 +76,7 @@ class RegisterQuestionDialog : DialogFragment() {
 
             RegisterQuestionViewModel.WriteQuestionEvent.SubmitQuestion -> {
                 notifySuccessMessage()
+                parentViewModel.loadQnas()
                 dismiss()
             }
         }
