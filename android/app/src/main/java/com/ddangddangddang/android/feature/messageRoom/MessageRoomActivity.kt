@@ -15,8 +15,8 @@ import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.android.model.ReportType
-import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
+import com.ddangddangddang.android.notification.type.MessageType
 import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
@@ -134,7 +134,7 @@ class MessageRoomActivity :
     }
 
     private fun cancelNotification() {
-        cancelActiveNotification(NotificationType.MESSAGE.name, roomId.toInt())
+        cancelActiveNotification(MessageType.tag, roomId.toInt())
     }
 
     companion object {

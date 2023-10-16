@@ -14,7 +14,6 @@ import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.model.ReportType
-import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
@@ -179,7 +178,7 @@ class AuctionDetailActivity :
     }
 
     private fun cancelNotification() {
-        cancelActiveNotification(NotificationType.BID.name, auctionId.toInt())
+        cancelActiveNotification(auctionId.toInt())
     }
 
     companion object {
