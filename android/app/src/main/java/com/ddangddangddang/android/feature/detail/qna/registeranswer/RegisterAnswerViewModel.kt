@@ -38,7 +38,7 @@ class RegisterAnswerViewModel @Inject constructor(private val repository: Auctio
     }
 
     fun submit() {
-        if (auctionId != -1L && questionId != -1L) return
+        if (auctionId == -1L || questionId == -1L) return
         if (isLoading.getAndSet(true)) return
         viewModelScope.launch {
             val request = RegisterAnswerRequest(auctionId, content.value ?: "")

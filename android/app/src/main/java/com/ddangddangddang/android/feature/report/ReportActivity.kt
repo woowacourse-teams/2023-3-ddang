@@ -38,9 +38,8 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     }
 
     private fun getReportInfo() {
-        val typeIndex: Int = intent.getIntExtra(REPORT_TYPE_KEY, DEFAULT_VALUE.toInt())
         val info = intent.getSerializableExtraCompat<ReportInfo>(REPORT_ID_KEY)
-        if (info == null || typeIndex == DEFAULT_VALUE.toInt()) {
+        if (info == null) {
             notifyNavigateToReportPageFailed()
             return
         }
@@ -62,8 +61,6 @@ class ReportActivity : BindingActivity<ActivityReportBinding>(R.layout.activity_
     }
 
     companion object {
-        private const val DEFAULT_VALUE = -1L
-        private const val REPORT_TYPE_KEY = "report_type_key"
         private const val REPORT_ID_KEY = "report_id_key"
         fun getIntent(context: Context, info: ReportInfo): Intent =
             Intent(context, ReportActivity::class.java).apply {

@@ -8,4 +8,5 @@ data class AuctionDetailResponse(
     val seller: SellerResponse,
     val chat: ChatAuctionDetailResponse,
     val isOwner: Boolean,
+    val isLastBidder: Boolean,
 )
