@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
@@ -54,8 +53,12 @@ class RegisterAnswerDialog : DialogFragment() {
         val screenHeight = requireContext().resources?.displayMetrics?.heightPixels ?: return
 
         val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
-        params?.height = (screenHeight * 0.4).toInt()
-        dialog?.window?.attributes = params as WindowManager.LayoutParams
+        val height = params?.height ?: return
+        val newHeight = (screenHeight * 0.35).toInt()
+        if (newHeight > height) {
+            params.height = newHeight
+            binding.etAnswerContents.layoutParams = params
+        }
     }
 
     private fun setupViewModel() {

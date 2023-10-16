@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/detail_auction_qna_question_write"
                 android:textColor="@color/grey_900"
+                android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toTopOf="@id/et_question_contents"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintStart_toStartOf="@id/gl_begin"
@@ -53,7 +54,6 @@
                 style="@style/Body"
                 android:layout_width="264dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="12dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
                 android:gravity="top"
                 android:hint="@string/detail_auction_qna_question_contents_hint"
@@ -63,9 +63,9 @@
                 android:paddingVertical="12dp"
                 android:text="@={viewModel.content}"
                 android:textColor="@color/grey_900"
-                app:layout_constraintBottom_toTopOf="@id/btn_question_cancel"
+                app:layout_constraintBottom_toTopOf="@id/btn_question_submit"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
-                app:layout_constraintHeight_min="50dp"
+                app:layout_constraintHeight_min="45dp"
                 app:layout_constraintStart_toStartOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_write_question_title"
                 tools:text="힝잉잉" />
@@ -82,7 +82,6 @@
                 android:onClick="@{() -> viewModel.cancel()}"
                 android:text="@string/detail_auction_bid_dialog_cancel"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_question_submit"
                 app:layout_constraintTop_toBottomOf="@id/et_question_contents" />
 
@@ -99,7 +98,6 @@
                 android:onClick="@{() -> viewModel.submit()}"
                 android:text="@string/detail_auction_qna_submit"
                 android:textSize="@dimen/textsize_body"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_question_contents" />
 
