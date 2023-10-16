@@ -17,9 +17,6 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
-import com.ddang.ddang.image.application.exception.ImageNotFoundException;
-import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -30,8 +27,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,7 +39,6 @@ public class AuthenticationService {
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final UserRepository userRepository;
-    private final ProfileImageRepository profileImageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
@@ -83,7 +77,6 @@ public class AuthenticationService {
                                                                         .name(oauth2Type.calculateNickname(
                                                                                 calculateRandomNumber())
                                                                         )
-                                                                        .profileImage(findDefaultProfileImage())
                                                                         .reliability(INITIALIZE_USER_RELIABILITY)
                                                                         .oauthId(userInformationDto.findUserId())
                                                                         .oauth2Type(oauth2Type)
@@ -94,11 +87,6 @@ public class AuthenticationService {
                                               });
 
         return new LoginUserInformationDto(signInUser, isSignUpUser.get());
-    }
-
-    private ProfileImage findDefaultProfileImage() {
-        return profileImageRepository.findByStoreName(DEFAULT_PROFILE_IMAGE_STORE_NAME)
-                                     .orElseThrow(() -> new ImageNotFoundException("기본 이미지를 찾을 수 없습니다."));
     }
 
     private String calculateRandomNumber() {
