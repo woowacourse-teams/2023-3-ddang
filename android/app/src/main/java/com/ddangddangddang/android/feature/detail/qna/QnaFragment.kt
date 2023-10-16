@@ -30,7 +30,7 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
         override fun onSubmitAnswerClick(questionId: Long) {
             activityViewModel.auctionDetailModel.value?.let { model ->
                 RegisterAnswerDialog.show(
-                    parentFragmentManager,
+                    childFragmentManager,
                     model.id,
                     questionId,
                 )
@@ -120,7 +120,6 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
                 RegisterQuestionDialog.show(
                     parentFragmentManager,
                     model.id,
-//                    ::onAfterQnaDialogDismiss,
                 )
             }
         }
@@ -128,8 +127,4 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
             binding.isOwner = it.isOwner
         }
     }
-
-//    private fun onAfterQnaDialogDismiss(isNeedRefresh: Boolean) {
-//        if (isNeedRefresh) viewModel.loadQnas()
-//    }
 }
