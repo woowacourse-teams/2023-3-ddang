@@ -23,7 +23,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -36,7 +35,6 @@ public class User extends BaseTimeEntity {
 
     public static final User EMPTY_USER = null;
     private static final boolean DELETED_STATUS = true;
-    private static final String UNKNOWN_NAME = "알 수 없음";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
