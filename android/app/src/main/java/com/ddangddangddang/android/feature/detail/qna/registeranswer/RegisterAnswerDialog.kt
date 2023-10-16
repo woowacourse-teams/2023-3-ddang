@@ -49,6 +49,19 @@ class RegisterAnswerDialog : DialogFragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setupViewModel()
+    }
+
+    private fun setupViewModel() {
+        binding.viewModel = viewModel
+        viewModel.event.observe(viewLifecycleOwner) {
+            handleEvent(it)
+        }
+    }
+
     private fun handleEvent(event: RegisterAnswerViewModel.WriteAnswerEvent) {
         when (event) {
             RegisterAnswerViewModel.WriteAnswerEvent.Cancel -> {
@@ -76,19 +89,6 @@ class RegisterAnswerDialog : DialogFragment() {
             requireContext(),
             getString(R.string.detail_auction_qna_answer_register_success),
         )
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        setupViewModel()
-    }
-
-    private fun setupViewModel() {
-        binding.viewModel = viewModel
-        viewModel.event.observe(viewLifecycleOwner) {
-            handleEvent(it)
-        }
     }
 
     companion object {
