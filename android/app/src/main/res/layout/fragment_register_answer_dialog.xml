@@ -51,7 +51,7 @@
                 android:id="@+id/et_answer_contents"
                 style="@style/Body"
                 android:layout_width="264dp"
-                android:layout_height="300dp"
+                android:layout_height="0dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/bg_stroke_gray_radius_1dp"
                 android:gravity="top"
@@ -62,6 +62,7 @@
                 android:paddingVertical="12dp"
                 android:text="@={viewModel.content}"
                 android:textColor="@color/grey_900"
+                app:layout_constraintBottom_toTopOf="@id/btn_answer_cancel"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
                 app:layout_constraintStart_toStartOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_write_answer_title"
@@ -79,6 +80,7 @@
                 android:onClick="@{() -> viewModel.cancel()}"
                 android:text="@string/detail_auction_bid_dialog_cancel"
                 android:textSize="@dimen/textsize_body"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/btn_answer_submit"
                 app:layout_constraintTop_toBottomOf="@id/et_answer_contents" />
 
@@ -95,6 +97,7 @@
                 android:onClick="@{() -> viewModel.submit()}"
                 android:text="@string/detail_auction_qna_submit"
                 android:textSize="@dimen/textsize_body"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_answer_contents" />
 

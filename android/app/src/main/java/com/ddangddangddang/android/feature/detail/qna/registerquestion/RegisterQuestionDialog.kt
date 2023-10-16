@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
@@ -52,7 +53,16 @@ class RegisterQuestionDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        setupHeight()
         setupViewModel()
+    }
+
+    private fun setupHeight() {
+        val screenHeight = requireContext().resources?.displayMetrics?.heightPixels ?: return
+
+        val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
+        params?.height = (screenHeight * 0.4).toInt()
+        dialog?.window?.attributes = params as WindowManager.LayoutParams
     }
 
     private fun setupViewModel() {
@@ -67,6 +77,7 @@ class RegisterQuestionDialog : DialogFragment() {
             RegisterQuestionViewModel.WriteQuestionEvent.Cancel -> {
                 dismiss()
             }
+
             is RegisterQuestionViewModel.WriteQuestionEvent.FailureSubmitQuestion -> {
                 notifyFailureMessage(
                     event.errorType,
