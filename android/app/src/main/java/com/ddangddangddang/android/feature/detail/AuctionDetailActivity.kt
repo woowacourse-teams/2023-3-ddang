@@ -42,7 +42,7 @@ class AuctionDetailActivity :
     // 액션바 높이를 반환하는 함수
     private fun getActionBarHeight(context: Context): Int {
         val styledAttributes =
-            context.theme.obtainStyledAttributes(intArrayOf(com.google.android.material.R.attr.actionBarSize))
+            context.theme.obtainStyledAttributes(intArrayOf(androidx.appcompat.R.attr.actionBarSize))
         val actionBarHeight = styledAttributes.getDimension(0, 0f).toInt()
         styledAttributes.recycle()
         return actionBarHeight
@@ -50,7 +50,7 @@ class AuctionDetailActivity :
 
     private fun getRemainingHeight(context: Context): Int {
         val screenHeight = context.resources.displayMetrics.heightPixels
-        val statusBarHeight = convertDpToPx(ACTION_BAR_HEIGHT) // 탭 레이아웃의 톱 마진과도 같은 값임.
+        val statusBarHeight = convertDpToPx(STATUS_BAR_HEIGHT) // 탭 레이아웃의 톱 마진과도 같은 값임.
         val actionBarHeight = getActionBarHeight(context)
         val tabLayoutHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
         val bottomButtonHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
@@ -187,7 +187,7 @@ class AuctionDetailActivity :
 
     companion object {
         private const val AUCTION_ID_KEY = "auction_id_key"
-        private const val ACTION_BAR_HEIGHT = 24f
+        private const val STATUS_BAR_HEIGHT = 24f
 
         fun getIntent(context: Context, auctionId: Long): Intent {
             return Intent(context, AuctionDetailActivity::class.java).apply {
