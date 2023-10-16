@@ -29,7 +29,26 @@ class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
         // when
         final Auction actual = auctionRepository.save(저장하기_전_경매_엔티티);
 
+        // then
         assertThat(actual.getId()).isPositive();
+    }
+
+    @Test
+    void 지정한_id의_경매가_존재하는_경우_true를_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsById(저장된_경매_엔티티.getId());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 지정한_id의_경매가_존재하지_않는_경우_false를_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsById(존재하지_않는_경매_id);
+
+        // then
+        assertThat(actual).isFalse();
     }
 
     @Test

@@ -2,20 +2,20 @@ package com.ddang.ddang.auction.application.fixture;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -28,19 +28,19 @@ import java.util.List;
 public class AuctionServiceFixture {
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     private Category 가구_카테고리 = new Category("가구");
     private Category 가구_서브_의자_카테고리 = new Category("의자");
@@ -52,11 +52,11 @@ public class AuctionServiceFixture {
                              .oauthId("12345")
                              .build();
     protected User 구매자 = User.builder()
-                           .name("구매자")
-                           .profileImage(new ProfileImage("upload.png", "store.png"))
-                           .reliability(new Reliability(4.7d))
-                           .oauthId("54321")
-                           .build();
+                              .name("구매자")
+                              .profileImage(new ProfileImage("upload.png", "store.png"))
+                              .reliability(new Reliability(4.7d))
+                              .oauthId("54321")
+                              .build();
 
     private MockMultipartFile 경매_이미지_파일 = new MockMultipartFile(
             "image.png",
@@ -103,7 +103,8 @@ public class AuctionServiceFixture {
 
         categoryRepository.save(가구_카테고리);
 
-        userRepository.saveAll(List.of(판매자, 구매자));
+        userRepository.save(판매자);
+        userRepository.save(구매자);
 
         유효한_경매_생성_dto = new CreateAuctionDto(
                 "제목",
@@ -213,7 +214,8 @@ public class AuctionServiceFixture {
         구매자가_입찰한_경매1_입찰 = new Bid(구매자가_입찰한_경매1, 구매자, 구매자가_입찰한_경매1_입찰_가격);
         구매자가_입찰한_경매2_입찰 = new Bid(구매자가_입찰한_경매2, 구매자, 구매자가_입찰한_경매2_입찰_가격);
 
-        bidRepository.saveAll(List.of(구매자가_입찰한_경매1_입찰, 구매자가_입찰한_경매2_입찰));
+        bidRepository.save(구매자가_입찰한_경매1_입찰);
+        bidRepository.save(구매자가_입찰한_경매2_입찰);
 
         구매자가_입찰한_경매1.updateLastBid(구매자가_입찰한_경매1_입찰);
         구매자가_입찰한_경매2.updateLastBid(구매자가_입찰한_경매2_입찰);
@@ -222,6 +224,10 @@ public class AuctionServiceFixture {
         구매자가_입찰한_경매2.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         종료되는_날이_3일_뒤인_경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         종료된_경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
-        auctionRepository.saveAll(List.of(구매자가_입찰한_경매1, 구매자가_입찰한_경매2, 종료되는_날이_3일_뒤인_경매, 종료된_경매));
+
+        auctionRepository.save(구매자가_입찰한_경매1);
+        auctionRepository.save(구매자가_입찰한_경매2);
+        auctionRepository.save(종료되는_날이_3일_뒤인_경매);
+        auctionRepository.save(종료된_경매);
     }
 }

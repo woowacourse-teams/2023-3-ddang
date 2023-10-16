@@ -3,14 +3,17 @@ package com.ddang.ddang.authentication.application.fixture;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
+import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.domain.DeviceToken;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
+import com.ddang.ddang.device.infrastructure.persistence.DeviceTokenRepositoryImpl;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,7 +37,9 @@ public class AuthenticationServiceFixture {
     protected User 사용자;
     protected User 탈퇴한_사용자;
 
-    protected UserInformationDto 사용자_회원_정보 = new UserInformationDto(12345L);
+    protected PrivateClaims 사용자_id_클레임 = new PrivateClaims(1L);
+
+    protected UserInformationDto 가입한_사용자_회원_정보 = new UserInformationDto(12345L);
     protected UserInformationDto 탈퇴한_사용자_회원_정보 = new UserInformationDto(54321L);
     protected UserInformationDto 가입하지_않은_사용자_회원_정보 = new UserInformationDto(-99999L);
 
@@ -48,7 +53,7 @@ public class AuthenticationServiceFixture {
     protected String 유효하지_않은_타입의_리프레시_토큰 = "invalidRefreshToken";
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaProfileImageRepository profileImageRepository;
@@ -56,11 +61,12 @@ public class AuthenticationServiceFixture {
     @Autowired
     private TokenEncoder tokenEncoder;
 
-    @Autowired
-    private JpaDeviceTokenRepository deviceTokenRepository;
+    private DeviceTokenRepository deviceTokenRepository;
 
     @BeforeEach
-    void fixtureSetUp() {
+    void fixtureSetUp(@Autowired final JpaDeviceTokenRepository jpaDeviceTokenRepository) {
+        deviceTokenRepository = new DeviceTokenRepositoryImpl(jpaDeviceTokenRepository);
+
         profileImageRepository.save(new ProfileImage("default_profile_image.png", "default_profile_image.png"));
 
         사용자 = User.builder()
@@ -68,6 +74,7 @@ public class AuthenticationServiceFixture {
                   .profileImage(new ProfileImage("upload.png", "store.png"))
                   .reliability(new Reliability(0.0d))
                   .oauthId("12345")
+                  .oauth2Type(Oauth2Type.KAKAO)
                   .build();
         사용자_이름 = 사용자.getName();
 
@@ -76,6 +83,7 @@ public class AuthenticationServiceFixture {
                       .profileImage(new ProfileImage("upload.png", "store.png"))
                       .reliability(new Reliability(0.0d))
                       .oauthId("12346")
+                      .oauth2Type(Oauth2Type.KAKAO)
                       .build();
 
         userRepository.save(사용자);
@@ -92,7 +100,7 @@ public class AuthenticationServiceFixture {
         );
 
         만료된_리프레시_토큰 = tokenEncoder.encode(
-                LocalDateTime.ofInstant(Instant.parse("2023-01-01T22:21:20Z"),  ZoneId.of("UTC")),
+                LocalDateTime.ofInstant(Instant.parse("2023-01-01T22:21:20Z"), ZoneId.of("UTC")),
                 TokenType.REFRESH,
                 Map.of("userId", 1L)
         );

@@ -2,7 +2,7 @@ package com.ddang.ddang.notification.application;
 
 import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.device.domain.DeviceToken;
-import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.google.firebase.messaging.AndroidConfig;
@@ -27,7 +27,7 @@ import static com.ddang.ddang.notification.application.util.NotificationProperty
 public class FcmNotificationService implements NotificationService {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final JpaDeviceTokenRepository deviceTokenRepository;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     @Override
     public NotificationStatus send(final CreateNotificationDto createNotificationDto) throws FirebaseMessagingException {

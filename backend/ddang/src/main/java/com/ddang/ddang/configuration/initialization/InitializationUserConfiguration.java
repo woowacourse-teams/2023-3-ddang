@@ -3,7 +3,7 @@ package com.ddang.ddang.configuration.initialization;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class InitializationUserConfiguration implements ApplicationRunner {
 
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Override
     @Transactional

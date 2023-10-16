@@ -1,7 +1,5 @@
 package com.ddang.ddang.authentication.application;
 
-import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
-
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.LoginUserInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
@@ -18,16 +16,22 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformatio
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
-import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
+import com.ddang.ddang.image.application.exception.ImageNotFoundException;
+import com.ddang.ddang.image.domain.ProfileImage;
+import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
-import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static com.ddang.ddang.image.domain.ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -37,15 +41,17 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
+    private static final Reliability INITIALIZE_USER_RELIABILITY = new Reliability(0.0d);
     private static final String PRIVATE_CLAIMS_KEY = "userId";
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
-    private final JpaUserRepository userRepository;
+    private final UserRepository userRepository;
+    private final ProfileImageRepository profileImageRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
-    private final JpaDeviceTokenRepository deviceTokenRepository;
+    private final DeviceTokenRepository deviceTokenRepository;
 
     @Transactional
     public LoginInformationDto login(
@@ -74,18 +80,20 @@ public class AuthenticationService {
     ) {
         final AtomicBoolean isSignUpUser = new AtomicBoolean(false);
 
-        final User signInUser = userRepository.findByOauthIdAndDeletedIsFalse(userInformationDto.findUserId())
-                                         .orElseGet(() -> {
-                                             final User user = User.builder()
-                                                                   .name(oauth2Type.calculateNickname(
-                                                                           calculateRandomNumber()))
-                                                                   .reliability(new Reliability(0.0d))
-                                                                   .oauthId(userInformationDto.findUserId())
-                                                                   .build();
+        final User signInUser = userRepository.findByOauthId(userInformationDto.findUserId())
+                                              .orElseGet(() -> {
+                                                  final User user = User.builder()
+                                                                        .name(oauth2Type.calculateNickname(
+                                                                                calculateRandomNumber())
+                                                                        )
+                                                                        .reliability(INITIALIZE_USER_RELIABILITY)
+                                                                        .oauthId(userInformationDto.findUserId())
+                                                                        .oauth2Type(oauth2Type)
+                                                                        .build();
 
-                                             isSignUpUser.set(true);
-                                             return userRepository.save(user);
-                                         });
+                                                  isSignUpUser.set(true);
+                                                  return userRepository.save(user);
+                                              });
 
         return new LoginUserInformationDto(signInUser, isSignUpUser.get());
     }
@@ -132,7 +140,13 @@ public class AuthenticationService {
                 Map.of(PRIVATE_CLAIMS_KEY, privateClaims.userId())
         );
 
-        return new TokenDto(accessToken, refreshToken);
+        final String newRefreshToken = tokenEncoder.encode(
+                LocalDateTime.now(),
+                TokenType.REFRESH,
+                Map.of(PRIVATE_CLAIMS_KEY, privateClaims.userId())
+        );
+
+        return new TokenDto(accessToken, newRefreshToken);
     }
 
     public boolean validateToken(final String accessToken) {
@@ -142,21 +156,21 @@ public class AuthenticationService {
 
     @Transactional
     public void withdrawal(
-            final Oauth2Type oauth2Type,
             final String accessToken,
             final String refreshToken
     ) throws InvalidWithdrawalException {
-        final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
         final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
                                                         .orElseThrow(() ->
                                                                 new InvalidTokenException("유효한 토큰이 아닙니다.")
                                                         );
-        final User user = userRepository.findByIdAndDeletedIsFalse(privateClaims.userId())
-                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다."));
+        final User user = userRepository.findById(privateClaims.userId())
+                                        .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한이 없습니다."));
+        final OAuth2UserInformationProvider provider = providerComposite.findProvider(user.getOauthInformation()
+                                                                                          .getOauth2Type());
 
         user.withdrawal();
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
         deviceTokenRepository.deleteByUserId(user.getId());
-        provider.unlinkUserBy(user.getOauthId());
+        provider.unlinkUserBy(user.getOauthInformation().getOauthId());
     }
 }

@@ -14,10 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserTest extends UserFixture {
 
     @Test
-    void 회원_생성시_신뢰도가_null이면_신뢰도_점수가_null인_신뢰도로_회원을_생성한다() {
+    void 회원_생성시_신뢰도가_null이면_신뢰도_점수가_double의_최솟값인_신뢰도로_회원을_생성한다() {
         // given
         final Reliability nullReliability = null;
-        final Reliability expect = new Reliability(null);
+        final Reliability expect = new Reliability(Double.MIN_VALUE);
 
         // when
         final User user = User.builder()
@@ -113,11 +113,11 @@ class UserTest extends UserFixture {
     }
 
     @Test
-    void 신뢰도_평균을_계산한다() {
+    void 새로운_신뢰도로_변경한다() {
         // when
-        평가_대상.updateReliability(평가_대상이_받은_평가_목록);
+        평가_대상.updateReliability(새로운_신뢰도);
 
         // then
-        assertThat(평가_대상.getReliability().getValue()).isEqualTo(평가_대상의_신뢰도_점수);
+        assertThat(평가_대상.getReliability().getValue()).isEqualTo(새로운_신뢰도_점수);
     }
 }

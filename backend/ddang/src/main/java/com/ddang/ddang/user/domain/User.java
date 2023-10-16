@@ -1,8 +1,8 @@
 package com.ddang.ddang.user.domain;
 
+import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.review.domain.Review;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -30,13 +30,13 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", "name", "reliability", "oauthId", "deleted"})
+@ToString(of = {"id", "name", "reliability", "oauthId", "deleted", "oauthInformation"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
     public static final User EMPTY_USER = null;
     private static final boolean DELETED_STATUS = true;
-    private static final String UNKOWN_NAME = "알 수 없음";
+    private static final String UNKNOWN_NAME = "알 수 없음";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,7 +53,8 @@ public class User extends BaseTimeEntity {
     @AttributeOverride(name = "value", column = @Column(name = "reliability"))
     private Reliability reliability;
 
-    private String oauthId;
+    @Embedded
+    private OauthInformation oauthInformation;
 
     @Column(name = "is_deleted")
     private boolean deleted = false;
@@ -63,12 +64,13 @@ public class User extends BaseTimeEntity {
             final String name,
             final ProfileImage profileImage,
             final Reliability reliability,
-            final String oauthId
+            final String oauthId,
+            final Oauth2Type oauth2Type
     ) {
         this.name = name;
         this.profileImage = profileImage;
         this.reliability = processReliability(reliability);
-        this.oauthId = oauthId;
+        this.oauthInformation = new OauthInformation(oauthId, oauth2Type);
     }
 
     private Reliability processReliability(final Reliability reliability) {
@@ -93,7 +95,7 @@ public class User extends BaseTimeEntity {
         this.profileImage = null;
     }
 
-    public void updateReliability(final List<Review> reviews) {
-        reliability.updateReliability(reviews);
+    public void updateReliability(final Reliability reliability) {
+        this.reliability = reliability;
     }
 }

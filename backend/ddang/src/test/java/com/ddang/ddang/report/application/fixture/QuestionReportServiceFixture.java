@@ -3,19 +3,19 @@ package com.ddang.ddang.report.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.domain.Question;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
 import com.ddang.ddang.report.domain.QuestionReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaQuestionReportRepository;
+import com.ddang.ddang.report.domain.repository.QuestionReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,16 +29,16 @@ public class QuestionReportServiceFixture {
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaQuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private JpaQuestionReportRepository questionReportRepository;
+    private QuestionReportRepository questionReportRepository;
 
     protected User 이미_신고한_신고자1;
     protected User 이미_신고한_신고자2;
@@ -116,11 +116,19 @@ public class QuestionReportServiceFixture {
         질문_신고2 = new QuestionReport(이미_신고한_신고자2, 질문, "신고합니다.");
         질문_신고3 = new QuestionReport(이미_신고한_신고자3, 질문, "신고합니다.");
 
-        userRepository.saveAll(List.of(판매자, 질문자, 신고자, 이미_신고한_신고자1, 이미_신고한_신고자2, 이미_신고한_신고자3));
+        userRepository.save(판매자);
+        userRepository.save(질문자);
+        userRepository.save(신고자);
+        userRepository.save(이미_신고한_신고자1);
+        userRepository.save(이미_신고한_신고자2);
+        userRepository.save(이미_신고한_신고자3);
+
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionRepository.save(경매);
         questionRepository.save(질문);
-        questionReportRepository.saveAll(List.of(질문_신고1, 질문_신고2, 질문_신고3));
+        questionReportRepository.save(질문_신고1);
+        questionReportRepository.save(질문_신고2);
+        questionReportRepository.save(질문_신고3);
 
         질문_신고_요청_dto = new CreateQuestionReportDto(질문.getId(), "신고합니다.", 신고자.getId());
         존재하지_않는_질문_신고_요청_dto = new CreateQuestionReportDto(존재하지_않는_질문_아이디, "신고합니다.", 신고자.getId());

@@ -1,7 +1,7 @@
 package com.ddang.ddang.region.application.fixture;
 
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class RegionServiceFixture {
 
     @Autowired
-    private JpaRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     protected Region 서울특별시;
     protected Region 두번째_지역이_없는_첫번째_지역;

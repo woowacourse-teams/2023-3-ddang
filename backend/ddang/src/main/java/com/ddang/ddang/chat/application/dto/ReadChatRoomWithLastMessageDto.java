@@ -2,7 +2,7 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageDto;
+import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.user.domain.User;
 

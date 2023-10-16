@@ -1,6 +1,5 @@
 package com.ddang.ddang.authentication.presentation;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -202,11 +201,11 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void ouath2Type과_accessToken과_refreshToken을_전달하면_탈퇴한다() throws Exception {
         // given
-        willDoNothing().given(authenticationService).withdrawal(any(), anyString(), anyString());
+        willDoNothing().given(authenticationService).withdrawal(anyString(), anyString());
 
         // when & then
         final ResultActions resultActions =
-                mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", 소셜_로그인_타입)
+                mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal")
                                                                 .contentType(MediaType.APPLICATION_JSON)
                                                                 .content(objectMapper.writeValueAsString(유효한_회원탈퇴_요청))
                                                                 .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
@@ -222,10 +221,10 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     void ouath2Type과_accessToken과_refreshToken을_전달시_이미_탈퇴_혹은_존재하지_않아_권한이_없는_회원인_경우_403을_반환한다() throws Exception {
         // given
         willThrow(new InvalidWithdrawalException("탈퇴에 대한 권한 없습니다.")).given(authenticationService)
-                                                                    .withdrawal(any(), anyString(), anyString());
+                                                                    .withdrawal(anyString(), anyString());
 
         // when & then
-        mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal/{oauth2Type}", 소셜_로그인_타입)
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal")
                                                         .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
                                                         .contentType(MediaType.APPLICATION_JSON)
                                                         .content(objectMapper.writeValueAsString(유효하지_않은_회원탈퇴_요청))
@@ -304,9 +303,6 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     private void withdrawal_문서화(final ResultActions resultActions) throws Exception {
         resultActions.andDo(
                 restDocs.document(
-                        pathParameters(
-                                parameterWithName("oauth2Type").description("소셜 로그인을 할 서비스 선택(kakao로 고정)")
-                        ),
                         requestHeaders(
                                 headerWithName("Authorization").description("회원 Bearer 인증 정보")
                         ),

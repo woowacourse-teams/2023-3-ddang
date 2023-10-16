@@ -3,7 +3,7 @@ package com.ddang.ddang.qna.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -13,36 +13,35 @@ import com.ddang.ddang.qna.application.dto.ReadQuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadUserInQnaDto;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
-import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.qna.domain.repository.AnswerRepository;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuestionServiceFixture {
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaQuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private JpaAnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
-    private JpaRegionRepository regionRepository;
+    private RegionRepository regionRepository;
 
     @Autowired
     private JpaCategoryRepository categoryRepository;
@@ -54,6 +53,7 @@ public class QuestionServiceFixture {
     protected Question 질문;
     protected User 질문자;
     protected User 질문하지_않은_사용자;
+    protected User 두번째_질문을_작성한_사용자;
     protected CreateQuestionDto 경매_질문_등록_요청_dto;
     protected CreateQuestionDto 존재하지_않는_사용자가_경매_질문_등록_요청_dto;
     protected CreateQuestionDto 존재하지_않는_경매_질문_등록_요청_dto;
@@ -65,6 +65,8 @@ public class QuestionServiceFixture {
     protected ReadQuestionDto 질문_정보_dto3;
     protected ReadAnswerDto 답변_정보_dto1;
     protected ReadAnswerDto 답변_정보_dto2;
+
+    protected String 이미지_절대_경로 = "/imageUrl";
 
     @BeforeEach
     void setUp() {
@@ -140,18 +142,34 @@ public class QuestionServiceFixture {
                           .reliability(new Reliability(4.7d))
                           .oauthId("12346")
                           .build();
+        두번째_질문을_작성한_사용자 = User.builder()
+                              .name("두번째 질문자")
+                              .profileImage(프로필_이미지)
+                              .reliability(new Reliability(4.7d))
+                              .oauthId("12347")
+                              .build();
         질문 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문1");
-        final Question 질문2 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문2");
+        final Question 질문2 = new Question(질문과_답변이_존재하는_경매, 두번째_질문을_작성한_사용자, "질문2");
         final Question 질문3 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문3");
         final Answer 답변1 = new Answer("답변1");
         final Answer 답변2 = new Answer("답변2");
         질문.addAnswer(답변1);
         질문2.addAnswer(답변2);
 
-        userRepository.saveAll(List.of(판매자, 질문자, 질문하지_않은_사용자));
-        auctionRepository.saveAll(List.of(경매, 질문과_답변이_존재하는_경매, 종료된_경매, 삭제된_경매));
-        questionRepository.saveAll(List.of(질문, 질문2, 질문3));
-        answerRepository.saveAll(List.of(답변1, 답변2));
+        userRepository.save(판매자);
+        userRepository.save(질문자);
+        userRepository.save(질문하지_않은_사용자);
+        userRepository.save(두번째_질문을_작성한_사용자);
+
+        auctionRepository.save(경매);
+        auctionRepository.save(질문과_답변이_존재하는_경매);
+        auctionRepository.save(종료된_경매);
+        auctionRepository.save(삭제된_경매);
+        questionRepository.save(질문);
+        questionRepository.save(질문2);
+        questionRepository.save(질문3);
+        answerRepository.save(답변1);
+        answerRepository.save(답변2);
 
         질문_3개_답변_2개가_존재하는_경매_아이디 = 질문과_답변이_존재하는_경매.getId();
 
@@ -164,10 +182,11 @@ public class QuestionServiceFixture {
 
         final ReadUserInQnaDto 판매자_정보_dto = ReadUserInQnaDto.from(판매자);
         final ReadUserInQnaDto 질문자_정보_dto = ReadUserInQnaDto.from(질문자);
-        질문_정보_dto1 = new ReadQuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime());
-        질문_정보_dto2 = new ReadQuestionDto(질문2.getId(), 질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime());
-        질문_정보_dto3 = new ReadQuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime());
-        답변_정보_dto1 = new ReadAnswerDto(답변1.getId(), 판매자_정보_dto, 답변1.getContent(), 답변1.getCreatedTime());
-        답변_정보_dto2 = new ReadAnswerDto(답변2.getId(), 판매자_정보_dto, 답변2.getContent(), 답변2.getCreatedTime());
+        final ReadUserInQnaDto 두번째_질문자_정보_dto = ReadUserInQnaDto.from(두번째_질문을_작성한_사용자);
+        질문_정보_dto1 = new ReadQuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime(), false, false);
+        질문_정보_dto2 = new ReadQuestionDto(질문2.getId(), 두번째_질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime(), false, true);
+        질문_정보_dto3 = new ReadQuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime(), false, false);
+        답변_정보_dto1 = new ReadAnswerDto(답변1.getId(), 판매자_정보_dto, 답변1.getContent(), 답변1.getCreatedTime(), false);
+        답변_정보_dto2 = new ReadAnswerDto(답변2.getId(), 판매자_정보_dto, 답변2.getContent(), 답변2.getCreatedTime(), false);
     }
 }

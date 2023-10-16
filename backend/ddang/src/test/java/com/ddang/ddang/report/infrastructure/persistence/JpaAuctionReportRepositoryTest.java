@@ -4,8 +4,6 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaAuctionReportRepositoryFixture;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -24,9 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
     JpaAuctionReportRepository auctionReportRepository;
 
@@ -39,9 +34,6 @@ class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
         final AuctionReport actual = auctionReportRepository.save(auctionReport);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(actual.getId()).isPositive();
     }
 
@@ -69,7 +61,7 @@ class JpaAuctionReportRepositoryTest extends JpaAuctionReportRepositoryFixture {
     @Test
     void 전체_경매_신고_목록을_조회한다() {
         // when
-        final List<AuctionReport> actual = auctionReportRepository.findAllByOrderByIdAsc();
+        final List<AuctionReport> actual = auctionReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

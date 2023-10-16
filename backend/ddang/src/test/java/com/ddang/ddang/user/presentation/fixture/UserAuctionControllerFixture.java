@@ -44,7 +44,8 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
             "판매자",
             3.5d,
             false,
-            AuctionStatus.UNBIDDEN
+            AuctionStatus.UNBIDDEN,
+            null
     );
     protected ReadAuctionDto 경매_정보_dto2 = new ReadAuctionDto(
             2L,
@@ -66,7 +67,8 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
             "판매자",
             3.5d,
             false,
-            AuctionStatus.UNBIDDEN
+            AuctionStatus.UNBIDDEN,
+            null
     );
     protected ReadAuctionsDto 사용자의_경매들_정보_dto = new ReadAuctionsDto(List.of(경매_정보_dto2, 경매_정보_dto1), true);
     protected ReadAuctionsDto 사용자가_참여한_경매들_정보_dto = new ReadAuctionsDto(List.of(경매_정보_dto2, 경매_정보_dto1), true);

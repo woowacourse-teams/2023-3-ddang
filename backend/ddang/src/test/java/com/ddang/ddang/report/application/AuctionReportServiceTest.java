@@ -1,23 +1,21 @@
 package com.ddang.ddang.report.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
-import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.application.fixture.AuctionReportServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -64,8 +62,8 @@ class AuctionReportServiceTest extends AuctionReportServiceFixture {
     void 삭제한_경매를_신고하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionReportService.create(삭제된_경매_신고_요청_dto))
-                .isInstanceOf(InvalidReportAuctionException.class)
-                .hasMessage("이미 삭제된 경매입니다.");
+                .isInstanceOf(AuctionNotFoundException.class)
+                .hasMessage("해당 경매를 찾을 수 없습니다.");
     }
 
     @Test

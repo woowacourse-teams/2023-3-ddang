@@ -16,7 +16,7 @@ public record ReadUserInQnaDto(
                 writer.getName(),
                 writer.getProfileImage().getId(),
                 writer.getReliability().getValue(),
-                writer.getOauthId(),
+                writer.getOauthInformation().getOauthId(),
                 writer.isDeleted()
         );
     }

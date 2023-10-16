@@ -157,7 +157,8 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 "판매자",
                 3.5d,
                 false,
-                AuctionStatus.UNBIDDEN
+                AuctionStatus.UNBIDDEN,
+                null
         );
 
         첫번째_경매_조회_dto = new ReadAuctionDto(
@@ -180,7 +181,8 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 "판매자",
                 3.5d,
                 false,
-                AuctionStatus.UNBIDDEN
+                AuctionStatus.UNBIDDEN,
+                null
         );
 
         두번째_경매_조회_dto = new ReadAuctionDto(
@@ -203,7 +205,8 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 "판매자",
                 3.5d,
                 false,
-                AuctionStatus.UNBIDDEN
+                AuctionStatus.UNBIDDEN,
+                null
         );
 
         경매_목록_조회_dto = new ReadAuctionsDto(List.of(두번째_경매_조회_dto, 첫번째_경매_조회_dto), true);

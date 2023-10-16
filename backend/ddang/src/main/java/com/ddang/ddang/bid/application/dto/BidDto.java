@@ -1,6 +1,6 @@
 package com.ddang.ddang.bid.application.dto;
 
-import com.ddang.ddang.auction.infrastructure.persistence.dto.AuctionAndImageDto;
+import com.ddang.ddang.auction.domain.dto.AuctionAndImageDto;
 
 public record BidDto(
         Long previousBidderId,

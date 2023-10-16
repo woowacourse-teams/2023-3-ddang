@@ -3,19 +3,18 @@ package com.ddang.ddang.category.application;
 import com.ddang.ddang.category.application.dto.ReadCategoryDto;
 import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
-import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.category.domain.repository.CategoryRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CategoryService {
 
-    private final JpaCategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
     public List<ReadCategoryDto> readAllMain() {
         final List<Category> mainCategories = categoryRepository.findMainAllByMainCategoryIsNull();
