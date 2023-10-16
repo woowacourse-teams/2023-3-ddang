@@ -23,7 +23,7 @@ class RegisterAnswerDialog : DialogFragment() {
         get() = _binding!!
 
     private val viewModel: RegisterAnswerViewModel by viewModels()
-    private val parentViewModel: QnaViewModel by viewModels()
+    private val parentViewModel: QnaViewModel by viewModels(ownerProducer = { requireParentFragment() })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

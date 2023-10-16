@@ -118,7 +118,7 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
         binding.clWriteQuestion.setOnClickListener {
             activityViewModel.auctionDetailModel.value?.let { model ->
                 RegisterQuestionDialog.show(
-                    parentFragmentManager,
+                    childFragmentManager,
                     model.id,
                 )
             }
