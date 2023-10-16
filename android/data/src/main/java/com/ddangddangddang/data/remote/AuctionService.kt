@@ -162,7 +162,7 @@ interface AuctionService {
     @POST("/reports/questions")
     suspend fun reportQuestion(@Body reportQuestionRequest: ReportQuestionRequest): ApiResponse<Unit>
 
-    @POST("/reports/answer")
+    @POST("/reports/answers")
     suspend fun reportAnswer(@Body reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit>
 
     @GET("/bids/{auctionId}")
