@@ -17,7 +17,6 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentAuctionBidDialogBinding
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.common.PriceTextWatcher
-import com.ddangddangddang.android.feature.common.PriceTextWatcher.Companion.getCursorPosition
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.util.view.Toaster
@@ -31,13 +30,7 @@ class AuctionBidDialog : DialogFragment() {
 
     private val viewModel: AuctionBidViewModel by viewModels()
     private val activityViewModel: AuctionDetailViewModel by activityViewModels()
-    private var bidPriceCursorPositionFromEnd: Int = 0
-    private val bidPriceWatcher by lazy {
-        PriceTextWatcher { cursorPositionFromEnd: Int, bidPrice: String ->
-            bidPriceCursorPositionFromEnd = cursorPositionFromEnd
-            viewModel.changeInputPriceText(bidPrice)
-        }
-    }
+    private val bidPriceWatcher by lazy { PriceTextWatcher { viewModel.changeInputPriceText(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -132,7 +125,12 @@ class AuctionBidDialog : DialogFragment() {
         val displayPrice = getString(R.string.all_price, price)
         binding.etBidPrice.removeTextChangedListener(bidPriceWatcher)
         binding.etBidPrice.setText(displayPrice)
-        binding.etBidPrice.setSelection(getCursorPosition(displayPrice.length, bidPriceCursorPositionFromEnd, RegisterAuctionViewModel.SUFFIX_INPUT_PRICE.length)) // 이전 커서 위치로 이동
+        binding.etBidPrice.setSelection(
+            bidPriceWatcher.getCursorPosition(
+                displayPrice.length,
+                RegisterAuctionViewModel.SUFFIX_INPUT_PRICE.length,
+            ),
+        ) // 이전 커서 위치로 이동
         binding.etBidPrice.addTextChangedListener(bidPriceWatcher)
     }
 
