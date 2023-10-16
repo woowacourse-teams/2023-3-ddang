@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import androidx.core.app.TaskStackBuilder
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.google.firebase.messaging.RemoteMessage
 
@@ -26,12 +27,13 @@ abstract class NotificationType {
     ): Notification
 
     fun Intent.getPendingIntent(context: Context, requestCode: Int): PendingIntent? {
-        return PendingIntent.getActivity(
-            context.applicationContext,
-            requestCode,
-            this,
-            PendingIntent.FLAG_IMMUTABLE,
-        )
+        return TaskStackBuilder.create(context).run {
+            addNextIntentWithParentStack(this@getPendingIntent)
+            getPendingIntent(
+                requestCode,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            )
+        }
     }
 }
 
