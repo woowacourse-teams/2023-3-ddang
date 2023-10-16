@@ -28,22 +28,38 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val deviceToken = repository.getDeviceToken()
             if (deviceToken.isNullOrBlank()) {
-                LoginEvent.FailureLoginEvent(ErrorType.UNEXPECTED)
+                _event.value = LoginEvent.FailureLoginEvent(ErrorType.UNEXPECTED)
                 return@launch
             }
 
             val request = KakaoLoginRequest(accessToken, deviceToken)
             when (val response = repository.loginByKakao(request)) {
-                is ApiResponse.Success -> _event.value = LoginEvent.CompleteLoginEvent
-                is ApiResponse.Failure -> _event.value = LoginEvent.FailureLoginEvent(ErrorType.FAILURE(response.error))
-                is ApiResponse.NetworkError -> _event.value = LoginEvent.FailureLoginEvent(ErrorType.NETWORK_ERROR)
-                is ApiResponse.Unexpected -> _event.value = LoginEvent.FailureLoginEvent(ErrorType.UNEXPECTED)
+                is ApiResponse.Success -> {
+                    if (response.body.isSignUpUser) {
+                        _event.value = LoginEvent.SignUpEvent
+                    } else {
+                        _event.value = LoginEvent.CompleteLoginEvent
+                    }
+                }
+
+                is ApiResponse.Failure -> {
+                    _event.value = LoginEvent.FailureLoginEvent(ErrorType.FAILURE(response.error))
+                }
+
+                is ApiResponse.NetworkError -> {
+                    _event.value = LoginEvent.FailureLoginEvent(ErrorType.NETWORK_ERROR)
+                }
+
+                is ApiResponse.Unexpected -> {
+                    _event.value = LoginEvent.FailureLoginEvent(ErrorType.UNEXPECTED)
+                }
             }
         }
     }
 
     sealed class LoginEvent {
         object KakaoLoginEvent : LoginEvent()
+        object SignUpEvent : LoginEvent()
         object CompleteLoginEvent : LoginEvent()
         data class FailureLoginEvent(val type: ErrorType) : LoginEvent()
     }

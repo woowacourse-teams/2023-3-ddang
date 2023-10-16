@@ -247,4 +247,11 @@
     <string name="user_review_failure">평가에 실패했습니다</string>
     <string name="user_review_success">평가가 완료되었습니다</string>
     <string name="user_review_load_failure">평가 내용을 가져오는데 실패했습니다</string>
+
+    <!-- onboarding -->
+    <string name="onboarding_profile_setting_title">프로필 설정</string>
+    <string name="onboarding_page_skip_dialog_title">건너뛰기</string>
+    <string name="onboarding_page_skip_dialog_message">정말 건너뛰시겠습니까?</string>
+    <string name="onboarding_page_skip_dialog_positive_button">확인</string>
+    <string name="onboarding_all_done">마치기</string>
 </resources>
