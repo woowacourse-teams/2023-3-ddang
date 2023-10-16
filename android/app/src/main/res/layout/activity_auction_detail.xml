@@ -267,7 +267,10 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/tv_auctioneer_count"
-                        app:tabIndicatorFullWidth="true" />
+                        app:tabGravity="fill"
+                        app:tabIndicatorFullWidth="true"
+                        app:tabMaxWidth="0dp"
+                        app:tabMode="fixed" />
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/vp_detail_info"

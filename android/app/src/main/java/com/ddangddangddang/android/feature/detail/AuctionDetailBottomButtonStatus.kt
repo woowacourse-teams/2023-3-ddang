@@ -28,11 +28,12 @@ enum class AuctionDetailBottomButtonStatus(
             val isOwner = auctionDetailModel.isOwner
             val auctionStatus = auctionDetailModel.auctionDetailStatusModel
             val chatStatus = auctionDetailModel.chatAuctionDetailModel
+            val isLastBidder = auctionDetailModel.isLastBidder
 
             return when {
                 canEnterMessageRoom(chatStatus) -> EnterAuctionChatRoom
                 canBidAuction(auctionStatus, isOwner) -> {
-                    if (auctionDetailModel.isLastBidder) {
+                    if (isLastBidder) {
                         AlreadyLastBidder
                     } else {
                         BidAuction

@@ -3,6 +3,7 @@ package com.ddangddangddang.android.feature.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
@@ -41,11 +42,9 @@ class AuctionDetailActivity :
 
     // 액션바 높이를 반환하는 함수
     private fun getActionBarHeight(context: Context): Int {
-        val styledAttributes =
-            context.theme.obtainStyledAttributes(intArrayOf(androidx.appcompat.R.attr.actionBarSize))
-        val actionBarHeight = styledAttributes.getDimension(0, 0f).toInt()
-        styledAttributes.recycle()
-        return actionBarHeight
+        val typedValue = TypedValue()
+        context.theme.resolveAttribute(androidx.appcompat.R.attr.actionBarSize, typedValue, true)
+        return TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
     }
 
     private fun getRemainingHeight(context: Context): Int {
