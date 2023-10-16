@@ -32,10 +32,20 @@ public class ReadMessageLog {
     private ChatRoom chatRoom;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "auction_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_reader"))
+    @JoinColumn(name = "reader_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_reader"))
     private User reader;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "message_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_message"))
-    private Message message;
+    @JoinColumn(name = "last_message_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_last_read_message"))
+    private Message lastReadMessage;
+
+    public ReadMessageLog(final ChatRoom chatRoom, final User reader, final Message lastReadMessage) {
+        this.chatRoom = chatRoom;
+        this.reader = reader;
+        this.lastReadMessage = lastReadMessage;
+    }
+
+    public void updateLastReadMessage(final Message lastReadMessage) {
+        this.lastReadMessage = lastReadMessage;
+    }
 }
