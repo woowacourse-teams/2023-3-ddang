@@ -37,8 +37,8 @@ public class AnswerFixture {
 
     protected Question 질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");
     private Question 답변이_있는_질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");
-    protected Answer 답변 = new Answer("답변드립니다.");
-    protected Answer 삭제된_답변 = new Answer("답변드립니다.");
+    protected Answer 답변 = new Answer(판매자, "답변드립니다.");
+    protected Answer 삭제된_답변 = new Answer(판매자, "답변드립니다.");
 
     @BeforeEach
     void setUp() {

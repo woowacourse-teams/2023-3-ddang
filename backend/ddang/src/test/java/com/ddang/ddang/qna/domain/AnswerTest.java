@@ -15,7 +15,7 @@ class AnswerTest extends AnswerFixture {
     @Test
     void 답변과_질문의_연관관계를_세팅한다() {
         // given
-        final Answer answer = new Answer("답변드립니다.");
+        final Answer answer = new Answer(판매자, "답변드립니다.");
 
         // when
         answer.initQuestion(질문);

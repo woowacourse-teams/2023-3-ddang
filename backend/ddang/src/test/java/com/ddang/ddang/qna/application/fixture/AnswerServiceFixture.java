@@ -78,7 +78,7 @@ public class AnswerServiceFixture {
                           .build();
         final Question 질문 = new Question(경매, 질문자, "궁금한 점이 있습니다.");
         final Question 답변한_질문 = new Question(경매, 질문자, "궁금한 점이 있습니다.");
-        답변 = new Answer("답변드립니다.");
+        답변 = new Answer(판매자, "답변드립니다.");
         답변한_질문.addAnswer(답변);
 
         userRepository.save(판매자);

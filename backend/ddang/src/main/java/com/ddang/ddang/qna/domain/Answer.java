@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -30,6 +31,10 @@ public class Answer extends BaseCreateTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "writer_id", foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    private User writer;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "question_id", foreignKey = @ForeignKey(name = "fk_answer_question"))
     private Question question;
@@ -40,7 +45,8 @@ public class Answer extends BaseCreateTimeEntity {
     @Column(name = "is_deleted")
     private boolean deleted = false;
 
-    public Answer(final String content) {
+    public Answer(final User writer, final String content) {
+        this.writer = writer;
         this.content = content;
     }
 
@@ -49,14 +55,10 @@ public class Answer extends BaseCreateTimeEntity {
     }
 
     public boolean isWriter(final User user) {
-        return question.getAuction().isOwner(user);
+        return writer.equals(user);
     }
 
     public void delete() {
         deleted = DELETED_STATUS;
-    }
-
-    public User getWriter() {
-        return question.getAuction().getSeller();
     }
 }

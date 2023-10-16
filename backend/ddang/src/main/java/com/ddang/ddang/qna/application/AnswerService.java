@@ -41,7 +41,7 @@ public class AnswerService {
         checkInvalidAnswerer(question, writer);
         checkAlreadyAnswered(question);
 
-        final Answer answer = answerDto.toEntity();
+        final Answer answer = answerDto.toEntity(writer);
         question.addAnswer(answer);
 
         final Answer persistAnswer = answerRepository.save(answer);
