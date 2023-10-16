@@ -15,17 +15,15 @@ import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.device.infrastructure.persistence.DeviceTokenRepositoryImpl;
 import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
-import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.ProfileImageRepositoryImpl;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
@@ -38,9 +36,6 @@ import static org.mockito.BDDMockito.given;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class AuthenticationServiceTest extends AuthenticationServiceFixture {
-
-    @Mock
-    ProfileImageRepository defaultProfileImageRepository;
 
     @MockBean
     Oauth2UserInformationProviderComposite providerComposite;
@@ -68,8 +63,6 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     DeviceTokenRepository deviceTokenRepository;
 
     AuthenticationService authenticationService;
-
-    AuthenticationService profileImageNotFoundAuthenticationService;
 
     @BeforeEach
     void fixtureSetUp(
