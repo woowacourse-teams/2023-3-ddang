@@ -64,6 +64,7 @@
                 android:textColor="@color/grey_900"
                 app:layout_constraintBottom_toTopOf="@id/btn_answer_cancel"
                 app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintHeight_min="50dp"
                 app:layout_constraintStart_toStartOf="@id/gl_begin"
                 app:layout_constraintTop_toBottomOf="@id/tv_write_answer_title"
                 tools:text="힝잉잉" />
