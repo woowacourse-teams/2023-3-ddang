@@ -36,7 +36,8 @@ public class AnswerFixture {
     protected User 답변_작성자가_아닌_사용자 = 질문_작성자;
 
     protected Question 질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");
-    private Question 답변이_있는_질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");
+    protected Question 답변이_있는_질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");
+    private Question 삭제된_답변이_있는_질문 = new Question(경매, 질문_작성자, "궁금한 점이 있어요.");
     protected Answer 답변 = new Answer(판매자, "답변드립니다.");
     protected Answer 삭제된_답변 = new Answer(판매자, "답변드립니다.");
 
@@ -49,6 +50,7 @@ public class AnswerFixture {
         ReflectionTestUtils.setField(삭제된_답변, "id", 1L);
 
         답변이_있는_질문.addAnswer(답변);
+        삭제된_답변이_있는_질문.addAnswer(삭제된_답변);
         삭제된_답변.delete();
     }
 }

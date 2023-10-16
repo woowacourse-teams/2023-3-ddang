@@ -60,5 +60,10 @@ public class Answer extends BaseCreateTimeEntity {
 
     public void delete() {
         deleted = DELETED_STATUS;
+
+        if (question != null) {
+            question.deleteAnswer();
+            question = null;
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.ddang.ddang.qna.domain;
 
 import com.ddang.ddang.qna.domain.fixture.AnswerFixture;
 import com.ddang.ddang.user.domain.User;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -67,5 +68,18 @@ class AnswerTest extends AnswerFixture {
 
         // then
         assertThat(actual).isEqualTo(판매자);
+    }
+
+    @Test
+    void 답변_삭제시_삭제_상태를_참으로_변경하고_질문과의_연관관계를_끊는다() {
+        // when
+        답변.delete();
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(답변.isDeleted()).isTrue();
+            softAssertions.assertThat(답변.getQuestion()).isNull();
+            softAssertions.assertThat(답변이_있는_질문.getAnswer()).isNull();
+        });
     }
 }
