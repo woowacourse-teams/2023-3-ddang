@@ -5,6 +5,8 @@ import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
+import com.ddang.ddang.chat.domain.ReadMessageLog;
+import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
@@ -20,6 +22,7 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -34,6 +37,9 @@ class MessageServiceTest extends MessageServiceFixture {
 
     @Autowired
     MessageService messageService;
+
+    @Autowired
+    ReadMessageLogRepository readMessageLogRepository;
 
     @MockBean
     NotificationService notificationService;
@@ -124,6 +130,16 @@ class MessageServiceTest extends MessageServiceFixture {
 
         // then
         assertThat(readMessageDtos).isEmpty();
+    }
+
+    @Test
+    void 메시지를_조회할_경우_마지막으로_읽은_메시지가_업데이트된다() {
+        // when
+        messageService.readAllByLastMessageId(조회한_마지막_메시지가_5인_메시지_조회용_request);
+        final Optional<ReadMessageLog> readMessageLog = readMessageLogRepository.findBy(발신자.getId(), 메시지가_5개인_채팅방.getId());
+
+        // then
+        assertThat(readMessageLog.get().getLastReadMessageId()).isEqualTo(메시지가_5개인_채팅방_메시지의_마지막_메시지);
     }
 
     @Test

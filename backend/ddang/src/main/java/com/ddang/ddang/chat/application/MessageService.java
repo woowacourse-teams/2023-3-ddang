@@ -5,11 +5,14 @@ import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
+import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.domain.repository.MessageRepository;
+import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -30,6 +33,7 @@ public class MessageService {
 
     private final ApplicationEventPublisher messageEventPublisher;
     private final MessageRepository messageRepository;
+    private final ReadMessageLogRepository readMessageLogRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
 
@@ -58,11 +62,10 @@ public class MessageService {
         return persistMessage.getId();
     }
 
+    @Transactional
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        if (!userRepository.existsById(request.messageReaderId())) {
-            throw new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
-        }
-
+        final User reader = userRepository.findById(request.messageReaderId())
+                                          .orElseThrow(() -> new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다."));
         final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -77,9 +80,20 @@ public class MessageService {
                 request.lastMessageId()
         );
 
+        final Message lastReadMessage = readMessages.get(readMessages.size() - 1);
+        updateLastReadMessage(reader, chatRoom, lastReadMessage);
+
         return readMessages.stream()
                            .map(message -> ReadMessageDto.from(message, chatRoom))
                            .toList();
+    }
+
+    private void updateLastReadMessage(final User reader, final ChatRoom chatRoom, final Message lastReadMessage) {
+        final ReadMessageLog messageLog = readMessageLogRepository.findBy(reader.getId(), chatRoom.getId())
+                                                                  .orElseThrow(() -> new ReadMessageLogNotFoundException(
+                                                                          "메시지 조회 로그가 존재하지 않습니다."
+                                                                  ));
+        messageLog.updateLastReadMessage(lastReadMessage.getId());
     }
 
     private void validateLastMessageId(final Long lastMessageId) {
