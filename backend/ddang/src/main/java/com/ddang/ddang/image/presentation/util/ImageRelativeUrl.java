@@ -20,4 +20,8 @@ public enum ImageRelativeUrl {
 
         return imageBaseUrl + value;
     }
+
+    public String getValue() {
+        return value;
+    }
 }

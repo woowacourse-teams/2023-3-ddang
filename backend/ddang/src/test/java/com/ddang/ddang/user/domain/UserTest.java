@@ -93,8 +93,9 @@ class UserTest extends UserFixture {
     @Test
     void 회원_탈퇴한다() {
         // given
+        final String userName = "kakao12345";
         final User user = User.builder()
-                              .name("kakao12345")
+                              .name(userName)
                               .profileImage(new ProfileImage("upload.png", "store.png"))
                               .reliability(new Reliability(5.0d))
                               .oauthId("12345")
@@ -104,7 +105,11 @@ class UserTest extends UserFixture {
         user.withdrawal();
 
         // then
-        assertThat(user.isDeleted()).isTrue();
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(user.isDeleted()).isTrue();
+            softAssertions.assertThat(user.getName()).isNotEqualTo(userName);
+            softAssertions.assertThat(user.getProfileImage()).isNull();
+        });
     }
 
     @Test
