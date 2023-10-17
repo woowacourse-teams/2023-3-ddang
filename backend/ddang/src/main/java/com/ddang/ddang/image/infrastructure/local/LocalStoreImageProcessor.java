@@ -5,20 +5,18 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class LocalStoreImageProcessor implements StoreImageProcessor {
-
-    private static final List<String> WHITE_IMAGE_EXTENSION = List.of("jpg", "jpeg", "png");
-    private static final String EXTENSION_FILE_CHARACTER = ".";
 
     @Value("${image.store.dir}")
     private String imageStoreDir;
@@ -38,7 +36,8 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
         return storeImageDtos;
     }
 
-    public StoreImageDto storeImageFile(MultipartFile imageFile) {
+    @Override
+    public StoreImageDto storeImageFile(final MultipartFile imageFile) {
         try {
             final String originalImageFileName = imageFile.getOriginalFilename();
             final String storeImageFileName = createStoreImageFileName(originalImageFileName);
@@ -47,16 +46,16 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
             imageFile.transferTo(new File(fullPath));
 
             return new StoreImageDto(originalImageFileName, storeImageFileName);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new StoreImageFailureException("이미지 저장에 실패했습니다.", ex);
         }
     }
 
-    private String findFullPath(String storeImageFileName) {
+    private String findFullPath(final String storeImageFileName) {
         return imageStoreDir + storeImageFileName;
     }
 
-    private String createStoreImageFileName(String originalFilename) {
+    private String createStoreImageFileName(final String originalFilename) {
         final String extension = extractExtension(originalFilename);
 
         validateImageFileExtension(extension);
@@ -66,7 +65,7 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
         return uuid + EXTENSION_FILE_CHARACTER + extension;
     }
 
-    private String extractExtension(String originalFilename) {
+    private String extractExtension(final String originalFilename) {
         int position = originalFilename.lastIndexOf(EXTENSION_FILE_CHARACTER);
 
         return originalFilename.substring(position + 1);
