@@ -28,7 +28,7 @@ public class ReadMessageLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "chat_room_id", nullable = false, foreignKey = @ForeignKey(name = "fk_read_message_log_chat_room"))
     private ChatRoom chatRoom;
 
