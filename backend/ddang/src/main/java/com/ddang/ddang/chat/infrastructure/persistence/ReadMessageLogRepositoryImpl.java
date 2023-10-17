@@ -19,7 +19,7 @@ public class ReadMessageLogRepositoryImpl implements ReadMessageLogRepository {
     }
 
     @Override
-    public Optional<ReadMessageLog> findLastReadMessageBy(final Long readerId, final Long chatRoomId) {
+    public Optional<ReadMessageLog> findBy(final Long readerId, final Long chatRoomId) {
         return jpaReadMessageLogRepository.findLastReadMessageByUserIdAndChatRoomId(readerId, chatRoomId);
     }
 }
