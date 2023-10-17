@@ -13,11 +13,13 @@ import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
+import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -27,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -38,6 +41,7 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomAndImageRepository chatRoomAndImageRepository;
     private final ChatRoomAndMessageAndImageRepository chatRoomAndMessageAndImageRepository;
+    private final ReadMessageLogRepository readMessageLogRepository;
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
 
@@ -50,10 +54,26 @@ public class ChatRoomService {
                                                              new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
                                                      );
 
-        return chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
-                                 .orElseGet(() ->
-                                         persistChatRoom(findUser, findAuction).getId()
-                                 );
+        final Optional<ChatRoom> findChatRoom = chatRoomRepository.findChatRoomByAuctionId(findAuction.getId());
+        if (findChatRoom.isPresent()) {
+            return findChatRoom.get().getId();
+        }
+
+        return createChatRoom(findUser, findAuction);
+    }
+
+    private Long createChatRoom(final User findUser, final Auction findAuction) {
+        final ChatRoom persistChatRoom = persistChatRoom(findUser, findAuction);
+        createReadMessageLog(persistChatRoom);
+        return persistChatRoom.getId();
+    }
+
+    private void createReadMessageLog(final ChatRoom persistChatRoom) {
+        final ReadMessageLog buyerReadMessageLog = new ReadMessageLog(persistChatRoom, persistChatRoom.getBuyer());
+        final ReadMessageLog sellerReadMessageLog = new ReadMessageLog(persistChatRoom, persistChatRoom.getAuction()
+                                                                                                       .getSeller());
+        readMessageLogRepository.save(buyerReadMessageLog);
+        readMessageLogRepository.save(sellerReadMessageLog);
     }
 
     private ChatRoom persistChatRoom(final User user, final Auction auction) {
