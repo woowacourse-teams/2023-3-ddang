@@ -58,11 +58,11 @@ public class AuctionRepositoryImpl implements AuctionRepository {
 
     @Override
     public boolean existsBySellerIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
-        return jpaAuctionRepository.existsBySellerIdAndClosingTimeGreaterThanEqual(userId, now);
+        return querydslAuctionRepository.existsBySellerIdAndAuctionIsOngoing(userId, now);
     }
 
     @Override
     public boolean existsLastBidByUserIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
-        return jpaAuctionRepository.existsByLastBidderIdAndClosingTimeGreaterThanEqual(userId, now);
+        return querydslAuctionRepository.existsLastBidByUserIdAndAuctionIsOngoing(userId, now);
     }
 }

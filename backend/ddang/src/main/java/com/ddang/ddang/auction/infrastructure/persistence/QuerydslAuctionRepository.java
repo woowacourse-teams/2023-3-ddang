@@ -1,11 +1,5 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
-import static com.ddang.ddang.auction.domain.QAuction.auction;
-import static com.ddang.ddang.bid.domain.QBid.bid;
-import static com.ddang.ddang.category.domain.QCategory.category;
-import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
-import static com.ddang.ddang.region.domain.QRegion.region;
-
 import com.ddang.ddang.auction.configuration.util.AuctionSortConditionConsts;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.UnsupportedSortConditionException;
@@ -15,16 +9,23 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.bid.domain.QBid.bid;
+import static com.ddang.ddang.category.domain.QCategory.category;
+import static com.ddang.ddang.region.domain.QAuctionRegion.auctionRegion;
+import static com.ddang.ddang.region.domain.QRegion.region;
 
 @Repository
 @RequiredArgsConstructor
@@ -83,7 +84,7 @@ public class QuerydslAuctionRepository {
         if (AuctionSortConditionConsts.CLOSING_TINE.equals(order.getProperty())) {
             return auction.closingTime.asc();
         }
-        
+
         throw new UnsupportedSortConditionException("지원하지 않는 정렬 방식입니다.");
     }
 
@@ -186,5 +187,26 @@ public class QuerydslAuctionRepository {
         });
 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
+    }
+
+    public boolean existsBySellerIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
+        return queryFactory.selectFrom(auction)
+                           .join(auction.seller).fetchJoin()
+                           .where(auction.seller.id.eq(userId)
+                                                   .and(auction.deleted.isFalse())
+                                                   .and(auction.closingTime.after(now))
+                           )
+                           .fetchFirst() != null;
+    }
+
+    public boolean existsLastBidByUserIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
+        return queryFactory.selectFrom(auction)
+                           .join(auction.lastBid, bid).fetchJoin()
+                           .join(bid.bidder).fetchJoin()
+                           .where(bid.bidder.id.eq(userId)
+                                               .and(auction.deleted.isFalse())
+                                               .and(auction.closingTime.after(now))
+                           )
+                           .fetchFirst() != null;
     }
 }

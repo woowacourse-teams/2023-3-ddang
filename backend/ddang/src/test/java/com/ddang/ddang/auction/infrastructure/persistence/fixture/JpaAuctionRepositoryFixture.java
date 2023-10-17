@@ -107,17 +107,17 @@ public class JpaAuctionRepositoryFixture {
                             .subCategory(가구_서브_의자_카테고리)
                             .build();
         삭제된_경매_엔티티 = Auction.builder()
+                            .seller(판매자)
                             .title("경매 상품 1")
                             .description("이것은 경매 상품 1 입니다.")
                             .bidUnit(new BidUnit(1_000))
                             .startPrice(new Price(1_000))
                             .closingTime(시간.atZone(위치).toLocalDateTime())
                             .subCategory(가구_서브_의자_카테고리)
-                            .seller(판매자)
                             .build();
 
-        삭제된_경매_엔티티.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         저장된_경매_엔티티.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
+        삭제된_경매_엔티티.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         삭제된_경매_엔티티.delete();
 
         auctionRepository.saveAll(List.of(저장된_경매_엔티티, 삭제된_경매_엔티티));
