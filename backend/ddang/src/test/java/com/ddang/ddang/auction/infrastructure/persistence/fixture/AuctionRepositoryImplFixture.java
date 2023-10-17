@@ -67,6 +67,7 @@ public class AuctionRepositoryImplFixture {
     protected Auction 삭제된_경매_엔티티;
     protected User 판매자;
     protected User 구매자;
+    protected Bid 입찰;
 
     @BeforeEach
     void fixtureSetUp(
@@ -137,7 +138,7 @@ public class AuctionRepositoryImplFixture {
         저장된_경매_엔티티.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         삭제된_경매_엔티티.delete();
         bidding(저장된_경매_엔티티, 구매자);
-        addAuctioneerCount(저장된_경매_엔티티, 1);
+        addAuctioneerCount(저장된_경매_엔티티, 구매자, 1);
 
         auctionRepository.save(삭제된_경매_엔티티);
         auctionRepository.save(저장된_경매_엔티티);
@@ -151,8 +152,8 @@ public class AuctionRepositoryImplFixture {
         targetAuction.updateLastBid(lastBid);
     }
 
-    private void addAuctioneerCount(final Auction targetAuction, final int count) {
-        final Bid lastBid = new Bid(targetAuction, targetAuction.getSeller(), new BidPrice(1));
+    private void addAuctioneerCount(final Auction targetAuction, final User bidder, final int count) {
+        final Bid lastBid = new Bid(targetAuction, bidder, new BidPrice(1));
 
         bidRepository.save(lastBid);
 

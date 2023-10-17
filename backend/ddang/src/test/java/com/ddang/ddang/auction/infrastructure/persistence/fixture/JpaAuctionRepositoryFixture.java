@@ -4,6 +4,9 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.bid.domain.BidPrice;
+import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -15,6 +18,7 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -41,10 +45,15 @@ public class JpaAuctionRepositoryFixture {
     @Autowired
     private JpaCategoryRepository categoryRepository;
 
+    @Autowired
+    private JpaBidRepository bidRepository;
+
     private Instant 시간 = Instant.parse("2023-07-08T22:21:20Z");
     private ZoneId 위치 = ZoneId.of("UTC");
 
     protected Long 존재하지_않는_경매_id = -999L;
+    protected User 판매자;
+    protected User 입찰자;
     protected Auction 저장하기_전_경매_엔티티 = Auction.builder()
                                              .title("제목")
                                              .description("내용")
@@ -73,23 +82,29 @@ public class JpaAuctionRepositoryFixture {
 
         categoryRepository.save(가구_카테고리);
 
-        final User 사용자 = User.builder()
-                             .name("사용자")
-                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(new Reliability(4.7d))
-                             .oauthId("12345")
-                             .build();
+        판매자 = User.builder()
+                  .name("판매자")
+                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                  .reliability(new Reliability(4.7d))
+                  .oauthId("12345")
+                  .build();
+        입찰자 = User.builder()
+                  .name("입찰자")
+                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                  .reliability(new Reliability(4.7d))
+                  .oauthId("12346")
+                  .build();
 
-        userRepository.save(사용자);
+        userRepository.saveAll(List.of(판매자, 입찰자));
 
         저장된_경매_엔티티 = Auction.builder()
+                            .seller(판매자)
                             .title("경매 상품 1")
                             .description("이것은 경매 상품 1 입니다.")
                             .bidUnit(new BidUnit(1_000))
                             .startPrice(new Price(1_000))
                             .closingTime(시간.atZone(위치).toLocalDateTime())
                             .subCategory(가구_서브_의자_카테고리)
-                            .seller(사용자)
                             .build();
         삭제된_경매_엔티티 = Auction.builder()
                             .title("경매 상품 1")
@@ -98,7 +113,7 @@ public class JpaAuctionRepositoryFixture {
                             .startPrice(new Price(1_000))
                             .closingTime(시간.atZone(위치).toLocalDateTime())
                             .subCategory(가구_서브_의자_카테고리)
-                            .seller(사용자)
+                            .seller(판매자)
                             .build();
 
         삭제된_경매_엔티티.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
@@ -106,6 +121,11 @@ public class JpaAuctionRepositoryFixture {
         삭제된_경매_엔티티.delete();
 
         auctionRepository.saveAll(List.of(저장된_경매_엔티티, 삭제된_경매_엔티티));
+
+        final Bid 입찰 = new Bid(저장된_경매_엔티티, 입찰자, new BidPrice(10_000));
+        저장된_경매_엔티티.updateLastBid(입찰);
+
+        bidRepository.save(입찰);
 
         em.flush();
         em.clear();

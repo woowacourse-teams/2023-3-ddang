@@ -3,6 +3,8 @@ package com.ddang.ddang.auction.infrastructure.persistence;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -52,5 +54,15 @@ public class AuctionRepositoryImpl implements AuctionRepository {
     @Override
     public Slice<Auction> findAuctionsAllByBidderId(final Long bidderId, final Pageable pageable) {
         return querydslAuctionRepository.findAuctionsAllByBidderId(bidderId, pageable);
+    }
+
+    @Override
+    public boolean existsBySellerIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
+        return jpaAuctionRepository.existsBySellerIdAndClosingTimeGreaterThanEqual(userId, now);
+    }
+
+    @Override
+    public boolean existsLastBidByUserIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
+        return jpaAuctionRepository.existsByLastBidderIdAndClosingTimeGreaterThanEqual(userId, now);
     }
 }

@@ -6,7 +6,9 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.infrastructure.persistence.fixture.JpaAuctionRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+
 import java.util.Optional;
+
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -68,8 +70,10 @@ class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
             softAssertions.assertThat(actual.get().getAuctionRegions()).isNotNull();
             softAssertions.assertThat(actual.get().getAuctionRegions().get(0)).isNotNull();
             softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion()).isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getFirstRegion()).isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getSecondRegion()).isNotNull();
+            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getFirstRegion())
+                          .isNotNull();
+            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getSecondRegion())
+                          .isNotNull();
             softAssertions.assertThat(actual.get().getSubCategory()).isNotNull();
             softAssertions.assertThat(actual.get().getSubCategory().getMainCategory()).isNotNull();
             softAssertions.assertThat(actual.get().getSeller()).isNotNull();
@@ -100,5 +104,53 @@ class JpaAuctionRepositoryTest extends JpaAuctionRepositoryFixture {
 
         // then
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 특정_사용자가_판매자인_경매중_현재_진행_중인_경매가_있다면_참을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsBySellerIdAndClosingTimeGreaterThanEqual(
+                판매자.getId(),
+                저장된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_사용자가_판매자인_경매중_현재_진행_중인_경매가_없다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsBySellerIdAndClosingTimeGreaterThanEqual(
+                판매자.getId(),
+                저장된_경매_엔티티.getClosingTime().plusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 특정_사용자가_마지막_입찰자인_경매중_현재_진행_중인_경매가_있다면_참을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsByLastBidderIdAndClosingTimeGreaterThanEqual(
+                입찰자.getId(),
+                저장된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_사용자가_마지막_입찰자인_경매중_현재_진행_중인_경매가_없다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsByLastBidderIdAndClosingTimeGreaterThanEqual(
+                입찰자.getId(),
+                저장된_경매_엔티티.getClosingTime().plusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
     }
 }

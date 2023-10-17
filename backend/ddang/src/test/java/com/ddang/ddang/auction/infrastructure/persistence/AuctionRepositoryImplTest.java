@@ -6,7 +6,7 @@ import com.ddang.ddang.auction.infrastructure.persistence.fixture.AuctionReposit
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.api.SoftAssertions;
+import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -166,5 +166,56 @@ class AuctionRepositoryImplTest extends AuctionRepositoryImplFixture {
             assertThat(actual.getContent().get(0)).isEqualTo(저장된_경매_엔티티);
             assertThat(actual.hasNext()).isFalse();
         });
+    }
+
+    @Test
+    void 특정_사용자가_판매자인_경매중_현재_진행_중인_경매가_있다면_참을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsBySellerIdAndAuctionIsOngoing(
+                판매자.getId(),
+                저장된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_사용자가_판매자인_경매중_현재_진행_중인_경매가_없다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsBySellerIdAndAuctionIsOngoing(
+                판매자.getId(),
+                저장된_경매_엔티티.getClosingTime().plusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 특정_사용자가_마지막_입찰자인_경매중_현재_진행_중인_경매가_있다면_참을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsLastBidByUserIdAndAuctionIsOngoing(
+                구매자.getId(),
+                저장된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        System.out.println(저장된_경매_엔티티);
+        System.out.println(저장된_경매_엔티티.getLastBid().getBidder());
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_사용자가_마지막_입찰자인_경매중_현재_진행_중인_경매가_없다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsLastBidByUserIdAndAuctionIsOngoing(
+                구매자.getId(),
+                저장된_경매_엔티티.getClosingTime().plusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
     }
 }
