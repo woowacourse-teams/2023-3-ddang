@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
@@ -19,14 +20,18 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.event.ApplicationEvents;
+import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
+@RecordApplicationEvents
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
 class ChatRoomServiceTest extends ChatRoomServiceFixture {
@@ -42,6 +47,9 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
 
     @Autowired
     MessageRepository messageRepository;
+
+    @Autowired
+    ApplicationEvents events;
 
     @Test
     void 채팅방_생성시_채팅_참여자에_대한_로그를_생성한다() {
@@ -66,6 +74,16 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
 
         // then
         assertThat(actual).isPositive();
+    }
+
+    @Test
+    void 채팅방_생성시_메시지_로그_생성_이벤트가_호출된다() {
+        // when
+        chatRoomService.create(구매자.getId(), 채팅방_생성을_위한_DTO);
+        final long actual = events.stream(CreateReadMessageLogEvent.class).count();
+
+        // then
+        assertThat(actual).isEqualTo(1);
     }
 
     @Test
@@ -125,8 +143,17 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0)).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보);
-            softAssertions.assertThat(actual.get(1)).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보);
+            softAssertions.assertThat(actual.get(0).id()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.id());
+            softAssertions.assertThat(actual.get(0).auctionDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.auctionDto());
+            softAssertions.assertThat(actual.get(0).partnerDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.partnerDto());
+            softAssertions.assertThat(actual.get(0).lastMessageDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.lastMessageDto());
+            softAssertions.assertThat(actual.get(0).isChatAvailable()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.isChatAvailable());
+
+            softAssertions.assertThat(actual.get(1).id()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.id());
+            softAssertions.assertThat(actual.get(1).auctionDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.auctionDto());
+            softAssertions.assertThat(actual.get(1).partnerDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.partnerDto());
+            softAssertions.assertThat(actual.get(1).lastMessageDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.lastMessageDto());
+            softAssertions.assertThat(actual.get(1).isChatAvailable()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.isChatAvailable());
         });
     }
 

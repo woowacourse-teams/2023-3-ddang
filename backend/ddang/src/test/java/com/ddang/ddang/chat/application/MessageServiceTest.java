@@ -2,10 +2,10 @@ package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
+import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
-import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
@@ -22,12 +22,12 @@ import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -43,6 +43,9 @@ class MessageServiceTest extends MessageServiceFixture {
 
     @MockBean
     NotificationService notificationService;
+
+    @MockBean
+    LastReadMessageLogService lastReadMessageLogService;
 
     @Autowired
     ApplicationEvents events;
@@ -107,6 +110,9 @@ class MessageServiceTest extends MessageServiceFixture {
 
     @Test
     void 마지막_조회_메시지가_없는_경우_모든_메시지를_조회한다() {
+        // given
+        willDoNothing().given(lastReadMessageLogService).update(any());
+
         // when
         final List<ReadMessageDto> actual = messageService.readAllByLastMessageId(마지막_조회_메시지_아이디가_없는_메시지_조회용_request);
 
@@ -116,6 +122,9 @@ class MessageServiceTest extends MessageServiceFixture {
 
     @Test
     void 첫_번째_메시지_이후에_생성된_모든_메시지를_조회한다() {
+        // given
+        willDoNothing().given(lastReadMessageLogService).update(any());
+
         // when
         final List<ReadMessageDto> actual = messageService.readAllByLastMessageId(두_번째_메시지부터_모든_메시지_조회용_request);
 
@@ -133,13 +142,13 @@ class MessageServiceTest extends MessageServiceFixture {
     }
 
     @Test
-    void 메시지를_조회할_경우_마지막으로_읽은_메시지가_업데이트된다() {
+    void 메시지를_조회할_경우_마지막으로_읽은_메시지_업데이트_이벤트를_호출한다() {
         // when
         messageService.readAllByLastMessageId(조회한_마지막_메시지가_5인_메시지_조회용_request);
-        final Optional<ReadMessageLog> readMessageLog = readMessageLogRepository.findBy(발신자.getId(), 메시지가_5개인_채팅방.getId());
+        final long actual = events.stream(UpdateReadMessageLogEvent.class).count();
 
         // then
-        assertThat(readMessageLog.get().getLastReadMessageId()).isEqualTo(메시지가_5개인_채팅방_메시지의_마지막_메시지);
+        assertThat(actual).isEqualTo(1);
     }
 
     @Test
