@@ -5,6 +5,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAnd
 import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageAndImageQueryProjectionDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import static com.ddang.ddang.auction.domain.QAuction.auction;
 import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
 import static com.ddang.ddang.chat.domain.QMessage.message;
+import static com.ddang.ddang.chat.domain.QReadMessageLog.readMessageLog;
 import static com.ddang.ddang.image.domain.QAuctionImage.auctionImage;
 import static java.util.Comparator.comparing;
 
@@ -26,8 +28,12 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
 
     public List<ChatRoomAndMessageAndImageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
         final List<ChatRoomAndMessageAndImageQueryProjectionDto> unsortedDtos =
-                queryFactory.select(new QChatRoomAndMessageAndImageQueryProjectionDto(chatRoom, message, auctionImage))
-                            .from(chatRoom)
+                queryFactory.select(new QChatRoomAndMessageAndImageQueryProjectionDto(
+                                    chatRoom,
+                                    message,
+                                    auctionImage,
+                                    countUnreadMessages(userId)
+                            )).from(chatRoom)
                             .leftJoin(chatRoom.buyer).fetchJoin()
                             .leftJoin(chatRoom.auction, auction).fetchJoin()
                             .leftJoin(auction.seller).fetchJoin()
@@ -50,6 +56,21 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                             .fetch();
 
         return sortByLastMessageIdDesc(unsortedDtos);
+    }
+
+    private static JPQLQuery<Long> countUnreadMessages(final Long userId) {
+        return JPAExpressions.select(message.count())
+                             .from(message)
+                             .where(
+                                     message.chatRoom.id.eq(chatRoom.id),
+                                     message.writer.id.ne(userId),
+                                     message.id.gt(
+                                             JPAExpressions
+                                                     .select(readMessageLog.lastReadMessageId)
+                                                     .from(readMessageLog)
+                                                     .where(readMessageLog.reader.id.eq(userId))
+                                     )
+                             );
     }
 
     private List<ChatRoomAndMessageAndImageDto> sortByLastMessageIdDesc(
