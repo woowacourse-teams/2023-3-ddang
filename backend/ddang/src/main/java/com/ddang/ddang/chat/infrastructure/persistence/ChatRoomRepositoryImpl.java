@@ -24,6 +24,11 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
+    public Optional<ChatRoom> findChatRoomByAuctionId(final Long auctionId) {
+        return jpaChatRoomRepository.findChatRoomByAuctionId(auctionId);
+    }
+
+    @Override
     public Optional<Long> findChatRoomIdByAuctionId(final Long auctionId) {
         return jpaChatRoomRepository.findChatRoomIdByAuctionId(auctionId);
     }
