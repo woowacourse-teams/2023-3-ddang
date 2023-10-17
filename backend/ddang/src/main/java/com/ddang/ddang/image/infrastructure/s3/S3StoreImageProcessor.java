@@ -7,6 +7,7 @@ import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureExc
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.util.UUID;
 
 @Component
 @Profile("!local && !test")
+@ConditionalOnProperty(name = "aws.s3.enabled", havingValue = "true")
 @RequiredArgsConstructor
 public class S3StoreImageProcessor implements StoreImageProcessor {
 

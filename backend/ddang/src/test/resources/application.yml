@@ -52,5 +52,6 @@ fcm:
 
 aws:
   s3:
+    enabled: true
     bucket-name: awsbucketname
     image-path: image/path
