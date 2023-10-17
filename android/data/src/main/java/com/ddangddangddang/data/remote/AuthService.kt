@@ -4,6 +4,7 @@ import com.ddangddangddang.data.model.request.KakaoLoginRequest
 import com.ddangddangddang.data.model.request.LogoutRequest
 import com.ddangddangddang.data.model.request.RefreshTokenRequest
 import com.ddangddangddang.data.model.request.WithdrawalRequest
+import com.ddangddangddang.data.model.response.LoginByKakaoResponse
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
 import retrofit2.http.Body
@@ -15,7 +16,7 @@ interface AuthService {
     @POST("/oauth2/login/kakao")
     suspend fun loginByKakao(
         @Body kakaoLoginRequest: KakaoLoginRequest,
-    ): ApiResponse<TokenResponse>
+    ): ApiResponse<LoginByKakaoResponse>
 
     @POST("/oauth2/refresh-token")
     suspend fun refreshToken(
@@ -33,7 +34,7 @@ interface AuthService {
         @Header("Authorization") authorization: String,
     ): ApiResponse<ValidateTokenResponse>
 
-    @POST("/oauth2/withdrawal/kakao")
+    @POST("/oauth2/withdrawal")
     suspend fun withdrawal(
         @Header("Authorization") authorization: String,
         @Body request: WithdrawalRequest,

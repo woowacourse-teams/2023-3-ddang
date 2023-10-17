@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.login
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -8,6 +9,7 @@ import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityLoginBinding
 import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.feature.main.MainActivity
+import com.ddangddangddang.android.feature.onboarding.OnBoardingActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.util.binding.BindingActivity
@@ -38,6 +40,7 @@ class LoginActivity :
                 is LoginViewModel.LoginEvent.KakaoLoginEvent -> loginByKakao()
                 is LoginViewModel.LoginEvent.CompleteLoginEvent -> navigateToMain()
                 is LoginViewModel.LoginEvent.FailureLoginEvent -> notifyLoginFailed(it.type)
+                LoginViewModel.LoginEvent.SignUpEvent -> navigateToOnBoarding()
             }
         }
     }
@@ -84,7 +87,12 @@ class LoginActivity :
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(MainActivity.getIntent(this))
+        finish()
+    }
+
+    private fun navigateToOnBoarding() {
+        startActivity(OnBoardingActivity.getIntent(this))
         finish()
     }
 
@@ -95,5 +103,11 @@ class LoginActivity :
             message = type.message ?: defaultMessage,
             actionMessage = actionMessage,
         )
+    }
+
+    companion object {
+        fun getIntent(context: Context): Intent {
+            return Intent(context, LoginActivity::class.java)
+        }
     }
 }

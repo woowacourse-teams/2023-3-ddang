@@ -4,8 +4,6 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +16,9 @@ import androidx.fragment.app.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentAuctionBidDialogBinding
 import com.ddangddangddang.android.feature.common.ErrorType
+import com.ddangddangddang.android.feature.common.PriceTextWatcher
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
+import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel
 import com.ddangddangddang.android.util.view.Toaster
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,16 +30,7 @@ class AuctionBidDialog : DialogFragment() {
 
     private val viewModel: AuctionBidViewModel by viewModels()
     private val activityViewModel: AuctionDetailViewModel by activityViewModels()
-
-    private val watcher = object : TextWatcher {
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-        override fun afterTextChanged(s: Editable?) {
-            s?.let { viewModel.changeInputPriceText(s.toString()) }
-        }
-    }
+    private val bidPriceWatcher by lazy { PriceTextWatcher { viewModel.changeInputPriceText(it) } }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,10 +82,7 @@ class AuctionBidDialog : DialogFragment() {
     }
 
     private fun setupListener() {
-        binding.etBidPrice.addTextChangedListener(watcher)
-        binding.etBidPrice.setOnClickListener {
-            binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(binding.etBidPrice.text.toString()))
-        }
+        binding.etBidPrice.addTextChangedListener(bidPriceWatcher)
     }
 
     private fun setupObserver() {
@@ -134,15 +122,16 @@ class AuctionBidDialog : DialogFragment() {
     }
 
     private fun setInputBidPrice(price: Int) {
-        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
-        binding.etBidPrice.removeTextChangedListener(watcher)
+        val displayPrice = getString(R.string.all_price, price)
+        binding.etBidPrice.removeTextChangedListener(bidPriceWatcher)
         binding.etBidPrice.setText(displayPrice)
-        binding.etBidPrice.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
-        binding.etBidPrice.addTextChangedListener(watcher)
-    }
-
-    private fun getCursorPositionFrontSuffix(content: String): Int {
-        return content.length - AuctionBidViewModel.SUFFIX_INPUT_PRICE.length
+        binding.etBidPrice.setSelection(
+            bidPriceWatcher.getCursorPosition(
+                displayPrice.length,
+                RegisterAuctionViewModel.SUFFIX_INPUT_PRICE.length,
+            ),
+        ) // 이전 커서 위치로 이동
+        binding.etBidPrice.addTextChangedListener(bidPriceWatcher)
     }
 
     private fun showMessage(message: String) {

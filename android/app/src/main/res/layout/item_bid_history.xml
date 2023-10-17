@@ -6,6 +6,10 @@
     <data>
 
         <variable
+            name="dateTimeFormatter"
+            type="java.time.format.DateTimeFormatter" />
+
+        <variable
             name="item"
             type="com.ddangddangddang.android.model.BidHistoryModel" />
     </data>
@@ -20,7 +24,7 @@
             style="@style/Caption"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:layout_marginEnd="@dimen/padding_vertical_filter_chips"
             android:text="@{item.name}"
             android:textColor="@color/grey_800"
             app:layout_constraintEnd_toStartOf="@id/tv_bid_time"
@@ -33,7 +37,7 @@
             style="@style/Header2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:maxLines="1"
+            android:layout_marginEnd="@dimen/padding_vertical_filter_chips"
             android:text="@{@string/detail_auction_bid_history_price_format(item.price)}"
             android:textColor="@color/grey_800"
             app:layout_constraintEnd_toStartOf="@id/tv_bid_time"
@@ -47,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="@{item.bidDateTime.toString()}"
+            android:text="@{item.bidDateTime.format(dateTimeFormatter)}"
             android:textColor="@color/grey_500"
             app:layout_constraintBottom_toBottomOf="@id/tv_bid_price"
             app:layout_constraintEnd_toEndOf="parent"

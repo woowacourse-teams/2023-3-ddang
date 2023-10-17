@@ -34,7 +34,7 @@ class BidHistoryViewModel @Inject constructor(
         viewModelScope.launch {
             when (val response = repository.getBidHistories(auctionId)) {
                 is ApiResponse.Success -> {
-                    _histories.value = response.body.map { it.toPresentation() }
+                    _histories.value = response.body.map { it.toPresentation() }.reversed()
                 }
 
                 is ApiResponse.Failure -> {

@@ -17,3 +17,7 @@ annotation class DateFormatter
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class TimeFormatter
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DefaultDateTimeFormatter
