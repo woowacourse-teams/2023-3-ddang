@@ -52,7 +52,7 @@ class RegisterAnswerDialog : DialogFragment() {
     private fun setupHeight() {
         val screenHeight = requireContext().resources?.displayMetrics?.heightPixels ?: return
 
-        val params: ViewGroup.LayoutParams? = dialog?.window?.attributes
+        val params: ViewGroup.LayoutParams? = binding.etAnswerContents.layoutParams
         val height = params?.height ?: return
         val newHeight = (screenHeight * 0.35).toInt()
         if (newHeight > height) {
