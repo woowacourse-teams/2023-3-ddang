@@ -42,7 +42,7 @@ public class QuestionFixture {
 
     protected Question 질문 = new Question(경매, 질문_작성자, 질문_내용);
     protected Question 삭제된_질문 = new Question(경매, 질문_작성자, 질문_내용);
-    protected Answer 답변 = new Answer("답변드립니다.");
+    protected Answer 답변 = new Answer(판매자, "답변드립니다.");
 
     @BeforeEach
     void setUp() {

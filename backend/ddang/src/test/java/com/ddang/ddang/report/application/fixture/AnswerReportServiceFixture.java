@@ -119,7 +119,7 @@ public class AnswerReportServiceFixture {
         경매.addAuctionImages(List.of(경매_이미지));
 
         final Question 질문 = new Question(경매, 질문자, "질문드립니다.");
-        답변 = new Answer("답변드립니다.");
+        답변 = new Answer(판매자, "답변드립니다.");
         질문.addAnswer(답변);
         답변_신고1 = new AnswerReport(이미_신고한_신고자1, 답변, "신고합니다.");
         답변_신고2 = new AnswerReport(이미_신고한_신고자2, 답변, "신고합니다.");

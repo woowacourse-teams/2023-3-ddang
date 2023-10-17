@@ -19,7 +19,7 @@ import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.ProfileImageRepositoryImpl;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import org.assertj.core.api.*;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
