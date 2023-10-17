@@ -95,8 +95,8 @@ public class QuestionRepositoryImplFixture {
         질문1 = new Question(질문이_3개_답변이_2개인_경매, 질문자, "질문1");
         질문2 = new Question(질문이_3개_답변이_2개인_경매, 질문자, "질문2");
         질문3 = new Question(질문이_3개_답변이_2개인_경매, 질문자, "질문3");
-        답변1 = new Answer("답변1");
-        답변2 = new Answer("답변2");
+        답변1 = new Answer(판매자, "답변1");
+        답변2 = new Answer(판매자, "답변2");
         질문1.addAnswer(답변1);
         질문2.addAnswer(답변2);
 

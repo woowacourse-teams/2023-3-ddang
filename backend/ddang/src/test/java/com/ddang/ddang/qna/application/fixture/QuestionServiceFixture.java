@@ -151,8 +151,8 @@ public class QuestionServiceFixture {
         질문 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문1");
         final Question 질문2 = new Question(질문과_답변이_존재하는_경매, 두번째_질문을_작성한_사용자, "질문2");
         final Question 질문3 = new Question(질문과_답변이_존재하는_경매, 질문자, "질문3");
-        final Answer 답변1 = new Answer("답변1");
-        final Answer 답변2 = new Answer("답변2");
+        final Answer 답변1 = new Answer(판매자, "답변1");
+        final Answer 답변2 = new Answer(판매자, "답변2");
         질문.addAnswer(답변1);
         질문2.addAnswer(답변2);
 

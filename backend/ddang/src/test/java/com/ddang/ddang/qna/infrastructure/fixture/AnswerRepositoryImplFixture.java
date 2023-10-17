@@ -38,6 +38,7 @@ public class AnswerRepositoryImplFixture {
 
     private AnswerRepository answerRepository;
 
+    protected User 판매자;
     protected Question 질문;
     protected Question 답변이_존재하는_질문;
     protected Question 답변이_존재하지_않는_질문;
@@ -59,12 +60,12 @@ public class AnswerRepositoryImplFixture {
         answerRepository = new AnswerRepositoryImpl(jpaAnswerRepository);
 
         final ProfileImage 프로필_이미지 = new ProfileImage("프로필.jpg", "프로필.jpg");
-        final User 판매자 = User.builder()
-                             .name("판매자")
-                             .profileImage(프로필_이미지)
-                             .reliability(new Reliability(4.7d))
-                             .oauthId("12345")
-                             .build();
+        판매자 = User.builder()
+                  .name("판매자")
+                  .profileImage(프로필_이미지)
+                  .reliability(new Reliability(4.7d))
+                  .oauthId("12345")
+                  .build();
         final Auction 경매 = Auction.builder()
                                   .seller(판매자)
                                   .title("경매 상품 1")
@@ -84,9 +85,9 @@ public class AnswerRepositoryImplFixture {
         답변이_존재하지_않는_질문 = 질문;
         final Question 답변이_삭제된_질문 = new Question(경매, 질문자, "궁금한 점이 있어요.");
 
-        답변 = new Answer("답변드립니다.");
+        답변 = new Answer(판매자, "답변드립니다.");
         답변이_존재하는_질문.addAnswer(답변);
-        삭제된_답변 = new Answer("답변드립니다.");
+        삭제된_답변 = new Answer(판매자, "답변드립니다.");
         답변이_삭제된_질문.addAnswer(삭제된_답변);
         삭제된_답변.delete();
 

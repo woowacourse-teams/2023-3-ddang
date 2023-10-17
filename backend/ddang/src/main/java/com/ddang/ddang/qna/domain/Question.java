@@ -27,6 +27,7 @@ import lombok.ToString;
 public class Question extends BaseCreateTimeEntity {
 
     private static final boolean DELETED_STATUS = true;
+    private static final Answer EMPTY_ANSWER = null;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,5 +71,9 @@ public class Question extends BaseCreateTimeEntity {
 
     public void delete() {
         deleted = DELETED_STATUS;
+    }
+
+    public void deleteAnswer() {
+        answer = EMPTY_ANSWER;
     }
 }

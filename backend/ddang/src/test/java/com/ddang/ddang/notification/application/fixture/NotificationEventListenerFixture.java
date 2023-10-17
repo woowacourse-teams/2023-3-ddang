@@ -132,7 +132,7 @@ public class NotificationEventListenerFixture {
         입찰_알림_이벤트 = new BidNotificationEvent(입찰_DTO);
 
         final Question 질문 = new Question(경매, 질문자, "질문 내용");
-        final Answer 답변 = new Answer("응답 내용");
+        final Answer 답변 = new Answer(발신자_겸_판매자, "응답 내용");
         질문.addAnswer(답변);
 
         질문_알림_이벤트 = new QuestionNotificationEvent(질문, 이미지_절대_경로);
