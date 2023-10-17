@@ -9,6 +9,9 @@ import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.application.fixture.ChatRoomServiceFixture;
+import com.ddang.ddang.chat.domain.ReadMessageLog;
+import com.ddang.ddang.chat.domain.repository.MessageRepository;
+import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.assertj.core.api.SoftAssertions;
@@ -18,6 +21,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -29,6 +33,31 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
 
     @Autowired
     ChatRoomService chatRoomService;
+
+    @Autowired
+    MessageService messageService;
+
+    @Autowired
+    ReadMessageLogRepository readMessageLogRepository;
+
+    @Autowired
+    MessageRepository messageRepository;
+
+    @Test
+    void 채팅방_생성시_채팅_참여자에_대한_로그를_생성한다() {
+        // given
+        final Long createdChatRoomId = chatRoomService.create(채팅방을_생성하는_메리.getId(), 메리가_생성하려는_채팅방);
+
+        // when
+        final Optional<ReadMessageLog> actual_메리 = readMessageLogRepository.findBy(채팅방을_생성하는_메리.getId(), createdChatRoomId);
+        final Optional<ReadMessageLog> actual_지토 = readMessageLogRepository.findBy(메리_경매_낙찰자_지토.getId(), createdChatRoomId);
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual_메리).isPresent();
+            softAssertions.assertThat(actual_지토).isPresent();
+        });
+    }
 
     @Test
     void 채팅방을_생성한다() {
