@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.TaskStackBuilder
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.main.MainActivity
 import com.google.firebase.messaging.RemoteMessage
 
 internal fun String.toNotificationType(): NotificationType {
@@ -26,9 +27,19 @@ abstract class NotificationType {
         remoteMessage: RemoteMessage,
     ): Notification
 
-    fun Intent.getPendingIntent(context: Context, requestCode: Int): PendingIntent? {
+    fun Intent.getPendingIntent(
+        context: Context,
+        requestCode: Int,
+        parentIntent: Intent? = null,
+    ): PendingIntent? {
         return TaskStackBuilder.create(context).run {
-            addNextIntentWithParentStack(this@getPendingIntent)
+            if (parentIntent != null) {
+                addNextIntentWithParentStack(parentIntent)
+                addNextIntent(this@getPendingIntent)
+            } else {
+                addNextIntentWithParentStack(this@getPendingIntent)
+            }
+
             getPendingIntent(
                 requestCode,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -45,7 +56,8 @@ abstract class AuctionDetailType : NotificationType() {
     ): Notification
 
     fun getAuctionDetailPendingIntent(context: Context, id: Long): PendingIntent? {
+        val parentIntent = MainActivity.getIntent(context)
         val intent = AuctionDetailActivity.getIntent(context.applicationContext, id)
-        return intent.getPendingIntent(context, id.toInt())
+        return intent.getPendingIntent(context, id.toInt(), parentIntent)
     }
 }

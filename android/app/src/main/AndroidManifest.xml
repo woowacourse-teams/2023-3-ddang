@@ -40,8 +40,7 @@
         <activity
             android:name=".feature.messageRoom.MessageRoomActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"
-            android:parentActivityName=".feature.main.MainActivity" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".feature.report.ReportActivity"
             android:exported="false" />
@@ -65,8 +64,7 @@
             android:exported="false" />
         <activity
             android:name=".feature.detail.AuctionDetailActivity"
-            android:exported="false"
-            android:parentActivityName=".feature.main.MainActivity" />
+            android:exported="false" />
         <activity
             android:name=".feature.register.RegisterAuctionActivity"
             android:exported="false" />
