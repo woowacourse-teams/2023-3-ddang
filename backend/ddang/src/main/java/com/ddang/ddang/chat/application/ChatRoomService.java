@@ -43,7 +43,6 @@ public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomAndImageRepository chatRoomAndImageRepository;
     private final ChatRoomAndMessageAndImageRepository chatRoomAndMessageAndImageRepository;
-    private final ReadMessageLogRepository readMessageLogRepository;
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
 

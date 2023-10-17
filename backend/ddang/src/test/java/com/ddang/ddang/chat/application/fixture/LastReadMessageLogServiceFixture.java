@@ -73,7 +73,6 @@ public class LastReadMessageLogServiceFixture {
             @Autowired final JPAQueryFactory jpaQueryFactory,
             @Autowired final JpaAuctionRepository jpaAuctionRepository,
             @Autowired final JpaUserRepository jpaUserRepository,
-            @Autowired final JpaMessageRepository jpaMessageRepository,
             @Autowired final JpaChatRoomRepository jpaChatRoomRepository,
             @Autowired final JpaBidRepository jpaBidRepository,
             @Autowired final JpaReadMessageLogRepository jpaReadMessageLogRepository
