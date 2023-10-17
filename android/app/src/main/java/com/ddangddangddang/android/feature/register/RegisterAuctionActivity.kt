@@ -5,7 +5,9 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView.OnEditorActionListener
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -98,6 +100,7 @@ class RegisterAuctionActivity :
         setupImageRecyclerView()
         setupStartPriceTextWatcher()
         setupBidUnitTextWatcher()
+        setupEditTextClearFocus()
     }
 
     private fun setupViewModel() {
@@ -149,10 +152,12 @@ class RegisterAuctionActivity :
             }
 
             RegisterAuctionViewModel.RegisterAuctionEvent.PickCategory -> {
+                currentFocus?.clearFocus()
                 navigationToCategorySelection()
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
+                currentFocus?.clearFocus()
                 navigationToRegionSelection(event.regionSelected)
             }
         }
@@ -277,6 +282,23 @@ class RegisterAuctionActivity :
 
     private fun setupBidUnitTextWatcher() {
         binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
+    }
+
+    private fun setupEditTextClearFocus() {
+        val editActionListener = OnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) v.clearFocus()
+            return@OnEditorActionListener false
+        }
+
+        val editTexts = listOf(
+            binding.etTitle,
+            binding.etStartPrice,
+            binding.etBidUnit,
+        )
+
+        editTexts.forEach {
+            it.setOnEditorActionListener(editActionListener)
+        }
     }
 
     companion object {

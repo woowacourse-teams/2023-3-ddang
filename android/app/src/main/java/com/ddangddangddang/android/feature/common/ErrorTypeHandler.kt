@@ -12,6 +12,11 @@ fun Activity.notifyFailureMessage(errorType: ErrorType, @StringRes defaultMessag
     Toaster.showShort(this, errorType.message ?: defaultMessage)
 }
 
+fun Fragment.notifyFailureMessage(errorType: ErrorType, @StringRes defaultMessageId: Int) {
+    val defaultMessage = getString(defaultMessageId)
+    Toaster.showShort(requireContext(), errorType.message ?: defaultMessage)
+}
+
 fun Activity.notifyFailureSnackBar(
     anchorView: View,
     errorType: ErrorType,

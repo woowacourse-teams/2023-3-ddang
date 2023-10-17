@@ -83,15 +83,26 @@
     <string name="detail_auction_info_direct_exchange_regions_description">직거래 가능 지역</string>
     <string name="detail_auction_info_seller_info">판매자 정보</string>
 
-    <!-- detail_auction_qua -->
+    <!-- detail_auction_qna -->
     <string name="detail_auction_qna_title">Q&amp;A</string>
     <string name="detail_auction_qna_seller_answer_title">판매자 답변</string>
     <string name="detail_auction_qna_no_answer">아직 작성된 답변이 없습니다.</string>
-    <string name="detail_auction_qna_answer_write">작성하기</string>
+    <string name="detail_auction_qna_question_write">질문하기</string>
+    <string name="detail_auction_qna_answer_write">답변하기</string>
     <string name="detail_auction_qna_delete">삭제하기</string>
     <string name="detail_auction_qna_waiting">답변대기</string>
     <string name="detail_auction_qna_complete">답변완료</string>
     <string name="detail_auction_qna_question_prefix">Q. %s</string>
+    <string name="detail_auction_qna_question_contents_hint">질문 내용을 입력해주세요.</string>
+    <string name="detail_auction_qna_answer_contents_hint">답변 내용을 입력해주세요.</string>
+    <string name="detail_auction_qna_question_register_failure">질문 등록에 실패했습니다.</string>
+    <string name="detail_auction_qna_question_register_success">질문 등록에 성공했습니다.</string>
+    <string name="detail_auction_qna_answer_register_failure">답변 등록에 실패했습니다.</string>
+    <string name="detail_auction_qna_answer_register_success">답변 등록에 성공했습니다.</string>
+    <string name="detail_auction_qna_loading_failure">Q&amp;A를 로딩하는데 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_question_delete_failure">질문 삭제를 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_answer_delete_failure">답변 삭제를 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_submit">등록</string>
 
     <!-- detail_auction_bid_history -->
     <string name="detail_auction_bid_history">입찰 내역</string>

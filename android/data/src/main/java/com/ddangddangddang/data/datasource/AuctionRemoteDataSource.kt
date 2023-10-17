@@ -2,12 +2,17 @@ package com.ddangddangddang.data.datasource
 
 import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
+import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.RegisterQuestionRequest
+import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
+import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.QnaResponse
 import com.ddangddangddang.data.model.response.BidHistoryResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
@@ -63,6 +68,28 @@ class AuctionRemoteDataSource @Inject constructor(private val service: AuctionSe
         service.reportMessageRoom(reportRequest)
 
     suspend fun deleteAuction(id: Long): ApiResponse<Unit> = service.deleteAuction(id)
+
+    suspend fun getAuctionQnas(auctionId: Long): ApiResponse<QnaResponse> =
+        service.getQnas(auctionId)
+
+    suspend fun registerQuestion(registerQuestionRequest: RegisterQuestionRequest): ApiResponse<Unit> =
+        service.registerQuestion(registerQuestionRequest)
+
+    suspend fun registerAnswer(
+        questionId: Long,
+        registerAnswerRequest: RegisterAnswerRequest,
+    ): ApiResponse<Unit> = service.registerAnswer(questionId, registerAnswerRequest)
+
+    suspend fun deleteQuestion(questionId: Long): ApiResponse<Unit> =
+        service.deleteQuestion(questionId)
+
+    suspend fun deleteAnswer(answerId: Long): ApiResponse<Unit> = service.deleteAnswer(answerId)
+    suspend fun reportQuestion(reportQuestionRequest: ReportQuestionRequest): ApiResponse<Unit> =
+        service.reportQuestion(reportQuestionRequest)
+
+    suspend fun reportAnswer(reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit> =
+        service.reportAnswer(reportAnswerRequest)
+
     suspend fun getBidHistories(auctionId: Long): ApiResponse<List<BidHistoryResponse>> =
         service.getBidHistories(auctionId)
 }

@@ -3,8 +3,12 @@ package com.ddangddangddang.data.remote
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
+import com.ddangddangddang.data.model.request.RegisterAnswerRequest
+import com.ddangddangddang.data.model.request.RegisterQuestionRequest
+import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
+import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.model.request.ReviewRequest
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
@@ -17,6 +21,7 @@ import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.ProfileResponse
+import com.ddangddangddang.data.model.response.QnaResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.model.response.UserReviewResponse
 import okhttp3.MultipartBody
@@ -135,6 +140,30 @@ interface AuctionService {
 
     @GET("/auctions/{auctionId}/reviews")
     suspend fun getReviewUser(@Path("auctionId") auctionId: Long): ApiResponse<UserReviewResponse>
+
+    @GET("/auctions/{auctionId}/questions")
+    suspend fun getQnas(@Path("auctionId") auctionId: Long): ApiResponse<QnaResponse>
+
+    @POST("/questions")
+    suspend fun registerQuestion(@Body registerQuestionRequest: RegisterQuestionRequest): ApiResponse<Unit>
+
+    @POST("/questions/{questionId}/answers")
+    suspend fun registerAnswer(
+        @Path("questionId") questionId: Long,
+        @Body registerAnswerRequest: RegisterAnswerRequest,
+    ): ApiResponse<Unit>
+
+    @DELETE("/questions/{questionId}")
+    suspend fun deleteQuestion(@Path("questionId") questionId: Long): ApiResponse<Unit>
+
+    @DELETE("/questions/answers/{answerId}")
+    suspend fun deleteAnswer(@Path("answerId") answerId: Long): ApiResponse<Unit>
+
+    @POST("/reports/questions")
+    suspend fun reportQuestion(@Body reportQuestionRequest: ReportQuestionRequest): ApiResponse<Unit>
+
+    @POST("/reports/answers")
+    suspend fun reportAnswer(@Body reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit>
 
     @GET("/bids/{auctionId}")
     suspend fun getBidHistories(@Path("auctionId") auctionId: Long): ApiResponse<List<BidHistoryResponse>>

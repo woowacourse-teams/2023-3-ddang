@@ -14,7 +14,7 @@ import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.global.DdangDdangDdang
-import com.ddangddangddang.android.model.ReportType
+import com.ddangddangddang.android.model.ReportInfo
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.notification.type.MessageType
 import com.ddangddangddang.android.reciever.MessageReceiver
@@ -83,7 +83,12 @@ class MessageRoomActivity :
     }
 
     private fun navigateToReport(roomId: Long) {
-        startActivity(ReportActivity.getIntent(this, ReportType.MessageRoomReport.ordinal, roomId))
+        startActivity(
+            ReportActivity.getIntent(
+                this,
+                ReportInfo.MessageRoomReportInfo(roomId),
+            ),
+        )
     }
 
     private fun showUserRate() {
