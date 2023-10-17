@@ -1,8 +1,10 @@
 package com.ddang.ddang.authentication.application;
 
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.application.fixture.AuthenticationServiceFixture;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
@@ -13,11 +15,6 @@ import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformatio
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
-import com.ddang.ddang.device.infrastructure.persistence.DeviceTokenRepositoryImpl;
-import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
-import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
-import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
-import com.ddang.ddang.image.infrastructure.persistence.ProfileImageRepositoryImpl;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.assertj.core.api.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +46,8 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     @Autowired
     UserRepository userRepository;
 
-    ProfileImageRepository profileImageRepository;
+    @Autowired
+    AuctionRepository auctionRepository;
 
     @Autowired
     TokenEncoder tokenEncoder;
@@ -60,27 +58,40 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     @Autowired
     BlackListTokenService blackListTokenService;
 
+    @Autowired
     DeviceTokenRepository deviceTokenRepository;
 
     AuthenticationService authenticationService;
 
     @BeforeEach
-    void fixtureSetUp(
-            @Autowired final JpaProfileImageRepository jpaProfileImageRepository,
-            @Autowired final JpaDeviceTokenRepository jpaDeviceTokenRepository
-    ) {
-        profileImageRepository = new ProfileImageRepositoryImpl(jpaProfileImageRepository);
-        deviceTokenRepository = new DeviceTokenRepositoryImpl(jpaDeviceTokenRepository);
-
+    void fixtureSetUp() {
         authenticationService = new AuthenticationService(
                 deviceTokenService,
                 providerComposite,
                 userRepository,
+                auctionRepository,
                 tokenEncoder,
                 tokenDecoder,
                 blackListTokenService,
                 deviceTokenRepository
         );
+    }
+
+    @Test
+    void 로그인할_때_가입하지_않은_사용자라면_회원가입을_진행한다() {
+        // given
+        given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
+
+        // when
+        final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
+
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty().contains("Bearer ");
+        });
     }
 
     @Test
@@ -254,19 +265,26 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
     }
 
     @Test
-    void 로그인할_때_가입하지_않은_사용자라면_회원가입을_진행한다() {
+    void 탈퇴할_때_등록한_경매중_진행중인_경매가_있다면_예외가_발생한다() {
         // given
         given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
-        given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(현재_진행중인_경매가_있는_사용자_회원_정보);
 
-        // when
-        final LoginInformationDto actual = authenticationService.login(지원하는_소셜_로그인_타입, 유효한_소셜_로그인_토큰, 디바이스_토큰);
+        // when & then
+        assertThatThrownBy(() -> authenticationService.withdrawal(현재_진행중인_경매가_있는_사용자_액세스_토큰, 현재_진행중인_경매가_있는_사용자_리프래시_토큰))
+                .isInstanceOf(WithdrawalNotAllowedException.class)
+                .hasMessage("등록한 경매 중 현재 진행 중인 것이 있기에 탈퇴할 수 없습니다.");
+    }
 
+    @Test
+    void 탈퇴할_때_등록한_경매중_진행중인_경매의_마지막_입찰자라면_예외가_발생한다() {
+        // given
+        given(providerComposite.findProvider(지원하는_소셜_로그인_타입)).willReturn(userInfoProvider);
+        given(userInfoProvider.findUserInformation(anyString())).willReturn(현재_진행중인_경매가_있는_사용자_회원_정보);
 
-        // then
-        SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty().contains("Bearer ");
-            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty().contains("Bearer ");
-        });
+        // when & then
+        assertThatThrownBy(() -> authenticationService.withdrawal(현재_진행중인_경매의_마지막_입찰자인_사용자_액세스_토큰, 현재_진행중인_경매의_마지막_입찰자인_사용자_리프래시_토큰))
+                .isInstanceOf(WithdrawalNotAllowedException.class)
+                .hasMessage("마지막 입찰자로 등록되어 있는 것이 있기에 탈퇴할 수 없습니다.");
     }
 }
