@@ -27,7 +27,7 @@ class JpaAnswerRepositoryTest extends JpaAnswerRepositoryFixture {
     @Test
     void 답변을_저장한다() {
         // given
-        final Answer answer = new Answer(답변_내용);
+        final Answer answer = new Answer(판매자, 답변_내용);
         질문.addAnswer(answer);
 
         // when

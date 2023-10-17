@@ -9,6 +9,7 @@ import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.application.fixture.AnswerServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -35,6 +36,15 @@ class AnswerServiceTest extends AnswerServiceFixture {
     void 답변을_등록한다() {
         // when
         final Long actual = answerService.create(답변_등록_요청_dto, 이미지_절대_경로);
+
+        // then
+        assertThat(actual).isPositive();
+    }
+
+    @Test
+    void 답변을_삭제한_질문에_다시_답변을_달_수_있다() {
+        // when
+        final Long actual = answerService.create(답변이_삭제된_질문에_답변_등록_요청_dto, 이미지_절대_경로);
 
         // then
         assertThat(actual).isPositive();
@@ -78,7 +88,11 @@ class AnswerServiceTest extends AnswerServiceFixture {
         answerService.deleteById(답변.getId(), 판매자.getId());
 
         // then
-        assertThat(답변.isDeleted()).isTrue();
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(답변.isDeleted()).isTrue();
+            softAssertions.assertThat(답변.getQuestion()).isNull();
+            softAssertions.assertThat(답변한_질문.getAnswer()).isNull();
+        });
     }
 
     @Test

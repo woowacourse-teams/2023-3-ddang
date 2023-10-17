@@ -115,8 +115,8 @@ public class JpaAnswerReportRepositoryFixture {
 
         final Question 질문1 = new Question(경매, 질문자, "질문드립니다.");
         final Question 질문2 = new Question(경매, 질문자, "질문드립니다.");
-        답변 = new Answer("답변드립니다.");
-        이미_신고된_답변 = new Answer("답변드립니다.");
+        답변 = new Answer(판매자, "답변드립니다.");
+        이미_신고된_답변 = new Answer(판매자, "답변드립니다.");
         질문1.addAnswer(답변);
         질문2.addAnswer(이미_신고된_답변);
 
