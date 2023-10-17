@@ -116,11 +116,12 @@
             <TextView
                 android:id="@+id/tv_seller_nickname"
                 style="@style/Body"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@{activityViewModel.auctionDetailModel.sellerModel.nickname}"
                 app:layout_constraintBottom_toTopOf="@id/iv_reliability_icon"
+                app:layout_constraintEnd_toStartOf="@id/gl_end"
                 app:layout_constraintStart_toEndOf="@id/cv_profile"
                 app:layout_constraintTop_toTopOf="@id/cv_profile"
                 app:layout_constraintVertical_chainStyle="packed"

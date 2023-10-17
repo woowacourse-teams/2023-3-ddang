@@ -80,8 +80,9 @@ class AuctionDetailViewModel @Inject constructor(
             when (it) {
                 AuctionDetailBottomButtonStatus.BidAuction -> popupAuctionBidEvent()
                 AuctionDetailBottomButtonStatus.EnterAuctionChatRoom -> enterChatRoomEvent()
-                AuctionDetailBottomButtonStatus.FinishAuction -> {}
+                AuctionDetailBottomButtonStatus.AlreadyLastBidder -> {}
                 AuctionDetailBottomButtonStatus.MyAuction -> {}
+                AuctionDetailBottomButtonStatus.FinishAuction -> {}
             }
         }
     }

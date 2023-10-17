@@ -59,6 +59,7 @@
     <string name="detail_auction_chat_room_create">쪽지방 생성</string>
     <string name="detail_auction_chat_room_entrance">쪽지방 입장</string>
     <string name="detail_auction_my_auction">내꺼 입찰금지</string>
+    <string name="detail_auction_already_last_bidder">현재까지 최고입찰자</string>
     <string name="detail_auction_category">%s > %s</string>
     <string name="detail_auction_price_status">%s %,d원</string>
     <string name="detail_auction_start_price">시작가 %,d원</string>
