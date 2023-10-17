@@ -3,16 +3,14 @@ package com.ddang.ddang.chat.application;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
+import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
-import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.domain.repository.MessageRepository;
-import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
@@ -31,9 +29,9 @@ import java.util.List;
 @Slf4j
 public class MessageService {
 
-    private final ApplicationEventPublisher messageEventPublisher;
+    private final ApplicationEventPublisher messageLogEventPublisher;
+    private final ApplicationEventPublisher messageNotificationEventPublisher;
     private final MessageRepository messageRepository;
-    private final ReadMessageLogRepository readMessageLogRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
 
@@ -57,7 +55,7 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        messageEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
+        messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
 
         return persistMessage.getId();
     }
@@ -80,20 +78,14 @@ public class MessageService {
                 request.lastMessageId()
         );
 
-        final Message lastReadMessage = readMessages.get(readMessages.size() - 1);
-        updateLastReadMessage(reader, chatRoom, lastReadMessage);
+        if (readMessages.size() > 0) {
+            final Message lastReadMessage = readMessages.get(readMessages.size() - 1);
+            messageLogEventPublisher.publishEvent(new UpdateReadMessageLogEvent(reader, chatRoom, lastReadMessage));
+        }
 
         return readMessages.stream()
                            .map(message -> ReadMessageDto.from(message, chatRoom))
                            .toList();
-    }
-
-    private void updateLastReadMessage(final User reader, final ChatRoom chatRoom, final Message lastReadMessage) {
-        final ReadMessageLog messageLog = readMessageLogRepository.findBy(reader.getId(), chatRoom.getId())
-                                                                  .orElseThrow(() -> new ReadMessageLogNotFoundException(
-                                                                          "메시지 조회 로그가 존재하지 않습니다."
-                                                                  ));
-        messageLog.updateLastReadMessage(lastReadMessage.getId());
     }
 
     private void validateLastMessageId(final Long lastMessageId) {

@@ -9,11 +9,11 @@ import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndImageRepository;
@@ -24,6 +24,7 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,7 @@ public class ChatRoomService {
 
     private static final Long DEFAULT_CHAT_ROOM_ID = null;
 
+    private final ApplicationEventPublisher messageLogEventPublisher;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomAndImageRepository chatRoomAndImageRepository;
     private final ChatRoomAndMessageAndImageRepository chatRoomAndMessageAndImageRepository;
@@ -64,16 +66,10 @@ public class ChatRoomService {
 
     private Long createChatRoom(final User findUser, final Auction findAuction) {
         final ChatRoom persistChatRoom = persistChatRoom(findUser, findAuction);
-        createReadMessageLog(persistChatRoom);
-        return persistChatRoom.getId();
-    }
 
-    private void createReadMessageLog(final ChatRoom persistChatRoom) {
-        final ReadMessageLog buyerReadMessageLog = new ReadMessageLog(persistChatRoom, persistChatRoom.getBuyer());
-        final ReadMessageLog sellerReadMessageLog = new ReadMessageLog(persistChatRoom, persistChatRoom.getAuction()
-                                                                                                       .getSeller());
-        readMessageLogRepository.save(buyerReadMessageLog);
-        readMessageLogRepository.save(sellerReadMessageLog);
+        messageLogEventPublisher.publishEvent(new CreateReadMessageLogEvent(persistChatRoom));
+
+        return persistChatRoom.getId();
     }
 
     private ChatRoom persistChatRoom(final User user, final Auction auction) {
