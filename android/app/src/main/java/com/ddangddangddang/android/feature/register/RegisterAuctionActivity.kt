@@ -5,7 +5,9 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView.OnEditorActionListener
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -108,13 +110,19 @@ class RegisterAuctionActivity :
         setupImageRecyclerView()
         setupStartPriceTextWatcher()
         setupBidUnitTextWatcher()
+        setupEditTextClearFocus()
     }
 
     private fun setupViewModel() {
         viewModel.images.observe(this) { imageAdapter.setImages(it) }
         viewModel.event.observe(this) { handleEvent(it) }
         viewModel.startPrice.observe(this) {
-            setPrice(binding.etStartPrice, startPriceWatcher, it.toInt(), startPriceCursorPositionFromEnd)
+            setPrice(
+                binding.etStartPrice,
+                startPriceWatcher,
+                it.toInt(),
+                startPriceCursorPositionFromEnd,
+            )
         }
         viewModel.bidUnit.observe(this) {
             setPrice(binding.etBidUnit, bidUnitWatcher, it.toInt(), bidUnitCursorPositionFromEnd)
@@ -159,10 +167,12 @@ class RegisterAuctionActivity :
             }
 
             RegisterAuctionViewModel.RegisterAuctionEvent.PickCategory -> {
+                currentFocus?.clearFocus()
                 navigationToCategorySelection()
             }
 
             is RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
+                currentFocus?.clearFocus()
                 navigationToRegionSelection(event.regionSelected)
             }
         }
@@ -238,16 +248,27 @@ class RegisterAuctionActivity :
         regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this, directRegion))
     }
 
-    private fun setPrice(editText: EditText, watcher: PriceTextWatcher, price: Int, cursorPositionFromEnd: Int) {
+    private fun setPrice(
+        editText: EditText,
+        watcher: PriceTextWatcher,
+        price: Int,
+        cursorPositionFromEnd: Int,
+    ) {
         val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
         editText.removeTextChangedListener(watcher)
         editText.setText(displayPrice)
-        editText.setSelection(getCursorPosition(displayPrice.length, cursorPositionFromEnd)) // " 원" 앞으로 커서 이동
+        editText.setSelection(
+            getCursorPosition(
+                displayPrice.length,
+                cursorPositionFromEnd,
+            ),
+        ) // " 원" 앞으로 커서 이동
         editText.addTextChangedListener(watcher)
     }
 
     private fun getCursorPosition(textLength: Int, prevCursorPositionFromEnd: Int): Int {
-        val cursorPositionFromEnd = if (prevCursorPositionFromEnd > 0) prevCursorPositionFromEnd else RegisterAuctionViewModel.SUFFIX_INPUT_PRICE.length
+        val cursorPositionFromEnd =
+            if (prevCursorPositionFromEnd > 0) prevCursorPositionFromEnd else RegisterAuctionViewModel.SUFFIX_INPUT_PRICE.length
         val cursorPosition = textLength - cursorPositionFromEnd
         return if (cursorPosition > 0) cursorPosition else 0
     }
@@ -284,6 +305,23 @@ class RegisterAuctionActivity :
 
     private fun setupBidUnitTextWatcher() {
         binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
+    }
+
+    private fun setupEditTextClearFocus() {
+        val editActionListener = OnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) v.clearFocus()
+            return@OnEditorActionListener false
+        }
+
+        val editTexts = listOf(
+            binding.etTitle,
+            binding.etStartPrice,
+            binding.etBidUnit,
+        )
+
+        editTexts.forEach {
+            it.setOnEditorActionListener(editActionListener)
+        }
     }
 
     companion object {
