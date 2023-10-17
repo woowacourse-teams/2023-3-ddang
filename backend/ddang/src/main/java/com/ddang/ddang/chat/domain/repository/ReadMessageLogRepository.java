@@ -8,5 +8,5 @@ public interface ReadMessageLogRepository {
 
     ReadMessageLog save(final ReadMessageLog readMessageLog);
 
-    Optional<ReadMessageLog> findLastReadMessageBy(final Long readerId, final Long chatRoomId);
+    Optional<ReadMessageLog> findBy(final Long readerId, final Long chatRoomId);
 }
