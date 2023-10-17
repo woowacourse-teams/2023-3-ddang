@@ -33,6 +33,7 @@
 
 
             <TextView
+                android:id="@+id/tv_question_title"
                 style="@style/Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
