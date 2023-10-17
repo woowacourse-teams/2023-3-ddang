@@ -29,7 +29,7 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", "name", "reliability", "oauthId", "deleted", "oauthInformation"})
+@ToString(of = {"id", "name", "reliability", "deleted", "oauthInformation"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
