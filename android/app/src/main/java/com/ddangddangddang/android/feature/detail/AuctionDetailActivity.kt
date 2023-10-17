@@ -3,8 +3,6 @@ package com.ddangddangddang.android.feature.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
-import android.view.View
 import androidx.activity.viewModels
 import androidx.viewpager2.widget.ViewPager2
 import com.ddangddangddang.android.R
@@ -19,7 +17,6 @@ import com.ddangddangddang.android.notification.NotificationType
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
-import com.ddangddangddang.android.util.view.convertDpToPx
 import com.ddangddangddang.android.util.view.observeLoadingWithDialog
 import com.ddangddangddang.android.util.view.showDialog
 import com.google.android.material.tabs.TabLayoutMediator
@@ -36,31 +33,7 @@ class AuctionDetailActivity :
         binding.viewModel = viewModel
         setupDetailView()
         setupViewModel()
-        setDynamicHeight(binding.vpDetailInfo, this)
         if (savedInstanceState == null) viewModel.loadAuctionDetail(auctionId)
-    }
-
-    // 액션바 높이를 반환하는 함수
-    private fun getActionBarHeight(context: Context): Int {
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(androidx.appcompat.R.attr.actionBarSize, typedValue, true)
-        return TypedValue.complexToDimensionPixelSize(typedValue.data, resources.displayMetrics)
-    }
-
-    private fun getRemainingHeight(context: Context): Int {
-        val screenHeight = context.resources.displayMetrics.heightPixels
-        val statusBarHeight = convertDpToPx(STATUS_BAR_HEIGHT) // 탭 레이아웃의 톱 마진과도 같은 값임.
-        val actionBarHeight = getActionBarHeight(context)
-        val tabLayoutHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
-        val bottomButtonHeight = resources.getDimensionPixelOffset(R.dimen.height_submit_button)
-        return screenHeight - statusBarHeight - actionBarHeight - tabLayoutHeight - bottomButtonHeight
-    }
-
-    // 뷰의 높이를 동적으로 설정하는 함수
-    private fun setDynamicHeight(view: View, context: Context) {
-        val params = view.layoutParams
-        params.height = getRemainingHeight(context)
-        view.layoutParams = params
     }
 
     private fun setupDetailView() {
@@ -186,7 +159,6 @@ class AuctionDetailActivity :
 
     companion object {
         private const val AUCTION_ID_KEY = "auction_id_key"
-        private const val STATUS_BAR_HEIGHT = 24f
 
         fun getIntent(context: Context, auctionId: Long): Intent {
             return Intent(context, AuctionDetailActivity::class.java).apply {
