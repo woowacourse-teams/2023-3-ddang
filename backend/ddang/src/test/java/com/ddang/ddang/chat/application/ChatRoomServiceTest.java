@@ -25,7 +25,6 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -146,14 +145,18 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
             softAssertions.assertThat(actual.get(0).id()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.id());
             softAssertions.assertThat(actual.get(0).auctionDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.auctionDto());
             softAssertions.assertThat(actual.get(0).partnerDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.partnerDto());
-            softAssertions.assertThat(actual.get(0).lastMessageDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.lastMessageDto());
-            softAssertions.assertThat(actual.get(0).isChatAvailable()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.isChatAvailable());
+            softAssertions.assertThat(actual.get(0).lastMessageDto())
+                          .isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.lastMessageDto());
+            softAssertions.assertThat(actual.get(0).isChatAvailable())
+                          .isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.isChatAvailable());
 
             softAssertions.assertThat(actual.get(1).id()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.id());
             softAssertions.assertThat(actual.get(1).auctionDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.auctionDto());
             softAssertions.assertThat(actual.get(1).partnerDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.partnerDto());
-            softAssertions.assertThat(actual.get(1).lastMessageDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.lastMessageDto());
-            softAssertions.assertThat(actual.get(1).isChatAvailable()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.isChatAvailable());
+            softAssertions.assertThat(actual.get(1).lastMessageDto())
+                          .isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.lastMessageDto());
+            softAssertions.assertThat(actual.get(1).isChatAvailable())
+                          .isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.isChatAvailable());
         });
     }
 
