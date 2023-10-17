@@ -6,6 +6,8 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.ddangddangddang.android.R
+import com.ddangddangddang.android.feature.main.MainActivity
+import com.ddangddangddang.android.feature.main.MainFragmentType
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.android.global.getBitmapFromUrl
@@ -66,7 +68,8 @@ object MessageType : NotificationType() {
     }
 
     private fun getMessageRoomPendingIntent(context: Context, id: Long): PendingIntent? {
+        val parentIntent = MainActivity.getIntent(context, MainFragmentType.MESSAGE)
         val intent = MessageRoomActivity.getIntent(context.applicationContext, id)
-        return intent.getPendingIntent(context, id.toInt())
+        return intent.getPendingIntent(context, id.toInt(), parentIntent)
     }
 }

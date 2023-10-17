@@ -9,8 +9,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
-    private val _currentFragmentType: MutableLiveData<MainFragmentType> =
-        MutableLiveData(MainFragmentType.HOME)
+    private val _currentFragmentType: MutableLiveData<MainFragmentType> = MutableLiveData()
     val currentFragmentType: LiveData<MainFragmentType>
         get() = _currentFragmentType
     private val _event: SingleLiveEvent<MainEvent> = SingleLiveEvent()
@@ -23,6 +22,10 @@ class MainViewModel @Inject constructor() : ViewModel() {
 
     init {
         _event.value = MainEvent.NotificationPermissionCheck
+    }
+
+    fun setupFragmentType(type: MainFragmentType) {
+        _currentFragmentType.value = type
     }
 
     private fun changeCurrentFragmentType(fragmentType: MainFragmentType) {
