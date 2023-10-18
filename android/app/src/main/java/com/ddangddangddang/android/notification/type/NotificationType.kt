@@ -34,9 +34,13 @@ abstract class NotificationType {
     ): PendingIntent? {
         return TaskStackBuilder.create(context).run {
             if (parentIntent != null) {
+                parentIntent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 addNextIntentWithParentStack(parentIntent)
                 addNextIntent(this@getPendingIntent)
             } else {
+                this@getPendingIntent.flags =
+                    Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 addNextIntentWithParentStack(this@getPendingIntent)
             }
 

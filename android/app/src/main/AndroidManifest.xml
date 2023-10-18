@@ -71,7 +71,9 @@
         <activity
             android:name=".feature.main.MainActivity"
             android:exported="false"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:taskAffinity=""
+            android:excludeFromRecents="true" />
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
