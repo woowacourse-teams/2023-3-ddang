@@ -24,6 +24,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByIdWithProfileImage(final Long id) {
+        return jpaUserRepository.findByIdWithProfileImage(id);
+    }
+
+    @Override
     public boolean existsById(final Long id) {
         return jpaUserRepository.existsById(id);
     }
