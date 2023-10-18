@@ -3,6 +3,7 @@ package com.ddang.ddang.auction.presentation.dto.response;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
+import com.ddang.ddang.user.presentation.util.NameProcessor;
 
 public record SellerResponse(
         Long id,
@@ -17,7 +18,7 @@ public record SellerResponse(
         return new SellerResponse(
                 auctionDto.sellerId(),
                 ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, auctionDto.sellerProfileId()),
-                auctionDto.sellerName(),
+                NameProcessor.process(auctionDto.isSellerDeleted(), auctionDto.sellerName()),
                 floatReliability
         );
     }

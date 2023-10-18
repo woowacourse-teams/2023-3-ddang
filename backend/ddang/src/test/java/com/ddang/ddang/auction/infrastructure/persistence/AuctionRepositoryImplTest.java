@@ -167,4 +167,76 @@ class AuctionRepositoryImplTest extends AuctionRepositoryImplFixture {
             assertThat(actual.hasNext()).isFalse();
         });
     }
+
+    @Test
+    void 특정_사용자가_판매자인_경매중_현재_진행_중인_경매가_있다면_참을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsBySellerIdAndAuctionStatusIsOngoing(
+                판매자.getId(),
+                저장된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_사용자가_판매자인_경매중_현재_진행_중인_경매가_없다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsBySellerIdAndAuctionStatusIsOngoing(
+                판매자.getId(),
+                저장된_경매_엔티티.getClosingTime().plusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 특정_사용자가_판매자인_경매중_현재_진행_중인_경매가_있지만_해당_경매가_삭제_됐다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsBySellerIdAndAuctionStatusIsOngoing(
+                삭제한_경매를_갖고_있는_판매자.getId(),
+                삭제된_경매만_있는_사용자의_삭제된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 특정_사용자가_마지막_입찰자인_경매중_현재_진행_중인_경매가_있다면_참을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsLastBidByUserIdAndAuctionStatusIsOngoing(
+                구매자.getId(),
+                저장된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        // then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 특정_사용자가_마지막_입찰자인_경매중_현재_진행_중인_경매가_없다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsLastBidByUserIdAndAuctionStatusIsOngoing(
+                구매자.getId(),
+                저장된_경매_엔티티.getClosingTime().plusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 특정_사용자가_마지막_입찰자인_경매중_현재_진행_중인_경매가_없지만_삭제_됐다면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionRepository.existsLastBidByUserIdAndAuctionStatusIsOngoing(
+                삭제된_경매의_마지막_입찰자.getId(),
+                삭제된_경매_엔티티.getClosingTime().minusDays(1)
+        );
+
+        // then
+        assertThat(actual).isFalse();
+    }
 }
