@@ -1,14 +1,14 @@
 package com.ddang.ddang.auction.configuration;
 
+import com.ddang.ddang.configuration.ProductProfile;
 import com.google.api.client.util.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import software.amazon.awssdk.auth.credentials.InstanceProfileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 
-@Profile("!local && !test")
+@ProductProfile
 @Configuration
 public class AwsConfiguration {
 

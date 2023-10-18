@@ -1,5 +1,6 @@
 package com.ddang.ddang.image.infrastructure.s3;
 
+import com.ddang.ddang.configuration.ProductProfile;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
@@ -8,7 +9,6 @@ import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFile
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.exception.SdkException;
@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Component
-@Profile("!local && !test")
+@ProductProfile
 @ConditionalOnProperty(name = "aws.s3.enabled", havingValue = "true")
 @RequiredArgsConstructor
 public class S3StoreImageProcessor implements StoreImageProcessor {
