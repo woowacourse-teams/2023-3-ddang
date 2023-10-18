@@ -28,7 +28,7 @@
     <string name="all_must_update_to_latest_version">최신 버전으로 업데이트가 필요합니다.</string>
     <string name="all_date_format">yyyy년 M월 d일</string>
     <string name="all_time_format">h:mm a</string>
-    <string name="all_date_time_format">yyyy-MM-dd HH:mm:ss</string>
+    <string name="all_date_time_format">yyyy-MM-dd\nHH:mm:ss</string>
     <string name="all_default_reliability">( - )</string>
     <string name="all_back_key_check_message">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다</string>
     <string name="all_price">%,d 원</string>

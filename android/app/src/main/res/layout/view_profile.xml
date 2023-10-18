@@ -11,7 +11,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <androidx.cardview.widget.CardView
@@ -41,13 +41,14 @@
 
         <TextView
             android:id="@+id/tv_nickname"
-            android:layout_width="wrap_content"
+            style="@style/Header2"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="@{profile.name}"
-            style="@style/Header2"
             android:textColor="@color/grey_800"
             app:layout_constraintBottom_toTopOf="@id/iv_reliability_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/cv_profile_image"
             app:layout_constraintTop_toTopOf="@id/cv_profile_image"
             app:layout_constraintVertical_chainStyle="packed"
@@ -66,11 +67,11 @@
 
         <TextView
             android:id="@+id/tv_reliability_score"
+            style="@style/Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="@{profile.reliability == null ? @string/all_default_reliability : @string/all_reliability(profile.reliability)}"
-            style="@style/Body"
             app:layout_constraintBottom_toBottomOf="@id/iv_reliability_icon"
             app:layout_constraintStart_toEndOf="@id/iv_reliability_icon"
             app:layout_constraintTop_toTopOf="@id/iv_reliability_icon"

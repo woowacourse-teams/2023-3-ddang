@@ -8,10 +8,12 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.FragmentBidHistoryBinding
+import com.ddangddangddang.android.di.DefaultDateTimeFormatter
 import com.ddangddangddang.android.feature.common.notifyFailureMessage
 import com.ddangddangddang.android.feature.detail.AuctionDetailViewModel
 import com.ddangddangddang.android.util.binding.BindingFragment
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -21,7 +23,12 @@ class BidHistoryFragment :
     private val viewModel: BidHistoryViewModel by viewModels()
 
     @Inject
-    lateinit var bidHistoryAdapter: BidHistoryAdapter
+    @DefaultDateTimeFormatter
+    lateinit var dateTimeFormatter: DateTimeFormatter
+
+    private val bidHistoryAdapter: BidHistoryAdapter by lazy {
+        BidHistoryAdapter(dateTimeFormatter)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
