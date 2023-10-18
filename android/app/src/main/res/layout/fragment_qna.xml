@@ -51,5 +51,16 @@
             app:layout_constraintTop_toBottomOf="@id/cl_write_question"
             tools:listitem="@layout/item_qna" />
 
+        <TextView
+            isVisible="@{viewModel.qnas.size == 0}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="@string/detail_auction_qna_no_exist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_write_question" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

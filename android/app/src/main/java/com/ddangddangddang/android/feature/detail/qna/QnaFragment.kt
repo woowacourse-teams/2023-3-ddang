@@ -56,6 +56,7 @@ class QnaFragment : BindingFragment<FragmentQnaBinding>(R.layout.fragment_qna) {
     private val qnaAdapter = QnaAdapter(onClicks)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
         setupQnas()
         setupViewModel()
         setupBinding()

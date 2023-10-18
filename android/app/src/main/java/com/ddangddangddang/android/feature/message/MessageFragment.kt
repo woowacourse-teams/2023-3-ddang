@@ -33,8 +33,10 @@ class MessageFragment : BindingFragment<FragmentMessageBinding>(R.layout.fragmen
 
     override fun onResume() {
         super.onResume()
-        requireContext().registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
-        viewModel.loadMessageRooms() // 홈 키에서 돌아올 때, 메시지 방에서 돌아올 때 갱신 되도록 하기 위해 여기 배치
+        if (isHidden.not()) {
+            requireContext().registerReceiver(messageReceiver, MessageReceiver.getIntentFilter())
+            viewModel.loadMessageRooms() // 홈 키에서 돌아올 때, 메시지 방에서 돌아올 때 갱신 되도록 하기 위해 여기 배치
+        }
     }
 
     override fun onPause() {
