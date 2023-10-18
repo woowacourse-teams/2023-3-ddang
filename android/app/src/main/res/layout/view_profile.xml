@@ -44,7 +44,7 @@
             style="@style/Header2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginStart="16dp"
             android:text="@{profile.name}"
             android:textColor="@color/grey_800"
             app:layout_constraintBottom_toTopOf="@id/iv_reliability_icon"
