@@ -1,7 +1,6 @@
 package com.ddang.ddang.image.infrastructure.persistence;
 
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.fixture.ProfileImageRepositoryImplFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,20 +27,20 @@ class ProfileImageRepositoryImplTest extends ProfileImageRepositoryImplFixture {
     }
 
     @Test
-    void 프로필을_이미지를_아이디를_통해_조회한다() {
+    void 프로필을_이미지_이름에_해당하는_프로필_이미지가_존재하면_참을_반환한다() {
         // when
-        final Optional<ProfileImage> actual = profileImageRepository.findById(프로필_이미지.getId());
+        final boolean actual = profileImageRepository.existsByStoreName(존재하는_프로필_이미지_이름);
 
         // then
-        assertThat(actual).contains(프로필_이미지);
+        assertThat(actual).isTrue();
     }
 
     @Test
-    void 프로필을_이미지를_저장_이미지를_통해_조회한다() {
+    void 프로필을_이미지_이름에_해당하는_프로필_이미지가_존재하지_않으면_참을_반환한다() {
         // when
-        final Optional<ProfileImage> actual = profileImageRepository.findByStoreName(프로필_이미지.getImage().getStoreName());
+        final boolean actual = profileImageRepository.existsByStoreName(존재하지_않는_프로필_이미지_이름);
 
         // then
-        assertThat(actual).contains(프로필_이미지);
+        assertThat(actual).isFalse();
     }
 }

@@ -18,13 +18,12 @@ public class JpaProfileImageRepositoryFixture {
 
     protected String 업로드_이미지_파일명 = "uploadName";
     protected String 저장된_이미지_파일명 = "storeName";
-    protected Long 존재하지_않는_프로필_이미지_아이디 = -999L;
-
-    protected ProfileImage 프로필_이미지;
+    protected String 존재하는_프로필_이미지_이름 = "프로필이미지.png";
+    protected String 존재하지_않는_프로필_이미지_이름 = "invalid.png";
 
     @BeforeEach
     void setUp() {
-        프로필_이미지 = new ProfileImage("uploadName", "storeName");
+        final ProfileImage 프로필_이미지 = new ProfileImage("프로필이미지.png", 존재하는_프로필_이미지_이름);
 
         profileImageRepository.save(프로필_이미지);
 
