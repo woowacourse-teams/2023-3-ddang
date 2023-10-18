@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
+import com.ddangddangddang.android.di.DateFormatter
+import com.ddangddangddang.android.di.TimeFormatter
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.review.UserReviewDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
@@ -21,6 +23,7 @@ import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,7 +34,16 @@ class MessageRoomActivity :
     private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
 
     @Inject
-    lateinit var messageAdapter: MessageAdapter
+    @DateFormatter
+    lateinit var dateFormatter: DateTimeFormatter
+
+    @Inject
+    @TimeFormatter
+    lateinit var timeFormatter: DateTimeFormatter
+
+    private val messageAdapter: MessageAdapter by lazy {
+        MessageAdapter(dateFormatter, timeFormatter)
+    }
 
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
 
