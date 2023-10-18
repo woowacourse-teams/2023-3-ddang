@@ -272,6 +272,7 @@ class RegisterAuctionActivity :
     private fun setupImageRecyclerView() {
         with(binding.rvImage) {
             adapter = imageAdapter
+            setHasFixedSize(true)
             addItemDecoration(RegisterAuctionImageSpaceItemDecoration(space = 24))
         }
     }

@@ -88,6 +88,7 @@ class HomeFragment : BindingFragment<FragmentHomeBinding>(R.layout.fragment_home
     private fun setupAuctionRecyclerView() {
         with(binding.rvAuction) {
             adapter = auctionAdapter
+            setHasFixedSize(true)
 
             val space = resources.getDimensionPixelSize(R.dimen.margin_side_layout)
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = space))
