@@ -17,11 +17,11 @@ public final class ImageUrlCalculator {
         return absoluteUrl + storeName;
     }
 
-    public static String calculateBy(final String imageAbsoluteUrl, final Long id) {
-        if (id == null && imageAbsoluteUrl.contains(ImageRelativeUrl.USER.getValue())) {
+    public static String calculateBy(final String imageAbsoluteUrl, final String storeName) {
+        if (storeName == null && imageAbsoluteUrl.contains(ImageRelativeUrl.USER.getValue())) {
             return imageAbsoluteUrl + ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
         }
 
-        return imageAbsoluteUrl + id;
+        return imageAbsoluteUrl + storeName;
     }
 }
