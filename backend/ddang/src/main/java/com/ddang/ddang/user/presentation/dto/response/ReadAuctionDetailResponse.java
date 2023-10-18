@@ -17,7 +17,7 @@ public record ReadAuctionDetailResponse(
             final AuthenticationUserInfo userInfo
     ) {
         final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(dto.auctionDto());
-        final String profileImageUrl = ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.auctionDto().sellerId());
+        final String profileImageUrl = ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.auctionDto().sellerProfileImageStoreName());
 
         final Float floatReliability = Float.valueOf(String.valueOf(dto.auctionDto().sellerReliability()));
 

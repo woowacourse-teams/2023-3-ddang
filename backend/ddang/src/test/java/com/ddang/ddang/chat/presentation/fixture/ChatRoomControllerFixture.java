@@ -18,11 +18,11 @@ public class ChatRoomControllerFixture extends CommonControllerSliceTest {
 
     private Long 탈퇴한_사용자_아이디 = 5L;
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
-    protected ReadUserInChatRoomDto 판매자 = new ReadUserInChatRoomDto(1L, "판매자", 1L, 5.0d, false);
-    private ReadUserInChatRoomDto 구매자1 = new ReadUserInChatRoomDto(2L, "구매자1", 2L, 5.0d, false);
-    private ReadUserInChatRoomDto 구매자2 = new ReadUserInChatRoomDto(3L, "구매자2", 3L, 5.0d, false);
-    private ReadAuctionInChatRoomDto 조회용_경매1 = new ReadAuctionInChatRoomDto(1L, "경매1", 10_000, 1L);
-    private ReadAuctionInChatRoomDto 조회용_경매2 = new ReadAuctionInChatRoomDto(2L, "경매2", 20_000, 1L);
+    protected ReadUserInChatRoomDto 판매자 = new ReadUserInChatRoomDto(1L, "판매자", "profile_image.png", 5.0d, false);
+    private ReadUserInChatRoomDto 구매자1 = new ReadUserInChatRoomDto(2L, "구매자1", "profile_image.png", 5.0d, false);
+    private ReadUserInChatRoomDto 구매자2 = new ReadUserInChatRoomDto(3L, "구매자2", "profile_image.png", 5.0d, false);
+    private ReadAuctionInChatRoomDto 조회용_경매1 = new ReadAuctionInChatRoomDto(1L, "경매1", 10_000, "auction_image.png");
+    private ReadAuctionInChatRoomDto 조회용_경매2 = new ReadAuctionInChatRoomDto(2L, "경매2", 20_000, "auction_image.png");
     protected ReadChatRoomWithLastMessageDto 조회용_채팅방1 = new ReadChatRoomWithLastMessageDto(1L, 조회용_경매1, 구매자1, new ReadLastMessageDto(1L, LocalDateTime.now(), 판매자, 구매자1, "메시지1"), true);
     protected ReadChatRoomWithLastMessageDto 조회용_채팅방2 = new ReadChatRoomWithLastMessageDto(2L, 조회용_경매2, 구매자2, new ReadLastMessageDto(1L, LocalDateTime.now(), 판매자, 구매자2, "메시지2"), true);
     protected CreateMessageRequest 메시지_생성_요청 = new CreateMessageRequest(1L, "메시지 내용");

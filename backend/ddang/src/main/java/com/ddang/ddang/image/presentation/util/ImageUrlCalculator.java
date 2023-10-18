@@ -7,19 +7,19 @@ public final class ImageUrlCalculator {
     private ImageUrlCalculator() {
     }
 
-    public static String calculateBy(final ImageRelativeUrl imageRelativeUrl, final Long id) {
+    public static String calculateBy(final ImageRelativeUrl imageRelativeUrl, final String storeName) {
         final String absoluteUrl = imageRelativeUrl.calculateAbsoluteUrl();
 
-        if (id == null && imageRelativeUrl == ImageRelativeUrl.USER) {
-            return absoluteUrl + ProfileImage.DEFAULT_PROFILE_IMAGE_ID;
+        if (storeName == null && imageRelativeUrl == ImageRelativeUrl.USER) {
+            return absoluteUrl + ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
         }
 
-        return absoluteUrl + id;
+        return absoluteUrl + storeName;
     }
 
     public static String calculateBy(final String imageAbsoluteUrl, final Long id) {
         if (id == null && imageAbsoluteUrl.contains(ImageRelativeUrl.USER.getValue())) {
-            return imageAbsoluteUrl + ProfileImage.DEFAULT_PROFILE_IMAGE_ID;
+            return imageAbsoluteUrl + ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
         }
 
         return imageAbsoluteUrl + id;

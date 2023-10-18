@@ -9,7 +9,7 @@ public record ReadUserResponse(String name, String profileImage, Float reliabili
 
     public static ReadUserResponse from(final ReadUserDto readUserDto) {
         final String name = NameProcessor.process(readUserDto.isDeleted(), readUserDto.name());
-        final String profileImageUrl = ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, readUserDto.profileImageId());
+        final String profileImageUrl = ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, readUserDto.profileImageStoreName());
 
         final Float floatReliability = Float.valueOf(String.valueOf(readUserDto.reliability()));
 

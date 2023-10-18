@@ -26,6 +26,6 @@ public class BidControllerFixture extends CommonControllerSliceTest {
     protected static CreateBidRequest 입찰액이_양수가_아닌_입찰_request1 = new CreateBidRequest(1L, -1);
     protected static CreateBidRequest 입찰액이_양수가_아닌_입찰_request2 = new CreateBidRequest(1L, 0);
 
-    protected ReadBidDto 입찰_정보_dto1 = new ReadBidDto("사용자1", 1L, false, 10_000, LocalDateTime.now());
-    protected ReadBidDto 입찰_정보_dto2 = new ReadBidDto("사용자2", 2L, false, 12_000, LocalDateTime.now());
+    protected ReadBidDto 입찰_정보_dto1 = new ReadBidDto("사용자1", "profile_image1.png", false, 10_000, LocalDateTime.now());
+    protected ReadBidDto 입찰_정보_dto2 = new ReadBidDto("사용자2", "profile_image2.png", false, 12_000, LocalDateTime.now());
 }

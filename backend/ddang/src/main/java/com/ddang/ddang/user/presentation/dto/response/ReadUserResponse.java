@@ -12,7 +12,7 @@ public record ReadUserResponse(String name, String profileImage, Float reliabili
 
         return new ReadUserResponse(
                 NameProcessor.process(readUserDto.isDeleted(), readUserDto.name()),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, readUserDto.profileImageId()),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, readUserDto.profileImageStoreName()),
                 floatReliability
         );
     }
