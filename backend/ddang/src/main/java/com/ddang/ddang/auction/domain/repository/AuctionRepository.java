@@ -27,7 +27,7 @@ public interface AuctionRepository {
 
     Slice<Auction> findAuctionsAllByBidderId(final Long bidderId, final Pageable pageable);
 
-    boolean existsBySellerIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now);
+    boolean existsBySellerIdAndAuctionStatusIsOngoing(final Long userId, final LocalDateTime now);
 
-    boolean existsLastBidByUserIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now);
+    boolean existsLastBidByUserIdAndAuctionStatusIsOngoing(final Long userId, final LocalDateTime now);
 }

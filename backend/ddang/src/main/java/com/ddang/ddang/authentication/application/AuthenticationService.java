@@ -171,10 +171,10 @@ public class AuthenticationService {
     private void validateCanWithdrawal(final User user) {
         final LocalDateTime now = LocalDateTime.now();
 
-        if (auctionRepository.existsBySellerIdAndAuctionIsOngoing(user.getId(), now)) {
+        if (auctionRepository.existsBySellerIdAndAuctionStatusIsOngoing(user.getId(), now)) {
             throw new WithdrawalNotAllowedException("등록한 경매 중 현재 진행 중인 것이 있기에 탈퇴할 수 없습니다.");
         }
-        if (auctionRepository.existsLastBidByUserIdAndAuctionIsOngoing(user.getId(), now)) {
+        if (auctionRepository.existsLastBidByUserIdAndAuctionStatusIsOngoing(user.getId(), now)) {
             throw new WithdrawalNotAllowedException("마지막 입찰자로 등록되어 있는 것이 있기에 탈퇴할 수 없습니다.");
         }
     }

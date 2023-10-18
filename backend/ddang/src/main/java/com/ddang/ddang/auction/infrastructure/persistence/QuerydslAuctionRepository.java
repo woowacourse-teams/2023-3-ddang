@@ -188,25 +188,4 @@ public class QuerydslAuctionRepository {
 
         return QuerydslSliceHelper.toSlice(findAuctions, pageable);
     }
-
-    public boolean existsBySellerIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
-        return queryFactory.selectFrom(auction)
-                           .join(auction.seller).fetchJoin()
-                           .where(auction.seller.id.eq(userId)
-                                                   .and(auction.deleted.isFalse())
-                                                   .and(auction.closingTime.after(now))
-                           )
-                           .fetchFirst() != null;
-    }
-
-    public boolean existsLastBidByUserIdAndAuctionIsOngoing(final Long userId, final LocalDateTime now) {
-        return queryFactory.selectFrom(auction)
-                           .join(auction.lastBid, bid).fetchJoin()
-                           .join(bid.bidder).fetchJoin()
-                           .where(bid.bidder.id.eq(userId)
-                                               .and(auction.deleted.isFalse())
-                                               .and(auction.closingTime.after(now))
-                           )
-                           .fetchFirst() != null;
-    }
 }
