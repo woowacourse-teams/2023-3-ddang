@@ -21,9 +21,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaMessageRepositoryTest extends JpaMessageRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
     JpaMessageRepository messageRepository;
 
@@ -31,9 +28,6 @@ class JpaMessageRepositoryTest extends JpaMessageRepositoryFixture {
     void 메시지를_저장한다() {
         // when
         final Message actual = messageRepository.save(메시지);
-
-        em.flush();
-        em.clear();
 
         // then
         assertThat(actual.getId()).isPositive();

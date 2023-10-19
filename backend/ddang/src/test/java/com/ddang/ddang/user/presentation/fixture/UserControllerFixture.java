@@ -14,6 +14,7 @@ public class UserControllerFixture extends CommonControllerSliceTest {
 
     protected String 액세스_토큰_값 = "Bearer accessToken";
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
+    protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(999L);
     protected String 탈퇴한_사용자_이름 = "알 수 없음";
 
     protected ReadUserDto 사용자_정보_조회_dto = new ReadUserDto(1L, "사용자1", 1L, 4.6d, "12345", false);

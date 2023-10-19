@@ -58,7 +58,7 @@ class JpaAnswerReportRepositoryTest extends JpaAnswerReportRepositoryFixture {
     @Test
     void 신고된_답변_목록을_조회한다() {
         // when
-        final List<AnswerReport> actual = answerReportRepository.findAllByOrderByIdAsc();
+        final List<AnswerReport> actual = answerReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

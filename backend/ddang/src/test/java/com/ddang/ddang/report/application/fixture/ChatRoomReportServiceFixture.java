@@ -3,21 +3,21 @@ package com.ddang.ddang.report.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
 import com.ddang.ddang.report.domain.ChatRoomReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaChatRoomReportRepository;
+import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -34,19 +34,19 @@ public class ChatRoomReportServiceFixture {
     private JpaProfileImageRepository profileImageRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JpaAuctionImageRepository auctionImageRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaChatRoomReportRepository chatRoomReportRepository;
+    private ChatRoomReportRepository chatRoomReportRepository;
 
     @Autowired
-    private JpaChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepository;
 
     protected User 이미_신고한_구매자1;
     protected User 이미_신고한_구매자2;
@@ -143,15 +143,26 @@ public class ChatRoomReportServiceFixture {
         final ChatRoomReport 채팅방_신고3 = new ChatRoomReport(이미_신고한_구매자3, 채팅방3, "신고합니다.");
 
         profileImageRepository.save(프로필_이미지);
-        userRepository.saveAll(List.of(판매자겸_아직_신고하지_않은_신고자, 이미_신고한_구매자1, 이미_신고한_구매자2, 이미_신고한_구매자3, 채팅방_참여자가_아닌_사용자));
+
+        userRepository.save(판매자겸_아직_신고하지_않은_신고자);
+        userRepository.save(이미_신고한_구매자1);
+        userRepository.save(이미_신고한_구매자2);
+        userRepository.save(이미_신고한_구매자3);
+        userRepository.save(채팅방_참여자가_아닌_사용자);
 
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionImageRepository.save(경매_이미지);
-        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3));
+        auctionRepository.save(경매1);
+        auctionRepository.save(경매2);
+        auctionRepository.save(경매3);
 
-        chatRoomRepository.saveAll(List.of(채팅방1, 채팅방2, 채팅방3));
+        chatRoomRepository.save(채팅방1);
+        chatRoomRepository.save(채팅방2);
+        chatRoomRepository.save(채팅방3);
 
-        chatRoomReportRepository.saveAll(List.of(채팅방_신고1, 채팅방_신고2, 채팅방_신고3));
+        chatRoomReportRepository.save(채팅방_신고1);
+        chatRoomReportRepository.save(채팅방_신고2);
+        chatRoomReportRepository.save(채팅방_신고3);
 
         채팅방_신고_요청_dto = new CreateChatRoomReportDto(
                 채팅방1.getId(),

@@ -14,7 +14,7 @@ public class BidControllerFixture extends CommonControllerSliceTest {
     protected PrivateClaims 존재하지_않는_사용자_ID_클레임 = new PrivateClaims(-999L);
     protected Long 생성된_입찰_아이디 = 1L;
     protected String 액세스_토큰_값 = "Bearer accessToken";
-    protected Long 조회하려는_경매_아이디 = -999L;
+    protected Long 조회하려는_경매_아이디 = 1L;
     protected Long 존재하지_않는_경매_아이디 = -999L;
 
     protected CreateBidRequest 입찰_request = new CreateBidRequest(1L, 10_000);

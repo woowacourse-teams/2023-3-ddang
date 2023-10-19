@@ -3,7 +3,7 @@ package com.ddang.ddang.device.application;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.fixture.DeviceTokenServiceFixture;
 import com.ddang.ddang.device.domain.DeviceToken;
-import com.ddang.ddang.device.infrastructure.persistence.JpaDeviceTokenRepository;
+import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -25,7 +25,7 @@ class DeviceTokenServiceTest extends DeviceTokenServiceFixture {
     DeviceTokenService deviceTokenService;
 
     @Autowired
-    JpaDeviceTokenRepository deviceTokenRepository;
+    DeviceTokenRepository deviceTokenRepository;
 
     @Test
     void 사용자의_디바이스_토큰이_존재하지_않는다면_저장한다() {

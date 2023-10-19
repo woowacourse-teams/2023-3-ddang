@@ -4,7 +4,7 @@ import com.ddang.ddang.region.application.dto.ReadRegionDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.InitializationRegionProcessor;
 import com.ddang.ddang.region.domain.Region;
-import com.ddang.ddang.region.infrastructure.persistence.JpaRegionRepository;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RegionService {
 
-    private final JpaRegionRepository regionRepository;
+    private final RegionRepository regionRepository;
     private final InitializationRegionProcessor regionProcessor;
 
     @Transactional

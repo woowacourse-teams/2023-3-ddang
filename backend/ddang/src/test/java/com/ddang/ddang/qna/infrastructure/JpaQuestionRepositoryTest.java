@@ -72,4 +72,19 @@ class JpaQuestionRepositoryTest extends JpaQuestionRepositoryFixture {
             softAssertions.assertThat(actual.get(2).getAnswer()).isNull();
         });
     }
+
+    @Test
+    void 경매_아이디를_통해_질문과_답변_조회시_질문이_삭제된_경우_답변이_있더라도_함꼐_조회되지_않는다() {
+        // when
+        final List<Question> actual = questionRepository.findAllByAuctionId(질문이_3개_답변이_2개중_첫번째_질문이_삭제된_경매.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).hasSize(2);
+            softAssertions.assertThat(actual.get(0)).isEqualTo(삭제되지_않은_질문2);
+            softAssertions.assertThat(actual.get(0).getAnswer()).isEqualTo(삭제되지_않은_질문의_답변2);
+            softAssertions.assertThat(actual.get(1)).isEqualTo(답변이_없는_질문3);
+            softAssertions.assertThat(actual.get(1).getAnswer()).isNull();
+        });
+    }
 }

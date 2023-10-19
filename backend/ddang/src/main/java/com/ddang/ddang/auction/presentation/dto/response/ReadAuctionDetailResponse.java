@@ -8,7 +8,8 @@ public record ReadAuctionDetailResponse(
         AuctionDetailResponse auction,
         SellerResponse seller,
         ChatRoomInAuctionResponse chat,
-        boolean isOwner
+        boolean isOwner,
+        boolean isLastBidder
 ) {
 
     public static ReadAuctionDetailResponse of(
@@ -24,11 +25,16 @@ public record ReadAuctionDetailResponse(
                 auctionDetailResponse,
                 sellerResponse,
                 chatRoomResponse,
-                isOwner(auctionDto, userInfo)
+                isOwner(auctionDto, userInfo),
+                isLastBidder(auctionDto, userInfo)
         );
     }
 
     private static boolean isOwner(final ReadAuctionDto auctionDto, final AuthenticationUserInfo userInfo) {
         return auctionDto.sellerId().equals(userInfo.userId());
+    }
+
+    private static boolean isLastBidder(final ReadAuctionDto auctionDto, final AuthenticationUserInfo userInfo) {
+        return userInfo.userId().equals(auctionDto.lastBidderId());
     }
 }

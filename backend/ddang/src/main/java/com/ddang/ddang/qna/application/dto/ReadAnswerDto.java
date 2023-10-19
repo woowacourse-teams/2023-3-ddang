@@ -9,14 +9,17 @@ public record ReadAnswerDto(
         Long id,
         ReadUserInQnaDto writerDto,
         String content,
-        LocalDateTime createdTime
+        LocalDateTime createdTime,
+        boolean isDeleted
 ) {
+
     public static ReadAnswerDto from(final Answer answer, final User writer) {
         return new ReadAnswerDto(
                 answer.getId(),
                 ReadUserInQnaDto.from(writer),
                 answer.getContent(),
-                answer.getCreatedTime()
+                answer.getCreatedTime(),
+                answer.isDeleted()
         );
     }
 }

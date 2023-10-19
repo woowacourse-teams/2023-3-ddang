@@ -67,7 +67,7 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
     void 경매_아이디를_통해_질문과_답변을_모두_조회한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(questionService.readAllByAuctionId(anyLong())).willReturn(질문과_답변_정보들_dto);
+        given(questionService.readAllByAuctionId(anyLong(), anyLong())).willReturn(질문과_답변_정보들_dto);
 
         // when & then
         final ResultActions resultActions =
@@ -83,6 +83,7 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
                                jsonPath("$.qnas.[0].question.writer.image").exists(),
                                jsonPath("$.qnas.[0].question.createdTime").exists(),
                                jsonPath("$.qnas.[0].question.content", is(질문_정보_dto1.content())),
+                               jsonPath("$.qnas.[0].question.isQuestioner", is(질문_정보_dto1.isQuestioner()), Boolean.class),
                                jsonPath("$.qnas.[0].answer.id", is(답변_정보_dto1.id()), Long.class),
                                jsonPath("$.qnas.[0].answer.writer.id", is(판매자_정보_dto.id()), Long.class),
                                jsonPath("$.qnas.[0].answer.writer.name", is(판매자_정보_dto.name())),
@@ -95,6 +96,7 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
                                jsonPath("$.qnas.[1].question.writer.image").exists(),
                                jsonPath("$.qnas.[1].question.createdTime").exists(),
                                jsonPath("$.qnas.[1].question.content", is(질문_정보_dto2.content())),
+                               jsonPath("$.qnas.[1].question.isQuestioner", is(질문_정보_dto2.isQuestioner()), Boolean.class),
                                jsonPath("$.qnas.[1].answer.id", is(답변_정보_dto2.id()), Long.class),
                                jsonPath("$.qnas.[1].answer.writer.id", is(판매자_정보_dto.id()), Long.class),
                                jsonPath("$.qnas.[1].answer.writer.name", is(판매자_정보_dto.name())),
@@ -110,7 +112,7 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
     void 존재하지_않는_경매_아이디를_통해_질문과_답변을_모두_조회할시_404를_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(questionService.readAllByAuctionId(anyLong()))
+        given(questionService.readAllByAuctionId(anyLong(), anyLong()))
                 .willThrow(new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
 
         // when & then
@@ -146,6 +148,8 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
                                                                              .description("질문 등록 시간"),
                                 fieldWithPath("qnas.[].question.content").type(JsonFieldType.STRING)
                                                                          .description("질문 내용"),
+                                fieldWithPath("qnas.[].question.isQuestioner").type(JsonFieldType.BOOLEAN)
+                                                                              .description("질문 작성자 여부 확인"),
                                 fieldWithPath("qnas.[].answer").type(JsonFieldType.OBJECT)
                                                                .description("답변 정보 JSON"),
                                 fieldWithPath("qnas.[].answer.id").type(JsonFieldType.NUMBER)

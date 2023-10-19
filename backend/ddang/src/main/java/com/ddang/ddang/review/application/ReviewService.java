@@ -2,7 +2,7 @@ package com.ddang.ddang.review.application;
 
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
@@ -10,10 +10,10 @@ import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.domain.Review;
-import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +26,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final JpaReviewRepository reviewRepository;
-    private final JpaAuctionRepository auctionRepository;
-    private final JpaUserRepository userRepository;
+    private final ReviewRepository reviewRepository;
+    private final AuctionRepository auctionRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long create(final CreateReviewDto reviewDto) {
-        final Auction findAuction = auctionRepository.findById(reviewDto.auctionId())
+        final Auction findAuction = auctionRepository.findTotalAuctionById(reviewDto.auctionId())
                                                      .orElseThrow(() ->
                                                              new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
                                                      );
@@ -44,9 +44,9 @@ public class ReviewService {
         validateWriterCanReview(findAuction, writer);
 
         final Review review = reviewDto.toEntity(findAuction, writer, target);
-        final Review persistReview = saveReviewAndUpdateReliability(review, target);
 
-        return persistReview.getId();
+        return reviewRepository.save(review)
+                               .getId();
     }
 
     private void validateWriterCanReview(final Auction auction, final User writer) {
@@ -63,18 +63,9 @@ public class ReviewService {
         }
     }
 
-    private Review saveReviewAndUpdateReliability(final Review review, final User target) {
-        final Review persistReview = reviewRepository.save(review);
-
-        final List<Review> targetReviews = reviewRepository.findAllByTargetId(target.getId());
-        target.updateReliability(targetReviews);
-
-        return persistReview;
-    }
-
     public ReadReviewDetailDto readByReviewId(final Long reviewId) {
         final Review findReview = reviewRepository.findById(reviewId)
-                                              .orElseThrow(() -> new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
+                                                  .orElseThrow(() -> new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
 
         return ReadReviewDetailDto.from(findReview);
     }

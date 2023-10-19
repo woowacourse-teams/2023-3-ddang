@@ -6,6 +6,7 @@ import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.presentation.fixture.UserControllerFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -109,6 +110,22 @@ class UserControllerTest extends UserControllerFixture {
     }
 
     @Test
+    void 존재하지_않는_사용자_정보_조회시_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
+        given(userService.readById(anyLong())).willThrow(new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
+
+        // when & then
+        mockMvc.perform(get("/users")
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+               )
+               .andExpectAll(
+                       status().isNotFound(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
     void 사용자_정보를_모두_수정한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
@@ -174,13 +191,35 @@ class UserControllerTest extends UserControllerFixture {
     }
 
     @Test
-    void 존재하지_않는_사용자_정보_조회시_404를_반환한다() throws Exception {
+    void 이미_존재하는_이름으로_수정할시_400_예외를_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(userService.readById(anyLong())).willThrow(new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
+        given(userService.updateById(anyLong(), any())).willThrow(new AlreadyExistsNameException("이미 존재하는 닉네임입니다."));
 
         // when & then
-        mockMvc.perform(get("/users")
+        mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
+                       .file(수정할_이름)
+                       .file(프로필_이미지가_없는_경우_파일)
+                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
+                       .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void 존재하지_않는_사용자_정보를_수정하면_404를_반환한다() throws Exception {
+        // given
+        given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(존재하지_않는_사용자_ID_클레임));
+        given(userService.updateById(anyLong(), any())).willThrow(new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
+
+        // when & then
+        mockMvc.perform(multipart(HttpMethod.PATCH, "/users")
+                       .file(수정할_이름)
+                       .file(프로필_이미지가_없는_경우_파일)
+                       .contentType(MediaType.MULTIPART_FORM_DATA_VALUE)
                        .header(HttpHeaders.AUTHORIZATION, 액세스_토큰_값)
                )
                .andExpectAll(
