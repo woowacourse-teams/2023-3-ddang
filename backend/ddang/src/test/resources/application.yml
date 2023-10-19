@@ -53,5 +53,6 @@ fcm:
 aws:
   s3:
     enabled: false
+    region: region
     bucket-name: awsbucketname
     image-path: image/path
