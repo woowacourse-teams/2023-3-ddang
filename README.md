@@ -42,6 +42,7 @@
 지금 당장 '땅땅땅'으로 원하는 물건을 가장 합리적인 가격에 거래해보세요!
 <br/>
 <br/>
+
 ## 땅땅땅 이용방법
 
 <img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/ddd935e9-478c-495c-a3e8-870df52ac517" width="200" height="300" />
