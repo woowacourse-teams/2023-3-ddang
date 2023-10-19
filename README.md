@@ -17,7 +17,8 @@
 | :-------------------------------------------: | :-------------------------------------------: | :-----------------------------------------------: | :-------------------------------------------------: |
 | <img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/d1d5cc44-a4e2-42ec-9978-b0a3b17b83b8" width="100" /> | <img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/0e659db9-418c-491e-81fb-6d03d3bfa0fa" width="100" /> | <img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/238bfaf5-290a-4b1d-bc9b-9927b2fa9e7f" width="100" /> | <img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/8b78f905-489d-4936-93dd-273210b492d6" width="100" /> |
 | [메리<br>(최승원)](https://github.com/swonny) | [엔초<br>(권예진)](https://github.com/kwonyj1022) | [제이미<br>(임정수)](https://github.com/JJ503) | [지토<br>(김지민)](https://github.com/apptie) |
-
+<br/>
+<br/>
 ## 서비스 소개
 
 땅땅땅은  ‘중고 거래 서비스’에 ‘경매’ 시스템을 도입한 서비스입니다.
@@ -39,7 +40,19 @@
 또한, 계속 변하는 입찰 내역을 보며 경매를 지켜보는 재미도 쏠쏠합니다.
 
 지금 당장 '땅땅땅'으로 원하는 물건을 가장 합리적인 가격에 거래해보세요!
+<br/>
+<br/>
+## 땅땅땅 이용방법
 
+<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/ddd935e9-478c-495c-a3e8-870df52ac517" width="200" height="300" />
+<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/3264785a-37ac-404f-825f-bd49f6a8d921" width="200" height="300" />
+<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/dc1aa784-75ae-41b5-b147-59d0d965c565" width="200" height="300" />
+<br/>
+<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/7a5bb375-7db7-427c-8658-82b66f500449" width="200" height="300" />
+<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/46c62d39-60bf-4e65-9107-278cbe4f2fd5" width="200" height="300" />
+<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/8ff9be2e-ad87-48e6-9f57-98d54e7fcb07" width="200" height="300" />
+<br/>
+<br/>
 ## 기술 스택
 
 ### Android
@@ -66,26 +79,3 @@
 
 ![image](https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/b446ae67-3df7-45e2-8879-a1d08119f5b4)
 
-## 땅땅땅 이용방법
-
-<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/ddd935e9-478c-495c-a3e8-870df52ac517" width="200" height="300" />
-<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/3264785a-37ac-404f-825f-bd49f6a8d921" width="200" height="300" />
-<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/dc1aa784-75ae-41b5-b147-59d0d965c565" width="200" height="300" />
-<br/>
-<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/7a5bb375-7db7-427c-8658-82b66f500449" width="200" height="300" />
-<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/46c62d39-60bf-4e65-9107-278cbe4f2fd5" width="200" height="300" />
-<img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/8ff9be2e-ad87-48e6-9f57-98d54e7fcb07" width="200" height="300" />
-
-## 팀 그라운드 룰
-
-### ‘땅땅땅’에서 사랑받는 9가지 방법 🥰
-
-1. 10시 1분은 10시가 아니다! 🕙
-2. 쓸데없는 의견은 없다! 🙅
-3. 눈치 주는 사람 눈치 주기 👀
-4. 세상에 나쁜 피드백은 없다! 💯
-5. 옆에 있는 동료는 누군가의 소중한 가족입니다. 👨‍👩‍👧
-6. 결정도 다같이! 책임도 다같이! 🤙🏻
-7. 기술에 매몰되지 말자! ⚒️
-8. PR은 혼자, merge는 다같이~ 🤝🏻 
-9. 내 코드도 다시보자! 🔥
