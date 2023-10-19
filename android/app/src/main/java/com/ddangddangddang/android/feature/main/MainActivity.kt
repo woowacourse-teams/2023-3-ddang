@@ -1,6 +1,7 @@
 package com.ddangddangddang.android.feature.main
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -22,6 +23,7 @@ import com.ddangddangddang.android.feature.mypage.MyPageFragment
 import com.ddangddangddang.android.feature.search.SearchFragment
 import com.ddangddangddang.android.global.screenViewLogEvent
 import com.ddangddangddang.android.util.binding.BindingActivity
+import com.ddangddangddang.android.util.compat.getSerializableExtraCompat
 import com.ddangddangddang.android.util.view.BackKeyHandler
 import com.ddangddangddang.android.util.view.showDialog
 import com.ddangddangddang.android.util.view.showSnackbar
@@ -61,7 +63,7 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         binding.viewModel = viewModel
 
         setupViewModel()
-        askNotificationPermission()
+        setupFragment()
         onBackPressedDispatcher.addCallback(this, callback)
     }
 
@@ -85,16 +87,17 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
     private fun handleEvent(event: MainViewModel.MainEvent) {
         when (event) {
             MainViewModel.MainEvent.HomeToTop -> scrollHomeToTop()
+            MainViewModel.MainEvent.NotificationPermissionCheck -> askNotificationPermission()
         }
     }
 
     private fun scrollHomeToTop() {
         val homeFragment =
-            supportFragmentManager.findFragmentByTag(FragmentType.HOME.tag) as? HomeFragment
+            supportFragmentManager.findFragmentByTag(MainFragmentType.HOME.tag) as? HomeFragment
         homeFragment?.scrollToTop()
     }
 
-    private fun changeFragment(type: FragmentType) {
+    private fun changeFragment(type: MainFragmentType) {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
 
@@ -108,12 +111,12 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         }
     }
 
-    private fun createFragment(type: FragmentType): Fragment {
+    private fun createFragment(type: MainFragmentType): Fragment {
         return when (type) {
-            FragmentType.HOME -> HomeFragment()
-            FragmentType.SEARCH -> SearchFragment()
-            FragmentType.MESSAGE -> MessageFragment()
-            FragmentType.MY_PAGE -> MyPageFragment()
+            MainFragmentType.HOME -> HomeFragment()
+            MainFragmentType.SEARCH -> SearchFragment()
+            MainFragmentType.MESSAGE -> MessageFragment()
+            MainFragmentType.MY_PAGE -> MyPageFragment()
         }
     }
 
@@ -163,5 +166,24 @@ class MainActivity : BindingActivity<ActivityMainBinding>(R.layout.activity_main
         val intent = Intent(ACTION_APP_NOTIFICATION_SETTINGS)
         intent.putExtra(EXTRA_APP_PACKAGE, this.packageName)
         startActivity(intent)
+    }
+
+    private fun setupFragment() {
+        if (viewModel.currentFragmentType.value == null) {
+            val type =
+                intent.getSerializableExtraCompat(KEY_MAIN_FRAGMENT_TYPE) ?: MainFragmentType.HOME
+            binding.bnvNavigation.selectedItemId = type.id
+            viewModel.setupFragmentType(type)
+        }
+    }
+
+    companion object {
+        private const val KEY_MAIN_FRAGMENT_TYPE = "main_fragment_type"
+
+        fun getIntent(context: Context, type: MainFragmentType = MainFragmentType.HOME): Intent {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra(KEY_MAIN_FRAGMENT_TYPE, type)
+            return intent
+        }
     }
 }

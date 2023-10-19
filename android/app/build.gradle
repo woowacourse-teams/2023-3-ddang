@@ -20,8 +20,8 @@ android {
         minSdk 28
         targetSdk 33
 
-        versionCode 12
-        versionName "5.1.2"
+        versionCode 14
+        versionName "6.0.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -110,6 +110,9 @@ dependencies {
 
     // app update manager
     implementation 'com.google.android.play:app-update-ktx:2.1.0'
+
+    // photo view 확대 가능 이미지뷰 라이브러리
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 }
 kapt {
     correctErrorTypes true

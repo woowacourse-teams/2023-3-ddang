@@ -1,12 +1,13 @@
 package com.ddangddangddang.data.repository
 
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
+import com.ddangddangddang.data.model.response.LoginByKakaoResponse
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
 
 interface AuthRepository {
-    suspend fun loginByKakao(kakaoLoginRequest: KakaoLoginRequest): ApiResponse<TokenResponse>
+    suspend fun loginByKakao(kakaoLoginRequest: KakaoLoginRequest): ApiResponse<LoginByKakaoResponse>
 
     suspend fun refreshToken(): ApiResponse<TokenResponse>
 

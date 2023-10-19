@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.ddangddangddang.android.feature.detail.qna.registerquestion.RegisterQuestionViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="16dp"
+        tools:context=".feature.detail.qna.registerquestion.RegisterQuestionDialog">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="24dp"
+            android:paddingBottom="12dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_begin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_begin="24dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl_end"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_end="24dp" />
+
+            <TextView
+                android:id="@+id/tv_write_question_title"
+                style="@style/Header2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/detail_auction_qna_question_write"
+                android:textColor="@color/grey_900"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toTopOf="@id/et_question_contents"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintStart_toStartOf="@id/gl_begin"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_question_contents"
+                style="@style/Body"
+                android:layout_width="264dp"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_stroke_gray_radius_1dp"
+                android:gravity="top"
+                android:hint="@string/detail_auction_qna_question_contents_hint"
+                android:importantForAutofill="no"
+                android:inputType="textMultiLine"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="12dp"
+                android:text="@={viewModel.content}"
+                android:textColor="@color/grey_900"
+                app:layout_constraintBottom_toTopOf="@id/btn_question_submit"
+                app:layout_constraintEnd_toEndOf="@id/gl_end"
+                app:layout_constraintHeight_min="45dp"
+                app:layout_constraintStart_toStartOf="@id/gl_begin"
+                app:layout_constraintTop_toBottomOf="@id/tv_write_question_title"
+                tools:text="힝잉잉" />
+
+            <Button
+                android:id="@+id/btn_question_cancel"
+                style="@style/NegativeButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@color/transparent"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClick="@{() -> viewModel.cancel()}"
+                android:text="@string/detail_auction_bid_dialog_cancel"
+                android:textSize="@dimen/textsize_body"
+                app:layout_constraintEnd_toStartOf="@id/btn_question_submit"
+                app:layout_constraintTop_toBottomOf="@id/et_question_contents" />
+
+            <Button
+                android:id="@+id/btn_question_submit"
+                style="@style/PositiveButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="10dp"
+                android:background="@color/transparent"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:onClick="@{() -> viewModel.submit()}"
+                android:text="@string/detail_auction_qna_submit"
+                android:textSize="@dimen/textsize_body"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_question_contents" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+
+</layout>

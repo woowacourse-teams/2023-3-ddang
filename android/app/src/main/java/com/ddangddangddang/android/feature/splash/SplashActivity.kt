@@ -55,12 +55,12 @@ class SplashActivity : BindingActivity<ActivitySplashBinding>(R.layout.activity_
     }
 
     private fun navigateToMain() {
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(MainActivity.getIntent(this))
         finish()
     }
 
     private fun navigateToLogin() {
-        startActivity(Intent(this, LoginActivity::class.java))
+        startActivity(LoginActivity.getIntent(this))
         finish()
     }
 

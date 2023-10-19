@@ -35,7 +35,7 @@ class AuctionBidViewModel @Inject constructor(
 
     private fun convertStringPriceToInt(text: String): Int {
         val originalValue = text.replace(",", "") // 문자열 내 들어있는 콤마를 모두 제거
-        val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE) // " 원"
+        val priceValue = originalValue.substringBefore(SUFFIX_INPUT_PRICE.trim()).trim() // " 원"
         val parsedValue =
             priceValue.toBigIntegerOrNull() ?: return ZERO // 입력에 문자가 섞인 경우
 

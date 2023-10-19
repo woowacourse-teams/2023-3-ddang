@@ -70,6 +70,10 @@ class SelectRegionsViewModel @Inject constructor(private val regionRepository: R
         }
     }
 
+    fun setupRegionSelected(regionSelected: List<RegionSelectionModel>) {
+        _regionSelections.value = regionSelected
+    }
+
     fun setExitEvent() {
         _event.value = SelectRegionsEvent.Exit
     }

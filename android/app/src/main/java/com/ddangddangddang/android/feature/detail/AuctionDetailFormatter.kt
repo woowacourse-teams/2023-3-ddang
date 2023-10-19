@@ -70,9 +70,8 @@ object AuctionDetailFormatter {
         val minutes = (differenceInMills / (60 * 1000L)) % 60
 
         return buildString {
-            if (days > 0L) append("${days}일")
-            if (hours > 0L) append(" ${hours}시간")
-            if (minutes > 0L) append(" ${minutes}분")
+            if (days > 0L) append("${days}일 ")
+            append(" ${String.format("%02d:%02d", hours, minutes)}")
         }.trim()
     }
 

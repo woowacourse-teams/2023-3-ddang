@@ -52,6 +52,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>(R.layout.fragment_
     private fun setupAuctionRecyclerView() {
         with(binding.rvSearchAuctions) {
             adapter = auctionAdapter
+            setHasFixedSize(true)
             addItemDecoration(
                 AuctionSpaceItemDecoration(
                     2,

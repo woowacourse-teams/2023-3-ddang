@@ -5,7 +5,9 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView.OnEditorActionListener
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -13,7 +15,9 @@ import androidx.activity.viewModels
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityRegisterAuctionBinding
 import com.ddangddangddang.android.feature.common.ErrorType
+import com.ddangddangddang.android.feature.common.PriceTextWatcher
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
+import com.ddangddangddang.android.feature.register.RegisterAuctionViewModel.Companion.SUFFIX_INPUT_PRICE
 import com.ddangddangddang.android.feature.register.category.SelectCategoryActivity
 import com.ddangddangddang.android.feature.register.region.SelectRegionsActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
@@ -29,6 +33,7 @@ import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.LocalTime
+import java.util.Calendar
 
 @AndroidEntryPoint
 class RegisterAuctionActivity :
@@ -39,8 +44,8 @@ class RegisterAuctionActivity :
     private val pickMultipleMediaLaunchers = setupMultipleMediaLaunchers()
     private val categoryActivityLauncher = setupCategoryLauncher()
     private val regionActivityLauncher = setupRegionLauncher()
-    private val startPriceWatcher by lazy { DefaultTextWatcher(viewModel::setStartPrice) }
-    private val bidUnitWatcher by lazy { DefaultTextWatcher(viewModel::setBidUnit) }
+    private val startPriceWatcher by lazy { PriceTextWatcher { viewModel.setStartPrice(it) } }
+    private val bidUnitWatcher by lazy { PriceTextWatcher { viewModel.setBidUnit(it) } }
 
     private fun setupMultipleMediaLaunchers(): List<ActivityResultLauncher<PickVisualMediaRequest>> {
         return List(RegisterAuctionViewModel.MAXIMUM_IMAGE_SIZE) { index ->
@@ -95,6 +100,7 @@ class RegisterAuctionActivity :
         setupImageRecyclerView()
         setupStartPriceTextWatcher()
         setupBidUnitTextWatcher()
+        setupEditTextClearFocus()
     }
 
     private fun setupViewModel() {
@@ -146,11 +152,13 @@ class RegisterAuctionActivity :
             }
 
             RegisterAuctionViewModel.RegisterAuctionEvent.PickCategory -> {
+                currentFocus?.clearFocus()
                 navigationToCategorySelection()
             }
 
-            RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
-                navigationToRegionSelection()
+            is RegisterAuctionViewModel.RegisterAuctionEvent.PickRegion -> {
+                currentFocus?.clearFocus()
+                navigationToRegionSelection(event.regionSelected)
             }
         }
     }
@@ -168,7 +176,12 @@ class RegisterAuctionActivity :
             selectedDateTime.year,
             selectedDateTime.monthValue - 1,
             selectedDateTime.dayOfMonth,
-        ).show()
+        ).apply {
+            val calendar: Calendar = Calendar.getInstance()
+            this.datePicker.minDate = calendar.timeInMillis
+            calendar.add(Calendar.DATE, 29)
+            this.datePicker.maxDate = calendar.timeInMillis
+        }.show()
     }
 
     private fun showTimePicker(selectedTime: LocalTime) {
@@ -216,15 +229,24 @@ class RegisterAuctionActivity :
         categoryActivityLauncher.launch(SelectCategoryActivity.getIntent(this))
     }
 
-    private fun navigationToRegionSelection() {
-        regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this))
+    private fun navigationToRegionSelection(directRegion: List<RegionSelectionModel>) {
+        regionActivityLauncher.launch(SelectRegionsActivity.getIntent(this, directRegion))
     }
 
-    private fun setPrice(editText: EditText, watcher: DefaultTextWatcher, price: Int) {
-        val displayPrice = getString(R.string.detail_auction_bid_dialog_input_price, price)
+    private fun setPrice(
+        editText: EditText,
+        watcher: PriceTextWatcher,
+        price: Int,
+    ) {
+        val displayPrice = getString(R.string.all_price, price)
         editText.removeTextChangedListener(watcher)
         editText.setText(displayPrice)
-        editText.setSelection(getCursorPositionFrontSuffix(displayPrice)) // " 원" 앞으로 커서 이동
+        editText.setSelection(
+            watcher.getCursorPosition(
+                displayPrice.length,
+                SUFFIX_INPUT_PRICE.length,
+            ),
+        ) // 이전 커서 위치로 이동
         editText.addTextChangedListener(watcher)
     }
 
@@ -250,6 +272,7 @@ class RegisterAuctionActivity :
     private fun setupImageRecyclerView() {
         with(binding.rvImage) {
             adapter = imageAdapter
+            setHasFixedSize(true)
             addItemDecoration(RegisterAuctionImageSpaceItemDecoration(space = 24))
         }
     }
@@ -262,8 +285,21 @@ class RegisterAuctionActivity :
         binding.etBidUnit.addTextChangedListener(bidUnitWatcher)
     }
 
-    private fun getCursorPositionFrontSuffix(content: String): Int {
-        return content.length - RegisterAuctionViewModel.SUFFIX_INPUT_PRICE.length
+    private fun setupEditTextClearFocus() {
+        val editActionListener = OnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) v.clearFocus()
+            return@OnEditorActionListener false
+        }
+
+        val editTexts = listOf(
+            binding.etTitle,
+            binding.etStartPrice,
+            binding.etBidUnit,
+        )
+
+        editTexts.forEach {
+            it.setOnEditorActionListener(editActionListener)
+        }
     }
 
     companion object {

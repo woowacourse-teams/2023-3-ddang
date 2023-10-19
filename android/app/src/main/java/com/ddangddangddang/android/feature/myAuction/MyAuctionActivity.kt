@@ -86,6 +86,7 @@ class MyAuctionActivity : BindingActivity<ActivityMyAuctionBinding>(R.layout.act
     private fun setupAuctionRecyclerView() {
         with(binding.rvMyAuction) {
             adapter = auctionAdapter
+            setHasFixedSize(true)
 
             val space = resources.getDimensionPixelSize(R.dimen.margin_side_layout)
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = space))

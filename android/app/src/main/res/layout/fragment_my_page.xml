@@ -24,11 +24,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
+                style="@style/Header1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_side_layout"
-                android:text="@string/mypage"
-                style="@style/Header1" />
+                android:text="@string/mypage" />
         </androidx.appcompat.widget.Toolbar>
 
         <ScrollView
@@ -60,9 +60,10 @@
                 <include
                     android:id="@+id/view_profile"
                     layout="@layout/view_profile"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="@id/gl_end"
                     app:layout_constraintStart_toStartOf="@id/gl_begin"
                     app:layout_constraintTop_toTopOf="parent"
                     bind:profile="@{viewModel.profile}" />
@@ -119,8 +120,8 @@
                     layout="@layout/view_my_page_feature_category"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:visibility="gone"
                     android:onClick="@{() -> viewModel.navigateToAnnouncement()}"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/tv_notification_settings_button"
                     bind:categoryName="@{@string/mypage_announcement_button}" />
 
@@ -155,12 +156,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:onClick="@{() -> viewModel.askWithdrawal()}"
                     android:text="@string/mypage_delete_account_button"
                     android:textColor="@color/grey_500"
                     android:textSize="14sp"
                     app:layout_constraintEnd_toEndOf="@id/gl_end"
-                    app:layout_constraintTop_toBottomOf="@id/tv_logout_button"
-                    android:onClick="@{() -> viewModel.askWithdrawal()}" />
+                    app:layout_constraintTop_toBottomOf="@id/tv_logout_button" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -3,6 +3,7 @@ package com.ddangddangddang.data.repository
 import com.ddangddangddang.data.datasource.AuthLocalDataSource
 import com.ddangddangddang.data.datasource.AuthRemoteDataSource
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
+import com.ddangddangddang.data.model.response.LoginByKakaoResponse
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
 import com.ddangddangddang.data.remote.ApiResponse
@@ -15,10 +16,10 @@ class AuthRepositoryImpl @Inject constructor(
     private val localDataSource: AuthLocalDataSource,
     private val remoteDataSource: AuthRemoteDataSource,
 ) : AuthRepository {
-    override suspend fun loginByKakao(kakaoLoginRequest: KakaoLoginRequest): ApiResponse<TokenResponse> {
+    override suspend fun loginByKakao(kakaoLoginRequest: KakaoLoginRequest): ApiResponse<LoginByKakaoResponse> {
         val response = remoteDataSource.loginByKakao(kakaoLoginRequest)
         if (response is ApiResponse.Success) {
-            localDataSource.saveToken(response.body)
+            localDataSource.saveToken(response.body.toTokenResponse())
         }
         return response
     }
