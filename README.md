@@ -19,6 +19,7 @@
 | [메리<br>(최승원)](https://github.com/swonny) | [엔초<br>(권예진)](https://github.com/kwonyj1022) | [제이미<br>(임정수)](https://github.com/JJ503) | [지토<br>(김지민)](https://github.com/apptie) |
 <br/>
 <br/>
+
 ## 서비스 소개
 
 땅땅땅은  ‘중고 거래 서비스’에 ‘경매’ 시스템을 도입한 서비스입니다.
@@ -54,6 +55,7 @@
 <img src="https://github.com/woowacourse-teams/2023-3-ddang/assets/49394114/8ff9be2e-ad87-48e6-9f57-98d54e7fcb07" width="200" height="300" />
 <br/>
 <br/>
+
 ## 기술 스택
 
 ### Android
