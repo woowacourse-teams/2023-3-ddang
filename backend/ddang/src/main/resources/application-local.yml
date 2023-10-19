@@ -57,3 +57,10 @@ fcm:
   enabled: false
   key:
     path: firebase/private-key.json
+
+aws:
+  s3:
+    enabled: false
+    region: region
+    bucket-name: awsbucketname
+    image-path: image/path
