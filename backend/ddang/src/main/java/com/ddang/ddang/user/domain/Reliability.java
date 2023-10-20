@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 public class Reliability {
 
-    private static final double INITIAL_RELIABILITY_VALUE = Double.MIN_VALUE;
+    private static final double INITIAL_RELIABILITY_VALUE = -Double.MAX_VALUE;
     public static final Reliability INITIAL_RELIABILITY = new Reliability(INITIAL_RELIABILITY_VALUE);
 
     private double value;
