@@ -95,10 +95,11 @@
             android:ellipsize="end"
             android:text="@{item.partnerName}"
             android:textColor="@color/grey_800"
-            app:layout_constraintEnd_toStartOf="@id/gl_end"
+            app:layout_constraintEnd_toStartOf="@id/tv_unread_message_count"
             app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
-            tools:text="채팅 상대 유저 이름" />
+            tools:text="채팅 상대 유저 이름"
+            app:layout_constraintHorizontal_bias="0.0" />
 
         <TextView
             android:id="@+id/tv_last_message_contents"
@@ -109,10 +110,26 @@
             android:ellipsize="end"
             android:text="@{item.lastMessageContents}"
             android:textColor="@color/grey_800"
-            app:layout_constraintEnd_toStartOf="@id/gl_end"
+            app:layout_constraintEnd_toStartOf="@id/tv_unread_message_count"
             app:layout_constraintStart_toStartOf="@id/tv_title"
             app:layout_constraintTop_toBottomOf="@id/tv_partner_user_name"
             tools:text="마지막 채팅 메시지 내용" />
+
+        <TextView
+            android:id="@+id/tv_unread_message_count"
+            style="@style/Caption"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintDimensionRatio="1:1"
+            android:padding="4dp"
+            android:textSize="12dp"
+            android:background="@drawable/bg_red_100_oval"
+            android:textColor="@color/grey_800"
+            tools:text="10"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/tv_datetime"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/gl_end" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
