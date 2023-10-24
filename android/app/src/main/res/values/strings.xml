@@ -28,8 +28,10 @@
     <string name="all_must_update_to_latest_version">최신 버전으로 업데이트가 필요합니다.</string>
     <string name="all_date_format">yyyy년 M월 d일</string>
     <string name="all_time_format">h:mm a</string>
+    <string name="all_date_time_format">yyyy-MM-dd\nHH:mm:ss</string>
     <string name="all_default_reliability">( - )</string>
     <string name="all_back_key_check_message">\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다</string>
+    <string name="all_price">%,d 원</string>
 
     <!-- splash -->
     <string name="splash_app_update_request_dialog_title">업데이트 알림</string>
@@ -58,6 +60,7 @@
     <string name="detail_auction_chat_room_create">쪽지방 생성</string>
     <string name="detail_auction_chat_room_entrance">쪽지방 입장</string>
     <string name="detail_auction_my_auction">내꺼 입찰금지</string>
+    <string name="detail_auction_already_last_bidder">현재까지 최고입찰자</string>
     <string name="detail_auction_category">%s > %s</string>
     <string name="detail_auction_price_status">%s %,d원</string>
     <string name="detail_auction_start_price">시작가 %,d원</string>
@@ -69,14 +72,44 @@
     <string name="detail_auction_load_failure">게시글을 불러오는데 실패했습니다</string>
     <string name="detail_auction_enter_chat_room_failure">채팅방에 입장하는데 실패했습니다</string>
 
+    <!-- detail_auction_bid_history -->
+    <string name="detail_auction_bid_history_price_format">%,d원</string>
+    <string name="detail_auction_bid_history_load_failure">경매 입찰 내역을 불러오는데 실패했습니다</string>
+    <string name="detail_auction_bid_history_no_exist">경매 입찰 내역이 존재하지 않습니다</string>
+
     <!-- detail_auction_info -->
+    <string name="detail_auction_info_title">상품 정보</string>
     <string name="detail_auction_info_description">상품 설명</string>
     <string name="detail_auction_info_direct_exchange_regions_description">직거래 가능 지역</string>
     <string name="detail_auction_info_seller_info">판매자 정보</string>
 
+    <!-- detail_auction_qna -->
+    <string name="detail_auction_qna_title">Q&amp;A</string>
+    <string name="detail_auction_qna_seller_answer_title">판매자 답변</string>
+    <string name="detail_auction_qna_no_answer">아직 작성된 답변이 없습니다.</string>
+    <string name="detail_auction_qna_question_write">질문하기</string>
+    <string name="detail_auction_qna_answer_write">답변하기</string>
+    <string name="detail_auction_qna_delete">삭제하기</string>
+    <string name="detail_auction_qna_waiting">답변대기</string>
+    <string name="detail_auction_qna_complete">답변완료</string>
+    <string name="detail_auction_qna_question_prefix">Q. %s</string>
+    <string name="detail_auction_qna_question_contents_hint">질문 내용을 입력해주세요.</string>
+    <string name="detail_auction_qna_answer_contents_hint">답변 내용을 입력해주세요.</string>
+    <string name="detail_auction_qna_question_register_failure">질문 등록에 실패했습니다.</string>
+    <string name="detail_auction_qna_question_register_success">질문 등록에 성공했습니다.</string>
+    <string name="detail_auction_qna_answer_register_failure">답변 등록에 실패했습니다.</string>
+    <string name="detail_auction_qna_answer_register_success">답변 등록에 성공했습니다.</string>
+    <string name="detail_auction_qna_loading_failure">Q&amp;A를 로딩하는데 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_question_delete_failure">질문 삭제를 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_answer_delete_failure">답변 삭제를 실패했습니다. 다시 시도해주세요.</string>
+    <string name="detail_auction_qna_submit">등록</string>
+    <string name="detail_auction_qna_no_exist">QnA가 존재하지 않습니다</string>
+
+    <!-- detail_auction_bid_history -->
+    <string name="detail_auction_bid_history">입찰 내역</string>
+
     <!-- detail_auction_bid_dialog -->
     <string name="detail_auction_bid_dialog_title">입찰하기</string>
-    <string name="detail_auction_bid_dialog_input_price">%,d 원</string>
     <string name="detail_auction_bid_dialog_unit_price">판매자가 설정한 경매 단위: %,d원</string>
     <string name="detail_auction_bid_dialog_cancel">취소</string>
     <string name="detail_auction_bid_dialog_submit">입찰</string>
@@ -89,14 +122,19 @@
     <!-- register -->
     <string name="register_auction">경매 상품 등록</string>
     <string name="register_auction_default_image_count">(%d/%d)</string>
+    <string name="register_auction_necessary_introduce">* 는 필수입력 사항입니다.</string>
+    <string name="register_auction_image">사진</string>
     <string name="register_auction_title">제목</string>
     <string name="register_auction_category">카테고리</string>
     <string name="register_auction_description">상품 설명</string>
     <string name="register_auction_start_price">경매 시작가</string>
+    <string name="register_auction_start_price_hint">경매 시작가는 0원보다 커야 합니다</string>
     <string name="register_auction_closing_time">경매 마감 시간</string>
+    <string name="register_auction_closing_time_hint">당일로부터 30일 이내까지 선택 가능합니다</string>
     <string name="register_auction_enable_direct_region">직거래 가능 지역</string>
     <string name="register_auction_image_url">이미지 주소</string>
     <string name="register_auction_bid_unit">경매 입찰 단위</string>
+    <string name="register_auction_bid_unit_hint">100원 이상부터 100원 단위로 입력 가능합니다</string>
     <string name="register_auction_blank_exist_error">채우지 않은 필드가 존재합니다.</string>
     <string name="register_auction_invalid_input_error">필드에 유효하지 않은 값이 존재합니다.</string>
     <string name="register_auction_ok">확인</string>
@@ -222,4 +260,11 @@
     <string name="user_review_failure">평가에 실패했습니다</string>
     <string name="user_review_success">평가가 완료되었습니다</string>
     <string name="user_review_load_failure">평가 내용을 가져오는데 실패했습니다</string>
+
+    <!-- onboarding -->
+    <string name="onboarding_profile_setting_title">프로필 설정</string>
+    <string name="onboarding_page_skip_dialog_title">건너뛰기</string>
+    <string name="onboarding_page_skip_dialog_message">정말 건너뛰시겠습니까?</string>
+    <string name="onboarding_page_skip_dialog_positive_button">확인</string>
+    <string name="onboarding_all_done">마치기</string>
 </resources>

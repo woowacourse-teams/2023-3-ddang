@@ -21,7 +21,7 @@ import lombok.ToString;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(of = "id", callSuper = false)
 @ToString(of = {"id", "description"})
 public class AnswerReport extends BaseCreateTimeEntity {
 

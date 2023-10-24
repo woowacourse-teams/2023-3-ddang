@@ -17,6 +17,8 @@ enum class AuctionDetailBottomButtonStatus(
     EnterAuctionChatRoom(R.string.detail_auction_chat_room_entrance, true),
 
     MyAuction(R.string.detail_auction_my_auction, false),
+
+    AlreadyLastBidder(R.string.detail_auction_already_last_bidder, false),
     ;
 
     companion object {
@@ -26,10 +28,18 @@ enum class AuctionDetailBottomButtonStatus(
             val isOwner = auctionDetailModel.isOwner
             val auctionStatus = auctionDetailModel.auctionDetailStatusModel
             val chatStatus = auctionDetailModel.chatAuctionDetailModel
+            val isLastBidder = auctionDetailModel.isLastBidder
 
             return when {
                 canEnterMessageRoom(chatStatus) -> EnterAuctionChatRoom
-                canBidAuction(auctionStatus, isOwner) -> BidAuction
+                canBidAuction(auctionStatus, isOwner) -> {
+                    if (isLastBidder) {
+                        AlreadyLastBidder
+                    } else {
+                        BidAuction
+                    }
+                }
+
                 isOwner -> MyAuction
                 else -> FinishAuction
             }

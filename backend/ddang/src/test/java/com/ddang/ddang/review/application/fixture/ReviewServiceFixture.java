@@ -3,7 +3,7 @@ package com.ddang.ddang.review.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -11,10 +11,10 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Score;
-import com.ddang.ddang.review.infrastructure.persistence.JpaReviewRepository;
+import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,20 +28,17 @@ public class ReviewServiceFixture {
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaReviewRepository reviewRepository;
+    private ReviewRepository reviewRepository;
 
-    private Double 구매자가_판매자1에게_받은_평가_점수 = 5.0d;
-    private Double 구매자가_판매자2에게_받은_평가_점수 = 1.0d;
-    private Double 구매자가_받을_새로운_평가_점수 = 4.5d;
-
-    protected Double 구매자가_새로운_평가_점수를_받고난_후의_신뢰도_점수 =
-            (구매자가_판매자1에게_받은_평가_점수 + 구매자가_판매자2에게_받은_평가_점수 + 구매자가_받을_새로운_평가_점수) / 3;
+    private double 구매자가_판매자1에게_받은_평가_점수 = 5.0d;
+    private double 구매자가_판매자2에게_받은_평가_점수 = 1.0d;
+    private double 구매자가_받을_새로운_평가_점수 = 4.5d;
     protected Long 존재하지_않는_사용자 = -999L;
     protected User 판매자1;
     protected User 판매자2;
@@ -108,7 +105,11 @@ public class ReviewServiceFixture {
                              .reliability(new Reliability(4.7d))
                              .oauthId("12347")
                              .build();
-        userRepository.saveAll(List.of(판매자1, 판매자2, 평가_안한_경매_판매자, 구매자, 경매_참여자가_아닌_사용자));
+        userRepository.save(판매자1);
+        userRepository.save(판매자2);
+        userRepository.save(평가_안한_경매_판매자);
+        userRepository.save(구매자);
+        userRepository.save(경매_참여자가_아닌_사용자);
 
         판매자1이_평가한_경매 = Auction.builder()
                               .seller(판매자1)
@@ -140,7 +141,9 @@ public class ReviewServiceFixture {
         판매자1이_평가한_경매.addAuctionImages(List.of(경매1_대표_이미지));
         판매자2가_평가한_경매.addAuctionImages(List.of(경매2_대표_이미지));
         평가_안한_경매.addAuctionImages(List.of(평가_안한_경매_대표_이미지));
-        auctionRepository.saveAll(List.of(판매자1이_평가한_경매, 판매자2가_평가한_경매, 평가_안한_경매));
+        auctionRepository.save(판매자1이_평가한_경매);
+        auctionRepository.save(판매자2가_평가한_경매);
+        auctionRepository.save(평가_안한_경매);
 
         구매자가_판매자1에게_받은_평가 = Review.builder()
                                   .auction(판매자1이_평가한_경매)
@@ -156,7 +159,9 @@ public class ReviewServiceFixture {
                                   .content("별로다.")
                                   .score(new Score(구매자가_판매자2에게_받은_평가_점수))
                                   .build();
-        reviewRepository.saveAll(List.of(구매자가_판매자1에게_받은_평가, 구매자가_판매자2에게_받은_평가));
+
+        reviewRepository.save(구매자가_판매자1에게_받은_평가);
+        reviewRepository.save(구매자가_판매자2에게_받은_평가);
 
         구매자가_이전까지_받은_평가_총2개 = List.of(구매자가_판매자1에게_받은_평가, 구매자가_판매자2에게_받은_평가);
 

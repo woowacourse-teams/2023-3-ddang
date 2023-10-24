@@ -15,6 +15,7 @@ import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.concurrent.atomic.AtomicBoolean
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,7 +38,8 @@ class MessageRoomViewModel @Inject constructor(
     private val lastMessageId: Long?
         get() = _messages.value?.lastOrNull()?.id
 
-    private var isMessageLoading: Boolean = false
+    private val isMessageLoading = AtomicBoolean(false)
+    private val isSubmitLoading = AtomicBoolean(false)
 
     fun loadMessageRoom(roomId: Long) {
         viewModelScope.launch {
@@ -66,9 +68,8 @@ class MessageRoomViewModel @Inject constructor(
 
     fun loadMessages() {
         _messageRoomInfo.value?.let {
-            if (isMessageLoading) return
+            if (isMessageLoading.getAndSet(true)) return
 
-            isMessageLoading = true
             viewModelScope.launch {
                 when (val response = repository.getMessages(it.roomId, lastMessageId)) {
                     is ApiResponse.Success -> {
@@ -90,7 +91,7 @@ class MessageRoomViewModel @Inject constructor(
                             MessageRoomEvent.FailureEvent.LoadMessages(ErrorType.UNEXPECTED)
                     }
                 }
-                isMessageLoading = false
+                isMessageLoading.set(false)
             }
         }
     }
@@ -123,6 +124,7 @@ class MessageRoomViewModel @Inject constructor(
         _messageRoomInfo.value?.let {
             val message = inputMessage.value
             if (message.isNullOrEmpty()) return
+            if (isSubmitLoading.getAndSet(true)) return
 
             val request = ChatMessageRequest(it.messagePartnerId, message)
             viewModelScope.launch {
@@ -147,6 +149,7 @@ class MessageRoomViewModel @Inject constructor(
                             MessageRoomEvent.FailureEvent.SendMessage(ErrorType.UNEXPECTED)
                     }
                 }
+                isSubmitLoading.set(false)
             }
         }
     }

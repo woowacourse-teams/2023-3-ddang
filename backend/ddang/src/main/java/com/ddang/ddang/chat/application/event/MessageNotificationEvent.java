@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.application.event;
 
-import com.ddang.ddang.chat.application.dto.MessageDto;
+import com.ddang.ddang.chat.domain.Message;
 
-public record MessageNotificationEvent(MessageDto messageDto) {
+public record MessageNotificationEvent(Message message, String profileImageAbsoluteUrl) {
 }

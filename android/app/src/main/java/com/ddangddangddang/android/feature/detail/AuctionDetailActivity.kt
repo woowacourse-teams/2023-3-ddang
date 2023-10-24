@@ -12,8 +12,7 @@ import com.ddangddangddang.android.feature.detail.bid.AuctionBidDialog
 import com.ddangddangddang.android.feature.imageDetail.ImageDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.MessageRoomActivity
 import com.ddangddangddang.android.feature.report.ReportActivity
-import com.ddangddangddang.android.model.ReportType
-import com.ddangddangddang.android.notification.NotificationType
+import com.ddangddangddang.android.model.ReportInfo
 import com.ddangddangddang.android.notification.cancelActiveNotification
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.Toaster
@@ -31,9 +30,16 @@ class AuctionDetailActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding.viewModel = viewModel
+        setupDetailView()
         setupViewModel()
-
         if (savedInstanceState == null) viewModel.loadAuctionDetail(auctionId)
+    }
+
+    private fun setupDetailView() {
+        binding.vpDetailInfo.adapter = DetailFragmentAdapter(supportFragmentManager, lifecycle)
+        TabLayoutMediator(binding.tbDetailInfo, binding.vpDetailInfo) { tab, position ->
+            tab.text = getString(DetailFragmentType.getTypeFrom(position).nameId)
+        }.attach()
     }
 
     private fun setupViewModel() {
@@ -91,7 +97,7 @@ class AuctionDetailActivity :
     }
 
     private fun navigateToReport(auctionId: Long) {
-        startActivity(ReportActivity.getIntent(this, ReportType.ArticleReport.ordinal, auctionId))
+        startActivity(ReportActivity.getIntent(this, ReportInfo.ArticleReportInfo(auctionId)))
     }
 
     private fun navigateToImageDetail(images: List<String>, focusPosition: Int) {
@@ -147,7 +153,7 @@ class AuctionDetailActivity :
     }
 
     private fun cancelNotification() {
-        cancelActiveNotification(NotificationType.BID.name, auctionId.toInt())
+        cancelActiveNotification(auctionId.toInt())
     }
 
     companion object {

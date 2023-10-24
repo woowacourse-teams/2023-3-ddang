@@ -53,7 +53,7 @@ class ProfileChangeViewModel @Inject constructor(
     }
 
     fun submitProfile(context: Context) {
-        val name = userNickname.value ?: return
+        val name = userNickname.value?.trim() ?: return
         val profileImageUri = profile.value?.takeIf { it.path != originalProfileUri.path }
         viewModelScope.launch {
             val file = runCatching { profileImageUri?.toAdjustImageFile(context) }.getOrNull()
@@ -63,7 +63,8 @@ class ProfileChangeViewModel @Inject constructor(
                 }
 
                 is ApiResponse.Failure -> {
-                    _event.value = Event.FailureChangeProfileEvent(ErrorType.FAILURE(response.error))
+                    _event.value =
+                        Event.FailureChangeProfileEvent(ErrorType.FAILURE(response.error))
                 }
 
                 is ApiResponse.NetworkError -> {

@@ -6,6 +6,7 @@ import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionExc
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -38,6 +39,7 @@ import com.ddang.ddang.report.application.exception.InvalidReportAuctionExceptio
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -403,6 +405,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AlreadyAnsweredException.class)
     public ResponseEntity<ExceptionResponse> handleAlreadyAnsweredException(final AlreadyAnsweredException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(AlreadyExistsNameException.class)
+    public ResponseEntity<ExceptionResponse> handleAlreadyExistsNameException(final AlreadyExistsNameException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                             .body(new ExceptionResponse(ex.getMessage()));
+    }
+
+    @ExceptionHandler(WithdrawalNotAllowedException.class)
+    public ResponseEntity<ExceptionResponse> handleWithdrawalNotAllowedException(final WithdrawalNotAllowedException ex) {
         logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)

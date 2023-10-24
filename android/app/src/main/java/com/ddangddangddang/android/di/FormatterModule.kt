@@ -33,4 +33,14 @@ object FormatterModule {
             Locale.KOREAN,
         )
     }
+
+    @DefaultDateTimeFormatter
+    @Singleton
+    @Provides
+    fun provideDefaultDateTimeFormatter(@ApplicationContext context: Context): DateTimeFormatter {
+        return DateTimeFormatter.ofPattern(
+            context.getString(R.string.all_date_time_format),
+            Locale.KOREAN,
+        )
+    }
 }

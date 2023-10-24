@@ -16,7 +16,7 @@ public record ReadQnaResponse(
     }
 
     private static ReadAnswerResponse processReadAnswerResponse(final ReadAnswerDto readAnswerDto) {
-        if (readAnswerDto == null) {
+        if (readAnswerDto == null || readAnswerDto.isDeleted()) {
             return null;
         }
 

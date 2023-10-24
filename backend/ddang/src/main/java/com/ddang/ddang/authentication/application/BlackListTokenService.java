@@ -4,7 +4,7 @@ import com.ddang.ddang.authentication.domain.BlackListToken;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.exception.EmptyTokenException;
-import com.ddang.ddang.authentication.infrastructure.persistence.JpaBlackListTokenRepository;
+import com.ddang.ddang.authentication.domain.repository.BlackListTokenRepository;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class BlackListTokenService {
 
-    private final JpaBlackListTokenRepository blackListTokenRepository;
+    private final BlackListTokenRepository blackListTokenRepository;
     private final TokenDecoder tokenDecoder;
 
     @Transactional

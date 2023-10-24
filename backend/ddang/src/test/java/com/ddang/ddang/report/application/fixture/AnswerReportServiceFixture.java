@@ -3,21 +3,21 @@ package com.ddang.ddang.report.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
-import com.ddang.ddang.qna.infrastructure.JpaAnswerRepository;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.qna.domain.repository.AnswerRepository;
+import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
 import com.ddang.ddang.report.domain.AnswerReport;
-import com.ddang.ddang.report.infrastructure.persistence.JpaAnswerReportRepository;
+import com.ddang.ddang.report.domain.repository.AnswerReportRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,19 +31,19 @@ public class AnswerReportServiceFixture {
     private JpaCategoryRepository categoryRepository;
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaQuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     @Autowired
-    private JpaAnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
-    private JpaAnswerReportRepository answerReportRepository;
+    private AnswerReportRepository answerReportRepository;
 
     protected User 신고자;
     protected User 이미_신고한_신고자1;
@@ -119,18 +119,27 @@ public class AnswerReportServiceFixture {
         경매.addAuctionImages(List.of(경매_이미지));
 
         final Question 질문 = new Question(경매, 질문자, "질문드립니다.");
-        답변 = new Answer("답변드립니다.");
+        답변 = new Answer(판매자, "답변드립니다.");
         질문.addAnswer(답변);
         답변_신고1 = new AnswerReport(이미_신고한_신고자1, 답변, "신고합니다.");
         답변_신고2 = new AnswerReport(이미_신고한_신고자2, 답변, "신고합니다.");
         답변_신고3 = new AnswerReport(이미_신고한_신고자3, 답변, "신고합니다.");
 
-        userRepository.saveAll(List.of(판매자, 질문자, 답변자, 신고자, 이미_신고한_신고자1, 이미_신고한_신고자2, 이미_신고한_신고자3));
+        userRepository.save(판매자);
+        userRepository.save(질문자);
+        userRepository.save(답변자);
+        userRepository.save(신고자);
+        userRepository.save(이미_신고한_신고자1);
+        userRepository.save(이미_신고한_신고자2);
+        userRepository.save(이미_신고한_신고자3);
+
         categoryRepository.saveAll(List.of(전자기기_카테고리, 전자기기_서브_노트북_카테고리));
         auctionRepository.save(경매);
         questionRepository.save(질문);
         answerRepository.save(답변);
-        answerReportRepository.saveAll(List.of(답변_신고1, 답변_신고2, 답변_신고3));
+        answerReportRepository.save(답변_신고1);
+        answerReportRepository.save(답변_신고2);
+        answerReportRepository.save(답변_신고3);
 
         답변_신고_요청_dto = new CreateAnswerReportDto(답변.getId(), "신고합니다.", 신고자.getId());
         존재하지_않는_답변_신고_요청_dto = new CreateAnswerReportDto(존재하지_않는_답변_아이디, "신고합니다.", 신고자.getId());

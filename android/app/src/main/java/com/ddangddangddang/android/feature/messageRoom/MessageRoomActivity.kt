@@ -8,19 +8,22 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ddangddangddang.android.R
 import com.ddangddangddang.android.databinding.ActivityMessageRoomBinding
+import com.ddangddangddang.android.di.DateFormatter
+import com.ddangddangddang.android.di.TimeFormatter
 import com.ddangddangddang.android.feature.detail.AuctionDetailActivity
 import com.ddangddangddang.android.feature.messageRoom.review.UserReviewDialog
 import com.ddangddangddang.android.feature.report.ReportActivity
 import com.ddangddangddang.android.global.AnalyticsDelegate
 import com.ddangddangddang.android.global.AnalyticsDelegateImpl
 import com.ddangddangddang.android.global.DdangDdangDdang
-import com.ddangddangddang.android.model.ReportType
-import com.ddangddangddang.android.notification.NotificationType
+import com.ddangddangddang.android.model.ReportInfo
 import com.ddangddangddang.android.notification.cancelActiveNotification
+import com.ddangddangddang.android.notification.type.MessageType
 import com.ddangddangddang.android.reciever.MessageReceiver
 import com.ddangddangddang.android.util.binding.BindingActivity
 import com.ddangddangddang.android.util.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,7 +34,16 @@ class MessageRoomActivity :
     private val roomCreatedNotifyAdapter by lazy { RoomCreatedNotifyAdapter() }
 
     @Inject
-    lateinit var messageAdapter: MessageAdapter
+    @DateFormatter
+    lateinit var dateFormatter: DateTimeFormatter
+
+    @Inject
+    @TimeFormatter
+    lateinit var timeFormatter: DateTimeFormatter
+
+    private val messageAdapter: MessageAdapter by lazy {
+        MessageAdapter(dateFormatter, timeFormatter)
+    }
 
     private val adapter by lazy { ConcatAdapter(roomCreatedNotifyAdapter, messageAdapter) }
 
@@ -83,7 +95,12 @@ class MessageRoomActivity :
     }
 
     private fun navigateToReport(roomId: Long) {
-        startActivity(ReportActivity.getIntent(this, ReportType.MessageRoomReport.ordinal, roomId))
+        startActivity(
+            ReportActivity.getIntent(
+                this,
+                ReportInfo.MessageRoomReportInfo(roomId),
+            ),
+        )
     }
 
     private fun showUserRate() {
@@ -134,7 +151,7 @@ class MessageRoomActivity :
     }
 
     private fun cancelNotification() {
-        cancelActiveNotification(NotificationType.MESSAGE.name, roomId.toInt())
+        cancelActiveNotification(MessageType.tag, roomId.toInt())
     }
 
     companion object {

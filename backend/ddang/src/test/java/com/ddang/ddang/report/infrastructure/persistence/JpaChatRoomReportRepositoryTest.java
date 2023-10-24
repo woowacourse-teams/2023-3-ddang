@@ -4,8 +4,6 @@ import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.infrastructure.persistence.fixture.JpaChatRoomReportRepositoryFixture;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -24,23 +22,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SuppressWarnings("NonAsciiCharacters")
 class JpaChatRoomReportRepositoryTest extends JpaChatRoomReportRepositoryFixture {
 
-    @PersistenceContext
-    EntityManager em;
-
     @Autowired
     JpaChatRoomReportRepository chatRoomReportRepository;
 
     @Test
     void 채팅방_신고를_저장한다() {
+        // given
         final ChatRoomReport chatRoomReport = new ChatRoomReport(구매자1, 채팅방1, "신고합니다.");
 
         // when
         final ChatRoomReport actual = chatRoomReportRepository.save(chatRoomReport);
 
         // then
-        em.flush();
-        em.clear();
-
         assertThat(actual.getId()).isPositive();
     }
 
@@ -68,7 +61,7 @@ class JpaChatRoomReportRepositoryTest extends JpaChatRoomReportRepositoryFixture
     @Test
     void 전체_채팅방_신고_목록을_조회한다() {
         // when
-        final List<ChatRoomReport> actual = chatRoomReportRepository.findAllByOrderByIdAsc();
+        final List<ChatRoomReport> actual = chatRoomReportRepository.findAll();
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="onClicks"
+            type="com.ddangddangddang.android.feature.detail.qna.QnaAdapter.OnClicks" />
+
+        <variable
+            name="model"
+            type="com.ddangddangddang.android.model.QnaModel.QuestionAndAnswerModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_question_title"
+            isSelected="@{model.isPicked}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/grey_50_to_selected_second_region_bg_selected"
+            android:onClick="@{() -> onClicks.onQuestionClick(model.question.id)}"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+
+            <TextView
+                android:id="@+id/tv_question_title"
+                style="@style/Body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{@string/detail_auction_qna_question_prefix(model.question.content)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_qna_status"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Q. 사이클 50 맞음?" />
+
+            <TextView
+                android:id="@+id/tv_qna_status"
+                style="@style/AuctionStatusCaption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_radius_8dp"
+                android:backgroundTint="@{context.getColor(model.status.colorId)}"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:text="@{model.status.questionStatus}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:backgroundTint="@color/red_900"
+                tools:text="답변 대기" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_content_n_answer"
+            isVisible="@{model.isPicked}"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cl_question_title">
+
+            <TextView
+                android:id="@+id/tv_content"
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="@{model.question.content}"
+                android:textColor="@color/grey_800"
+                app:layout_constraintBottom_toTopOf="@id/br_question_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="힝잉 " />
+
+            <TextView
+                android:id="@+id/tv_delete_question"
+                style="@style/Body"
+                isVisible="@{model.question.isQuestioner}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> onClicks.onDeleteQuestionClick(model.question.id)}"
+                android:text="@string/detail_auction_qna_delete"
+                android:textColor="@color/grey_800"
+                app:drawableEndCompat="@drawable/ic_delete_24"
+                app:drawableTint="@color/grey_800"
+                app:layout_constraintBottom_toTopOf="@id/line_divider"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/br_question_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="top"
+                app:constraint_referenced_ids="iv_report_question, tv_delete_question" />
+
+            <ImageView
+                android:id="@+id/iv_report_question"
+                isVisible="@{!model.question.isQuestioner}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{() -> onClicks.onReportQuestionClick(model.question.id)}"
+                android:src="@drawable/ic_report_24"
+                app:layout_constraintBottom_toTopOf="@id/line_divider"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <View
+                android:id="@+id/line_divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="50dp"
+                android:background="@color/grey_300"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_content" />
+
+
+            <TextView
+                android:id="@+id/tv_seller_answer_title"
+                style="@style/Header2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/detail_auction_qna_seller_answer_title"
+                android:textColor="@color/grey_800"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/line_divider" />
+
+            <TextView
+                style="@style/Body"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                android:text="@{model.answer.content ?? @string/detail_auction_qna_no_answer}"
+                android:textColor="@color/grey_800"
+                app:layout_constraintBottom_toTopOf="@id/br_answer_btn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_seller_answer_title" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/br_answer_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="top"
+                app:constraint_referenced_ids="tv_write_answer, tv_delete_answer, iv_report_answer" />
+
+            <TextView
+                android:id="@+id/tv_write_answer"
+                style="@style/Body"
+                isVisible="@{model.isOwner &amp;&amp; model.answer == null}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> onClicks.onSubmitAnswerClick(model.question.id)}"
+                android:text="@string/detail_auction_qna_answer_write"
+                android:textColor="@color/grey_800"
+                app:drawableEndCompat="@drawable/ic_create_24"
+                app:drawableTint="@color/grey_800"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_delete_answer"
+                style="@style/Body"
+                isVisible="@{model.isOwner &amp;&amp; model.answer != null}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical"
+                android:onClick="@{() -> onClicks.onDeleteAnswerClick(model.answer.id)}"
+                android:text="@string/detail_auction_qna_delete"
+                android:textColor="@color/grey_800"
+                app:drawableEndCompat="@drawable/ic_delete_24"
+                app:drawableTint="@color/grey_800"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_report_answer"
+                isVisible="@{!model.isOwner &amp;&amp; model.answer != null}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{() -> onClicks.onReportAnswerClick(model.question.id, model.answer.id)}"
+                android:src="@drawable/ic_report_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

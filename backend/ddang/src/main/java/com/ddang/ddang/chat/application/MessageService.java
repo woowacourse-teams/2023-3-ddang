@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.MessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
@@ -9,12 +8,12 @@ import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
+import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
@@ -30,9 +29,9 @@ import java.util.List;
 public class MessageService {
 
     private final ApplicationEventPublisher messageEventPublisher;
-    private final JpaMessageRepository messageRepository;
-    private final JpaChatRoomRepository chatRoomRepository;
-    private final JpaUserRepository userRepository;
+    private final MessageRepository messageRepository;
+    private final ChatRoomRepository chatRoomRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
@@ -54,8 +53,7 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        final MessageDto messageDto = MessageDto.of(persistMessage, chatRoom, writer, receiver, profileImageAbsoluteUrl);
-        messageEventPublisher.publishEvent(new MessageNotificationEvent(messageDto));
+        messageEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
 
         return persistMessage.getId();
     }
@@ -73,7 +71,7 @@ public class MessageService {
             validateLastMessageId(request.lastMessageId());
         }
 
-        final List<Message> readMessages = messageRepository.findMessagesAllByLastMessageId(
+        final List<Message> readMessages = messageRepository.findAllByLastMessageId(
                 request.messageReaderId(),
                 chatRoom.getId(),
                 request.lastMessageId()

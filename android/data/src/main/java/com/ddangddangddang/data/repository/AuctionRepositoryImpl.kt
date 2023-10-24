@@ -5,12 +5,18 @@ import com.ddangddangddang.data.datasource.AuctionLocalDataSource
 import com.ddangddangddang.data.datasource.AuctionRemoteDataSource
 import com.ddangddangddang.data.model.SortType
 import com.ddangddangddang.data.model.request.AuctionBidRequest
+import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterAuctionRequest
+import com.ddangddangddang.data.model.request.RegisterQuestionRequest
+import com.ddangddangddang.data.model.request.ReportAnswerRequest
 import com.ddangddangddang.data.model.request.ReportAuctionArticleRequest
 import com.ddangddangddang.data.model.request.ReportMessageRoomRequest
+import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
+import com.ddangddangddang.data.model.response.BidHistoryResponse
+import com.ddangddangddang.data.model.response.QnaResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import java.io.File
 import javax.inject.Inject
@@ -87,5 +93,40 @@ class AuctionRepositoryImpl @Inject constructor(
         val response = remoteDataSource.deleteAuction(auctionId)
         if (response is ApiResponse.Success) localDataSource.removeAuctionPreview(auctionId)
         return response
+    }
+
+    override suspend fun getAuctionQnas(auctionId: Long): ApiResponse<QnaResponse> {
+        return remoteDataSource.getAuctionQnas(auctionId)
+    }
+
+    override suspend fun registerQuestion(registerQuestionRequest: RegisterQuestionRequest): ApiResponse<Unit> {
+        return remoteDataSource.registerQuestion(registerQuestionRequest)
+    }
+
+    override suspend fun registerAnswer(
+        questionId: Long,
+        registerAnswerRequest: RegisterAnswerRequest,
+    ): ApiResponse<Unit> {
+        return remoteDataSource.registerAnswer(questionId, registerAnswerRequest)
+    }
+
+    override suspend fun deleteQuestion(questionId: Long): ApiResponse<Unit> {
+        return remoteDataSource.deleteQuestion(questionId)
+    }
+
+    override suspend fun deleteAnswer(answerId: Long): ApiResponse<Unit> {
+        return remoteDataSource.deleteAnswer(answerId)
+    }
+
+    override suspend fun reportQuestion(reportQuestionRequest: ReportQuestionRequest): ApiResponse<Unit> {
+        return remoteDataSource.reportQuestion(reportQuestionRequest)
+    }
+
+    override suspend fun reportAnswer(reportAnswerRequest: ReportAnswerRequest): ApiResponse<Unit> {
+        return remoteDataSource.reportAnswer(reportAnswerRequest)
+    }
+
+    override suspend fun getBidHistories(auctionId: Long): ApiResponse<List<BidHistoryResponse>> {
+        return remoteDataSource.getBidHistories(auctionId)
     }
 }

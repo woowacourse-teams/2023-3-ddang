@@ -7,6 +7,7 @@ import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.infrastructure.persistence.fixture.JpaBlackListTokenRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -26,10 +27,19 @@ class JpaBlackListTokenRepositoryTest extends JpaBlackListTokenRepositoryFixture
     @Test
     void BlackListToken_엔티티를_저장한다() {
         // when
-        final BlackListToken actual = blackListTokenRepository.save(만료할_토큰);
+        final BlackListToken actual = blackListTokenRepository.save(만료할_토큰1);
 
         // then
         assertThat(actual.getId()).isPositive();
+    }
+
+    @Test
+    void BlackListToken_엔티티_여러개를_저장한다() {
+        // when
+        final List<BlackListToken> actual = blackListTokenRepository.saveAll(List.of(만료할_토큰1, 만료할_토큰2));
+
+        // then
+        assertThat(actual).hasSize(2);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.ddang.ddang.authentication.presentation.fixture;
 
+import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
@@ -17,6 +18,7 @@ public class AuthenticationControllerFixture extends CommonControllerSliceTest {
     protected String 유효한_액세스_토큰_내용 = "Bearer accessToken";
     protected String 만료된_액세스_토큰_내용 = "Bearer accessToken";
     protected TokenDto 발급된_토큰 = new TokenDto(유효한_액세스_토큰_내용, "Bearer refreshToken");
+    protected LoginInformationDto 로그인한_사용자_정보 = new LoginInformationDto(발급된_토큰, false);
     protected LoginTokenRequest 유효한_로그인_요청 = new LoginTokenRequest("kakaoAccessToken", "deviceToken");
     protected LoginTokenRequest 유효하지_않은_로그인_요청 = new LoginTokenRequest("kakaoAccessToken", "deviceToken");
     protected RefreshTokenRequest 유효한_토큰_재발급_요청 = new RefreshTokenRequest("Bearer refreshToken");

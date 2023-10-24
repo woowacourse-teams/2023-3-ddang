@@ -29,7 +29,8 @@ public record ReadAuctionDto(
         String sellerName,
         double sellerReliability,
         boolean isSellerDeleted,
-        AuctionStatus auctionStatus
+        AuctionStatus auctionStatus,
+        Long lastBidderId
 ) {
 
     public static ReadAuctionDto of(final Auction auction, final LocalDateTime targetTime) {
@@ -53,7 +54,8 @@ public record ReadAuctionDto(
                 auction.getSeller().getName(),
                 auction.getSeller().getReliability().getValue(),
                 auction.getSeller().isDeleted(),
-                auction.findAuctionStatus(targetTime)
+                auction.findAuctionStatus(targetTime),
+                convertLastBidderId(auction)
         );
     }
 
@@ -78,5 +80,13 @@ public record ReadAuctionDto(
                       .stream()
                       .map(ReadRegionsDto::from)
                       .toList();
+    }
+
+    private static Long convertLastBidderId(final Auction auction) {
+        if (auction.getLastBid() == null) {
+            return null;
+        }
+
+        return auction.getLastBid().getBidder().getId();
     }
 }

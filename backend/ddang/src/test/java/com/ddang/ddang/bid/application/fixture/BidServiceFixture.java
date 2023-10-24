@@ -3,17 +3,17 @@ package com.ddang.ddang.bid.application.fixture;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
-import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
-import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
+import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
-import com.ddang.ddang.user.infrastructure.persistence.JpaUserRepository;
+import com.ddang.ddang.user.domain.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,13 +24,13 @@ import java.util.List;
 public class BidServiceFixture {
 
     @Autowired
-    private JpaUserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private JpaAuctionRepository auctionRepository;
+    private AuctionRepository auctionRepository;
 
     @Autowired
-    private JpaBidRepository bidRepository;
+    private BidRepository bidRepository;
 
     protected NotificationStatus 알림_성공 = NotificationStatus.SUCCESS;
     protected String 이미지_절대_url = "https://3-ddang.store/auctions/images";
@@ -126,11 +126,20 @@ public class BidServiceFixture {
                                       .build();
         삭제된_경매.delete();
 
-        userRepository.saveAll(List.of(판매자, 입찰자1, 입찰자2));
+        userRepository.save(판매자);
+        userRepository.save(입찰자1);
+        userRepository.save(입찰자2);
+
         경매1.addAuctionImages(List.of(경매_이미지1));
         경매2.addAuctionImages(List.of(경매_이미지2));
         경매3.addAuctionImages(List.of(경매_이미지3));
-        auctionRepository.saveAll(List.of(경매1, 경매2, 경매3, 입찰_내역이_하나_있던_경매, 종료된_경매, 삭제된_경매));
+
+        auctionRepository.save(경매1);
+        auctionRepository.save(경매2);
+        auctionRepository.save(경매3);
+        auctionRepository.save(입찰_내역이_하나_있던_경매);
+        auctionRepository.save(종료된_경매);
+        auctionRepository.save(삭제된_경매);
 
         final Bid bid1 = new Bid(경매1, 입찰자1, new BidPrice(1_000));
         final Bid bid2 = new Bid(경매2, 입찰자1, new BidPrice(1_000));

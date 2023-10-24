@@ -87,6 +87,7 @@ class ParticipateAuctionActivity :
     private fun setupAuctionRecyclerView() {
         with(binding.rvMyParticipateAuction) {
             adapter = auctionAdapter
+            setHasFixedSize(true)
 
             val space = resources.getDimensionPixelSize(R.dimen.margin_side_layout)
             addItemDecoration(AuctionSpaceItemDecoration(spanCount = 2, space = space))

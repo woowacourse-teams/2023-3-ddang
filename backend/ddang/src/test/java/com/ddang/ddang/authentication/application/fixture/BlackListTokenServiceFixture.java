@@ -3,7 +3,7 @@ package com.ddang.ddang.authentication.application.fixture;
 import com.ddang.ddang.authentication.domain.BlackListToken;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.infrastructure.persistence.JpaBlackListTokenRepository;
+import com.ddang.ddang.authentication.domain.repository.BlackListTokenRepository;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class BlackListTokenServiceFixture {
 
     @Autowired
-    private JpaBlackListTokenRepository blackListTokenRepository;
+    private BlackListTokenRepository blackListTokenRepository;
 
     @Autowired
     private TokenEncoder tokenEncoder;

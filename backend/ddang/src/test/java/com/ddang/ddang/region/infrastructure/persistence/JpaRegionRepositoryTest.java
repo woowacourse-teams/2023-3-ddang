@@ -26,6 +26,34 @@ class JpaRegionRepositoryTest extends JpaRegionRepositoryFixture {
     JpaRegionRepository regionRepository;
 
     @Test
+    void 지역을_저장한다() {
+        // given
+        final Region region = new Region("region1");
+
+        // when
+        final Region actual = regionRepository.save(region);
+
+        // then
+        assertThat(actual.getId()).isPositive();
+    }
+
+    @Test
+    void 지역을_여러개_한번에_저장한다() {
+        // given
+        final Region region1 = new Region("region1");
+        final Region region2 = new Region("region2");
+
+        // when
+        final List<Region> actual = regionRepository.saveAll(List.of(region1, region2));
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.get(0).getId()).isPositive();
+            softAssertions.assertThat(actual.get(1).getId()).isPositive();
+        });
+    }
+
+    @Test
     void 모든_첫번째_지역을_조회한다() {
         // when
         final List<Region> actual = regionRepository.findFirstAll();
