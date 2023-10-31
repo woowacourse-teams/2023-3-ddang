@@ -23,20 +23,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", "name", "reliability", "oauthId", "deleted", "oauthInformation"})
+@ToString(of = {"id", "name", "reliability", "deleted", "oauthInformation"})
 @Table(name = "users")
 public class User extends BaseTimeEntity {
 
     public static final User EMPTY_USER = null;
     private static final boolean DELETED_STATUS = true;
-    private static final String UNKNOWN_NAME = "알 수 없음";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

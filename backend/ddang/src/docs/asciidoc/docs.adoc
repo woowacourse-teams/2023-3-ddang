@@ -80,7 +80,6 @@ include::{snippets}/authentication-controller-test/access-token과_refresh-token
 ==== 요청
 
 include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/http-request.adoc[]
-include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/path-parameters.adoc[]
 include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/request-headers.adoc[]
 include::{snippets}/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/request-fields.adoc[]
 
@@ -464,7 +463,7 @@ include::{snippets}/report-controller-test/질문_신고를_등록한다/request
 
 include::{snippets}/report-controller-test/질문_신고를_등록한다/http-response.adoc[]
 
-=== 채팅방 신고 조회
+=== 질문 신고 조회
 
 ==== 요청
 
@@ -487,7 +486,7 @@ include::{snippets}/report-controller-test/답변_신고를_등록한다/request
 
 include::{snippets}/report-controller-test/답변_신고를_등록한다/http-response.adoc[]
 
-=== 채팅방 신고 조회
+=== 답변 신고 조회
 
 ==== 요청
 
@@ -549,7 +548,7 @@ include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_
 include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/http-response.adoc[]
 include::{snippets}/review-controller-test/주어진_사용자가_받은_평가_목록을_최신순으로_조회한다/response-fields.adoc[]
 
-=== 사용자가_경매_거래_상대에게_작성한_평가를_조회한다
+=== 사용자가 경매 거래 상대에게 작성한 평가를 조회한다
 
 ==== 요청
 include::{snippets}/auction-review-controller-test/사용자가_경매_거래에_작성한_평가를_조회한다/http-request.adoc[]

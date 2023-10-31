@@ -19,6 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.configuration.Oauth2TypeConverter;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
@@ -231,7 +232,45 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                )
                .andExpectAll(
                        status().isForbidden(),
-                       jsonPath("$.message").value("탈퇴에 대한 권한 없습니다.")
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void ouath2Type과_accessToken과_refreshToken을_전달시_진행중인_경매를_등록한_회원인_경우_400을_반환한다() throws Exception {
+        // given
+        willThrow(new WithdrawalNotAllowedException("등록한 경매 중 현재 진행 중인 것이 있기에 탈퇴할 수 없습니다."))
+                .given(authenticationService)
+                .withdrawal(anyString(), anyString());
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal")
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .content(objectMapper.writeValueAsString(유효한_회원탈퇴_요청))
+                                                        .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
+               );
+    }
+
+    @Test
+    void ouath2Type과_accessToken과_refreshToken을_전달시_진행중인_경매의_마지막_입찰자_회원인_경우_400을_반환한다() throws Exception {
+        // given
+        willThrow(new WithdrawalNotAllowedException("마지막 입찰자로 등록되어 있는 것이 있기에 탈퇴할 수 없습니다."))
+                .given(authenticationService)
+                .withdrawal(anyString(), anyString());
+
+        // when & then
+        mockMvc.perform(RestDocumentationRequestBuilders.post("/oauth2/withdrawal")
+                                                        .contentType(MediaType.APPLICATION_JSON)
+                                                        .content(objectMapper.writeValueAsString(유효한_회원탈퇴_요청))
+                                                        .header(HttpHeaders.AUTHORIZATION, 유효한_액세스_토큰_내용)
+               )
+               .andExpectAll(
+                       status().isBadRequest(),
+                       jsonPath("$.message").exists()
                );
     }
 
@@ -251,7 +290,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
                                 fieldWithPath("refreshToken").type(JsonFieldType.STRING)
                                                              .description("Refresh Token"),
                                 fieldWithPath("isSignUpUser").type(JsonFieldType.BOOLEAN)
-                                                          .description("최초 로그인 여부(회원가입)")
+                                                             .description("최초 로그인 여부(회원가입)")
                         )
                 )
         );

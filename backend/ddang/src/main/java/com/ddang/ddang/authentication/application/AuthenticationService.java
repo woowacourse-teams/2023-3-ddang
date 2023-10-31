@@ -1,9 +1,11 @@
 package com.ddang.ddang.authentication.application;
 
+import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
 import com.ddang.ddang.authentication.application.dto.LoginUserInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
+import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.application.util.RandomNameGenerator;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
@@ -33,12 +35,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private static final Reliability INITIALIZE_USER_RELIABILITY = new Reliability(0.0d);
     private static final String PRIVATE_CLAIMS_KEY = "userId";
 
     private final DeviceTokenService deviceTokenService;
     private final Oauth2UserInformationProviderComposite providerComposite;
     private final UserRepository userRepository;
+    private final AuctionRepository auctionRepository;
     private final TokenEncoder tokenEncoder;
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
@@ -77,7 +79,7 @@ public class AuthenticationService {
                                                                         .name(oauth2Type.calculateNickname(
                                                                                 calculateRandomNumber())
                                                                         )
-                                                                        .reliability(INITIALIZE_USER_RELIABILITY)
+                                                                        .reliability(Reliability.INITIAL_RELIABILITY)
                                                                         .oauthId(userInformationDto.findUserId())
                                                                         .oauth2Type(oauth2Type)
                                                                         .build();
@@ -151,17 +153,28 @@ public class AuthenticationService {
             final String refreshToken
     ) throws InvalidWithdrawalException {
         final PrivateClaims privateClaims = tokenDecoder.decode(TokenType.ACCESS, accessToken)
-                                                        .orElseThrow(() ->
-                                                                new InvalidTokenException("유효한 토큰이 아닙니다.")
-                                                        );
+                                                        .orElseThrow(() -> new InvalidTokenException("유효한 토큰이 아닙니다."));
         final User user = userRepository.findById(privateClaims.userId())
                                         .orElseThrow(() -> new InvalidWithdrawalException("탈퇴에 대한 권한이 없습니다."));
-        final OAuth2UserInformationProvider provider = providerComposite.findProvider(user.getOauthInformation()
-                                                                                          .getOauth2Type());
+        final OAuth2UserInformationProvider provider =
+                providerComposite.findProvider(user.getOauthInformation().getOauth2Type());
+
+        validateCanWithdrawal(user);
 
         user.withdrawal();
         blackListTokenService.registerBlackListToken(accessToken, refreshToken);
         deviceTokenRepository.deleteByUserId(user.getId());
         provider.unlinkUserBy(user.getOauthInformation().getOauthId());
+    }
+
+    private void validateCanWithdrawal(final User user) {
+        final LocalDateTime now = LocalDateTime.now();
+
+        if (auctionRepository.existsBySellerIdAndAuctionStatusIsOngoing(user.getId(), now)) {
+            throw new WithdrawalNotAllowedException("등록한 경매 중 현재 진행 중인 것이 있기에 탈퇴할 수 없습니다.");
+        }
+        if (auctionRepository.existsLastBidByUserIdAndAuctionStatusIsOngoing(user.getId(), now)) {
+            throw new WithdrawalNotAllowedException("마지막 입찰자로 등록되어 있는 것이 있기에 탈퇴할 수 없습니다.");
+        }
     }
 }

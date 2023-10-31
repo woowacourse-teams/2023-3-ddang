@@ -3,6 +3,8 @@ package com.ddang.ddang.auction.presentation.dto.response;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
+import com.ddang.ddang.user.presentation.util.NameProcessor;
+import com.ddang.ddang.user.presentation.util.ReliabilityProcessor;
 
 public record SellerResponse(
         Long id,
@@ -12,13 +14,11 @@ public record SellerResponse(
 ) {
 
     public static SellerResponse from(final ReadAuctionDto auctionDto) {
-        final Float floatReliability = Float.valueOf(String.valueOf(auctionDto.sellerReliability()));
-
         return new SellerResponse(
                 auctionDto.sellerId(),
                 ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, auctionDto.sellerProfileId()),
-                auctionDto.sellerName(),
-                floatReliability
+                NameProcessor.process(auctionDto.isSellerDeleted(), auctionDto.sellerName()),
+                ReliabilityProcessor.process(auctionDto.sellerReliability())
         );
     }
 }
