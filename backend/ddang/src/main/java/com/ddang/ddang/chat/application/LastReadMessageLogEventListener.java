@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class LastReadMessageLogEventListener {
 
     private final LastReadMessageLogService lastReadMessageLogService;
