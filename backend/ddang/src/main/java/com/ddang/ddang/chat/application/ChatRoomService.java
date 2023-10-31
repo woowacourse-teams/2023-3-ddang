@@ -19,7 +19,6 @@ import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -30,7 +29,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,12 +53,9 @@ public class ChatRoomService {
                                                              new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
                                                      );
 
-        final Optional<ChatRoom> findChatRoom = chatRoomRepository.findChatRoomByAuctionId(findAuction.getId());
-        if (findChatRoom.isPresent()) {
-            return findChatRoom.get().getId();
-        }
-
-        return createChatRoom(findUser, findAuction);
+        return chatRoomRepository.findChatRoomByAuctionId(findAuction.getId())
+                                 .map(ChatRoom::getId)
+                                 .orElseGet(() -> createChatRoom(findUser, findAuction));
     }
 
     private Long createChatRoom(final User findUser, final Auction findAuction) {
