@@ -43,5 +43,7 @@ jobs:
           
 
       - name: flywayValidate
-        run: ./gradlew -Dflyway.configFiles=flyway.conf flywayValidate --stacktrace
+        run: |
+          ./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate --stacktrace
+          ./gradlew -Dflyway.configFiles=flyway.conf flywayValidate --stacktrace
         working-directory: ./backend/ddang
