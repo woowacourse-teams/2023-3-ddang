@@ -36,13 +36,12 @@ jobs:
       - name: Create flyway.conf
         run: |
           touch flyway.conf
-          echo "flyway.url=${{ secrets.DEV_DATASOURCE_URL }}" >> flyway.conf
-          echo "flyway.user=${{ secrets.DEV_DATASOURCE_USERNAME }}" >> flyway.conf
-          echo "flyway.password=${{ secrets.DEV_DATASOURCE_PASSWORD }}" >> flyway.conf
+          echo "flyway.url=${{ secrets.dev_datasource_url }}" >> flyway.conf
+          echo "flyway.user=${{ secrets.dev_datasource_username }}" >> flyway.conf
+          echo "flyway.password=${{ secrets.dev_datasource_password }}" >> flyway.conf
           echo "flyway.encoding=UTF-8" >> flyway.conf
           echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
           echo "flyway.validateOnMigrate=true" >> flyway.conf
-          cat flyway.conf
         working-directory: ./backend/ddang
 
       - name: flywayValidate
