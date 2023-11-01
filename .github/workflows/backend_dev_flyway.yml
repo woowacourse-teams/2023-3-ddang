@@ -42,6 +42,7 @@ jobs:
           echo "flyway.encoding=UTF-8" >> flyway.conf
           echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
           echo "flyway.validateOnMigrate=true" >> flyway.conf
+          ehco "cat flyway.conf"
         working-directory: ./backend/ddang
 
       - name: flywayValidate
