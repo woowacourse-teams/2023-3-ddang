@@ -8,20 +8,27 @@ on:
 permissions: write-all
 
 jobs:
-  SSH:
+  build:
     if: contains(github.event.pull_request.labels.*.name, 'backend')
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v3
-      - name: Run scripts in server
-        uses: appleboy/ssh-action@v0.1.6
+      - name: settings java
+        uses: actions/setup-java@v3
         with:
-          host: ${{ secrets.dev_ip }}
-          username: ${{ secrets.dev_user }}
-          key: ${{ secrets.dev_private_key }}
-          script: | 
-            cd ${{ secrets.dev_project_directory }}
+          java-version: '17'
+          distribution: 'temurin'
+      - name: cache gradle
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: chmod gradle
+        run: chmod +x backend/ddang/gradlew
 
       - name: Create flyway.conf
         run: |
@@ -29,10 +36,12 @@ jobs:
           echo "flyway.driver=${{ secrets.dev_datasource_driver_class_name }}" >> flyway.conf
           echo "flyway.url=${{ secrets.dev_datasource_url }}" >> flyway.conf
           echo "flyway.user=${{ secrets.dev_datasource_username }}" >> flyway.conf
-          echo "flyway.password=${{ secrets.dev_datasource_password }}" >> flyway.conf
           echo "flyway.encoding=UTF-8" >> flyway.conf
           echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
           echo "flyway.validateOnMigrate=true" >> flyway.conf
+        working-directory: ./backend/ddang
+          
 
       - name: flywayValidate
         run: ./gradlew -Dflyway.configFiles=flyway.conf flywayValidate --stacktrace
+        working-directory: ./backend/ddang
