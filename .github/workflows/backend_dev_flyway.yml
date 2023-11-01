@@ -36,6 +36,7 @@ jobs:
       - name: Create flyway.conf
         run: |
           touch flyway.conf
+          echo "flyway.driver=${{ secrets.dev_datasource_driver_class_name }}" >> flyway.conf
           echo "flyway.url=${{ secrets.dev_datasource_url }}" >> flyway.conf
           echo "flyway.user=${{ secrets.dev_datasource_username }}" >> flyway.conf
           echo "flyway.password=${{ secrets.dev_datasource_password }}" >> flyway.conf
