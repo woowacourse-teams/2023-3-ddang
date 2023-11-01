@@ -10,8 +10,6 @@ public interface ChatRoomRepository {
 
     Optional<ChatRoom> findById(final Long id);
 
-    Optional<ChatRoom> findChatRoomByAuctionId(final Long auctionId);
-
     Optional<Long> findChatRoomIdByAuctionId(final Long auctionId);
 
     boolean existsByAuctionId(final Long auctionId);

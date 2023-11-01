@@ -53,8 +53,7 @@ public class ChatRoomService {
                                                              new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
                                                      );
 
-        return chatRoomRepository.findChatRoomByAuctionId(findAuction.getId())
-                                 .map(ChatRoom::getId)
+        return chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                  .orElseGet(() -> createChatRoom(findUser, findAuction));
     }
 

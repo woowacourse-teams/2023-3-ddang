@@ -9,15 +9,6 @@ import java.util.Optional;
 public interface JpaChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     @Query("""
-        SELECT c
-        FROM ChatRoom c
-        JOIN FETCH c.buyer
-        JOIN FETCH c.auction.seller
-        WHERE c.auction.id = :auctionId
-    """)
-    Optional<ChatRoom> findChatRoomByAuctionId(final Long auctionId);
-
-    @Query("""
         SELECT c.id
         FROM ChatRoom c
         WHERE c.auction.id = :auctionId
