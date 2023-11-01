@@ -42,9 +42,9 @@ jobs:
           echo "flyway.encoding=UTF-8" >> flyway.conf
           echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
           echo "flyway.validateOnMigrate=true" >> flyway.conf
-        working-directory: ./backend
+        working-directory: ./backend/ddang
 
       - name: flywayValidate
-        cd backend/ddang
-        run: ./gradlew -Dflyway.configFiles=flyway.conf flywayValidate --stacktrace
-        working-directory: ./backend
+        run:
+        ./gradlew -Dflyway.configFiles=flyway.conf flywayValidate --stacktrace
+        working-directory: ./backend/ddang
