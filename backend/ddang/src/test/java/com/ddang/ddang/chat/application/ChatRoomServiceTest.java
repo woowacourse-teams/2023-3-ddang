@@ -39,9 +39,6 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     ChatRoomService chatRoomService;
 
     @Autowired
-    MessageService messageService;
-
-    @Autowired
     ReadMessageLogRepository readMessageLogRepository;
 
     @Autowired
