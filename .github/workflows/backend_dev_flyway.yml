@@ -1,0 +1,36 @@
+name: dev flyway 검증
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: [ develop-be ]
+
+permissions: write-all
+
+jobs:
+  build:
+    if: contains(github.event.pull_request.labels.*.name, 'backend')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: settings java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Create flyway.conf
+        run: |
+          touch flyway.conf
+          echo "flyway.url=${{ secrets.DEV_DATASOURCE_URL }}" >> flyway.conf
+          echo "flyway.user=${{ secrets.DEV_DATASOURCE_USERNAME }}" >> flyway.conf
+          echo "flyway.password=${{ secrets.DEV_DATASOURCE_PASSWORD }}" >> flyway.conf
+          echo "flyway.encoding=UTF-8" >> flyway.conf
+          echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
+          echo "flyway.validateOnMigrate=true" >> flyway.conf
+        working-directory: ./backend
+
+      - name: flywayValidate
+        run: ./gradlew -Dflyway.configFiles=flyway.conf flywayValidate --stacktrace
+        working-directory: ./backend
