@@ -12,6 +12,17 @@ jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'backend')
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: test
+          MYSQL_PASSWORD: password
+        ports:
+          - 7777:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
   
     steps:
       - uses: actions/checkout@v3
@@ -34,9 +45,6 @@ jobs:
             
       - name: chmod gradle
         run: chmod +x backend/ddang/gradlew
-
-      - name: Set up Docker Compose
-        run: docker-compose -f .github/workflows/docker-compose.yml up -d
 
       - name: Wait for MySQL to be ready
         run: |
@@ -62,6 +70,3 @@ jobs:
         run: |
           ./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate --stacktrace
         working-directory: ./backend/ddang
-  
-      - name: Shut down Docker Compose
-        run: docker-compose -f .github/workflows/docker-compose.yml down
