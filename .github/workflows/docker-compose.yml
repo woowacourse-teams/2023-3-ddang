@@ -8,5 +8,5 @@ services:
       MYSQL_USER: test
       MYSQL_PASSWORD: password
     ports:
-      - "7777:3306"
+      - "3306:3306"
       
