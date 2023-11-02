@@ -7,6 +7,8 @@ on:
 
 permissions: write-all
 
+
+
 jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'backend')
@@ -18,6 +20,14 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Setup MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 7777
+          container port: 3306
+          mysql database: testdb
+          mysql user: 'test'
+          mysql password: 'password'
       - name: cache gradle
         uses: actions/cache@v2
         with:
@@ -33,9 +43,10 @@ jobs:
       - name: Create flyway.conf
         run: |
           touch flyway.conf
-          echo "flyway.driver=${{ secrets.dev_datasource_driver_class_name }}" >> flyway.conf
-          echo "flyway.url=${{ secrets.dev_datasource_url }}" >> flyway.conf
-          echo "flyway.user=${{ secrets.dev_datasource_username }}" >> flyway.conf
+          echo "flyway.driver=com.mysql.cj.jdbc.Driver" >> flyway.conf
+          echo "flyway.url=mysql://test:password@localhost:7777/testdb" >> flyway.conf
+          echo "flyway.user=test" >> flyway.conf
+          echo "flyway.password=password" >> flyway.conf
           echo "flyway.encoding=UTF-8" >> flyway.conf
           echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
           echo "flyway.validateOnMigrate=true" >> flyway.conf
