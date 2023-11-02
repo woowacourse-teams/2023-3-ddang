@@ -38,12 +38,12 @@ jobs:
 
       - name: Wait for MySQL to be ready
         run: |
-          echo "$DATABASE_URL"
           while [ -z "$DATABASE_URL" ]; do
             echo "Waiting for MySQL to be ready..."
             export DATABASE_URL=$(echo "SELECT 'ready';" | mysql -h127.0.0.1 -P7777 -utest -ppassword testdb --skip-column-names 2>/dev/null)
             sleep 1
           done
+          echo "$DATABASE_URL"
   
       - name: Shut down Docker Compose
         run: docker-compose -f .github/docker-compose.yml down
