@@ -2,6 +2,8 @@ name: dev flyway 검증
 
 on:
   pull_request:
+    paths:
+      - 'backend/ddang/src/main/resources/db/migration'
     types: [opened, reopened, synchronize]
     branches: [develop-be]
 
@@ -43,8 +45,6 @@ jobs:
             export DATABASE_URL=$(echo "SELECT 'ready';" | mysql -h127.0.0.1 -P3306 -utest -ppassword testdb --skip-column-names 2>/dev/null)
             sleep 1
           done
-          echo "$DATABASE_URL"
-          docker ps
 
       - name: Create flyway.conf
         run: |
