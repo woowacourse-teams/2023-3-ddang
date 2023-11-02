@@ -45,6 +45,9 @@ jobs:
       - name: chmod gradle
         run: chmod +x backend/ddang/gradlew
 
+      - name: Set up Docker Compose
+        run: docker-compose -f .github/docker-compose.yml up -d
+
       - name: Create flyway.conf
         run: |
           touch flyway.conf
