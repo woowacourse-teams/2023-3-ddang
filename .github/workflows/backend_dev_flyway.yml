@@ -44,6 +44,8 @@ jobs:
             sleep 1
           done
           echo "$DATABASE_URL"
+          docker ps
+          telnet 127.0.0.1 7777
 
       - name: Create flyway.conf
         run: |
