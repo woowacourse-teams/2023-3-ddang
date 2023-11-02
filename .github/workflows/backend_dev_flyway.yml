@@ -44,31 +44,23 @@ jobs:
             sleep 1
           done
           echo "$DATABASE_URL"
+
+      - name: Create flyway.conf
+        run: |
+          touch flyway.conf
+          echo "flyway.driver=com.mysql.cj.jdbc.Driver" >> flyway.conf
+          echo "flyway.url=mysql://127.0.0.1:7777/testdb" >> flyway.conf
+          echo "flyway.user=test" >> flyway.conf
+          echo "flyway.password=password" >> flyway.conf
+          echo "flyway.encoding=UTF-8" >> flyway.conf
+          echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
+          echo "flyway.validateOnMigrate=true" >> flyway.conf
+        working-directory: ./backend/ddang
+
+      - name: flywayValidate
+        run: |
+          ./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate --stacktrace
+        working-directory: ./backend/ddang
   
       - name: Shut down Docker Compose
         run: docker-compose -f .github/docker-compose.yml down
-      
-
-      # - name: Set up Docker Compose
-      #   run: docker-compose -f .github/workflows/docker-compose.yml up -d
-
-      # - name: Create flyway.conf
-      #   run: |
-      #     touch flyway.conf
-      #     echo "flyway.driver=com.mysql.cj.jdbc.Driver" >> flyway.conf
-      #     echo "flyway.url=jdbc:mysql://127.0.0.1:7777/testdb" >> flyway.conf
-      #     echo "flyway.user=test" >> flyway.conf
-      #     echo "flyway.password=password" >> flyway.conf
-      #     echo "flyway.encoding=UTF-8" >> flyway.conf
-      #     echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
-      #     echo "flyway.validateOnMigrate=true" >> flyway.conf
-      #   working-directory: ./backend/ddang
-
-      # - name: flywayValidate
-      #   run: |
-      #     ./gradlew -Dflyway.configFiles=flyway.conf flywayMigrate --stacktrace
-      #   working-directory: ./backend/ddang
-
-      # - name: Stop MySQL
-      #   run: docker stop mysql
-      
