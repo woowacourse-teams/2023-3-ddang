@@ -28,6 +28,8 @@ jobs:
           mysql database: testdb
           mysql user: 'test'
           mysql password: 'password'
+      - name: Wait for MySQL to start
+        run: sleep 10
       - name: cache gradle
         uses: actions/cache@v2
         with:
