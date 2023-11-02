@@ -64,4 +64,4 @@ jobs:
         working-directory: ./backend/ddang
   
       - name: Shut down Docker Compose
-        run: docker-compose -f .github/docker-compose.yml down
+        run: docker-compose -f .github/workflows/docker-compose.yml down
