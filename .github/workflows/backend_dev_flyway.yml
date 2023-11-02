@@ -34,7 +34,7 @@ jobs:
         run: chmod +x backend/ddang/gradlew
 
       - name: Set up Docker Compose
-        run: docker-compose -f .github/docker-compose.yml up -d
+        run: docker-compose -f .github/workflows/docker-compose.yml up -d
   
       - name: Build and test
         run: |
