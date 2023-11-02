@@ -23,6 +23,9 @@ jobs:
           - 7777:3306
     steps:
       - uses: actions/checkout@v3
+      - name: Check MySQL Connection
+        run: |
+          mysql -h localhost -P 7777 -u test -ppassword -e "SELECT 1"
       - name: settings java
         uses: actions/setup-java@v3
         with:
@@ -44,7 +47,7 @@ jobs:
         run: |
           touch flyway.conf
           echo "flyway.driver=com.mysql.cj.jdbc.Driver" >> flyway.conf
-          echo "flyway.url=jdbc:mysql://localhost:3306/testdb" >> flyway.conf
+          echo "flyway.url=jdbc:mysql://localhost:7777/testdb" >> flyway.conf
           echo "flyway.user=test" >> flyway.conf
           echo "flyway.password=password" >> flyway.conf
           echo "flyway.encoding=UTF-8" >> flyway.conf
