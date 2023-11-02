@@ -30,6 +30,9 @@ jobs:
           mysql password: 'password'
       - name: Wait for MySQL to start
         run: sleep 10
+      - name: Check MySQL Connection
+        run: |
+          mysql -h localhost -P 7777 -u test -ppassword -e "SELECT 1"
       - name: cache gradle
         uses: actions/cache@v2
         with:
