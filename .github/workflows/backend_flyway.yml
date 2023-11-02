@@ -3,7 +3,7 @@ name: dev flyway 검증
 on:
   pull_request:
     paths:
-      - 'src/main/resources/db/migration/**.sql'
+      - 'backend/ddang/src/main/resources/db/migration/**.sql'
     types: [opened, reopened, synchronize]
     branches: [develop-be]
 
