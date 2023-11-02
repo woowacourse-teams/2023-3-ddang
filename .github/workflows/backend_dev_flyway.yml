@@ -3,16 +3,24 @@ name: dev flyway 검증
 on:
   pull_request:
     types: [opened, reopened, synchronize]
-    branches: [ develop-be ]
+    branches: [develop-be]
 
 permissions: write-all
-
-
 
 jobs:
   build:
     if: contains(github.event.pull_request.labels.*.name, 'backend')
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testdb
+          MYSQL_USER: test
+          MYSQL_PASSWORD: password
+        ports:
+          - 7777:3306
     steps:
       - uses: actions/checkout@v3
       - name: settings java
@@ -20,19 +28,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Setup MySQL
-        uses: mirromutth/mysql-action@v1.1
-        with:
-          host port: 7777
-          container port: 3306
-          mysql database: testdb
-          mysql user: 'test'
-          mysql password: 'password'
-      - name: Wait for MySQL to start
-        run: sleep 10
-      - name: Check MySQL Connection
-        run: |
-          mysql -h localhost -P 7777 -u test -ppassword -e "SELECT 1"
       - name: cache gradle
         uses: actions/cache@v2
         with:
@@ -56,7 +51,6 @@ jobs:
           echo "flyway.locations=filesystem:src/main/resources/db/migration" >> flyway.conf
           echo "flyway.validateOnMigrate=true" >> flyway.conf
         working-directory: ./backend/ddang
-          
 
       - name: flywayValidate
         run: |
