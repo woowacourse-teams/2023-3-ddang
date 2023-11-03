@@ -14,10 +14,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserTest extends UserFixture {
 
     @Test
-    void 회원_생성시_신뢰도가_null이면_신뢰도_점수가_double의_최솟값인_신뢰도로_회원을_생성한다() {
+    void 회원_생성시_신뢰도가_null이면_신뢰도_점수가_음수인_신뢰도로_회원을_생성한다() {
         // given
         final Reliability nullReliability = null;
-        final Reliability expect = new Reliability(Double.MIN_VALUE);
 
         // when
         final User user = User.builder()
@@ -28,7 +27,7 @@ class UserTest extends UserFixture {
                               .build();
 
         // then
-        assertThat(user.getReliability()).isEqualTo(expect);
+        assertThat(user.getReliability().getValue()).isLessThan(0.0d);
     }
 
     @Test
