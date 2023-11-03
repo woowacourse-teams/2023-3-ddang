@@ -58,7 +58,6 @@ public class MessageService {
         return persistMessage.getId();
     }
 
-    @Transactional
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
         final User reader = userRepository.findById(request.messageReaderId())
                                           .orElseThrow(() -> new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다."));

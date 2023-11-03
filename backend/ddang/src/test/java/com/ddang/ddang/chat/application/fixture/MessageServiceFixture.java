@@ -77,11 +77,11 @@ public class MessageServiceFixture {
         auctionRepository.save(경매);
 
         발신자 = User.builder()
-                             .name("발신자")
-                             .profileImage(new ProfileImage("upload.png", "store.png"))
-                             .reliability(new Reliability(4.7d))
-                             .oauthId("12345")
-                             .build();
+                  .name("발신자")
+                  .profileImage(new ProfileImage("upload.png", "store.png"))
+                  .reliability(new Reliability(4.7d))
+                  .oauthId("12345")
+                  .build();
         final User 수신자 = User.builder()
                              .name("수신자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
