@@ -22,7 +22,6 @@ import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.ChatRoomRepositoryImpl;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaChatRoomRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.JpaMessageRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.JpaReadMessageLogRepository;
 import com.ddang.ddang.chat.infrastructure.persistence.ReadMessageLogRepositoryImpl;
 import com.ddang.ddang.image.domain.ProfileImage;
@@ -67,6 +66,7 @@ public class LastReadMessageLogServiceFixture {
     protected Auction 메시지_로그_업데이트용_경매;
     protected ChatRoom 메시지_로그_생성용_채팅방;
     protected ChatRoom 저장되지_않은_채팅방;
+    protected ChatRoom 메시지_로그_업데이트용_채팅방;
 
     @BeforeEach
     void fixtureSetUp(
@@ -151,12 +151,11 @@ public class LastReadMessageLogServiceFixture {
 
         메시지_로그_생성용_채팅방 = new ChatRoom(메시지_로그_생성용_경매, 메시지_로그_생성용_입찰자_구매자);
         저장되지_않은_채팅방 = new ChatRoom(메시지_로그_생성용_경매, 메시지_로그_생성용_입찰자_구매자);
-        final ChatRoom 메시지_로그_업데이트용_채팅방 = new ChatRoom(메시지_로그_업데이트용_경매, 메시지_로그_업데이트용_발신자_겸_판매자);
+        메시지_로그_업데이트용_채팅방 = new ChatRoom(메시지_로그_업데이트용_경매, 메시지_로그_업데이트용_발신자_겸_판매자);
         chatRoomRepository.save(메시지_로그_생성용_채팅방);
         chatRoomRepository.save(메시지_로그_업데이트용_채팅방);
 
         메시지_로그_생성용_이벤트 = new CreateReadMessageLogEvent(메시지_로그_생성용_채팅방);
-        메시지_로그_업데이트용_이벤트 = new UpdateReadMessageLogEvent(메시지_로그_업데이트용_발신자_겸_판매자, 메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_마지막_조회_메시지);
 
         메시지_로그_생성용_마지막_조회_메시지 = Message.builder()
                                        .writer(메시지_로그_생성용_발신자_겸_판매자)
@@ -172,10 +171,11 @@ public class LastReadMessageLogServiceFixture {
                                            .writer(저장되지_않은_사용자)
                                            .contents("저장되지 않은 메시지")
                                            .build();
-        메시지_로그_업데이트용_이벤트 = new UpdateReadMessageLogEvent(메시지_로그_업데이트용_발신자_겸_판매자, 메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_마지막_조회_메시지);
 
         final ReadMessageLog 메시지_로그_업데이트용_로그 = new ReadMessageLog(메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_발신자_겸_판매자);
         readMessageLogRepository.save(메시지_로그_업데이트용_로그);
+
+        메시지_로그_업데이트용_이벤트 = new UpdateReadMessageLogEvent(메시지_로그_업데이트용_발신자_겸_판매자, 메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_마지막_조회_메시지);
 
         유효하지_않는_메시지_조회_로그 = new UpdateReadMessageLogEvent(저장되지_않은_사용자, 저장되지_않은_채팅방, 저장되지_않은_메시지);
     }
