@@ -27,7 +27,7 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
     public List<StoreImageDto> storeImageFiles(final List<MultipartFile> imageFiles) {
         final List<StoreImageDto> storeImageDtos = new ArrayList<>();
 
-        for (MultipartFile imageFile : imageFiles) {
+        for (final MultipartFile imageFile : imageFiles) {
             if (imageFile.isEmpty()) {
                 throw new EmptyImageException("이미지 파일의 데이터가 비어 있습니다.");
             }
