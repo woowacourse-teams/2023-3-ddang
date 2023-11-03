@@ -72,6 +72,8 @@ jobs:
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
           SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":white_check_mark:"
+          SLACK_MESSAGE+="\n\n리뷰 요청은 스레드로 직접 멘션해주세요."
+          SLACK_MESSAGE+='"}}]}'
 
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
 
@@ -88,6 +90,7 @@ jobs:
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
           SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":x:"
+          SLACK_MESSAGE+="\n\n리뷰 요청은 문제 해결 후 스레드로 직접 멘션해주세요."
           SLACK_MESSAGE+='"}}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
@@ -105,6 +108,7 @@ jobs:
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
           SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":black_square_for_stop:"
+          SLACK_MESSAGE+="\n\n리뷰 요청은 문제 해결 후 스레드로 직접 멘션해주세요."
           SLACK_MESSAGE+='"}}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
