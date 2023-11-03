@@ -9,6 +9,7 @@ public interface UserRepository {
     User save(final User user);
 
     Optional<User> findById(final Long id);
+
     Optional<User> findByIdWithProfileImage(final Long id);
 
     boolean existsById(final Long id);

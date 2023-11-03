@@ -20,20 +20,20 @@ public class ImageController {
     private final ImageService imageService;
 
     @GetMapping("/users/images/{storeName}")
-    public ResponseEntity<Resource> downloadProfileImage(@PathVariable String storeName) throws MalformedURLException {
+    public ResponseEntity<Resource> downloadProfileImage(@PathVariable final String storeName) throws MalformedURLException {
         final Resource resource = imageService.readProfileImage(storeName);
 
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 
     @GetMapping("/auctions/images/{storeName}")
-    public ResponseEntity<Resource> downloadAuctionImage(@PathVariable String storeName) throws MalformedURLException {
+    public ResponseEntity<Resource> downloadAuctionImage(@PathVariable final String storeName) throws MalformedURLException {
         final Resource resource = imageService.readAuctionImage(storeName);
 
-        HttpHeaders headers = new HttpHeaders();
+        final HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
 
         return new ResponseEntity<>(resource, headers, HttpStatus.OK);

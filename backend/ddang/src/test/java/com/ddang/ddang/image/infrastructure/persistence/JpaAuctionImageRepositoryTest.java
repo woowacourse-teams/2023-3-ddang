@@ -33,7 +33,6 @@ class JpaAuctionImageRepositoryTest extends JpaAuctionImageRepositoryFixture {
         assertThat(actual.getId()).isPositive();
     }
 
-
     @Test
     void 경매_이미지_이름에_해당하는_경매_이미지가_존재하면_참을_반환한다() {
         // when
