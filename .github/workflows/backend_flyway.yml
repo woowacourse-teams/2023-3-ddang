@@ -1,4 +1,4 @@
-name: dev flyway 검증
+name: flyway 스크립트 검증
 
 on:
   pull_request:
