@@ -7,7 +7,7 @@ import com.ddang.ddang.image.domain.ProfileImage;
 import static org.mockito.Mockito.mock;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class ImageIdProcessorFixture {
+public class ImageStoreNameProcessorFixture {
 
     protected AuctionImage 경매_이미지 = mock(AuctionImage.class);
     protected AuctionImage null인_경매_이미지 = null;
