@@ -172,8 +172,10 @@ public class LastReadMessageLogServiceFixture {
                                            .contents("저장되지 않은 메시지")
                                            .build();
 
-        final ReadMessageLog 메시지_로그_업데이트용_로그 = new ReadMessageLog(메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_발신자_겸_판매자);
-        readMessageLogRepository.save(메시지_로그_업데이트용_로그);
+        final ReadMessageLog 메시지_로그_업데이트용_로그_판매자 = new ReadMessageLog(메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_발신자_겸_판매자);
+        final ReadMessageLog 메시지_로그_업데이트용_로그_구매자 = new ReadMessageLog(메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_입찰자);
+        readMessageLogRepository.save(메시지_로그_업데이트용_로그_판매자);
+        readMessageLogRepository.save(메시지_로그_업데이트용_로그_구매자);
 
         메시지_로그_업데이트용_이벤트 = new UpdateReadMessageLogEvent(메시지_로그_업데이트용_발신자_겸_판매자, 메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_마지막_조회_메시지);
 
