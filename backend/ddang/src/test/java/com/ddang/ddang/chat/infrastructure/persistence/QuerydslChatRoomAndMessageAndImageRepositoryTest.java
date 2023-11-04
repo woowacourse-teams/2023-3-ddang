@@ -45,8 +45,7 @@ class QuerydslChatRoomAndMessageAndImageRepositoryTest extends QuerydslChatRoomA
     @Test
     void 사용자가_읽지_않은_메시지_개수를_반환한다() {
         // given
-        readMessageLogRepository.save(new ReadMessageLog(메리_엔초_채팅방, 엔초));
-        readMessageLogRepository.save(new ReadMessageLog(메리_엔초_채팅방, 메리));
+        readMessageLogRepository.saveAll(List.of(new ReadMessageLog(메리_엔초_채팅방, 메리), new ReadMessageLog(메리_엔초_채팅방, 엔초)));
 
         // when
         messageRepository.save(메리가_엔초에게_3시에_보낸_쪽지1);

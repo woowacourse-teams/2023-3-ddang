@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,7 +35,7 @@ class ReadMessageLogRepositoryImplTest extends ReadMessageLogRepositoryFixture {
     @Test
     void 마지막_읽은_메시지를_저장한다() {
         // given
-        final ReadMessageLog actual = readMessageLogRepository.save(다섯_번째_메시지까지_읽은_메시지_로그);
+        final ReadMessageLog actual = readMessageLogRepository.saveAll(List.of(다섯_번째_메시지까지_읽은_메시지_로그)).get(0);
 
         // then
         assertThat(actual.getId()).isPositive();

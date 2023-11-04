@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -26,8 +28,7 @@ public class LastReadMessageLogService {
         final ReadMessageLog buyerReadMessageLog = new ReadMessageLog(chatRoom, buyer);
         final ReadMessageLog sellerReadMessageLog = new ReadMessageLog(chatRoom, seller);
 
-        readMessageLogRepository.save(buyerReadMessageLog);
-        readMessageLogRepository.save(sellerReadMessageLog);
+        readMessageLogRepository.saveAll(List.of(buyerReadMessageLog, sellerReadMessageLog));
     }
 
     @Transactional
@@ -39,6 +40,7 @@ public class LastReadMessageLogService {
                                                                           new ReadMessageLogNotFoundException(
                                                                                   "메시지 조회 로그가 존재하지 않습니다."
                                                                           ));
+
         messageLog.updateLastReadMessage(updateReadMessageLogEvent.lastReadMessage().getId());
     }
 }

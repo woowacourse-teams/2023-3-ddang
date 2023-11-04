@@ -144,6 +144,6 @@ public class ReadMessageLogRepositoryFixture {
 
         final ReadMessageLog 메리_엔초_채팅방의_메리_메시지_조회_로그 = new ReadMessageLog(메리_엔초_채팅방, 메리);
         메리_엔초_채팅방의_메리_메시지_조회_로그.updateLastReadMessage(다섯_번째_메시지.getId());
-        readMessageLogRepository.save(메리_엔초_채팅방의_메리_메시지_조회_로그);
+        readMessageLogRepository.saveAll(List.of(메리_엔초_채팅방의_메리_메시지_조회_로그));
     }
 }
