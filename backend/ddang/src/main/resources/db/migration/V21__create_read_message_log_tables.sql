@@ -6,5 +6,5 @@ create table read_message_log (
                                   primary key (id)
 );
 
-alter table read_message_log add constraint fk_read_message_log_chat_room foreign key (chat_room_id) references chatRoom (id);
+alter table read_message_log add constraint fk_read_message_log_chat_room foreign key (chat_room_id) references chat_room (id);
 alter table read_message_log add constraint fk_read_message_reader foreign key (reader_id) references users (id);
