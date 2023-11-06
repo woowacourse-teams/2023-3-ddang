@@ -4,6 +4,7 @@ import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageQueryProjectionDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageAndImageQueryProjectionDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -32,7 +33,7 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                                     chatRoom,
                                     message,
                                     auctionImage,
-                                    countUnreadMessages(userId)
+                                    countUnreadMessages(userId, chatRoom.id)
                             )).from(chatRoom)
                             .leftJoin(chatRoom.buyer).fetchJoin()
                             .leftJoin(chatRoom.auction, auction).fetchJoin()
@@ -58,17 +59,17 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
         return sortByLastMessageIdDesc(unsortedDtos);
     }
 
-    private static JPQLQuery<Long> countUnreadMessages(final Long userId) {
+    private static JPQLQuery<Long> countUnreadMessages(final Long userId, final NumberPath<Long> chatRoomId) {
         return JPAExpressions.select(message.count())
                              .from(message)
                              .where(
-                                     message.chatRoom.id.eq(chatRoom.id),
+                                     message.chatRoom.id.eq(chatRoomId),
                                      message.writer.id.ne(userId),
                                      message.id.gt(
                                              JPAExpressions
                                                      .select(readMessageLog.lastReadMessageId)
                                                      .from(readMessageLog)
-                                                     .where(readMessageLog.reader.id.eq(userId))
+                                                     .where(readMessageLog.reader.id.eq(userId), readMessageLog.chatRoom.id.eq(chatRoomId))
                                      )
                              );
     }
@@ -80,10 +81,10 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                            .filter((ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) ->
                                    Objects.nonNull(unsortedDto.message())
                            ).sorted(comparing(
-                                           (ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) ->
-                                                   unsortedDto.message().getId()
-                                   ).reversed()
-                           ).map(ChatRoomAndMessageAndImageQueryProjectionDto::toSortedDto)
+                                (ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) ->
+                                        unsortedDto.message().getId()
+                        ).reversed()
+                ).map(ChatRoomAndMessageAndImageQueryProjectionDto::toSortedDto)
                            .toList();
     }
 
