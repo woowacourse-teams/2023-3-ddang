@@ -4,8 +4,6 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.infrastructure.persistence.fixture.JpaMessageRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;

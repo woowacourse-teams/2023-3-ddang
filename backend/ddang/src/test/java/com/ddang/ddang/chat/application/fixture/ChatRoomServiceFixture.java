@@ -59,6 +59,8 @@ public class ChatRoomServiceFixture {
     protected User 엔초;
     protected User 제이미;
     protected User 지토;
+    protected User 채팅방을_생성하는_메리;
+    protected User 메리_경매_낙찰자_지토;
     protected User 경매에_참여한_적_없는_사용자;
     protected Auction 채팅방이_없는_경매;
     protected Auction 판매자_엔초_구매자_지토_경매;
@@ -78,6 +80,7 @@ public class ChatRoomServiceFixture {
     protected CreateChatRoomDto 경매가_진행중이라서_채팅방을_생성할_수_없는_DTO;
     protected CreateChatRoomDto 낙찰자가_없어서_채팅방을_생성할_수_없는_DTO;
     protected CreateChatRoomDto 엔초_지토_채팅방_생성을_위한_DTO;
+    protected CreateChatRoomDto 메리가_생성하려는_채팅방;
     protected ReadParticipatingChatRoomDto 엔초가_조회한_엔초_지토_채팅방_정보_조회_결과;
     protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_가능;
     protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_불가능;
@@ -120,32 +123,46 @@ public class ChatRoomServiceFixture {
                  .name("엔초")
                  .profileImage(프로필_이미지)
                  .reliability(new Reliability(4.7d))
-                 .oauthId("12346")
+                 .oauthId("12347")
                  .build();
         제이미 = User.builder()
                   .name("제이미")
                   .profileImage(프로필_이미지)
                   .reliability(new Reliability(4.7d))
-                  .oauthId("12347")
+                  .oauthId("12348")
                   .build();
         지토 = User.builder()
                  .name("지토")
                  .profileImage(프로필_이미지)
                  .reliability(new Reliability(4.7d))
-                 .oauthId("12348")
+                 .oauthId("12349")
                  .build();
         경매에_참여한_적_없는_사용자 = User.builder()
                                .name("외부인")
                                .profileImage(프로필_이미지)
                                .reliability(new Reliability(4.7d))
-                               .oauthId("12349")
+                               .oauthId("12340")
                                .build();
+        채팅방을_생성하는_메리 = User.builder()
+                           .name("채팅방을_생성하는_메리")
+                           .profileImage(프로필_이미지)
+                           .reliability(new Reliability(4.7d))
+                           .oauthId("09876")
+                           .build();
+        메리_경매_낙찰자_지토 = User.builder()
+                           .name("메리_경매_낙찰자_지토")
+                           .profileImage(프로필_이미지)
+                           .reliability(new Reliability(4.7d))
+                           .oauthId("10293")
+                           .build();
         userRepository.save(판매자);
         userRepository.save(구매자);
         userRepository.save(엔초);
         userRepository.save(제이미);
         userRepository.save(지토);
         userRepository.save(경매에_참여한_적_없는_사용자);
+        userRepository.save(채팅방을_생성하는_메리);
+        userRepository.save(메리_경매_낙찰자_지토);
 
         채팅방이_없는_경매 = Auction.builder()
                             .seller(판매자)
@@ -192,25 +209,39 @@ public class ChatRoomServiceFixture {
                                                  .bidUnit(new BidUnit(1_000))
                                                  .closingTime(LocalDateTime.now())
                                                  .build();
+        final Auction 판매자_메리_구매자_지토_경매 = Auction.builder()
+                                                .seller(채팅방을_생성하는_메리)
+                                                .title("메리 맥북")
+                                                .description("메리 맥북 팔아요")
+                                                .subCategory(전자기기_서브_노트북_카테고리)
+                                                .startPrice(new Price(10_000))
+                                                .bidUnit(new BidUnit(1_000))
+                                                .closingTime(LocalDateTime.now())
+                                                .build();
         채팅방이_없는_경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
         판매자_엔초_구매자_지토_경매.addAuctionImages(List.of(엔초의_경매_대표_이미지, 엔초의_대표_이미지가_아닌_경매_이미지));
         판매자_제이미_구매자_엔초_경매.addAuctionImages(List.of(제이미의_경매_대표_이미지, 제이미의_대표_이미지가_아닌_경매_이미지));
+        판매자_메리_구매자_지토_경매.addAuctionImages(List.of(경매_대표_이미지, 대표_이미지가_아닌_경매_이미지));
 
         auctionRepository.save(채팅방이_없는_경매);
         auctionRepository.save(종료되지_않은_경매);
         auctionRepository.save(낙찰자가_없는_경매);
         auctionRepository.save(판매자_엔초_구매자_지토_경매);
         auctionRepository.save(판매자_제이미_구매자_엔초_경매);
+        auctionRepository.save(판매자_메리_구매자_지토_경매);
 
         final Bid 채팅방_없는_경매_입찰 = new Bid(채팅방이_없는_경매, 구매자, new BidPrice(15_000));
         final Bid 지토가_엔초_경매에_입찰 = new Bid(판매자_엔초_구매자_지토_경매, 지토, new BidPrice(15_000));
         final Bid 엔초가_제이미_경매에_입찰 = new Bid(판매자_제이미_구매자_엔초_경매, 엔초, new BidPrice(15_000));
+        final Bid 지토가_메리_경매에_입찰 = new Bid(판매자_메리_구매자_지토_경매, 메리_경매_낙찰자_지토, new BidPrice(15_000));
         bidRepository.save(채팅방_없는_경매_입찰);
         bidRepository.save(지토가_엔초_경매에_입찰);
         bidRepository.save(엔초가_제이미_경매에_입찰);
+        bidRepository.save(지토가_메리_경매에_입찰);
         채팅방이_없는_경매.updateLastBid(채팅방_없는_경매_입찰);
         판매자_엔초_구매자_지토_경매.updateLastBid(지토가_엔초_경매에_입찰);
         판매자_제이미_구매자_엔초_경매.updateLastBid(엔초가_제이미_경매에_입찰);
+        판매자_메리_구매자_지토_경매.updateLastBid(지토가_메리_경매에_입찰);
 
         엔초_지토_채팅방 = new ChatRoom(판매자_엔초_구매자_지토_경매, 지토);
         제이미_엔초_채팅방 = new ChatRoom(판매자_제이미_구매자_엔초_경매, 엔초);
@@ -239,6 +270,7 @@ public class ChatRoomServiceFixture {
         경매에_참여한_적_없는_사용자_정보 = new AuthenticationUserInfo(경매에_참여한_적_없는_사용자.getId());
         존재하지_않는_사용자_정보 = new AuthenticationUserInfo(존재하지_않는_사용자_아이디);
         채팅방_생성을_위한_DTO = new CreateChatRoomDto(채팅방이_없는_경매.getId());
+        메리가_생성하려는_채팅방 = new CreateChatRoomDto(판매자_메리_구매자_지토_경매.getId());
         경매_정보가_없어서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(존재하지_않는_경매_아이디);
         경매가_진행중이라서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(종료되지_않은_경매.getId());
         낙찰자가_없어서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(낙찰자가_없는_경매.getId());
@@ -253,6 +285,7 @@ public class ChatRoomServiceFixture {
                 ReadAuctionInChatRoomDto.of(판매자_제이미_구매자_엔초_경매, 제이미의_경매_대표_이미지),
                 ReadUserInChatRoomDto.from(제이미),
                 ReadLastMessageDto.from(제이미가_엔초에게_2시에_보낸_쪽지),
+                1L,
                 true
         );
         엔초_채팅_목록의_엔초_지토_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
@@ -260,6 +293,7 @@ public class ChatRoomServiceFixture {
                 ReadAuctionInChatRoomDto.of(판매자_엔초_구매자_지토_경매, 엔초의_경매_대표_이미지),
                 ReadUserInChatRoomDto.from(지토),
                 ReadLastMessageDto.from(엔초가_지토에게_1시에_보낸_쪽지),
+                1L,
                 true
         );
     }
