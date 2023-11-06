@@ -7,5 +7,6 @@ data class MessageRoomModel(
     val partnerName: String,
     val lastMessageContents: String,
     val lastMessageDateTime: String,
+    val unreadMessageCount: String,
     val isChatAvailable: Boolean,
 )

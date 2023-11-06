@@ -6,6 +6,7 @@ import com.ddangddangddang.data.model.response.ChatMessageIdResponse
 import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
+import com.ddangddangddang.data.model.response.ChatRoomResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import com.ddangddangddang.data.remote.AuctionService
 import javax.inject.Inject
@@ -17,8 +18,8 @@ class ChatRemoteDataSource @Inject constructor(private val service: AuctionServi
     suspend fun getChatRoomPreviews(): ApiResponse<List<ChatRoomPreviewResponse>> =
         service.getChatRoomPreviews()
 
-    suspend fun getChatRoomPreview(chatRoomId: Long): ApiResponse<ChatRoomPreviewResponse> =
-        service.getChatRoomPreview(chatRoomId)
+    suspend fun getChatRoom(chatRoomId: Long): ApiResponse<ChatRoomResponse> =
+        service.getChatRoom(chatRoomId)
 
     suspend fun getMessages(
         chatRoomId: Long,

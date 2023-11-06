@@ -1,5 +1,7 @@
 package com.ddangddangddang.android.model.mapper
 
+import com.ddangddangddang.android.R
+import com.ddangddangddang.android.global.DdangDdangDdang
 import com.ddangddangddang.android.model.MessageRoomModel
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import java.time.LocalDateTime
@@ -13,7 +15,12 @@ object MessageRoomModelMapper : Mapper<MessageRoomModel, ChatRoomPreviewResponse
             chatPartner.profileImage ?: "",
             chatPartner.name,
             lastMessage?.contents ?: "", // 수정 필요
-            formatLastMessageTime(LocalDateTime.parse(lastMessage?.createdAt ?: "2022-05-12T12:30:33")), // 수정 필요 LocalDateTimeFormatter.parse 사용할 것
+            formatLastMessageTime(
+                LocalDateTime.parse(
+                    lastMessage?.createdAt ?: "2022-05-12T12:30:33",
+                ),
+            ), // 수정 필요 LocalDateTimeFormatter.parse 사용할 것
+            if (unreadMessageCount >= 100) DdangDdangDdang.resources.getString(R.string.message_rooms_maximum_unread_message_count) else unreadMessageCount.toString(),
             isChatAvailable,
         )
     }
