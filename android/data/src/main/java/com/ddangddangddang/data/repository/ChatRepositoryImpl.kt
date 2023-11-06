@@ -7,6 +7,7 @@ import com.ddangddangddang.data.model.response.ChatMessageIdResponse
 import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
+import com.ddangddangddang.data.model.response.ChatRoomResponse
 import com.ddangddangddang.data.remote.ApiResponse
 import javax.inject.Inject
 
@@ -19,8 +20,8 @@ class ChatRepositoryImpl @Inject constructor(
     override suspend fun getChatRoomPreviews(): ApiResponse<List<ChatRoomPreviewResponse>> =
         chatRemoteDataSource.getChatRoomPreviews()
 
-    override suspend fun getChatRoomPreview(chatRoomId: Long): ApiResponse<ChatRoomPreviewResponse> =
-        chatRemoteDataSource.getChatRoomPreview(chatRoomId)
+    override suspend fun getChatRoom(chatRoomId: Long): ApiResponse<ChatRoomResponse> =
+        chatRemoteDataSource.getChatRoom(chatRoomId)
 
     override suspend fun getMessages(
         chatRoomId: Long,

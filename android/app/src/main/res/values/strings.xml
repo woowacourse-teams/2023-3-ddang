@@ -166,6 +166,7 @@
     <string name="message_profile_description">상대방 프로필입니다</string>
     <string name="message_not_exist_rooms">쪽지방이 존재하지 않습니다</string>
     <string name="message_rooms_load_failure">쪽지방 목록을 불러오는데 실패했습니다</string>
+    <string name="message_rooms_maximum_unread_message_count">99</string>
 
     <!-- message_room -->
     <string name="message_room_auction_item_description">경매 상품 이미지입니다</string>

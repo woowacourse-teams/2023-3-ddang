@@ -3,11 +3,9 @@ package com.ddangddangddang.data.model.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ChatRoomPreviewResponse(
+data class ChatRoomResponse(
     val id: Long,
     val chatPartner: ChatPartnerResponse,
     val auction: ChatAuctionItemResponse,
-    val lastMessage: ChatLastMessageResponse? = null,
-    val unreadMessageCount: Long,
     val isChatAvailable: Boolean,
 )

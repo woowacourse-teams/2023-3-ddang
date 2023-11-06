@@ -43,7 +43,7 @@ class MessageRoomViewModel @Inject constructor(
 
     fun loadMessageRoom(roomId: Long) {
         viewModelScope.launch {
-            when (val response = repository.getChatRoomPreview(roomId)) {
+            when (val response = repository.getChatRoom(roomId)) {
                 is ApiResponse.Success -> {
                     _messageRoomInfo.value = response.body.toPresentation()
                     loadMessages()
