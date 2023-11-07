@@ -6,7 +6,12 @@ import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.querydsl.core.annotations.QueryProjection;
 
-public record ChatRoomAndMessageAndImageQueryProjectionDto(ChatRoom chatRoom, Message message, AuctionImage auctionImage) {
+public record ChatRoomAndMessageAndImageQueryProjectionDto(
+        ChatRoom chatRoom,
+        Message message,
+        AuctionImage auctionImage,
+        Long unreadMessage
+) {
 
     @QueryProjection
     public ChatRoomAndMessageAndImageQueryProjectionDto {
@@ -16,7 +21,8 @@ public record ChatRoomAndMessageAndImageQueryProjectionDto(ChatRoom chatRoom, Me
         return new ChatRoomAndMessageAndImageDto(
                 this.chatRoom,
                 this.message,
-                this.auctionImage
+                this.auctionImage,
+                this.unreadMessage
         );
     }
 }

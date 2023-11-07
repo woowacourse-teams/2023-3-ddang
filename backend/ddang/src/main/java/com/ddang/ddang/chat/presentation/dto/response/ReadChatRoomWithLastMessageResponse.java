@@ -7,6 +7,7 @@ public record ReadChatRoomWithLastMessageResponse(
         ReadChatPartnerResponse chatPartner,
         ReadAuctionInChatRoomResponse auction,
         ReadLastMessageResponse lastMessage,
+        Long unreadMessageCount,
         boolean isChatAvailable
 ) {
 
@@ -16,6 +17,7 @@ public record ReadChatRoomWithLastMessageResponse(
                 ReadChatPartnerResponse.from(dto.partnerDto()),
                 ReadAuctionInChatRoomResponse.from(dto.auctionDto()),
                 ReadLastMessageResponse.from(dto.lastMessageDto()),
+                dto.unreadMessageCount(),
                 dto.isChatAvailable()
         );
     }
