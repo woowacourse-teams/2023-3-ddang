@@ -40,7 +40,7 @@ jobs:
       
       - name: slack suggestion notification
         if: contains(github.event.pull_request.labels.*.name, 'suggestion')
-        id: slack-notification
+        id: slack-suggestion-notification
         run: |
           SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
@@ -56,14 +56,14 @@ jobs:
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
       
       - name: settings java
-        if: steps.slack-notification.outcome == 'failure'
+        if: steps.slack-suggestion-notification.outcome == 'failure'
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
       - name: cache gradle
-        if: steps.slack-notification.outcome == 'failure'
+        if: steps.slack-suggestion-notification.outcome == 'failure'
         uses: actions/cache@v2
         with:
           path: |
@@ -74,7 +74,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: chmod gradle
-        if: steps.slack-notification.outcome == 'failure'
+        if: steps.slack-suggestion-notification.outcome == 'failure'
         run: chmod +x backend/ddang/gradlew
 
       - name: run jacocoTestCoverage
@@ -84,7 +84,7 @@ jobs:
           ./gradlew jacocoTestCoverage 
 
       - name: slack notification
-        if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && steps.slack-notification.outcome == 'failure'
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && steps.slack-suggestion-notification.outcome == 'failure'
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
