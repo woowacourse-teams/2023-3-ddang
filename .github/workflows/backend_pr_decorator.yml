@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: set author slack id
-        if: always()
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
         id: author-slack
         run: |
           GIT_ID=${{ github.event.pull_request.user.login }}
@@ -83,7 +83,7 @@ jobs:
           ./gradlew jacocoTestCoverage 
 
       - name: slack notification
-        if: success()
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
