@@ -78,7 +78,7 @@ jobs:
         run: chmod +x backend/ddang/gradlew
 
       - name: run jacocoTestCoverage
-        if: steps.slack-notification.outcome == 'skipped'
+        if: steps.slack-suggestion-notification.outcome == 'skipped'
         run: |
           cd backend/ddang
           ./gradlew jacocoTestCoverage 
