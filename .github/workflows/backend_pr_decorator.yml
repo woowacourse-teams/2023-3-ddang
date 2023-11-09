@@ -42,7 +42,9 @@ jobs:
         if: contains(github.event.pull_request.labels.*.name, 'suggestion')
         run: |
           SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
+          SLACK_MESSAGE+="<@"
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
+          SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
           SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
@@ -83,7 +85,9 @@ jobs:
       - name: slack notification
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
+          SLACK_MESSAGE+="<@"
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
+          SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
           SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
