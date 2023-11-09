@@ -55,14 +55,14 @@ jobs:
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
       
       - name: settings java
-        if: cancelled()
+        if: failure()
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
       - name: cache gradle
-        if: success()
+        if: failure()
         uses: actions/cache@v2
         with:
           path: |
