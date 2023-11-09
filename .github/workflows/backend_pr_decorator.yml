@@ -9,14 +9,37 @@ permissions: write-all
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'backend')
+    if: contains(github.event.pull_request.labels.*.name, 'backend') && !contains(github.event.pull_request.labels.*.name, 'suggestion')
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
+      - name: settings java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: cache gradle
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: chmod gradle
+        run: chmod +x backend/ddang/gradlew
+
+      - name: run jacocoTestCoverage
+        run: |
+          cd backend/ddang
+          ./gradlew jacocoTestCoverage 
 
       - name: set author slack id
-        if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
+        if: always()
         id: author-slack
         run: |
           GIT_ID=${{ github.event.pull_request.user.login }}
@@ -34,62 +57,15 @@ jobs:
             AUTHOR_NAME="${{ secrets.kwonyj1022_slack_display_name }}"
             AUTHOR_ID="${{ secrets.kwonyj1022_slack_id }}"
           fi
-
+          
           echo "AUTHOR_NAME=${AUTHOR_NAME}" >> $GITHUB_OUTPUT
           echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
-      
-      - name: slack suggestion notification
-        if: github.event_name == 'pull_request' && github.event.action != 'synchronize' && contains(github.event.pull_request.labels.*.name, 'suggestion')
-        id: slack-suggestion-notification
-        run: |
-          SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
-          SLACK_MESSAGE+="<@"
-          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
-          SLACK_MESSAGE+=">"
-          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
-          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
-          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
-          SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
-          SLACK_MESSAGE+="\n\n제안 사항에 대한 PR입니다.\n리뷰 요청은 스레드로 직접 멘션해주세요."
-          SLACK_MESSAGE+='"}}]}'
-
-          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
-      
-      - name: settings java
-        if: steps.slack-suggestion-notification.outcome == 'skipped'
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: cache gradle
-        if: steps.slack-suggestion-notification.outcome == 'skipped'
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-
-      - name: chmod gradle
-        if: steps.slack-suggestion-notification.outcome == 'skipped'
-        run: chmod +x backend/ddang/gradlew
-
-      - name: run jacocoTestCoverage
-        if: steps.slack-suggestion-notification.outcome == 'skipped'
-        run: |
-          cd backend/ddang
-          ./gradlew jacocoTestCoverage 
 
       - name: slack notification
-        if: github.event_name == 'pull_request' && github.event.action != 'synchronize' && steps.slack-suggestion-notification.outcome == 'skipped'
+        if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
-          SLACK_MESSAGE+="<@"
-          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
-          SLACK_MESSAGE+=">"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
           SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
