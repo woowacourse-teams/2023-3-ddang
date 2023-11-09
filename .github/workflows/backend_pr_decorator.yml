@@ -40,6 +40,7 @@ jobs:
       
       - name: slack suggestion notification
         if: contains(github.event.pull_request.labels.*.name, 'suggestion')
+        id: slack-notification
         run: |
           SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
@@ -55,7 +56,7 @@ jobs:
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
       
       - name: settings java
-        if: success()
+        if: steps.slack-notification.outcome == 'failure'
         uses: actions/setup-java@v3
         with:
           java-version: '17'
