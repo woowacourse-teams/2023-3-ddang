@@ -27,6 +27,7 @@ public class QuerydslAuctionAndImageRepository implements AuctionAndImageReposit
                             .from(auction)
                             .leftJoin(auction.lastBid, bid).fetchJoin()
                             .leftJoin(bid.bidder).fetchJoin()
+                            .leftJoin(auction.seller).fetchJoin()
                             .leftJoin(auctionImage).on(auctionImage.id.eq(
                                     JPAExpressions
                                             .select(auctionImage.id.min())
