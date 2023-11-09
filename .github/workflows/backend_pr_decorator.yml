@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: set author slack id
-        if: github.event_name == 'pull_request' && github.event.action == 'synchronize'
+        if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
         id: author-slack
         run: |
           GIT_ID=${{ github.event.pull_request.user.login }}
@@ -39,7 +39,7 @@ jobs:
           echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
       
       - name: slack suggestion notification
-        if: contains(github.event.pull_request.labels.*.name, 'suggestion')
+        if: github.event_name == 'pull_request' && github.event.action != 'synchronize' && contains(github.event.pull_request.labels.*.name, 'suggestion')
         id: slack-suggestion-notification
         run: |
           SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
@@ -84,7 +84,7 @@ jobs:
           ./gradlew jacocoTestCoverage 
 
       - name: slack notification
-        if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && steps.slack-suggestion-notification.outcome == 'skipped'
+        if: github.event_name == 'pull_request' && github.event.action != 'synchronize' && steps.slack-suggestion-notification.outcome == 'skipped'
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
