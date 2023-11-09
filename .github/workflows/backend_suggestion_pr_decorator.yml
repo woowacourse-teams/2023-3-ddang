@@ -1,0 +1,53 @@
+name: 제안 PR 슬랙 메시지
+
+on:
+  pull_request:
+    types: [ opened, reopened ]
+    branches: [ main, develop, develop-be ]
+
+permissions: write-all
+
+jobs:
+  build:
+    if: contains(github.event.pull_request.labels.*.name, 'backend') && contains(github.event.pull_request.labels.*.name, 'suggestion')
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: set author slack id
+        id: author-slack
+        run: |
+          GIT_ID=${{ github.event.pull_request.user.login }}
+          
+          if [ "$GIT_ID" == "apptie" ]; then
+            AUTHOR_NAME="${{ secrets.apptie_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.apptie_slack_id }}"
+          elif [ "$GIT_ID" == "swonny" ]; then
+            AUTHOR_NAME="${{ secrets.swonny_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.swonny_slack_id }}"
+          elif [ "$GIT_ID" == "JJ503" ]; then
+            AUTHOR_NAME="${{ secrets.JJ503_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.JJ503_slack_id }}"
+          elif [ "$GIT_ID" == "kwonyj1022" ]; then
+            AUTHOR_NAME="${{ secrets.kwonyj1022_slack_display_name }}"
+            AUTHOR_ID="${{ secrets.kwonyj1022_slack_id }}"
+          fi
+
+          echo "AUTHOR_NAME=${AUTHOR_NAME}" >> $GITHUB_OUTPUT
+          echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
+      
+      - name: slack suggestion notification
+        run: |
+          SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
+          SLACK_MESSAGE+="<@"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
+          SLACK_MESSAGE+=">"
+          SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
+          SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
+          SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
+          SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
+          SLACK_MESSAGE+="\n\n제안 사항에 대한 PR입니다.\n리뷰 요청은 스레드로 직접 멘션해주세요."
+          SLACK_MESSAGE+='"}}]}'
+
+          curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
