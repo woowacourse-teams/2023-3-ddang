@@ -79,11 +79,11 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: chmod gradle
-        if: steps.slack-suggestion-notification.outcome == 'failure'
+        if: steps.slack-suggestion-notification.outcome == 'skipped'
         run: chmod +x backend/ddang/gradlew
 
       - name: run jacocoTestCoverage
-        if: steps.slack-notification.outcome == 'failure'
+        if: steps.slack-notification.outcome == 'skipped'
         run: |
           cd backend/ddang
           ./gradlew jacocoTestCoverage 
