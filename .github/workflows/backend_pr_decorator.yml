@@ -63,7 +63,7 @@ jobs:
           distribution: 'temurin'
 
       - name: cache gradle
-        if: success()
+        if: steps.slack-notification.outcome == 'failure'
         uses: actions/cache@v2
         with:
           path: |
@@ -74,11 +74,11 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: chmod gradle
-        if: success()
+        if: steps.slack-notification.outcome == 'failure'
         run: chmod +x backend/ddang/gradlew
 
       - name: run jacocoTestCoverage
-        if: success()
+        if: steps.slack-notification.outcome == 'failure'
         run: |
           cd backend/ddang
           ./gradlew jacocoTestCoverage 
