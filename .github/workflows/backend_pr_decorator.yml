@@ -55,7 +55,7 @@ jobs:
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
       
       - name: settings java
-        if: failure()
+        if: success()
         uses: actions/setup-java@v3
         with:
           java-version: '17'
