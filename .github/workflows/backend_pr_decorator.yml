@@ -55,14 +55,14 @@ jobs:
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
       
       - name: settings java
-        if: failure()
+        if: cancelled()
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
       - name: cache gradle
-        if: failure()
+        if: success()
         uses: actions/cache@v2
         with:
           path: |
@@ -83,6 +83,7 @@ jobs:
           ./gradlew jacocoTestCoverage 
 
       - name: slack notification
+        if: success()
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
