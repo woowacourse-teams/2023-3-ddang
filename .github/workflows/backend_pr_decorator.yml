@@ -37,7 +37,7 @@ jobs:
           echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
       
       - name: slack suggestion notification
-        if: github.event_name == 'pull_request' && github.event.action != 'synchronize' && contains(github.event.pull_request.labels.*.name, 'suggestion')
+        if: github.event_name == 'pull_request' && github.event.action == 'synchronize' && contains(github.event.pull_request.labels.*.name, 'suggestion')
         run: |
           SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
