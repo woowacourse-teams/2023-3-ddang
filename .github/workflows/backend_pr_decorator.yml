@@ -8,13 +8,14 @@ on:
 permissions: write-all
 
 jobs:
-  author-info:
+  build:
+    if: contains(github.event.pull_request.labels.*.name, 'backend')
     runs-on: ubuntu-latest
-    outputs:
-      AUTHOR_NAME: ${{ steps.set-author-slack-id.outputs.AUTHOR_NAME }}
-      AUTHOR_ID: ${{ steps.set-author-slack-id.outputs.AUTHOR_ID }}
+
     steps:
-      - name: set-author-slack-id
+      - uses: actions/checkout@v3
+
+      - name: set author slack id
         if: always()
         id: author-slack
         run: |
@@ -32,18 +33,14 @@ jobs:
             AUTHOR_ID="${{ secrets.kwonyj1022_slack_id }}"
           fi
 
-          echo "::set-output name=AUTHOR_NAME::${AUTHOR_NAME}"
-          echo "::set-output name=AUTHOR_ID::${AUTHOR_ID}"
-
-  suggestion:
-    if: contains(github.event.pull_request.labels.*.name, 'backend') && contains(github.event.pull_request.labels.*.name, 'suggestion')
-    runs-on: ubuntu-latest
-    steps:
+          echo "AUTHOR_NAME=${AUTHOR_NAME}" >> $GITHUB_OUTPUT
+          echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
+      
       - name: slack suggestion notification
-        if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
+        if: github.event_name == 'pull_request' && github.event.action != 'synchronize' && contains(github.event.pull_request.labels.*.name, 'suggestion')
         run: |
           SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
-          SLACK_MESSAGE+="${{ needs.author-info.outputs.AUTHOR_NAME }}"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
           SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
@@ -52,14 +49,9 @@ jobs:
           SLACK_MESSAGE+='"}}]}'
 
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
-
-  build:
-    if: contains(github.event.pull_request.labels.*.name, 'backend') && !contains(github.event.pull_request.labels.*.name, 'suggestion')
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
+      
       - name: settings java
+        if: failure()
         uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -84,10 +76,9 @@ jobs:
           ./gradlew jacocoTestCoverage 
 
       - name: slack notification
-        if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
-          SLACK_MESSAGE+="${{ needs.author-info.outputs.AUTHOR_NAME }}"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
           SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
@@ -104,7 +95,7 @@ jobs:
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
-          SLACK_MESSAGE+="${{ needs.author-info.outputs.AUTHOR_ID }}"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
@@ -122,7 +113,7 @@ jobs:
         run: |
           SLACK_MESSAGE='{"text":"PR 브랜치 분석","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*PR 브랜치 분석* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="<@"
-          SLACK_MESSAGE+="${{ needs.author-info.outputs.AUTHOR_ID }}"
+          SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_ID }}"
           SLACK_MESSAGE+=">"
           SLACK_MESSAGE+="\n>\n>*PR 링크*\n><"
           SLACK_MESSAGE+="${{ github.event.pull_request.html_url }} "
