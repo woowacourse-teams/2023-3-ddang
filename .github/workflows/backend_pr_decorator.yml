@@ -54,11 +54,6 @@ jobs:
           SLACK_MESSAGE+='"}}]}'
 
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
-
-      - name: test
-        if: always()
-        run: |
-          echo "${{ steps.slack-suggestion-notification.outcome }}"
       
       - name: settings java
         if: steps.slack-suggestion-notification.outcome == 'skipped'
