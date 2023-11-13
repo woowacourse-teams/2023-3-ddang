@@ -14,6 +14,8 @@ import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,6 +33,9 @@ public class BidServiceFixture {
 
     @Autowired
     private BidRepository bidRepository;
+
+    @PersistenceContext
+    private EntityManager em;
 
     protected NotificationStatus 알림_성공 = NotificationStatus.SUCCESS;
     protected String 이미지_절대_url = "https://3-ddang.store/auctions/images";
@@ -166,5 +171,7 @@ public class BidServiceFixture {
         최소_입찰단위를_더한_금액보다_낮은_입찰액으로_입찰_요청_dto = new CreateBidDto(입찰_내역이_하나_있던_경매.getId(), 1_500, 입찰자2.getId());
         범위_밖의_금액으로_입찰_요청_dto1 = new CreateBidDto(경매3.getId(), -1, 입찰자2.getId());
         범위_밖의_금액으로_입찰_요청_dto2 = new CreateBidDto(경매3.getId(), 2_100_000_001, 입찰자2.getId());
+
+        em.flush();
     }
 }
