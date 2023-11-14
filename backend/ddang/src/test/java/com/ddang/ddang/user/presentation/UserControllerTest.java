@@ -7,7 +7,7 @@ import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.ddang.ddang.user.presentation.fixture.UserControllerFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

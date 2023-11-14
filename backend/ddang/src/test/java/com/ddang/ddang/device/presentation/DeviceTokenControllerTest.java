@@ -9,7 +9,7 @@ import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.presentation.fixture.DeviceTokenControllerFixture;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;

@@ -1,4 +1,4 @@
-package com.ddang.ddang.review.application.exception;
+package com.ddang.ddang.review.infrastructure.exception;
 
 public class ReviewNotFoundException extends IllegalArgumentException {
 

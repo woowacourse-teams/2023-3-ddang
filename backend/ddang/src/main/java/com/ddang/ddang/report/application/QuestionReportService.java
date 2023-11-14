@@ -1,6 +1,5 @@
 package com.ddang.ddang.report.application;
 
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.report.application.dto.CreateQuestionReportDto;
@@ -8,14 +7,12 @@ import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.domain.QuestionReport;
 import com.ddang.ddang.report.domain.repository.QuestionReportRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -28,12 +25,9 @@ public class QuestionReportService {
 
     @Transactional
     public Long create(final CreateQuestionReportDto questionReportDto) {
-        final Question question = questionRepository.findById(questionReportDto.questionId())
-                                                    .orElseThrow(() ->
-                                                            new QuestionNotFoundException("해당 질문을 찾을 수 없습니다.")
-                                                    );
-        final User reporter = userRepository.findById(questionReportDto.reporterId())
-                                            .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final Question question = questionRepository.getByIdOrThrow(questionReportDto.questionId());
+        final User reporter = userRepository.getByIdOrThrow(questionReportDto.reporterId());
+
         checkInvalidQuestionReport(reporter, question);
 
         final QuestionReport questionReport = questionReportDto.toEntity(question, reporter);

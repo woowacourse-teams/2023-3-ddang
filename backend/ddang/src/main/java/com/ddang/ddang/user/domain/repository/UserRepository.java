@@ -8,6 +8,8 @@ public interface UserRepository {
 
     User save(final User user);
 
+    User getByIdOrThrow(final Long id);
+
     Optional<User> findById(final Long id);
 
     Optional<User> findByOauthId(final String oauthId);

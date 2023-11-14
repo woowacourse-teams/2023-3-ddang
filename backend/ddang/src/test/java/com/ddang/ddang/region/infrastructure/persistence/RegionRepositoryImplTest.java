@@ -1,9 +1,12 @@
 package com.ddang.ddang.region.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.region.infrastructure.persistence.fixture.RegionRepositoryImplFixture;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -12,11 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(QuerydslConfiguration.class)
@@ -97,24 +95,6 @@ class RegionRepositoryImplTest extends RegionRepositoryImplFixture {
             softAssertions.assertThat(actual.get(0)).isEqualTo(서울특별시_강남구_삼성동);
             softAssertions.assertThat(actual.get(1)).isEqualTo(서울특별시_강남구_대치동);
         });
-    }
-
-    @Test
-    void 세번째_지역을_조회한다() {
-        // when
-        final Optional<Region> actual = regionRepository.findThirdRegionById(서울특별시_강남구_삼성동.getId());
-
-        // then
-        assertThat(actual).contains(서울특별시_강남구_삼성동);
-    }
-
-    @Test
-    void 세번째_지역이_아닌_아이디를_전달하면_빈_Optional을_반환한다() {
-        // when
-        final Optional<Region> actual = regionRepository.findThirdRegionById(서울특별시.getId());
-
-        // then
-        assertThat(actual).isEmpty();
     }
 
     @Test

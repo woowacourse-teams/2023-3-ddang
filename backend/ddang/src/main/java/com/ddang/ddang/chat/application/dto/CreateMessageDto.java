@@ -23,12 +23,12 @@ public record CreateMessageDto(
 
     public Message toEntity(
             final ChatRoom chatRoom,
-            final User writer,
+            final User sender,
             final User receiver
     ) {
         return Message.builder()
                       .chatRoom(chatRoom)
-                      .writer(writer)
+                      .writer(sender)
                       .receiver(receiver)
                       .contents(contents)
                       .build();

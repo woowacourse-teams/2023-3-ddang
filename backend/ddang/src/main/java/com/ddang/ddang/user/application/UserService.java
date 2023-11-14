@@ -5,7 +5,6 @@ import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.dto.UpdateUserDto;
 import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +20,14 @@ public class UserService {
     private final StoreImageProcessor imageProcessor;
 
     public ReadUserDto readById(final Long userId) {
-        final User user = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
+        final User user = userRepository.getByIdOrThrow(userId);
 
         return ReadUserDto.from(user);
     }
 
     @Transactional
     public ReadUserDto updateById(final Long userId, final UpdateUserDto userDto) {
-        final User user = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("사용자 정보를 사용할 수 없습니다."));
+        final User user = userRepository.getByIdOrThrow(userId);
 
         updateUserByRequest(userDto, user);
 

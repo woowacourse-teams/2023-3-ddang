@@ -1,6 +1,5 @@
 package com.ddang.ddang.review.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
@@ -8,18 +7,17 @@ import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
-import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.application.exception.RevieweeNotFoundException;
+import com.ddang.ddang.review.application.exception.ReviewerNotFoundException;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.repository.ReviewRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,14 +30,15 @@ public class ReviewService {
 
     @Transactional
     public Long create(final CreateReviewDto reviewDto) {
-        final Auction findAuction = auctionRepository.findTotalAuctionById(reviewDto.auctionId())
-                                                     .orElseThrow(() ->
-                                                             new AuctionNotFoundException("해당 경매를 찾을 수 없습니다.")
-                                                     );
+        final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(reviewDto.auctionId());
         final User writer = userRepository.findById(reviewDto.writerId())
-                                          .orElseThrow(() -> new UserNotFoundException("작성자 정보를 찾을 수 없습니다."));
+                                          .orElseThrow(() ->
+                                                  new ReviewerNotFoundException("리뷰어 정보를 찾을 수 없습니다.")
+                                          );
         final User target = userRepository.findById(reviewDto.targetId())
-                                          .orElseThrow(() -> new UserNotFoundException("평가 상대의 정보를 찾을 수 없습니다."));
+                                          .orElseThrow(() ->
+                                                  new RevieweeNotFoundException("평가 상대의 정보를 찾을 수 없습니다.")
+                                          );
 
         validateWriterCanReview(findAuction, writer);
 
@@ -64,8 +63,7 @@ public class ReviewService {
     }
 
     public ReadReviewDetailDto readByReviewId(final Long reviewId) {
-        final Review findReview = reviewRepository.findById(reviewId)
-                                                  .orElseThrow(() -> new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
+        final Review findReview = reviewRepository.getByIdOrThrow(reviewId);
 
         return ReadReviewDetailDto.from(findReview);
     }

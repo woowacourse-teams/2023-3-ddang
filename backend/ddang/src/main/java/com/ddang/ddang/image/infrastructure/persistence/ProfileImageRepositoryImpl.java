@@ -2,12 +2,11 @@ package com.ddang.ddang.image.infrastructure.persistence;
 
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class ProfileImageRepositoryImpl implements ProfileImageRepository {
 
@@ -16,10 +15,5 @@ public class ProfileImageRepositoryImpl implements ProfileImageRepository {
     @Override
     public Optional<ProfileImage> findById(final Long id) {
         return jpaProfileImageRepository.findById(id);
-    }
-
-    @Override
-    public Optional<ProfileImage> findByStoreName(final String storeName) {
-        return jpaProfileImageRepository.findByStoreName(storeName);
     }
 }

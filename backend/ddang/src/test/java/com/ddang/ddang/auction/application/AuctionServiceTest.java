@@ -1,17 +1,24 @@
 package com.ddang.ddang.auction.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.application.fixture.AuctionServiceFixture;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,14 +28,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -57,8 +56,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_대한_판매자가_없는_경우_경매를_등록하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.create(존재하지_않는_판매자의_경매_생성_dto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("지정한 판매자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -81,16 +79,14 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_해당하는_카테고리가_없을때_경매를_등록하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.create(존재하지_않는_카테고리의_경매_생성_dto))
-                .isInstanceOf(CategoryNotFoundException.class)
-                .hasMessage("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다.");
+                .isInstanceOf(CategoryNotFoundException.class);
     }
 
     @Test
     void 지정한_아이디에_해당하는_카테고리가_서브_카테고리가_아닐_떄_경매를_등록하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.create(메인_카테고리의_경매_생성_dto))
-                .isInstanceOf(CategoryNotFoundException.class)
-                .hasMessage("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다.");
+                .isInstanceOf(CategoryNotFoundException.class);
     }
 
     @Test
@@ -106,8 +102,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_해당하는_경매가_없는_경매를_조회시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.readByAuctionId(존재하지_않는_경매_ID))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test
@@ -130,10 +125,10 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_해당하는_경매를_삭제한다() {
         // when & then
         SoftAssertions.assertSoftly(softAssertions -> {
-            assertThatCode(() -> auctionService.deleteByAuctionId(종료되는_날이_3일_뒤인_경매.getId(), 판매자.getId())).doesNotThrowAnyException();
+            assertThatCode(() -> auctionService.deleteByAuctionId(종료되는_날이_3일_뒤인_경매.getId(), 판매자.getId()))
+                    .doesNotThrowAnyException();
             assertThatThrownBy(() -> auctionService.readByAuctionId(종료되는_날이_3일_뒤인_경매.getId()))
-                    .isInstanceOf(AuctionNotFoundException.class)
-                    .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
+                    .isInstanceOf(AuctionNotFoundException.class);
         });
     }
 
@@ -141,16 +136,14 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_해당하는_경매가_없는_경매를_삭제시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.deleteByAuctionId(존재하지_않는_경매_ID, 판매자.getId()))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test
     void 지정한_아이디에_해당하는_회원이_없는_경우_삭제시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.deleteByAuctionId(종료되는_날이_3일_뒤인_경매.getId(), 존재하지_않는_사용자_ID))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("회원 정보를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

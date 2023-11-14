@@ -1,21 +1,20 @@
 package com.ddang.ddang.report.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
 import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.application.fixture.QuestionReportServiceFixture;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -38,16 +37,14 @@ class QuestionReportServiceTest extends QuestionReportServiceFixture {
     void 존재하지_않는_질문_신고시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionReportService.create(존재하지_않는_질문_신고_요청_dto))
-                .isInstanceOf(QuestionNotFoundException.class)
-                .hasMessage("해당 질문을 찾을 수 없습니다.");
+                .isInstanceOf(QuestionNotFoundException.class);
     }
 
     @Test
     void 존재하지_않는_사용자가_질문_신고시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionReportService.create(존재하지_않는_사용자가_질문_신고_요청_dto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

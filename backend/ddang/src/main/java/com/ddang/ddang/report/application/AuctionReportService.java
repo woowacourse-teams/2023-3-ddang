@@ -1,6 +1,5 @@
 package com.ddang.ddang.report.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
@@ -9,14 +8,12 @@ import com.ddang.ddang.report.application.exception.AlreadyReportAuctionExceptio
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.domain.repository.AuctionReportRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -29,10 +26,9 @@ public class AuctionReportService {
 
     @Transactional
     public Long create(final CreateAuctionReportDto auctionReportDto) {
-        final User reporter = userRepository.findById(auctionReportDto.reporterId())
-                                            .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final Auction auction = auctionRepository.findTotalAuctionById(auctionReportDto.auctionId())
-                                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+        final User reporter = userRepository.getByIdOrThrow(auctionReportDto.reporterId());
+        final Auction auction = auctionRepository.getTotalAuctionByIdOrThrow(auctionReportDto.auctionId());
+
         checkInvalidAuctionReport(reporter, auction);
 
         final AuctionReport auctionReport = auctionReportDto.toEntity(reporter, auction);

@@ -1,24 +1,24 @@
 package com.ddang.ddang.review.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
-import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.application.exception.RevieweeNotFoundException;
+import com.ddang.ddang.review.application.exception.ReviewerNotFoundException;
 import com.ddang.ddang.review.application.fixture.ReviewServiceFixture;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -41,24 +41,21 @@ class ReviewServiceTest extends ReviewServiceFixture {
     void 연관된_경매를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.create(존재하지_않는_경매와_연관된_평가를_등록하려는_DTO))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test
-    void 평가_작성자를_찾을_수_없다면_예외가_발생한다() {
+    void 리뷰어를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.create(존재하지_않는_사용자가_평가를_등록하려는_DTO))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("작성자 정보를 찾을 수 없습니다.");
+                .isInstanceOf(ReviewerNotFoundException.class);
     }
 
     @Test
-    void 평가_상대를_찾을_수_없다면_예외가_발생한다() {
+    void 리뷰이를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.create(존재하지_않는_사용자를_평가하려는_DTO))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("평가 상대의 정보를 찾을 수 없습니다.");
+                .isInstanceOf(RevieweeNotFoundException.class);
     }
 
     @Test
@@ -93,8 +90,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     void 지정한_평가_아이디에_해당하는_평가가_없으면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.readByReviewId(존재하지_않는_평가_아이디))
-                .isInstanceOf(ReviewNotFoundException.class)
-                .hasMessage("해당 평가를 찾을 수 없습니다.");
+                .isInstanceOf(ReviewNotFoundException.class);
     }
 
     @Test

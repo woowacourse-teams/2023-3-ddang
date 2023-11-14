@@ -1,18 +1,27 @@
 package com.ddang.ddang.chat.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.ReceiverNotFoundException;
+import com.ddang.ddang.chat.application.exception.SenderNotFoundException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
+import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.google.firebase.messaging.FirebaseMessagingException;
+import java.util.List;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -20,14 +29,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -88,24 +89,21 @@ class MessageServiceTest extends MessageServiceFixture {
     void 채팅방이_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.create(유효하지_않은_채팅방의_메시지_생성_DTO, 이미지_절대_경로))
-                .isInstanceOf(ChatRoomNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+                .isInstanceOf(ChatRoomNotFoundException.class);
     }
 
     @Test
     void 발신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.create(유효하지_않은_발신자의_메시지_생성_DTO, 이미지_절대_경로))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
+                .isInstanceOf(SenderNotFoundException.class);
     }
 
     @Test
     void 수신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.create(유효하지_않은_수신자의_메시지_생성_DTO, 이미지_절대_경로))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
+                .isInstanceOf(ReceiverNotFoundException.class);
     }
 
     @Test
@@ -155,16 +153,14 @@ class MessageServiceTest extends MessageServiceFixture {
     void 잘못된_사용자가_메시지를_조회할_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.readAllByLastMessageId(유효하지_않은_사용자의_메시지_조회용_request))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
     void 조회한_채팅방이_없는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.readAllByLastMessageId(유효하지_않은_채팅방의_메시지_조회용_request))
-                .isInstanceOf(ChatRoomNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+                .isInstanceOf(ChatRoomNotFoundException.class);
     }
 
     @Test

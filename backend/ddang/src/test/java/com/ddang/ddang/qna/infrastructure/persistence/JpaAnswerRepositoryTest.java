@@ -1,11 +1,10 @@
-package com.ddang.ddang.qna.infrastructure;
+package com.ddang.ddang.qna.infrastructure.persistence;
 
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.qna.domain.Answer;
-import com.ddang.ddang.qna.domain.repository.AnswerRepository;
-import com.ddang.ddang.qna.infrastructure.fixture.AnswerRepositoryImplFixture;
-import org.junit.jupiter.api.BeforeEach;
+import com.ddang.ddang.qna.infrastructure.fixture.JpaAnswerRepositoryFixture;
+import com.ddang.ddang.qna.infrastructure.persistence.JpaAnswerRepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -21,14 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class AnswerRepositoryImplTest extends AnswerRepositoryImplFixture {
+class JpaAnswerRepositoryTest extends JpaAnswerRepositoryFixture {
 
-    AnswerRepository answerRepository;
-
-    @BeforeEach
-    void setUp(@Autowired final JpaAnswerRepository jpaAnswerRepository) {
-        answerRepository = new AnswerRepositoryImpl(jpaAnswerRepository);
-    }
+    @Autowired
+    JpaAnswerRepository answerRepository;
 
     @Test
     void 답변을_저장한다() {
@@ -64,7 +59,7 @@ class AnswerRepositoryImplTest extends AnswerRepositoryImplFixture {
     @Test
     void 삭제된_답변은_조회되지_않는다() {
         // when
-        final Optional<Answer> actual = answerRepository.findById(삭제된_답변.getId());
+        final Optional<Answer> actual = answerRepository.findByIdAndDeletedIsFalse(삭제된_답변.getId());
 
         // then
         assertThat(actual).isEmpty();
@@ -73,7 +68,7 @@ class AnswerRepositoryImplTest extends AnswerRepositoryImplFixture {
     @Test
     void 삭제되지_않은_답변은_조회된다() {
         // when
-        final Optional<Answer> actual = answerRepository.findById(답변.getId());
+        final Optional<Answer> actual = answerRepository.findByIdAndDeletedIsFalse(답변.getId());
 
         // then
         assertThat(actual).contains(답변);

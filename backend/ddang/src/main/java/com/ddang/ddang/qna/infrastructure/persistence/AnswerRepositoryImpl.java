@@ -1,13 +1,12 @@
-package com.ddang.ddang.qna.infrastructure;
+package com.ddang.ddang.qna.infrastructure.persistence;
 
+import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
-@Repository
+@Component
 @RequiredArgsConstructor
 public class AnswerRepositoryImpl implements AnswerRepository {
 
@@ -24,7 +23,8 @@ public class AnswerRepositoryImpl implements AnswerRepository {
     }
 
     @Override
-    public Optional<Answer> findById(final Long id) {
-        return jpaAnswerRepository.findByIdAndDeletedIsFalse(id);
+    public Answer getByIdOrThrow(final Long id) {
+        return jpaAnswerRepository.findByIdAndDeletedIsFalse(id)
+                                  .orElseThrow(() -> new AnswerNotFoundException("지정한 답변을 찾을 수 없습니다."));
     }
 }

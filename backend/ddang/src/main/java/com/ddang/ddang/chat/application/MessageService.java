@@ -4,23 +4,22 @@ import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.ReceiverNotFoundException;
+import com.ddang.ddang.chat.application.exception.SenderNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,22 +34,19 @@ public class MessageService {
 
     @Transactional
     public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
-        final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
-                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
-        final User writer = userRepository.findById(dto.writerId())
-                                          .orElseThrow(() -> new UserNotFoundException(
+        final ChatRoom chatRoom = chatRoomRepository.getByIdOrThrow(dto.chatRoomId());
+        final User sender = userRepository.findById(dto.writerId())
+                                          .orElseThrow(() -> new SenderNotFoundException(
                                                   "지정한 아이디에 대한 발신자를 찾을 수 없습니다."));
         final User receiver = userRepository.findById(dto.receiverId())
-                                            .orElseThrow(() -> new UserNotFoundException(
+                                            .orElseThrow(() -> new ReceiverNotFoundException(
                                                     "지정한 아이디에 대한 수신자를 찾을 수 없습니다."));
 
         if (!chatRoom.isChatAvailablePartner(receiver)) {
             throw new UnableToChatException("탈퇴한 사용자에게는 메시지 전송이 불가능합니다.");
         }
 
-        final Message message = dto.toEntity(chatRoom, writer, receiver);
-
+        final Message message = dto.toEntity(chatRoom, sender, receiver);
         final Message persistMessage = messageRepository.save(message);
 
         messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
@@ -59,11 +55,8 @@ public class MessageService {
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        final User reader = userRepository.findById(request.messageReaderId())
-                                          .orElseThrow(() -> new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다."));
-        final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
-                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
+        final User reader = userRepository.getByIdOrThrow(request.messageReaderId());
+        final ChatRoom chatRoom = chatRoomRepository.getByIdOrThrow(request.chatRoomId());
 
         if (request.lastMessageId() != null) {
             validateLastMessageId(request.lastMessageId());

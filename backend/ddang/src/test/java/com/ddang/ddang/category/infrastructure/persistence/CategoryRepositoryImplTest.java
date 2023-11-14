@@ -1,13 +1,14 @@
 package com.ddang.ddang.category.infrastructure.persistence;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.domain.repository.CategoryRepository;
 import com.ddang.ddang.category.infrastructure.persistence.fixture.CategoryRepositoryFixture;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import java.util.List;
-import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -59,18 +60,16 @@ class CategoryRepositoryImplTest extends CategoryRepositoryFixture {
     @Test
     void 서브_카테고리를_조회한다() {
         // when
-        final Optional<Category> actual = categoryRepository.findSubCategoryById(가구_서브_의자_카테고리.getId());
+        Category actual = categoryRepository.getSubCategoryByIdOrThrow(가구_서브_의자_카테고리.getId());
 
         // then
-        assertThat(actual).contains(가구_서브_의자_카테고리);
+        assertThat(actual).isEqualTo(가구_서브_의자_카테고리);
     }
 
     @Test
-    void 서브_카테고리가_아닌_카테고리의_아이디를_전달하면_빈_Optional을_반환한다() {
-        // when
-        final Optional<Category> actual = categoryRepository.findSubCategoryById(가구_카테고리.getId());
-
-        // then
-        assertThat(actual).isEmpty();
+    void 서브_카테고리가_아닌_카테고리의_아이디를_전달하면_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> categoryRepository.getSubCategoryByIdOrThrow(가구_카테고리.getId()))
+                .isInstanceOf(CategoryNotFoundException.class);
     }
 }

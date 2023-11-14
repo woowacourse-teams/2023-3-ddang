@@ -1,4 +1,4 @@
-package com.ddang.ddang.user.application.exception;
+package com.ddang.ddang.user.infrastructure.exception;
 
 public class UserNotFoundException extends IllegalArgumentException {
 

@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.application;
 
-import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.application.fixture.LastReadMessageLogEventListenerFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import org.junit.jupiter.api.DisplayNameGeneration;

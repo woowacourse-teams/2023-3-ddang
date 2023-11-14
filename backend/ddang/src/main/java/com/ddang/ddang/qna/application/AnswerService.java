@@ -4,14 +4,11 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
-import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +28,8 @@ public class AnswerService {
 
     @Transactional
     public Long create(final CreateAnswerDto answerDto, final String absoluteImageUrl) {
-        final User writer = userRepository.findById(answerDto.userId())
-                                          .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final Question question = questionRepository.findById(answerDto.questionId())
-                                                    .orElseThrow(() ->
-                                                            new QuestionNotFoundException("해당 질문을 찾을 수 없습니다.")
-                                                    );
+        final User writer = userRepository.getByIdOrThrow(answerDto.userId());
+        final Question question = questionRepository.getByIdOrThrow(answerDto.questionId());
 
         checkInvalidAnswerer(question, writer);
         checkAlreadyAnswered(question);
@@ -65,10 +58,8 @@ public class AnswerService {
 
     @Transactional
     public void deleteById(final Long answerId, final Long userId) {
-        final Answer answer = answerRepository.findById(answerId)
-                                              .orElseThrow(() -> new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."));
-        final User user = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final Answer answer = answerRepository.getByIdOrThrow(answerId);
+        final User user = userRepository.getByIdOrThrow(userId);
 
         if (!answer.isWriter(user)) {
             throw new UserForbiddenException("삭제할 권한이 없습니다.");

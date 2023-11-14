@@ -1,6 +1,6 @@
 package com.ddang.ddang.qna.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
@@ -9,19 +9,16 @@ import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -35,10 +32,8 @@ public class QuestionService {
 
     @Transactional
     public Long create(final CreateQuestionDto questionDto, final String absoluteImageUrl) {
-        final User questioner = userRepository.findById(questionDto.userId())
-                                              .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final Auction auction = auctionRepository.findPureAuctionById(questionDto.auctionId())
-                                                 .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
+        final User questioner = userRepository.getByIdOrThrow(questionDto.userId());
+        final Auction auction = auctionRepository.getPureAuctionByIdOrThrow(questionDto.auctionId());
 
         checkInvalidAuction(auction);
         checkInvalidQuestioner(auction, questioner);
@@ -78,10 +73,8 @@ public class QuestionService {
 
     @Transactional
     public void deleteById(final Long questionId, final Long userId) {
-        final Question question = questionRepository.findById(questionId)
-                                                    .orElseThrow(() -> new QuestionNotFoundException("해당 질문을 찾을 수 없습니다."));
-        final User user = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final Question question = questionRepository.getByIdOrThrow(questionId);
+        final User user = userRepository.getByIdOrThrow(userId);
 
         if (!question.isWriter(user)) {
             throw new UserForbiddenException("삭제할 권한이 없습니다.");

@@ -4,12 +4,10 @@ import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.domain.repository.CategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -19,17 +17,15 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.domain.repository.RegionRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -44,14 +40,8 @@ public class AuctionService {
 
     @Transactional
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
-        final User seller = userRepository.findById(dto.sellerId())
-                                          .orElseThrow(() -> new UserNotFoundException(
-                                                  "지정한 판매자를 찾을 수 없습니다."
-                                          ));
-        final Category subCategory = categoryRepository.findSubCategoryById(dto.subCategoryId())
-                                                       .orElseThrow(() -> new CategoryNotFoundException(
-                                                               "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
-                                                       ));
+        final User seller = userRepository.getByIdOrThrow(dto.sellerId());
+        final Category subCategory = categoryRepository.getSubCategoryByIdOrThrow(dto.subCategoryId());
         final Auction auction = dto.toEntity(seller, subCategory);
         final List<Region> thirdRegions = regionRepository.findAllThirdRegionByIds(dto.thirdRegionIds());
 
@@ -80,10 +70,7 @@ public class AuctionService {
     }
 
     public ReadAuctionDto readByAuctionId(final Long auctionId) {
-        final Auction findAuction = auctionRepository.findTotalAuctionById(auctionId)
-                                                     .orElseThrow(() -> new AuctionNotFoundException(
-                                                             "지정한 아이디에 대한 경매를 찾을 수 없습니다."
-                                                     ));
+        final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(auctionId);
 
         return ReadAuctionDto.of(findAuction, LocalDateTime.now());
     }
@@ -113,17 +100,13 @@ public class AuctionService {
 
     @Transactional
     public void deleteByAuctionId(final Long auctionId, final Long userId) {
-        final Auction auction = auctionRepository.findTotalAuctionById(auctionId)
-                                                 .orElseThrow(() -> new AuctionNotFoundException(
-                                                         "지정한 아이디에 대한 경매를 찾을 수 없습니다."
-                                                 ));
-        final User user = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+        final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(auctionId);
+        final User user = userRepository.getByIdOrThrow(userId);
 
-        if (!auction.isOwner(user)) {
+        if (!findAuction.isOwner(user)) {
             throw new UserForbiddenException("권한이 없습니다.");
         }
 
-        auction.delete();
+        findAuction.delete();
     }
 }

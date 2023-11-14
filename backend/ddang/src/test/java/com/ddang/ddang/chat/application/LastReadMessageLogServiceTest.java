@@ -1,6 +1,8 @@
 package com.ddang.ddang.chat.application;
 
-import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.application.fixture.LastReadMessageLogServiceFixture;
 import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
@@ -11,10 +13,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.RecordApplicationEvents;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -30,15 +28,13 @@ class LastReadMessageLogServiceTest extends LastReadMessageLogServiceFixture {
 
     @Test
     void 메시지_로그를_생성한다() {
-        // given & when
+        // when
         lastReadMessageLogService.create(메시지_로그_생성용_이벤트);
-        final Optional<ReadMessageLog> actual_판매자 = readMessageLogRepository.findBy(메시지_로그_생성용_발신자_겸_판매자.getId(), 메시지_로그_생성용_채팅방.getId());
-        final Optional<ReadMessageLog> actual_구매자 = readMessageLogRepository.findBy(메시지_로그_생성용_입찰자_구매자.getId(), 메시지_로그_생성용_채팅방.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual_판매자).isPresent();
-            softAssertions.assertThat(actual_구매자).isPresent();
+            softAssertions.assertThatCode(() -> readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(메시지_로그_생성용_발신자_겸_판매자.getId(), 메시지_로그_생성용_채팅방.getId())).doesNotThrowAnyException();
+            softAssertions.assertThatCode(() -> readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(메시지_로그_생성용_입찰자_구매자.getId(), 메시지_로그_생성용_채팅방.getId())).doesNotThrowAnyException();
         });
     }
 
@@ -47,21 +43,20 @@ class LastReadMessageLogServiceTest extends LastReadMessageLogServiceFixture {
         // given & when
         lastReadMessageLogService.update(메시지_로그_업데이트용_이벤트);
 
-        final Optional<ReadMessageLog> actual_발신자 = readMessageLogRepository.findBy(
+        final ReadMessageLog actual_발신자 = readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(
                 메시지_로그_업데이트용_발신자_겸_판매자.getId(),
                 메시지_로그_업데이트용_채팅방.getId()
         );
-        final Optional<ReadMessageLog> actual_입찰자 = readMessageLogRepository.findBy(
+        final ReadMessageLog actual_입찰자 = readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(
                 메시지_로그_업데이트용_입찰자.getId(),
                 메시지_로그_업데이트용_채팅방.getId()
         );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual_발신자).isPresent();
-            softAssertions.assertThat(actual_발신자.get().getLastReadMessageId())
+            softAssertions.assertThat(actual_발신자.getLastReadMessageId())
                           .isEqualTo(메시지_로그_업데이트용_마지막_조회_메시지.getId());
-            softAssertions.assertThat(actual_입찰자.get().getLastReadMessageId())
+            softAssertions.assertThat(actual_입찰자.getLastReadMessageId())
                           .isNotEqualTo(메시지_로그_업데이트용_마지막_조회_메시지.getId());
         });
     }

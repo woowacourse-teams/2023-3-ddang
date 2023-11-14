@@ -1,14 +1,14 @@
 package com.ddang.ddang.review.infrastructure.persistence;
 
+import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.repository.ReviewRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class ReviewRepositoryImpl implements ReviewRepository {
 
@@ -20,8 +20,9 @@ public class ReviewRepositoryImpl implements ReviewRepository {
     }
 
     @Override
-    public Optional<Review> findById(final Long id) {
-        return jpaReviewRepository.findById(id);
+    public Review getByIdOrThrow(final Long id) {
+        return jpaReviewRepository.findById(id)
+                                  .orElseThrow(() -> new ReviewNotFoundException("지정한 리뷰를 찾을 수 없습니다."));
     }
 
     @Override

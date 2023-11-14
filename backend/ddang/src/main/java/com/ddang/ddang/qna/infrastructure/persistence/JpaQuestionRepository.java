@@ -1,4 +1,4 @@
-package com.ddang.ddang.qna.infrastructure;
+package com.ddang.ddang.qna.infrastructure.persistence;
 
 import com.ddang.ddang.qna.domain.Question;
 import org.springframework.data.jpa.repository.JpaRepository;
