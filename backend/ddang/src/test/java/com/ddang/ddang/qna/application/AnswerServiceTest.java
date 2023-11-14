@@ -1,5 +1,8 @@
 package com.ddang.ddang.qna.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
@@ -16,9 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -99,8 +99,7 @@ class AnswerServiceTest extends AnswerServiceFixture {
     void 존재하지_않는_답변_삭제시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> answerService.deleteById(존재하지_않는_답변_아이디, 판매자.getId()))
-                .isInstanceOf(AnswerNotFoundException.class)
-                .hasMessage("해당 답변을 찾을 수 없습니다.");
+                .isInstanceOf(AnswerNotFoundException.class);
     }
 
     @Test

@@ -4,7 +4,6 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
-import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
@@ -65,8 +64,7 @@ public class AnswerService {
 
     @Transactional
     public void deleteById(final Long answerId, final Long userId) {
-        final Answer answer = answerRepository.findById(answerId)
-                                              .orElseThrow(() -> new AnswerNotFoundException("해당 답변을 찾을 수 없습니다."));
+        final Answer answer = answerRepository.getByIdOrThrow(answerId);
         final User user = userRepository.findById(userId)
                                         .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
 

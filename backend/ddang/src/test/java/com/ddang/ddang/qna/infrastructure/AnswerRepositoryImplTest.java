@@ -1,7 +1,11 @@
 package com.ddang.ddang.qna.infrastructure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import com.ddang.ddang.qna.infrastructure.fixture.AnswerRepositoryImplFixture;
@@ -12,10 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
@@ -62,20 +62,18 @@ class AnswerRepositoryImplTest extends AnswerRepositoryImplFixture {
     }
 
     @Test
-    void 삭제된_답변은_조회되지_않는다() {
-        // when
-        final Optional<Answer> actual = answerRepository.findById(삭제된_답변.getId());
-
-        // then
-        assertThat(actual).isEmpty();
+    void 삭제된_답변은_조회하면_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> answerRepository.getByIdOrThrow(삭제된_답변.getId()))
+                .isInstanceOf(AnswerNotFoundException.class);
     }
 
     @Test
     void 삭제되지_않은_답변은_조회된다() {
         // when
-        final Optional<Answer> actual = answerRepository.findById(답변.getId());
+        final Answer actual = answerRepository.getByIdOrThrow(답변.getId());
 
         // then
-        assertThat(actual).contains(답변);
+        assertThat(actual).isEqualTo(답변);
     }
 }
