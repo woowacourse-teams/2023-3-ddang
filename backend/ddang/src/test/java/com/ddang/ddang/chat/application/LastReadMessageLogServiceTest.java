@@ -33,8 +33,8 @@ class LastReadMessageLogServiceTest extends LastReadMessageLogServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThatCode(() -> readMessageLogRepository.findByReaderIdAndChatRoomId(메시지_로그_생성용_발신자_겸_판매자.getId(), 메시지_로그_생성용_채팅방.getId())).doesNotThrowAnyException();
-            softAssertions.assertThatCode(() -> readMessageLogRepository.findByReaderIdAndChatRoomId(메시지_로그_생성용_입찰자_구매자.getId(), 메시지_로그_생성용_채팅방.getId())).doesNotThrowAnyException();
+            softAssertions.assertThatCode(() -> readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(메시지_로그_생성용_발신자_겸_판매자.getId(), 메시지_로그_생성용_채팅방.getId())).doesNotThrowAnyException();
+            softAssertions.assertThatCode(() -> readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(메시지_로그_생성용_입찰자_구매자.getId(), 메시지_로그_생성용_채팅방.getId())).doesNotThrowAnyException();
         });
     }
 
@@ -43,11 +43,11 @@ class LastReadMessageLogServiceTest extends LastReadMessageLogServiceFixture {
         // given & when
         lastReadMessageLogService.update(메시지_로그_업데이트용_이벤트);
 
-        final ReadMessageLog actual_발신자 = readMessageLogRepository.findByReaderIdAndChatRoomId(
+        final ReadMessageLog actual_발신자 = readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(
                 메시지_로그_업데이트용_발신자_겸_판매자.getId(),
                 메시지_로그_업데이트용_채팅방.getId()
         );
-        final ReadMessageLog actual_입찰자 = readMessageLogRepository.findByReaderIdAndChatRoomId(
+        final ReadMessageLog actual_입찰자 = readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(
                 메시지_로그_업데이트용_입찰자.getId(),
                 메시지_로그_업데이트용_채팅방.getId()
         );

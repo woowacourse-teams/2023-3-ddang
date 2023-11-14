@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface ReadMessageLogRepository {
 
-    ReadMessageLog findByReaderIdAndChatRoomId(final Long readerId, final Long chatRoomId);
+    ReadMessageLog getByReaderIdAndChatRoomIdOrThrow(final Long readerId, final Long chatRoomId);
 
     List<ReadMessageLog> saveAll(List<ReadMessageLog> readMessageLogs);
 }

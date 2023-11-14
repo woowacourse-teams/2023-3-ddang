@@ -14,7 +14,7 @@ public class ReadMessageLogRepositoryImpl implements ReadMessageLogRepository {
     private final JpaReadMessageLogRepository jpaReadMessageLogRepository;
 
     @Override
-    public ReadMessageLog findByReaderIdAndChatRoomId(final Long readerId, final Long chatRoomId) {
+    public ReadMessageLog getByReaderIdAndChatRoomIdOrThrow(final Long readerId, final Long chatRoomId) {
         return jpaReadMessageLogRepository.findLastReadMessageByUserIdAndChatRoomId(readerId, chatRoomId)
                                           .orElseThrow(() ->
                                                   new ReadMessageLogNotFoundException(

@@ -41,7 +41,7 @@ class ReadMessageLogRepositoryImplTest extends ReadMessageLogRepositoryFixture {
     @Test
     void 메시지_조회자_아이디와_채팅방_아이디에_해당하는_조회_메시지_로그를_반환한다() {
         // given
-        final ReadMessageLog actual = readMessageLogRepository.findByReaderIdAndChatRoomId(
+        final ReadMessageLog actual = readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(
                 메리.getId(), 메리_엔초_채팅방.getId()
         );
 

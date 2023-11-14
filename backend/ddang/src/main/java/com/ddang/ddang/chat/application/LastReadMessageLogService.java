@@ -33,7 +33,7 @@ public class LastReadMessageLogService {
     public void update(final UpdateReadMessageLogEvent updateReadMessageLogEvent) {
         final User reader = updateReadMessageLogEvent.reader();
         final ChatRoom chatRoom = updateReadMessageLogEvent.chatRoom();
-        final ReadMessageLog messageLog = readMessageLogRepository.findByReaderIdAndChatRoomId(
+        final ReadMessageLog messageLog = readMessageLogRepository.getByReaderIdAndChatRoomIdOrThrow(
                 reader.getId(), chatRoom.getId()
         );
 
