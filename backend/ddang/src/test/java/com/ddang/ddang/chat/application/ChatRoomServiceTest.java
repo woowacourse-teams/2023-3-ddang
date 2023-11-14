@@ -167,8 +167,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     void 지정한_아이디에_해당하는_채팅방을_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomService.readByChatRoomId(존재하지_않는_채팅방_아이디, 엔초.getId()))
-                .isInstanceOf(ChatRoomNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
+                .isInstanceOf(ChatRoomNotFoundException.class);
 
     }
 

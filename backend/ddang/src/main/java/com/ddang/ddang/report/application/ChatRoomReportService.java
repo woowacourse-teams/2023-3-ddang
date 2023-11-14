@@ -1,6 +1,5 @@
 package com.ddang.ddang.report.application;
 
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
@@ -12,11 +11,10 @@ import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -31,9 +29,8 @@ public class ChatRoomReportService {
     public Long create(final CreateChatRoomReportDto chatRoomReportDto) {
         final User reporter = userRepository.findById(chatRoomReportDto.reporterId())
                                             .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final ChatRoom chatRoom =
-                chatRoomRepository.findById(chatRoomReportDto.chatRoomId())
-                                  .orElseThrow(() -> new ChatRoomNotFoundException("해당 채팅방을 찾을 수 없습니다."));
+        final ChatRoom chatRoom = chatRoomRepository.getByIdOrThrow(chatRoomReportDto.chatRoomId());
+
         checkInvalidChatRoomReport(reporter, chatRoom);
 
         final ChatRoomReport chatRoomReport = chatRoomReportDto.toEntity(reporter, chatRoom);

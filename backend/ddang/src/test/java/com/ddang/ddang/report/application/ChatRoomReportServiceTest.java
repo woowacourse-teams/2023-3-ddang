@@ -1,5 +1,8 @@
 package com.ddang.ddang.report.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
@@ -7,16 +10,12 @@ import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomExcepti
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.fixture.ChatRoomReportServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -47,8 +46,7 @@ class ChatRoomReportServiceTest extends ChatRoomReportServiceFixture {
     void 존재하지_않는_채팅방을_신고할시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomReportService.create(존재하지_않는_채팅방_신고_요청_dto))
-                .isInstanceOf(ChatRoomNotFoundException.class)
-                .hasMessage("해당 채팅방을 찾을 수 없습니다.");
+                .isInstanceOf(ChatRoomNotFoundException.class);
     }
 
     @Test

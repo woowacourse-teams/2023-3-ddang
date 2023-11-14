@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
-import java.util.Optional;
-
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -33,13 +31,12 @@ class ChatRoomAndImageRepositoryImplTest extends ChatRoomAndImageRepositoryImplF
     @Test
     void 지정한_채팅방_아이디에_해당하는_채팅방을_조회한다() {
         // when
-        final Optional<ChatRoomAndImageDto> actual = chatRoomAndImageRepository.findChatRoomById(채팅방.getId());
+        final ChatRoomAndImageDto actual = chatRoomAndImageRepository.getByIdOrThrow(채팅방.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get().chatRoom()).isEqualTo(채팅방);
-            softAssertions.assertThat(actual.get().thumbnailImage()).isEqualTo(경매_대표_이미지);
+            softAssertions.assertThat(actual.chatRoom()).isEqualTo(채팅방);
+            softAssertions.assertThat(actual.thumbnailImage()).isEqualTo(경매_대표_이미지);
         });
     }
 }

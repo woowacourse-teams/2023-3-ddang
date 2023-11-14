@@ -1,13 +1,13 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
+import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
@@ -19,8 +19,11 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public Optional<ChatRoom> findById(final Long id) {
-        return jpaChatRoomRepository.findById(id);
+    public ChatRoom getByIdOrThrow(final Long id) {
+        return jpaChatRoomRepository.findById(id)
+                                    .orElseThrow(() -> new ChatRoomNotFoundException(
+                                            "지정한 채팅방을 찾을 수 없습니다."
+                                    ));
     }
 
     @Override

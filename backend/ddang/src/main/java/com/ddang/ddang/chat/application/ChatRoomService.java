@@ -9,7 +9,6 @@ import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -101,11 +100,8 @@ public class ChatRoomService {
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
         final User findUser = userRepository.findById(userId)
                                             .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
-        final ChatRoomAndImageDto chatRoomAndImageDto =
-                chatRoomAndImageRepository.findChatRoomById(chatRoomId)
-                                          .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                  "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
-                                          ));
+        final ChatRoomAndImageDto chatRoomAndImageDto = chatRoomAndImageRepository.getByIdOrThrow(chatRoomId);
+
         checkAccessible(findUser, chatRoomAndImageDto.chatRoom());
 
         return ReadParticipatingChatRoomDto.of(findUser, chatRoomAndImageDto);
