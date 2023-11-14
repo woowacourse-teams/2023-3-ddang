@@ -8,7 +8,6 @@ import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.domain.repository.CategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -46,10 +45,7 @@ public class AuctionService {
                                           .orElseThrow(() -> new UserNotFoundException(
                                                   "지정한 판매자를 찾을 수 없습니다."
                                           ));
-        final Category subCategory = categoryRepository.findSubCategoryById(dto.subCategoryId())
-                                                       .orElseThrow(() -> new CategoryNotFoundException(
-                                                               "지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다."
-                                                       ));
+        final Category subCategory = categoryRepository.getSubCategoryByIdOrThrow(dto.subCategoryId());
         final Auction auction = dto.toEntity(seller, subCategory);
         final List<Region> thirdRegions = regionRepository.findAllThirdRegionByIds(dto.thirdRegionIds());
 

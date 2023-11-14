@@ -80,16 +80,14 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_해당하는_카테고리가_없을때_경매를_등록하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.create(존재하지_않는_카테고리의_경매_생성_dto))
-                .isInstanceOf(CategoryNotFoundException.class)
-                .hasMessage("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다.");
+                .isInstanceOf(CategoryNotFoundException.class);
     }
 
     @Test
     void 지정한_아이디에_해당하는_카테고리가_서브_카테고리가_아닐_떄_경매를_등록하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.create(메인_카테고리의_경매_생성_dto))
-                .isInstanceOf(CategoryNotFoundException.class)
-                .hasMessage("지정한 하위 카테고리가 없거나 하위 카테고리가 아닙니다.");
+                .isInstanceOf(CategoryNotFoundException.class);
     }
 
     @Test
