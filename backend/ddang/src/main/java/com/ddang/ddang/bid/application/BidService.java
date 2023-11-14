@@ -63,9 +63,6 @@ public class BidService {
         if (auction.isClosed(now)) {
             throw new InvalidAuctionToBidException("이미 종료된 경매입니다");
         }
-        if (auction.isDeleted()) {
-            throw new InvalidAuctionToBidException("삭제된 경매입니다");
-        }
     }
 
     private void checkInvalidBid(final Auction auction, final User bidder, final CreateBidDto bidDto) {
