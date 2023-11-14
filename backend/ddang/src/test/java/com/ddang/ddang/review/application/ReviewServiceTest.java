@@ -10,8 +10,9 @@ import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.application.exception.RevieweeNotFoundException;
+import com.ddang.ddang.review.application.exception.ReviewerNotFoundException;
 import com.ddang.ddang.review.application.fixture.ReviewServiceFixture;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -44,19 +45,17 @@ class ReviewServiceTest extends ReviewServiceFixture {
     }
 
     @Test
-    void 평가_작성자를_찾을_수_없다면_예외가_발생한다() {
+    void 리뷰어를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.create(존재하지_않는_사용자가_평가를_등록하려는_DTO))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("작성자 정보를 찾을 수 없습니다.");
+                .isInstanceOf(ReviewerNotFoundException.class);
     }
 
     @Test
-    void 평가_상대를_찾을_수_없다면_예외가_발생한다() {
+    void 리뷰이를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.create(존재하지_않는_사용자를_평가하려는_DTO))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("평가 상대의 정보를 찾을 수 없습니다.");
+                .isInstanceOf(RevieweeNotFoundException.class);
     }
 
     @Test
