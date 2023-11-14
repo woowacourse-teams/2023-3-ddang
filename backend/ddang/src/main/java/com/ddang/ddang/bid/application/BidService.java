@@ -1,10 +1,10 @@
 package com.ddang.ddang.bid.application;
 
-import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.dto.AuctionAndImageDto;
 import com.ddang.ddang.auction.domain.repository.AuctionAndImageRepository;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
@@ -19,7 +19,6 @@ import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -42,39 +41,35 @@ public class BidService {
         final AuctionAndImageDto auctionAndImageDto =
                 auctionAndImageRepository.findDtoByAuctionId(bidDto.auctionId())
                                          .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
-
         final Auction auction = auctionAndImageDto.auction();
+
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
-        final Optional<User> previousBidder = auction.findLastBidder();
+        auction.findLastBidder()
+               .ifPresent(previousBidder ->
+                       publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder));
 
-        final Bid saveBid = saveAndUpdateLastBid(bidDto, auction, bidder);
-
-        publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder);
-
-        return saveBid.getId();
+        return saveAndUpdateLastBid(bidDto, auction, bidder).getId();
     }
 
     private void publishBidNotificationEvent(
             final String auctionImageAbsoluteUrl,
             final AuctionAndImageDto auctionAndImageDto,
-            final Optional<User> previousBidder
+            final User previousBidder
     ) {
-        if (previousBidder.isEmpty()) {
-            return;
-        }
-
         final BidDto bidDto = new BidDto(
-                previousBidder.get().getId(),
+                previousBidder.getId(),
                 auctionAndImageDto,
                 auctionImageAbsoluteUrl
         );
+
         bidEventPublisher.publishEvent(new BidNotificationEvent(bidDto));
     }
 
     private void checkInvalidAuction(final Auction auction) {
         final LocalDateTime now = LocalDateTime.now();
+
         if (auction.isClosed(now)) {
             throw new InvalidAuctionToBidException("이미 종료된 경매입니다");
         }
@@ -84,18 +79,18 @@ public class BidService {
     }
 
     private void checkInvalidBid(final Auction auction, final User bidder, final CreateBidDto bidDto) {
-        final Optional<Bid> lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
-        final BidPrice bidPrice = processBidPrice(bidDto.bidPrice());
-
         checkIsSeller(auction, bidder);
 
-        if (lastBid.isPresent()) {
-            checkIsNotLastBidder(lastBid.get(), bidder);
-            checkInvalidBidPrice(lastBid.get(), bidPrice);
-            return;
-        }
+        final BidPrice bidPrice = processBidPrice(bidDto.bidPrice());
 
-        checkInvalidFirstBidPrice(auction, bidPrice);
+        auction.findLastBid()
+                .ifPresentOrElse(
+                        lastBid -> {
+                            checkIsNotLastBidder(lastBid, bidder);
+                            checkInvalidBidPrice(lastBid, bidPrice);
+                        },
+                        () -> checkInvalidFirstBidPrice(auction, bidPrice)
+                );
     }
 
     private BidPrice processBidPrice(final int value) {
