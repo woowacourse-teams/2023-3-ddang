@@ -1,5 +1,8 @@
 package com.ddang.ddang.chat.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
@@ -14,6 +17,7 @@ import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,11 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -76,8 +75,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     void 채팅방_생성시_관련된_경매_정보를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomService.create(구매자.getId(), 경매_정보가_없어서_채팅방을_생성할_수_없는_DTO))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test
@@ -214,8 +212,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_경매를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomService.readChatInfoByAuctionId(존재하지_않는_경매_아이디, 엔초_회원_정보))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("지정한 아이디에 대한 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test

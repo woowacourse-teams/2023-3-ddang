@@ -1,5 +1,8 @@
 package com.ddang.ddang.qna.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
@@ -11,6 +14,7 @@ import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.application.fixture.QuestionServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -18,11 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -57,8 +56,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     void 존재하지_않는_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionService.create(존재하지_않는_경매_질문_등록_요청_dto, 이미지_절대_경로))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test
@@ -73,8 +71,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     void 삭제된_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionService.create(삭제된_경매_질문_등록_요청_dto, 이미지_절대_경로))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test

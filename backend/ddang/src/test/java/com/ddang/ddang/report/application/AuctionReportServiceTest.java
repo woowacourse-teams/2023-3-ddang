@@ -46,8 +46,7 @@ class AuctionReportServiceTest extends AuctionReportServiceFixture {
     void 존재하지_않는_경매를_신고하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionReportService.create(존재하지_않는_경매_신고_요청_dto))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test
@@ -62,8 +61,7 @@ class AuctionReportServiceTest extends AuctionReportServiceFixture {
     void 삭제한_경매를_신고하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionReportService.create(삭제된_경매_신고_요청_dto))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test

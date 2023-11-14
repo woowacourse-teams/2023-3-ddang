@@ -1,5 +1,8 @@
 package com.ddang.ddang.review.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
@@ -9,16 +12,12 @@ import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.application.fixture.ReviewServiceFixture;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -41,8 +40,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     void 연관된_경매를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.create(존재하지_않는_경매와_연관된_평가를_등록하려는_DTO))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test

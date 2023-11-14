@@ -1,5 +1,9 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.fixture.AuctionRepositoryImplFixture;
@@ -16,10 +20,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
@@ -70,54 +70,48 @@ class AuctionRepositoryImplTest extends AuctionRepositoryImplFixture {
     @Test
     void 지정한_아이디에_대한_경매와_관련된_데이터를_모두_조회한다() {
         // when
-        final Optional<Auction> actual = auctionRepository.findTotalAuctionById(저장된_경매_엔티티.getId());
+        final Auction actual = auctionRepository.getTotalAuctionByIdOrThrow(저장된_경매_엔티티.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get().getId()).isEqualTo(저장된_경매_엔티티.getId());
-            softAssertions.assertThat(actual.get().getTitle()).isEqualTo(저장된_경매_엔티티.getTitle());
-            softAssertions.assertThat(actual.get().getDescription()).isEqualTo(저장된_경매_엔티티.getDescription());
-            softAssertions.assertThat(actual.get().getBidUnit()).isEqualTo(저장된_경매_엔티티.getBidUnit());
-            softAssertions.assertThat(actual.get().getStartPrice()).isEqualTo(저장된_경매_엔티티.getStartPrice());
-            softAssertions.assertThat(actual.get().getClosingTime()).isEqualTo(저장된_경매_엔티티.getClosingTime());
-            softAssertions.assertThat(actual.get().getAuctionRegions()).isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0)).isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion()).isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getFirstRegion())
-                          .isNotNull();
-            softAssertions.assertThat(actual.get().getAuctionRegions().get(0).getThirdRegion().getSecondRegion())
-                          .isNotNull();
-            softAssertions.assertThat(actual.get().getSubCategory()).isNotNull();
-            softAssertions.assertThat(actual.get().getSubCategory().getMainCategory()).isNotNull();
-            softAssertions.assertThat(actual.get().getSeller()).isNotNull();
+            softAssertions.assertThat(actual.getId()).isEqualTo(저장된_경매_엔티티.getId());
+            softAssertions.assertThat(actual.getTitle()).isEqualTo(저장된_경매_엔티티.getTitle());
+            softAssertions.assertThat(actual.getDescription()).isEqualTo(저장된_경매_엔티티.getDescription());
+            softAssertions.assertThat(actual.getBidUnit()).isEqualTo(저장된_경매_엔티티.getBidUnit());
+            softAssertions.assertThat(actual.getStartPrice()).isEqualTo(저장된_경매_엔티티.getStartPrice());
+            softAssertions.assertThat(actual.getClosingTime()).isEqualTo(저장된_경매_엔티티.getClosingTime());
+            softAssertions.assertThat(actual.getAuctionRegions()).isNotNull();
+            softAssertions.assertThat(actual.getAuctionRegions().get(0)).isNotNull();
+            softAssertions.assertThat(actual.getAuctionRegions().get(0).getThirdRegion()).isNotNull();
+            softAssertions.assertThat(actual.getAuctionRegions().get(0).getThirdRegion().getFirstRegion()).isNotNull();
+            softAssertions.assertThat(actual.getAuctionRegions().get(0).getThirdRegion().getSecondRegion()).isNotNull();
+            softAssertions.assertThat(actual.getSubCategory()).isNotNull();
+            softAssertions.assertThat(actual.getSubCategory().getMainCategory()).isNotNull();
+            softAssertions.assertThat(actual.getSeller()).isNotNull();
         });
     }
 
     @Test
     void 지정한_아이디에_대한_경매를_조회한다() {
         // when
-        final Optional<Auction> actual = auctionRepository.findPureAuctionById(저장된_경매_엔티티.getId());
+        final Auction actual = auctionRepository.getPureAuctionByIdOrThrow(저장된_경매_엔티티.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual).isPresent();
-            softAssertions.assertThat(actual.get().getId()).isEqualTo(저장된_경매_엔티티.getId());
-            softAssertions.assertThat(actual.get().getTitle()).isEqualTo(저장된_경매_엔티티.getTitle());
-            softAssertions.assertThat(actual.get().getDescription()).isEqualTo(저장된_경매_엔티티.getDescription());
-            softAssertions.assertThat(actual.get().getBidUnit()).isEqualTo(저장된_경매_엔티티.getBidUnit());
-            softAssertions.assertThat(actual.get().getStartPrice()).isEqualTo(저장된_경매_엔티티.getStartPrice());
-            softAssertions.assertThat(actual.get().getClosingTime()).isEqualTo(저장된_경매_엔티티.getClosingTime());
+            softAssertions.assertThat(actual.getId()).isEqualTo(저장된_경매_엔티티.getId());
+            softAssertions.assertThat(actual.getTitle()).isEqualTo(저장된_경매_엔티티.getTitle());
+            softAssertions.assertThat(actual.getDescription()).isEqualTo(저장된_경매_엔티티.getDescription());
+            softAssertions.assertThat(actual.getBidUnit()).isEqualTo(저장된_경매_엔티티.getBidUnit());
+            softAssertions.assertThat(actual.getStartPrice()).isEqualTo(저장된_경매_엔티티.getStartPrice());
+            softAssertions.assertThat(actual.getClosingTime()).isEqualTo(저장된_경매_엔티티.getClosingTime());
         });
     }
 
     @Test
-    void 삭제된_아이디에_대한_경매_조회시_빈_optional을_반환한다() {
-        // when
-        final Optional<Auction> actual = auctionRepository.findTotalAuctionById(삭제된_경매_엔티티.getId());
-
-        // then
-        assertThat(actual).isEmpty();
+    void 삭제된_아이디에_대한_경매_조회시_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> auctionRepository.getTotalAuctionByIdOrThrow(삭제된_경매_엔티티.getId()))
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test

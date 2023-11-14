@@ -1,17 +1,16 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
+import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
-
 import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class AuctionRepositoryImpl implements AuctionRepository {
 
@@ -29,13 +28,15 @@ public class AuctionRepositoryImpl implements AuctionRepository {
     }
 
     @Override
-    public Optional<Auction> findTotalAuctionById(final Long id) {
-        return jpaAuctionRepository.findTotalAuctionById(id);
+    public Auction getTotalAuctionByIdOrThrow(final Long id) {
+        return jpaAuctionRepository.findTotalAuctionById(id)
+                                   .orElseThrow(() -> new AuctionNotFoundException("지정한 경매를 찾을 수 없습니다."));
     }
 
     @Override
-    public Optional<Auction> findPureAuctionById(final Long id) {
-        return jpaAuctionRepository.findPureAuctionById(id);
+    public Auction getPureAuctionByIdOrThrow(final Long id) {
+        return jpaAuctionRepository.findPureAuctionById(id)
+                                   .orElseThrow(() -> new AuctionNotFoundException("지정한 경매를 찾을 수 없습니다."));
     }
 
     @Override
