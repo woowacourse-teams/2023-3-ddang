@@ -19,23 +19,29 @@ public class DeviceTokenService {
 
     @Transactional
     public void persist(final Long userId, final PersistDeviceTokenDto deviceTokenDto) {
-        final String newDeviceToken = deviceTokenDto.deviceToken();
-        if (newDeviceToken == null || newDeviceToken.isBlank()) {
+        final String newDeviceTokenValue = deviceTokenDto.deviceToken();
+
+        if (newDeviceTokenValue == null || newDeviceTokenValue.isBlank()) {
             return;
         }
 
-        final DeviceToken deviceToken =
-                deviceTokenRepository.findByUserId(userId)
-                                     .orElseGet(() -> createDeviceToken(userId, newDeviceToken));
-        if (deviceToken.isDifferentToken(newDeviceToken)) {
-            deviceToken.updateDeviceToken(newDeviceToken);
+        deviceTokenRepository.findByUserId(userId)
+                             .ifPresentOrElse(
+                                     deviceToken -> updateDeviceToken(deviceToken, newDeviceTokenValue),
+                                     () -> persistDeviceToken(userId, newDeviceTokenValue)
+                             );
+    }
+
+    private void updateDeviceToken(final DeviceToken deviceToken, final String newDeviceTokenValue) {
+        if (deviceToken.isDifferentToken(newDeviceTokenValue)) {
+            deviceToken.updateDeviceToken(newDeviceTokenValue);
         }
     }
 
-    private DeviceToken createDeviceToken(final Long userId, final String newDeviceToken) {
+    private void persistDeviceToken(final Long userId, final String newDeviceToken) {
         final User findUser = userRepository.getByIdOrThrow(userId);
         final DeviceToken deviceToken = new DeviceToken(findUser, newDeviceToken);
 
-        return deviceTokenRepository.save(deviceToken);
+        deviceTokenRepository.save(deviceToken);
     }
 }

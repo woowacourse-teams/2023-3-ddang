@@ -39,11 +39,11 @@ public class DeviceToken {
         this.deviceToken = deviceToken;
     }
 
-    public boolean isDifferentToken(final String targetDeviceToken) {
-        return !this.deviceToken.equals(targetDeviceToken);
+    public boolean isDifferentToken(final String targetDeviceTokenValue) {
+        return !this.deviceToken.equals(targetDeviceTokenValue);
     }
 
-    public void updateDeviceToken(final String newDeviceToken) {
-        this.deviceToken = newDeviceToken;
+    public void updateDeviceToken(final String newDeviceTokenValue) {
+        this.deviceToken = newDeviceTokenValue;
     }
 }
