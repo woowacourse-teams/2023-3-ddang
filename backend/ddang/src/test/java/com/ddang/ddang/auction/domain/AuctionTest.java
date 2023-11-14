@@ -420,4 +420,42 @@ class AuctionTest extends AuctionFixture {
         // then
         assertThat(actual).isEqualTo(AuctionStatus.SUCCESS);
     }
+
+    @Test
+    void 마지막_입찰_내역이_있으면_Optional로_감싸서_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("제목")
+                                       .seller(판매자)
+                                       .closingTime(LocalDateTime.now().minusDays(2))
+                                       .build();
+        final Bid bid = new Bid(auction, 구매자, 유효한_입찰_금액);
+
+        auction.updateLastBid(bid);
+
+        // when
+        final Optional<Bid> actual = auction.findLastBid();
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isPresent();
+            softAssertions.assertThat(actual.get()).isEqualTo(bid);
+        });
+    }
+
+    @Test
+    void 마지막_입찰_내역이_없다면_빈_Optional을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("제목")
+                                       .seller(판매자)
+                                       .closingTime(LocalDateTime.now().minusDays(2))
+                                       .build();
+
+        // when
+        final Optional<Bid> actual = auction.findLastBid();
+
+        // then
+        assertThat(actual).isEmpty();
+    }
 }

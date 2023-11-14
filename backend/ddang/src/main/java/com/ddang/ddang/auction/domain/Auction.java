@@ -191,4 +191,8 @@ public class Auction extends BaseTimeEntity {
 
         return Optional.of(lastBid.getBidder());
     }
+
+    public Optional<Bid> findLastBid() {
+        return Optional.ofNullable(lastBid);
+    }
 }
