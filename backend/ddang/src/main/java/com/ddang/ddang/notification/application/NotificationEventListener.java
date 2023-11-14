@@ -56,8 +56,8 @@ public class NotificationEventListener {
     public void sendBidNotification(final BidNotificationEvent bidNotificationEvent) {
         try {
             final BidDto bidDto = bidNotificationEvent.bidDto();
-            final Auction auction = bidDto.auctionAndImageDto().auction();
-            final AuctionImage auctionImage = bidDto.auctionAndImageDto().auctionImage();
+            final Auction auction = bidDto.auction();
+            final AuctionImage auctionImage = convertAuctionToImage(auction);
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.BID,
                     bidDto.previousBidderId(),
@@ -70,6 +70,10 @@ public class NotificationEventListener {
         } catch (final FirebaseMessagingException ex) {
             log.error("exception type : {}, ", ex.getClass().getSimpleName(), ex);
         }
+    }
+
+    private AuctionImage convertAuctionToImage(final Auction auction) {
+        return auction.getAuctionImages().get(0);
     }
 
     @TransactionalEventListener

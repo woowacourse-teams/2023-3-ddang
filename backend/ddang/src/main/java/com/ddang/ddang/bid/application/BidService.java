@@ -1,8 +1,6 @@
 package com.ddang.ddang.bid.application;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.auction.domain.dto.AuctionAndImageDto;
-import com.ddang.ddang.auction.domain.repository.AuctionAndImageRepository;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.bid.application.dto.BidDto;
@@ -31,38 +29,30 @@ public class BidService {
 
     private final ApplicationEventPublisher bidEventPublisher;
     private final AuctionRepository auctionRepository;
-    private final AuctionAndImageRepository auctionAndImageRepository;
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
 
     @Transactional
     public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
         final User bidder = userRepository.getByIdOrThrow(bidDto.userId());
-        final AuctionAndImageDto auctionAndImageDto =
-                auctionAndImageRepository.findDtoByAuctionId(bidDto.auctionId())
-                                         .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
-        final Auction auction = auctionAndImageDto.auction();
+        final Auction auction = auctionRepository.getTotalAuctionByIdOrThrow(bidDto.auctionId());
 
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
         auction.findLastBidder()
                .ifPresent(previousBidder ->
-                       publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder));
+                       publishBidNotificationEvent(auctionImageAbsoluteUrl, auction, previousBidder));
 
         return saveAndUpdateLastBid(bidDto, auction, bidder).getId();
     }
 
     private void publishBidNotificationEvent(
             final String auctionImageAbsoluteUrl,
-            final AuctionAndImageDto auctionAndImageDto,
+            final Auction auction,
             final User previousBidder
     ) {
-        final BidDto bidDto = new BidDto(
-                previousBidder.getId(),
-                auctionAndImageDto,
-                auctionImageAbsoluteUrl
-        );
+        final BidDto bidDto = new BidDto(previousBidder.getId(), auction, auctionImageAbsoluteUrl);
 
         bidEventPublisher.publishEvent(new BidNotificationEvent(bidDto));
     }

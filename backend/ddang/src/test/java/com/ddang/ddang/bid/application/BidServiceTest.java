@@ -91,8 +91,7 @@ class BidServiceTest extends BidServiceFixture {
     void 존재하지_않는_경매에_입찰하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> bidService.create(존재하지_않는_경매_아이디에_대한_입찰_요청_dto, 이미지_절대_url))
-                .isInstanceOf(AuctionNotFoundException.class)
-                .hasMessage("해당 경매를 찾을 수 없습니다.");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test
@@ -114,8 +113,7 @@ class BidServiceTest extends BidServiceFixture {
     void 삭제된_경매에_입찰하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> bidService.create(삭제된_경매에_대한_입찰_요청_dto, 이미지_절대_url))
-                .isInstanceOf(InvalidAuctionToBidException.class)
-                .hasMessage("삭제된 경매입니다");
+                .isInstanceOf(AuctionNotFoundException.class);
     }
 
     @Test

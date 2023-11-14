@@ -11,6 +11,8 @@ import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.ChatRoom;
@@ -24,6 +26,9 @@ import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
+import com.ddang.ddang.region.domain.AuctionRegion;
+import com.ddang.ddang.region.domain.Region;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -54,6 +59,12 @@ public class NotificationEventListenerFixture {
     @Autowired
     private JpaMessageRepository messageRepository;
 
+    @Autowired
+    private RegionRepository regionRepository;
+
+    @Autowired
+    private JpaCategoryRepository categoryRepository;
+
     protected CreateMessageDto 메시지_생성_DTO;
     protected CreateBidDto 입찰_생성_DTO;
     protected MessageNotificationEvent 메시지_알림_이벤트;
@@ -65,6 +76,22 @@ public class NotificationEventListenerFixture {
 
     @BeforeEach
     void setUpFixture() {
+        final Region 서울특별시 = new Region("서울특별시");
+        final Region 강남구 = new Region("강남구");
+        final Region 역삼동 = new Region("역삼동");
+
+        서울특별시.addSecondRegion(강남구);
+        강남구.addThirdRegion(역삼동);
+
+        regionRepository.save(서울특별시);
+
+        final Category 가구_카테고리 = new Category("가구");
+        final Category 가구_서브_의자_카테고리 = new Category("의자");
+
+        가구_카테고리.addSubCategory(가구_서브_의자_카테고리);
+
+        categoryRepository.save(가구_카테고리);
+
         final User 발신자_겸_판매자 = User.builder()
                                    .name("발신자 겸 판매자")
                                    .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -101,7 +128,11 @@ public class NotificationEventListenerFixture {
                                   .bidUnit(new BidUnit(100))
                                   .startPrice(new Price(100))
                                   .closingTime(LocalDateTime.now().plusDays(3L))
+                                  .subCategory(가구_서브_의자_카테고리)
                                   .build();
+
+        경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
+
         auctionRepository.save(경매);
 
         final AuctionImage 경매_이미지 = new AuctionImage("upload.jpg", "store.jpg");
@@ -126,7 +157,7 @@ public class NotificationEventListenerFixture {
                        .build()
         );
         final AuctionAndImageDto auctionAndImageDto = new AuctionAndImageDto(경매, 경매_이미지);
-        final BidDto 입찰_DTO = new BidDto(수신자_겸_기존_입찰자.getId(), auctionAndImageDto, 이미지_절대_경로);
+        final BidDto 입찰_DTO = new BidDto(수신자_겸_기존_입찰자.getId(), 경매, 이미지_절대_경로);
 
         메시지_알림_이벤트 = new MessageNotificationEvent(저장된_메시지, 이미지_절대_경로);
         입찰_알림_이벤트 = new BidNotificationEvent(입찰_DTO);
