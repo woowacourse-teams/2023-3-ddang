@@ -59,8 +59,10 @@ public class ChatRoomService {
 
     private ChatRoom persistChatRoom(final User user, final Auction auction) {
         checkAuctionStatus(auction);
+
         final User winner = auction.findWinner(LocalDateTime.now())
                                    .orElseThrow(() -> new WinnerNotFoundException("낙찰자가 존재하지 않습니다"));
+
         checkUserCanParticipate(user, auction);
 
         final ChatRoom chatRoom = new ChatRoom(auction, winner);
@@ -110,14 +112,13 @@ public class ChatRoomService {
     }
 
     public ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
-        final User findUser = userRepository.findById(userInfo.userId())
-                                            .orElse(User.EMPTY_USER);
+        return userRepository.findById(userInfo.userId())
+                .map(findUser -> convertReadChatRoomDto(auctionId, findUser))
+                .orElse(ReadChatRoomDto.CANNOT_CHAT_DTO);
+    }
+
+    private ReadChatRoomDto convertReadChatRoomDto(final Long auctionId, final User findUser) {
         final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(auctionId);
-
-        if (findUser == User.EMPTY_USER) {
-            return ReadChatRoomDto.CANNOT_CHAT_DTO;
-        }
-
         final Long chatRoomId = chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                                   .orElse(DEFAULT_CHAT_ROOM_ID);
 
