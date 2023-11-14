@@ -48,8 +48,7 @@ class QuestionServiceTest extends QuestionServiceFixture {
     void 존재하지_않는_사용자가_경매에_질문하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionService.create(존재하지_않는_사용자가_경매_질문_등록_요청_dto, 이미지_절대_경로))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

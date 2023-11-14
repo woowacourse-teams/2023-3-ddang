@@ -56,8 +56,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_대한_판매자가_없는_경우_경매를_등록하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.create(존재하지_않는_판매자의_경매_생성_dto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("지정한 판매자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -144,8 +143,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
     void 지정한_아이디에_해당하는_회원이_없는_경우_삭제시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionService.deleteByAuctionId(종료되는_날이_3일_뒤인_경매.getId(), 존재하지_않는_사용자_ID))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("회원 정보를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

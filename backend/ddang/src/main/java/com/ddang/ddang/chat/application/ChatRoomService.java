@@ -17,7 +17,6 @@ import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -43,8 +42,7 @@ public class ChatRoomService {
 
     @Transactional
     public Long create(final Long userId, final CreateChatRoomDto chatRoomDto) {
-        final User findUser = userRepository.findById(userId)
-                                            .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
+        final User findUser = userRepository.getByIdOrThrow(userId);
         final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(chatRoomDto.auctionId());
 
         return chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
@@ -87,8 +85,7 @@ public class ChatRoomService {
     }
 
     public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
-        final User findUser = userRepository.findById(userId)
-                                            .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
+        final User findUser = userRepository.getByIdOrThrow(userId);
         final List<ChatRoomAndMessageAndImageDto> chatRoomAndMessageAndImageQueryProjectionDtos =
                 chatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
 
@@ -98,8 +95,7 @@ public class ChatRoomService {
     }
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
-        final User findUser = userRepository.findById(userId)
-                                            .orElseThrow(() -> new UserNotFoundException("사용자 정보를 찾을 수 없습니다."));
+        final User findUser = userRepository.getByIdOrThrow(userId);
         final ChatRoomAndImageDto chatRoomAndImageDto = chatRoomAndImageRepository.getByIdOrThrow(chatRoomId);
 
         checkAccessible(findUser, chatRoomAndImageDto.chatRoom());

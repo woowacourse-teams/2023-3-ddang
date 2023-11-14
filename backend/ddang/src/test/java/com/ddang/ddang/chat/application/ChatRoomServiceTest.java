@@ -67,8 +67,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     void 채팅방_생성시_요청한_사용자_정보를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomService.create(존재하지_않는_사용자_아이디, 채팅방_생성을_위한_DTO))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("사용자 정보를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -141,8 +140,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     void 사용자가_참여한_채팅방_목록_조회시_사용자_정보를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomService.readAllByUserId(존재하지_않는_사용자_아이디))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("사용자 정보를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -158,8 +156,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     void 지정한_아이디에_해당하는_채팅방_조회시_조회를_요청한_사용자의_정보를_찾을_수_없다면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomService.readByChatRoomId(엔초_지토_채팅방.getId(), 존재하지_않는_사용자_아이디))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("사용자 정보를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
 
     }
 

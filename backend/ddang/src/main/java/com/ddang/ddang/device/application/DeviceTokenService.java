@@ -3,7 +3,6 @@ package com.ddang.ddang.device.application;
 import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,7 @@ public class DeviceTokenService {
     }
 
     private DeviceToken createDeviceToken(final Long userId, final String newDeviceToken) {
-        final User findUser = userRepository.findById(userId)
-                                            .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final User findUser = userRepository.getByIdOrThrow(userId);
         final DeviceToken deviceToken = new DeviceToken(findUser, newDeviceToken);
 
         return deviceTokenRepository.save(deviceToken);

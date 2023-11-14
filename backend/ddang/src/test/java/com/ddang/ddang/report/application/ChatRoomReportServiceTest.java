@@ -38,8 +38,7 @@ class ChatRoomReportServiceTest extends ChatRoomReportServiceFixture {
     void 존재하지_않는_사용자가_채팅방을_신고할시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> chatRoomReportService.create(존재하지_않는_사용자의_채팅방_신고_요청_dto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

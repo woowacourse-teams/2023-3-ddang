@@ -1,5 +1,9 @@
 package com.ddang.ddang.user.application;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
@@ -12,10 +16,6 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -45,8 +45,7 @@ class UserServiceTest extends UserServiceFixture {
     void 존재하지_않는_사용자_정보_조회시_예외를_반환한다() {
         // when & then
         assertThatThrownBy(() -> userService.readById(존재하지_않는_사용자_아이디))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("사용자 정보를 사용할 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
@@ -109,7 +108,6 @@ class UserServiceTest extends UserServiceFixture {
     void 사용자_정보_수정시_존재하지_않는_사용자라면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> userService.updateById(존재하지_않는_사용자_아이디, 사용자_정보_수정_요청_dto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("사용자 정보를 사용할 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 }

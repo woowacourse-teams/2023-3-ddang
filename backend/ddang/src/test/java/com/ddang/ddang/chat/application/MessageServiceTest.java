@@ -152,8 +152,7 @@ class MessageServiceTest extends MessageServiceFixture {
     void 잘못된_사용자가_메시지를_조회할_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.readAllByLastMessageId(유효하지_않은_사용자의_메시지_조회용_request))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

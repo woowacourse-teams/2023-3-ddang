@@ -1,11 +1,16 @@
 package com.ddang.ddang.user.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import com.ddang.ddang.user.infrastructure.persistence.fixture.UserRepositoryImplFixture;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -13,10 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
@@ -145,5 +146,21 @@ class UserRepositoryImplTest extends UserRepositoryImplFixture {
 
         // then
         assertThat(actual).isFalse();
+    }
+
+    @Test
+    void 지정한_회원을_반환한다() {
+        // when
+        final User actual = userRepository.getByIdOrThrow(사용자.getId());
+
+        // then
+        assertThat(actual).isEqualTo(사용자);
+    }
+
+    @Test
+    void 지정한_회원이_없다면_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> userRepository.getByIdOrThrow(존재하지_않는_사용자_아이디))
+                .isInstanceOf(UserNotFoundException.class);
     }
 }

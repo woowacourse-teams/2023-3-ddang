@@ -44,8 +44,7 @@ class AnswerReportServiceTest extends AnswerReportServiceFixture {
     void 존재하지_않는_사용자가_답변_신고시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> answerReportService.create(존재하지_않는_사용자가_답변_신고_요청_dto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

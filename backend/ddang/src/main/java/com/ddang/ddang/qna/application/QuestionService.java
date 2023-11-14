@@ -11,7 +11,6 @@ import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionExce
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -33,8 +32,7 @@ public class QuestionService {
 
     @Transactional
     public Long create(final CreateQuestionDto questionDto, final String absoluteImageUrl) {
-        final User questioner = userRepository.findById(questionDto.userId())
-                                              .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final User questioner = userRepository.getByIdOrThrow(questionDto.userId());
         final Auction auction = auctionRepository.getPureAuctionByIdOrThrow(questionDto.auctionId());
 
         checkInvalidAuction(auction);
@@ -76,8 +74,7 @@ public class QuestionService {
     @Transactional
     public void deleteById(final Long questionId, final Long userId) {
         final Question question = questionRepository.getByIdOrThrow(questionId);
-        final User user = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final User user = userRepository.getByIdOrThrow(userId);
 
         if (!question.isWriter(user)) {
             throw new UserForbiddenException("삭제할 권한이 없습니다.");

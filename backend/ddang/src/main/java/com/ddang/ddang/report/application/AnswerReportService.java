@@ -7,7 +7,6 @@ import com.ddang.ddang.report.application.dto.ReadAnswerReportDto;
 import com.ddang.ddang.report.application.exception.InvalidAnswererReportException;
 import com.ddang.ddang.report.domain.AnswerReport;
 import com.ddang.ddang.report.domain.repository.AnswerReportRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import java.util.List;
@@ -27,8 +26,8 @@ public class AnswerReportService {
     @Transactional
     public Long create(final CreateAnswerReportDto answerReportDto) {
         final Answer answer = answerRepository.getByIdOrThrow(answerReportDto.answerId());
-        final User reporter = userRepository.findById(answerReportDto.reporterId())
-                                            .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final User reporter = userRepository.getByIdOrThrow(answerReportDto.reporterId());
+
         checkInvalidAnswerReport(reporter, answer);
 
         final AnswerReport answerReport = answerReportDto.toEntity(answer, reporter);

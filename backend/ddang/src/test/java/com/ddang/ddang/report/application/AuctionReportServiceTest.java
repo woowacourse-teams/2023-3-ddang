@@ -38,8 +38,7 @@ class AuctionReportServiceTest extends AuctionReportServiceFixture {
     void 존재하지_않는_사용자가_신고하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> auctionReportService.create(존재하지_않는_사용자의_경매_신고_요청_dto))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

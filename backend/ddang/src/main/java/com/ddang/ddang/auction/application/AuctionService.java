@@ -17,7 +17,6 @@ import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import com.ddang.ddang.region.domain.repository.RegionRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import java.time.LocalDateTime;
@@ -41,10 +40,7 @@ public class AuctionService {
 
     @Transactional
     public CreateInfoAuctionDto create(final CreateAuctionDto dto) {
-        final User seller = userRepository.findById(dto.sellerId())
-                                          .orElseThrow(() -> new UserNotFoundException(
-                                                  "지정한 판매자를 찾을 수 없습니다."
-                                          ));
+        final User seller = userRepository.getByIdOrThrow(dto.sellerId());
         final Category subCategory = categoryRepository.getSubCategoryByIdOrThrow(dto.subCategoryId());
         final Auction auction = dto.toEntity(seller, subCategory);
         final List<Region> thirdRegions = regionRepository.findAllThirdRegionByIds(dto.thirdRegionIds());
@@ -105,8 +101,7 @@ public class AuctionService {
     @Transactional
     public void deleteByAuctionId(final Long auctionId, final Long userId) {
         final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(auctionId);
-        final User user = userRepository.findById(userId)
-                                        .orElseThrow(() -> new UserNotFoundException("회원 정보를 찾을 수 없습니다."));
+        final User user = userRepository.getByIdOrThrow(userId);
 
         if (!findAuction.isOwner(user)) {
             throw new UserForbiddenException("권한이 없습니다.");

@@ -15,17 +15,15 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -40,8 +38,7 @@ public class BidService {
 
     @Transactional
     public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
-        final User bidder = userRepository.findById(bidDto.userId())
-                                          .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
+        final User bidder = userRepository.getByIdOrThrow(bidDto.userId());
         final AuctionAndImageDto auctionAndImageDto =
                 auctionAndImageRepository.findDtoByAuctionId(bidDto.auctionId())
                                          .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
