@@ -1,10 +1,15 @@
 package com.ddang.ddang.qna.infrastructure;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
+import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import com.ddang.ddang.qna.infrastructure.fixture.QuestionRepositoryImplFixture;
+import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -13,11 +18,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
@@ -45,21 +45,19 @@ class QuestionRepositoryImplTest extends QuestionRepositoryImplFixture {
     }
 
     @Test
-    void 삭제된_질문은_조회되지_않는다() {
-        // when
-        final Optional<Question> actual = questionRepository.findById(삭제된_질문.getId());
-
-        // then
-        assertThat(actual).isEmpty();
+    void 삭제된_질문을_조회하면_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> questionRepository.getByIdOrThrow(삭제된_질문.getId()))
+                .isInstanceOf(QuestionNotFoundException.class);
     }
 
     @Test
     void 삭제되지_않은_질문은_조회된다() {
         // when
-        final Optional<Question> actual = questionRepository.findById(질문1.getId());
+        final Question actual = questionRepository.getByIdOrThrow(질문1.getId());
 
         // then
-        assertThat(actual).contains(질문1);
+        assertThat(actual).isEqualTo(질문1);
     }
 
     @Test

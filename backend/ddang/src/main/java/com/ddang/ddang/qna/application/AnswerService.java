@@ -5,7 +5,6 @@ import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
@@ -32,10 +31,7 @@ public class AnswerService {
     public Long create(final CreateAnswerDto answerDto, final String absoluteImageUrl) {
         final User writer = userRepository.findById(answerDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
-        final Question question = questionRepository.findById(answerDto.questionId())
-                                                    .orElseThrow(() ->
-                                                            new QuestionNotFoundException("해당 질문을 찾을 수 없습니다.")
-                                                    );
+        final Question question = questionRepository.getByIdOrThrow(answerDto.questionId());
 
         checkInvalidAnswerer(question, writer);
         checkAlreadyAnswered(question);

@@ -1,14 +1,13 @@
 package com.ddang.ddang.qna.infrastructure;
 
+import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
-@Repository
+@Component
 @RequiredArgsConstructor
 public class QuestionRepositoryImpl implements QuestionRepository {
 
@@ -20,8 +19,11 @@ public class QuestionRepositoryImpl implements QuestionRepository {
     }
 
     @Override
-    public Optional<Question> findById(final Long id) {
-        return jpaQuestionRepository.findByIdAndDeletedIsFalse(id);
+    public Question getByIdOrThrow(final Long id) {
+        return jpaQuestionRepository.findByIdAndDeletedIsFalse(id)
+                                    .orElseThrow(() ->
+                                            new QuestionNotFoundException("지정한 질문을 찾을 수 없습니다.")
+                                    );
     }
 
     @Override

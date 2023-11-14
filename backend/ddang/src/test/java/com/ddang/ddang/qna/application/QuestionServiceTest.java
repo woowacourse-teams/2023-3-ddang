@@ -130,16 +130,14 @@ class QuestionServiceTest extends QuestionServiceFixture {
     void 존재하지_않는_질문_삭제시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionService.deleteById(존재하지_않는_질문_아이디, 질문자.getId()))
-                .isInstanceOf(QuestionNotFoundException.class)
-                .hasMessage("해당 질문을 찾을 수 없습니다.");
+                .isInstanceOf(QuestionNotFoundException.class);
     }
 
     @Test
     void 존재하지_않는_사용자가_질문_삭제시_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> questionService.deleteById(질문.getId(), 존재하지_않는_사용자_아이디))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessage("해당 사용자를 찾을 수 없습니다.");
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test

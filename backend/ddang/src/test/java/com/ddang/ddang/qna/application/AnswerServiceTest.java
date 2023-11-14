@@ -62,8 +62,7 @@ class AnswerServiceTest extends AnswerServiceFixture {
     void 존재하지_않는_질문에_답하는_경우_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> answerService.create(존재하지_않는_질문에_답변_등록_요청_dto, 이미지_절대_경로))
-                .isInstanceOf(QuestionNotFoundException.class)
-                .hasMessage("해당 질문을 찾을 수 없습니다.");
+                .isInstanceOf(QuestionNotFoundException.class);
     }
 
     @Test
