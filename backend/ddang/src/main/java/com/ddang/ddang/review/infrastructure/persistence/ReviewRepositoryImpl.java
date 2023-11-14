@@ -1,6 +1,6 @@
 package com.ddang.ddang.review.infrastructure.persistence;
 
-import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import java.util.List;

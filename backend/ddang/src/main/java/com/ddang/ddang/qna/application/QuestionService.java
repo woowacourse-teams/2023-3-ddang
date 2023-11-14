@@ -1,6 +1,6 @@
 package com.ddang.ddang.qna.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;

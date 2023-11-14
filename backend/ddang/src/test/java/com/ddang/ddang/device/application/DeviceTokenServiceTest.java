@@ -7,7 +7,7 @@ import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.device.application.fixture.DeviceTokenServiceFixture;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;

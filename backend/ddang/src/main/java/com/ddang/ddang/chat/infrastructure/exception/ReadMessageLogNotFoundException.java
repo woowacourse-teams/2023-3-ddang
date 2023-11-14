@@ -1,4 +1,4 @@
-package com.ddang.ddang.chat.application.exception;
+package com.ddang.ddang.chat.infrastructure.exception;
 
 public class ReadMessageLogNotFoundException extends IllegalArgumentException {
 

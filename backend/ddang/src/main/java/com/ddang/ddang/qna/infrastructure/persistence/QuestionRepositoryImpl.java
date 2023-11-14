@@ -1,6 +1,6 @@
-package com.ddang.ddang.qna.infrastructure;
+package com.ddang.ddang.qna.infrastructure.persistence;
 
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
 import java.util.List;

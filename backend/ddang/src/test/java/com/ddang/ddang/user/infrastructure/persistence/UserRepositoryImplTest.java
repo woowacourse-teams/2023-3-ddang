@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;

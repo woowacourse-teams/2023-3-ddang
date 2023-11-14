@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
@@ -16,7 +16,7 @@ import com.ddang.ddang.bid.application.fixture.BidServiceFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import java.util.List;
 import java.util.stream.Stream;

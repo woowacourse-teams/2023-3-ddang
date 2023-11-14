@@ -3,7 +3,7 @@ package com.ddang.ddang.auction.infrastructure.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.infrastructure.persistence.fixture.AuctionRepositoryImplFixture;

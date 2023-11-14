@@ -1,6 +1,6 @@
-package com.ddang.ddang.qna.infrastructure;
+package com.ddang.ddang.qna.infrastructure.persistence;
 
-import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import lombok.RequiredArgsConstructor;

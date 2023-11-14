@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.review.infrastructure.persistence.fixture.ReviewRepositoryImplFixture;

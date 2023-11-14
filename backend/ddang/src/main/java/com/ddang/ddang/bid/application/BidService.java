@@ -1,6 +1,6 @@
 package com.ddang.ddang.bid.application;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.dto.AuctionAndImageDto;
 import com.ddang.ddang.auction.domain.repository.AuctionAndImageRepository;

@@ -1,6 +1,6 @@
 package com.ddang.ddang.exception;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
@@ -11,12 +11,12 @@ import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedEx
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
-import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
@@ -26,11 +26,11 @@ import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureExc
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
-import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
@@ -39,9 +39,9 @@ import com.ddang.ddang.report.application.exception.InvalidQuestionReportExcepti
 import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
-import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
 import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

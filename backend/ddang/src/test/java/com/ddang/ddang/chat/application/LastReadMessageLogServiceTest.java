@@ -2,7 +2,7 @@ package com.ddang.ddang.chat.application;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.application.fixture.LastReadMessageLogServiceFixture;
 import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;

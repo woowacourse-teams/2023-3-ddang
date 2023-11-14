@@ -1,6 +1,6 @@
 package com.ddang.ddang.user.infrastructure.persistence;
 
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import java.util.Optional;

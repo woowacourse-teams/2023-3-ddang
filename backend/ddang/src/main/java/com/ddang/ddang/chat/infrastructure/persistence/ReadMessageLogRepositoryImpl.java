@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.domain.ReadMessageLog;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import java.util.List;

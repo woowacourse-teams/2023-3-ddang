@@ -2,7 +2,7 @@ package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
-import com.ddang.ddang.chat.application.exception.ReadMessageLogNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

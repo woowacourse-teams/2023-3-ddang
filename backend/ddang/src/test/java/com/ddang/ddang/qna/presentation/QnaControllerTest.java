@@ -1,6 +1,6 @@
 package com.ddang.ddang.qna.presentation;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
@@ -12,15 +12,15 @@ import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
 import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
-import com.ddang.ddang.qna.application.exception.AnswerNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
-import com.ddang.ddang.qna.application.exception.QuestionNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
 import com.ddang.ddang.qna.presentation.dto.request.CreateAnswerRequest;
 import com.ddang.ddang.qna.presentation.dto.request.CreateQuestionRequest;
 import com.ddang.ddang.qna.presentation.fixture.QnaControllerFixture;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -11,7 +11,7 @@ import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import java.util.List;

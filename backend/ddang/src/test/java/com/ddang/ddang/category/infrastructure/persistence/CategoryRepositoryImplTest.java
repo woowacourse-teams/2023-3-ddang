@@ -3,7 +3,7 @@ package com.ddang.ddang.category.infrastructure.persistence;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.domain.repository.CategoryRepository;
 import com.ddang.ddang.category.infrastructure.persistence.fixture.CategoryRepositoryFixture;

@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.application.exception;
+package com.ddang.ddang.auction.infrastructure.persistence.exception;
 
 public class AuctionNotFoundException extends IllegalArgumentException {
 

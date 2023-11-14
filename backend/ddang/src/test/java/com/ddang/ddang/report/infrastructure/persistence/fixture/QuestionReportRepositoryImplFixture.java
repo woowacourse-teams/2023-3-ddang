@@ -12,7 +12,7 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.domain.Question;
-import com.ddang.ddang.qna.infrastructure.JpaQuestionRepository;
+import com.ddang.ddang.qna.infrastructure.persistence.JpaQuestionRepository;
 import com.ddang.ddang.report.domain.QuestionReport;
 import com.ddang.ddang.report.domain.repository.QuestionReportRepository;
 import com.ddang.ddang.report.infrastructure.persistence.JpaQuestionReportRepository;

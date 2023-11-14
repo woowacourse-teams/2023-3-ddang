@@ -1,4 +1,4 @@
-package com.ddang.ddang.category.application.exception;
+package com.ddang.ddang.category.infrastructure.exception;
 
 public class CategoryNotFoundException extends IllegalArgumentException {
 

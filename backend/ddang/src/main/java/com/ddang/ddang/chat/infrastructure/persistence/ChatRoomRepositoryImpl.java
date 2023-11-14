@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import java.util.Optional;

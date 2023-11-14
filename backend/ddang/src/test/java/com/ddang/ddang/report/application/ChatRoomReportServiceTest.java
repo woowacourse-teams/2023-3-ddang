@@ -3,13 +3,13 @@ package com.ddang.ddang.report.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.fixture.ChatRoomReportServiceFixture;
-import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;

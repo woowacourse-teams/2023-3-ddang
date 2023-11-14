@@ -10,7 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ddang.ddang.category.application.dto.ReadCategoryDto;
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import java.util.List;

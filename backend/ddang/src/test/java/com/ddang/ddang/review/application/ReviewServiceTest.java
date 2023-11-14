@@ -3,13 +3,13 @@ package com.ddang.ddang.review.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
-import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.application.exception.RevieweeNotFoundException;
 import com.ddang.ddang.review.application.exception.ReviewerNotFoundException;
 import com.ddang.ddang.review.application.fixture.ReviewServiceFixture;

@@ -1,6 +1,6 @@
 package com.ddang.ddang.category.infrastructure.persistence;
 
-import com.ddang.ddang.category.application.exception.CategoryNotFoundException;
+import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.domain.repository.CategoryRepository;
 import java.util.List;
