@@ -7,7 +7,6 @@ import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
-import com.ddang.ddang.review.application.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.repository.ReviewRepository;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
@@ -59,8 +58,7 @@ public class ReviewService {
     }
 
     public ReadReviewDetailDto readByReviewId(final Long reviewId) {
-        final Review findReview = reviewRepository.findById(reviewId)
-                                                  .orElseThrow(() -> new ReviewNotFoundException("해당 평가를 찾을 수 없습니다."));
+        final Review findReview = reviewRepository.getByIdOrThrow(reviewId);
 
         return ReadReviewDetailDto.from(findReview);
     }

@@ -9,7 +9,7 @@ public interface ReviewRepository {
 
     Review save(final Review review);
 
-    Optional<Review> findById(final Long id);
+    Review getByIdOrThrow(final Long id);
 
     List<Review> findAllByTargetId(final Long targetId);
 

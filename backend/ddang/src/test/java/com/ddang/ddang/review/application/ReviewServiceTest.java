@@ -91,8 +91,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     void 지정한_평가_아이디에_해당하는_평가가_없으면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> reviewService.readByReviewId(존재하지_않는_평가_아이디))
-                .isInstanceOf(ReviewNotFoundException.class)
-                .hasMessage("해당 평가를 찾을 수 없습니다.");
+                .isInstanceOf(ReviewNotFoundException.class);
     }
 
     @Test

@@ -42,14 +42,15 @@ public class ReviewRepositoryImplFixture {
 
     protected User 판매자1;
     protected User 판매자2;
-    protected User 평가_안한_경매_판매자;
+    protected User 리뷰_안한_경매_판매자;
     protected User 구매자;
-    protected Auction 판매자1이_평가한_경매;
-    protected Auction 판매자2가_평가한_경매;
-    protected Auction 평가_안한_경매;
-    protected Review 저장하려는_평가;
-    protected Review 구매자가_판매자1에게_받은_평가;
-    protected Review 구매자가_판매자2에게_받은_평가;
+    protected Auction 판매자1이_리뷰한_경매;
+    protected Auction 판매자2가_리뷰한_경매;
+    protected Auction 리뷰_안한_경매;
+    protected Review 저장하려는_리뷰;
+    protected Review 구매자가_판매자1에게_받은_리뷰;
+    protected Review 구매자가_판매자2에게_받은_리뷰;
+    protected Long 존재하지_않는_리뷰_id = -999L;
 
     @BeforeEach
     void fixtureSetUp(
@@ -67,7 +68,7 @@ public class ReviewRepositoryImplFixture {
         전자기기_카테고리.addSubCategory(전자기기_서브_노트북_카테고리);
         categoryRepository.save(전자기기_카테고리);
 
-        final ProfileImage 평가_안한_판매자_프로필_이미지 = new ProfileImage("no_review_seller_profile.png", "no_review_seller_profile.png");
+        final ProfileImage 리뷰_안한_판매자_프로필_이미지 = new ProfileImage("no_review_seller_profile.png", "no_review_seller_profile.png");
         final ProfileImage 판매자1_프로필_이미지 = new ProfileImage("seller1_profile.png", "seller1_profile.png");
         final ProfileImage 판매자2_프로필_이미지 = new ProfileImage("seller2_profile.png", "seller2_profile.png");
         final ProfileImage 구매자_프로필_이미지 = new ProfileImage("buyer_profile.png", "buyer_profile.png");
@@ -84,9 +85,9 @@ public class ReviewRepositoryImplFixture {
                    .reliability(new Reliability(4.7d))
                    .oauthId("12346")
                    .build();
-        평가_안한_경매_판매자 = User.builder()
-                           .name("평가 안한 판매자")
-                           .profileImage(평가_안한_판매자_프로필_이미지)
+        리뷰_안한_경매_판매자 = User.builder()
+                           .name("리뷰 안한 판매자")
+                           .profileImage(리뷰_안한_판매자_프로필_이미지)
                            .reliability(new Reliability(4.7d))
                            .oauthId("12346")
                            .build();
@@ -99,14 +100,14 @@ public class ReviewRepositoryImplFixture {
 
         userRepository.save(판매자1);
         userRepository.save(판매자2);
-        userRepository.save(평가_안한_경매_판매자);
+        userRepository.save(리뷰_안한_경매_판매자);
         userRepository.save(구매자);
 
         final AuctionImage 경매1_대표_이미지 = new AuctionImage("경매1_대표_이미지.png", "경매1_대표_이미지.png");
         final AuctionImage 경매2_대표_이미지 = new AuctionImage("경매2_대표_이미지.png", "경매2_대표_이미지.png");
-        final AuctionImage 평가_안한_경매_대표_이미지 = new AuctionImage("평가_안한_경매_대표_이미지.png", "평가_안한_경매_대표_이미지.png");
+        final AuctionImage 리뷰_안한_경매_대표_이미지 = new AuctionImage("리뷰_안한_경매_대표_이미지.png", "리뷰_안한_경매_대표_이미지.png");
 
-        판매자1이_평가한_경매 = Auction.builder()
+        판매자1이_리뷰한_경매 = Auction.builder()
                               .seller(판매자1)
                               .title("맥북")
                               .description("맥북 팔아요")
@@ -115,7 +116,7 @@ public class ReviewRepositoryImplFixture {
                               .bidUnit(new BidUnit(1_000))
                               .closingTime(LocalDateTime.now())
                               .build();
-        판매자2가_평가한_경매 = Auction.builder()
+        판매자2가_리뷰한_경매 = Auction.builder()
                               .seller(판매자2)
                               .title("맥북")
                               .description("맥북 팔아요")
@@ -124,7 +125,7 @@ public class ReviewRepositoryImplFixture {
                               .bidUnit(new BidUnit(1_000))
                               .closingTime(LocalDateTime.now())
                               .build();
-        평가_안한_경매 = Auction.builder()
+        리뷰_안한_경매 = Auction.builder()
                           .seller(판매자2)
                           .title("맥북")
                           .description("맥북 팔아요")
@@ -134,36 +135,36 @@ public class ReviewRepositoryImplFixture {
                           .closingTime(LocalDateTime.now())
                           .build();
 
-        판매자1이_평가한_경매.addAuctionImages(List.of(경매1_대표_이미지));
-        판매자2가_평가한_경매.addAuctionImages(List.of(경매2_대표_이미지));
-        평가_안한_경매.addAuctionImages(List.of(평가_안한_경매_대표_이미지));
-        auctionRepository.save(판매자1이_평가한_경매);
-        auctionRepository.save(판매자2가_평가한_경매);
-        auctionRepository.save(평가_안한_경매);
+        판매자1이_리뷰한_경매.addAuctionImages(List.of(경매1_대표_이미지));
+        판매자2가_리뷰한_경매.addAuctionImages(List.of(경매2_대표_이미지));
+        리뷰_안한_경매.addAuctionImages(List.of(리뷰_안한_경매_대표_이미지));
+        auctionRepository.save(판매자1이_리뷰한_경매);
+        auctionRepository.save(판매자2가_리뷰한_경매);
+        auctionRepository.save(리뷰_안한_경매);
 
-        저장하려는_평가 = Review.builder()
-                         .auction(평가_안한_경매)
+        저장하려는_리뷰 = Review.builder()
+                         .auction(리뷰_안한_경매)
                          .writer(판매자1)
                          .target(구매자)
                          .content("친절하다.")
                          .score(new Score(5.0d))
                          .build();
-        구매자가_판매자1에게_받은_평가 = Review.builder()
-                                  .auction(판매자1이_평가한_경매)
+        구매자가_판매자1에게_받은_리뷰 = Review.builder()
+                                  .auction(판매자1이_리뷰한_경매)
                                   .writer(판매자1)
                                   .target(구매자)
                                   .content("친절하다.")
                                   .score(new Score(5.0d))
                                   .build();
-        구매자가_판매자2에게_받은_평가 = Review.builder()
-                                  .auction(판매자2가_평가한_경매)
+        구매자가_판매자2에게_받은_리뷰 = Review.builder()
+                                  .auction(판매자2가_리뷰한_경매)
                                   .writer(판매자2)
                                   .target(구매자)
                                   .content("별로다.")
                                   .score(new Score(1.0d))
                                   .build();
 
-        reviewRepository.save(구매자가_판매자1에게_받은_평가);
-        reviewRepository.save(구매자가_판매자2에게_받은_평가);
+        reviewRepository.save(구매자가_판매자1에게_받은_리뷰);
+        reviewRepository.save(구매자가_판매자2에게_받은_리뷰);
     }
 }
