@@ -1,5 +1,10 @@
 package com.ddang.ddang.notification.application;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
+
 import com.ddang.ddang.bid.application.BidService;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.infrastructure.persistence.JpaBidRepository;
@@ -19,11 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -99,6 +99,7 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
 
         // then
         final long actual = events.stream(BidNotificationEvent.class).count();
+
         assertThat(actual).isEqualTo(1);
     }
 

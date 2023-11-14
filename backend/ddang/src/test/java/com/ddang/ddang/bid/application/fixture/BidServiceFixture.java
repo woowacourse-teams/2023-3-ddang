@@ -8,17 +8,21 @@ import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
+import com.ddang.ddang.category.domain.Category;
+import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.domain.NotificationStatus;
+import com.ddang.ddang.region.domain.AuctionRegion;
+import com.ddang.ddang.region.domain.Region;
+import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class BidServiceFixture {
@@ -31,6 +35,12 @@ public class BidServiceFixture {
 
     @Autowired
     private BidRepository bidRepository;
+
+    @Autowired
+    private RegionRepository regionRepository;
+
+    @Autowired
+    private JpaCategoryRepository categoryRepository;
 
     protected NotificationStatus 알림_성공 = NotificationStatus.SUCCESS;
     protected String 이미지_절대_url = "https://3-ddang.store/auctions/images";
@@ -60,6 +70,22 @@ public class BidServiceFixture {
 
     @BeforeEach
     void setUp() {
+        final Region 서울특별시 = new Region("서울특별시");
+        final Region 강남구 = new Region("강남구");
+        final Region 역삼동 = new Region("역삼동");
+
+        서울특별시.addSecondRegion(강남구);
+        강남구.addThirdRegion(역삼동);
+
+        regionRepository.save(서울특별시);
+
+        final Category 가구_카테고리 = new Category("가구");
+        final Category 가구_서브_의자_카테고리 = new Category("의자");
+
+        가구_카테고리.addSubCategory(가구_서브_의자_카테고리);
+
+        categoryRepository.save(가구_카테고리);
+
         final ProfileImage 프로필_이미지 = new ProfileImage("upload.png", "store.png");
         final User 판매자 = User.builder()
                              .name("판매자")
@@ -87,6 +113,7 @@ public class BidServiceFixture {
                      .bidUnit(new BidUnit(1_000))
                      .startPrice(new Price(1_000))
                      .closingTime(LocalDateTime.now().plusDays(7))
+                     .subCategory(가구_서브_의자_카테고리)
                      .build();
         final AuctionImage 경매_이미지2 = new AuctionImage("auction_image.png", "auction_image.png");
         final Auction 경매2 = Auction.builder()
@@ -96,6 +123,7 @@ public class BidServiceFixture {
                                    .bidUnit(new BidUnit(1_000))
                                    .startPrice(new Price(1_000))
                                    .closingTime(LocalDateTime.now().plusDays(7))
+                                   .subCategory(가구_서브_의자_카테고리)
                                    .build();
         final AuctionImage 경매_이미지3 = new AuctionImage("auction_image.png", "auction_image.png");
         final Auction 경매3 = Auction.builder()
@@ -105,6 +133,7 @@ public class BidServiceFixture {
                                    .bidUnit(new BidUnit(1_000))
                                    .startPrice(new Price(1_000))
                                    .closingTime(LocalDateTime.now().plusDays(7))
+                                   .subCategory(가구_서브_의자_카테고리)
                                    .build();
         입찰_내역이_없는_경매 = 경매3;
         입찰_내역이_하나_있던_경매 = 경매2;
@@ -115,6 +144,7 @@ public class BidServiceFixture {
                                       .bidUnit(new BidUnit(1_000))
                                       .startPrice(new Price(1_000))
                                       .closingTime(LocalDateTime.now().minusDays(7))
+                                      .subCategory(가구_서브_의자_카테고리)
                                       .build();
         final Auction 삭제된_경매 = Auction.builder()
                                       .seller(판매자)
@@ -133,6 +163,11 @@ public class BidServiceFixture {
         경매1.addAuctionImages(List.of(경매_이미지1));
         경매2.addAuctionImages(List.of(경매_이미지2));
         경매3.addAuctionImages(List.of(경매_이미지3));
+
+        경매1.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
+        경매2.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
+        경매3.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
+        종료된_경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
 
         auctionRepository.save(경매1);
         auctionRepository.save(경매2);
