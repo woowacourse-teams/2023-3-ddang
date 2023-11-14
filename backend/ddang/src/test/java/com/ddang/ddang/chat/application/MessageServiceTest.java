@@ -9,10 +9,12 @@ import static org.mockito.BDDMockito.willDoNothing;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
-import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
+import com.ddang.ddang.chat.application.exception.ReceiverNotFoundException;
+import com.ddang.ddang.chat.application.exception.SenderNotFoundException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
+import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
@@ -94,15 +96,14 @@ class MessageServiceTest extends MessageServiceFixture {
     void 발신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.create(유효하지_않은_발신자의_메시지_생성_DTO, 이미지_절대_경로))
-                .isInstanceOf(UserNotFoundException.class);
+                .isInstanceOf(SenderNotFoundException.class);
     }
 
     @Test
     void 수신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
         assertThatThrownBy(() -> messageService.create(유효하지_않은_수신자의_메시지_생성_DTO, 이미지_절대_경로))
-                .isInstanceOf(UserNotFoundException.class)
-                .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
+                .isInstanceOf(ReceiverNotFoundException.class);
     }
 
     @Test
