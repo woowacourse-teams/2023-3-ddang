@@ -11,7 +11,6 @@ import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderCompos
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.UserInformationDto;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
@@ -22,13 +21,12 @@ import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,47 +46,43 @@ public class AuthenticationService {
 
     @Transactional
     public LoginInformationDto login(
+            final String socialId,
             final Oauth2Type oauth2Type,
-            final String oauth2AccessToken,
             final String deviceToken
     ) {
-        final OAuth2UserInformationProvider provider = providerComposite.findProvider(oauth2Type);
-        final UserInformationDto userInformationDto = provider.findUserInformation(oauth2AccessToken);
-        final LoginUserInformationDto loginUserInfo = findOrPersistUser(oauth2Type, userInformationDto);
+        final LoginUserInformationDto loginUserInfo = findOrPersistUser(socialId, oauth2Type);
 
         updateOrPersistDeviceToken(deviceToken, loginUserInfo.user());
 
         return LoginInformationDto.of(convertTokenDto(loginUserInfo), loginUserInfo);
     }
 
+    private LoginUserInformationDto findOrPersistUser(final String socialId, final Oauth2Type oauth2Type) {
+        final AtomicBoolean isSignUpUser = new AtomicBoolean(false);
+        final User signInUser = userRepository.findByOauthId(socialId)
+                                              .orElseGet(() -> {
+                                                  isSignUpUser.set(true);
+                                                  return persistUser(socialId, oauth2Type);
+                                              });
+
+        return new LoginUserInformationDto(signInUser, isSignUpUser.get());
+    }
+
+    private User persistUser(final String socialId, final Oauth2Type oauth2Type) {
+        final User user = User.builder()
+                              .name(oauth2Type.calculateNickname(calculateRandomNumber()))
+                              .reliability(Reliability.INITIAL_RELIABILITY)
+                              .oauthId(socialId)
+                              .oauth2Type(oauth2Type)
+                              .build();
+
+        return userRepository.save(user);
+    }
+
     private void updateOrPersistDeviceToken(final String deviceToken, final User persistUser) {
         final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(deviceToken);
 
         deviceTokenService.persist(persistUser.getId(), persistDeviceTokenDto);
-    }
-
-    private LoginUserInformationDto findOrPersistUser(
-            final Oauth2Type oauth2Type,
-            final UserInformationDto userInformationDto
-    ) {
-        final AtomicBoolean isSignUpUser = new AtomicBoolean(false);
-
-        final User signInUser = userRepository.findByOauthId(userInformationDto.findUserId())
-                                              .orElseGet(() -> {
-                                                  final User user = User.builder()
-                                                                        .name(oauth2Type.calculateNickname(
-                                                                                calculateRandomNumber())
-                                                                        )
-                                                                        .reliability(Reliability.INITIAL_RELIABILITY)
-                                                                        .oauthId(userInformationDto.findUserId())
-                                                                        .oauth2Type(oauth2Type)
-                                                                        .build();
-
-                                                  isSignUpUser.set(true);
-                                                  return userRepository.save(user);
-                                              });
-
-        return new LoginUserInformationDto(signInUser, isSignUpUser.get());
     }
 
     private String calculateRandomNumber() {

@@ -7,6 +7,7 @@ import com.ddang.ddang.auction.presentation.AuctionReviewController;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
+import com.ddang.ddang.authentication.application.SocialUserInformationService;
 import com.ddang.ddang.authentication.presentation.AuthenticationController;
 import com.ddang.ddang.bid.application.BidService;
 import com.ddang.ddang.bid.presentation.BidController;
@@ -186,4 +187,7 @@ public abstract class CommonControllerSliceTest {
 
     @MockBean
     protected ReviewService reviewService;
+
+    @MockBean
+    protected SocialUserInformationService socialUserInformationService;
 }

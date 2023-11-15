@@ -101,7 +101,7 @@ public class AuthenticationServiceFixture {
                       .name("kakao12346")
                       .profileImage(new ProfileImage("upload.png", "store.png"))
                       .reliability(new Reliability(0.0d))
-                      .oauthId("12346")
+                      .oauthId(탈퇴한_사용자_회원_정보.findUserId())
                       .oauth2Type(Oauth2Type.KAKAO)
                       .build();
         final User 현재_진행중인_경매가_있는_사용자 = User.builder()

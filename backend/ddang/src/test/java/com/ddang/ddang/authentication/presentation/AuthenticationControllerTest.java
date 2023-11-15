@@ -59,7 +59,8 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void 소셜_로그인을_지원하는_타입과_소셜_로그인_토큰을_전달하면_accessToken과_refreshToken을_반환한다() throws Exception {
         // given
-        given(authenticationService.login(eq(지원하는_소셜_로그인_타입), anyString(), anyString())).willReturn(로그인한_사용자_정보);
+        given(socialUserInformationService.findInformation(eq(지원하는_소셜_로그인_타입), anyString())).willReturn(회원_소셜_정보);
+        given(authenticationService.login(anyString(), eq(지원하는_소셜_로그인_타입), anyString())).willReturn(로그인한_사용자_정보);
 
         // when & then
         final ResultActions resultActions =
@@ -80,7 +81,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void 소셜_로그인을_진행하지_않는_타입을_전달하면_400이_발생한다() throws Exception {
         // given
-        given(authenticationService.login(eq(지원하지_않는_소셜_로그인_타입), anyString(), anyString()))
+        given(socialUserInformationService.findInformation(eq(지원하지_않는_소셜_로그인_타입), anyString()))
                 .willThrow(new UnsupportedSocialLoginException("지원하는 소셜 로그인 기능이 아닙니다."));
 
         // when & then
@@ -97,7 +98,7 @@ class AuthenticationControllerTest extends AuthenticationControllerFixture {
     @Test
     void 유효하지_않은_소셜_로그인_토큰을_전달하면_401이_발생한다() throws Exception {
         // given
-        given(authenticationService.login(eq(지원하는_소셜_로그인_타입), anyString(), anyString()))
+        given(socialUserInformationService.findInformation(eq(지원하는_소셜_로그인_타입), anyString()))
                 .willThrow(new InvalidTokenException("401 Unauthorized", new RuntimeException()));
 
         // when & then

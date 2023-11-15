@@ -1,6 +1,7 @@
 package com.ddang.ddang.authentication.presentation.fixture;
 
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
+import com.ddang.ddang.authentication.application.dto.SocialUserInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
@@ -26,4 +27,5 @@ public class AuthenticationControllerFixture extends CommonControllerSliceTest {
     protected LogoutRequest 유효한_로그아웃_요청 = new LogoutRequest("Bearer refreshToken");
     protected WithdrawalRequest 유효한_회원탈퇴_요청 = new WithdrawalRequest("Bearer refreshToken");
     protected WithdrawalRequest 유효하지_않은_회원탈퇴_요청 = new WithdrawalRequest("Bearer refreshToken");
+    protected SocialUserInformationDto 회원_소셜_정보 = new SocialUserInformationDto("12345");
 }
