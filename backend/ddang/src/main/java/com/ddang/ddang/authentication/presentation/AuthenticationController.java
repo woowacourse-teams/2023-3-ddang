@@ -2,7 +2,9 @@ package com.ddang.ddang.authentication.presentation;
 
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
+import com.ddang.ddang.authentication.application.SocialUserInformationService;
 import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
+import com.ddang.ddang.authentication.application.dto.SocialUserInformationDto;
 import com.ddang.ddang.authentication.application.dto.TokenDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
@@ -30,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
+    private final SocialUserInformationService socialUserInformationService;
     private final BlackListTokenService blackListTokenService;
 
     @PostMapping("/login/{oauth2Type}")
@@ -37,8 +40,10 @@ public class AuthenticationController {
             @PathVariable final Oauth2Type oauth2Type,
             @RequestBody final LoginTokenRequest request
     ) {
+        final SocialUserInformationDto socialUserInformationDto =
+                socialUserInformationService.findInformation(oauth2Type, request.accessToken());
         final LoginInformationDto loginInformationDto =
-                authenticationService.login(oauth2Type, request.accessToken(), request.deviceToken());
+                authenticationService.login(socialUserInformationDto.id(), oauth2Type, request.deviceToken());
 
         return ResponseEntity.ok(LoginInformationResponse.from(loginInformationDto));
     }
