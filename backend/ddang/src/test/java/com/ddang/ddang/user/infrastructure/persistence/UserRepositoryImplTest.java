@@ -67,6 +67,24 @@ class UserRepositoryImplTest extends UserRepositoryImplFixture {
     }
 
     @Test
+    void 존재하는_사용자_아이디를_전달하면_해당_사용자를_Optional로_감싸_반환하고_프로필_이미지도_한번에_조회한다() {
+        // when
+        final Optional<User> actual = userRepository.findByIdWithProfileImage(사용자.getId());
+
+        // then
+        assertThat(actual).contains(사용자);
+    }
+
+    @Test
+    void 존재하지_않는_사용자_아이디를_전달하면_빈_Optional을_반환하고_프로필_이미지도_한번에_조회한다() {
+        // when
+        final Optional<User> actual = userRepository.findByIdWithProfileImage(존재하지_않는_사용자_아이디);
+
+        // then
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
     void 회원탈퇴한_사용자의_id를_전달하면_빈_Optional을_반환한다() {
         // when
         final Optional<User> actual = userRepository.findById(탈퇴한_사용자.getId());

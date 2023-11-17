@@ -1,7 +1,5 @@
 package com.ddang.ddang.image.application;
 
-import com.ddang.ddang.image.domain.AuctionImage;
-import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.repository.AuctionImageRepository;
 import com.ddang.ddang.image.domain.repository.ProfileImageRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,28 +23,22 @@ public class ImageService {
     private final ProfileImageRepository profileImageRepository;
     private final AuctionImageRepository auctionImageRepository;
 
-    public Resource readProfileImage(final Long id) throws MalformedURLException {
-        final ProfileImage profileImage = profileImageRepository.findById(id)
-                                                                .orElse(null);
-
-        if (profileImage == null) {
+    public Resource readProfileImage(final String storeName) throws MalformedURLException {
+        if (!profileImageRepository.existsByStoreName(storeName)) {
             return null;
         }
 
-        final String fullPath = findFullPath(profileImage.getImage().getStoreName());
+        final String fullPath = findFullPath(storeName);
 
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }
 
-    public Resource readAuctionImage(final Long id) throws MalformedURLException {
-        final AuctionImage auctionImage = auctionImageRepository.findById(id)
-                                                                .orElse(null);
-
-        if (auctionImage == null) {
+    public Resource readAuctionImage(final String storeName) throws MalformedURLException {
+        if (!auctionImageRepository.existsByStoreName(storeName)) {
             return null;
         }
 
-        final String fullPath = findFullPath(auctionImage.getImage().getStoreName());
+        final String fullPath = findFullPath(storeName);
 
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }

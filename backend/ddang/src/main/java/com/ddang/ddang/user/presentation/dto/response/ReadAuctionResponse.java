@@ -25,9 +25,9 @@ public record ReadAuctionResponse(
     }
 
     private static String calculateThumbnailImageUrl(final ReadAuctionDto dto) {
-        final Long thumbnailAuctionImage = dto.auctionImageIds().get(0);
+        final String thumbnailAuctionImageStoreName = dto.auctionImageStoreNames().get(0);
 
-        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, thumbnailAuctionImage);
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, thumbnailAuctionImageStoreName);
     }
 
     private static int processAuctionPrice(final Integer startPrice, final Integer lastBidPrice) {

@@ -13,11 +13,14 @@ public interface JpaChatRoomReportRepository extends JpaRepository<ChatRoomRepor
     @Query("""
         SELECT crr
         FROM ChatRoomReport crr
-        JOIN FETCH crr.reporter
+        JOIN FETCH crr.reporter r
+        LEFT JOIN FETCH r.profileImage
         JOIN FETCH crr.chatRoom cr
-        JOIN FETCH cr.buyer
+        JOIN FETCH cr.buyer b
+        LEFT JOIN FETCH b.profileImage
         JOIN FETCH cr.auction a
-        JOIN FETCH a.seller
+        JOIN FETCH a.seller s
+        LEFT JOIN s.profileImage
         ORDER BY crr.id ASC
     """)
     List<ChatRoomReport> findAll();
