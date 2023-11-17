@@ -1,6 +1,5 @@
-package com.ddang.ddang.auction.configuration;
+package com.ddang.ddang.configuration;
 
-import com.ddang.ddang.configuration.ProductProfile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
