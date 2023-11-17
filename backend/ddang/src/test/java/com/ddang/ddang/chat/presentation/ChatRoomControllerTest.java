@@ -247,13 +247,15 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                                                                                       .title())),
                                                            jsonPath("$.[0].lastMessage.contents", is(조회용_채팅방1.lastMessageDto()
                                                                                                              .contents())),
+                                                           jsonPath("$.[0].unreadMessageCount", is(조회용_채팅방1.unreadMessageCount()), Long.class),
                                                            jsonPath("$.[1].id", is(조회용_채팅방2.id()), Long.class),
                                                            jsonPath("$.[1].chatPartner.name", is(조회용_채팅방2.partnerDto()
                                                                                                          .name())),
                                                            jsonPath("$.[1].auction.title", is(조회용_채팅방2.auctionDto()
                                                                                                       .title())),
                                                            jsonPath("$.[1].lastMessage.contents", is(조회용_채팅방2.lastMessageDto()
-                                                                                                             .contents()))
+                                                                                                             .contents())),
+                                                           jsonPath("$.[1].unreadMessageCount", is(조회용_채팅방1.unreadMessageCount()), Long.class)
                                                    );
         readAllParticipatingChatRooms_문서화(resultActions);
     }
@@ -539,6 +541,8 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                                                          .description("메시지를 보낸 시간"),
                                 fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
                                                                         .description("메시지 내용"),
+                                fieldWithPath("[].unreadMessageCount").type(JsonFieldType.NUMBER)
+                                                                      .description("안 읽은 메시지 개수"),
                                 fieldWithPath("[].isChatAvailable").type(JsonFieldType.BOOLEAN)
                                                                    .description("채팅 가능 여부")
                         )

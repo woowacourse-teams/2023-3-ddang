@@ -3,6 +3,7 @@ package com.ddang.ddang.chat.application;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
+import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
@@ -15,7 +16,6 @@ import com.ddang.ddang.user.application.exception.UserNotFoundException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,10 +25,10 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
 public class MessageService {
 
-    private final ApplicationEventPublisher messageEventPublisher;
+    private final ApplicationEventPublisher messageLogEventPublisher;
+    private final ApplicationEventPublisher messageNotificationEventPublisher;
     private final MessageRepository messageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
@@ -53,16 +53,14 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        messageEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
+        messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
 
         return persistMessage.getId();
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
-        if (!userRepository.existsById(request.messageReaderId())) {
-            throw new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다.");
-        }
-
+        final User reader = userRepository.findById(request.messageReaderId())
+                                          .orElseThrow(() -> new UserNotFoundException("지정한 아이디에 대한 사용자를 찾을 수 없습니다."));
         final ChatRoom chatRoom = chatRoomRepository.findById(request.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."));
@@ -76,6 +74,12 @@ public class MessageService {
                 chatRoom.getId(),
                 request.lastMessageId()
         );
+
+        if (!readMessages.isEmpty()) {
+            final Message lastReadMessage = readMessages.get(readMessages.size() - 1);
+
+            messageLogEventPublisher.publishEvent(new UpdateReadMessageLogEvent(reader, chatRoom, lastReadMessage));
+        }
 
         return readMessages.stream()
                            .map(message -> ReadMessageDto.from(message, chatRoom))
