@@ -13,11 +13,11 @@ public interface JpaAnswerReportRepository extends JpaRepository<AnswerReport, L
     @Query("""
         SELECT ar
         FROM AnswerReport ar
-        JOIN FETCH ar.reporter
+        JOIN FETCH ar.reporter r
+        LEFT JOIN FETCH r.profileImage
         JOIN FETCH ar.answer an
-        JOIN FETCH an.question q
-        JOIN FETCH q.auction a
-        JOIN FETCH a.seller
+        JOIN FETCH an.writer w
+        LEFT JOIN FETCH w.profileImage
         ORDER BY ar.id ASC
     """)
     List<AnswerReport> findAll();

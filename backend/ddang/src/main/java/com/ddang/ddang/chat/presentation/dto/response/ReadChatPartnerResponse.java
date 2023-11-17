@@ -13,7 +13,7 @@ public record ReadChatPartnerResponse(Long id, String name, String profileImage)
         return new ReadChatPartnerResponse(
                 dto.id(),
                 name,
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.profileImageId())
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.profileImageStoreName())
         );
     }
 }

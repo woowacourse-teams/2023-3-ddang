@@ -18,13 +18,13 @@ public class JpaAuctionImageRepositoryFixture {
 
     protected String 업로드_이미지_파일명 = "uploadName";
     protected String 저장된_이미지_파일명 = "storeName";
-    protected Long 존재하지_않는_경매_이미지_아이디 = -999L;
 
-    protected AuctionImage 경매_이미지;
+    protected String 존재하는_경매_이미지_이름 = "경매이미지.png";
+    protected String 존재하지_않는_경매_이미지_이름 = "invalid.png";
 
     @BeforeEach
     void setUp() {
-        경매_이미지 = new AuctionImage(업로드_이미지_파일명, 저장된_이미지_파일명);
+        final AuctionImage 경매_이미지 = new AuctionImage("경매이미지.png", 존재하는_경매_이미지_이름);
 
         auctionImageRepository.save(경매_이미지);
 

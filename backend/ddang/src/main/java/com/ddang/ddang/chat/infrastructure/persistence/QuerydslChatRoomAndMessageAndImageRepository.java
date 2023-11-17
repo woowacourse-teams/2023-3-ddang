@@ -35,9 +35,10 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                                     auctionImage,
                                     countUnreadMessages(userId, chatRoom.id)
                             )).from(chatRoom)
-                            .leftJoin(chatRoom.buyer).fetchJoin()
-                            .leftJoin(chatRoom.auction, auction).fetchJoin()
-                            .leftJoin(auction.seller).fetchJoin()
+                            .join(chatRoom.buyer).fetchJoin()
+                            .join(chatRoom.auction, auction).fetchJoin()
+                            .join(auction.seller).fetchJoin()
+                            .leftJoin(auction.seller.profileImage).fetchJoin()
                             .leftJoin(auctionImage).on(auctionImage.id.eq(
                                     JPAExpressions
                                             .select(auctionImage.id.min())
@@ -45,7 +46,7 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                                             .where(auctionImage.auction.id.eq(auction.id))
                                             .groupBy(auctionImage.auction.id)
                             )).fetchJoin()
-                            .leftJoin(auction.lastBid).fetchJoin()
+                            .join(auction.lastBid).fetchJoin()
                             .leftJoin(message).on(message.id.eq(
                                     JPAExpressions
                                             .select(message.id.max())

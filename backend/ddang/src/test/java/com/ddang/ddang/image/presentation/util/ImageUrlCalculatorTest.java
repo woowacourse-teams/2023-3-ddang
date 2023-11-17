@@ -16,43 +16,43 @@ class ImageUrlCalculatorTest extends ImageUrlCalculatorFixture {
     @Test
     void 프로필_사진의_상대_URL로_절대_경로를_계산한다() {
         // when
-        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_상대_URL, 프로필_이미지_아이디);
+        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_상대_URL, 프로필_이미지_저장_이름);
 
         // then
-        assertThat(actual).contains(프로필_이미지_전체_URL);
+        assertThat(actual).contains(프로필_이미지_저장_이름_기반_전체_URL);
     }
 
     @Test
     void 프로필_사진의_아이디가_null인_경우_기본_이미지의_상대_URL로_절대_경로를_계산한다() {
         // when
-        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_상대_URL, 프로필_이미지_아이디가_null);
+        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_상대_URL, 프로필_이미지_저장_이름이_null);
 
         // then
-        assertThat(actual).contains(프로필_기본_이미지_전체_URL);
+        assertThat(actual).contains(이미지_저장_이름_기반_프로필_기본_이미지_전체_URL);
     }
 
     @Test
     void 경매_대표_이미지의_상대_URL로_절대_경로를_계산한다() {
         // when
-        final String actual = ImageUrlCalculator.calculateBy(경매_이미지_상대_URL, 경매_이미지_아이디);
+        final String actual = ImageUrlCalculator.calculateBy(경매_이미지_상대_URL, 경매_이미지_저장_이름);
 
         // then
-        assertThat(actual).contains(경매_이미지_전체_URL);
+        assertThat(actual).contains(경매_이미지_저장_이름_기반_전체_URL);
     }
 
     @Test
     void 프로필_사진의_절대_URL로_절대_경로를_계산한다() {
         // when
-        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_절대_URL, 프로필_이미지_아이디);
+        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_절대_URL, 프로필_이미지_저장_이름);
 
         // then
-        assertThat(actual).isEqualTo(프로필_이미지_전체_URL);
+        assertThat(actual).isEqualTo(프로필_이미지_저장_이름_기반_전체_URL);
     }
 
     @Test
     void 프로필_사진의_아이디가_null인_경우_기본_이미지의_절대_URL로_절대_경로를_계산한다() {
         // when
-        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_절대_URL, 프로필_이미지_아이디가_null);
+        final String actual = ImageUrlCalculator.calculateBy(프로필_이미지_절대_URL, 프로필_이미지_저장_이름이_null);
 
         // then
         assertThat(actual).isEqualTo(프로필_기본_이미지_전체_URL);
@@ -61,9 +61,9 @@ class ImageUrlCalculatorTest extends ImageUrlCalculatorFixture {
     @Test
     void 경매_대표_이미지의_절대_URL로_절대_경로를_계산한다() {
         // when
-        final String actual = ImageUrlCalculator.calculateBy(경매_이미지_절대_URL, 경매_이미지_아이디);
+        final String actual = ImageUrlCalculator.calculateBy(경매_이미지_절대_URL, 경매_이미지_저장_이름);
 
         // then
-        assertThat(actual).isEqualTo(경매_이미지_전체_URL);
+        assertThat(actual).isEqualTo(경매_이미지_저장_이름_기반_전체_URL);
     }
 }

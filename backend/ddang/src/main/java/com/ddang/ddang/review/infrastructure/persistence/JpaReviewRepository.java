@@ -14,6 +14,7 @@ public interface JpaReviewRepository extends JpaRepository<Review, Long> {
     @Query("""
             SELECT r FROM Review r 
             JOIN FETCH r.writer w 
+            LEFT JOIN FETCH w.profileImage
             JOIN FETCH r.target t 
             WHERE t.id = :targetId 
             ORDER BY r.id DESC
