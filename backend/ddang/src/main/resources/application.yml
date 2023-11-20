@@ -4,14 +4,17 @@ spring:
     group:
       local:
         - console-logging
+        - image-local-upload
       dev:
         - console-logging
         - file-warn-logging
         - file-error-logging
         - slack-error-logging
         - file-info-request-logging
+        - image-local-upload
       prod:
         - file-warn-logging
         - file-error-logging
         - slack-error-logging
         - file-info-request-logging
+        - image-local-upload

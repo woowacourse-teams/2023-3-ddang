@@ -54,7 +54,10 @@ public class UserServiceFixture {
                 MediaType.IMAGE_PNG.toString(),
                 new byte[]{1}
         );
-        새로운_프로필_이미지_dto = new StoreImageDto(새로운_이미지_파일.getOriginalFilename(), "newStore.png");
+        새로운_프로필_이미지_dto = new StoreImageDto(
+                새로운_이미지_파일.getOriginalFilename(),
+                새로운_이미지_파일.getOriginalFilename()
+        );
 
         사용자_정보_수정_요청_dto = new UpdateUserDto("updateName", 새로운_이미지_파일);
         사용자_이름만_수정_요청_dto = new UpdateUserDto("updateName", null);
