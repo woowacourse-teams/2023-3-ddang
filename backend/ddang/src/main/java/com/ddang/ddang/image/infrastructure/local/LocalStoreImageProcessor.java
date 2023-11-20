@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 @Component
+@Profile("image-local-upload")
 public class LocalStoreImageProcessor implements StoreImageProcessor {
 
     private static final List<String> WHITE_IMAGE_EXTENSION = List.of("jpg", "jpeg", "png");
@@ -22,6 +24,20 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
 
     @Value("${image.store.dir}")
     private String imageStoreDir;
+
+    public StoreImageDto storeImageFile(MultipartFile imageFile) {
+        try {
+            final String originalImageFileName = imageFile.getOriginalFilename();
+            final String storeImageFileName = createStoreImageFileName(originalImageFileName);
+            final String fullPath = findFullPath(storeImageFileName);
+
+            imageFile.transferTo(new File(fullPath));
+
+            return new StoreImageDto(originalImageFileName, storeImageFileName);
+        } catch (IOException ex) {
+            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", ex);
+        }
+    }
 
     @Override
     public List<StoreImageDto> storeImageFiles(final List<MultipartFile> imageFiles) {
@@ -36,20 +52,6 @@ public class LocalStoreImageProcessor implements StoreImageProcessor {
         }
 
         return storeImageDtos;
-    }
-
-    public StoreImageDto storeImageFile(MultipartFile imageFile) {
-        try {
-            final String originalImageFileName = imageFile.getOriginalFilename();
-            final String storeImageFileName = createStoreImageFileName(originalImageFileName);
-            final String fullPath = findFullPath(storeImageFileName);
-
-            imageFile.transferTo(new File(fullPath));
-
-            return new StoreImageDto(originalImageFileName, storeImageFileName);
-        } catch (IOException ex) {
-            throw new StoreImageFailureException("이미지 저장에 실패했습니다.", ex);
-        }
     }
 
     private String findFullPath(String storeImageFileName) {
