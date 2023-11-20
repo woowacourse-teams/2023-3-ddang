@@ -3,19 +3,16 @@ package com.ddang.ddang.auction.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
-import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.application.fixture.AuctionServiceFixture;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import java.util.List;
@@ -24,7 +21,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
@@ -34,17 +30,11 @@ import org.springframework.data.domain.Sort.Order;
 @SuppressWarnings("NonAsciiCharacters")
 class AuctionServiceTest extends AuctionServiceFixture {
 
-    @MockBean
-    StoreImageProcessor imageProcessor;
-
     @Autowired
     AuctionService auctionService;
 
     @Test
     void 경매를_등록한다() {
-        // given
-        given(imageProcessor.storeImageFiles(any())).willReturn(List.of(경매_이미지_엔티티));
-
         // when
         final CreateInfoAuctionDto actual = auctionService.create(유효한_경매_생성_dto);
 

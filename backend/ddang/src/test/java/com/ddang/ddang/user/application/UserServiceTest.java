@@ -1,21 +1,17 @@
 package com.ddang.ddang.user.application;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
-import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.ddang.ddang.user.application.fixture.UserServiceFixture;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 @IsolateDatabase
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -24,9 +20,6 @@ class UserServiceTest extends UserServiceFixture {
 
     @Autowired
     UserService userService;
-
-    @MockBean
-    StoreImageProcessor imageProcessor;
 
     @Test
     void 특정_사용자_정보를_조회한다() {
@@ -50,9 +43,6 @@ class UserServiceTest extends UserServiceFixture {
 
     @Test
     void 사용자_정보를_수정한다() {
-        // given
-        given(imageProcessor.storeImageFile(any())).willReturn(새로운_프로필_이미지_dto);
-
         // when
         userService.updateById(사용자.getId(), 사용자_정보_수정_요청_dto);
 
@@ -88,9 +78,6 @@ class UserServiceTest extends UserServiceFixture {
 
     @Test
     void 사용자_정보를_수정시_이미지만_수정한다() {
-        // given
-        given(imageProcessor.storeImageFile(any())).willReturn(새로운_프로필_이미지_dto);
-
         // when
         userService.updateById(사용자.getId(), 사용자_이미지만_수정_요청_dto);
 
