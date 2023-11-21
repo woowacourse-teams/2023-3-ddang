@@ -1,10 +1,10 @@
 package com.ddang.ddang.exception;
 
-import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.configuration.exception.InvalidSearchConditionException;
 import com.ddang.ddang.auction.domain.exception.InvalidPriceValueException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
@@ -12,24 +12,25 @@ import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginException;
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
-import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
-import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
+import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.exception.dto.ExceptionResponse;
 import com.ddang.ddang.image.application.exception.ImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.local.exception.EmptyImageException;
 import com.ddang.ddang.image.infrastructure.local.exception.StoreImageFailureException;
 import com.ddang.ddang.image.infrastructure.local.exception.UnsupportedImageFileExtensionException;
+import com.ddang.ddang.image.infrastructure.persistence.exception.AuctionImageNotFoundException;
 import com.ddang.ddang.notification.application.exception.NotificationFailedException;
 import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
-import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
+import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
 import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
@@ -42,6 +43,7 @@ import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
 import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
 import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
+import java.net.MalformedURLException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -51,8 +53,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-
-import java.net.MalformedURLException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -78,6 +78,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                              .body(new ExceptionResponse("이미지 조회에 실패했습니다."));
+    }
+
+    @ExceptionHandler(AuctionImageNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleAuctionImageNotFoundException(
+            final AuctionImageNotFoundException ex) {
+        logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body(new ExceptionResponse(ex.getMessage()));
     }
 
     @ExceptionHandler(CategoryNotFoundException.class)
