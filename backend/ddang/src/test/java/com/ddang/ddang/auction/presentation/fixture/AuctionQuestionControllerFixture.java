@@ -21,7 +21,7 @@ public class AuctionQuestionControllerFixture extends CommonControllerSliceTest 
     protected ReadUserInQnaDto 질문자_정보_dto = new ReadUserInQnaDto(
             1L,
             "질문자",
-            1L,
+            "store-name.png",
             4.5d,
             "12345",
             false
@@ -29,7 +29,7 @@ public class AuctionQuestionControllerFixture extends CommonControllerSliceTest 
     protected ReadUserInQnaDto 판매자_정보_dto = new ReadUserInQnaDto(
             2L,
             "판매자",
-            2L,
+            "store-name.png",
             4.5d,
             "12346",
             false

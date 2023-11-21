@@ -18,14 +18,14 @@ public record CreateAuctionResponse(
         return new CreateAuctionResponse(
                 dto.id(),
                 dto.title(),
-                convertAuctionImageUrl(dto.auctionImageId()),
+                convertAuctionImageUrl(dto.auctionImageStoreName()),
                 dto.startPrice(),
                 AuctionStatus.UNBIDDEN.name(),
                 0
         );
     }
 
-    private static String convertAuctionImageUrl(final Long id) {
-        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id);
+    private static String convertAuctionImageUrl(final String storeName) {
+        return ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, storeName);
     }
 }

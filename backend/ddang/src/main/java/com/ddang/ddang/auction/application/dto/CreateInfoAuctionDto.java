@@ -5,7 +5,7 @@ import com.ddang.ddang.auction.domain.Auction;
 public record CreateInfoAuctionDto(
         Long id,
         String title,
-        Long auctionImageId,
+        String auctionImageStoreName,
         int startPrice
 ) {
 
@@ -13,7 +13,7 @@ public record CreateInfoAuctionDto(
         return new CreateInfoAuctionDto(
                 auction.getId(),
                 auction.getTitle(),
-                auction.getAuctionImages().get(0).getId(),
+                auction.getAuctionImages().get(0).getStoreName(),
                 auction.getStartPrice().getValue()
         );
     }

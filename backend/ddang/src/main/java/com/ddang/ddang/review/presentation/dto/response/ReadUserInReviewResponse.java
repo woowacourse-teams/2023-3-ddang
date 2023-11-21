@@ -10,7 +10,7 @@ public record ReadUserInReviewResponse(Long id, String name, String profileImage
         return new ReadUserInReviewResponse(
                 userDto.id(),
                 userDto.name(),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, userDto.profileImageId())
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, userDto.profileImageStoreName())
         );
     }
 }
