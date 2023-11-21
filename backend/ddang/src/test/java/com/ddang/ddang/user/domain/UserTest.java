@@ -1,13 +1,13 @@
 package com.ddang.ddang.user.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.fixture.UserFixture;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -118,5 +118,23 @@ class UserTest extends UserFixture {
 
         // then
         assertThat(평가_대상.getReliability().getValue()).isEqualTo(새로운_신뢰도_점수);
+    }
+
+    @Test
+    void 프로필_이미지를_조회할_때_이미지가_없다면_기본_이미지_파일_이름을_반환한다() {
+        // when
+        final String actual = 프로필_이미지가_없는_회원.getProfileImageStoreName();
+
+        // then
+        assertThat(actual).isEqualTo(ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME);
+    }
+
+    @Test
+    void 프로필_이미지를_조회한다() {
+        // when
+        final String actual = 프로필_이미지가_있는_회원.getProfileImageStoreName();
+
+        // then
+        assertThat(actual).isEqualTo(프로필_이미지_파일_이름);
     }
 }

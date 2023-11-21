@@ -15,10 +15,15 @@ public record ReadAuctionDetailResponse(
     public static ReadAuctionDetailResponse of(
             final ReadAuctionDto auctionDto,
             final AuthenticationUserInfo userInfo,
-            final ReadChatRoomDto chatRoomDto
+            final ReadChatRoomDto chatRoomDto,
+            final String profileImageRelativeUrl,
+            final String auctionImageRelativeUrl
     ) {
-        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.from(auctionDto);
-        final SellerResponse sellerResponse = SellerResponse.from(auctionDto);
+        final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(
+                auctionDto,
+                auctionImageRelativeUrl
+        );
+        final SellerResponse sellerResponse = SellerResponse.of(auctionDto, profileImageRelativeUrl);
         final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(chatRoomDto);
 
         return new ReadAuctionDetailResponse(

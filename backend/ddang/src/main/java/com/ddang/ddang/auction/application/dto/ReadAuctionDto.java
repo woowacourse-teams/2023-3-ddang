@@ -3,9 +3,7 @@ package com.ddang.ddang.auction.application.dto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.bid.domain.Bid;
-import com.ddang.ddang.image.application.util.ImageStoreNameProcessor;
 import com.ddang.ddang.image.domain.AuctionImage;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,7 +48,7 @@ public record ReadAuctionDto(
                 auction.getSubCategory().getMainCategory().getName(),
                 auction.getSubCategory().getName(),
                 auction.getSeller().getId(),
-                ImageStoreNameProcessor.process(auction.getSeller().getProfileImage()),
+                auction.getSeller().getProfileImageStoreName(),
                 auction.getSeller().getName(),
                 auction.getSeller().getReliability().getValue(),
                 auction.getSeller().isDeleted(),

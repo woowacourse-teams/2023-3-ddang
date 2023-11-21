@@ -2,6 +2,8 @@ package com.ddang.ddang.review.presentation;
 
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
+import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import com.ddang.ddang.review.application.ReviewService;
 import com.ddang.ddang.review.application.dto.CreateReviewDto;
 import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
@@ -28,6 +30,7 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final ImageRelativeUrlFinder urlFinder;
 
     @PostMapping
     public ResponseEntity<Void> create(
@@ -52,7 +55,10 @@ public class ReviewController {
     public ResponseEntity<List<ReadReviewResponse>> readAllReviewsOfTargetUser(@PathVariable final Long userId) {
         final List<ReadReviewDto> readReviewDtos = reviewService.readAllByTargetId(userId);
         final List<ReadReviewResponse> response = readReviewDtos.stream()
-                                                                .map(ReadReviewResponse::from)
+                                                                .map(dto -> ReadReviewResponse.of(
+                                                                        dto,
+                                                                        urlFinder.find(ImageTargetType.PROFILE_IMAGE)
+                                                                ))
                                                                 .toList();
 
         return ResponseEntity.ok(response);

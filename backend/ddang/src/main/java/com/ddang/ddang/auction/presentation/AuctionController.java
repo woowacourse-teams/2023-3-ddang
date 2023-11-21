@@ -15,6 +15,8 @@ import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.ChatRoomService;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
+import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +40,7 @@ public class AuctionController {
 
     private final AuctionService auctionService;
     private final ChatRoomService chatRoomService;
+    private final ImageRelativeUrlFinder urlFinder;
 
     @PostMapping
     public ResponseEntity<CreateAuctionResponse> create(
@@ -50,7 +53,9 @@ public class AuctionController {
                 images,
                 userInfo.userId()
         ));
-        final CreateAuctionResponse response = CreateAuctionResponse.from(createInfoAuctionDto);
+        final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto,
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
+        );
 
         return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
                              .body(response);
@@ -66,7 +71,9 @@ public class AuctionController {
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
                 userInfo,
-                readChatRoomDto
+                readChatRoomDto,
+                urlFinder.find(ImageTargetType.PROFILE_IMAGE),
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
         );
 
         return ResponseEntity.ok(response);
@@ -82,7 +89,10 @@ public class AuctionController {
                 pageable,
                 readAuctionSearchCondition
         );
-        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(
+                readAuctionsDto,
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
+        );
 
         return ResponseEntity.ok(response);
     }

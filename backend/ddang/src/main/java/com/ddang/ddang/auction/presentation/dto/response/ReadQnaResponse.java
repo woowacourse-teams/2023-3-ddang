@@ -8,18 +8,21 @@ public record ReadQnaResponse(
         ReadAnswerResponse answer
 ) {
 
-    public static ReadQnaResponse from(final ReadQnaDto readQnaDto) {
-        final ReadQuestionResponse question = ReadQuestionResponse.from(readQnaDto.readQuestionDto());
-        final ReadAnswerResponse answer = processReadAnswerResponse(readQnaDto.readAnswerDto());
+    public static ReadQnaResponse of(final ReadQnaDto readQnaDto, final String imageRelativeUrl) {
+        final ReadQuestionResponse question = ReadQuestionResponse.of(readQnaDto.readQuestionDto(), imageRelativeUrl);
+        final ReadAnswerResponse answer = processReadAnswerResponse(readQnaDto.readAnswerDto(), imageRelativeUrl);
 
         return new ReadQnaResponse(question, answer);
     }
 
-    private static ReadAnswerResponse processReadAnswerResponse(final ReadAnswerDto readAnswerDto) {
+    private static ReadAnswerResponse processReadAnswerResponse(
+            final ReadAnswerDto readAnswerDto,
+            final String imageRelativeUrl
+    ) {
         if (readAnswerDto == null || readAnswerDto.isDeleted()) {
             return null;
         }
 
-        return ReadAnswerResponse.from(readAnswerDto);
+        return ReadAnswerResponse.of(readAnswerDto, imageRelativeUrl);
     }
 }

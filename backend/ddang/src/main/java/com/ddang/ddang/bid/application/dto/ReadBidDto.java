@@ -1,9 +1,7 @@
 package com.ddang.ddang.bid.application.dto;
 
 import com.ddang.ddang.bid.domain.Bid;
-import com.ddang.ddang.image.application.util.ImageStoreNameProcessor;
 import com.ddang.ddang.user.domain.User;
-
 import java.time.LocalDateTime;
 
 public record ReadBidDto(
@@ -19,7 +17,7 @@ public record ReadBidDto(
 
         return new ReadBidDto(
                 bidder.getName(),
-                ImageStoreNameProcessor.process(bidder.getProfileImage()),
+                bidder.getProfileImageStoreName(),
                 bidder.isDeleted(),
                 bid.getPrice().getValue(),
                 bid.getCreatedTime()

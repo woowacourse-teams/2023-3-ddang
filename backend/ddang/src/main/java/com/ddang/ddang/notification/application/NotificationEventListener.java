@@ -7,7 +7,6 @@ import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
@@ -44,10 +43,7 @@ public class NotificationEventListener {
                     message.getWriter().getName(),
                     message.getContents(),
                     calculateRedirectUrl(MESSAGE_NOTIFICATION_REDIRECT_URI, message.getChatRoom().getId()),
-                    ImageUrlCalculator.calculateBy(
-                            messageNotificationEvent.profileImageAbsoluteUrl(),
-                            profileImage.getStoreName()
-                    )
+                    messageNotificationEvent.profileImageAbsoluteUrl() + profileImage.getStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -67,7 +63,7 @@ public class NotificationEventListener {
                     auction.getTitle(),
                     BID_NOTIFICATION_MESSAGE_FORMAT,
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(bidDto.auctionImageAbsoluteUrl(), auctionImage.getStoreName())
+                    bidDto.auctionImageAbsoluteUrl() + auctionImage.getStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -91,10 +87,7 @@ public class NotificationEventListener {
                     auction.getTitle(),
                     question.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(
-                            questionNotificationEvent.absoluteImageUrl(),
-                            auctionImage.getStoreName()
-                    )
+                    questionNotificationEvent.absoluteImageUrl() + auctionImage.getStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -115,10 +108,7 @@ public class NotificationEventListener {
                     question.getContent(),
                     answer.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(
-                            answerNotificationEvent.absoluteImageUrl(),
-                            auctionImage.getStoreName()
-                    )
+                    answerNotificationEvent.absoluteImageUrl() + auctionImage.getStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {

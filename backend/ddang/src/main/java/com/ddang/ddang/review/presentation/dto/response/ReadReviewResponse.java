@@ -2,7 +2,6 @@ package com.ddang.ddang.review.presentation.dto.response;
 
 import com.ddang.ddang.review.application.dto.ReadReviewDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 
 public record ReadReviewResponse(
@@ -18,16 +17,17 @@ public record ReadReviewResponse(
         LocalDateTime createdTime
 ) {
 
-    public static ReadReviewResponse from(final ReadReviewDto reviewDto) {
+    public static ReadReviewResponse of(final ReadReviewDto reviewDto, final String imageRelativeUrl) {
         final Double nullableScore = reviewDto.score();
         Float returnScore = null;
+
         if (nullableScore != null) {
             returnScore = nullableScore.floatValue();
         }
 
         return new ReadReviewResponse(
                 reviewDto.id(),
-                ReadUserInReviewResponse.from(reviewDto.writer()),
+                ReadUserInReviewResponse.of(reviewDto.writer(), imageRelativeUrl),
                 reviewDto.content(),
                 returnScore,
                 reviewDto.createdTime()

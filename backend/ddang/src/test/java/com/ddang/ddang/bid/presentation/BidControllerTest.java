@@ -1,35 +1,5 @@
 package com.ddang.ddang.bid.presentation;
 
-import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.bid.application.dto.CreateBidDto;
-import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
-import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
-import com.ddang.ddang.bid.application.exception.InvalidBidderException;
-import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
-import com.ddang.ddang.bid.presentation.fixture.BidControllerFixture;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -49,12 +19,43 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.bid.application.dto.CreateBidDto;
+import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
+import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;
+import com.ddang.ddang.bid.application.exception.InvalidBidderException;
+import com.ddang.ddang.bid.presentation.dto.request.CreateBidRequest;
+import com.ddang.ddang.bid.presentation.fixture.BidControllerFixture;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 @SuppressWarnings("NonAsciiCharacters")
 class BidControllerTest extends BidControllerFixture {
 
     TokenDecoder tokenDecoder;
 
     MockMvc mockMvc;
+
+    BidController bidController;
 
     @BeforeEach
     void setUp() {
@@ -69,6 +70,7 @@ class BidControllerTest extends BidControllerFixture {
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
+        bidController = new BidController(bidService, urlFinder);
         mockMvc = MockMvcBuilders.standaloneSetup(bidController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)

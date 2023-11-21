@@ -2,7 +2,8 @@ package com.ddang.ddang.qna.presentation;
 
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
+import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import com.ddang.ddang.qna.application.AnswerService;
 import com.ddang.ddang.qna.application.QuestionService;
 import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
@@ -28,6 +29,7 @@ public class QnaController {
 
     private final QuestionService questionService;
     private final AnswerService answerService;
+    private final ImageRelativeUrlFinder urlFinder;
 
     @PostMapping
     public ResponseEntity<Void> createQuestion(
@@ -36,7 +38,7 @@ public class QnaController {
     ) {
         questionService.create(
                 CreateQuestionDto.of(questionRequest, userInfo.userId()),
-                ImageRelativeUrl.AUCTION.calculateAbsoluteUrl()
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
         );
 
         return ResponseEntity.created(URI.create("/auctions/" + questionRequest.auctionId()))
@@ -62,7 +64,7 @@ public class QnaController {
     ) {
         answerService.create(
                 CreateAnswerDto.of(questionId, answerRequest, userInfo.userId()),
-                ImageRelativeUrl.AUCTION.calculateAbsoluteUrl()
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
         );
 
         return ResponseEntity.created(URI.create("/auctions/" + answerRequest.auctionId()))

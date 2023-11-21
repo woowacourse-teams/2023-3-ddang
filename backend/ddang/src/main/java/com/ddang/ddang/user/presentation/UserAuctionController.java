@@ -5,6 +5,8 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
+import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import com.ddang.ddang.user.presentation.dto.response.ReadAuctionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserAuctionController {
 
     private final AuctionService auctionService;
+    private final ImageRelativeUrlFinder urlFinder;
 
     @GetMapping("/mine")
     public ResponseEntity<ReadAuctionsResponse> readAllByUserInfo(
@@ -26,7 +29,10 @@ public class UserAuctionController {
             @DescendingSort final Pageable pageable
     ) {
         final ReadAuctionsDto readAuctionsDto = auctionService.readAllByUserId(userInfo.userId(), pageable);
-        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(
+                readAuctionsDto,
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
+        );
 
         return ResponseEntity.ok(response);
     }
@@ -37,7 +43,10 @@ public class UserAuctionController {
             @DescendingSort final Pageable pageable
     ) {
         final ReadAuctionsDto readAuctionsDto = auctionService.readAllByBidderId(userInfo.userId(), pageable);
-        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(
+                readAuctionsDto,
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
+        );
 
         return ResponseEntity.ok(response);
     }

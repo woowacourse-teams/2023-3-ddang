@@ -1,26 +1,5 @@
 package com.ddang.ddang.user.presentation;
 
-import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.user.presentation.fixture.UserAuctionControllerFixture;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -39,12 +18,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.user.presentation.fixture.UserAuctionControllerFixture;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 @SuppressWarnings("NonAsciiCharacters")
 class UserAuctionControllerTest extends UserAuctionControllerFixture {
 
     TokenDecoder tokenDecoder;
 
     MockMvc mockMvc;
+
+    UserAuctionController userAuctionController;
 
     @BeforeEach
     void setUp() {
@@ -59,6 +60,7 @@ class UserAuctionControllerTest extends UserAuctionControllerFixture {
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
+        userAuctionController = new UserAuctionController(auctionService, urlFinder);
         mockMvc = MockMvcBuilders.standaloneSetup(userAuctionController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)

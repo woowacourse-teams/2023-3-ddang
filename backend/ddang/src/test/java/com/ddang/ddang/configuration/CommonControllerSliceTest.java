@@ -1,8 +1,6 @@
 package com.ddang.ddang.configuration;
 
 import com.ddang.ddang.auction.application.AuctionService;
-import com.ddang.ddang.auction.presentation.AuctionController;
-import com.ddang.ddang.auction.presentation.AuctionQnaController;
 import com.ddang.ddang.auction.presentation.AuctionReviewController;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.AuthenticationUserService;
@@ -10,19 +8,18 @@ import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.SocialUserInformationService;
 import com.ddang.ddang.authentication.presentation.AuthenticationController;
 import com.ddang.ddang.bid.application.BidService;
-import com.ddang.ddang.bid.presentation.BidController;
 import com.ddang.ddang.category.application.CategoryService;
 import com.ddang.ddang.category.presentation.CategoryController;
 import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
-import com.ddang.ddang.chat.presentation.ChatRoomController;
 import com.ddang.ddang.device.application.DeviceTokenService;
 import com.ddang.ddang.device.presentation.DeviceTokenController;
 import com.ddang.ddang.image.application.ImageService;
+import com.ddang.ddang.image.configuration.ImageRelativeUrlConfigurationProperties;
 import com.ddang.ddang.image.presentation.ImageController;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import com.ddang.ddang.qna.application.AnswerService;
 import com.ddang.ddang.qna.application.QuestionService;
-import com.ddang.ddang.qna.presentation.QnaController;
 import com.ddang.ddang.region.application.RegionService;
 import com.ddang.ddang.region.presentation.RegionController;
 import com.ddang.ddang.report.application.AnswerReportService;
@@ -31,10 +28,7 @@ import com.ddang.ddang.report.application.ChatRoomReportService;
 import com.ddang.ddang.report.application.QuestionReportService;
 import com.ddang.ddang.report.presentation.ReportController;
 import com.ddang.ddang.review.application.ReviewService;
-import com.ddang.ddang.review.presentation.ReviewController;
 import com.ddang.ddang.user.application.UserService;
-import com.ddang.ddang.user.presentation.UserAuctionController;
-import com.ddang.ddang.user.presentation.UserController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -51,20 +45,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @WebMvcTest(
         controllers = {
-                AuctionController.class,
-                AuctionQnaController.class,
                 AuthenticationController.class,
-                BidController.class,
                 CategoryController.class,
-                ChatRoomController.class,
                 DeviceTokenController.class,
                 ImageController.class,
                 RegionController.class,
                 ReportController.class,
-                UserAuctionController.class,
-                UserController.class,
-                QnaController.class,
-                ReviewController.class,
                 AuctionReviewController.class
         },
         excludeFilters = {
@@ -87,22 +73,10 @@ public abstract class CommonControllerSliceTest {
     protected RestDocumentationContextProvider provider;
 
     @Autowired
-    protected AuctionController auctionController;
-
-    @Autowired
-    protected AuctionQnaController auctionQnaController;
-
-    @Autowired
     protected AuthenticationController authenticationController;
 
     @Autowired
     protected CategoryController categoryController;
-
-    @Autowired
-    protected BidController bidController;
-
-    @Autowired
-    protected ChatRoomController chatRoomController;
 
     @Autowired
     protected DeviceTokenController deviceTokenController;
@@ -115,18 +89,6 @@ public abstract class CommonControllerSliceTest {
 
     @Autowired
     protected ReportController reportController;
-
-    @Autowired
-    protected UserAuctionController userAuctionController;
-
-    @Autowired
-    protected UserController userController;
-
-    @Autowired
-    protected QnaController qnaController;
-
-    @Autowired
-    protected ReviewController reviewController;
 
     @Autowired
     protected AuctionReviewController auctionReviewController;
@@ -190,4 +152,9 @@ public abstract class CommonControllerSliceTest {
 
     @MockBean
     protected SocialUserInformationService socialUserInformationService;
+
+    protected ImageRelativeUrlConfigurationProperties imageRelativeUrl =
+            new ImageRelativeUrlConfigurationProperties("/auctions/images/", "/users/images/");
+
+    protected ImageRelativeUrlFinder urlFinder = new ImageRelativeUrlFinder(imageRelativeUrl);
 }

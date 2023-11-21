@@ -1,29 +1,5 @@
 package com.ddang.ddang.review.presentation;
 
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.review.application.dto.CreateReviewDto;
-import com.ddang.ddang.review.application.exception.AlreadyReviewException;
-import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
-import com.ddang.ddang.review.presentation.fixture.ReviewControllerFixture;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.List;
-import java.util.Optional;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -44,11 +20,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.review.application.dto.CreateReviewDto;
+import com.ddang.ddang.review.application.exception.AlreadyReviewException;
+import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
+import com.ddang.ddang.review.presentation.fixture.ReviewControllerFixture;
+import java.util.List;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 @SuppressWarnings("NonAsciiCharacters")
 class ReviewControllerTest extends ReviewControllerFixture {
 
     TokenDecoder tokenDecoder;
+
     MockMvc mockMvc;
+
+    ReviewController reviewController;
 
     @BeforeEach
     void setUp() {
@@ -63,6 +65,7 @@ class ReviewControllerTest extends ReviewControllerFixture {
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
+        reviewController = new ReviewController(reviewService, urlFinder);
         mockMvc = MockMvcBuilders.standaloneSetup(reviewController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
