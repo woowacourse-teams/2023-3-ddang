@@ -1,9 +1,7 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 
 public record ReadAnswerResponse(
@@ -17,7 +15,7 @@ public record ReadAnswerResponse(
         String content
 ) {
 
-    public static ReadAnswerResponse of(final ReadAnswerDto readAnswerDto, final ImageRelativeUrl imageRelativeUrl) {
+    public static ReadAnswerResponse of(final ReadAnswerDto readAnswerDto, final String imageRelativeUrl) {
         return new ReadAnswerResponse(
                 readAnswerDto.id(),
                 ReadUserInAuctionQuestionResponse.of(readAnswerDto.writerDto(), imageRelativeUrl),

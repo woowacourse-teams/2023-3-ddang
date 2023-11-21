@@ -2,7 +2,6 @@ package com.ddang.ddang.user.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionWithChatRoomIdDto;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.user.presentation.util.ReliabilityProcessor;
 
 public record ReadAuctionDetailResponse(
@@ -15,14 +14,13 @@ public record ReadAuctionDetailResponse(
     public static ReadAuctionDetailResponse of(
             final ReadAuctionWithChatRoomIdDto dto,
             final AuthenticationUserInfo userInfo,
-            final ImageRelativeUrl imageRelativeUrl
+            final String imageRelativeUrl
     ) {
         final AuctionDetailResponse auctionDetailResponse = AuctionDetailResponse.of(
                 dto.auctionDto(),
                 imageRelativeUrl
         );
-        final String profileImageUrl = imageRelativeUrl.calculateAbsoluteUrl() + dto.auctionDto()
-                                                                                    .sellerProfileStoreName();
+        final String profileImageUrl = imageRelativeUrl + dto.auctionDto().sellerProfileStoreName();
         final Float reliability = ReliabilityProcessor.process(dto.auctionDto().sellerReliability());
         final SellerResponse sellerResponse = new SellerResponse(
                 dto.auctionDto().sellerId(),

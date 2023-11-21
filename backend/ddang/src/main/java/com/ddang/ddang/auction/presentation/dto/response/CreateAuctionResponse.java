@@ -2,7 +2,6 @@ package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.domain.AuctionStatus;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 
 public record CreateAuctionResponse(
         Long id,
@@ -13,11 +12,11 @@ public record CreateAuctionResponse(
         int auctioneerCount
 ) {
 
-    public static CreateAuctionResponse of(final CreateInfoAuctionDto dto, final ImageRelativeUrl imageRelativeUrl) {
+    public static CreateAuctionResponse of(final CreateInfoAuctionDto dto, final String imageRelativeUrl) {
         return new CreateAuctionResponse(
                 dto.id(),
                 dto.title(),
-                imageRelativeUrl.calculateAbsoluteUrl() + dto.auctionImageStoreName(),
+                imageRelativeUrl + dto.auctionImageStoreName(),
                 dto.startPrice(),
                 AuctionStatus.UNBIDDEN.name(),
                 0

@@ -1,6 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 
@@ -8,7 +8,7 @@ import java.util.List;
 
 public record ReadQnasResponse(List<ReadQnaResponse> qnas) {
 
-    public static ReadQnasResponse of(final ReadQnasDto readQnasDto, final ImageRelativeUrl imageRelativeUrl) {
+    public static ReadQnasResponse of(final ReadQnasDto readQnasDto, final String imageRelativeUrl) {
         final List<ReadQnaDto> dtos = readQnasDto.readQnaDtos();
         final List<ReadQnaResponse> readQnaResponses = dtos.stream()
                                                            .map(dto -> ReadQnaResponse.of(dto, imageRelativeUrl))

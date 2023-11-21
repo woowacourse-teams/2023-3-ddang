@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
 import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 
 public record ReadChatRoomWithLastMessageResponse(
         Long id,
@@ -14,8 +13,8 @@ public record ReadChatRoomWithLastMessageResponse(
 
     public static ReadChatRoomWithLastMessageResponse of(
             final ReadChatRoomWithLastMessageDto dto,
-            final ImageRelativeUrl profileImageRelativeUrl,
-            final ImageRelativeUrl auctionImageRelativeUrl
+            final String profileImageRelativeUrl,
+            final String auctionImageRelativeUrl
     ) {
         return new ReadChatRoomWithLastMessageResponse(
                 dto.id(),

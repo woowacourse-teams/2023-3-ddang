@@ -1,41 +1,5 @@
 package com.ddang.ddang.qna.presentation;
 
-import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
-import com.ddang.ddang.auction.application.exception.UserForbiddenException;
-import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
-import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
-import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
-import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
-import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
-import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
-import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
-import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
-import com.ddang.ddang.qna.presentation.dto.request.CreateAnswerRequest;
-import com.ddang.ddang.qna.presentation.dto.request.CreateQuestionRequest;
-import com.ddang.ddang.qna.presentation.fixture.QnaControllerFixture;
-import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -58,12 +22,49 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ddang.ddang.auction.application.exception.UserForbiddenException;
+import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
+import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
+import com.ddang.ddang.qna.application.exception.AlreadyAnsweredException;
+import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
+import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
+import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
+import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
+import com.ddang.ddang.qna.presentation.dto.request.CreateAnswerRequest;
+import com.ddang.ddang.qna.presentation.dto.request.CreateQuestionRequest;
+import com.ddang.ddang.qna.presentation.fixture.QnaControllerFixture;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
 @SuppressWarnings("NonAsciiCharacters")
 class QnaControllerTest extends QnaControllerFixture {
 
     TokenDecoder tokenDecoder;
 
     MockMvc mockMvc;
+
+    QnaController qnaController;
 
     @BeforeEach
     void setUp() {
@@ -78,6 +79,7 @@ class QnaControllerTest extends QnaControllerFixture {
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
+        qnaController = new QnaController(questionService, answerService, urlFinder);
         mockMvc = MockMvcBuilders.standaloneSetup(qnaController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)

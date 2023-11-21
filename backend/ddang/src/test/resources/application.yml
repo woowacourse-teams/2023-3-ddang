@@ -30,9 +30,6 @@ open:
 image:
   store:
     dir: ./
-  url:
-    auction-image: "/auctions/images/"
-    profile-image: "/users/images/"
 
 token:
   jwt:

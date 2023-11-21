@@ -17,7 +17,8 @@ import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomWithLastMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
+import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
     private final MessageService messageService;
+    private final ImageRelativeUrlFinder urlFinder;
 
     @PostMapping
     public ResponseEntity<CreateChatRoomResponse> createChatRoom(
@@ -63,8 +65,8 @@ public class ChatRoomController {
                 readParticipatingChatRoomDtos.stream()
                                              .map(dto -> ReadChatRoomWithLastMessageResponse.of(
                                                      dto,
-                                                     ImageRelativeUrl.USER,
-                                                     ImageRelativeUrl.AUCTION
+                                                     urlFinder.find(ImageTargetType.PROFILE_IMAGE),
+                                                     urlFinder.find(ImageTargetType.AUCTION_IMAGE)
                                              ))
                                              .toList();
 
@@ -82,8 +84,8 @@ public class ChatRoomController {
         );
         final ReadChatRoomResponse response = ReadChatRoomResponse.of(
                 chatRoomDto,
-                ImageRelativeUrl.USER,
-                ImageRelativeUrl.AUCTION
+                urlFinder.find(ImageTargetType.PROFILE_IMAGE),
+                urlFinder.find(ImageTargetType.AUCTION_IMAGE)
         );
 
         return ResponseEntity.ok(response);
@@ -98,7 +100,7 @@ public class ChatRoomController {
 
         final Long messageId = messageService.create(
                 CreateMessageDto.of(userInfo.userId(), chatRoomId, request),
-                ImageRelativeUrl.USER.calculateAbsoluteUrl()
+                urlFinder.find(ImageTargetType.PROFILE_IMAGE)
         );
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 

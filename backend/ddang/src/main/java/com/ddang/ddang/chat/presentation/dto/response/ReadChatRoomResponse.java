@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 
 public record ReadChatRoomResponse(
         Long id,
@@ -12,8 +11,8 @@ public record ReadChatRoomResponse(
 
     public static ReadChatRoomResponse of(
             final ReadParticipatingChatRoomDto chatRoomDto,
-            final ImageRelativeUrl profileImageRelativeUrl,
-            final ImageRelativeUrl auctionImageRelativeUrl
+            final String profileImageRelativeUrl,
+            final String auctionImageRelativeUrl
     ) {
         final ReadChatPartnerResponse chatPartner = ReadChatPartnerResponse.of(
                 chatRoomDto.partnerDto(),

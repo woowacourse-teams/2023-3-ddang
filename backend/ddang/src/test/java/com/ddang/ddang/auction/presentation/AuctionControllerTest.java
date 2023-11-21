@@ -28,8 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
-import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.auction.presentation.fixture.AuctionControllerFixture;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
@@ -64,6 +64,8 @@ class AuctionControllerTest extends AuctionControllerFixture {
 
     MockMvc mockMvc;
 
+    AuctionController auctionController;
+
     @BeforeEach
     void setUp() {
         mockTokenDecoder = mock(TokenDecoder.class);
@@ -76,6 +78,8 @@ class AuctionControllerTest extends AuctionControllerFixture {
                 store
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
+
+        auctionController = new AuctionController(auctionService, chatRoomService, urlFinder);
 
         mockMvc = MockMvcBuilders.standaloneSetup(auctionController)
                                  .setControllerAdvice(new GlobalExceptionHandler())
