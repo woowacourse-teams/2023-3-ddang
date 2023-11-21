@@ -1,5 +1,12 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
+import static com.ddang.ddang.auction.domain.QAuction.auction;
+import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
+import static com.ddang.ddang.chat.domain.QMessage.message;
+import static com.ddang.ddang.chat.domain.QReadMessageLog.readMessageLog;
+import static com.ddang.ddang.image.domain.QAuctionImage.auctionImage;
+import static java.util.Comparator.comparing;
+
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageQueryProjectionDto;
 import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageAndImageQueryProjectionDto;
@@ -8,18 +15,10 @@ import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 import java.util.Objects;
-
-import static com.ddang.ddang.auction.domain.QAuction.auction;
-import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
-import static com.ddang.ddang.chat.domain.QMessage.message;
-import static com.ddang.ddang.chat.domain.QReadMessageLog.readMessageLog;
-import static com.ddang.ddang.image.domain.QAuctionImage.auctionImage;
-import static java.util.Comparator.comparing;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
@@ -32,19 +31,11 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                 queryFactory.select(new QChatRoomAndMessageAndImageQueryProjectionDto(
                                     chatRoom,
                                     message,
-                                    auctionImage,
                                     countUnreadMessages(userId, chatRoom.id)
                             )).from(chatRoom)
                             .leftJoin(chatRoom.buyer).fetchJoin()
                             .leftJoin(chatRoom.auction, auction).fetchJoin()
                             .leftJoin(auction.seller).fetchJoin()
-                            .leftJoin(auctionImage).on(auctionImage.id.eq(
-                                    JPAExpressions
-                                            .select(auctionImage.id.min())
-                                            .from(auctionImage)
-                                            .where(auctionImage.auction.id.eq(auction.id))
-                                            .groupBy(auctionImage.auction.id)
-                            )).fetchJoin()
                             .leftJoin(auction.lastBid).fetchJoin()
                             .leftJoin(message).on(message.id.eq(
                                     JPAExpressions

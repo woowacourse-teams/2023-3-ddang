@@ -5,6 +5,7 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.common.entity.BaseTimeEntity;
 import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.image.domain.Image;
 import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.user.domain.User;
 import jakarta.persistence.AttributeOverride;
@@ -83,6 +84,9 @@ public class Auction extends BaseTimeEntity {
     @OneToMany(mappedBy = "auction", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<AuctionImage> auctionImages = new ArrayList<>();
 
+    @Embedded
+    private Image thumbnailImage;
+
     private int auctioneerCount = 0;
 
     @Builder
@@ -120,6 +124,8 @@ public class Auction extends BaseTimeEntity {
             this.auctionImages.add(auctionImage);
             auctionImage.initAuction(this);
         }
+
+        this.thumbnailImage = auctionImages.get(0).getImage();
     }
 
     public AuctionStatus findAuctionStatus(final LocalDateTime targetTime) {
@@ -194,5 +200,9 @@ public class Auction extends BaseTimeEntity {
 
     public Optional<Bid> findLastBid() {
         return Optional.ofNullable(lastBid);
+    }
+
+    public String getThumbnailImageStoreName() {
+        return thumbnailImage.getStoreName();
     }
 }

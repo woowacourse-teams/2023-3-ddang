@@ -38,7 +38,7 @@ class QuerydslChatRoomAndImageRepositoryTest extends QuerydslChatRoomAndImageRep
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).isPresent();
             softAssertions.assertThat(actual.get().chatRoom()).isEqualTo(채팅방);
-            softAssertions.assertThat(actual.get().thumbnailImage()).isEqualTo(경매_대표_이미지);
+            softAssertions.assertThat(actual.get().thumbnailImageStoreName()).isEqualTo(경매_대표_이미지.getStoreName());
         });
     }
 }

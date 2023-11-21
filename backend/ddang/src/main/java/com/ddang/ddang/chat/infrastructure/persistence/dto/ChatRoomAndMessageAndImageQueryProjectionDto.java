@@ -9,7 +9,6 @@ import com.querydsl.core.annotations.QueryProjection;
 public record ChatRoomAndMessageAndImageQueryProjectionDto(
         ChatRoom chatRoom,
         Message message,
-        AuctionImage auctionImage,
         Long unreadMessage
 ) {
 
@@ -21,7 +20,7 @@ public record ChatRoomAndMessageAndImageQueryProjectionDto(
         return new ChatRoomAndMessageAndImageDto(
                 this.chatRoom,
                 this.message,
-                this.auctionImage,
+                this.chatRoom.getAuction().getThumbnailImageStoreName(),
                 this.unreadMessage
         );
     }

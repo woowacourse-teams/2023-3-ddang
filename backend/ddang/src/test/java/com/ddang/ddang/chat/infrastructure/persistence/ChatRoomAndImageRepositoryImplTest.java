@@ -36,7 +36,7 @@ class ChatRoomAndImageRepositoryImplTest extends ChatRoomAndImageRepositoryImplF
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.chatRoom()).isEqualTo(채팅방);
-            softAssertions.assertThat(actual.thumbnailImage()).isEqualTo(경매_대표_이미지);
+            softAssertions.assertThat(actual.thumbnailImageStoreName()).isEqualTo(경매_대표_이미지.getStoreName());
         });
     }
 }

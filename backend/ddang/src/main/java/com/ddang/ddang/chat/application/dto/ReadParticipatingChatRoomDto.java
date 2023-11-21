@@ -20,7 +20,7 @@ public record ReadParticipatingChatRoomDto(
 
         return new ReadParticipatingChatRoomDto(
                 chatRoom.getId(),
-                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), chatRoomAndImageDto.thumbnailImage()),
+                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), chatRoomAndImageDto.thumbnailImageStoreName()),
                 ReadUserInChatRoomDto.from(partner),
                 chatRoom.isChatAvailablePartner(partner)
         );
