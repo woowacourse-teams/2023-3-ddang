@@ -96,4 +96,12 @@ public class User extends BaseTimeEntity {
     public void updateReliability(final Reliability reliability) {
         this.reliability = reliability;
     }
+
+    public String getProfileImageStoreName() {
+        if (profileImage == null) {
+            return ProfileImage.DEFAULT_PROFILE_IMAGE_STORE_NAME;
+        }
+
+        return profileImage.getStoreName();
+    }
 }
