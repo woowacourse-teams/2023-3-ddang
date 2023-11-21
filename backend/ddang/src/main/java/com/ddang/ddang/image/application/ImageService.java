@@ -25,8 +25,8 @@ public class ImageService {
     private final ProfileImageRepository profileImageRepository;
     private final AuctionImageRepository auctionImageRepository;
 
-    public Resource readProfileImage(final Long id) throws MalformedURLException {
-        final ProfileImage profileImage = profileImageRepository.findById(id)
+    public Resource readProfileImage(final String storeName) throws MalformedURLException {
+        final ProfileImage profileImage = profileImageRepository.findByStoreName(storeName)
                                                                 .orElse(null);
 
         if (profileImage == null) {

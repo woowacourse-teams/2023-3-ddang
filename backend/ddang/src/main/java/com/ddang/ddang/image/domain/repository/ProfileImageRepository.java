@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface ProfileImageRepository {
 
-    Optional<ProfileImage> findById(final Long id);
+    Optional<ProfileImage> findByStoreName(final String storeName);
 }

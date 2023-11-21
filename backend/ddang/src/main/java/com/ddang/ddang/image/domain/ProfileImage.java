@@ -32,4 +32,8 @@ public class ProfileImage {
     public ProfileImage(final String uploadName, final String storeName) {
         this.image = new Image(uploadName, storeName);
     }
+
+    public String getStoreName() {
+        return image.getStoreName();
+    }
 }

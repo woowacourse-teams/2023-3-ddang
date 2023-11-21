@@ -18,9 +18,9 @@ public class ImageController {
 
     private final ImageService imageService;
 
-    @GetMapping("/users/images/{id}")
-    public ResponseEntity<Resource> downloadProfileImage(@PathVariable Long id) throws MalformedURLException {
-        final Resource resource = imageService.readProfileImage(id);
+    @GetMapping("/users/images/{storeName}")
+    public ResponseEntity<Resource> downloadProfileImage(@PathVariable String storeName) throws MalformedURLException {
+        final Resource resource = imageService.readProfileImage(storeName);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
