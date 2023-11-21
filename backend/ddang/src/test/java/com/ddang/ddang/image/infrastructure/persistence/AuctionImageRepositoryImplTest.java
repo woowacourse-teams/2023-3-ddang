@@ -1,8 +1,12 @@
 package com.ddang.ddang.image.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.repository.AuctionImageRepository;
+import com.ddang.ddang.image.infrastructure.persistence.exception.AuctionImageNotFoundException;
 import com.ddang.ddang.image.infrastructure.persistence.fixture.AuctionImageRepositoryImplFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -11,10 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import(QuerydslConfiguration.class)
@@ -30,11 +30,18 @@ class AuctionImageRepositoryImplTest extends AuctionImageRepositoryImplFixture {
     }
 
     @Test
-    void 경매_이미지를_아이디를_통해_조회한다() {
+    void 경매_이미지를_파일_이름을_통해_조회한다() {
         // when
-        final Optional<AuctionImage> actual = auctionImageRepository.findById(경매_이미지.getId());
+        final AuctionImage actual = auctionImageRepository.getByStoreNameOrThrow(경매_이미지.getImage().getStoreName());
 
         // then
-        assertThat(actual).contains(경매_이미지);
+        assertThat(actual).isEqualTo(경매_이미지);
+    }
+
+    @Test
+    void 지정한_파일_이름이_없다면_예외가_발생한다() {
+        // when & then
+        assertThatThrownBy(() -> auctionImageRepository.getByStoreNameOrThrow(존재하지_않는_경매_이미지_이름))
+                .isInstanceOf(AuctionImageNotFoundException.class);
     }
 }

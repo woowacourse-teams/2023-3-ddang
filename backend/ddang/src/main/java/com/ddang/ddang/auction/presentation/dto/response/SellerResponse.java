@@ -16,7 +16,7 @@ public record SellerResponse(
     public static SellerResponse from(final ReadAuctionDto auctionDto) {
         return new SellerResponse(
                 auctionDto.sellerId(),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, auctionDto.sellerProfileId()),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, auctionDto.sellerProfileStoreName()),
                 NameProcessor.process(auctionDto.isSellerDeleted(), auctionDto.sellerName()),
                 ReliabilityProcessor.process(auctionDto.sellerReliability())
         );

@@ -13,7 +13,7 @@ public class ProfileImageRepositoryImpl implements ProfileImageRepository {
     private final JpaProfileImageRepository jpaProfileImageRepository;
 
     @Override
-    public Optional<ProfileImage> findById(final Long id) {
-        return jpaProfileImageRepository.findById(id);
+    public Optional<ProfileImage> findByStoreName(final String storeName) {
+        return jpaProfileImageRepository.findByStoreName(storeName);
     }
 }

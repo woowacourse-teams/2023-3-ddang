@@ -30,7 +30,7 @@ public class UserServiceFixture {
 
     @BeforeEach
     void setUp() {
-        프로필_이미지 = new ProfileImage("upload.png", "store.png");
+        프로필_이미지 = new ProfileImage("upload.png", "store-name.png");
         final String 이미_존재하는_사용자_이름 = "중복되는 이름";
         final User 이미_저장된_사용자 = User.builder()
                                     .name(이미_존재하는_사용자_이름)

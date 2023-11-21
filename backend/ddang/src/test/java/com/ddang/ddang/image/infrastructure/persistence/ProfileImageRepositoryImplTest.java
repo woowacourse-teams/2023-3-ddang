@@ -29,9 +29,9 @@ class ProfileImageRepositoryImplTest extends ProfileImageRepositoryImplFixture {
     }
 
     @Test
-    void 프로필을_이미지를_아이디를_통해_조회한다() {
+    void 프로필을_이미지를_저장된_파일_이름을_통해_조회한다() {
         // when
-        final Optional<ProfileImage> actual = profileImageRepository.findById(프로필_이미지.getId());
+        final Optional<ProfileImage> actual = profileImageRepository.findByStoreName(프로필_이미지.getStoreName());
 
         // then
         assertThat(actual).contains(프로필_이미지);

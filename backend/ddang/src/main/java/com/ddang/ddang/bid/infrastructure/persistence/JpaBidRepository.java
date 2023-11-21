@@ -10,6 +10,14 @@ import java.util.Optional;
 
 public interface JpaBidRepository extends JpaRepository<Bid, Long> {
 
+    @Query("""
+        SELECT b
+        FROM Bid b
+        JOIN FETCH b.bidder bi
+        LEFT JOIN FETCH bi.profileImage
+        WHERE b.auction.id = :auctionId
+        ORDER BY b.id ASC
+    """)
     List<Bid> findAllByAuctionIdOrderByIdAsc(final Long auctionId);
 
     @Query("SELECT b FROM Bid b WHERE b.auction.id = :auctionId ORDER BY b.id DESC LIMIT 1")

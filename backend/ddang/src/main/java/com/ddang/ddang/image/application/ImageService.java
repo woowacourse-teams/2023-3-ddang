@@ -19,34 +19,29 @@ import java.net.MalformedURLException;
 public class ImageService {
 
     private static final String FILE_PROTOCOL_PREFIX = "file:";
+
     @Value("${image.store.dir}")
     private String imageStoreDir;
 
     private final ProfileImageRepository profileImageRepository;
     private final AuctionImageRepository auctionImageRepository;
 
-    public Resource readProfileImage(final Long id) throws MalformedURLException {
-        final ProfileImage profileImage = profileImageRepository.findById(id)
+    public Resource readProfileImage(final String storeName) throws MalformedURLException {
+        final ProfileImage profileImage = profileImageRepository.findByStoreName(storeName)
                                                                 .orElse(null);
 
         if (profileImage == null) {
             return null;
         }
 
-        final String fullPath = findFullPath(profileImage.getImage().getStoreName());
+        final String fullPath = findFullPath(profileImage.getStoreName());
 
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }
 
-    public Resource readAuctionImage(final Long id) throws MalformedURLException {
-        final AuctionImage auctionImage = auctionImageRepository.findById(id)
-                                                                .orElse(null);
-
-        if (auctionImage == null) {
-            return null;
-        }
-
-        final String fullPath = findFullPath(auctionImage.getImage().getStoreName());
+    public Resource readAuctionImage(final String storeName) throws MalformedURLException {
+        final AuctionImage auctionImage = auctionImageRepository.getByStoreNameOrThrow(storeName);
+        final String fullPath = findFullPath(auctionImage.getStoreName());
 
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }

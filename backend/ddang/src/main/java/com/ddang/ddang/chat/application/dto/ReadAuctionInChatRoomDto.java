@@ -8,7 +8,7 @@ public record ReadAuctionInChatRoomDto(
         Long id,
         String title,
         Integer lastBidPrice,
-        Long thumbnailImageId
+        String thumbnailImageStoreName
 ) {
 
     public static ReadAuctionInChatRoomDto of(final Auction auction, final AuctionImage thumbnailImage) {
@@ -16,7 +16,7 @@ public record ReadAuctionInChatRoomDto(
                 auction.getId(),
                 auction.getTitle(),
                 convertPrice(auction.getLastBid()),
-                thumbnailImage.getId()
+                thumbnailImage.getStoreName()
         );
     }
 

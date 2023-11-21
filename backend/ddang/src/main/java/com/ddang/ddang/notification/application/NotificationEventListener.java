@@ -44,7 +44,10 @@ public class NotificationEventListener {
                     message.getWriter().getName(),
                     message.getContents(),
                     calculateRedirectUrl(MESSAGE_NOTIFICATION_REDIRECT_URI, message.getChatRoom().getId()),
-                    ImageUrlCalculator.calculateBy(messageNotificationEvent.profileImageAbsoluteUrl(), profileImage.getId())
+                    ImageUrlCalculator.calculateBy(
+                            messageNotificationEvent.profileImageAbsoluteUrl(),
+                            profileImage.getStoreName()
+                    )
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -64,7 +67,7 @@ public class NotificationEventListener {
                     auction.getTitle(),
                     BID_NOTIFICATION_MESSAGE_FORMAT,
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(bidDto.auctionImageAbsoluteUrl(), auctionImage.getId())
+                    ImageUrlCalculator.calculateBy(bidDto.auctionImageAbsoluteUrl(), auctionImage.getStoreName())
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -88,7 +91,10 @@ public class NotificationEventListener {
                     auction.getTitle(),
                     question.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(questionNotificationEvent.absoluteImageUrl(), auctionImage.getId())
+                    ImageUrlCalculator.calculateBy(
+                            questionNotificationEvent.absoluteImageUrl(),
+                            auctionImage.getStoreName()
+                    )
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -109,7 +115,10 @@ public class NotificationEventListener {
                     question.getContent(),
                     answer.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    ImageUrlCalculator.calculateBy(answerNotificationEvent.absoluteImageUrl(), auctionImage.getId())
+                    ImageUrlCalculator.calculateBy(
+                            answerNotificationEvent.absoluteImageUrl(),
+                            auctionImage.getStoreName()
+                    )
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {

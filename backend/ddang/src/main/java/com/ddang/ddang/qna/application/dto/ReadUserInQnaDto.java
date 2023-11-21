@@ -5,7 +5,7 @@ import com.ddang.ddang.user.domain.User;
 public record ReadUserInQnaDto(
         Long id,
         String name,
-        Long profileImageId,
+        String profileImageStoreName,
         double reliability,
         String oauthId,
         boolean isDeleted
@@ -14,7 +14,7 @@ public record ReadUserInQnaDto(
         return new ReadUserInQnaDto(
                 writer.getId(),
                 writer.getName(),
-                writer.getProfileImage().getId(),
+                writer.getProfileImage().getStoreName(),
                 writer.getReliability().getValue(),
                 writer.getOauthInformation().getOauthId(),
                 writer.isDeleted()
