@@ -17,7 +17,7 @@ public class ImageServiceFixture {
     private JpaAuctionImageRepository auctionImageRepository;
 
     protected String 존재하지_않는_프로필_이미지_이름 = "invalid-image.png";
-    protected Long 존재하지_않는_경매_이미지_아이디 = -999L;
+    protected String 존재하지_않는_경매_이미지_이름 = "invalid-image.png";
 
     protected ProfileImage 프로필_이미지;
     protected String 프로필_이미지_파일명;

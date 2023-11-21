@@ -38,8 +38,8 @@ public class ImageService {
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }
 
-    public Resource readAuctionImage(final Long id) throws MalformedURLException {
-        final AuctionImage auctionImage = auctionImageRepository.findById(id)
+    public Resource readAuctionImage(final String storeName) throws MalformedURLException {
+        final AuctionImage auctionImage = auctionImageRepository.findByStoreName(storeName)
                                                                 .orElse(null);
 
         if (auctionImage == null) {

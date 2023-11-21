@@ -14,7 +14,7 @@ public class AuctionImageRepositoryImpl implements AuctionImageRepository {
     private final JpaAuctionImageRepository jpaAuctionImageRepository;
 
     @Override
-    public Optional<AuctionImage> findById(final Long id) {
-        return jpaAuctionImageRepository.findById(id);
+    public Optional<AuctionImage> findByStoreName(final String storeName) {
+        return jpaAuctionImageRepository.findByStoreName(storeName);
     }
 }

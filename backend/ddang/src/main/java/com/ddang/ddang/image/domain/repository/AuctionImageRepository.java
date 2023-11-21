@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface AuctionImageRepository {
 
-    Optional<AuctionImage> findById(final Long id);
+    Optional<AuctionImage> findByStoreName(final String storeName);
 }
