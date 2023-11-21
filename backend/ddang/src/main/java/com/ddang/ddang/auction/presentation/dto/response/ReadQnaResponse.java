@@ -1,5 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 
@@ -8,18 +9,21 @@ public record ReadQnaResponse(
         ReadAnswerResponse answer
 ) {
 
-    public static ReadQnaResponse from(final ReadQnaDto readQnaDto) {
-        final ReadQuestionResponse question = ReadQuestionResponse.from(readQnaDto.readQuestionDto());
-        final ReadAnswerResponse answer = processReadAnswerResponse(readQnaDto.readAnswerDto());
+    public static ReadQnaResponse of(final ReadQnaDto readQnaDto, final ImageRelativeUrl imageRelativeUrl) {
+        final ReadQuestionResponse question = ReadQuestionResponse.of(readQnaDto.readQuestionDto(), imageRelativeUrl);
+        final ReadAnswerResponse answer = processReadAnswerResponse(readQnaDto.readAnswerDto(), imageRelativeUrl);
 
         return new ReadQnaResponse(question, answer);
     }
 
-    private static ReadAnswerResponse processReadAnswerResponse(final ReadAnswerDto readAnswerDto) {
+    private static ReadAnswerResponse processReadAnswerResponse(
+            final ReadAnswerDto readAnswerDto,
+            final ImageRelativeUrl imageRelativeUrl
+    ) {
         if (readAnswerDto == null || readAnswerDto.isDeleted()) {
             return null;
         }
 
-        return ReadAnswerResponse.from(readAnswerDto);
+        return ReadAnswerResponse.of(readAnswerDto, imageRelativeUrl);
     }
 }

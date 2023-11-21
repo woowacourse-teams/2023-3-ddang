@@ -61,7 +61,11 @@ public class ChatRoomController {
 
         final List<ReadChatRoomWithLastMessageResponse> responses =
                 readParticipatingChatRoomDtos.stream()
-                                             .map(ReadChatRoomWithLastMessageResponse::from)
+                                             .map(dto -> ReadChatRoomWithLastMessageResponse.of(
+                                                     dto,
+                                                     ImageRelativeUrl.USER,
+                                                     ImageRelativeUrl.AUCTION
+                                             ))
                                              .toList();
 
         return ResponseEntity.ok(responses);
@@ -72,8 +76,15 @@ public class ChatRoomController {
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @PathVariable final Long chatRoomId
     ) {
-        final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(chatRoomId, userInfo.userId());
-        final ReadChatRoomResponse response = ReadChatRoomResponse.from(chatRoomDto);
+        final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(
+                chatRoomId,
+                userInfo.userId()
+        );
+        final ReadChatRoomResponse response = ReadChatRoomResponse.of(
+                chatRoomDto,
+                ImageRelativeUrl.USER,
+                ImageRelativeUrl.AUCTION
+        );
 
         return ResponseEntity.ok(response);
     }
@@ -86,7 +97,8 @@ public class ChatRoomController {
     ) {
 
         final Long messageId = messageService.create(
-                CreateMessageDto.of(userInfo.userId(), chatRoomId, request), ImageRelativeUrl.USER.calculateAbsoluteUrl()
+                CreateMessageDto.of(userInfo.userId(), chatRoomId, request),
+                ImageRelativeUrl.USER.calculateAbsoluteUrl()
         );
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 

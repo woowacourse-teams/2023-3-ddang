@@ -43,7 +43,7 @@ public class BidController {
     public ResponseEntity<List<ReadBidResponse>> readAllByAuctionId(@PathVariable final Long auctionId) {
         final List<ReadBidDto> readBidDtos = bidService.readAllByAuctionId(auctionId);
         final List<ReadBidResponse> response = readBidDtos.stream()
-                                                          .map(ReadBidResponse::from)
+                                                          .map(dto -> ReadBidResponse.of(dto, ImageRelativeUrl.USER))
                                                           .toList();
 
         return ResponseEntity.ok(response);

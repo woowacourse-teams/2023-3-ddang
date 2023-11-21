@@ -1,6 +1,7 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 
 public record ReadChatRoomResponse(
         Long id,
@@ -9,9 +10,19 @@ public record ReadChatRoomResponse(
         boolean isChatAvailable
 ) {
 
-    public static ReadChatRoomResponse from(final ReadParticipatingChatRoomDto chatRoomDto) {
-        final ReadChatPartnerResponse chatPartner = ReadChatPartnerResponse.from(chatRoomDto.partnerDto());
-        final ReadAuctionInChatRoomResponse auction = ReadAuctionInChatRoomResponse.from(chatRoomDto.auctionDto());
+    public static ReadChatRoomResponse of(
+            final ReadParticipatingChatRoomDto chatRoomDto,
+            final ImageRelativeUrl profileImageRelativeUrl,
+            final ImageRelativeUrl auctionImageRelativeUrl
+    ) {
+        final ReadChatPartnerResponse chatPartner = ReadChatPartnerResponse.of(
+                chatRoomDto.partnerDto(),
+                profileImageRelativeUrl
+        );
+        final ReadAuctionInChatRoomResponse auction = ReadAuctionInChatRoomResponse.of(
+                chatRoomDto.auctionDto(),
+                auctionImageRelativeUrl
+        );
 
         return new ReadChatRoomResponse(chatRoomDto.id(), chatPartner, auction, chatRoomDto.isChatAvailable());
     }

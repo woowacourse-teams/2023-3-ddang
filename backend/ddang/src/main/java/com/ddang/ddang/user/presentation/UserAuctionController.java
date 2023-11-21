@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.user.presentation.dto.response.ReadAuctionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,7 @@ public class UserAuctionController {
             @DescendingSort final Pageable pageable
     ) {
         final ReadAuctionsDto readAuctionsDto = auctionService.readAllByUserId(userInfo.userId(), pageable);
-        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, ImageRelativeUrl.AUCTION);
 
         return ResponseEntity.ok(response);
     }
@@ -37,7 +38,7 @@ public class UserAuctionController {
             @DescendingSort final Pageable pageable
     ) {
         final ReadAuctionsDto readAuctionsDto = auctionService.readAllByBidderId(userInfo.userId(), pageable);
-        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, ImageRelativeUrl.AUCTION);
 
         return ResponseEntity.ok(response);
     }

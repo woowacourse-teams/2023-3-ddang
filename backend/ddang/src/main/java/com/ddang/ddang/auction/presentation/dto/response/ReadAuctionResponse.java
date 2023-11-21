@@ -2,7 +2,6 @@ package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
-import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 
 public record ReadAuctionResponse(
         Long id,
@@ -13,11 +12,11 @@ public record ReadAuctionResponse(
         int auctioneerCount
 ) {
 
-    public static ReadAuctionResponse from(final ReadAuctionDto dto) {
+    public static ReadAuctionResponse of(final ReadAuctionDto dto, final ImageRelativeUrl imageRelativeUrl) {
         return new ReadAuctionResponse(
                 dto.id(),
                 dto.title(),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, dto.auctionImageStoreNames().get(0)),
+                imageRelativeUrl.calculateAbsoluteUrl() + dto.auctionImageStoreNames().get(0),
                 processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                 dto.auctionStatus().name(),
                 dto.auctioneerCount()

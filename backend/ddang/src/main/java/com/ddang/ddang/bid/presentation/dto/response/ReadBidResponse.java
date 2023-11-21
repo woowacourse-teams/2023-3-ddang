@@ -2,7 +2,6 @@ package com.ddang.ddang.bid.presentation.dto.response;
 
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
-import com.ddang.ddang.image.presentation.util.ImageUrlCalculator;
 import com.ddang.ddang.user.presentation.util.NameProcessor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -19,12 +18,12 @@ public record ReadBidResponse(
         LocalDateTime bidTime
 ) {
 
-    public static ReadBidResponse from(final ReadBidDto dto) {
+    public static ReadBidResponse of(final ReadBidDto dto, final ImageRelativeUrl imageRelativeUrl) {
         final String name = NameProcessor.process(dto.isDeletedUser(), dto.name());
 
         return new ReadBidResponse(
                 name,
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.profileImageStoreName()),
+                imageRelativeUrl.calculateAbsoluteUrl() + dto.profileImageStoreName(),
                 dto.price(),
                 dto.bidTime()
         );

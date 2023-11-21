@@ -15,6 +15,7 @@ import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.ChatRoomService;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +51,7 @@ public class AuctionController {
                 images,
                 userInfo.userId()
         ));
-        final CreateAuctionResponse response = CreateAuctionResponse.from(createInfoAuctionDto);
+        final CreateAuctionResponse response = CreateAuctionResponse.of(createInfoAuctionDto, ImageRelativeUrl.AUCTION);
 
         return ResponseEntity.created(URI.create("/auctions/" + createInfoAuctionDto.id()))
                              .body(response);
@@ -66,7 +67,9 @@ public class AuctionController {
         final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
                 readAuctionDto,
                 userInfo,
-                readChatRoomDto
+                readChatRoomDto,
+                ImageRelativeUrl.USER,
+                ImageRelativeUrl.AUCTION
         );
 
         return ResponseEntity.ok(response);
@@ -82,7 +85,7 @@ public class AuctionController {
                 pageable,
                 readAuctionSearchCondition
         );
-        final ReadAuctionsResponse response = ReadAuctionsResponse.from(readAuctionsDto);
+        final ReadAuctionsResponse response = ReadAuctionsResponse.of(readAuctionsDto, ImageRelativeUrl.AUCTION);
 
         return ResponseEntity.ok(response);
     }

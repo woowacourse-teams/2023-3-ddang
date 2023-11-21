@@ -2,6 +2,7 @@ package com.ddang.ddang.user.presentation;
 
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import com.ddang.ddang.user.application.UserService;
 import com.ddang.ddang.user.application.dto.ReadUserDto;
 import com.ddang.ddang.user.presentation.dto.response.ReadUserResponse;
@@ -27,7 +28,7 @@ public class UserController {
     @GetMapping
     public ResponseEntity<ReadUserResponse> readById(@AuthenticateUser final AuthenticationUserInfo userInfo) {
         final ReadUserDto readUserDto = userService.readById(userInfo.userId());
-        final ReadUserResponse response = ReadUserResponse.from(readUserDto);
+        final ReadUserResponse response = ReadUserResponse.of(readUserDto, ImageRelativeUrl.USER);
 
         return ResponseEntity.ok(response);
     }
@@ -44,7 +45,7 @@ public class UserController {
         }
 
         final ReadUserDto readUserDto = userService.updateById(userInfo.userId(), updateUserDto);
-        final ReadUserResponse response = ReadUserResponse.from(readUserDto);
+        final ReadUserResponse response = ReadUserResponse.of(readUserDto, ImageRelativeUrl.USER);
 
         return ResponseEntity.ok(response);
     }
