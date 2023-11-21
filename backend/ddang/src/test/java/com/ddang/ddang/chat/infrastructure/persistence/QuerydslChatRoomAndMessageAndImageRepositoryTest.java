@@ -75,10 +75,10 @@ class QuerydslChatRoomAndMessageAndImageRepositoryTest extends QuerydslChatRoomA
             softAssertions.assertThat(actual).hasSize(2);
             softAssertions.assertThat(actual.get(0).chatRoom()).isEqualTo(엔초_지토_채팅방);
             softAssertions.assertThat(actual.get(0).message()).isEqualTo(엔초가_지토에게_5시에_보낸_쪽지);
-            softAssertions.assertThat(actual.get(0).thumbnailImage()).isEqualTo(엔초의_경매_대표_이미지);
+            softAssertions.assertThat(actual.get(0).thumbnailImageStoreName()).isEqualTo(엔초의_경매_대표_이미지.getStoreName());
             softAssertions.assertThat(actual.get(1).chatRoom()).isEqualTo(제이미_엔초_채팅방);
             softAssertions.assertThat(actual.get(1).message()).isEqualTo(제이미가_엔초에게_4시에_보낸_쪽지);
-            softAssertions.assertThat(actual.get(1).thumbnailImage()).isEqualTo(제이미의_경매_대표_이미지);
+            softAssertions.assertThat(actual.get(1).thumbnailImageStoreName()).isEqualTo(제이미의_경매_대표_이미지.getStoreName());
         });
     }
 }

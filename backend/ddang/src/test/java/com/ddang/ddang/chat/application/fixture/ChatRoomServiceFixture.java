@@ -264,7 +264,7 @@ public class ChatRoomServiceFixture {
         messageRepository.save(엔초가_지토에게_1시에_보낸_쪽지);
         messageRepository.save(제이미가_엔초에게_2시에_보낸_쪽지);
 
-        final ChatRoomAndImageDto 엔초_지토_채팅방_정보 = new ChatRoomAndImageDto(엔초_지토_채팅방, 엔초의_경매_대표_이미지);
+        final ChatRoomAndImageDto 엔초_지토_채팅방_정보 = new ChatRoomAndImageDto(엔초_지토_채팅방, 엔초의_경매_대표_이미지.getStoreName());
         엔초_회원_정보 = new AuthenticationUserInfo(엔초.getId());
         판매자_회원_정보 = new AuthenticationUserInfo(판매자.getId());
         경매에_참여한_적_없는_사용자_정보 = new AuthenticationUserInfo(경매에_참여한_적_없는_사용자.getId());
@@ -282,7 +282,7 @@ public class ChatRoomServiceFixture {
         채팅방_없고_참여_불가능 = new ReadChatRoomDto(null, false);
         엔초_채팅_목록의_제이미_엔초_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
                 제이미_엔초_채팅방.getId(),
-                ReadAuctionInChatRoomDto.of(판매자_제이미_구매자_엔초_경매, 제이미의_경매_대표_이미지),
+                ReadAuctionInChatRoomDto.of(판매자_제이미_구매자_엔초_경매, 제이미의_경매_대표_이미지.getStoreName()),
                 ReadUserInChatRoomDto.from(제이미),
                 ReadLastMessageDto.from(제이미가_엔초에게_2시에_보낸_쪽지),
                 1L,
@@ -290,7 +290,7 @@ public class ChatRoomServiceFixture {
         );
         엔초_채팅_목록의_엔초_지토_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
                 엔초_지토_채팅방.getId(),
-                ReadAuctionInChatRoomDto.of(판매자_엔초_구매자_지토_경매, 엔초의_경매_대표_이미지),
+                ReadAuctionInChatRoomDto.of(판매자_엔초_구매자_지토_경매, 엔초의_경매_대표_이미지.getStoreName()),
                 ReadUserInChatRoomDto.from(지토),
                 ReadLastMessageDto.from(엔초가_지토에게_1시에_보낸_쪽지),
                 1L,

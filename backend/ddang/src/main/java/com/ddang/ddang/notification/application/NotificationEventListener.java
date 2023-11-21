@@ -5,7 +5,6 @@ import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
@@ -56,14 +55,13 @@ public class NotificationEventListener {
         try {
             final BidDto bidDto = bidNotificationEvent.bidDto();
             final Auction auction = bidDto.auction();
-            final AuctionImage auctionImage = convertAuctionToImage(auction);
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.BID,
                     bidDto.previousBidderId(),
                     auction.getTitle(),
                     BID_NOTIFICATION_MESSAGE_FORMAT,
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    bidDto.auctionImageAbsoluteUrl() + auctionImage.getStoreName()
+                    bidDto.auctionImageAbsoluteUrl() + auction.getThumbnailImageStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -71,23 +69,18 @@ public class NotificationEventListener {
         }
     }
 
-    private AuctionImage convertAuctionToImage(final Auction auction) {
-        return auction.getAuctionImages().get(0);
-    }
-
     @TransactionalEventListener
     public void sendQuestionNotification(final QuestionNotificationEvent questionNotificationEvent) {
         try {
             final Question question = questionNotificationEvent.question();
             final Auction auction = question.getAuction();
-            final AuctionImage auctionImage = auction.getAuctionImages().get(FIRST_IMAGE_INDEX);
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.QUESTION,
                     auction.getSeller().getId(),
                     auction.getTitle(),
                     question.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    questionNotificationEvent.absoluteImageUrl() + auctionImage.getStoreName()
+                    questionNotificationEvent.absoluteImageUrl() + auction.getThumbnailImageStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
@@ -101,14 +94,13 @@ public class NotificationEventListener {
             final Answer answer = answerNotificationEvent.answer();
             final Auction auction = answer.getQuestion().getAuction();
             final Question question = answer.getQuestion();
-            final AuctionImage auctionImage = auction.getAuctionImages().get(FIRST_IMAGE_INDEX);
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.ANSWER,
                     question.getWriter().getId(),
                     question.getContent(),
                     answer.getContent(),
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    answerNotificationEvent.absoluteImageUrl() + auctionImage.getStoreName()
+                    answerNotificationEvent.absoluteImageUrl() + auction.getThumbnailImageStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {

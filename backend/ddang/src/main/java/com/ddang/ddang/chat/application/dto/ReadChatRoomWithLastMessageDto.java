@@ -22,12 +22,11 @@ public record ReadChatRoomWithLastMessageDto(
         final ChatRoom chatRoom = chatRoomAndMessageAndImageDto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
         final Message lastMessage = chatRoomAndMessageAndImageDto.message();
-        final AuctionImage thumbnailImage = chatRoomAndMessageAndImageDto.thumbnailImage();
         final Long unreadMessages = chatRoomAndMessageAndImageDto.unreadMessageCount();
 
         return new ReadChatRoomWithLastMessageDto(
                 chatRoom.getId(),
-                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), thumbnailImage),
+                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), chatRoomAndMessageAndImageDto.thumbnailImageStoreName()),
                 ReadUserInChatRoomDto.from(partner),
                 ReadLastMessageDto.from(lastMessage),
                 unreadMessages,

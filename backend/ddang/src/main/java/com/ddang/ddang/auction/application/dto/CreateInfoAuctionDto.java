@@ -13,7 +13,7 @@ public record CreateInfoAuctionDto(
         return new CreateInfoAuctionDto(
                 auction.getId(),
                 auction.getTitle(),
-                auction.getAuctionImages().get(0).getStoreName(),
+                auction.getThumbnailImageStoreName(),
                 auction.getStartPrice().getValue()
         );
     }
