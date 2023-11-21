@@ -17,6 +17,7 @@ public class AuctionImageRepositoryImplFixture {
     private JpaAuctionImageRepository jpaAuctionImageRepository;
 
     protected AuctionImage 경매_이미지;
+    protected String 존재하지_않는_경매_이미지_이름 = "invalid-image.png";
 
     @BeforeEach
     void fixtureSetUp() {

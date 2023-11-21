@@ -39,13 +39,7 @@ public class ImageService {
     }
 
     public Resource readAuctionImage(final String storeName) throws MalformedURLException {
-        final AuctionImage auctionImage = auctionImageRepository.findByStoreName(storeName)
-                                                                .orElse(null);
-
-        if (auctionImage == null) {
-            return null;
-        }
-
+        final AuctionImage auctionImage = auctionImageRepository.getByStoreNameOrThrow(storeName);
         final String fullPath = findFullPath(auctionImage.getImage().getStoreName());
 
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
