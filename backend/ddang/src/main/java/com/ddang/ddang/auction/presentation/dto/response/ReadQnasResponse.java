@@ -1,6 +1,5 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;
 

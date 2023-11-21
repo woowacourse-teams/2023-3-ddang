@@ -3,6 +3,8 @@ package com.ddang.ddang.auction.presentation.dto.response;
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
+import com.ddang.ddang.user.presentation.util.NameProcessor;
+import com.ddang.ddang.user.presentation.util.ReliabilityProcessor;
 
 public record ReadAuctionDetailResponse(
         AuctionDetailResponse auction,
@@ -41,5 +43,24 @@ public record ReadAuctionDetailResponse(
 
     private static boolean isLastBidder(final ReadAuctionDto auctionDto, final AuthenticationUserInfo userInfo) {
         return userInfo.userId().equals(auctionDto.lastBidderId());
+    }
+
+    private record SellerResponse(Long id, String image, String nickname, Float reliability) {
+
+        private static SellerResponse of(final ReadAuctionDto auctionDto, final String imageRelativeUrl) {
+            return new SellerResponse(
+                    auctionDto.sellerId(),
+                    imageRelativeUrl + auctionDto.sellerProfileStoreName(),
+                    NameProcessor.process(auctionDto.isSellerDeleted(), auctionDto.sellerName()),
+                    ReliabilityProcessor.process(auctionDto.sellerReliability())
+            );
+        }
+    }
+
+    private record ChatRoomInAuctionResponse(Long id, boolean isChatParticipant) {
+
+        public static ChatRoomInAuctionResponse from(final ReadChatRoomDto dto) {
+            return new ChatRoomInAuctionResponse(dto.id(), dto.isChatParticipant());
+        }
     }
 }

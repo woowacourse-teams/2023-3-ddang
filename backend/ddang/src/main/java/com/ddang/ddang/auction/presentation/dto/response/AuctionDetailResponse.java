@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,5 +66,19 @@ public record AuctionDetailResponse(
                   .stream()
                   .map(DirectRegionResponse::from)
                   .toList();
+    }
+
+    private record CategoryResponse(String main, String sub) {
+    }
+
+    private record DirectRegionResponse(String first, String second, String third) {
+
+        private static DirectRegionResponse from(final ReadRegionsDto dto) {
+            return new DirectRegionResponse(
+                    dto.firstRegionDto().regionName(),
+                    dto.secondRegionDto().regionName(),
+                    dto.thirdRegionDto().regionName()
+            );
+        }
     }
 }
