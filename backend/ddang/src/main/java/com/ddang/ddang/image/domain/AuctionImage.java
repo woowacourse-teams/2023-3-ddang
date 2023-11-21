@@ -43,4 +43,8 @@ public class AuctionImage {
     public void initAuction(final Auction auction) {
         this.auction = auction;
     }
+
+    public String getStoreName() {
+        return image.getStoreName();
+    }
 }

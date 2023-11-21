@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 public class ImageService {
 
     private static final String FILE_PROTOCOL_PREFIX = "file:";
+
     @Value("${image.store.dir}")
     private String imageStoreDir;
 
@@ -33,14 +34,14 @@ public class ImageService {
             return null;
         }
 
-        final String fullPath = findFullPath(profileImage.getImage().getStoreName());
+        final String fullPath = findFullPath(profileImage.getStoreName());
 
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }
 
     public Resource readAuctionImage(final String storeName) throws MalformedURLException {
         final AuctionImage auctionImage = auctionImageRepository.getByStoreNameOrThrow(storeName);
-        final String fullPath = findFullPath(auctionImage.getImage().getStoreName());
+        final String fullPath = findFullPath(auctionImage.getStoreName());
 
         return new UrlResource(FILE_PROTOCOL_PREFIX + fullPath);
     }

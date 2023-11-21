@@ -45,9 +45,7 @@ class JpaAuctionImageRepositoryTest extends JpaAuctionImageRepositoryFixture {
     @Test
     void 지정한_파일_이름에_해당하는_경매_이미지를_조회한다() {
         // when
-        final Optional<AuctionImage> actual = auctionImageRepository.findByStoreName(
-                경매_이미지.getImage().getStoreName()
-        );
+        final Optional<AuctionImage> actual = auctionImageRepository.findByStoreName(경매_이미지.getStoreName());
 
         // then
         assertThat(actual).contains(경매_이미지);

@@ -28,10 +28,10 @@ public class ImageServiceFixture {
     @BeforeEach
     void setUp() {
         프로필_이미지 = new ProfileImage("upload.png", "store.png");
-        프로필_이미지_파일명 = 프로필_이미지.getImage().getStoreName();
+        프로필_이미지_파일명 = 프로필_이미지.getStoreName();
 
         경매_이미지 = new AuctionImage("upload.png", "store.png");
-        경매_이미지_파일명 = 경매_이미지.getImage().getStoreName();
+        경매_이미지_파일명 = 경매_이미지.getStoreName();
 
         profileImageRepository.save(프로필_이미지);
         auctionImageRepository.save(경매_이미지);
