@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ddang.ddang.auction.domain.fixture.AuctionFixture;
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -457,5 +458,24 @@ class AuctionTest extends AuctionFixture {
 
         // then
         assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 대표_이미지를_조회한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("제목")
+                                       .seller(판매자)
+                                       .closingTime(LocalDateTime.now().minusDays(2))
+                                       .build();
+        final AuctionImage auctionImage = new AuctionImage("uploadName.png", "storeName.png");
+
+        auction.addAuctionImages(List.of(auctionImage));
+
+        // when
+        final String actual = auction.getThumbnailImageStoreName();
+
+        // then
+        assertThat(actual).isEqualTo(auctionImage.getStoreName());
     }
 }
