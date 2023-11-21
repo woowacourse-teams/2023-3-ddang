@@ -1,6 +1,6 @@
-package com.ddang.ddang.auction.presentation;
+package com.ddang.ddang.qna.presentation;
 
-import com.ddang.ddang.auction.presentation.dto.response.ReadQnasResponse;
+import com.ddang.ddang.qna.presentation.dto.response.ReadQnasResponse;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;

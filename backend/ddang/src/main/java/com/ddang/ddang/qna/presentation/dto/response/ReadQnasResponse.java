@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.presentation.dto.response;
+package com.ddang.ddang.qna.presentation.dto.response;
 
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 import com.ddang.ddang.qna.application.dto.ReadQnasDto;

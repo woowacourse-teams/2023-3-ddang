@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.presentation;
+package com.ddang.ddang.qna.presentation;
 
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.anyLong;
