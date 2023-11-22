@@ -47,6 +47,6 @@ public class UserRepositoryImplFixture {
         userRepository.save(탈퇴한_사용자);
 
         끝이_동일한_이름 = "12345";
-        존재하는_사용자_이름 = 사용자.getName();
+        존재하는_사용자_이름 = 사용자.findName();
     }
 }

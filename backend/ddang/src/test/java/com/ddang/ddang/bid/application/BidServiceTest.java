@@ -177,8 +177,8 @@ class BidServiceTest extends BidServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).name()).isEqualTo(입찰자1.getName());
-            softAssertions.assertThat(actual.get(1).name()).isEqualTo(입찰자2.getName());
+            softAssertions.assertThat(actual.get(0).name()).isEqualTo(입찰자1.findName());
+            softAssertions.assertThat(actual.get(1).name()).isEqualTo(입찰자2.findName());
         });
     }
 

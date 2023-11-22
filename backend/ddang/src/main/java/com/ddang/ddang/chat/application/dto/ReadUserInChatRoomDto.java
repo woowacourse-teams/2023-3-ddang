@@ -13,7 +13,7 @@ public record ReadUserInChatRoomDto(
     public static ReadUserInChatRoomDto from(final User user) {
         return new ReadUserInChatRoomDto(
                 user.getId(),
-                user.getName(),
+                user.findName(),
                 user.getProfileImageStoreName(),
                 user.getReliability().getValue(),
                 user.isDeleted()

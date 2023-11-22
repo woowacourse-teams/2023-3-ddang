@@ -39,7 +39,7 @@ public class NotificationEventListener {
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.MESSAGE,
                     message.getReceiver().getId(),
-                    message.getWriter().getName(),
+                    message.getWriter().findName(),
                     message.getContents(),
                     calculateRedirectUrl(MESSAGE_NOTIFICATION_REDIRECT_URI, message.getChatRoom().getId()),
                     messageNotificationEvent.profileImageAbsoluteUrl() + profileImage.getStoreName()

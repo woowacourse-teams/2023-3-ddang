@@ -14,7 +14,7 @@ public record ReadUserInReportDto(
     public static ReadUserInReportDto from(final User user) {
         return new ReadUserInReportDto(
                 user.getId(),
-                user.getName(),
+                user.findName(),
                 user.getProfileImageStoreName(),
                 user.getReliability().getValue(),
                 user.getOauthInformation().getOauthId(),

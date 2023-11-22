@@ -7,7 +7,7 @@ public record ReadUserInReviewDto(Long id, String name, String profileImageStore
     public static ReadUserInReviewDto from(final User user) {
         return new ReadUserInReviewDto(
                 user.getId(),
-                user.getName(),
+                user.findName(),
                 user.getProfileImage().getStoreName(),
                 user.getReliability().getValue(),
                 user.getOauthInformation().getOauthId()

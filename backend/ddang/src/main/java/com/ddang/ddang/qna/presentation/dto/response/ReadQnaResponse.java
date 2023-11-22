@@ -4,7 +4,6 @@ import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
 import com.ddang.ddang.qna.application.dto.ReadQnaDto;
 import com.ddang.ddang.qna.application.dto.ReadQuestionDto;
 import com.ddang.ddang.qna.application.dto.ReadUserInQnaDto;
-import com.ddang.ddang.user.presentation.util.NameProcessor;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
@@ -83,7 +82,7 @@ public record ReadQnaResponse(
         private static ReadUserInAuctionQuestionResponse of(final ReadUserInQnaDto dto, final String imageUrl) {
             return new ReadUserInAuctionQuestionResponse(
                     dto.id(),
-                    NameProcessor.process(dto.isDeleted(), dto.name()),
+                    dto.name(),
                     imageUrl + dto.profileImageStoreName()
             );
         }

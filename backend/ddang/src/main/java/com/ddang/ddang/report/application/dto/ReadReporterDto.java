@@ -7,7 +7,7 @@ public record ReadReporterDto(Long id, String name, String profileImageStoreName
     public static ReadReporterDto from(final User reporter) {
         return new ReadReporterDto(
                 reporter.getId(),
-                reporter.getName(),
+                reporter.findName(),
                 reporter.getProfileImageStoreName(),
                 reporter.getReliability().getValue(),
                 reporter.isDeleted()

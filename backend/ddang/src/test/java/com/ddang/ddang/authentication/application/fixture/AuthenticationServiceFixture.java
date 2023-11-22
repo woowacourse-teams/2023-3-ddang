@@ -95,7 +95,7 @@ public class AuthenticationServiceFixture {
                   .oauthId("12345")
                   .oauth2Type(Oauth2Type.KAKAO)
                   .build();
-        사용자_이름 = 사용자.getName();
+        사용자_이름 = 사용자.findName();
 
         탈퇴한_사용자 = User.builder()
                       .name("kakao12346")

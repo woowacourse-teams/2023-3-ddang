@@ -28,7 +28,7 @@ class UserServiceTest extends UserServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.name()).isEqualTo(사용자.getName());
+            softAssertions.assertThat(actual.name()).isEqualTo(사용자.findName());
             softAssertions.assertThat(actual.profileImageStoreName()).isEqualTo(사용자.getProfileImage().getStoreName());
             softAssertions.assertThat(actual.reliability()).isEqualTo(사용자.getReliability().getValue());
         });
@@ -48,7 +48,7 @@ class UserServiceTest extends UserServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(사용자.getName()).isEqualTo(사용자_정보_수정_요청_dto.name());
+            softAssertions.assertThat(사용자.findName()).isEqualTo(사용자_정보_수정_요청_dto.name());
             softAssertions.assertThat(사용자.getProfileImage().getImage().getStoreName())
                           .isEqualTo(새로운_프로필_이미지_dto.storeName());
             softAssertions.assertThat(사용자.getProfileImage().getImage().getUploadName())
@@ -63,7 +63,7 @@ class UserServiceTest extends UserServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(사용자.getName()).isEqualTo(사용자_이름만_수정_요청_dto.name());
+            softAssertions.assertThat(사용자.findName()).isEqualTo(사용자_이름만_수정_요청_dto.name());
             softAssertions.assertThat(사용자.getProfileImage()).isEqualTo(프로필_이미지);
         });
     }
@@ -83,7 +83,7 @@ class UserServiceTest extends UserServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(사용자.getName()).isEqualTo(사용자_이름);
+            softAssertions.assertThat(사용자.findName()).isEqualTo(사용자_이름);
             softAssertions.assertThat(사용자.getProfileImage().getImage().getStoreName())
                           .isEqualTo(새로운_프로필_이미지_dto.storeName());
             softAssertions.assertThat(사용자.getProfileImage().getImage().getUploadName())

@@ -16,7 +16,7 @@ public record ReadBidDto(
         final User bidder = bid.getBidder();
 
         return new ReadBidDto(
-                bidder.getName(),
+                bidder.findName(),
                 bidder.getProfileImageStoreName(),
                 bidder.isDeleted(),
                 bid.getPrice().getValue(),

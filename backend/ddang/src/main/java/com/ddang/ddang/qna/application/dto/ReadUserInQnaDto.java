@@ -13,7 +13,7 @@ public record ReadUserInQnaDto(
     public static ReadUserInQnaDto from(final User writer) {
         return new ReadUserInQnaDto(
                 writer.getId(),
-                writer.getName(),
+                writer.findName(),
                 writer.getProfileImage().getStoreName(),
                 writer.getReliability().getValue(),
                 writer.getOauthInformation().getOauthId(),

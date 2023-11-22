@@ -196,7 +196,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(사용자.isDeleted()).isTrue();
-            softAssertions.assertThat(사용자.getName()).isNotEqualTo(사용자_이름);
+            softAssertions.assertThat(사용자.findName()).isNotEqualTo(사용자_이름);
             softAssertions.assertThat(사용자.getProfileImage()).isNull();
         });
     }

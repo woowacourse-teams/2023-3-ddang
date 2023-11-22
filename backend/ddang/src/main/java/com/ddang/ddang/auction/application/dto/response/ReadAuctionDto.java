@@ -49,7 +49,7 @@ public record ReadAuctionDto(
                 auction.getSubCategory().getName(),
                 auction.getSeller().getId(),
                 auction.getSeller().getProfileImageStoreName(),
-                auction.getSeller().getName(),
+                auction.getSeller().findName(),
                 auction.getSeller().getReliability().getValue(),
                 auction.getSeller().isDeleted(),
                 auction.findAuctionStatus(targetTime),

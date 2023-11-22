@@ -14,7 +14,7 @@ public record ReadUserDto(
     public static ReadUserDto from(final User user) {
         return new ReadUserDto(
                 user.getId(),
-                user.getName(),
+                user.findName(),
                 user.getProfileImageStoreName(),
                 user.getReliability().getValue(),
                 user.getOauthInformation().getOauthId(),
