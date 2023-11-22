@@ -34,7 +34,7 @@ public class MessageService {
 
     @Transactional
     public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
-        final ChatRoom chatRoom = chatRoomRepository.getByIdOrThrow(dto.chatRoomId());
+        final ChatRoom chatRoom = chatRoomRepository.getSimpleChatRoomByIdOrThrow(dto.chatRoomId());
         final User sender = userRepository.findById(dto.writerId())
                                           .orElseThrow(() -> new SenderNotFoundException(
                                                   "지정한 아이디에 대한 발신자를 찾을 수 없습니다."));
@@ -56,7 +56,7 @@ public class MessageService {
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {
         final User reader = userRepository.getByIdOrThrow(request.messageReaderId());
-        final ChatRoom chatRoom = chatRoomRepository.getByIdOrThrow(request.chatRoomId());
+        final ChatRoom chatRoom = chatRoomRepository.getSimpleChatRoomByIdOrThrow(request.chatRoomId());
 
         if (request.lastMessageId() != null) {
             validateLastMessageId(request.lastMessageId());

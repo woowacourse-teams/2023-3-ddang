@@ -27,7 +27,7 @@ public class ChatRoomReportService {
     @Transactional
     public Long create(final CreateChatRoomReportDto chatRoomReportDto) {
         final User reporter = userRepository.getByIdOrThrow(chatRoomReportDto.reporterId());
-        final ChatRoom chatRoom = chatRoomRepository.getByIdOrThrow(chatRoomReportDto.chatRoomId());
+        final ChatRoom chatRoom = chatRoomRepository.getSimpleChatRoomByIdOrThrow(chatRoomReportDto.chatRoomId());
 
         checkInvalidChatRoomReport(reporter, chatRoom);
 

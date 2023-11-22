@@ -45,7 +45,7 @@ class ChatRoomRepositoryImplTest extends ChatRoomRepositoryImplFixture {
     @Test
     void 지정한_아이디에_대한_단순_채팅방_정보를_조회한다() {
         // when
-        final ChatRoom actual = chatRoomRepository.getByIdOrThrow(채팅방.getId());
+        final ChatRoom actual = chatRoomRepository.getSimpleChatRoomByIdOrThrow(채팅방.getId());
 
         // then
         assertThat(actual).isEqualTo(채팅방);

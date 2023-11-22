@@ -19,7 +19,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public ChatRoom getByIdOrThrow(final Long id) {
+    public ChatRoom getSimpleChatRoomByIdOrThrow(final Long id) {
         return jpaChatRoomRepository.findById(id)
                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                             "지정한 채팅방을 찾을 수 없습니다."
