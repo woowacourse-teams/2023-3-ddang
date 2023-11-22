@@ -8,6 +8,7 @@ import com.ddang.ddang.chat.infrastructure.persistence.fixture.ChatRoomRepositor
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import java.util.Optional;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -42,12 +43,25 @@ class ChatRoomRepositoryImplTest extends ChatRoomRepositoryImplFixture {
     }
 
     @Test
-    void 지정한_아이디에_대한_채팅방을_조회한다() {
+    void 지정한_아이디에_대한_단순_채팅방_정보를_조회한다() {
         // when
         final ChatRoom actual = chatRoomRepository.getByIdOrThrow(채팅방.getId());
 
         // then
         assertThat(actual).isEqualTo(채팅방);
+    }
+
+    @Test
+    void 지정한_아이디에_대한_채팅방_경매_구매자_판매자_정보를_조회한다() {
+        // when
+        final ChatRoom actual = chatRoomRepository.getDetailChatRoomByIdOrThrow(채팅방.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).isEqualTo(채팅방);
+            softAssertions.assertThat(actual.getAuction()).isEqualTo(채팅방.getAuction());
+            softAssertions.assertThat(actual.getBuyer()).isEqualTo(채팅방.getBuyer());
+        });
     }
 
     @Test
