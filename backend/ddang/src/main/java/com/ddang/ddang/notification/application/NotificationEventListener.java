@@ -1,7 +1,7 @@
 package com.ddang.ddang.notification.application;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.bid.application.dto.BidDto;
+import com.ddang.ddang.bid.application.event.dto.NotificationPreviousBidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.Message;
@@ -53,15 +53,15 @@ public class NotificationEventListener {
     @TransactionalEventListener
     public void sendBidNotification(final BidNotificationEvent bidNotificationEvent) {
         try {
-            final BidDto bidDto = bidNotificationEvent.bidDto();
-            final Auction auction = bidDto.auction();
+            final NotificationPreviousBidDto notificationPreviousBidDto = bidNotificationEvent.notificationPreviousBidDto();
+            final Auction auction = notificationPreviousBidDto.auction();
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.BID,
-                    bidDto.previousBidderId(),
+                    notificationPreviousBidDto.previousBidderId(),
                     auction.getTitle(),
                     BID_NOTIFICATION_MESSAGE_FORMAT,
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    bidDto.auctionImageAbsoluteUrl() + auction.getThumbnailImageStoreName()
+                    notificationPreviousBidDto.auctionImageAbsoluteUrl() + auction.getThumbnailImageStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {

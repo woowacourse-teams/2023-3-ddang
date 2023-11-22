@@ -1,6 +1,6 @@
 package com.ddang.ddang.bid.application.event;
 
-import com.ddang.ddang.bid.application.dto.BidDto;
+import com.ddang.ddang.bid.application.event.dto.NotificationPreviousBidDto;
 
-public record BidNotificationEvent(BidDto bidDto) {
+public record BidNotificationEvent(NotificationPreviousBidDto notificationPreviousBidDto) {
 }

@@ -1,6 +1,6 @@
 package com.ddang.ddang.bid.presentation.dto.response;
 
-import com.ddang.ddang.bid.application.dto.ReadBidDto;
+import com.ddang.ddang.bid.application.dto.response.ReadBidDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 

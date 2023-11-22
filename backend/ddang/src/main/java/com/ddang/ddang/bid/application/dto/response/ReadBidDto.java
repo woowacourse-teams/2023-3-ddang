@@ -1,4 +1,4 @@
-package com.ddang.ddang.bid.application.dto;
+package com.ddang.ddang.bid.application.dto.response;
 
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.user.domain.User;

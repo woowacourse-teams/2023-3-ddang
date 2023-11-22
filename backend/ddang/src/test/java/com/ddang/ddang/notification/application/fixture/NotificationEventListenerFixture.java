@@ -4,8 +4,8 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.bid.application.dto.BidDto;
-import com.ddang.ddang.bid.application.dto.CreateBidDto;
+import com.ddang.ddang.bid.application.event.dto.NotificationPreviousBidDto;
+import com.ddang.ddang.bid.application.dto.request.CreateBidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
@@ -155,7 +155,7 @@ public class NotificationEventListenerFixture {
                        .contents("메시지 내용")
                        .build()
         );
-        final BidDto 입찰_DTO = new BidDto(수신자_겸_기존_입찰자.getId(), 경매, 이미지_절대_경로);
+        final NotificationPreviousBidDto 입찰_DTO = new NotificationPreviousBidDto(수신자_겸_기존_입찰자.getId(), 경매, 이미지_절대_경로);
 
         메시지_알림_이벤트 = new MessageNotificationEvent(저장된_메시지, 이미지_절대_경로);
         입찰_알림_이벤트 = new BidNotificationEvent(입찰_DTO);

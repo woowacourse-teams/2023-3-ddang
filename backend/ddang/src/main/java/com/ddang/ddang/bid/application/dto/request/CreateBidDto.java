@@ -1,4 +1,4 @@
-package com.ddang.ddang.bid.application.dto;
+package com.ddang.ddang.bid.application.dto.request;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.bid.domain.Bid;
