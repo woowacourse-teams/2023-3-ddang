@@ -91,8 +91,8 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty().contains("Bearer ");
-            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.accessToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.refreshToken()).isNotEmpty().contains("Bearer ");
         });
     }
 
@@ -111,8 +111,8 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty().contains("Bearer ");
-            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.accessToken()).isNotEmpty().contains("Bearer ");
+            softAssertions.assertThat(actual.refreshToken()).isNotEmpty().contains("Bearer ");
             softAssertions.assertThat(actual.isSignUpUser()).isFalse();
         });
     }
@@ -132,8 +132,8 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(actual.tokenDto().accessToken()).isNotEmpty();
-            softAssertions.assertThat(actual.tokenDto().refreshToken()).isNotEmpty();
+            softAssertions.assertThat(actual.accessToken()).isNotEmpty();
+            softAssertions.assertThat(actual.refreshToken()).isNotEmpty();
             softAssertions.assertThat(actual.isSignUpUser()).isTrue();
         });
     }
