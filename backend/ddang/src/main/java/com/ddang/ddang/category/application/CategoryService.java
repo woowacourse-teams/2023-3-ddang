@@ -1,6 +1,6 @@
 package com.ddang.ddang.category.application;
 
-import com.ddang.ddang.category.application.dto.ReadCategoryDto;
+import com.ddang.ddang.category.application.dto.response.ReadCategoryDto;
 import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.domain.repository.CategoryRepository;

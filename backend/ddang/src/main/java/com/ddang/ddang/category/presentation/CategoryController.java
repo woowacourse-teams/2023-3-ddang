@@ -1,7 +1,7 @@
 package com.ddang.ddang.category.presentation;
 
 import com.ddang.ddang.category.application.CategoryService;
-import com.ddang.ddang.category.application.dto.ReadCategoryDto;
+import com.ddang.ddang.category.application.dto.response.ReadCategoryDto;
 import com.ddang.ddang.category.presentation.dto.response.ReadCategoryResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

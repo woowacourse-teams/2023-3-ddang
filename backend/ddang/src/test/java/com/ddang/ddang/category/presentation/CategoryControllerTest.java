@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.category.application.dto.ReadCategoryDto;
+import com.ddang.ddang.category.application.dto.response.ReadCategoryDto;
 import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.ddang.ddang.exception.GlobalExceptionHandler;

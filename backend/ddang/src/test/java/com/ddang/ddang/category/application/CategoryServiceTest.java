@@ -2,7 +2,7 @@ package com.ddang.ddang.category.application;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ddang.ddang.category.application.dto.ReadCategoryDto;
+import com.ddang.ddang.category.application.dto.response.ReadCategoryDto;
 import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.category.application.fixture.CategoryServiceFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;

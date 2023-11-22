@@ -1,4 +1,4 @@
-package com.ddang.ddang.category.application.dto;
+package com.ddang.ddang.category.application.dto.response;
 
 import com.ddang.ddang.category.domain.Category;
 
