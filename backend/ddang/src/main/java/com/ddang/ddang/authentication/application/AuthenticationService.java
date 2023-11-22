@@ -1,9 +1,9 @@
 package com.ddang.ddang.authentication.application;
 
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
-import com.ddang.ddang.authentication.application.dto.LoginUserInformationDto;
-import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.dto.response.LoginInfoDto;
+import com.ddang.ddang.authentication.application.dto.response.LoginUserInfoDto;
+import com.ddang.ddang.authentication.application.dto.response.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.application.util.RandomNameGenerator;
@@ -45,19 +45,19 @@ public class AuthenticationService {
     private final DeviceTokenRepository deviceTokenRepository;
 
     @Transactional
-    public LoginInformationDto login(
+    public LoginInfoDto login(
             final String socialId,
             final Oauth2Type oauth2Type,
             final String deviceToken
     ) {
-        final LoginUserInformationDto loginUserInfo = findOrPersistUser(socialId, oauth2Type);
+        final LoginUserInfoDto loginUserInfo = findOrPersistUser(socialId, oauth2Type);
 
         updateOrPersistDeviceToken(deviceToken, loginUserInfo.user());
 
-        return LoginInformationDto.of(convertTokenDto(loginUserInfo), loginUserInfo);
+        return LoginInfoDto.of(convertTokenDto(loginUserInfo), loginUserInfo);
     }
 
-    private LoginUserInformationDto findOrPersistUser(final String socialId, final Oauth2Type oauth2Type) {
+    private LoginUserInfoDto findOrPersistUser(final String socialId, final Oauth2Type oauth2Type) {
         final AtomicBoolean isSignUpUser = new AtomicBoolean(false);
         final User signInUser = userRepository.findByOauthId(socialId)
                                               .orElseGet(() -> {
@@ -65,7 +65,7 @@ public class AuthenticationService {
                                                   return persistUser(socialId, oauth2Type);
                                               });
 
-        return new LoginUserInformationDto(signInUser, isSignUpUser.get());
+        return new LoginUserInfoDto(signInUser, isSignUpUser.get());
     }
 
     private User persistUser(final String socialId, final Oauth2Type oauth2Type) {
@@ -99,7 +99,7 @@ public class AuthenticationService {
         return userRepository.existsByNameEndingWith(name);
     }
 
-    private TokenDto convertTokenDto(final LoginUserInformationDto signInUserInfo) {
+    private TokenDto convertTokenDto(final LoginUserInfoDto signInUserInfo) {
         final User loginUser = signInUserInfo.user();
 
         final String accessToken = tokenEncoder.encode(

@@ -1,6 +1,6 @@
 package com.ddang.ddang.authentication.presentation.dto.response;
 
-import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.dto.response.TokenDto;
 
 public record TokenResponse(String accessToken, String refreshToken) {
 

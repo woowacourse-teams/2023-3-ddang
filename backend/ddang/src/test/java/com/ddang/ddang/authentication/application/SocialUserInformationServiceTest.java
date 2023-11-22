@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
-import com.ddang.ddang.authentication.application.dto.SocialUserInformationDto;
+import com.ddang.ddang.authentication.application.dto.response.SocialUserInfoDto;
 import com.ddang.ddang.authentication.application.fixture.SocialUserInformationServiceFixture;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
@@ -39,7 +39,7 @@ class SocialUserInformationServiceTest extends SocialUserInformationServiceFixtu
         given(userInfoProvider.findUserInformation(anyString())).willReturn(사용자_소셜_정보);
 
         // when
-        final SocialUserInformationDto actual = socialUserInformationService.findInformation(
+        final SocialUserInfoDto actual = socialUserInformationService.findInformation(
                 지원하는_소셜_로그인_타입,
                 유효한_소셜_로그인_토큰
         );

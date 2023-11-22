@@ -3,9 +3,9 @@ package com.ddang.ddang.authentication.presentation;
 import com.ddang.ddang.authentication.application.AuthenticationService;
 import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.application.SocialUserInformationService;
-import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
-import com.ddang.ddang.authentication.application.dto.SocialUserInformationDto;
-import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.dto.response.LoginInfoDto;
+import com.ddang.ddang.authentication.application.dto.response.SocialUserInfoDto;
+import com.ddang.ddang.authentication.application.dto.response.TokenDto;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.authentication.presentation.dto.request.LoginTokenRequest;
 import com.ddang.ddang.authentication.presentation.dto.request.LogoutRequest;
@@ -40,12 +40,12 @@ public class AuthenticationController {
             @PathVariable final Oauth2Type oauth2Type,
             @RequestBody final LoginTokenRequest request
     ) {
-        final SocialUserInformationDto socialUserInformationDto =
+        final SocialUserInfoDto socialUserInfoDto =
                 socialUserInformationService.findInformation(oauth2Type, request.accessToken());
-        final LoginInformationDto loginInformationDto =
-                authenticationService.login(socialUserInformationDto.id(), oauth2Type, request.deviceToken());
+        final LoginInfoDto loginInfoDto =
+                authenticationService.login(socialUserInfoDto.id(), oauth2Type, request.deviceToken());
 
-        return ResponseEntity.ok(LoginInformationResponse.from(loginInformationDto));
+        return ResponseEntity.ok(LoginInformationResponse.from(loginInfoDto));
     }
 
     @PostMapping("/refresh-token")

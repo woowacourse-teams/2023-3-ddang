@@ -6,8 +6,8 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.authentication.application.dto.LoginInformationDto;
-import com.ddang.ddang.authentication.application.dto.TokenDto;
+import com.ddang.ddang.authentication.application.dto.response.LoginInfoDto;
+import com.ddang.ddang.authentication.application.dto.response.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.application.fixture.AuthenticationServiceFixture;
@@ -83,7 +83,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
 
         // when
-        final LoginInformationDto actual = authenticationService.login(
+        final LoginInfoDto actual = authenticationService.login(
                 가입하지_않은_사용자_회원_정보.findUserId(),
                 지원하는_소셜_로그인_타입,
                 디바이스_토큰
@@ -103,7 +103,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(가입한_사용자_회원_정보);
 
         // when
-        final LoginInformationDto actual = authenticationService.login(
+        final LoginInfoDto actual = authenticationService.login(
                 가입한_사용자_회원_정보.findUserId(),
                 지원하는_소셜_로그인_타입,
                 디바이스_토큰
@@ -124,7 +124,7 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
         given(userInfoProvider.findUserInformation(anyString())).willReturn(가입하지_않은_사용자_회원_정보);
 
         // when
-        final LoginInformationDto actual = authenticationService.login(
+        final LoginInfoDto actual = authenticationService.login(
                 가입하지_않은_사용자_회원_정보.findUserId(),
                 지원하는_소셜_로그인_타입,
                 디바이스_토큰
