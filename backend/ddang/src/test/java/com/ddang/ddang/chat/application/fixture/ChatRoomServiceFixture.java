@@ -19,7 +19,6 @@ import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
@@ -264,7 +263,6 @@ public class ChatRoomServiceFixture {
         messageRepository.save(엔초가_지토에게_1시에_보낸_쪽지);
         messageRepository.save(제이미가_엔초에게_2시에_보낸_쪽지);
 
-        final ChatRoomAndImageDto 엔초_지토_채팅방_정보 = new ChatRoomAndImageDto(엔초_지토_채팅방, 엔초의_경매_대표_이미지.getStoreName());
         엔초_회원_정보 = new AuthenticationUserInfo(엔초.getId());
         판매자_회원_정보 = new AuthenticationUserInfo(판매자.getId());
         경매에_참여한_적_없는_사용자_정보 = new AuthenticationUserInfo(경매에_참여한_적_없는_사용자.getId());
@@ -275,7 +273,7 @@ public class ChatRoomServiceFixture {
         경매가_진행중이라서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(종료되지_않은_경매.getId());
         낙찰자가_없어서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(낙찰자가_없는_경매.getId());
         엔초_지토_채팅방_생성을_위한_DTO = new CreateChatRoomDto(판매자_엔초_구매자_지토_경매.getId());
-        엔초가_조회한_엔초_지토_채팅방_정보_조회_결과 = ReadParticipatingChatRoomDto.of(엔초, 엔초_지토_채팅방_정보.chatRoom());
+        엔초가_조회한_엔초_지토_채팅방_정보_조회_결과 = ReadParticipatingChatRoomDto.of(엔초, 엔초_지토_채팅방);
         엔초_지토_채팅방_정보_및_참여_가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), true);
         엔초_지토_채팅방_정보_및_참여_불가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), false);
         채팅방은_아직_없지만_참여_가능 = new ReadChatRoomDto(null, true);
