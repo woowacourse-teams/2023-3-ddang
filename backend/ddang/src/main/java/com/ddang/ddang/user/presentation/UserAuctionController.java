@@ -1,7 +1,7 @@
 package com.ddang.ddang.user.presentation;
 
 import com.ddang.ddang.auction.application.AuctionService;
-import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
 import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;

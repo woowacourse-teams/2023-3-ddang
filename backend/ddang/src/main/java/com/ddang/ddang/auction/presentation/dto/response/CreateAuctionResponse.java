@@ -1,6 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.domain.AuctionStatus;
 
 public record CreateAuctionResponse(

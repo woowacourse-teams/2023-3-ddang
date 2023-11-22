@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.response.CreateInfoAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.application.fixture.AuctionServiceFixture;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;

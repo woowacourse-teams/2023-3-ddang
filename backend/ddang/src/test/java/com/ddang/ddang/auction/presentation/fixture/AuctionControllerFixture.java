@@ -1,21 +1,23 @@
 package com.ddang.ddang.auction.presentation.fixture;
 
-import com.ddang.ddang.auction.application.dto.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
 import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionDto;
-import com.ddang.ddang.auction.application.dto.ReadRegionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadRegionsDto;
+import com.ddang.ddang.auction.application.dto.response.CreateInfoAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
 import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
+import com.ddang.ddang.region.domain.AuctionRegion;
+import com.ddang.ddang.region.domain.Region;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionControllerFixture extends CommonControllerSliceTest {
@@ -131,11 +133,19 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 objectMapper.writeValueAsBytes(유효하지_않은_지역_경매_등록_request)
         );
 
-        final ReadRegionsDto 서울특별시_강서구_역삼동 = new ReadRegionsDto(
-                new ReadRegionDto(1L, "서울특별시"),
-                new ReadRegionDto(2L, "강서구"),
-                new ReadRegionDto(3L, "역삼동")
-        );
+        final Region 서울특별시 = new Region("서울특별시");
+        ReflectionTestUtils.setField(서울특별시, "id", 1L);
+
+        final Region 강서구 = new Region("강서구");
+        ReflectionTestUtils.setField(강서구, "id", 2L);
+
+        final Region 역삼동 = new Region("역삼동");
+        ReflectionTestUtils.setField(역삼동, "id", 3L);
+
+        강서구.addThirdRegion(역삼동);
+        서울특별시.addSecondRegion(강서구);
+
+        final ReadRegionsDto 서울특별시_강서구_역삼동 = ReadRegionsDto.from(new AuctionRegion(역삼동));
 
         경매_조회_dto = new ReadAuctionDto(
                 1L,

@@ -1,6 +1,6 @@
 package com.ddang.ddang.user.presentation.dto.response;
 
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
 
 public record ReadAuctionResponse(
         Long id,

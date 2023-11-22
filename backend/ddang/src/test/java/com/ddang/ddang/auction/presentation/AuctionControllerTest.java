@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ddang.ddang.auction.application.dto.CreateAuctionDto;
+import com.ddang.ddang.auction.application.dto.request.CreateAuctionDto;
 import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResolver;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
@@ -271,11 +271,11 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                  jsonPath("$.auction.registerTime").exists(),
                                  jsonPath("$.auction.closingTime").exists(),
                                  jsonPath("$.auction.directRegions[0].first",
-                                         is(경매_조회_dto.auctionRegions().get(0).firstRegionDto().regionName())),
+                                         is(경매_조회_dto.auctionRegions().get(0).firstRegionName())),
                                  jsonPath("$.auction.directRegions[0].second",
-                                         is(경매_조회_dto.auctionRegions().get(0).secondRegionDto().regionName())),
+                                         is(경매_조회_dto.auctionRegions().get(0).secondRegionName())),
                                  jsonPath("$.auction.directRegions[0].third",
-                                         is(경매_조회_dto.auctionRegions().get(0).thirdRegionDto().regionName())),
+                                         is(경매_조회_dto.auctionRegions().get(0).thirdRegionName())),
                                  jsonPath("$.auction.auctioneerCount", is(경매_조회_dto.auctioneerCount())),
                                  jsonPath("$.chat.id").exists(),
                                  jsonPath("$.chat.isChatParticipant", is(true)),

@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.application.dto;
+package com.ddang.ddang.auction.application.dto.response;
 
 import com.ddang.ddang.auction.domain.Auction;
 import java.time.LocalDateTime;

@@ -1,4 +1,4 @@
-package com.ddang.ddang.auction.application.dto;
+package com.ddang.ddang.auction.application.dto.request;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
@@ -26,7 +26,6 @@ public record CreateAuctionDto(
     public static CreateAuctionDto of(
             final CreateAuctionRequest request,
             final List<MultipartFile> images,
-            // TODO 3차 데모데이 이후 리펙토링 예정
             final Long sellerId
     ) {
         return new CreateAuctionDto(

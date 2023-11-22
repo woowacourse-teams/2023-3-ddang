@@ -1,6 +1,6 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.auction.application.dto.ReadAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.user.presentation.util.NameProcessor;

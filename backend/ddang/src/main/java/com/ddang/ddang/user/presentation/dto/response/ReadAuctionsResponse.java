@@ -1,8 +1,7 @@
 package com.ddang.ddang.user.presentation.dto.response;
 
-import com.ddang.ddang.auction.application.dto.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
 
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import java.util.List;
 
 public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean isLast) {
