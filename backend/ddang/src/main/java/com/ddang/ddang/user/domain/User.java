@@ -35,6 +35,7 @@ public class User extends BaseTimeEntity {
 
     public static final User EMPTY_USER = null;
     private static final boolean DELETED_STATUS = true;
+    private static final String UNKNOWN_NAME = "알 수 없음";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -103,5 +104,13 @@ public class User extends BaseTimeEntity {
         }
 
         return profileImage.getStoreName();
+    }
+
+    public String findName() {
+        if (deleted) {
+            return UNKNOWN_NAME;
+        }
+
+        return name;
     }
 }

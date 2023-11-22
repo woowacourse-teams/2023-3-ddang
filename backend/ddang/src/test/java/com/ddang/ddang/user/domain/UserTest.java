@@ -62,7 +62,7 @@ class UserTest extends UserFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(user.getName()).isEqualTo("newName");
+            softAssertions.assertThat(user.findName()).isEqualTo("newName");
             softAssertions.assertThat(user.getProfileImage()).isEqualTo(new ProfileImage("upload.png", "store.png"));
             softAssertions.assertThat(user.getReliability().getValue()).isEqualTo(5.0d);
         });
@@ -83,8 +83,9 @@ class UserTest extends UserFixture {
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            softAssertions.assertThat(user.getName()).isEqualTo("kakao12345");
-            softAssertions.assertThat(user.getProfileImage()).isEqualTo(new ProfileImage("updateUpload.png", "updateStore.png"));
+            softAssertions.assertThat(user.findName()).isEqualTo("kakao12345");
+            softAssertions.assertThat(user.getProfileImage())
+                          .isEqualTo(new ProfileImage("updateUpload.png", "updateStore.png"));
             softAssertions.assertThat(user.getReliability().getValue()).isEqualTo(5.0d);
         });
     }
@@ -106,7 +107,7 @@ class UserTest extends UserFixture {
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(user.isDeleted()).isTrue();
-            softAssertions.assertThat(user.getName()).isNotEqualTo(userName);
+            softAssertions.assertThat(user.findName()).isNotEqualTo(userName);
             softAssertions.assertThat(user.getProfileImage()).isNull();
         });
     }
@@ -136,5 +137,33 @@ class UserTest extends UserFixture {
 
         // then
         assertThat(actual).isEqualTo(프로필_이미지_파일_이름);
+    }
+
+    @Test
+    void 탈퇴한_회원의_이름을_조회하면_알_수_없음을_반환한다() {
+        // given
+        final User user = User.builder()
+                              .build();
+        user.withdrawal();
+
+        // when
+        final String actual = user.findName();
+
+        // then
+        assertThat(actual).isEqualTo("알 수 없음");
+    }
+
+    @Test
+    void 회원의_이름을_조회한다() {
+        // given
+        final User user = User.builder()
+                              .name("이름")
+                              .build();
+
+        // when
+        final String actual = user.findName();
+
+        // then
+        assertThat(actual).isEqualTo("이름");
     }
 }
