@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -84,18 +83,18 @@ public class BidService {
     }
 
     private void checkInvalidBid(final Auction auction, final User bidder, final CreateBidDto bidDto) {
-        final Optional<Bid> lastBid = bidRepository.findLastBidByAuctionId(bidDto.auctionId());
-        final BidPrice bidPrice = processBidPrice(bidDto.bidPrice());
-
         checkIsSeller(auction, bidder);
 
-        if (lastBid.isPresent()) {
-            checkIsNotLastBidder(lastBid.get(), bidder);
-            checkInvalidBidPrice(lastBid.get(), bidPrice);
-            return;
-        }
+        final BidPrice bidPrice = processBidPrice(bidDto.bidPrice());
 
-        checkInvalidFirstBidPrice(auction, bidPrice);
+        auction.findLastBid()
+               .ifPresentOrElse(
+                       lastBid -> {
+                           checkIsNotLastBidder(lastBid, bidder);
+                           checkInvalidBidPrice(lastBid, bidPrice);
+                       },
+                       () -> checkInvalidFirstBidPrice(auction, bidPrice)
+               );
     }
 
     private BidPrice processBidPrice(final int value) {
