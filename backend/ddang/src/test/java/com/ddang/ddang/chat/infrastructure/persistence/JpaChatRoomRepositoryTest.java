@@ -1,21 +1,19 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.infrastructure.persistence.fixture.JpaChatRoomRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import java.util.Optional;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
@@ -39,12 +37,26 @@ class JpaChatRoomRepositoryTest extends JpaChatRoomRepositoryFixture {
     }
 
     @Test
-    void 지정한_아이디에_대한_채팅방을_조회한다() {
+    void 지정한_아이디에_대한_단순_채팅방_정보를_조회한다() {
         // when
         final Optional<ChatRoom> actual = jpaChatRoomRepository.findById(채팅방.getId());
 
         // then
         assertThat(actual).contains(채팅방);
+    }
+
+    @Test
+    void 지정한_아이디에_대한_채팅방_경매_구매자_판매자_정보를_조회한다() {
+        // when
+        final Optional<ChatRoom> actual = jpaChatRoomRepository.findDetailChatRoomById(채팅방.getId());
+
+        // then
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual).contains(채팅방);
+            softAssertions.assertThat(actual.get().getAuction()).isEqualTo(채팅방.getAuction());
+            softAssertions.assertThat(actual.get().getAuction().getSeller()).isEqualTo(채팅방.getAuction().getSeller());
+            softAssertions.assertThat(actual.get().getBuyer()).isEqualTo(채팅방.getBuyer());
+        });
     }
 
     @Test
