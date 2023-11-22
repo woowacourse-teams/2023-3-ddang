@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.user.domain.User;
 
 public record ReadParticipatingChatRoomDto(
@@ -13,14 +12,13 @@ public record ReadParticipatingChatRoomDto(
 
     public static ReadParticipatingChatRoomDto of(
             final User findUser,
-            final ChatRoomAndImageDto chatRoomAndImageDto
+            final ChatRoom chatRoom
     ) {
-        final ChatRoom chatRoom = chatRoomAndImageDto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
 
         return new ReadParticipatingChatRoomDto(
                 chatRoom.getId(),
-                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), chatRoomAndImageDto.thumbnailImageStoreName()),
+                ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), chatRoom.getAuction().getThumbnailImageStoreName()),
                 ReadUserInChatRoomDto.from(partner),
                 chatRoom.isChatAvailablePartner(partner)
         );

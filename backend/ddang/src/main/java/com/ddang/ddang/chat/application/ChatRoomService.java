@@ -12,9 +12,7 @@ import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.domain.dto.ChatRoomAndImageDto;
 import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
-import com.ddang.ddang.chat.domain.repository.ChatRoomAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomAndMessageAndImageRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.user.domain.User;
@@ -35,7 +33,6 @@ public class ChatRoomService {
 
     private final ApplicationEventPublisher messageLogEventPublisher;
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomAndImageRepository chatRoomAndImageRepository;
     private final ChatRoomAndMessageAndImageRepository chatRoomAndMessageAndImageRepository;
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
@@ -98,11 +95,11 @@ public class ChatRoomService {
 
     public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
         final User findUser = userRepository.getByIdOrThrow(userId);
-        final ChatRoomAndImageDto chatRoomAndImageDto = chatRoomAndImageRepository.getByIdOrThrow(chatRoomId);
+        final ChatRoom chatRoom = chatRoomRepository.getDetailChatRoomByIdOrThrow(chatRoomId);
 
-        checkAccessible(findUser, chatRoomAndImageDto.chatRoom());
+        checkAccessible(findUser, chatRoom);
 
-        return ReadParticipatingChatRoomDto.of(findUser, chatRoomAndImageDto);
+        return ReadParticipatingChatRoomDto.of(findUser, chatRoom);
     }
 
     private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
