@@ -30,4 +30,8 @@ public class Reliability {
     public boolean isLessThan(final double target) {
         return value < target;
     }
+
+    public float toFloat() {
+        return (float) value;
+    }
 }
