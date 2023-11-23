@@ -16,7 +16,7 @@ import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.application.dto.request.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;

@@ -6,7 +6,7 @@ import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.application.dto.request.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationType;
 import com.ddang.ddang.qna.application.event.AnswerNotificationEvent;
 import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;

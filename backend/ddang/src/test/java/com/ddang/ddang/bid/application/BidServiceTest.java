@@ -15,7 +15,7 @@ import com.ddang.ddang.bid.application.exception.InvalidBidderException;
 import com.ddang.ddang.bid.application.fixture.BidServiceFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.application.dto.request.CreateNotificationDto;
 import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import java.util.List;

@@ -17,7 +17,7 @@ import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.application.dto.request.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
 import com.google.firebase.messaging.FirebaseMessagingException;

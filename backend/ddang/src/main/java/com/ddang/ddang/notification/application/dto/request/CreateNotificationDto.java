@@ -1,4 +1,4 @@
-package com.ddang.ddang.notification.application.dto;
+package com.ddang.ddang.notification.application.dto.request;
 
 import com.ddang.ddang.notification.domain.NotificationType;
 import lombok.NonNull;

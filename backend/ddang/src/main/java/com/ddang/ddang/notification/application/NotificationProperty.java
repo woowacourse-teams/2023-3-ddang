@@ -1,4 +1,4 @@
-package com.ddang.ddang.notification.application.util;
+package com.ddang.ddang.notification.application;
 
 import lombok.Getter;
 

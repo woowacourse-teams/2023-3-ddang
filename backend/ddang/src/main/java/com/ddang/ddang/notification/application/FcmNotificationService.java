@@ -1,9 +1,15 @@
 package com.ddang.ddang.notification.application;
 
+import static com.ddang.ddang.notification.application.NotificationProperty.BODY;
+import static com.ddang.ddang.notification.application.NotificationProperty.IMAGE;
+import static com.ddang.ddang.notification.application.NotificationProperty.NOTIFICATION_TYPE;
+import static com.ddang.ddang.notification.application.NotificationProperty.REDIRECT_URL;
+import static com.ddang.ddang.notification.application.NotificationProperty.TITLE;
+
 import com.ddang.ddang.device.application.exception.DeviceTokenNotFoundException;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
+import com.ddang.ddang.notification.application.dto.request.CreateNotificationDto;
 import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.google.firebase.messaging.AndroidConfig;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -13,12 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.ddang.ddang.notification.application.util.NotificationProperty.BODY;
-import static com.ddang.ddang.notification.application.util.NotificationProperty.IMAGE;
-import static com.ddang.ddang.notification.application.util.NotificationProperty.NOTIFICATION_TYPE;
-import static com.ddang.ddang.notification.application.util.NotificationProperty.REDIRECT_URL;
-import static com.ddang.ddang.notification.application.util.NotificationProperty.TITLE;
 
 @Service
 @Transactional(readOnly = true)
