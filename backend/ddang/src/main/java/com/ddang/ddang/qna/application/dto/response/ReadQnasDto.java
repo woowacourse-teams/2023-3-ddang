@@ -1,4 +1,4 @@
-package com.ddang.ddang.qna.application.dto;
+package com.ddang.ddang.qna.application.dto.response;
 
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.user.domain.User;

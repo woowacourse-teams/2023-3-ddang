@@ -5,7 +5,7 @@ import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.qna.application.dto.CreateAnswerDto;
+import com.ddang.ddang.qna.application.dto.request.CreateAnswerDto;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;

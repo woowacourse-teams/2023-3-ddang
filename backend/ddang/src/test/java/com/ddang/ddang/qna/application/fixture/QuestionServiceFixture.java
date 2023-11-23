@@ -7,10 +7,10 @@ import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
-import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
-import com.ddang.ddang.qna.application.dto.ReadQuestionDto;
-import com.ddang.ddang.qna.application.dto.ReadUserInQnaDto;
+import com.ddang.ddang.qna.application.dto.request.CreateQuestionDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnaDto.ReadAnswerDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnaDto.ReadQuestionDto;
+import com.ddang.ddang.qna.application.dto.response.ReadUserInQnaDto;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
@@ -20,10 +20,9 @@ import com.ddang.ddang.region.domain.repository.RegionRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
+import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.time.LocalDateTime;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class QuestionServiceFixture {

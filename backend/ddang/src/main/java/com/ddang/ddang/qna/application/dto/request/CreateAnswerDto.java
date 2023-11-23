@@ -1,4 +1,4 @@
-package com.ddang.ddang.qna.application.dto;
+package com.ddang.ddang.qna.application.dto.request;
 
 import com.ddang.ddang.qna.presentation.dto.request.CreateAnswerRequest;
 import com.ddang.ddang.qna.domain.Answer;

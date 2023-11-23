@@ -1,7 +1,7 @@
 package com.ddang.ddang.qna.presentation.dto.response;
 
-import com.ddang.ddang.qna.application.dto.ReadQnaDto;
-import com.ddang.ddang.qna.application.dto.ReadQnasDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnaDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnasDto;
 
 import java.util.List;
 

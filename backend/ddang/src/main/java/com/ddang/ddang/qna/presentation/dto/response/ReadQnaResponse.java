@@ -1,9 +1,7 @@
 package com.ddang.ddang.qna.presentation.dto.response;
 
-import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
-import com.ddang.ddang.qna.application.dto.ReadQnaDto;
-import com.ddang.ddang.qna.application.dto.ReadQuestionDto;
-import com.ddang.ddang.qna.application.dto.ReadUserInQnaDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnaDto;
+import com.ddang.ddang.qna.application.dto.response.ReadUserInQnaDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
@@ -13,24 +11,24 @@ public record ReadQnaResponse(
 ) {
 
     public static ReadQnaResponse of(final ReadQnaDto readQnaDto, final String imageRelativeUrl) {
-        final ReadQuestionResponse question = ReadQuestionResponse.of(readQnaDto.readQuestionDto(), imageRelativeUrl);
-        final ReadAnswerResponse answer = processReadAnswerResponse(readQnaDto.readAnswerDto(), imageRelativeUrl);
+        final ReadQuestionResponse question = ReadQuestionResponse.of(readQnaDto, imageRelativeUrl);
+        final ReadAnswerResponse answer = processReadAnswerResponse(readQnaDto, imageRelativeUrl);
 
         return new ReadQnaResponse(question, answer);
     }
 
     private static ReadAnswerResponse processReadAnswerResponse(
-            final ReadAnswerDto readAnswerDto,
+            final ReadQnaDto readQnaDto,
             final String imageRelativeUrl
     ) {
-        if (readAnswerDto == null || readAnswerDto.isDeleted()) {
+        if (readQnaDto.readAnswerDto() == null || readQnaDto.readAnswerDto().isDeleted()) {
             return null;
         }
 
-        return ReadAnswerResponse.of(readAnswerDto, imageRelativeUrl);
+        return ReadAnswerResponse.of(readQnaDto, imageRelativeUrl);
     }
 
-    private record ReadAnswerResponse(
+    public record ReadAnswerResponse(
             Long id,
 
             ReadUserInAuctionQuestionResponse writer,
@@ -40,17 +38,17 @@ public record ReadQnaResponse(
 
             String content
     ) {
-        public static ReadAnswerResponse of(final ReadAnswerDto readAnswerDto, final String imageRelativeUrl) {
+        private static ReadAnswerResponse of(final ReadQnaDto readQnaDto, final String imageRelativeUrl) {
             return new ReadAnswerResponse(
-                    readAnswerDto.id(),
-                    ReadUserInAuctionQuestionResponse.of(readAnswerDto.writerDto(), imageRelativeUrl),
-                    readAnswerDto.createdTime(),
-                    readAnswerDto.content()
+                    readQnaDto.readAnswerDto().id(),
+                    ReadUserInAuctionQuestionResponse.of(readQnaDto.readAnswerDto().writerDto(), imageRelativeUrl),
+                    readQnaDto.readAnswerDto().createdTime(),
+                    readQnaDto.readAnswerDto().content()
             );
         }
     }
 
-    private record ReadQuestionResponse(
+    public record ReadQuestionResponse(
             Long id,
 
             ReadUserInAuctionQuestionResponse writer,
@@ -63,21 +61,21 @@ public record ReadQnaResponse(
             boolean isQuestioner
     ) {
 
-        public static ReadQuestionResponse of(
-                final ReadQuestionDto readQuestionDto,
+        private static ReadQuestionResponse of(
+                final ReadQnaDto readQnaDto,
                 final String imageRelativeUrl
         ) {
             return new ReadQuestionResponse(
-                    readQuestionDto.id(),
-                    ReadUserInAuctionQuestionResponse.of(readQuestionDto.readUserInQnaDto(), imageRelativeUrl),
-                    readQuestionDto.createdTime(),
-                    readQuestionDto.content(),
-                    readQuestionDto.isQuestioner()
+                    readQnaDto.readQuestionDto().id(),
+                    ReadUserInAuctionQuestionResponse.of(readQnaDto.readQuestionDto().readUserInQnaDto(), imageRelativeUrl),
+                    readQnaDto.readQuestionDto().createdTime(),
+                    readQnaDto.readQuestionDto().content(),
+                    readQnaDto.readQuestionDto().isQuestioner()
             );
         }
     }
 
-    private record ReadUserInAuctionQuestionResponse(Long id, String name, String image) {
+    public record ReadUserInAuctionQuestionResponse(Long id, String name, String image) {
 
         private static ReadUserInAuctionQuestionResponse of(final ReadUserInQnaDto dto, final String imageUrl) {
             return new ReadUserInAuctionQuestionResponse(

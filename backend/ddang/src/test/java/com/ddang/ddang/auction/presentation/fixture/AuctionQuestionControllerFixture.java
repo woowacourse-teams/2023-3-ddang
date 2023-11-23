@@ -2,12 +2,11 @@ package com.ddang.ddang.auction.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.qna.application.dto.ReadAnswerDto;
-import com.ddang.ddang.qna.application.dto.ReadQnaDto;
-import com.ddang.ddang.qna.application.dto.ReadQnasDto;
-import com.ddang.ddang.qna.application.dto.ReadQuestionDto;
-import com.ddang.ddang.qna.application.dto.ReadUserInQnaDto;
-
+import com.ddang.ddang.qna.application.dto.response.ReadQnaDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnaDto.ReadAnswerDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnaDto.ReadQuestionDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnasDto;
+import com.ddang.ddang.qna.application.dto.response.ReadUserInQnaDto;
 import java.time.LocalDateTime;
 import java.util.List;
 

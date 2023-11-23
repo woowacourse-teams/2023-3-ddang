@@ -4,8 +4,8 @@ import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFo
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.qna.application.dto.CreateQuestionDto;
-import com.ddang.ddang.qna.application.dto.ReadQnasDto;
+import com.ddang.ddang.qna.application.dto.request.CreateQuestionDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnasDto;
 import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;

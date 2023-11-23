@@ -6,7 +6,7 @@ import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import com.ddang.ddang.qna.application.QuestionService;
-import com.ddang.ddang.qna.application.dto.ReadQnasDto;
+import com.ddang.ddang.qna.application.dto.response.ReadQnasDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
