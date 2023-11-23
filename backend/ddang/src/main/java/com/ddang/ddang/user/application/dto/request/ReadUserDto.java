@@ -1,4 +1,4 @@
-package com.ddang.ddang.user.application.dto;
+package com.ddang.ddang.user.application.dto.request;
 
 import com.ddang.ddang.user.domain.User;
 

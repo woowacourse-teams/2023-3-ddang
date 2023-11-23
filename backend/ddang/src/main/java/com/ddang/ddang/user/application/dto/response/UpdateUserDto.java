@@ -1,4 +1,4 @@
-package com.ddang.ddang.user.application.dto;
+package com.ddang.ddang.user.application.dto.response;
 
 import com.ddang.ddang.user.presentation.dto.request.UpdateUserRequest;
 import org.springframework.web.multipart.MultipartFile;

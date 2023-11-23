@@ -2,8 +2,8 @@ package com.ddang.ddang.user.application;
 
 import com.ddang.ddang.image.domain.StoreImageProcessor;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
-import com.ddang.ddang.user.application.dto.ReadUserDto;
-import com.ddang.ddang.user.application.dto.UpdateUserDto;
+import com.ddang.ddang.user.application.dto.request.ReadUserDto;
+import com.ddang.ddang.user.application.dto.response.UpdateUserDto;
 import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;

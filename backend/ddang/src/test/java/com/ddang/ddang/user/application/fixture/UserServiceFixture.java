@@ -2,7 +2,7 @@ package com.ddang.ddang.user.application.fixture;
 
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
-import com.ddang.ddang.user.application.dto.UpdateUserDto;
+import com.ddang.ddang.user.application.dto.response.UpdateUserDto;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;

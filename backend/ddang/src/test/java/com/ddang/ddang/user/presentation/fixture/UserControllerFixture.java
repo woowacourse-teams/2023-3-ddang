@@ -2,7 +2,7 @@ package com.ddang.ddang.user.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.user.application.dto.ReadUserDto;
+import com.ddang.ddang.user.application.dto.request.ReadUserDto;
 import com.ddang.ddang.user.presentation.dto.request.UpdateUserRequest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;

@@ -3,7 +3,7 @@ package com.ddang.ddang.user.application;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.user.application.dto.ReadUserDto;
+import com.ddang.ddang.user.application.dto.request.ReadUserDto;
 import com.ddang.ddang.user.application.exception.AlreadyExistsNameException;
 import com.ddang.ddang.user.application.fixture.UserServiceFixture;
 import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
