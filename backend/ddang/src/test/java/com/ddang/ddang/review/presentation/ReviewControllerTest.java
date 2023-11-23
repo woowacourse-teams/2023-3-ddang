@@ -26,7 +26,7 @@ import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.review.application.dto.CreateReviewDto;
+import com.ddang.ddang.review.application.dto.request.CreateReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
 import com.ddang.ddang.review.presentation.fixture.ReviewControllerFixture;

@@ -1,6 +1,6 @@
 package com.ddang.ddang.review.presentation.dto.response;
 
-import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;

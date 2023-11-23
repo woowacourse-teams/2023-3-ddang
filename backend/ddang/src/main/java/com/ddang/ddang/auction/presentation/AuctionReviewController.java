@@ -4,7 +4,7 @@ import com.ddang.ddang.auction.presentation.dto.response.ReadReviewDetailRespons
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.review.application.ReviewService;
-import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

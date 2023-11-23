@@ -8,7 +8,7 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
-import com.ddang.ddang.review.application.dto.CreateReviewDto;
+import com.ddang.ddang.review.application.dto.request.CreateReviewDto;
 import com.ddang.ddang.review.domain.Review;
 import com.ddang.ddang.review.domain.Score;
 import com.ddang.ddang.review.domain.repository.ReviewRepository;

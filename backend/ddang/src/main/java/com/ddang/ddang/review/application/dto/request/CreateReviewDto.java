@@ -1,4 +1,4 @@
-package com.ddang.ddang.review.application.dto;
+package com.ddang.ddang.review.application.dto.request;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.review.domain.Review;

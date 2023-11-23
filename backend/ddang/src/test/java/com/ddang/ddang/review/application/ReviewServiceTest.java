@@ -5,8 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
-import com.ddang.ddang.review.application.dto.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;

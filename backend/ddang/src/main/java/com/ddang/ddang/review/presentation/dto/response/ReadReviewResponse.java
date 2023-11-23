@@ -1,6 +1,7 @@
 package com.ddang.ddang.review.presentation.dto.response;
 
-import com.ddang.ddang.review.application.dto.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadUserInReviewDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
@@ -33,4 +34,16 @@ public record ReadReviewResponse(
                 reviewDto.createdTime()
         );
     }
+
+    public record ReadUserInReviewResponse(Long id, String name, String profileImage) {
+
+        public static ReadUserInReviewResponse of(final ReadUserInReviewDto userDto, final String imageRelativeUrl) {
+            return new ReadUserInReviewResponse(
+                    userDto.id(),
+                    userDto.name(),
+                    imageRelativeUrl + userDto.profileImageStoreName()
+            );
+        }
+    }
+
 }

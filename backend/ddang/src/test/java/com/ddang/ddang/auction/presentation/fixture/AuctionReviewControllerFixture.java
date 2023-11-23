@@ -2,9 +2,9 @@ package com.ddang.ddang.auction.presentation.fixture;
 
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
-import com.ddang.ddang.review.application.dto.ReadReviewDto;
-import com.ddang.ddang.review.application.dto.ReadUserInReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadUserInReviewDto;
 
 import java.time.LocalDateTime;
 

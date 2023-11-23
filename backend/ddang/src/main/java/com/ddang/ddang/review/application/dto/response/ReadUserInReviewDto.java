@@ -1,4 +1,4 @@
-package com.ddang.ddang.review.application.dto;
+package com.ddang.ddang.review.application.dto.response;
 
 import com.ddang.ddang.user.domain.User;
 

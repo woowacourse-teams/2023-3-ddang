@@ -2,9 +2,9 @@ package com.ddang.ddang.review.application;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.review.application.dto.CreateReviewDto;
-import com.ddang.ddang.review.application.dto.ReadReviewDetailDto;
-import com.ddang.ddang.review.application.dto.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.request.CreateReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
+import com.ddang.ddang.review.application.dto.response.ReadReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.application.exception.RevieweeNotFoundException;
