@@ -1,4 +1,4 @@
-package com.ddang.ddang.region.application.dto;
+package com.ddang.ddang.region.application.dto.response;
 
 import com.ddang.ddang.region.domain.Region;
 

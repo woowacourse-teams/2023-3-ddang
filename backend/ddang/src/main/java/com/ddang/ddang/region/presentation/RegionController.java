@@ -1,7 +1,7 @@
 package com.ddang.ddang.region.presentation;
 
 import com.ddang.ddang.region.application.RegionService;
-import com.ddang.ddang.region.application.dto.ReadRegionDto;
+import com.ddang.ddang.region.application.dto.response.ReadRegionDto;
 import com.ddang.ddang.region.presentation.dto.response.ReadRegionInfoResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;

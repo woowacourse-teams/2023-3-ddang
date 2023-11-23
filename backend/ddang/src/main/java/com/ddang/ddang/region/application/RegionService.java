@@ -1,6 +1,6 @@
 package com.ddang.ddang.region.application;
 
-import com.ddang.ddang.region.application.dto.ReadRegionDto;
+import com.ddang.ddang.region.application.dto.response.ReadRegionDto;
 import com.ddang.ddang.region.application.exception.RegionNotFoundException;
 import com.ddang.ddang.region.domain.InitializationRegionProcessor;
 import com.ddang.ddang.region.domain.Region;

@@ -1,6 +1,6 @@
 package com.ddang.ddang.region.presentation.dto.response;
 
-import com.ddang.ddang.region.application.dto.ReadRegionDto;
+import com.ddang.ddang.region.application.dto.response.ReadRegionDto;
 
 public record ReadRegionInfoResponse(Long id, String name) {
 

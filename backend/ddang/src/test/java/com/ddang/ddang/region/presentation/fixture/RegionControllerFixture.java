@@ -1,7 +1,7 @@
 package com.ddang.ddang.region.presentation.fixture;
 
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.region.application.dto.ReadRegionDto;
+import com.ddang.ddang.region.application.dto.response.ReadRegionDto;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class RegionControllerFixture extends CommonControllerSliceTest {
