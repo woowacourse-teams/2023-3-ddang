@@ -26,4 +26,8 @@ public class Reliability {
     public double calculateReviewScoreSum(final int appliedReviewCount) {
         return value * appliedReviewCount;
     }
+
+    public boolean isLessThan(final double target) {
+        return value < target;
+    }
 }
