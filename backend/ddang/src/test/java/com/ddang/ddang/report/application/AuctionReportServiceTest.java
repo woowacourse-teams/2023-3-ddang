@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.application.fixture.AuctionReportServiceFixture;

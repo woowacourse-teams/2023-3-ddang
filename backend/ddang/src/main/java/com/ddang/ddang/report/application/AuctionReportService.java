@@ -2,8 +2,8 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
-import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
-import com.ddang.ddang.report.application.dto.ReadAuctionReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadAuctionReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
 import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
 import com.ddang.ddang.report.domain.AuctionReport;

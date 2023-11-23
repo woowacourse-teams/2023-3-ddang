@@ -10,7 +10,7 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
-import com.ddang.ddang.report.application.dto.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateAuctionReportDto;
 import com.ddang.ddang.report.domain.AuctionReport;
 import com.ddang.ddang.report.domain.repository.AuctionReportRepository;
 import com.ddang.ddang.user.domain.Reliability;

@@ -2,8 +2,8 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
-import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
-import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.domain.ChatRoomReport;

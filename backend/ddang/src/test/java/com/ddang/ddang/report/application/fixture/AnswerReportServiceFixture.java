@@ -12,7 +12,7 @@ import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
 import com.ddang.ddang.qna.domain.repository.QuestionRepository;
-import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateAnswerReportDto;
 import com.ddang.ddang.report.domain.AnswerReport;
 import com.ddang.ddang.report.domain.repository.AnswerReportRepository;
 import com.ddang.ddang.user.domain.Reliability;

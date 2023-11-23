@@ -2,8 +2,8 @@ package com.ddang.ddang.report.application;
 
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
-import com.ddang.ddang.report.application.dto.CreateAnswerReportDto;
-import com.ddang.ddang.report.application.dto.ReadAnswerReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateAnswerReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadAnswerReportDto;
 import com.ddang.ddang.report.application.exception.InvalidAnswererReportException;
 import com.ddang.ddang.report.domain.AnswerReport;
 import com.ddang.ddang.report.domain.repository.AnswerReportRepository;

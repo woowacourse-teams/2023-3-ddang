@@ -1,4 +1,4 @@
-package com.ddang.ddang.report.application.dto;
+package com.ddang.ddang.report.application.dto.request;
 
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.report.domain.AnswerReport;

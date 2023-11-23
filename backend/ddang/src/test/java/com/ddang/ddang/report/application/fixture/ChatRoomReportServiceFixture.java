@@ -12,7 +12,7 @@ import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.infrastructure.persistence.JpaAuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.JpaProfileImageRepository;
-import com.ddang.ddang.report.application.dto.CreateChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateChatRoomReportDto;
 import com.ddang.ddang.report.domain.ChatRoomReport;
 import com.ddang.ddang.report.domain.repository.ChatRoomReportRepository;
 import com.ddang.ddang.user.domain.Reliability;

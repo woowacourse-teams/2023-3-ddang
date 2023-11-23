@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.report.application.dto.ReadChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto;
 import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
 import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
 import com.ddang.ddang.report.application.fixture.ChatRoomReportServiceFixture;

@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
-import com.ddang.ddang.report.application.dto.ReadQuestionReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadQuestionReportDto;
 import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
 import com.ddang.ddang.report.application.fixture.QuestionReportServiceFixture;
 import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
