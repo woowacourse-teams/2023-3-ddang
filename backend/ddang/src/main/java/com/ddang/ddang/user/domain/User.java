@@ -34,8 +34,10 @@ import java.util.UUID;
 public class User extends BaseTimeEntity {
 
     public static final User EMPTY_USER = null;
+
     private static final boolean DELETED_STATUS = true;
     private static final String UNKNOWN_NAME = "알 수 없음";
+    private static final Float EMPTY_RELIABILITY = null;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -112,5 +114,13 @@ public class User extends BaseTimeEntity {
         }
 
         return name;
+    }
+
+    public Float findReliability() {
+        if (reliability.isLessThan(0.0d)) {
+            return EMPTY_RELIABILITY;
+        }
+
+        return reliability.toFloat();
     }
 }

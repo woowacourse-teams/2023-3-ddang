@@ -166,4 +166,32 @@ class UserTest extends UserFixture {
         // then
         assertThat(actual).isEqualTo("이름");
     }
+
+    @Test
+    void 회원의_신뢰도가_초기화된_이후_변경되지_않았다면_null을_반환한다() {
+        // given
+        final User user = User.builder()
+                              .name("이름")
+                              .build();
+
+        // when
+        final Float actual = user.findReliability();
+
+        // then
+        assertThat(actual).isNull();
+    }
+
+    @Test
+    void 회원의_신뢰도가_변경되었다면_신뢰도를_반환한다() {
+        // given
+        final User user = User.builder()
+                              .reliability(new Reliability(5.0d))
+                              .build();
+
+        // when
+        final Float actual = user.findReliability();
+
+        // then
+        assertThat(actual).isEqualTo(5.0f);
+    }
 }
