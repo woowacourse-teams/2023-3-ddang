@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,14 +54,5 @@ class BidRepositoryImplTest extends BidRepositoryImplFixture {
             softAssertions.assertThat(actual.get(0).getId()).isEqualTo(경매1의_입찰1.getId());
             softAssertions.assertThat(actual.get(1).getId()).isEqualTo(경매1의_입찰2겸_마지막_입찰.getId());
         });
-    }
-
-    @Test
-    void 특정_경매의_마지막_입찰을_조회한다() {
-        // when
-        final Optional<Bid> actual = bidRepository.findLastBidByAuctionId(경매1.getId());
-
-        // then
-        assertThat(actual.get().getId()).isEqualTo(경매1의_입찰2겸_마지막_입찰.getId());
     }
 }
