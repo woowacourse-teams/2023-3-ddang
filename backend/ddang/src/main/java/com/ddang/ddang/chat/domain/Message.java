@@ -22,7 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode(of = "id", callSuper = false)
-@ToString(of = {"id", "contents"})
+@ToString(of = {"id", "content"})
 public class Message extends BaseCreateTimeEntity {
 
     @Id
@@ -42,13 +42,13 @@ public class Message extends BaseCreateTimeEntity {
     private User receiver;
 
     @Column(nullable = false, length = 20_000)
-    private String contents;
+    private String content;
 
     @Builder
-    private Message(final ChatRoom chatRoom, final User writer, final User receiver, final String contents) {
+    private Message(final ChatRoom chatRoom, final User writer, final User receiver, final String content) {
         this.chatRoom = chatRoom;
         this.writer = writer;
         this.receiver = receiver;
-        this.contents = contents;
+        this.content = content;
     }
 }

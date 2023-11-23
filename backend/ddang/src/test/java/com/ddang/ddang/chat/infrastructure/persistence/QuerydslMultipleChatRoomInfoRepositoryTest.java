@@ -1,10 +1,10 @@
 package com.ddang.ddang.chat.infrastructure.persistence;
 
 import com.ddang.ddang.chat.domain.ReadMessageLog;
-import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
+import com.ddang.ddang.chat.domain.dto.MultipleChatRoomInfoDto;
 import com.ddang.ddang.chat.domain.repository.MessageRepository;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
-import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslChatRoomAndMessageAndImageRepositoryFixture;
+import com.ddang.ddang.chat.infrastructure.persistence.fixture.QuerydslMultipleChatRoomInfoRepositoryFixture;
 import com.ddang.ddang.configuration.JpaConfiguration;
 import com.ddang.ddang.configuration.QuerydslConfiguration;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -23,9 +23,9 @@ import java.util.List;
 @Import({JpaConfiguration.class, QuerydslConfiguration.class})
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class QuerydslChatRoomAndMessageAndImageRepositoryTest extends QuerydslChatRoomAndMessageAndImageRepositoryFixture {
+class QuerydslMultipleChatRoomInfoRepositoryTest extends QuerydslMultipleChatRoomInfoRepositoryFixture {
 
-    QuerydslChatRoomAndMessageAndImageRepository querydslChatRoomAndMessageAndImageRepository;
+    QuerydslMultipleChatRoomInfoRepository querydslMultipleChatRoomInfoRepository;
 
     ReadMessageLogRepository readMessageLogRepository;
 
@@ -37,7 +37,7 @@ class QuerydslChatRoomAndMessageAndImageRepositoryTest extends QuerydslChatRoomA
             @Autowired final JpaReadMessageLogRepository jpaReadMessageLogRepository,
             @Autowired final JpaMessageRepository jpaMessageRepository
     ) {
-        querydslChatRoomAndMessageAndImageRepository = new QuerydslChatRoomAndMessageAndImageRepository(queryFactory);
+        querydslMultipleChatRoomInfoRepository = new QuerydslMultipleChatRoomInfoRepository(queryFactory);
         readMessageLogRepository = new ReadMessageLogRepositoryImpl(jpaReadMessageLogRepository);
         messageRepository = new MessageRepositoryImpl(jpaMessageRepository, new QuerydslMessageRepository(queryFactory));
     }
@@ -52,9 +52,9 @@ class QuerydslChatRoomAndMessageAndImageRepositoryTest extends QuerydslChatRoomA
         messageRepository.save(메리가_엔초에게_3시에_보낸_쪽지2);
         messageRepository.save(메리가_엔초에게_3시에_보낸_쪽지3);
         messageRepository.save(엔초가_메리에게_3시에_보낸_쪽지);
-        final List<ChatRoomAndMessageAndImageDto> actual_엔초 = querydslChatRoomAndMessageAndImageRepository
+        final List<MultipleChatRoomInfoDto> actual_엔초 = querydslMultipleChatRoomInfoRepository
                 .findAllChatRoomInfoByUserIdOrderByLastMessage(엔초.getId());
-        final List<ChatRoomAndMessageAndImageDto> actual_메리 = querydslChatRoomAndMessageAndImageRepository
+        final List<MultipleChatRoomInfoDto> actual_메리 = querydslMultipleChatRoomInfoRepository
                 .findAllChatRoomInfoByUserIdOrderByLastMessage(메리.getId());
 
         // then
@@ -67,18 +67,18 @@ class QuerydslChatRoomAndMessageAndImageRepositoryTest extends QuerydslChatRoomA
     @Test
     void 지정한_사용자_아이디가_포함된_채팅방을_조회한다() {
         // when
-        final List<ChatRoomAndMessageAndImageDto> actual =
-                querydslChatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(엔초.getId());
+        final List<MultipleChatRoomInfoDto> actual =
+                querydslMultipleChatRoomInfoRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(엔초.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
             softAssertions.assertThat(actual.get(0).chatRoom()).isEqualTo(엔초_지토_채팅방);
             softAssertions.assertThat(actual.get(0).message()).isEqualTo(엔초가_지토에게_5시에_보낸_쪽지);
-            softAssertions.assertThat(actual.get(0).thumbnailImageStoreName()).isEqualTo(엔초의_경매_대표_이미지.getStoreName());
+            softAssertions.assertThat(actual.get(0).chatRoom().getAuction().getThumbnailImageStoreName()).isEqualTo(엔초의_경매_대표_이미지.getStoreName());
             softAssertions.assertThat(actual.get(1).chatRoom()).isEqualTo(제이미_엔초_채팅방);
             softAssertions.assertThat(actual.get(1).message()).isEqualTo(제이미가_엔초에게_4시에_보낸_쪽지);
-            softAssertions.assertThat(actual.get(1).thumbnailImageStoreName()).isEqualTo(제이미의_경매_대표_이미지.getStoreName());
+            softAssertions.assertThat(actual.get(1).chatRoom().getAuction().getThumbnailImageStoreName()).isEqualTo(제이미의_경매_대표_이미지.getStoreName());
         });
     }
 }

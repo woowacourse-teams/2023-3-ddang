@@ -1,6 +1,5 @@
 package com.ddang.ddang.chat.application.fixture;
 
-import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.BidUnit;
 import com.ddang.ddang.auction.domain.Price;
@@ -11,12 +10,12 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadAuctionInChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadUserInChatRoomDto;
+import com.ddang.ddang.chat.application.dto.request.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadChatRoomAuctionInfoDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadLastMessageDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadPartnerInfoDto;
+import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
@@ -80,13 +79,13 @@ public class ChatRoomServiceFixture {
     protected CreateChatRoomDto 낙찰자가_없어서_채팅방을_생성할_수_없는_DTO;
     protected CreateChatRoomDto 엔초_지토_채팅방_생성을_위한_DTO;
     protected CreateChatRoomDto 메리가_생성하려는_채팅방;
-    protected ReadParticipatingChatRoomDto 엔초가_조회한_엔초_지토_채팅방_정보_조회_결과;
-    protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_가능;
-    protected ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_불가능;
-    protected ReadChatRoomDto 채팅방은_아직_없지만_참여_가능;
-    protected ReadChatRoomDto 채팅방_없고_참여_불가능;
-    protected ReadChatRoomWithLastMessageDto 엔초_채팅_목록의_제이미_엔초_채팅방_정보;
-    protected ReadChatRoomWithLastMessageDto 엔초_채팅_목록의_엔초_지토_채팅방_정보;
+    protected ReadSingleChatRoomDto 엔초가_조회한_엔초_지토_채팅방_정보_조회_결과;
+    protected com.ddang.ddang.auction.application.dto.ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_가능;
+    protected com.ddang.ddang.auction.application.dto.ReadChatRoomDto 엔초_지토_채팅방_정보_및_참여_불가능;
+    protected com.ddang.ddang.auction.application.dto.ReadChatRoomDto 채팅방은_아직_없지만_참여_가능;
+    protected com.ddang.ddang.auction.application.dto.ReadChatRoomDto 채팅방_없고_참여_불가능;
+    protected ReadMultipleChatRoomDto 엔초_채팅_목록의_제이미_엔초_채팅방_정보;
+    protected ReadMultipleChatRoomDto 엔초_채팅_목록의_엔초_지토_채팅방_정보;
 
     @BeforeEach
     void setUp() {
@@ -250,13 +249,13 @@ public class ChatRoomServiceFixture {
 
         엔초가_지토에게_1시에_보낸_쪽지 = Message.builder()
                                     .chatRoom(엔초_지토_채팅방)
-                                    .contents("엔초가 지토에게 1시애 보낸 쪽지")
+                                    .content("엔초가 지토에게 1시애 보낸 쪽지")
                                     .writer(엔초)
                                     .receiver(지토)
                                     .build();
         제이미가_엔초에게_2시에_보낸_쪽지 = Message.builder()
                                      .chatRoom(제이미_엔초_채팅방)
-                                     .contents("제이미가 엔초에게 2시애 보낸 쪽지")
+                                     .content("제이미가 엔초에게 2시애 보낸 쪽지")
                                      .writer(제이미)
                                      .receiver(엔초)
                                      .build();
@@ -273,24 +272,24 @@ public class ChatRoomServiceFixture {
         경매가_진행중이라서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(종료되지_않은_경매.getId());
         낙찰자가_없어서_채팅방을_생성할_수_없는_DTO = new CreateChatRoomDto(낙찰자가_없는_경매.getId());
         엔초_지토_채팅방_생성을_위한_DTO = new CreateChatRoomDto(판매자_엔초_구매자_지토_경매.getId());
-        엔초가_조회한_엔초_지토_채팅방_정보_조회_결과 = ReadParticipatingChatRoomDto.of(엔초, 엔초_지토_채팅방);
-        엔초_지토_채팅방_정보_및_참여_가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), true);
-        엔초_지토_채팅방_정보_및_참여_불가능 = new ReadChatRoomDto(엔초_지토_채팅방.getId(), false);
-        채팅방은_아직_없지만_참여_가능 = new ReadChatRoomDto(null, true);
-        채팅방_없고_참여_불가능 = new ReadChatRoomDto(null, false);
-        엔초_채팅_목록의_제이미_엔초_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
+        엔초가_조회한_엔초_지토_채팅방_정보_조회_결과 = ReadSingleChatRoomDto.of(엔초, 엔초_지토_채팅방);
+        엔초_지토_채팅방_정보_및_참여_가능 = new com.ddang.ddang.auction.application.dto.ReadChatRoomDto(엔초_지토_채팅방.getId(), true);
+        엔초_지토_채팅방_정보_및_참여_불가능 = new com.ddang.ddang.auction.application.dto.ReadChatRoomDto(엔초_지토_채팅방.getId(), false);
+        채팅방은_아직_없지만_참여_가능 = new com.ddang.ddang.auction.application.dto.ReadChatRoomDto(null, true);
+        채팅방_없고_참여_불가능 = new com.ddang.ddang.auction.application.dto.ReadChatRoomDto(null, false);
+        엔초_채팅_목록의_제이미_엔초_채팅방_정보 = new ReadMultipleChatRoomDto(
                 제이미_엔초_채팅방.getId(),
-                ReadAuctionInChatRoomDto.of(판매자_제이미_구매자_엔초_경매, 제이미의_경매_대표_이미지.getStoreName()),
-                ReadUserInChatRoomDto.from(제이미),
-                ReadLastMessageDto.from(제이미가_엔초에게_2시에_보낸_쪽지),
+                new ReadChatRoomAuctionInfoDto(판매자_제이미_구매자_엔초_경매.getId(), 판매자_제이미_구매자_엔초_경매.getTitle(), 판매자_제이미_구매자_엔초_경매.getLastBid().getPrice().getValue(), 판매자_제이미_구매자_엔초_경매.getThumbnailImageStoreName()),
+                new ReadPartnerInfoDto(제이미.getId(), 제이미.getName(), 제이미.getProfileImageStoreName(), 제이미.getReliability().getValue(), 제이미.isDeleted()),
+                new ReadLastMessageDto(제이미가_엔초에게_2시에_보낸_쪽지.getCreatedTime(), 제이미가_엔초에게_2시에_보낸_쪽지.getContent()),
                 1L,
                 true
         );
-        엔초_채팅_목록의_엔초_지토_채팅방_정보 = new ReadChatRoomWithLastMessageDto(
+        엔초_채팅_목록의_엔초_지토_채팅방_정보 = new ReadMultipleChatRoomDto(
                 엔초_지토_채팅방.getId(),
-                ReadAuctionInChatRoomDto.of(판매자_엔초_구매자_지토_경매, 엔초의_경매_대표_이미지.getStoreName()),
-                ReadUserInChatRoomDto.from(지토),
-                ReadLastMessageDto.from(엔초가_지토에게_1시에_보낸_쪽지),
+                new ReadChatRoomAuctionInfoDto(판매자_엔초_구매자_지토_경매.getId(), 판매자_엔초_구매자_지토_경매.getTitle(), 판매자_엔초_구매자_지토_경매.getLastBid().getPrice().getValue(), 판매자_엔초_구매자_지토_경매.getThumbnailImageStoreName()),
+                new ReadPartnerInfoDto(지토.getId(), 지토.getName(), 지토.getProfileImageStoreName(), 지토.getReliability().getValue(), 지토.isDeleted()),
+                new ReadLastMessageDto(엔초가_지토에게_1시에_보낸_쪽지.getCreatedTime(), 엔초가_지토에게_1시에_보낸_쪽지.getContent()),
                 1L,
                 true
         );

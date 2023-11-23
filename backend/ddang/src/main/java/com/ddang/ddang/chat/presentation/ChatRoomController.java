@@ -4,18 +4,18 @@ import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
-import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.dto.request.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.request.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMessageDto;
+import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.CreateChatRoomResponse;
 import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
-import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
-import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomWithLastMessageResponse;
+import com.ddang.ddang.chat.presentation.dto.response.ReadSingleChatRoomResponse;
+import com.ddang.ddang.chat.presentation.dto.response.ReadMultipleChatRoomResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import com.ddang.ddang.image.presentation.util.ImageTargetType;
@@ -55,34 +55,32 @@ public class ChatRoomController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ReadChatRoomWithLastMessageResponse>> readAllParticipatingChatRooms(
+    public ResponseEntity<List<ReadMultipleChatRoomResponse>> readAllParticipatingChatRooms(
             @AuthenticateUser final AuthenticationUserInfo userInfo
     ) {
-        final List<ReadChatRoomWithLastMessageDto> readParticipatingChatRoomDtos =
-                chatRoomService.readAllByUserId(userInfo.userId());
-
-        final List<ReadChatRoomWithLastMessageResponse> responses =
-                readParticipatingChatRoomDtos.stream()
-                                             .map(dto -> ReadChatRoomWithLastMessageResponse.of(
+        final List<ReadMultipleChatRoomDto> readMultipleChatRoomDtos = chatRoomService.readAllByUserId(userInfo.userId());
+        final List<ReadMultipleChatRoomResponse> responses =
+                readMultipleChatRoomDtos.stream()
+                                        .map(dto -> ReadMultipleChatRoomResponse.of(
                                                      dto,
                                                      urlFinder.find(ImageTargetType.PROFILE_IMAGE),
                                                      urlFinder.find(ImageTargetType.AUCTION_IMAGE)
                                              ))
-                                             .toList();
+                                        .toList();
 
         return ResponseEntity.ok(responses);
     }
 
     @GetMapping("/{chatRoomId}")
-    public ResponseEntity<ReadChatRoomResponse> readChatRoomById(
+    public ResponseEntity<ReadSingleChatRoomResponse> readChatRoomById(
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @PathVariable final Long chatRoomId
     ) {
-        final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(
+        final ReadSingleChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(
                 chatRoomId,
                 userInfo.userId()
         );
-        final ReadChatRoomResponse response = ReadChatRoomResponse.of(
+        final ReadSingleChatRoomResponse response = ReadSingleChatRoomResponse.of(
                 chatRoomDto,
                 urlFinder.find(ImageTargetType.PROFILE_IMAGE),
                 urlFinder.find(ImageTargetType.AUCTION_IMAGE)

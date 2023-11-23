@@ -4,12 +4,11 @@ import static com.ddang.ddang.auction.domain.QAuction.auction;
 import static com.ddang.ddang.chat.domain.QChatRoom.chatRoom;
 import static com.ddang.ddang.chat.domain.QMessage.message;
 import static com.ddang.ddang.chat.domain.QReadMessageLog.readMessageLog;
-import static com.ddang.ddang.image.domain.QAuctionImage.auctionImage;
 import static java.util.Comparator.comparing;
 
-import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.ChatRoomAndMessageAndImageQueryProjectionDto;
-import com.ddang.ddang.chat.infrastructure.persistence.dto.QChatRoomAndMessageAndImageQueryProjectionDto;
+import com.ddang.ddang.chat.domain.dto.MultipleChatRoomInfoDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.MultipleChatRoomInfoQueryProjectionDto;
+import com.ddang.ddang.chat.infrastructure.persistence.dto.QMultipleChatRoomInfoQueryProjectionDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
@@ -22,13 +21,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class QuerydslChatRoomAndMessageAndImageRepository {
+public class QuerydslMultipleChatRoomInfoRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<ChatRoomAndMessageAndImageDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
-        final List<ChatRoomAndMessageAndImageQueryProjectionDto> unsortedDtos =
-                queryFactory.select(new QChatRoomAndMessageAndImageQueryProjectionDto(
+    public List<MultipleChatRoomInfoDto> findAllChatRoomInfoByUserIdOrderByLastMessage(final Long userId) {
+        final List<MultipleChatRoomInfoQueryProjectionDto> unsortedDtos =
+                queryFactory.select(new QMultipleChatRoomInfoQueryProjectionDto(
                                     chatRoom,
                                     message,
                                     countUnreadMessages(userId, chatRoom.id)
@@ -65,17 +64,17 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                              );
     }
 
-    private List<ChatRoomAndMessageAndImageDto> sortByLastMessageIdDesc(
-            final List<ChatRoomAndMessageAndImageQueryProjectionDto> unsortedDtos
+    private List<MultipleChatRoomInfoDto> sortByLastMessageIdDesc(
+            final List<MultipleChatRoomInfoQueryProjectionDto> unsortedDtos
     ) {
         return unsortedDtos.stream()
-                           .filter((ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) ->
+                           .filter((MultipleChatRoomInfoQueryProjectionDto unsortedDto) ->
                                    Objects.nonNull(unsortedDto.message())
                            ).sorted(comparing(
-                                (ChatRoomAndMessageAndImageQueryProjectionDto unsortedDto) ->
+                                (MultipleChatRoomInfoQueryProjectionDto unsortedDto) ->
                                         unsortedDto.message().getId()
                         ).reversed()
-                ).map(ChatRoomAndMessageAndImageQueryProjectionDto::toSortedDto)
+                ).map(MultipleChatRoomInfoQueryProjectionDto::toSortedDto)
                            .toList();
     }
 

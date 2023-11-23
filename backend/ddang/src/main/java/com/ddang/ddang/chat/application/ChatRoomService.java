@@ -1,19 +1,18 @@
 package com.ddang.ddang.chat.application;
 
-import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
-import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
-import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.dto.request.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.domain.ChatRoom;
-import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
-import com.ddang.ddang.chat.domain.repository.ChatRoomAndMessageAndImageRepository;
+import com.ddang.ddang.chat.domain.dto.MultipleChatRoomInfoDto;
+import com.ddang.ddang.chat.domain.repository.MultipleChatRoomRepository;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
 import com.ddang.ddang.user.domain.User;
 import com.ddang.ddang.user.domain.repository.UserRepository;
@@ -33,7 +32,7 @@ public class ChatRoomService {
 
     private final ApplicationEventPublisher messageLogEventPublisher;
     private final ChatRoomRepository chatRoomRepository;
-    private final ChatRoomAndMessageAndImageRepository chatRoomAndMessageAndImageRepository;
+    private final MultipleChatRoomRepository multipleChatRoomRepository;
     private final UserRepository userRepository;
     private final AuctionRepository auctionRepository;
 
@@ -83,23 +82,23 @@ public class ChatRoomService {
         return !(findAuction.isOwner(findUser) || findAuction.isWinner(findUser, LocalDateTime.now()));
     }
 
-    public List<ReadChatRoomWithLastMessageDto> readAllByUserId(final Long userId) {
+    public List<ReadMultipleChatRoomDto> readAllByUserId(final Long userId) {
         final User findUser = userRepository.getByIdOrThrow(userId);
-        final List<ChatRoomAndMessageAndImageDto> chatRoomAndMessageAndImageQueryProjectionDtos =
-                chatRoomAndMessageAndImageRepository.findAllChatRoomInfoByUserIdOrderByLastMessage(findUser.getId());
+        final List<MultipleChatRoomInfoDto> chatRoomAndMessageAndImageQueryProjectionDtos =
+                multipleChatRoomRepository.findAllByUserIdOrderByLastMessage(findUser.getId());
 
         return chatRoomAndMessageAndImageQueryProjectionDtos.stream()
-                                                            .map(dto -> ReadChatRoomWithLastMessageDto.of(findUser, dto))
+                                                            .map(dto -> ReadMultipleChatRoomDto.of(findUser, dto))
                                                             .toList();
     }
 
-    public ReadParticipatingChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
+    public ReadSingleChatRoomDto readByChatRoomId(final Long chatRoomId, final Long userId) {
         final User findUser = userRepository.getByIdOrThrow(userId);
         final ChatRoom chatRoom = chatRoomRepository.getDetailChatRoomByIdOrThrow(chatRoomId);
 
         checkAccessible(findUser, chatRoom);
 
-        return ReadParticipatingChatRoomDto.of(findUser, chatRoom);
+        return ReadSingleChatRoomDto.of(findUser, chatRoom);
     }
 
     private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
@@ -108,18 +107,18 @@ public class ChatRoomService {
         }
     }
 
-    public ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
+    public com.ddang.ddang.auction.application.dto.ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
         return userRepository.findById(userInfo.userId())
                 .map(findUser -> convertReadChatRoomDto(auctionId, findUser))
-                .orElse(ReadChatRoomDto.CANNOT_CHAT_DTO);
+                .orElse(com.ddang.ddang.auction.application.dto.ReadChatRoomDto.CANNOT_CHAT_DTO);
     }
 
-    private ReadChatRoomDto convertReadChatRoomDto(final Long auctionId, final User findUser) {
+    private com.ddang.ddang.auction.application.dto.ReadChatRoomDto convertReadChatRoomDto(final Long auctionId, final User findUser) {
         final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(auctionId);
         final Long chatRoomId = chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                                   .orElse(DEFAULT_CHAT_ROOM_ID);
 
-        return new ReadChatRoomDto(chatRoomId, isChatParticipant(findAuction, findUser));
+        return new com.ddang.ddang.auction.application.dto.ReadChatRoomDto(chatRoomId, isChatParticipant(findAuction, findUser));
     }
 
     private boolean isChatParticipant(final Auction findAuction, final User findUser) {

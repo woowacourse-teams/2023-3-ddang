@@ -12,7 +12,7 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.request.CreateMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
@@ -152,7 +152,7 @@ public class NotificationEventListenerFixture {
                        .chatRoom(채팅방)
                        .writer(발신자_겸_판매자)
                        .receiver(수신자_겸_기존_입찰자)
-                       .contents("메시지 내용")
+                       .content("메시지 내용")
                        .build()
         );
         final NotificationPreviousBidDto 입찰_DTO = new NotificationPreviousBidDto(수신자_겸_기존_입찰자.getId(), 경매, 이미지_절대_경로);

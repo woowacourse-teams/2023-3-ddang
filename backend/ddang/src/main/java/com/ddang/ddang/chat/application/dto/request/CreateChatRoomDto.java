@@ -1,4 +1,4 @@
-package com.ddang.ddang.chat.application.dto;
+package com.ddang.ddang.chat.application.dto.request;
 
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 

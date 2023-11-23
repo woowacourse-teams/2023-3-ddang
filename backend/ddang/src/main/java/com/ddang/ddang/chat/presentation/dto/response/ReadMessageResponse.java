@@ -1,6 +1,6 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
-import com.ddang.ddang.chat.application.dto.ReadMessageDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMessageDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
@@ -9,11 +9,11 @@ public record ReadMessageResponse(
         Long id,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-        LocalDateTime createdAt,
+        LocalDateTime createdTime,
 
         boolean isMyMessage,
 
-        String contents
+        String content
 ) {
 
     public static ReadMessageResponse of(final ReadMessageDto readMessageDto, final boolean isMyMessage) {
@@ -21,7 +21,7 @@ public record ReadMessageResponse(
                 readMessageDto.id(),
                 readMessageDto.createdTime(),
                 isMyMessage,
-                readMessageDto.contents()
+                readMessageDto.content()
         );
     }
 }

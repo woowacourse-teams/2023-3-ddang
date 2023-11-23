@@ -40,7 +40,7 @@ public class NotificationEventListener {
                     NotificationType.MESSAGE,
                     message.getReceiver().getId(),
                     message.getWriter().findName(),
-                    message.getContents(),
+                    message.getContent(),
                     calculateRedirectUrl(MESSAGE_NOTIFICATION_REDIRECT_URI, message.getChatRoom().getId()),
                     messageNotificationEvent.profileImageAbsoluteUrl() + profileImage.getStoreName()
             );

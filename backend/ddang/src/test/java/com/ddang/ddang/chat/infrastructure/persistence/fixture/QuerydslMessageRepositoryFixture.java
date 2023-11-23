@@ -105,7 +105,7 @@ public class QuerydslMessageRepositoryFixture {
                                        .chatRoom(채팅방)
                                        .writer(판매자)
                                        .receiver(구매자)
-                                       .contents("안녕하세요")
+                                       .content("안녕하세요")
                                        .build();
             저장된_메시지들.add(메시지);
             messageRepository.save(메시지);

@@ -1,7 +1,7 @@
 package com.ddang.ddang.chat.application;
 
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadMessageDto;
+import com.ddang.ddang.chat.application.dto.request.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;

@@ -54,7 +54,7 @@ public class LastReadMessageLogEventListenerFixture {
         final Message 메시지 = Message.builder()
                                    .chatRoom(메시지_로그_생성용_채팅방)
                                    .writer(메시지_로그_생성용_발신자_겸_판매자)
-                                   .contents("메시지")
+                                   .content("메시지")
                                    .build();
 
         업데이트용_메시지_조회_로그 = new UpdateReadMessageLogEvent(메시지_로그_생성용_발신자_겸_판매자, 메시지_로그_생성용_채팅방, 메시지);

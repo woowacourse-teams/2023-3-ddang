@@ -68,7 +68,7 @@ public class JpaMessageRepositoryFixture {
                      .chatRoom(채팅방)
                      .writer(채팅참여_판매자)
                      .receiver(채팅참여_구매자)
-                     .contents("안녕하세요")
+                     .content("안녕하세요")
                      .build();
 
         em.flush();

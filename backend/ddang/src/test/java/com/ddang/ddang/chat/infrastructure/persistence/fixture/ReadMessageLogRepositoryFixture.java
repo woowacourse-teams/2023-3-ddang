@@ -132,7 +132,7 @@ public class ReadMessageLogRepositoryFixture {
                                        .chatRoom(메리_엔초_채팅방)
                                        .writer(메리)
                                        .receiver(엔초)
-                                       .contents("안녕하세요")
+                                       .content("안녕하세요")
                                        .build();
             messageRepository.save(메시지);
             메리_엔초_메시지들.add(메시지);

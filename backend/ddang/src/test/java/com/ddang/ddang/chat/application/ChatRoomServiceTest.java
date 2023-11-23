@@ -3,11 +3,10 @@ package com.ddang.ddang.chat.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
-import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
-import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
@@ -113,12 +112,12 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 사용자가_참여한_모든_채팅방을_마지막에_전송된_메시지와_함께_조회하며_마지막_메시지가_최근인_순서로_정렬하여_조회한다() {
         // when
-        final List<ReadChatRoomWithLastMessageDto> actual = chatRoomService.readAllByUserId(엔초.getId());
+        final List<ReadMultipleChatRoomDto> actual = chatRoomService.readAllByUserId(엔초.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
-            softAssertions.assertThat(actual.get(0).id()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.id());
+            softAssertions.assertThat(actual.get(0).chatRoomId()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.chatRoomId());
             softAssertions.assertThat(actual.get(0).auctionDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.auctionDto());
             softAssertions.assertThat(actual.get(0).partnerDto()).isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.partnerDto());
             softAssertions.assertThat(actual.get(0).lastMessageDto())
@@ -126,7 +125,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
             softAssertions.assertThat(actual.get(0).isChatAvailable())
                           .isEqualTo(엔초_채팅_목록의_제이미_엔초_채팅방_정보.isChatAvailable());
 
-            softAssertions.assertThat(actual.get(1).id()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.id());
+            softAssertions.assertThat(actual.get(1).chatRoomId()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.chatRoomId());
             softAssertions.assertThat(actual.get(1).auctionDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.auctionDto());
             softAssertions.assertThat(actual.get(1).partnerDto()).isEqualTo(엔초_채팅_목록의_엔초_지토_채팅방_정보.partnerDto());
             softAssertions.assertThat(actual.get(1).lastMessageDto())
@@ -146,7 +145,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_아이디에_해당하는_채팅방을_조회한다() {
         // when
-        final ReadParticipatingChatRoomDto actual = chatRoomService.readByChatRoomId(엔초_지토_채팅방.getId(), 엔초.getId());
+        final ReadSingleChatRoomDto actual = chatRoomService.readByChatRoomId(엔초_지토_채팅방.getId(), 엔초.getId());
 
         // then
         assertThat(actual).isEqualTo(엔초가_조회한_엔초_지토_채팅방_정보_조회_결과);
@@ -179,7 +178,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방_정보를_조회할_때_조회한_사람이_해당_채팅방_참여자라면_채팅방_아이디와_참여가능여부_참을_반환한다() {
         // when
-        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 엔초_회원_정보);
+        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 엔초_회원_정보);
 
         // then
         assertThat(actual).isEqualTo(엔초_지토_채팅방_정보_및_참여_가능);
@@ -188,7 +187,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방_정보를_조회할_때_조회한_사람이_해당_채팅방_참여자가_아니라면_채팅방_아이디와_참여가능여부_거짓을_반환한다() {
         // when
-        final ReadChatRoomDto actual =
+        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual =
                 chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 경매에_참여한_적_없는_사용자_정보);
 
         // then
@@ -198,7 +197,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_조회를_요청한_사용자_정보를_찾을_수_없다면_무조건_채팅방_아이디_null과_참여가능여부_거짓을_반환한다() {
         // when
-        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 존재하지_않는_사용자_정보);
+        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 존재하지_않는_사용자_정보);
 
         // then
         assertThat(actual).isEqualTo(채팅방_없고_참여_불가능);
@@ -214,7 +213,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_채팅방을_찾을_수_없다면_채팅방_아이디_null과_참여가능을_반환한다() {
         // when
-        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(채팅방이_없는_경매.getId(), 판매자_회원_정보);
+        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(채팅방이_없는_경매.getId(), 판매자_회원_정보);
 
         // then
         assertThat(actual).isEqualTo(채팅방은_아직_없지만_참여_가능);

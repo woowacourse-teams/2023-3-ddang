@@ -6,7 +6,7 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.request.CreateMessageDto;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
@@ -144,7 +144,7 @@ public class MessageServiceFixture {
                                        .writer(발신자)
                                        .receiver(수신자)
                                        .chatRoom(채팅방)
-                                       .contents("메시지 내용")
+                                       .content("메시지 내용")
                                        .build();
             메시지들.add(메시지);
             messageRepository.save(메시지);
@@ -156,7 +156,7 @@ public class MessageServiceFixture {
                                        .writer(발신자)
                                        .receiver(수신자)
                                        .chatRoom(메시지가_5개인_채팅방)
-                                       .contents("메시지 내용")
+                                       .content("메시지 내용")
                                        .build();
             메시지가_5개인_채팅방_메시지들.add(메시지);
             messageRepository.save(메시지);

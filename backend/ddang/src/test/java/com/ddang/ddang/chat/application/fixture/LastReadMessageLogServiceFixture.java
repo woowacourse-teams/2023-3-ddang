@@ -161,16 +161,16 @@ public class LastReadMessageLogServiceFixture {
         메시지_로그_생성용_마지막_조회_메시지 = Message.builder()
                                        .writer(메시지_로그_생성용_발신자_겸_판매자)
                                        .receiver(메시지_로그_생성용_입찰자_구매자)
-                                       .contents("메시지")
+                                       .content("메시지")
                                        .build();
         메시지_로그_업데이트용_마지막_조회_메시지 = Message.builder()
                                          .writer(메시지_로그_업데이트용_발신자_겸_판매자)
                                          .receiver(메시지_로그_업데이트용_입찰자)
-                                         .contents("메시지")
+                                         .content("메시지")
                                          .build();
         final Message 저장되지_않은_메시지 = Message.builder()
                                            .writer(저장되지_않은_사용자)
-                                           .contents("저장되지 않은 메시지")
+                                           .content("저장되지 않은 메시지")
                                            .build();
 
         final ReadMessageLog 메시지_로그_업데이트용_로그_판매자 = new ReadMessageLog(메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_발신자_겸_판매자);

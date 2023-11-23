@@ -30,8 +30,8 @@ import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgum
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
+import com.ddang.ddang.chat.application.dto.request.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.request.CreateMessageDto;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
 import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
@@ -176,7 +176,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                                    .andExpectAll(
                                                            status().isOk(),
                                                            jsonPath("$.[0].isMyMessage", is(expected.isMyMessage())),
-                                                           jsonPath("$.[0].contents", is(expected.contents()))
+                                                           jsonPath("$.[0].content", is(expected.content()))
                                                    );
         readAllByLastMessageId_문서화(resultActions);
     }
@@ -245,21 +245,21 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                                            .contentType(MediaType.APPLICATION_JSON))
                                                    .andExpectAll(
                                                            status().isOk(),
-                                                           jsonPath("$.[0].id", is(조회용_채팅방1.id()), Long.class),
-                                                           jsonPath("$.[0].chatPartner.name", is(조회용_채팅방1.partnerDto()
+                                                           jsonPath("$.[0].id", is(조회용_채팅방1.chatRoomId()), Long.class),
+                                                           jsonPath("$.[0].partner.name", is(조회용_채팅방1.partnerDto()
                                                                                                          .name())),
                                                            jsonPath("$.[0].auction.title", is(조회용_채팅방1.auctionDto()
                                                                                                       .title())),
-                                                           jsonPath("$.[0].lastMessage.contents", is(조회용_채팅방1.lastMessageDto()
-                                                                                                             .contents())),
+                                                           jsonPath("$.[0].lastMessage.content", is(조회용_채팅방1.lastMessageDto()
+                                                                                                             .content())),
                                                            jsonPath("$.[0].unreadMessageCount", is(조회용_채팅방1.unreadMessageCount()), Long.class),
-                                                           jsonPath("$.[1].id", is(조회용_채팅방2.id()), Long.class),
-                                                           jsonPath("$.[1].chatPartner.name", is(조회용_채팅방2.partnerDto()
+                                                           jsonPath("$.[1].id", is(조회용_채팅방2.chatRoomId()), Long.class),
+                                                           jsonPath("$.[1].partner.name", is(조회용_채팅방2.partnerDto()
                                                                                                          .name())),
                                                            jsonPath("$.[1].auction.title", is(조회용_채팅방2.auctionDto()
                                                                                                       .title())),
-                                                           jsonPath("$.[1].lastMessage.contents", is(조회용_채팅방2.lastMessageDto()
-                                                                                                             .contents())),
+                                                           jsonPath("$.[1].lastMessage.content", is(조회용_채팅방2.lastMessageDto()
+                                                                                                             .content())),
                                                            jsonPath("$.[1].unreadMessageCount", is(조회용_채팅방1.unreadMessageCount()), Long.class)
                                                    );
         readAllParticipatingChatRooms_문서화(resultActions);
@@ -293,10 +293,8 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                                    .andExpectAll(
                                                            status().isOk(),
                                                            jsonPath("$.id", is(조회용_참가중인_채팅방.id()), Long.class),
-                                                           jsonPath("$.chatPartner.name", is(조회용_참가중인_채팅방.partnerDto()
-                                                                                                         .name())),
-                                                           jsonPath("$.auction.title", is(조회용_참가중인_채팅방.auctionDto()
-                                                                                                      .title()))
+                                                           jsonPath("$.auction.title", is(조회용_참가중인_채팅방.auctionDto().title())),
+                                                           jsonPath("$.partner.name", is(조회용_참가중인_채팅방.partnerDto().name()))
                                                    );
         readChatRoom_문서화(resultActions);
     }
@@ -479,7 +477,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                         ),
                         requestFields(
                                 fieldWithPath("receiverId").description("메시지 수신자 ID"),
-                                fieldWithPath("contents").description("메시지 내용")
+                                fieldWithPath("content").description("메시지 내용")
                         ),
                         responseFields(
                                 fieldWithPath("id").type(JsonFieldType.NUMBER)
@@ -505,11 +503,11 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                 fieldWithPath("[]").type(JsonFieldType.ARRAY)
                                                    .description("하나의 채팅방 내의 메시지 목록 (lastMessageId가 포함되어 있다면 lastMessageId 이후의 메시지 목록"),
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("메시지 ID"),
-                                fieldWithPath("[].createdAt").type(JsonFieldType.STRING)
+                                fieldWithPath("[].createdTime").type(JsonFieldType.STRING)
                                                              .description("메시지를 보낸 시간"),
                                 fieldWithPath("[].isMyMessage").type(JsonFieldType.BOOLEAN)
                                                                .description("조회를 요청한 사람이 보낸 메시지인지 여부"),
-                                fieldWithPath("[].contents").type(JsonFieldType.STRING)
+                                fieldWithPath("[].content").type(JsonFieldType.STRING)
                                                             .description("메시지 내용")
                         )
                 )
@@ -525,12 +523,12 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                         responseFields(
                                 fieldWithPath("[]").type(JsonFieldType.ARRAY).description("자신이 참여한 채팅방 목록"),
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("채팅방 ID"),
-                                fieldWithPath("[].chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                fieldWithPath("[].chatPartner.id").type(JsonFieldType.NUMBER)
+                                fieldWithPath("[].partner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
+                                fieldWithPath("[].partner.id").type(JsonFieldType.NUMBER)
                                                                   .description("채팅 상대방 ID"),
-                                fieldWithPath("[].chatPartner.name").type(JsonFieldType.STRING)
+                                fieldWithPath("[].partner.name").type(JsonFieldType.STRING)
                                                                     .description("채팅 상대방 이름"),
-                                fieldWithPath("[].chatPartner.profileImage").type(JsonFieldType.STRING)
+                                fieldWithPath("[].partner.profileImage").type(JsonFieldType.STRING)
                                                                             .description("채팅 상대방 프로필 사진"),
                                 fieldWithPath("[].auction").type(JsonFieldType.OBJECT)
                                                            .description("채팅방과 연관된 경매"),
@@ -542,9 +540,9 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                 fieldWithPath("[].auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
                                 fieldWithPath("[].lastMessage").type(JsonFieldType.OBJECT)
                                                                .description("마지막으로 전송된 메시지"),
-                                fieldWithPath("[].lastMessage.createdAt").type(JsonFieldType.STRING)
+                                fieldWithPath("[].lastMessage.createdTime").type(JsonFieldType.STRING)
                                                                          .description("메시지를 보낸 시간"),
-                                fieldWithPath("[].lastMessage.contents").type(JsonFieldType.STRING)
+                                fieldWithPath("[].lastMessage.content").type(JsonFieldType.STRING)
                                                                         .description("메시지 내용"),
                                 fieldWithPath("[].unreadMessageCount").type(JsonFieldType.NUMBER)
                                                                       .description("안 읽은 메시지 개수"),
@@ -572,12 +570,12 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                                 fieldWithPath("auction.image").type(JsonFieldType.STRING)
                                                               .description("경매 대표 사진"),
                                 fieldWithPath("auction.price").type(JsonFieldType.NUMBER).description("낙찰가"),
-                                fieldWithPath("chatPartner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
-                                fieldWithPath("chatPartner.id").type(JsonFieldType.NUMBER)
+                                fieldWithPath("partner").type(JsonFieldType.OBJECT).description("채팅 상대방"),
+                                fieldWithPath("partner.id").type(JsonFieldType.NUMBER)
                                                                .description("채팅 상대방 ID"),
-                                fieldWithPath("chatPartner.name").type(JsonFieldType.STRING)
+                                fieldWithPath("partner.name").type(JsonFieldType.STRING)
                                                                  .description("채팅 상대방 이름"),
-                                fieldWithPath("chatPartner.profileImage").type(JsonFieldType.STRING)
+                                fieldWithPath("partner.profileImage").type(JsonFieldType.STRING)
                                                                          .description("채팅 상대방 프로필 사진"),
                                 fieldWithPath("isChatAvailable").type(JsonFieldType.BOOLEAN)
                                                                 .description("채팅 가능 여부")

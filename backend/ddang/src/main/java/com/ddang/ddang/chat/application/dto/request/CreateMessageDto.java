@@ -1,4 +1,4 @@
-package com.ddang.ddang.chat.application.dto;
+package com.ddang.ddang.chat.application.dto.request;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
@@ -9,7 +9,7 @@ public record CreateMessageDto(
         Long chatRoomId,
         Long writerId,
         Long receiverId,
-        String contents
+        String content
 ) {
 
     public static CreateMessageDto of(final Long writerId, final Long chatRoomId, final CreateMessageRequest request) {
@@ -17,7 +17,7 @@ public record CreateMessageDto(
                 chatRoomId,
                 writerId,
                 request.receiverId(),
-                request.contents()
+                request.content()
         );
     }
 
@@ -30,7 +30,7 @@ public record CreateMessageDto(
                       .chatRoom(chatRoom)
                       .writer(sender)
                       .receiver(receiver)
-                      .contents(contents)
+                      .content(content)
                       .build();
     }
 }

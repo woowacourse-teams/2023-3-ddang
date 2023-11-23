@@ -97,13 +97,13 @@ public class MessageRepositoryImplFixture {
                          .chatRoom(채팅방)
                          .writer(판매자_겸_발신자)
                          .receiver(구매자_겸_수신자)
-                         .contents(메시지_내용)
+                         .content(메시지_내용)
                          .build();
         저장된_메시지 = Message.builder()
                          .chatRoom(채팅방)
                          .writer(판매자_겸_발신자)
                          .receiver(구매자_겸_수신자)
-                         .contents("레포지토리에 저장된 메시지")
+                         .content("레포지토리에 저장된 메시지")
                          .build();
         messageRepository.save(저장된_메시지);
 
@@ -114,7 +114,7 @@ public class MessageRepositoryImplFixture {
                                        .chatRoom(메시지가_5개인_채팅방)
                                        .writer(판매자_겸_발신자)
                                        .receiver(구매자_겸_수신자)
-                                       .contents("안녕하세요")
+                                       .content("안녕하세요")
                                        .build();
             저장된_메시지들.add(메시지);
             messageRepository.save(메시지);

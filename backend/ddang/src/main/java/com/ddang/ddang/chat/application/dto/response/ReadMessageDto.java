@@ -1,4 +1,4 @@
-package com.ddang.ddang.chat.application.dto;
+package com.ddang.ddang.chat.application.dto.response;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
@@ -11,7 +11,7 @@ public record ReadMessageDto(
         Long chatRoomId,
         Long writerId,
         Long receiverId,
-        String contents
+        String content
 ) {
 
     public static ReadMessageDto from(
@@ -24,7 +24,7 @@ public record ReadMessageDto(
                 chatRoom.getId(),
                 message.getWriter().getId(),
                 message.getReceiver().getId(),
-                message.getContents()
+                message.getContent()
         );
     }
 }

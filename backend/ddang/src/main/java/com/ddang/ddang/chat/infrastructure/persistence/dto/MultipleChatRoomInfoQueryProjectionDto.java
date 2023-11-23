@@ -2,25 +2,23 @@ package com.ddang.ddang.chat.infrastructure.persistence.dto;
 
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
-import com.ddang.ddang.chat.domain.dto.ChatRoomAndMessageAndImageDto;
-import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.chat.domain.dto.MultipleChatRoomInfoDto;
 import com.querydsl.core.annotations.QueryProjection;
 
-public record ChatRoomAndMessageAndImageQueryProjectionDto(
+public record MultipleChatRoomInfoQueryProjectionDto(
         ChatRoom chatRoom,
         Message message,
         Long unreadMessage
 ) {
 
     @QueryProjection
-    public ChatRoomAndMessageAndImageQueryProjectionDto {
+    public MultipleChatRoomInfoQueryProjectionDto {
     }
 
-    public ChatRoomAndMessageAndImageDto toSortedDto() {
-        return new ChatRoomAndMessageAndImageDto(
+    public MultipleChatRoomInfoDto toSortedDto() {
+        return new MultipleChatRoomInfoDto(
                 this.chatRoom,
                 this.message,
-                this.chatRoom.getAuction().getThumbnailImageStoreName(),
                 this.unreadMessage
         );
     }

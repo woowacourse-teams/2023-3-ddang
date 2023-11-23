@@ -31,7 +31,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class QuerydslChatRoomAndMessageAndImageRepositoryFixture {
+public class QuerydslMultipleChatRoomInfoRepositoryFixture {
 
     @PersistenceContext
     private EntityManager em;
@@ -152,61 +152,61 @@ public class QuerydslChatRoomAndMessageAndImageRepositoryFixture {
 
         final Message 제이미가_엔초에게_1시에_보낸_쪽지 = Message.builder()
                                                    .chatRoom(제이미_엔초_채팅방)
-                                                   .contents("제이미가 엔초에게 1시애 보낸 쪽지")
+                                                   .content("제이미가 엔초에게 1시애 보낸 쪽지")
                                                    .writer(제이미)
                                                    .receiver(엔초)
                                                    .build();
         final Message 엔초가_지토에게_2시에_보낸_쪽지 = Message.builder()
                                                   .chatRoom(엔초_지토_채팅방)
-                                                  .contents("엔초가 지토에게 2시애 보낸 쪽지")
+                                                  .content("엔초가 지토에게 2시애 보낸 쪽지")
                                                   .writer(엔초)
                                                   .receiver(지토)
                                                   .build();
         제이미가_엔초에게_4시에_보낸_쪽지 = Message.builder()
                                      .chatRoom(제이미_엔초_채팅방)
-                                     .contents("제이미가 엔초에게 4시애 보낸 쪽지")
+                                     .content("제이미가 엔초에게 4시애 보낸 쪽지")
                                      .writer(제이미)
                                      .receiver(엔초)
                                      .build();
         엔초가_지토에게_5시에_보낸_쪽지 = Message.builder()
                                     .chatRoom(엔초_지토_채팅방)
-                                    .contents("엔초가 지토에게 5시애 보낸 쪽지")
+                                    .content("엔초가 지토에게 5시애 보낸 쪽지")
                                     .writer(엔초)
                                     .receiver(지토)
                                     .build();
         엔초가_지토에게_추가로_보낸_쪽지 = Message.builder()
                                     .chatRoom(엔초_지토_채팅방)
-                                    .contents("엔초가 지토에게 6시애 보낸 쪽지")
+                                    .content("엔초가 지토에게 6시애 보낸 쪽지")
                                     .writer(엔초)
                                     .receiver(지토)
                                     .build();
         메리가_엔초에게_3시에_보낸_쪽지1 = Message.builder()
                                      .chatRoom(메리_엔초_채팅방)
-                                     .contents("메리가 엔초에게 3시에 보낸 쪽지")
+                                     .content("메리가 엔초에게 3시에 보낸 쪽지")
                                      .writer(메리)
                                      .receiver(엔초)
                                      .build();
         메리가_엔초에게_3시에_보낸_쪽지1 = Message.builder()
                                      .chatRoom(메리_엔초_채팅방)
-                                     .contents("메리가 엔초에게 3시에 보낸 쪽지2")
+                                     .content("메리가 엔초에게 3시에 보낸 쪽지2")
                                      .writer(메리)
                                      .receiver(엔초)
                                      .build();
         메리가_엔초에게_3시에_보낸_쪽지2 = Message.builder()
                                      .chatRoom(메리_엔초_채팅방)
-                                     .contents("메리가 엔초에게 3시에 보낸 쪽지3")
+                                     .content("메리가 엔초에게 3시에 보낸 쪽지3")
                                      .writer(메리)
                                      .receiver(엔초)
                                      .build();
         메리가_엔초에게_3시에_보낸_쪽지3 = Message.builder()
                                      .chatRoom(메리_엔초_채팅방)
-                                     .contents("메리가 엔초에게 3시에 보낸 쪽지3")
+                                     .content("메리가 엔초에게 3시에 보낸 쪽지3")
                                      .writer(메리)
                                      .receiver(엔초)
                                      .build();
         엔초가_메리에게_3시에_보낸_쪽지 = Message.builder()
                                     .chatRoom(메리_엔초_채팅방)
-                                    .contents("엔초가 메리에게 3시에 보낸 쪽지3")
+                                    .content("엔초가 메리에게 3시에 보낸 쪽지3")
                                     .writer(엔초)
                                     .receiver(메리)
                                     .build();

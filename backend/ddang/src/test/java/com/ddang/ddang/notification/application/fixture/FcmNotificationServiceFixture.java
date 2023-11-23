@@ -137,7 +137,7 @@ public class FcmNotificationServiceFixture {
                                    .chatRoom(채팅방)
                                    .writer(메시지_조회자_겸_발신자)
                                    .receiver(메시지_수신자)
-                                   .contents("메시지")
+                                   .content("메시지")
                                    .build();
         messageRepository.save(메시지);
     }
