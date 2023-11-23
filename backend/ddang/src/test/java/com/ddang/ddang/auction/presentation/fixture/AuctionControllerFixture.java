@@ -165,7 +165,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 1L,
                 "store-name.png",
                 "판매자",
-                3.5d,
+                3.5f,
                 false,
                 AuctionStatus.UNBIDDEN,
                 null
@@ -189,7 +189,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 1L,
                 "store-name.png",
                 "판매자",
-                3.5d,
+                3.5f,
                 false,
                 AuctionStatus.UNBIDDEN,
                 null
@@ -213,7 +213,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 1L,
                 "store-name.png",
                 "판매자",
-                3.5d,
+                3.5f,
                 false,
                 AuctionStatus.UNBIDDEN,
                 null

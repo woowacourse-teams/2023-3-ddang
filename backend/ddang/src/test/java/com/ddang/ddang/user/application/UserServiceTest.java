@@ -30,7 +30,7 @@ class UserServiceTest extends UserServiceFixture {
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.name()).isEqualTo(사용자.findName());
             softAssertions.assertThat(actual.profileImageStoreName()).isEqualTo(사용자.getProfileImage().getStoreName());
-            softAssertions.assertThat(actual.reliability()).isEqualTo(사용자.getReliability().getValue());
+            softAssertions.assertThat(actual.reliability()).isEqualTo(사용자.findReliability());
         });
     }
 

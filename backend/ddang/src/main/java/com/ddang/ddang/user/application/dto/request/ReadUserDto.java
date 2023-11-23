@@ -6,7 +6,7 @@ public record ReadUserDto(
         Long id,
         String name,
         String profileImageStoreName,
-        double reliability,
+        Float reliability,
         String oauthId,
         boolean isDeleted
 ) {
@@ -16,7 +16,7 @@ public record ReadUserDto(
                 user.getId(),
                 user.findName(),
                 user.getProfileImageStoreName(),
-                user.getReliability().getValue(),
+                user.findReliability(),
                 user.getOauthInformation().getOauthId(),
                 user.isDeleted()
         );

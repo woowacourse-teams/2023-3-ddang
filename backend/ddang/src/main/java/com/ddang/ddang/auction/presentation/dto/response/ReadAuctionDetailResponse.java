@@ -3,7 +3,6 @@ package com.ddang.ddang.auction.presentation.dto.response;
 import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
 import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
-import com.ddang.ddang.user.presentation.util.ReliabilityProcessor;
 
 public record ReadAuctionDetailResponse(
         AuctionDetailResponse auction,
@@ -51,7 +50,7 @@ public record ReadAuctionDetailResponse(
                     auctionDto.sellerId(),
                     imageRelativeUrl + auctionDto.sellerProfileStoreName(),
                     auctionDto.sellerName(),
-                    ReliabilityProcessor.process(auctionDto.sellerReliability())
+                    auctionDto.sellerReliability()
             );
         }
     }

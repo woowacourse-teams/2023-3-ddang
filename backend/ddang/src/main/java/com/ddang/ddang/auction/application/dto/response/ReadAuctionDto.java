@@ -25,7 +25,7 @@ public record ReadAuctionDto(
         Long sellerId,
         String sellerProfileStoreName,
         String sellerName,
-        double sellerReliability,
+        Float sellerReliability,
         boolean isSellerDeleted,
         AuctionStatus auctionStatus,
         Long lastBidderId
@@ -50,7 +50,7 @@ public record ReadAuctionDto(
                 auction.getSeller().getId(),
                 auction.getSeller().getProfileImageStoreName(),
                 auction.getSeller().findName(),
-                auction.getSeller().getReliability().getValue(),
+                auction.getSeller().findReliability(),
                 auction.getSeller().isDeleted(),
                 auction.findAuctionStatus(targetTime),
                 convertLastBidderId(auction)

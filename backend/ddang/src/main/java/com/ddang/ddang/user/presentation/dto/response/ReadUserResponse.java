@@ -1,7 +1,6 @@
 package com.ddang.ddang.user.presentation.dto.response;
 
 import com.ddang.ddang.user.application.dto.request.ReadUserDto;
-import com.ddang.ddang.user.presentation.util.ReliabilityProcessor;
 
 public record ReadUserResponse(String name, String profileImage, Float reliability) {
 
@@ -9,7 +8,7 @@ public record ReadUserResponse(String name, String profileImage, Float reliabili
         return new ReadUserResponse(
                 readUserDto.name(),
                 imageRelativeUrl + readUserDto.profileImageStoreName(),
-                ReliabilityProcessor.process(readUserDto.reliability())
+                readUserDto.reliability()
         );
     }
 }
