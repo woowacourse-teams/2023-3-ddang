@@ -6,7 +6,7 @@ import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgum
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
-import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.request.CreateDeviceTokenDto;
 import com.ddang.ddang.device.presentation.fixture.DeviceTokenControllerFixture;
 import com.ddang.ddang.exception.GlobalExceptionHandler;
 import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
@@ -71,7 +71,7 @@ class DeviceTokenControllerTest extends DeviceTokenControllerFixture {
     void 디바이스_토큰을_저장_또는_갱신한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효한_사용자_ID_클레임));
-        doNothing().when(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
+        doNothing().when(deviceTokenService).persist(anyLong(), any(CreateDeviceTokenDto.class));
 
         // when & then
         final ResultActions resultActions =
@@ -91,7 +91,7 @@ class DeviceTokenControllerTest extends DeviceTokenControllerFixture {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(유효하지_않은_사용자_ID_클레임));
         willThrow(new UserNotFoundException("해당 사용자를 찾을 수 없습니다."))
-                .given(deviceTokenService).persist(anyLong(), any(PersistDeviceTokenDto.class));
+                .given(deviceTokenService).persist(anyLong(), any(CreateDeviceTokenDto.class));
 
         // when & then
         mockMvc.perform(patch("/device-token")

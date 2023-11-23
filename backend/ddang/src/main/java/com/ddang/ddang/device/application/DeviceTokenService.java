@@ -1,6 +1,6 @@
 package com.ddang.ddang.device.application;
 
-import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.request.CreateDeviceTokenDto;
 import com.ddang.ddang.device.domain.DeviceToken;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.user.domain.User;
@@ -18,7 +18,7 @@ public class DeviceTokenService {
     private final UserRepository userRepository;
 
     @Transactional
-    public void persist(final Long userId, final PersistDeviceTokenDto deviceTokenDto) {
+    public void persist(final Long userId, final CreateDeviceTokenDto deviceTokenDto) {
         final String newDeviceTokenValue = deviceTokenDto.deviceToken();
 
         if (newDeviceTokenValue == null || newDeviceTokenValue.isBlank()) {

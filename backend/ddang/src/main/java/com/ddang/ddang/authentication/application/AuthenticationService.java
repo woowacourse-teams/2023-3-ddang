@@ -16,7 +16,7 @@ import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
 import com.ddang.ddang.authentication.infrastructure.oauth2.Oauth2Type;
 import com.ddang.ddang.device.application.DeviceTokenService;
-import com.ddang.ddang.device.application.dto.PersistDeviceTokenDto;
+import com.ddang.ddang.device.application.dto.request.CreateDeviceTokenDto;
 import com.ddang.ddang.device.domain.repository.DeviceTokenRepository;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
@@ -80,9 +80,9 @@ public class AuthenticationService {
     }
 
     private void updateOrPersistDeviceToken(final String deviceToken, final User persistUser) {
-        final PersistDeviceTokenDto persistDeviceTokenDto = new PersistDeviceTokenDto(deviceToken);
+        final CreateDeviceTokenDto createDeviceTokenDto = new CreateDeviceTokenDto(deviceToken);
 
-        deviceTokenService.persist(persistUser.getId(), persistDeviceTokenDto);
+        deviceTokenService.persist(persistUser.getId(), createDeviceTokenDto);
     }
 
     private String calculateRandomNumber() {
