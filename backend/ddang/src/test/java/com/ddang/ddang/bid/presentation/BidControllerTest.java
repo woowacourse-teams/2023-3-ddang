@@ -24,7 +24,7 @@ import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.configuration.AuthenticationStore;
 import com.ddang.ddang.bid.application.dto.request.CreateBidDto;
 import com.ddang.ddang.bid.application.exception.InvalidAuctionToBidException;
 import com.ddang.ddang.bid.application.exception.InvalidBidPriceException;

@@ -5,7 +5,7 @@ import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
+import com.ddang.ddang.authentication.configuration.AuthenticationStore;
 import com.ddang.ddang.device.application.dto.request.CreateDeviceTokenDto;
 import com.ddang.ddang.device.presentation.fixture.DeviceTokenControllerFixture;
 import com.ddang.ddang.exception.GlobalExceptionHandler;

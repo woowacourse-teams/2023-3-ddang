@@ -1,5 +1,6 @@
-package com.ddang.ddang.authentication.domain.dto;
+package com.ddang.ddang.authentication.configuration;
 
+import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import org.springframework.stereotype.Component;
 
 @Component

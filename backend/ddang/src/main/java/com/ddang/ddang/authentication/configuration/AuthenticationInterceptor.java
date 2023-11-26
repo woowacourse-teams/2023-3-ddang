@@ -5,7 +5,6 @@ import com.ddang.ddang.authentication.application.BlackListTokenService;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import jakarta.servlet.http.HttpServletRequest;

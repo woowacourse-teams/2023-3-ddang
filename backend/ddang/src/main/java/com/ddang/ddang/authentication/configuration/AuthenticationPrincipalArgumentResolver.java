@@ -1,7 +1,6 @@
 package com.ddang.ddang.authentication.configuration;
 
 import com.ddang.ddang.authentication.configuration.exception.UserUnauthorizedException;
-import com.ddang.ddang.authentication.domain.dto.AuthenticationStore;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
