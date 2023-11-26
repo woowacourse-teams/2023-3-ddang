@@ -3,15 +3,15 @@ package com.ddang.ddang.auction.presentation;
 import com.ddang.ddang.auction.application.AuctionService;
 import com.ddang.ddang.auction.application.dto.request.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.response.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.dto.ReadChatRoomDto;
+import com.ddang.ddang.auction.application.dto.response.ReadSingleAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
+import com.ddang.ddang.chat.application.dto.response.ReadChatRoomDto;
 import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.auction.presentation.dto.response.CreateAuctionResponse;
-import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionDetailResponse;
-import com.ddang.ddang.auction.presentation.dto.response.ReadAuctionsResponse;
+import com.ddang.ddang.auction.presentation.dto.response.ReadSingleAuctionResponse;
+import com.ddang.ddang.auction.presentation.dto.response.ReadMultipleAuctionResponse;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.ChatRoomService;
@@ -62,14 +62,14 @@ public class AuctionController {
     }
 
     @GetMapping("/{auctionId}")
-    public ResponseEntity<ReadAuctionDetailResponse> read(
+    public ResponseEntity<ReadSingleAuctionResponse> read(
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @PathVariable final Long auctionId
     ) {
-        final ReadAuctionDto readAuctionDto = auctionService.readByAuctionId(auctionId);
+        final ReadSingleAuctionDto readSingleAuctionDto = auctionService.readByAuctionId(auctionId);
         final ReadChatRoomDto readChatRoomDto = chatRoomService.readChatInfoByAuctionId(auctionId, userInfo);
-        final ReadAuctionDetailResponse response = ReadAuctionDetailResponse.of(
-                readAuctionDto,
+        final ReadSingleAuctionResponse response = ReadSingleAuctionResponse.of(
+                readSingleAuctionDto,
                 userInfo,
                 readChatRoomDto,
                 urlFinder.find(ImageTargetType.PROFILE_IMAGE),
@@ -80,17 +80,17 @@ public class AuctionController {
     }
 
     @GetMapping
-    public ResponseEntity<ReadAuctionsResponse> readAllByCondition(
+    public ResponseEntity<ReadMultipleAuctionResponse> readAllByCondition(
             @AuthenticateUser final AuthenticationUserInfo ignored,
             @DescendingSort final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByCondition(
+        final ReadMultipleAuctionDto readMultipleAuctionDto = auctionService.readAllByCondition(
                 pageable,
                 readAuctionSearchCondition
         );
-        final ReadAuctionsResponse response = ReadAuctionsResponse.of(
-                readAuctionsDto,
+        final ReadMultipleAuctionResponse response = ReadMultipleAuctionResponse.of(
+                readMultipleAuctionDto,
                 urlFinder.find(ImageTargetType.AUCTION_IMAGE)
         );
 

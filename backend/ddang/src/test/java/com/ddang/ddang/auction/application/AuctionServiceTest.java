@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.auction.application.dto.response.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadSingleAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.application.fixture.AuctionServiceFixture;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
@@ -82,7 +82,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
     @Test
     void 지정한_아이디에_해당하는_경매를_조회한다() {
         // when
-        final ReadAuctionDto actual = auctionService.readByAuctionId(구매자가_입찰한_경매1.getId());
+        final ReadSingleAuctionDto actual = auctionService.readByAuctionId(구매자가_입찰한_경매1.getId());
 
         // then
         assertThat(actual.id()).isEqualTo(구매자가_입찰한_경매1.getId());
@@ -98,14 +98,14 @@ class AuctionServiceTest extends AuctionServiceFixture {
     @Test
     void 첫번째_페이지의_경매_목록을_조회한다() {
         // when
-        final ReadAuctionsDto actual = auctionService.readAllByCondition(
+        final ReadMultipleAuctionDto actual = auctionService.readAllByCondition(
                 PageRequest.of(0, 1, Sort.by(Order.desc("id"))),
                 new ReadAuctionSearchCondition(null)
         );
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            final List<ReadAuctionDto> actualReadAuctionDtos = actual.readAuctionDtos();
+            final List<ReadMultipleAuctionDto.ReadAuctionDto> actualReadAuctionDtos = actual.readAuctionDtos();
             softAssertions.assertThat(actualReadAuctionDtos).hasSize(1);
             softAssertions.assertThat(actualReadAuctionDtos.get(0).title()).isEqualTo(구매자가_입찰한_경매2.getTitle());
         });
@@ -150,7 +150,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
         final PageRequest pageRequest = PageRequest.of(0, 3);
 
         // when
-        final ReadAuctionsDto actual = auctionService.readAllByUserId(판매자.getId(), pageRequest);
+        final ReadMultipleAuctionDto actual = auctionService.readAllByUserId(판매자.getId(), pageRequest);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -164,7 +164,7 @@ class AuctionServiceTest extends AuctionServiceFixture {
     @Test
     void 회원이_참여한_경매_목록을_조회한다() {
         final PageRequest pageRequest = PageRequest.of(0, 3);
-        final ReadAuctionsDto actual = auctionService.readAllByBidderId(구매자.getId(), pageRequest);
+        final ReadMultipleAuctionDto actual = auctionService.readAllByBidderId(구매자.getId(), pageRequest);
 
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual.readAuctionDtos()).hasSize(2);

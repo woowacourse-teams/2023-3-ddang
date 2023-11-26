@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.dto.request.CreateChatRoomDto;
+import com.ddang.ddang.chat.application.dto.response.ReadChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
@@ -107,18 +108,18 @@ public class ChatRoomService {
         }
     }
 
-    public com.ddang.ddang.auction.application.dto.ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
+    public ReadChatRoomDto readChatInfoByAuctionId(final Long auctionId, final AuthenticationUserInfo userInfo) {
         return userRepository.findById(userInfo.userId())
                 .map(findUser -> convertReadChatRoomDto(auctionId, findUser))
-                .orElse(com.ddang.ddang.auction.application.dto.ReadChatRoomDto.CANNOT_CHAT_DTO);
+                .orElse(ReadChatRoomDto.CANNOT_CHAT_DTO);
     }
 
-    private com.ddang.ddang.auction.application.dto.ReadChatRoomDto convertReadChatRoomDto(final Long auctionId, final User findUser) {
+    private ReadChatRoomDto convertReadChatRoomDto(final Long auctionId, final User findUser) {
         final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(auctionId);
         final Long chatRoomId = chatRoomRepository.findChatRoomIdByAuctionId(findAuction.getId())
                                                   .orElse(DEFAULT_CHAT_ROOM_ID);
 
-        return new com.ddang.ddang.auction.application.dto.ReadChatRoomDto(chatRoomId, isChatParticipant(findAuction, findUser));
+        return new ReadChatRoomDto(chatRoomId, isChatParticipant(findAuction, findUser));
     }
 
     private boolean isChatParticipant(final Auction findAuction, final User findUser) {

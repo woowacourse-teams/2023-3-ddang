@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ReadReviewDetailResponseTest {
+class ReadReviewResponseTest {
 
     @Test
     void dto의_필드가_null일_때_response의_필드도_null이다() {

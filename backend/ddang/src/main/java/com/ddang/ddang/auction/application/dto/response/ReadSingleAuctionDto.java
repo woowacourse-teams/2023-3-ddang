@@ -2,12 +2,12 @@ package com.ddang.ddang.auction.application.dto.response;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.AuctionStatus;
-import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.image.domain.AuctionImage;
+import com.ddang.ddang.user.domain.User;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ReadAuctionDto(
+public record ReadSingleAuctionDto(
         Long id,
         String title,
         String description,
@@ -17,7 +17,7 @@ public record ReadAuctionDto(
         boolean deleted,
         LocalDateTime registerTime,
         LocalDateTime closingTime,
-        List<ReadRegionsDto> auctionRegions,
+        List<ReadFullDirectRegionDto> auctionRegions,
         List<String> auctionImageStoreNames,
         int auctioneerCount,
         String mainCategory,
@@ -31,14 +31,14 @@ public record ReadAuctionDto(
         Long lastBidderId
 ) {
 
-    public static ReadAuctionDto of(final Auction auction, final LocalDateTime targetTime) {
-        return new ReadAuctionDto(
+    public static ReadSingleAuctionDto of(final Auction auction, final LocalDateTime targetTime) {
+        return new ReadSingleAuctionDto(
                 auction.getId(),
                 auction.getTitle(),
                 auction.getDescription(),
                 auction.getBidUnit().getValue(),
                 auction.getStartPrice().getValue(),
-                convertPrice(auction.getLastBid()),
+                auction.findLastBid().map(lastBid -> lastBid.getPrice().getValue()).orElse(null),
                 auction.isDeleted(),
                 auction.getCreatedTime(),
                 auction.getClosingTime(),
@@ -53,7 +53,7 @@ public record ReadAuctionDto(
                 auction.getSeller().findReliability(),
                 auction.getSeller().isDeleted(),
                 auction.findAuctionStatus(targetTime),
-                convertLastBidderId(auction)
+                auction.findLastBidder().map(User::getId).orElse(null)
         );
     }
 
@@ -64,27 +64,10 @@ public record ReadAuctionDto(
                       .toList();
     }
 
-    private static Integer convertPrice(final Bid bid) {
-        if (bid == null) {
-            return null;
-        }
-
-        return bid.getPrice()
-                  .getValue();
-    }
-
-    private static List<ReadRegionsDto> convertReadRegionsDto(final Auction auction) {
+    private static List<ReadFullDirectRegionDto> convertReadRegionsDto(final Auction auction) {
         return auction.getAuctionRegions()
                       .stream()
-                      .map(ReadRegionsDto::from)
+                      .map(ReadFullDirectRegionDto::from)
                       .toList();
-    }
-
-    private static Long convertLastBidderId(final Auction auction) {
-        if (auction.getLastBid() == null) {
-            return null;
-        }
-
-        return auction.getLastBid().getBidder().getId();
     }
 }

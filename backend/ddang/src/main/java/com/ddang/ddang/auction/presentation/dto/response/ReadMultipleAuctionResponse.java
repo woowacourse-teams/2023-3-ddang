@@ -1,22 +1,21 @@
 package com.ddang.ddang.auction.presentation.dto.response;
 
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
 import java.util.List;
 
-public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean isLast) {
+public record ReadMultipleAuctionResponse(List<ReadAuctionResponse> auctions, boolean isLast) {
 
-    public static ReadAuctionsResponse of(
-            final ReadAuctionsDto readAuctionsDto,
+    public static ReadMultipleAuctionResponse of(
+            final ReadMultipleAuctionDto readMultipleAuctionDto,
             final String imageRelativeUrl
     ) {
         final List<ReadAuctionResponse> readAuctionResponses =
-                readAuctionsDto.readAuctionDtos()
-                               .stream()
-                               .map(dto -> ReadAuctionResponse.of(dto, imageRelativeUrl))
-                               .toList();
+                readMultipleAuctionDto.readAuctionDtos()
+                                      .stream()
+                                      .map(dto -> ReadAuctionResponse.of(dto, imageRelativeUrl))
+                                      .toList();
 
-        return new ReadAuctionsResponse(readAuctionResponses, readAuctionsDto.isLast());
+        return new ReadMultipleAuctionResponse(readAuctionResponses, readMultipleAuctionDto.isLast());
     }
 
     public record ReadAuctionResponse(
@@ -27,11 +26,11 @@ public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean i
             String status,
             int auctioneerCount
     ) {
-        private static ReadAuctionResponse of(final ReadAuctionDto dto, final String imageRelativeUrl) {
+        private static ReadAuctionResponse of(final ReadMultipleAuctionDto.ReadAuctionDto dto, final String imageRelativeUrl) {
             return new ReadAuctionResponse(
                     dto.id(),
                     dto.title(),
-                    imageRelativeUrl + dto.auctionImageStoreNames().get(0),
+                    imageRelativeUrl + dto.auctionThumbnailImageStoreName(),
                     processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                     dto.auctionStatus().name(),
                     dto.auctioneerCount()

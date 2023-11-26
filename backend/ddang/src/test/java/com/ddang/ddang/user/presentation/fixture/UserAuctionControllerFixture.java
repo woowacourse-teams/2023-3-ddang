@@ -1,12 +1,11 @@
 package com.ddang.ddang.user.presentation.fixture;
 
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
-import com.ddang.ddang.auction.application.dto.response.ReadRegionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadFullDirectRegionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadFullDirectRegionDto.ReadDirectRegionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
 import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
-import com.ddang.ddang.region.domain.AuctionRegion;
 import com.ddang.ddang.region.domain.Region;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,10 +20,10 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
     protected String 페이지_크기 = "10";
     protected String 페이지 = "1";
 
-    protected ReadAuctionDto 경매_정보_dto1;
-    protected ReadAuctionDto 경매_정보_dto2;
-    protected ReadAuctionsDto 사용자의_경매들_정보_dto;
-    protected ReadAuctionsDto 사용자가_참여한_경매들_정보_dto;
+    protected ReadMultipleAuctionDto.ReadAuctionDto 경매_정보_dto1;
+    protected ReadMultipleAuctionDto.ReadAuctionDto 경매_정보_dto2;
+    protected ReadMultipleAuctionDto 사용자의_경매들_정보_dto;
+    protected ReadMultipleAuctionDto 사용자가_참여한_경매들_정보_dto;
 
     @BeforeEach
     void fixtureSetUp() {
@@ -40,9 +39,7 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
         강서구.addThirdRegion(역삼동);
         서울특별시.addSecondRegion(강서구);
 
-        final ReadRegionsDto 직거래_지역_정보_dto = ReadRegionsDto.from(new AuctionRegion(역삼동));
-
-        경매_정보_dto1 = new ReadAuctionDto(
+        경매_정보_dto1 = new ReadMultipleAuctionDto.ReadAuctionDto(
                 1L,
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -52,8 +49,14 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
                 false,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                List.of(직거래_지역_정보_dto),
-                List.of("store-name.png"),
+                List.of(
+                        new ReadFullDirectRegionDto(
+                                new ReadDirectRegionDto(서울특별시.getId(), 서울특별시.getName()),
+                                new ReadDirectRegionDto(강서구.getId(), 강서구.getName()),
+                                new ReadDirectRegionDto(역삼동.getId(), 역삼동.getName())
+                        )
+                ),
+                "store-name.png",
                 2,
                 "main1",
                 "sub1",
@@ -66,7 +69,7 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
                 null
         );
 
-        경매_정보_dto2 = new ReadAuctionDto(
+        경매_정보_dto2 = new ReadMultipleAuctionDto.ReadAuctionDto(
                 2L,
                 "경매 상품 2",
                 "이것은 경매 상품 2 입니다.",
@@ -76,8 +79,14 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
                 false,
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                List.of(직거래_지역_정보_dto),
-                List.of("store-name.png"),
+                List.of(
+                        new ReadFullDirectRegionDto(
+                                new ReadDirectRegionDto(서울특별시.getId(), 서울특별시.getName()),
+                                new ReadDirectRegionDto(강서구.getId(), 강서구.getName()),
+                                new ReadDirectRegionDto(역삼동.getId(), 역삼동.getName())
+                        )
+                ),
+                "store-name.png",
                 2,
                 "main2",
                 "sub2",
@@ -90,7 +99,7 @@ public class UserAuctionControllerFixture extends CommonControllerSliceTest {
                 null
         );
 
-        사용자의_경매들_정보_dto = new ReadAuctionsDto(List.of(경매_정보_dto2, 경매_정보_dto1), true);
-        사용자가_참여한_경매들_정보_dto = new ReadAuctionsDto(List.of(경매_정보_dto2, 경매_정보_dto1), true);
+        사용자의_경매들_정보_dto = new ReadMultipleAuctionDto(List.of(경매_정보_dto2, 경매_정보_dto1), true);
+        사용자가_참여한_경매들_정보_dto = new ReadMultipleAuctionDto(List.of(경매_정보_dto2, 경매_정보_dto1), true);
     }
 }

@@ -2,8 +2,8 @@ package com.ddang.ddang.auction.application;
 
 import com.ddang.ddang.auction.application.dto.request.CreateAuctionDto;
 import com.ddang.ddang.auction.application.dto.response.CreateInfoAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadSingleAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
@@ -69,13 +69,13 @@ public class AuctionService {
         }
     }
 
-    public ReadAuctionDto readByAuctionId(final Long auctionId) {
+    public ReadSingleAuctionDto readByAuctionId(final Long auctionId) {
         final Auction findAuction = auctionRepository.getTotalAuctionByIdOrThrow(auctionId);
 
-        return ReadAuctionDto.of(findAuction, LocalDateTime.now());
+        return ReadSingleAuctionDto.of(findAuction, LocalDateTime.now());
     }
 
-    public ReadAuctionsDto readAllByCondition(
+    public ReadMultipleAuctionDto readAllByCondition(
             final Pageable pageable,
             final ReadAuctionSearchCondition readAuctionSearchCondition) {
         final Slice<Auction> auctions = auctionRepository.findAuctionsAllByCondition(
@@ -83,19 +83,19 @@ public class AuctionService {
                 pageable
         );
 
-        return ReadAuctionsDto.of(auctions, LocalDateTime.now());
+        return ReadMultipleAuctionDto.of(auctions, LocalDateTime.now());
     }
 
-    public ReadAuctionsDto readAllByUserId(final Long userId, final Pageable pageable) {
+    public ReadMultipleAuctionDto readAllByUserId(final Long userId, final Pageable pageable) {
         final Slice<Auction> auctions = auctionRepository.findAuctionsAllByUserId(userId, pageable);
 
-        return ReadAuctionsDto.of(auctions, LocalDateTime.now());
+        return ReadMultipleAuctionDto.of(auctions, LocalDateTime.now());
     }
 
-    public ReadAuctionsDto readAllByBidderId(final Long userId, final Pageable pageable) {
+    public ReadMultipleAuctionDto readAllByBidderId(final Long userId, final Pageable pageable) {
         final Slice<Auction> auctions = auctionRepository.findAuctionsAllByBidderId(userId, pageable);
 
-        return ReadAuctionsDto.of(auctions, LocalDateTime.now());
+        return ReadMultipleAuctionDto.of(auctions, LocalDateTime.now());
     }
 
     @Transactional

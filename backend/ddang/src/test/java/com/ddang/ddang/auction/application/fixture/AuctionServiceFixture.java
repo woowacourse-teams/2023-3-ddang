@@ -8,6 +8,7 @@ import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.image.domain.dto.StoreImageDto;
 import com.ddang.ddang.region.domain.AuctionRegion;
@@ -224,6 +225,10 @@ public class AuctionServiceFixture {
         구매자가_입찰한_경매2.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         종료되는_날이_3일_뒤인_경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
         종료된_경매.addAuctionRegions(List.of(new AuctionRegion(역삼동)));
+        구매자가_입찰한_경매1.addAuctionImages(List.of(new AuctionImage("upload.png", "store.png")));
+        구매자가_입찰한_경매2.addAuctionImages(List.of(new AuctionImage("upload.png", "store.png")));
+        종료되는_날이_3일_뒤인_경매.addAuctionImages(List.of(new AuctionImage("upload.png", "store.png")));
+        종료된_경매.addAuctionImages(List.of(new AuctionImage("upload.png", "store.png")));
 
         auctionRepository.save(구매자가_입찰한_경매1);
         auctionRepository.save(구매자가_입찰한_경매2);

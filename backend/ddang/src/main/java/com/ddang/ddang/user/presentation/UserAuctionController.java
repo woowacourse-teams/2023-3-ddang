@@ -1,7 +1,7 @@
 package com.ddang.ddang.user.presentation;
 
 import com.ddang.ddang.auction.application.AuctionService;
-import com.ddang.ddang.auction.application.dto.response.ReadAuctionsDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
 import com.ddang.ddang.auction.configuration.DescendingSort;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
@@ -28,9 +28,9 @@ public class UserAuctionController {
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @DescendingSort final Pageable pageable
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByUserId(userInfo.userId(), pageable);
+        final ReadMultipleAuctionDto readMultipleAuctionDto = auctionService.readAllByUserId(userInfo.userId(), pageable);
         final ReadAuctionsResponse response = ReadAuctionsResponse.of(
-                readAuctionsDto,
+                readMultipleAuctionDto,
                 urlFinder.find(ImageTargetType.AUCTION_IMAGE)
         );
 
@@ -42,9 +42,9 @@ public class UserAuctionController {
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @DescendingSort final Pageable pageable
     ) {
-        final ReadAuctionsDto readAuctionsDto = auctionService.readAllByBidderId(userInfo.userId(), pageable);
+        final ReadMultipleAuctionDto readMultipleAuctionDto = auctionService.readAllByBidderId(userInfo.userId(), pageable);
         final ReadAuctionsResponse response = ReadAuctionsResponse.of(
-                readAuctionsDto,
+                readMultipleAuctionDto,
                 urlFinder.find(ImageTargetType.AUCTION_IMAGE)
         );
 

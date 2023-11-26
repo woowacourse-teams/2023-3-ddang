@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.domain.exception.WinnerNotFoundException;
+import com.ddang.ddang.chat.application.dto.response.ReadChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
@@ -178,7 +179,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방_정보를_조회할_때_조회한_사람이_해당_채팅방_참여자라면_채팅방_아이디와_참여가능여부_참을_반환한다() {
         // when
-        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 엔초_회원_정보);
+        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 엔초_회원_정보);
 
         // then
         assertThat(actual).isEqualTo(엔초_지토_채팅방_정보_및_참여_가능);
@@ -187,7 +188,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방_정보를_조회할_때_조회한_사람이_해당_채팅방_참여자가_아니라면_채팅방_아이디와_참여가능여부_거짓을_반환한다() {
         // when
-        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual =
+        final ReadChatRoomDto actual =
                 chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 경매에_참여한_적_없는_사용자_정보);
 
         // then
@@ -197,7 +198,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_조회를_요청한_사용자_정보를_찾을_수_없다면_무조건_채팅방_아이디_null과_참여가능여부_거짓을_반환한다() {
         // when
-        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 존재하지_않는_사용자_정보);
+        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(판매자_엔초_구매자_지토_경매.getId(), 존재하지_않는_사용자_정보);
 
         // then
         assertThat(actual).isEqualTo(채팅방_없고_참여_불가능);
@@ -213,7 +214,7 @@ class ChatRoomServiceTest extends ChatRoomServiceFixture {
     @Test
     void 지정한_경매_아이디와_관련된_채팅방을_조회할_때_채팅방을_찾을_수_없다면_채팅방_아이디_null과_참여가능을_반환한다() {
         // when
-        final com.ddang.ddang.auction.application.dto.ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(채팅방이_없는_경매.getId(), 판매자_회원_정보);
+        final ReadChatRoomDto actual = chatRoomService.readChatInfoByAuctionId(채팅방이_없는_경매.getId(), 판매자_회원_정보);
 
         // then
         assertThat(actual).isEqualTo(채팅방은_아직_없지만_참여_가능);
