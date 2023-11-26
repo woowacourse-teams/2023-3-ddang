@@ -6,11 +6,11 @@ import com.ddang.ddang.authentication.application.dto.response.LoginUserInfoDto;
 import com.ddang.ddang.authentication.application.dto.response.TokenDto;
 import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalException;
 import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
-import com.ddang.ddang.authentication.application.util.RandomNameGenerator;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.authentication.domain.UserNameGenerator;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.authentication.infrastructure.oauth2.OAuth2UserInformationProvider;
@@ -43,6 +43,7 @@ public class AuthenticationService {
     private final TokenDecoder tokenDecoder;
     private final BlackListTokenService blackListTokenService;
     private final DeviceTokenRepository deviceTokenRepository;
+    private final UserNameGenerator generator;
 
     @Transactional
     public LoginInfoDto login(
@@ -70,7 +71,7 @@ public class AuthenticationService {
 
     private User persistUser(final String socialId, final Oauth2Type oauth2Type) {
         final User user = User.builder()
-                              .name(oauth2Type.calculateNickname(calculateRandomNumber()))
+                              .name(oauth2Type.calculateNickname(generator.generate()))
                               .reliability(Reliability.INITIAL_RELIABILITY)
                               .oauthId(socialId)
                               .oauth2Type(oauth2Type)
@@ -83,20 +84,6 @@ public class AuthenticationService {
         final CreateDeviceTokenDto createDeviceTokenDto = new CreateDeviceTokenDto(deviceToken);
 
         deviceTokenService.persist(persistUser.getId(), createDeviceTokenDto);
-    }
-
-    private String calculateRandomNumber() {
-        String name = RandomNameGenerator.generate();
-
-        while (isAlreadyExist(name)) {
-            name = RandomNameGenerator.generate();
-        }
-
-        return name;
-    }
-
-    private boolean isAlreadyExist(final String name) {
-        return userRepository.existsByNameEndingWith(name);
     }
 
     private TokenDto convertTokenDto(final LoginUserInfoDto signInUserInfo) {

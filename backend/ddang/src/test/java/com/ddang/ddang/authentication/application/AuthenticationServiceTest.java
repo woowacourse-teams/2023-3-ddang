@@ -12,6 +12,7 @@ import com.ddang.ddang.authentication.application.exception.InvalidWithdrawalExc
 import com.ddang.ddang.authentication.application.exception.WithdrawalNotAllowedException;
 import com.ddang.ddang.authentication.application.fixture.AuthenticationServiceFixture;
 import com.ddang.ddang.authentication.domain.Oauth2UserInformationProviderComposite;
+import com.ddang.ddang.authentication.domain.RandomUuidUserNameGenerator;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenEncoder;
 import com.ddang.ddang.authentication.domain.exception.InvalidTokenException;
@@ -72,7 +73,8 @@ class AuthenticationServiceTest extends AuthenticationServiceFixture {
                 tokenEncoder,
                 tokenDecoder,
                 blackListTokenService,
-                deviceTokenRepository
+                deviceTokenRepository,
+                new RandomUuidUserNameGenerator()
         );
     }
 
