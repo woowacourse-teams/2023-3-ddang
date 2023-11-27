@@ -3,14 +3,19 @@ package com.ddang.ddang.report.presentation.fixture;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.ddang.ddang.report.application.dto.response.ReadAnswerReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadAnswerReportDto.ReportedAnswerInfoDto;
+import com.ddang.ddang.report.application.dto.response.ReadAnswerReportDto.ReportedAnswerInfoDto.AnswererInfoDto;
 import com.ddang.ddang.report.application.dto.response.ReadAuctionReportDto;
-import com.ddang.ddang.report.application.dto.response.ReadAuctionReportDto.ReadReportTargetAuctionInfoDto;
-import com.ddang.ddang.report.application.dto.response.ReadAuctionReportDto.ReadReportTargetAuctionInfoDto.ReadSellerInfoDto;
-import com.ddang.ddang.report.application.dto.response.ReadAuctionReportDto.ReadReporterDto;
+import com.ddang.ddang.report.application.dto.response.ReadAuctionReportDto.ReportedAuctionInfoDto;
 import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto;
-import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto.ReadReportTargetChatRoomInfoDto;
-import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto.ReadReportTargetChatRoomInfoDto.ReadPartnerInfoDto;
+import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto.ReportedChatRoomInfoDto;
+import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto.ReportedChatRoomInfoDto.PartnerInfoDto;
+import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto.ReportedChatRoomInfoDto.SimpleAuctionInfoDto;
+import com.ddang.ddang.report.application.dto.response.ReadChatRoomReportDto.ReportedChatRoomInfoDto.SimpleAuctionInfoDto.SellerInfoDto;
 import com.ddang.ddang.report.application.dto.response.ReadQuestionReportDto;
+import com.ddang.ddang.report.application.dto.response.ReadQuestionReportDto.ReportedQuestionInfoDto;
+import com.ddang.ddang.report.application.dto.response.ReadQuestionReportDto.ReportedQuestionInfoDto.QuestionerInfoDto;
+import com.ddang.ddang.report.application.dto.response.ReadQuestionReportDto.ReporterInfoDto;
 import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
@@ -34,9 +39,9 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected CreateAuctionReportRequest 경매_아이디가_음수인_신고_request = new CreateAuctionReportRequest(-999L, "신고합니다");
     protected static CreateAuctionReportRequest 신고_내용이_null인_경매_신고_request = new CreateAuctionReportRequest(1L, null);
     protected static CreateAuctionReportRequest 신고_내용이_빈값인_경매_신고_request = new CreateAuctionReportRequest(1L, "");
-    private ReadReportTargetAuctionInfoDto 신고할_경매_정보_dto = new ReadReportTargetAuctionInfoDto(
+    private ReportedAuctionInfoDto 신고할_경매_정보_dto = new ReportedAuctionInfoDto(
             1L,
-            new ReadSellerInfoDto(1L, "판매자", "store-name.png", 4.0d, "12345", false),
+            new ReportedAuctionInfoDto.SellerInfoDto(1L, "판매자", "store-name.png", 4.0d, "12345", false),
             "제목",
             "설명",
             100,
@@ -47,11 +52,11 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
     protected ReadAuctionReportDto 경매_신고_dto1 = new ReadAuctionReportDto(
             1L,
-            new ReadReporterDto(2L, "회원1", "store-name.png", 5.0, false),
+            new ReadAuctionReportDto.ReporterInfoDto(2L, "회원1", "store-name.png", 5.0, false),
             LocalDateTime.now(),
-            new ReadReportTargetAuctionInfoDto(
+            new ReportedAuctionInfoDto(
                     1L,
-                    new ReadSellerInfoDto(1L, "판매자", "store-name.png", 4.0d, "12345", false),
+                    new ReportedAuctionInfoDto.SellerInfoDto(1L, "판매자", "store-name.png", 4.0d, "12345", false),
                     "제목",
                     "설명",
                     100,
@@ -64,14 +69,14 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
     protected ReadAuctionReportDto 경매_신고_dto2 = new ReadAuctionReportDto(
             2L,
-            new ReadReporterDto(3L, "회원2", "store-name.png", 5.0, false),
+            new ReadAuctionReportDto.ReporterInfoDto(3L, "회원2", "store-name.png", 5.0, false),
             LocalDateTime.now(),
             신고할_경매_정보_dto,
             "신고합니다."
     );
     protected ReadAuctionReportDto 경매_신고_dto3 = new ReadAuctionReportDto(
             3L,
-            new ReadReporterDto(4L, "회원3", "store-name.png", 5.0, false),
+            new ReadAuctionReportDto.ReporterInfoDto(4L, "회원3", "store-name.png", 5.0, false),
             LocalDateTime.now(),
             신고할_경매_정보_dto,
             "신고합니다."
@@ -85,13 +90,13 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected static CreateChatRoomReportRequest 신고_내용이_빈값인_채팅_신고_request = new CreateChatRoomReportRequest(-999L, "");
     protected ReadChatRoomReportDto 채팅방_신고_dto1 = new ReadChatRoomReportDto(
             2L,
-            new ReadChatRoomReportDto.ReadReporterDto(2L, "구매자1", "store-name.png", 4.0d, false),
+            new ReadChatRoomReportDto.ReporterInfoDto(2L, "구매자1", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadReportTargetChatRoomInfoDto(
+            new ReportedChatRoomInfoDto(
                     1L,
-                    new ReadReportTargetChatRoomInfoDto.ReadReportTargetAuctionInfoDto(
+                    new SimpleAuctionInfoDto(
                             1L,
-                            new ReadReportTargetChatRoomInfoDto.ReadReportTargetAuctionInfoDto.ReadSellerInfoDto(
+                            new SellerInfoDto(
                                     1L, "판매자", "store-name.png", 4.0d, "12345", false
                             ),
                             "제목",
@@ -102,20 +107,20 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
                             LocalDateTime.now().plusDays(2),
                             2
                     ),
-                    new ReadPartnerInfoDto(2L, "구매자1", "store-name.png", 4.0d, "12346", false)
+                    new PartnerInfoDto(2L, "구매자1", "store-name.png", 4.0d, "12346", false)
             ),
             "신고합니다."
     );
 
     protected ReadChatRoomReportDto 채팅방_신고_dto2 = new ReadChatRoomReportDto(
             2L,
-            new ReadChatRoomReportDto.ReadReporterDto(3L, "구매자2", "store-name.png", 4.0d, false),
+            new ReadChatRoomReportDto.ReporterInfoDto(3L, "구매자2", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadReportTargetChatRoomInfoDto(
+            new ReportedChatRoomInfoDto(
                     1L,
-                    new ReadReportTargetChatRoomInfoDto.ReadReportTargetAuctionInfoDto(
+                    new SimpleAuctionInfoDto(
                             2L,
-                            new ReadReportTargetChatRoomInfoDto.ReadReportTargetAuctionInfoDto.ReadSellerInfoDto(
+                            new SellerInfoDto(
                                     1L, "판매자", "store-name.png", 4.0d, "12345", false
                             ),
                             "제목",
@@ -126,19 +131,19 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
                             LocalDateTime.now().plusDays(2),
                             2
                     ),
-                    new ReadPartnerInfoDto(3L, "구매자2", "store-name.png", 4.0d, "12347", false)
+                    new PartnerInfoDto(3L, "구매자2", "store-name.png", 4.0d, "12347", false)
             ),
             "신고합니다."
     );
     protected ReadChatRoomReportDto 채팅방_신고_dto3 = new ReadChatRoomReportDto(
             3L,
-            new ReadChatRoomReportDto.ReadReporterDto(3L, "구매자2", "store-name.png", 4.0d, false),
+            new ReadChatRoomReportDto.ReporterInfoDto(3L, "구매자2", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadReportTargetChatRoomInfoDto(
+            new ReportedChatRoomInfoDto(
                     1L,
-                    new ReadReportTargetChatRoomInfoDto.ReadReportTargetAuctionInfoDto(
+                    new SimpleAuctionInfoDto(
                             3L,
-                            new ReadReportTargetChatRoomInfoDto.ReadReportTargetAuctionInfoDto.ReadSellerInfoDto(1L, "판매자", "store-name.png", 4.0d, "12345", false),
+                            new SellerInfoDto(1L, "판매자", "store-name.png", 4.0d, "12345", false),
                             "제목",
                             "설명",
                             100,
@@ -147,7 +152,7 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
                             LocalDateTime.now().plusDays(2),
                             2
                     ),
-                    new ReadReportTargetChatRoomInfoDto.ReadPartnerInfoDto(3L, "구매자2", "store-name.png", 4.0d, "12347", false)
+                    new PartnerInfoDto(3L, "구매자2", "store-name.png", 4.0d, "12347", false)
             ),
             "신고합니다."
     );
@@ -164,11 +169,11 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected static CreateQuestionReportRequest 신고_내용이_빈값인_질문_신고_request = new CreateQuestionReportRequest(1L, 1L, "");
     protected ReadQuestionReportDto 질문_신고_dto1 = new ReadQuestionReportDto(
             1L,
-            new ReadQuestionReportDto.ReadReporterDto(2L, "구매자1", "store-name.png", 4.0d, false),
+            new ReporterInfoDto(2L, "구매자1", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadQuestionReportDto.ReadReportTargetQuestionInfoDto(
+            new ReportedQuestionInfoDto(
                     1L,
-                    new ReadQuestionReportDto.ReadReportTargetQuestionInfoDto.ReadQuestionWriterInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
+                    new QuestionerInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
                     "질문드립니다.",
                     LocalDateTime.now()
             ),
@@ -176,22 +181,22 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
     protected ReadQuestionReportDto 질문_신고_dto2 = new ReadQuestionReportDto(
             2L,
-            new ReadQuestionReportDto.ReadReporterDto(2L, "구매자1", "store-name.png", 4.0d, false),
+            new ReporterInfoDto(2L, "구매자1", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadQuestionReportDto.ReadReportTargetQuestionInfoDto(
+            new ReportedQuestionInfoDto(
                     2L,
-                    new ReadQuestionReportDto.ReadReportTargetQuestionInfoDto.ReadQuestionWriterInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
+                    new QuestionerInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
                     "질문드립니다.",
                     LocalDateTime.now()
             ),
             "신고합니다.");
     protected ReadQuestionReportDto 질문_신고_dto3 = new ReadQuestionReportDto(
             3L,
-            new ReadQuestionReportDto.ReadReporterDto(2L, "구매자1", "store-name.png", 4.0d, false),
+            new ReporterInfoDto(2L, "구매자1", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadQuestionReportDto.ReadReportTargetQuestionInfoDto(
+            new ReportedQuestionInfoDto(
                     3L,
-                    new ReadQuestionReportDto.ReadReportTargetQuestionInfoDto.ReadQuestionWriterInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
+                    new QuestionerInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
                     "질문드립니다.",
                     LocalDateTime.now()
             ),
@@ -210,11 +215,11 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     protected static CreateAnswerReportRequest 신고_내용이_빈값인_답변_신고_request = new CreateAnswerReportRequest(1L, 1L, "");
     protected ReadAnswerReportDto 답변_신고_dto1 = new ReadAnswerReportDto(
             1L,
-            new ReadAnswerReportDto.ReadReporterDto(2L, "구매자1", "store-name.png", 4.0d, false),
+            new ReadAnswerReportDto.ReporterInfoDto(2L, "구매자1", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadAnswerReportDto.ReadReportTargetAnswerInfoDto(
+            new ReportedAnswerInfoDto(
                     1L,
-                    new ReadAnswerReportDto.ReadReportTargetAnswerInfoDto.ReadAnswerWriterInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
+                    new AnswererInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
                     "답변드립니다.",
                     LocalDateTime.now()
             ),
@@ -222,11 +227,11 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
     protected ReadAnswerReportDto 답변_신고_dto2 = new ReadAnswerReportDto(
             2L,
-            new ReadAnswerReportDto.ReadReporterDto(2L, "구매자1", "store-name.png", 4.0d, false),
+            new ReadAnswerReportDto.ReporterInfoDto(2L, "구매자1", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadAnswerReportDto.ReadReportTargetAnswerInfoDto(
+            new ReportedAnswerInfoDto(
                     2L,
-                    new ReadAnswerReportDto.ReadReportTargetAnswerInfoDto.ReadAnswerWriterInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
+                    new AnswererInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
                     "답변드립니다.",
                     LocalDateTime.now()
             ),
@@ -234,11 +239,11 @@ public class ReportControllerFixture extends CommonControllerSliceTest {
     );
     protected ReadAnswerReportDto 답변_신고_dto3 = new ReadAnswerReportDto(
             3L,
-            new ReadAnswerReportDto.ReadReporterDto(2L, "구매자1", "store-name.png", 4.0d, false),
+            new ReadAnswerReportDto.ReporterInfoDto(2L, "구매자1", "store-name.png", 4.0d, false),
             LocalDateTime.now(),
-            new ReadAnswerReportDto.ReadReportTargetAnswerInfoDto(
+            new ReportedAnswerInfoDto(
                     3L,
-                    new ReadAnswerReportDto.ReadReportTargetAnswerInfoDto.ReadAnswerWriterInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
+                    new AnswererInfoDto(1L, "사용자", "store-name.png", 5.0d, "12345", false),
                     "답변드립니다.",
                     LocalDateTime.now()
             ),

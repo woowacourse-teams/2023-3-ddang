@@ -7,23 +7,23 @@ import java.time.LocalDateTime;
 
 public record ReadAnswerReportDto(
         Long id,
-        ReadReporterDto reporterDto,
+        ReporterInfoDto reporterDto,
         LocalDateTime createdTime,
-        ReadReportTargetAnswerInfoDto answerDto,
+        ReportedAnswerInfoDto answerDto,
         String description
 ) {
 
     public static ReadAnswerReportDto from(final AnswerReport answerReport) {
         return new ReadAnswerReportDto(
                 answerReport.getId(),
-                ReadReporterDto.from(answerReport.getReporter()),
+                ReporterInfoDto.from(answerReport.getReporter()),
                 answerReport.getCreatedTime(),
-                ReadReportTargetAnswerInfoDto.from(answerReport.getAnswer()),
+                ReportedAnswerInfoDto.from(answerReport.getAnswer()),
                 answerReport.getDescription()
         );
     }
 
-    public record ReadReporterDto(
+    public record ReporterInfoDto(
             Long id,
             String name,
             String profileImageStoreName,
@@ -31,8 +31,8 @@ public record ReadAnswerReportDto(
             boolean isDeleted
     ) {
 
-        private static ReadReporterDto from(final User reporter) {
-            return new ReadReporterDto(
+        public static ReporterInfoDto from(final User reporter) {
+            return new ReporterInfoDto(
                     reporter.getId(),
                     reporter.findName(),
                     reporter.getProfileImageStoreName(),
@@ -42,23 +42,23 @@ public record ReadAnswerReportDto(
         }
     }
 
-    public record ReadReportTargetAnswerInfoDto(
+    public record ReportedAnswerInfoDto(
             Long id,
-            ReadAnswerWriterInfoDto userDto,
+            AnswererInfoDto userDto,
             String content,
             LocalDateTime createdTime
     ) {
 
-        private static ReadReportTargetAnswerInfoDto from(final Answer answer) {
-            return new ReadReportTargetAnswerInfoDto(
+        public static ReportedAnswerInfoDto from(final Answer answer) {
+            return new ReportedAnswerInfoDto(
                     answer.getId(),
-                    ReadAnswerWriterInfoDto.from(answer.getWriter()),
+                    AnswererInfoDto.from(answer.getWriter()),
                     answer.getContent(),
                     answer.getCreatedTime()
             );
         }
 
-        public record ReadAnswerWriterInfoDto(
+        public record AnswererInfoDto(
                 Long id,
                 String name,
                 String profileImageStoreName,
@@ -67,8 +67,8 @@ public record ReadAnswerReportDto(
                 boolean isSellerDeleted
         ) {
 
-            private static ReadAnswerWriterInfoDto from(final User user) {
-                return new ReadAnswerWriterInfoDto(
+            public static AnswererInfoDto from(final User user) {
+                return new AnswererInfoDto(
                         user.getId(),
                         user.findName(),
                         user.getProfileImageStoreName(),

@@ -7,23 +7,23 @@ import java.time.LocalDateTime;
 
 public record ReadAuctionReportDto(
         Long id,
-        ReadReporterDto reporterDto,
+        ReporterInfoDto reporterDto,
         LocalDateTime createdTime,
-        ReadReportTargetAuctionInfoDto auctionDto,
+        ReportedAuctionInfoDto auctionDto,
         String description
 ) {
 
     public static ReadAuctionReportDto from(final AuctionReport auctionReport) {
         return new ReadAuctionReportDto(
                 auctionReport.getId(),
-                ReadReporterDto.from(auctionReport.getReporter()),
+                ReporterInfoDto.from(auctionReport.getReporter()),
                 auctionReport.getCreatedTime(),
-                ReadReportTargetAuctionInfoDto.from(auctionReport.getAuction()),
+                ReportedAuctionInfoDto.from(auctionReport.getAuction()),
                 auctionReport.getDescription()
         );
     }
 
-    public record ReadReporterDto(
+    public record ReporterInfoDto(
             Long id,
             String name,
             String profileImageStoreName,
@@ -31,8 +31,8 @@ public record ReadAuctionReportDto(
             boolean isDeleted
     ) {
 
-        private static ReadReporterDto from(final User reporter) {
-            return new ReadReporterDto(
+        public static ReporterInfoDto from(final User reporter) {
+            return new ReporterInfoDto(
                     reporter.getId(),
                     reporter.findName(),
                     reporter.getProfileImageStoreName(),
@@ -42,9 +42,9 @@ public record ReadAuctionReportDto(
         }
     }
 
-    public record ReadReportTargetAuctionInfoDto(
+    public record ReportedAuctionInfoDto(
             Long id,
-            ReadSellerInfoDto seller,
+            SellerInfoDto seller,
             String title,
             String description,
             int bidUnit,
@@ -54,10 +54,10 @@ public record ReadAuctionReportDto(
             int auctioneerCount
     ) {
 
-        private static ReadReportTargetAuctionInfoDto from(final Auction auction) {
-            return new ReadReportTargetAuctionInfoDto(
+        public static ReportedAuctionInfoDto from(final Auction auction) {
+            return new ReportedAuctionInfoDto(
                     auction.getId(),
-                    ReadSellerInfoDto.from(auction.getSeller()),
+                    SellerInfoDto.from(auction.getSeller()),
                     auction.getTitle(),
                     auction.getDescription(),
                     auction.getBidUnit().getValue(),
@@ -68,7 +68,7 @@ public record ReadAuctionReportDto(
             );
         }
 
-        public record ReadSellerInfoDto(
+        public record SellerInfoDto(
                 Long id,
                 String name,
                 String profileImageStoreName,
@@ -77,8 +77,8 @@ public record ReadAuctionReportDto(
                 boolean isSellerDeleted
         ) {
 
-            private static ReadSellerInfoDto from(final User user) {
-                return new ReadSellerInfoDto(
+            public static SellerInfoDto from(final User user) {
+                return new SellerInfoDto(
                         user.getId(),
                         user.findName(),
                         user.getProfileImageStoreName(),

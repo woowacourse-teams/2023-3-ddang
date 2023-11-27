@@ -8,23 +8,23 @@ import java.time.LocalDateTime;
 
 public record ReadChatRoomReportDto(
         Long id,
-        ReadReporterDto reporterDto,
+        ReporterInfoDto reporterDto,
         LocalDateTime createdTime,
-        ReadReportTargetChatRoomInfoDto chatRoomDto,
+        ReportedChatRoomInfoDto chatRoomDto,
         String description
 ) {
 
     public static ReadChatRoomReportDto from(final ChatRoomReport chatRoomReport) {
         return new ReadChatRoomReportDto(
                 chatRoomReport.getId(),
-                ReadReporterDto.from(chatRoomReport.getReporter()),
+                ReporterInfoDto.from(chatRoomReport.getReporter()),
                 chatRoomReport.getCreatedTime(),
-                ReadReportTargetChatRoomInfoDto.from(chatRoomReport.getChatRoom()),
+                ReportedChatRoomInfoDto.from(chatRoomReport.getChatRoom()),
                 chatRoomReport.getDescription()
         );
     }
 
-    public record ReadReporterDto(
+    public record ReporterInfoDto(
             Long id,
             String name,
             String profileImageStoreName,
@@ -32,8 +32,8 @@ public record ReadChatRoomReportDto(
             boolean isDeleted
     ) {
 
-        private static ReadReporterDto from(final User reporter) {
-            return new ReadReporterDto(
+        private static ReporterInfoDto from(final User reporter) {
+            return new ReporterInfoDto(
                     reporter.getId(),
                     reporter.findName(),
                     reporter.getProfileImageStoreName(),
@@ -43,21 +43,21 @@ public record ReadChatRoomReportDto(
         }
     }
 
-    public record ReadReportTargetChatRoomInfoDto(
+    public record ReportedChatRoomInfoDto(
             Long id,
-            ReadReportTargetAuctionInfoDto auctionDto,
-            ReadPartnerInfoDto partnerDto
+            SimpleAuctionInfoDto auctionDto,
+            PartnerInfoDto partnerDto
     ) {
 
-        private static ReadReportTargetChatRoomInfoDto from(final ChatRoom chatRoom) {
-            return new ReadReportTargetChatRoomInfoDto(
+        public static ReportedChatRoomInfoDto from(final ChatRoom chatRoom) {
+            return new ReportedChatRoomInfoDto(
                     chatRoom.getId(),
-                    ReadReportTargetAuctionInfoDto.from(chatRoom.getAuction()),
-                    ReadPartnerInfoDto.from(chatRoom.getBuyer())
+                    SimpleAuctionInfoDto.from(chatRoom.getAuction()),
+                    PartnerInfoDto.from(chatRoom.getBuyer())
             );
         }
 
-        public record ReadPartnerInfoDto(
+        public record PartnerInfoDto(
                 Long id,
                 String name,
                 String profileImageStoreName,
@@ -66,8 +66,8 @@ public record ReadChatRoomReportDto(
                 boolean isSellerDeleted
         ) {
 
-            private static ReadPartnerInfoDto from(final User user) {
-                return new ReadPartnerInfoDto(
+            public static PartnerInfoDto from(final User user) {
+                return new PartnerInfoDto(
                         user.getId(),
                         user.findName(),
                         user.getProfileImageStoreName(),
@@ -78,9 +78,9 @@ public record ReadChatRoomReportDto(
             }
         }
 
-        public record ReadReportTargetAuctionInfoDto(
+        public record SimpleAuctionInfoDto(
                 Long id,
-                ReadSellerInfoDto seller,
+                SellerInfoDto seller,
                 String title,
                 String description,
                 int bidUnit,
@@ -90,10 +90,10 @@ public record ReadChatRoomReportDto(
                 int auctioneerCount
         ) {
 
-            private static ReadReportTargetAuctionInfoDto from(final Auction auction) {
-                return new ReadReportTargetAuctionInfoDto(
+            public static SimpleAuctionInfoDto from(final Auction auction) {
+                return new SimpleAuctionInfoDto(
                         auction.getId(),
-                        ReadSellerInfoDto.from(auction.getSeller()),
+                        SellerInfoDto.from(auction.getSeller()),
                         auction.getTitle(),
                         auction.getDescription(),
                         auction.getBidUnit().getValue(),
@@ -104,7 +104,7 @@ public record ReadChatRoomReportDto(
                 );
             }
 
-            public record ReadSellerInfoDto(
+            public record SellerInfoDto(
                     Long id,
                     String name,
                     String profileImageStoreName,
@@ -113,8 +113,8 @@ public record ReadChatRoomReportDto(
                     boolean isSellerDeleted
             ) {
 
-                private static ReadSellerInfoDto from(final User user) {
-                    return new ReadReportTargetAuctionInfoDto.ReadSellerInfoDto(
+                public static SellerInfoDto from(final User user) {
+                    return new SellerInfoDto(
                             user.getId(),
                             user.findName(),
                             user.getProfileImageStoreName(),
