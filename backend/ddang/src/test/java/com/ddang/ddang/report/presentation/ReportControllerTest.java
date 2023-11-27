@@ -1,48 +1,5 @@
 package com.ddang.ddang.report.presentation;
 
-import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
-import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
-import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
-import com.ddang.ddang.authentication.domain.TokenDecoder;
-import com.ddang.ddang.authentication.domain.TokenType;
-import com.ddang.ddang.authentication.configuration.AuthenticationStore;
-import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
-import com.ddang.ddang.exception.GlobalExceptionHandler;
-import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
-import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
-import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
-import com.ddang.ddang.report.application.dto.request.CreateAnswerReportDto;
-import com.ddang.ddang.report.application.dto.request.CreateAuctionReportDto;
-import com.ddang.ddang.report.application.dto.request.CreateChatRoomReportDto;
-import com.ddang.ddang.report.application.dto.request.CreateQuestionReportDto;
-import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
-import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
-import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
-import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
-import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
-import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
-import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest;
-import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
-import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
-import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
-import com.ddang.ddang.report.presentation.fixture.ReportControllerFixture;
-import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
-import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
-
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -60,6 +17,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
+import com.ddang.ddang.authentication.configuration.AuthenticationStore;
+import com.ddang.ddang.authentication.domain.TokenDecoder;
+import com.ddang.ddang.authentication.domain.TokenType;
+import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
+import com.ddang.ddang.exception.GlobalExceptionHandler;
+import com.ddang.ddang.qna.application.exception.InvalidAnswererException;
+import com.ddang.ddang.qna.infrastructure.exception.AnswerNotFoundException;
+import com.ddang.ddang.qna.infrastructure.exception.QuestionNotFoundException;
+import com.ddang.ddang.report.application.dto.request.CreateAnswerReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateAuctionReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateChatRoomReportDto;
+import com.ddang.ddang.report.application.dto.request.CreateQuestionReportDto;
+import com.ddang.ddang.report.application.exception.AlreadyReportAuctionException;
+import com.ddang.ddang.report.application.exception.AlreadyReportChatRoomException;
+import com.ddang.ddang.report.application.exception.InvalidChatRoomReportException;
+import com.ddang.ddang.report.application.exception.InvalidQuestionReportException;
+import com.ddang.ddang.report.application.exception.InvalidReportAuctionException;
+import com.ddang.ddang.report.application.exception.InvalidReporterToAuctionException;
+import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
+import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
+import com.ddang.ddang.report.presentation.fixture.ReportControllerFixture;
+import com.ddang.ddang.user.infrastructure.exception.UserNotFoundException;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
+import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 @SuppressWarnings("NonAsciiCharacters")
 class ReportControllerTest extends ReportControllerFixture {
@@ -85,6 +84,7 @@ class ReportControllerTest extends ReportControllerFixture {
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver)
+                                 .setMessageConverters(mappingJackson2HttpMessageConverter)
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)

@@ -7,12 +7,8 @@ import java.time.LocalDateTime;
 
 public record ReadMessageResponse(
         Long id,
-
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
         LocalDateTime createdTime,
-
         boolean isMyMessage,
-
         String content
 ) {
 

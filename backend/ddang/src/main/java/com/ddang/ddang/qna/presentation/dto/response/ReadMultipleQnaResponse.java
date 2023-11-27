@@ -44,12 +44,8 @@ public record ReadMultipleQnaResponse(List<QnaInfoResponse> qnas) {
 
         public record AnswerInfoResponse(
                 Long id,
-
                 AnswererInfoResponse writer,
-
-                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
                 LocalDateTime createdTime,
-
                 String content
         ) {
             private static AnswerInfoResponse of(final QnaInfoDto qnaInfoDto, final String imageRelativeUrl) {
@@ -75,14 +71,9 @@ public record ReadMultipleQnaResponse(List<QnaInfoResponse> qnas) {
 
         public record QuestionInfoResponse(
                 Long id,
-
                 QuestionerInfoResponse writer,
-
-                @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
                 LocalDateTime createdTime,
-
                 String content,
-
                 boolean isQuestioner
         ) {
 

@@ -59,6 +59,7 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver)
+                                 .setMessageConverters(mappingJackson2HttpMessageConverter)
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)
@@ -85,7 +86,8 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
                                jsonPath("$.qnas.[0].question.writer.image").exists(),
                                jsonPath("$.qnas.[0].question.createdTime").exists(),
                                jsonPath("$.qnas.[0].question.content", is(질문_정보_dto1.content())),
-                               jsonPath("$.qnas.[0].question.isQuestioner", is(질문_정보_dto1.isQuestioner()), Boolean.class),
+                               jsonPath("$.qnas.[0].question.isQuestioner", is(질문_정보_dto1.isQuestioner()),
+                                       Boolean.class),
                                jsonPath("$.qnas.[0].answer.id", is(답변_정보_dto1.id()), Long.class),
                                jsonPath("$.qnas.[0].answer.writer.id", is(판매자_정보_dto.id()), Long.class),
                                jsonPath("$.qnas.[0].answer.writer.name", is(판매자_정보_dto.name())),
@@ -98,7 +100,8 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
                                jsonPath("$.qnas.[1].question.writer.image").exists(),
                                jsonPath("$.qnas.[1].question.createdTime").exists(),
                                jsonPath("$.qnas.[1].question.content", is(질문_정보_dto2.content())),
-                               jsonPath("$.qnas.[1].question.isQuestioner", is(질문_정보_dto2.isQuestioner()), Boolean.class),
+                               jsonPath("$.qnas.[1].question.isQuestioner", is(질문_정보_dto2.isQuestioner()),
+                                       Boolean.class),
                                jsonPath("$.qnas.[1].answer.id", is(답변_정보_dto2.id()), Long.class),
                                jsonPath("$.qnas.[1].answer.writer.id", is(판매자_정보_dto.id()), Long.class),
                                jsonPath("$.qnas.[1].answer.writer.name", is(판매자_정보_dto.name())),

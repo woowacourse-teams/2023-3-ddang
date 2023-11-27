@@ -16,14 +16,9 @@ public record ReadMultipleAuctionReportResponse(List<AuctionReportInfoResponse> 
 
     public record AuctionReportInfoResponse(
             Long id,
-
             ReporterResponse reporter,
-
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime createdTime,
-
             ReportedAuctionInfoResponse auction,
-
             String description
     ) {
 

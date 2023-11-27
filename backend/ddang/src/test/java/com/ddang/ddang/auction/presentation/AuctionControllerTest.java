@@ -85,6 +85,7 @@ class AuctionControllerTest extends AuctionControllerFixture {
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver, new DescendingSortPageableArgumentResolver())
+                                 .setMessageConverters(mappingJackson2HttpMessageConverter)
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)

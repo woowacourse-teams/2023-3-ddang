@@ -70,6 +70,7 @@ class ReviewControllerTest extends ReviewControllerFixture {
                                  .setControllerAdvice(new GlobalExceptionHandler())
                                  .addInterceptors(interceptor)
                                  .setCustomArgumentResolvers(resolver)
+                                 .setMessageConverters(mappingJackson2HttpMessageConverter)
                                  .apply(MockMvcRestDocumentation.documentationConfiguration(provider))
                                  .alwaysDo(print())
                                  .alwaysDo(restDocs)
@@ -121,8 +122,9 @@ class ReviewControllerTest extends ReviewControllerFixture {
 
         // when & then
         final ResultActions resultActions =
-                mockMvc.perform(RestDocumentationRequestBuilders.get("/reviews/users/{userId}", String.valueOf(구매자.id()))
-                                                                .contentType(MediaType.APPLICATION_JSON)
+                mockMvc.perform(
+                               RestDocumentationRequestBuilders.get("/reviews/users/{userId}", String.valueOf(구매자.id()))
+                                                               .contentType(MediaType.APPLICATION_JSON)
                        )
                        .andExpectAll(
                                status().isOk(),
@@ -207,11 +209,11 @@ class ReviewControllerTest extends ReviewControllerFixture {
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER)
                                                       .description("사용자 평가 ID"),
                                 fieldWithPath("[].reviewer.id").type(JsonFieldType.NUMBER)
-                                                             .description("평가를 작성한 사용자의 ID"),
+                                                               .description("평가를 작성한 사용자의 ID"),
                                 fieldWithPath("[].reviewer.name").type(JsonFieldType.STRING)
-                                                               .description("평가를 작성한 사용자의 이름"),
+                                                                 .description("평가를 작성한 사용자의 이름"),
                                 fieldWithPath("[].reviewer.profileImage").type(JsonFieldType.STRING)
-                                                                       .description("평가를 작성한 사용자의 프로필 이미지 url"),
+                                                                         .description("평가를 작성한 사용자의 프로필 이미지 url"),
                                 fieldWithPath("[].content").type(JsonFieldType.STRING)
                                                            .description("평가 내용"),
                                 fieldWithPath("[].score").type(JsonFieldType.NUMBER)

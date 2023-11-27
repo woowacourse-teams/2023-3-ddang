@@ -2,9 +2,8 @@ package com.ddang.ddang.auction.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.response.ReadFullDirectRegionDto;
 import com.ddang.ddang.auction.application.dto.response.ReadSingleAuctionDto;
-import com.ddang.ddang.chat.application.dto.response.ReadChatRoomDto;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ddang.ddang.chat.application.dto.response.ReadChatRoomDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -65,31 +64,17 @@ public record ReadSingleAuctionResponse(
 
     public record AuctionInfoResponse(
             Long id,
-
             List<String> images,
-
             String title,
-
             CategoryInfoResponse category,
-
             String description,
-
             int startPrice,
-
             Integer lastBidPrice,
-
             String status,
-
             int bidUnit,
-
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime registerTime,
-
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime closingTime,
-
             List<DirectRegionInfoResponse> directRegions,
-
             int auctioneerCount
     ) {
 

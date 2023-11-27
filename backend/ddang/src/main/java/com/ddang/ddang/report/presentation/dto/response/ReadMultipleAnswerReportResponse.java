@@ -17,14 +17,9 @@ public record ReadMultipleAnswerReportResponse(List<AnswerReportInfoResponse> re
 
     public record AnswerReportInfoResponse(
             Long id,
-
             ReporterInfoResponse reporter,
-
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime createdTime,
-
             ReportedAnswerInfoResponse answer,
-
             String description
     ) {
 

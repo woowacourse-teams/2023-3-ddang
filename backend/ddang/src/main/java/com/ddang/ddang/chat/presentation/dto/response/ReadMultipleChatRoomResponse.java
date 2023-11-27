@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 public record ReadMultipleChatRoomResponse(
@@ -51,11 +50,6 @@ public record ReadMultipleChatRoomResponse(
         }
     }
 
-    public record LastMessageInfoResponse(
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-            LocalDateTime createdTime,
-
-            String content
-    ) {
+    public record LastMessageInfoResponse(LocalDateTime createdTime, String content) {
     }
 }

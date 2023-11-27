@@ -16,14 +16,9 @@ public record ReadMultipleChatRoomReportResponse(List<ReadChatRoomReportResponse
 
     public record ReadChatRoomReportResponse(
             Long id,
-
             ReporterInfoResponse reporter,
-
-            @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime createdTime,
-
             ReportedChatRoomInfoResponse chatRoom,
-
             String description
     ) {
         private static ReadChatRoomReportResponse from(final ReadChatRoomReportDto chatRoomReportDto) {

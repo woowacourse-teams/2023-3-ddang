@@ -29,7 +29,16 @@ import com.ddang.ddang.report.application.QuestionReportService;
 import com.ddang.ddang.report.presentation.ReportController;
 import com.ddang.ddang.review.application.ReviewService;
 import com.ddang.ddang.user.application.UserService;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +48,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -62,9 +72,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public abstract class CommonControllerSliceTest {
-
-    @Autowired
-    protected ObjectMapper objectMapper;
 
     @Autowired
     protected RestDocumentationResultHandler restDocs;
@@ -157,4 +164,31 @@ public abstract class CommonControllerSliceTest {
             new ImageRelativeUrlConfigurationProperties("/auctions/images/", "/users/images/");
 
     protected ImageRelativeUrlFinder urlFinder = new ImageRelativeUrlFinder(imageRelativeUrl);
+
+    protected ObjectMapper objectMapper;
+
+    protected MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter;
+
+    @BeforeEach
+    void controllerSliceTestSetUp() {
+        objectMapper = new ObjectMapper();
+
+        final SimpleModule module = new SimpleModule();
+
+        module.addSerializer(LocalDateTime.class, new JsonSerializer<>() {
+            @Override
+            public void serialize(final LocalDateTime value, final JsonGenerator gen,
+                    final SerializerProvider serializers)
+                    throws IOException {
+                final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+
+                gen.writeString(formatter.format(value));
+            }
+        });
+
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.registerModule(module);
+        mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
+        mappingJackson2HttpMessageConverter.setObjectMapper(objectMapper);
+    }
 }
