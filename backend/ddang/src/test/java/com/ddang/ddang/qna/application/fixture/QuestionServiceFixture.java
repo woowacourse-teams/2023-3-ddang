@@ -8,9 +8,10 @@ import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.qna.application.dto.request.CreateQuestionDto;
-import com.ddang.ddang.qna.application.dto.response.ReadQnaDto.ReadAnswerDto;
-import com.ddang.ddang.qna.application.dto.response.ReadQnaDto.ReadQuestionDto;
-import com.ddang.ddang.qna.application.dto.response.ReadUserInQnaDto;
+import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto.AnswerDto;
+import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto.AnswerDto.AnswererInfoDto;
+import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto.QuestionDto;
+import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto.QuestionDto.QuestionerInfoDto;
 import com.ddang.ddang.qna.domain.Answer;
 import com.ddang.ddang.qna.domain.Question;
 import com.ddang.ddang.qna.domain.repository.AnswerRepository;
@@ -59,11 +60,11 @@ public class QuestionServiceFixture {
     protected CreateQuestionDto 종료된_경매_질문_등록_요청_dto;
     protected CreateQuestionDto 삭제된_경매_질문_등록_요청_dto;
     protected CreateQuestionDto 판매자가_본인_경매_질문_등록_요청_dto;
-    protected ReadQuestionDto 질문_정보_dto1;
-    protected ReadQuestionDto 질문_정보_dto2;
-    protected ReadQuestionDto 질문_정보_dto3;
-    protected ReadAnswerDto 답변_정보_dto1;
-    protected ReadAnswerDto 답변_정보_dto2;
+    protected QuestionDto 질문_정보_dto1;
+    protected QuestionDto 질문_정보_dto2;
+    protected QuestionDto 질문_정보_dto3;
+    protected AnswerDto 답변_정보_dto1;
+    protected AnswerDto 답변_정보_dto2;
 
     protected String 이미지_절대_경로 = "/imageUrl";
 
@@ -179,13 +180,13 @@ public class QuestionServiceFixture {
         삭제된_경매_질문_등록_요청_dto = new CreateQuestionDto(삭제된_경매.getId(), "궁금한 점이 있습니다.", 질문자.getId());
         판매자가_본인_경매_질문_등록_요청_dto = new CreateQuestionDto(경매.getId(), "궁금한 점이 있습니다.", 판매자.getId());
 
-        final ReadUserInQnaDto 판매자_정보_dto = ReadUserInQnaDto.from(판매자);
-        final ReadUserInQnaDto 질문자_정보_dto = ReadUserInQnaDto.from(질문자);
-        final ReadUserInQnaDto 두번째_질문자_정보_dto = ReadUserInQnaDto.from(두번째_질문을_작성한_사용자);
-        질문_정보_dto1 = new ReadQuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime(), false, false);
-        질문_정보_dto2 = new ReadQuestionDto(질문2.getId(), 두번째_질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime(), false, true);
-        질문_정보_dto3 = new ReadQuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime(), false, false);
-        답변_정보_dto1 = new ReadAnswerDto(답변1.getId(), 판매자_정보_dto, 답변1.getContent(), 답변1.getCreatedTime(), false);
-        답변_정보_dto2 = new ReadAnswerDto(답변2.getId(), 판매자_정보_dto, 답변2.getContent(), 답변2.getCreatedTime(), false);
+        final AnswererInfoDto 판매자_정보_dto = AnswererInfoDto.from(판매자);
+        final QuestionerInfoDto 질문자_정보_dto = QuestionerInfoDto.from(질문자);
+        final QuestionerInfoDto 두번째_질문자_정보_dto = QuestionerInfoDto.from(두번째_질문을_작성한_사용자);
+        질문_정보_dto1 = new QuestionDto(질문.getId(), 질문자_정보_dto, 질문.getContent(), 질문.getCreatedTime(), false, false);
+        질문_정보_dto2 = new QuestionDto(질문2.getId(), 두번째_질문자_정보_dto, 질문2.getContent(), 질문2.getCreatedTime(), false, true);
+        질문_정보_dto3 = new QuestionDto(질문3.getId(), 질문자_정보_dto, 질문3.getContent(), 질문3.getCreatedTime(), false, false);
+        답변_정보_dto1 = new AnswerDto(답변1.getId(), 판매자_정보_dto, 답변1.getContent(), 답변1.getCreatedTime(), false);
+        답변_정보_dto2 = new AnswerDto(답변2.getId(), 판매자_정보_dto, 답변2.getContent(), 답변2.getCreatedTime(), false);
     }
 }

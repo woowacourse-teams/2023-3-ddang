@@ -1,12 +1,12 @@
 package com.ddang.ddang.qna.presentation;
 
-import com.ddang.ddang.qna.presentation.dto.response.ReadQnasResponse;
+import com.ddang.ddang.qna.presentation.dto.response.ReadMultipleQnaResponse;
 import com.ddang.ddang.authentication.configuration.AuthenticateUser;
 import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import com.ddang.ddang.qna.application.QuestionService;
-import com.ddang.ddang.qna.application.dto.response.ReadQnasDto;
+import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +23,13 @@ public class AuctionQnaController {
     private final ImageRelativeUrlFinder urlFinder;
 
     @GetMapping("/{auctionId}/questions")
-    public ResponseEntity<ReadQnasResponse> readAllByAuctionId(
+    public ResponseEntity<ReadMultipleQnaResponse> readAllByAuctionId(
             @AuthenticateUser AuthenticationUserInfo userInfo,
             @PathVariable final Long auctionId
     ) {
-        final ReadQnasDto readQnasDto = questionService.readAllByAuctionId(auctionId, userInfo.userId());
-        final ReadQnasResponse response = ReadQnasResponse.of(
-                readQnasDto,
+        final ReadMultipleQnaDto readMultipleQnaDto = questionService.readAllByAuctionId(auctionId, userInfo.userId());
+        final ReadMultipleQnaResponse response = ReadMultipleQnaResponse.of(
+                readMultipleQnaDto,
                 urlFinder.find(ImageTargetType.PROFILE_IMAGE)
         );
 

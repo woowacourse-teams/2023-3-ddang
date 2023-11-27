@@ -6,8 +6,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.application.exception.UserForbiddenException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.qna.application.dto.response.ReadQnaDto;
-import com.ddang.ddang.qna.application.dto.response.ReadQnasDto;
+import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto;
+import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto;
 import com.ddang.ddang.qna.application.event.QuestionNotificationEvent;
 import com.ddang.ddang.qna.application.exception.InvalidAuctionToAskQuestionException;
 import com.ddang.ddang.qna.application.exception.InvalidQuestionerException;
@@ -84,27 +84,27 @@ class QuestionServiceTest extends QuestionServiceFixture {
     @Test
     void 경매_아이디를_통해_질문과_답변을_모두_조회한다() {
         // when
-        final ReadQnasDto actual = questionService.readAllByAuctionId(질문_3개_답변_2개가_존재하는_경매_아이디, 두번째_질문을_작성한_사용자.getId());
+        final ReadMultipleQnaDto actual = questionService.readAllByAuctionId(질문_3개_답변_2개가_존재하는_경매_아이디, 두번째_질문을_작성한_사용자.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
-            final List<ReadQnaDto> questionAndAnswerDtos = actual.readQnaDtos();
+            final List<QnaInfoDto> questionAndAnswerDtos = actual.qnaInfoDtos();
             softAssertions.assertThat(questionAndAnswerDtos).hasSize(3);
 
-            final ReadQnaDto 첫번째_질문 = questionAndAnswerDtos.get(0);
-            softAssertions.assertThat(첫번째_질문.readQuestionDto()).isEqualTo(질문_정보_dto1);
-            softAssertions.assertThat(첫번째_질문.readQuestionDto().isQuestioner()).isFalse();
-            softAssertions.assertThat(첫번째_질문.readAnswerDto()).isEqualTo(답변_정보_dto1);
+            final QnaInfoDto 첫번째_질문 = questionAndAnswerDtos.get(0);
+            softAssertions.assertThat(첫번째_질문.questionDto()).isEqualTo(질문_정보_dto1);
+            softAssertions.assertThat(첫번째_질문.questionDto().isQuestioner()).isFalse();
+            softAssertions.assertThat(첫번째_질문.answerDto()).isEqualTo(답변_정보_dto1);
 
-            final ReadQnaDto 두번째_질문 = questionAndAnswerDtos.get(1);
-            softAssertions.assertThat(두번째_질문.readQuestionDto()).isEqualTo(질문_정보_dto2);
-            softAssertions.assertThat(두번째_질문.readQuestionDto().isQuestioner()).isTrue();
-            softAssertions.assertThat(두번째_질문.readAnswerDto()).isEqualTo(답변_정보_dto2);
+            final QnaInfoDto 두번째_질문 = questionAndAnswerDtos.get(1);
+            softAssertions.assertThat(두번째_질문.questionDto()).isEqualTo(질문_정보_dto2);
+            softAssertions.assertThat(두번째_질문.questionDto().isQuestioner()).isTrue();
+            softAssertions.assertThat(두번째_질문.answerDto()).isEqualTo(답변_정보_dto2);
 
-            final ReadQnaDto 세번째_질문 = questionAndAnswerDtos.get(2);
-            softAssertions.assertThat(세번째_질문.readQuestionDto()).isEqualTo(질문_정보_dto3);
-            softAssertions.assertThat(세번째_질문.readQuestionDto().isQuestioner()).isFalse();
-            softAssertions.assertThat(세번째_질문.readAnswerDto()).isNull();
+            final QnaInfoDto 세번째_질문 = questionAndAnswerDtos.get(2);
+            softAssertions.assertThat(세번째_질문.questionDto()).isEqualTo(질문_정보_dto3);
+            softAssertions.assertThat(세번째_질문.questionDto().isQuestioner()).isFalse();
+            softAssertions.assertThat(세번째_질문.answerDto()).isNull();
         });
     }
 
