@@ -28,7 +28,7 @@ class MultipleChatRoomInfoRepositoryImplTest extends MultipleChatRoomInfoReposit
     @BeforeEach
     void setUp(@Autowired final JPAQueryFactory queryFactory) {
         multipleChatRoomRepository =
-                new MultipleMultipleChatRoomInfoRepositoryImpl(new QuerydslMultipleChatRoomInfoRepository(queryFactory));
+                new MultipleChatRoomInfoRepositoryImpl(new QuerydslMultipleChatRoomInfoRepository(queryFactory));
     }
 
     @Test

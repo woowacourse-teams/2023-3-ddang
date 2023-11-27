@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class MultipleMultipleChatRoomInfoRepositoryImpl implements MultipleChatRoomRepository {
+public class MultipleChatRoomInfoRepositoryImpl implements MultipleChatRoomRepository {
 
     private final QuerydslMultipleChatRoomInfoRepository querydslMultipleChatRoomInfoRepository;
 
