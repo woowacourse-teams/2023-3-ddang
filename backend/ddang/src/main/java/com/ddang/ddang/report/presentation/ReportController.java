@@ -18,10 +18,10 @@ import com.ddang.ddang.report.presentation.dto.request.CreateAnswerReportRequest
 import com.ddang.ddang.report.presentation.dto.request.CreateAuctionReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateChatRoomReportRequest;
 import com.ddang.ddang.report.presentation.dto.request.CreateQuestionReportRequest;
-import com.ddang.ddang.report.presentation.dto.response.ReadAnswerReportsResponse;
-import com.ddang.ddang.report.presentation.dto.response.ReadAuctionReportsResponse;
-import com.ddang.ddang.report.presentation.dto.response.ReadChatRoomReportsResponse;
-import com.ddang.ddang.report.presentation.dto.response.ReadQuestionReportsResponse;
+import com.ddang.ddang.report.presentation.dto.response.ReadMultipleAnswerReportResponse;
+import com.ddang.ddang.report.presentation.dto.response.ReadMultipleAuctionReportResponse;
+import com.ddang.ddang.report.presentation.dto.response.ReadMultipleChatRoomReportResponse;
+import com.ddang.ddang.report.presentation.dto.response.ReadMultipleQuestionReportResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -56,9 +56,9 @@ public class ReportController {
     }
 
     @GetMapping("/auctions")
-    public ResponseEntity<ReadAuctionReportsResponse> readAllAuctionReport() {
+    public ResponseEntity<ReadMultipleAuctionReportResponse> readAllAuctionReport() {
         final List<ReadAuctionReportDto> readAuctionReportDtos = auctionReportService.readAll();
-        final ReadAuctionReportsResponse response = ReadAuctionReportsResponse.from(readAuctionReportDtos);
+        final ReadMultipleAuctionReportResponse response = ReadMultipleAuctionReportResponse.from(readAuctionReportDtos);
 
         return ResponseEntity.ok(response);
     }
@@ -75,9 +75,9 @@ public class ReportController {
     }
 
     @GetMapping("/chat-rooms")
-    public ResponseEntity<ReadChatRoomReportsResponse> readAllChatRoomReport() {
+    public ResponseEntity<ReadMultipleChatRoomReportResponse> readAllChatRoomReport() {
         final List<ReadChatRoomReportDto> readAuctionReportDtos = chatRoomReportService.readAll();
-        final ReadChatRoomReportsResponse response = ReadChatRoomReportsResponse.from(readAuctionReportDtos);
+        final ReadMultipleChatRoomReportResponse response = ReadMultipleChatRoomReportResponse.from(readAuctionReportDtos);
 
         return ResponseEntity.ok(response);
     }
@@ -94,9 +94,9 @@ public class ReportController {
     }
 
     @GetMapping("/questions")
-    public ResponseEntity<ReadQuestionReportsResponse> readAllQuestionReport() {
+    public ResponseEntity<ReadMultipleQuestionReportResponse> readAllQuestionReport() {
         final List<ReadQuestionReportDto> readQuestionReportDtos = questionReportService.readAll();
-        final ReadQuestionReportsResponse response = ReadQuestionReportsResponse.from(readQuestionReportDtos);
+        final ReadMultipleQuestionReportResponse response = ReadMultipleQuestionReportResponse.from(readQuestionReportDtos);
 
         return ResponseEntity.ok(response);
     }
@@ -113,9 +113,9 @@ public class ReportController {
     }
 
     @GetMapping("/answers")
-    public ResponseEntity<ReadAnswerReportsResponse> readAllAnswerReport() {
+    public ResponseEntity<ReadMultipleAnswerReportResponse> readAllAnswerReport() {
         final List<ReadAnswerReportDto> readAnswerReportDtos = answerReportService.readAll();
-        final ReadAnswerReportsResponse response = ReadAnswerReportsResponse.from(readAnswerReportDtos);
+        final ReadMultipleAnswerReportResponse response = ReadMultipleAnswerReportResponse.from(readAnswerReportDtos);
 
         return ResponseEntity.ok(response);
     }

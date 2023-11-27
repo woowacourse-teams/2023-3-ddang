@@ -5,14 +5,14 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ReadQuestionReportsResponse(List<ReadQuestionReportResponse> reports) {
+public record ReadMultipleQuestionReportResponse(List<ReadQuestionReportResponse> reports) {
 
-    public static ReadQuestionReportsResponse from(final List<ReadQuestionReportDto> questionReportDtos) {
+    public static ReadMultipleQuestionReportResponse from(final List<ReadQuestionReportDto> questionReportDtos) {
         final List<ReadQuestionReportResponse> reportsResponse = questionReportDtos.stream()
                                                                                    .map(ReadQuestionReportResponse::from)
                                                                                    .toList();
 
-        return new ReadQuestionReportsResponse(reportsResponse);
+        return new ReadMultipleQuestionReportResponse(reportsResponse);
     }
 
     public record ReadQuestionReportResponse(

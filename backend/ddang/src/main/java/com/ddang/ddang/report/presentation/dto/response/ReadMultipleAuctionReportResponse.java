@@ -5,37 +5,37 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public record ReadAuctionReportsResponse(List<ReadAuctionReportResponse> reports) {
+public record ReadMultipleAuctionReportResponse(List<AuctionReportInfoResponse> reports) {
 
-    public static ReadAuctionReportsResponse from(final List<ReadAuctionReportDto> auctionReportDtos) {
-        final List<ReadAuctionReportResponse> reportResponses = auctionReportDtos.stream()
-                                                                                 .map(ReadAuctionReportResponse::from)
+    public static ReadMultipleAuctionReportResponse from(final List<ReadAuctionReportDto> auctionReportDtos) {
+        final List<AuctionReportInfoResponse> reportResponses = auctionReportDtos.stream()
+                                                                                 .map(AuctionReportInfoResponse::from)
                                                                                  .toList();
-        return new ReadAuctionReportsResponse(reportResponses);
+        return new ReadMultipleAuctionReportResponse(reportResponses);
     }
 
-    public record ReadAuctionReportResponse(
+    public record AuctionReportInfoResponse(
             Long id,
 
-            ReadReporterResponse reporter,
+            ReporterResponse reporter,
 
             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime createdTime,
 
-            ReadReportTargetAuctionSimpleInfoResponse auction,
+            ReportedAuctionInfoResponse auction,
 
             String description
     ) {
 
-        private static ReadAuctionReportResponse from(final ReadAuctionReportDto auctionReportDto) {
-            return new ReadAuctionReportResponse(
+        private static AuctionReportInfoResponse from(final ReadAuctionReportDto auctionReportDto) {
+            return new AuctionReportInfoResponse(
                     auctionReportDto.id(),
-                    new ReadReporterResponse(
+                    new ReporterResponse(
                             auctionReportDto.reporterDto().id(),
                             auctionReportDto.reporterDto().name()
                     ),
                     auctionReportDto.createdTime(),
-                    new ReadReportTargetAuctionSimpleInfoResponse(
+                    new ReportedAuctionInfoResponse(
                             auctionReportDto.auctionDto().id(),
                             auctionReportDto.auctionDto().title()
                     ),
@@ -43,10 +43,10 @@ public record ReadAuctionReportsResponse(List<ReadAuctionReportResponse> reports
             );
         }
 
-        public record ReadReporterResponse(Long id, String name) {
+        public record ReporterResponse(Long id, String name) {
         }
 
-        public record ReadReportTargetAuctionSimpleInfoResponse(Long id, String title) {
+        public record ReportedAuctionInfoResponse(Long id, String title) {
         }
     }
 }
