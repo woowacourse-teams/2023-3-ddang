@@ -5,8 +5,8 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import com.ddang.ddang.auction.infrastructure.persistence.exception.AuctionNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
-import com.ddang.ddang.review.application.dto.response.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadSingleReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadMultipleReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.infrastructure.exception.ReviewNotFoundException;
@@ -77,7 +77,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     @Test
     void 지정한_평가_아이디에_해당하는_평가를_조회한다() {
         // when
-        final ReadReviewDetailDto actual = reviewService.readByReviewId(구매자가_판매자1에게_받은_평가.getId());
+        final ReadSingleReviewDto actual = reviewService.readByReviewId(구매자가_판매자1에게_받은_평가.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -96,17 +96,17 @@ class ReviewServiceTest extends ReviewServiceFixture {
     @Test
     void 지정한_아이디가_평가_대상인_평가_목록을_최신순으로_조회한다() {
         // when
-        final List<ReadReviewDto> actual = reviewService.readAllByTargetId(구매자.getId());
+        final List<ReadMultipleReviewDto> actual = reviewService.readAllByTargetId(구매자.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
             softAssertions.assertThat(actual).hasSize(2);
             softAssertions.assertThat(actual.get(0).id()).isEqualTo(구매자가_판매자2에게_받은_평가.getId());
-            softAssertions.assertThat(actual.get(0).writer().id()).isEqualTo(판매자2.getId());
+            softAssertions.assertThat(actual.get(0).reviewer().id()).isEqualTo(판매자2.getId());
             softAssertions.assertThat(actual.get(0).content()).isEqualTo(구매자가_판매자2에게_받은_평가.getContent());
             softAssertions.assertThat(actual.get(0).score()).isEqualTo(구매자가_판매자2에게_받은_평가.getScore().getValue());
             softAssertions.assertThat(actual.get(1).id()).isEqualTo(구매자가_판매자1에게_받은_평가.getId());
-            softAssertions.assertThat(actual.get(1).writer().id()).isEqualTo(판매자1.getId());
+            softAssertions.assertThat(actual.get(1).reviewer().id()).isEqualTo(판매자1.getId());
             softAssertions.assertThat(actual.get(1).content()).isEqualTo(구매자가_판매자1에게_받은_평가.getContent());
             softAssertions.assertThat(actual.get(1).score()).isEqualTo(구매자가_판매자1에게_받은_평가.getScore().getValue());
         });
@@ -115,7 +115,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     @Test
     void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재한다면_dto에_넣어_반환한다() {
         // when
-        final ReadReviewDetailDto actual = reviewService.readByAuctionIdAndWriterId(판매자1.getId(), 판매자1이_평가한_경매.getId());
+        final ReadSingleReviewDto actual = reviewService.readByAuctionIdAndWriterId(판매자1.getId(), 판매자1이_평가한_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {
@@ -127,7 +127,7 @@ class ReviewServiceTest extends ReviewServiceFixture {
     @Test
     void 지정한_경매_아이디와_작성자_아이디가_해당하는_평가가_존재하지_않는다면_dto의_필드가_null이다() {
         // when
-        final ReadReviewDetailDto actual = reviewService.readByAuctionIdAndWriterId(평가_안한_경매_판매자.getId(), 평가_안한_경매.getId());
+        final ReadSingleReviewDto actual = reviewService.readByAuctionIdAndWriterId(평가_안한_경매_판매자.getId(), 평가_안한_경매.getId());
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

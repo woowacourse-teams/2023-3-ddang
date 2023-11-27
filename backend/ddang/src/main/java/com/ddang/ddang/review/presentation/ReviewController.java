@@ -6,11 +6,11 @@ import com.ddang.ddang.image.presentation.util.ImageRelativeUrlFinder;
 import com.ddang.ddang.image.presentation.util.ImageTargetType;
 import com.ddang.ddang.review.application.ReviewService;
 import com.ddang.ddang.review.application.dto.request.CreateReviewDto;
-import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
-import com.ddang.ddang.review.application.dto.response.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadSingleReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadMultipleReviewDto;
 import com.ddang.ddang.review.presentation.dto.request.CreateReviewRequest;
-import com.ddang.ddang.review.presentation.dto.response.ReadReviewDetailResponse;
-import com.ddang.ddang.review.presentation.dto.response.ReadReviewResponse;
+import com.ddang.ddang.review.presentation.dto.response.ReadSingleReviewResponse;
+import com.ddang.ddang.review.presentation.dto.response.ReadMultipleReviewResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -44,22 +44,22 @@ public class ReviewController {
     }
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<ReadReviewDetailResponse> read(@PathVariable final Long reviewId) {
-        final ReadReviewDetailDto readReviewDetailDto = reviewService.readByReviewId(reviewId);
-        ReadReviewDetailResponse response = ReadReviewDetailResponse.from(readReviewDetailDto);
+    public ResponseEntity<ReadSingleReviewResponse> read(@PathVariable final Long reviewId) {
+        final ReadSingleReviewDto readSingleReviewDto = reviewService.readByReviewId(reviewId);
+        ReadSingleReviewResponse response = ReadSingleReviewResponse.from(readSingleReviewDto);
 
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<List<ReadReviewResponse>> readAllReviewsOfTargetUser(@PathVariable final Long userId) {
-        final List<ReadReviewDto> readReviewDtos = reviewService.readAllByTargetId(userId);
-        final List<ReadReviewResponse> response = readReviewDtos.stream()
-                                                                .map(dto -> ReadReviewResponse.of(
+    public ResponseEntity<List<ReadMultipleReviewResponse>> readAllReviewsOfTargetUser(@PathVariable final Long userId) {
+        final List<ReadMultipleReviewDto> readMultipleReviewDtos = reviewService.readAllByTargetId(userId);
+        final List<ReadMultipleReviewResponse> response = readMultipleReviewDtos.stream()
+                                                                                .map(dto -> ReadMultipleReviewResponse.of(
                                                                         dto,
                                                                         urlFinder.find(ImageTargetType.PROFILE_IMAGE)
                                                                 ))
-                                                                .toList();
+                                                                                .toList();
 
         return ResponseEntity.ok(response);
     }

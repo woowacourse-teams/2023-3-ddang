@@ -1,6 +1,6 @@
 package com.ddang.ddang.review.presentation.dto.response;
 
-import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
+import com.ddang.ddang.review.application.dto.response.ReadSingleReviewDto;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
-class ReadReviewResponseTest {
+class ReadMultipleReviewResponseTest {
 
     @Test
     void dto의_필드가_null일_때_response의_필드도_null이다() {
         // given
-        final ReadReviewDetailDto readReviewDetailDto = new ReadReviewDetailDto(null, null);
+        final ReadSingleReviewDto readSingleReviewDto = new ReadSingleReviewDto(null, null);
 
         // when
-        final ReadReviewDetailResponse actual = ReadReviewDetailResponse.from(readReviewDetailDto);
+        final ReadSingleReviewResponse actual = ReadSingleReviewResponse.from(readSingleReviewDto);
 
         // then
         SoftAssertions.assertSoftly(softAssertions -> {

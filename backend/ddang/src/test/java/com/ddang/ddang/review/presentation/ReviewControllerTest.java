@@ -127,13 +127,13 @@ class ReviewControllerTest extends ReviewControllerFixture {
                        .andExpectAll(
                                status().isOk(),
                                jsonPath("$.[0].id", is(구매자가_판매자2에게_받은_평가.id()), Long.class),
-                               jsonPath("$.[0].writer.id", is(구매자가_판매자2에게_받은_평가.writer().id()), Long.class),
-                               jsonPath("$.[0].writer.name", is(구매자가_판매자2에게_받은_평가.writer().name())),
+                               jsonPath("$.[0].reviewer.id", is(구매자가_판매자2에게_받은_평가.reviewer().id()), Long.class),
+                               jsonPath("$.[0].reviewer.name", is(구매자가_판매자2에게_받은_평가.reviewer().name())),
                                jsonPath("$.[0].content", is(구매자가_판매자2에게_받은_평가.content())),
                                jsonPath("$.[0].score", is(구매자가_판매자2에게_받은_평가.score())),
                                jsonPath("$.[1].id", is(구매자가_판매자1에게_받은_평가.id()), Long.class),
-                               jsonPath("$.[1].writer.id", is(구매자가_판매자1에게_받은_평가.writer().id()), Long.class),
-                               jsonPath("$.[1].writer.name", is(구매자가_판매자1에게_받은_평가.writer().name())),
+                               jsonPath("$.[1].reviewer.id", is(구매자가_판매자1에게_받은_평가.reviewer().id()), Long.class),
+                               jsonPath("$.[1].reviewer.name", is(구매자가_판매자1에게_받은_평가.reviewer().name())),
                                jsonPath("$.[1].content", is(구매자가_판매자1에게_받은_평가.content())),
                                jsonPath("$.[1].score", is(구매자가_판매자1에게_받은_평가.score()))
                        );
@@ -206,11 +206,11 @@ class ReviewControllerTest extends ReviewControllerFixture {
                                                    .description("조회 대상 사용자가 받은 모든 평가 목록"),
                                 fieldWithPath("[].id").type(JsonFieldType.NUMBER)
                                                       .description("사용자 평가 ID"),
-                                fieldWithPath("[].writer.id").type(JsonFieldType.NUMBER)
+                                fieldWithPath("[].reviewer.id").type(JsonFieldType.NUMBER)
                                                              .description("평가를 작성한 사용자의 ID"),
-                                fieldWithPath("[].writer.name").type(JsonFieldType.STRING)
+                                fieldWithPath("[].reviewer.name").type(JsonFieldType.STRING)
                                                                .description("평가를 작성한 사용자의 이름"),
-                                fieldWithPath("[].writer.profileImage").type(JsonFieldType.STRING)
+                                fieldWithPath("[].reviewer.profileImage").type(JsonFieldType.STRING)
                                                                        .description("평가를 작성한 사용자의 프로필 이미지 url"),
                                 fieldWithPath("[].content").type(JsonFieldType.STRING)
                                                            .description("평가 내용"),

@@ -3,8 +3,8 @@ package com.ddang.ddang.review.application;
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.review.application.dto.request.CreateReviewDto;
-import com.ddang.ddang.review.application.dto.response.ReadReviewDetailDto;
-import com.ddang.ddang.review.application.dto.response.ReadReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadSingleReviewDto;
+import com.ddang.ddang.review.application.dto.response.ReadMultipleReviewDto;
 import com.ddang.ddang.review.application.exception.AlreadyReviewException;
 import com.ddang.ddang.review.application.exception.InvalidUserToReview;
 import com.ddang.ddang.review.application.exception.RevieweeNotFoundException;
@@ -62,23 +62,23 @@ public class ReviewService {
         }
     }
 
-    public ReadReviewDetailDto readByReviewId(final Long reviewId) {
+    public ReadSingleReviewDto readByReviewId(final Long reviewId) {
         final Review findReview = reviewRepository.getByIdOrThrow(reviewId);
 
-        return ReadReviewDetailDto.from(findReview);
+        return ReadSingleReviewDto.from(findReview);
     }
 
-    public List<ReadReviewDto> readAllByTargetId(final Long targetId) {
+    public List<ReadMultipleReviewDto> readAllByTargetId(final Long targetId) {
         final List<Review> targetReviews = reviewRepository.findAllByTargetId(targetId);
 
         return targetReviews.stream()
-                            .map(ReadReviewDto::from)
+                            .map(ReadMultipleReviewDto::from)
                             .toList();
     }
 
-    public ReadReviewDetailDto readByAuctionIdAndWriterId(final Long writerId, final Long auctionId) {
+    public ReadSingleReviewDto readByAuctionIdAndWriterId(final Long writerId, final Long auctionId) {
         return reviewRepository.findByAuctionIdAndWriterId(auctionId, writerId)
-                               .map(ReadReviewDetailDto::from)
-                               .orElse(ReadReviewDetailDto.EMPTY);
+                               .map(ReadSingleReviewDto::from)
+                               .orElse(ReadSingleReviewDto.EMPTY);
     }
 }
