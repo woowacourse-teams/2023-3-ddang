@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ReadSingleAuctionResponse(
-        ReadAuctionResponse auction,
-        SellerResponse seller,
-        ChatRoomInAuctionResponse chat,
+        AuctionInfoResponse auction,
+        SellerInfoResponse seller,
+        ChatRoomInfoResponse chat,
         boolean isOwner,
         boolean isLastBidder
 ) {
@@ -23,13 +23,13 @@ public record ReadSingleAuctionResponse(
             final String profileImageRelativeUrl,
             final String auctionImageRelativeUrl
     ) {
-        final ReadAuctionResponse readAuctionResponse = ReadAuctionResponse.of(auctionDto, auctionImageRelativeUrl);
-        final SellerResponse sellerResponse = SellerResponse.of(auctionDto, profileImageRelativeUrl);
-        final ChatRoomInAuctionResponse chatRoomResponse = ChatRoomInAuctionResponse.from(chatRoomDto);
+        final AuctionInfoResponse auctionInfoResponse = AuctionInfoResponse.of(auctionDto, auctionImageRelativeUrl);
+        final SellerInfoResponse sellerInfoResponse = SellerInfoResponse.of(auctionDto, profileImageRelativeUrl);
+        final ChatRoomInfoResponse chatRoomResponse = ChatRoomInfoResponse.from(chatRoomDto);
 
         return new ReadSingleAuctionResponse(
-                readAuctionResponse,
-                sellerResponse,
+                auctionInfoResponse,
+                sellerInfoResponse,
                 chatRoomResponse,
                 isOwner(auctionDto, userInfo),
                 isLastBidder(auctionDto, userInfo)
@@ -44,10 +44,10 @@ public record ReadSingleAuctionResponse(
         return userInfo.userId().equals(auctionDto.lastBidderId());
     }
 
-    private record SellerResponse(Long id, String image, String nickname, Float reliability) {
+    public record SellerInfoResponse(Long id, String image, String nickname, Float reliability) {
 
-        private static SellerResponse of(final ReadSingleAuctionDto auctionDto, final String imageRelativeUrl) {
-            return new SellerResponse(
+        public static SellerInfoResponse of(final ReadSingleAuctionDto auctionDto, final String imageRelativeUrl) {
+            return new SellerInfoResponse(
                     auctionDto.sellerId(),
                     imageRelativeUrl + auctionDto.sellerProfileStoreName(),
                     auctionDto.sellerName(),
@@ -56,21 +56,21 @@ public record ReadSingleAuctionResponse(
         }
     }
 
-    private record ChatRoomInAuctionResponse(Long id, boolean isChatParticipant) {
+    public record ChatRoomInfoResponse(Long id, boolean isChatParticipant) {
 
-        public static ChatRoomInAuctionResponse from(final ReadChatRoomDto dto) {
-            return new ChatRoomInAuctionResponse(dto.id(), dto.isChatParticipant());
+        public static ChatRoomInfoResponse from(final ReadChatRoomDto dto) {
+            return new ChatRoomInfoResponse(dto.id(), dto.isChatParticipant());
         }
     }
 
-    public record ReadAuctionResponse(
+    public record AuctionInfoResponse(
             Long id,
 
             List<String> images,
 
             String title,
 
-            ReadCategoryResponse category,
+            CategoryInfoResponse category,
 
             String description,
 
@@ -88,17 +88,17 @@ public record ReadSingleAuctionResponse(
             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime closingTime,
 
-            List<ReadDirectRegionResponse> directRegions,
+            List<DirectRegionInfoResponse> directRegions,
 
             int auctioneerCount
     ) {
 
-        public static ReadAuctionResponse of(final ReadSingleAuctionDto dto, final String imageRelativeUrl) {
-            return new ReadAuctionResponse(
+        public static AuctionInfoResponse of(final ReadSingleAuctionDto dto, final String imageRelativeUrl) {
+            return new AuctionInfoResponse(
                     dto.id(),
                     convertImageUrls(dto, imageRelativeUrl),
                     dto.title(),
-                    new ReadCategoryResponse(dto.mainCategory(), dto.subCategory()),
+                    new CategoryInfoResponse(dto.mainCategory(), dto.subCategory()),
                     dto.description(),
                     dto.startPrice(),
                     dto.lastBidPrice(),
@@ -118,20 +118,20 @@ public record ReadSingleAuctionResponse(
                       .toList();
         }
 
-        private static List<ReadDirectRegionResponse> convertDirectRegionsResponse(final ReadSingleAuctionDto dto) {
+        private static List<DirectRegionInfoResponse> convertDirectRegionsResponse(final ReadSingleAuctionDto dto) {
             return dto.auctionRegions()
                       .stream()
-                      .map(ReadDirectRegionResponse::from)
+                      .map(DirectRegionInfoResponse::from)
                       .toList();
         }
 
-        public record ReadCategoryResponse(String main, String sub) {
+        public record CategoryInfoResponse(String main, String sub) {
         }
 
-        public record ReadDirectRegionResponse(String first, String second, String third) {
+        public record DirectRegionInfoResponse(String first, String second, String third) {
 
-            private static ReadDirectRegionResponse from(final ReadFullDirectRegionDto dto) {
-                return new ReadDirectRegionResponse(
+            private static DirectRegionInfoResponse from(final ReadFullDirectRegionDto dto) {
+                return new DirectRegionInfoResponse(
                         dto.firstRegionDto().regionName(),
                         dto.secondRegionDto().regionName(),
                         dto.thirdRegionDto().regionName()

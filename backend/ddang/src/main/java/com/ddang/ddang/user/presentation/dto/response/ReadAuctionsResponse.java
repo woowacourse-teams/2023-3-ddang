@@ -1,6 +1,7 @@
 package com.ddang.ddang.user.presentation.dto.response;
 
 import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto.AuctionInfoDto;
 import java.util.List;
 
 public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean isLast) {
@@ -10,7 +11,7 @@ public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean i
             final String imageRelativeUrl
     ) {
         final List<ReadAuctionResponse> readAuctionResponses =
-                readMultipleAuctionDto.readAuctionDtos()
+                readMultipleAuctionDto.auctionInfoDtos()
                                       .stream()
                                       .map(dto -> ReadAuctionResponse.of(dto, imageRelativeUrl))
                                       .toList();
@@ -27,7 +28,7 @@ public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean i
             int auctioneerCount
     ) {
 
-        public static ReadAuctionResponse of(final ReadMultipleAuctionDto.ReadAuctionDto dto, final String imageRelativeUrl) {
+        public static ReadAuctionResponse of(final AuctionInfoDto dto, final String imageRelativeUrl) {
             return new ReadAuctionResponse(
                     dto.id(),
                     dto.title(),

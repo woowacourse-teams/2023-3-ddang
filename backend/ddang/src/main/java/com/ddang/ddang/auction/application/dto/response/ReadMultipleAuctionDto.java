@@ -7,18 +7,18 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Slice;
 
-public record ReadMultipleAuctionDto(List<ReadAuctionDto> readAuctionDtos, boolean isLast) {
+public record ReadMultipleAuctionDto(List<AuctionInfoDto> auctionInfoDtos, boolean isLast) {
 
     public static ReadMultipleAuctionDto of(final Slice<Auction> auctions, final LocalDateTime targetTime) {
-        final List<ReadAuctionDto> readAuctionDtos = auctions.getContent()
+        final List<AuctionInfoDto> auctionInfoDtos = auctions.getContent()
                                                              .stream()
-                                                             .map(auction -> ReadAuctionDto.of(auction, targetTime))
+                                                             .map(auction -> AuctionInfoDto.of(auction, targetTime))
                                                              .toList();
 
-        return new ReadMultipleAuctionDto(readAuctionDtos, !auctions.hasNext());
+        return new ReadMultipleAuctionDto(auctionInfoDtos, !auctions.hasNext());
     }
 
-    public record ReadAuctionDto(
+    public record AuctionInfoDto(
             Long id,
             String title,
             String description,
@@ -42,8 +42,8 @@ public record ReadMultipleAuctionDto(List<ReadAuctionDto> readAuctionDtos, boole
             Long lastBidderId
     ) {
 
-        private static ReadAuctionDto of(final Auction auction, final LocalDateTime targetTime) {
-            return new ReadAuctionDto(
+        public static AuctionInfoDto of(final Auction auction, final LocalDateTime targetTime) {
+            return new AuctionInfoDto(
                     auction.getId(),
                     auction.getTitle(),
                     auction.getDescription(),

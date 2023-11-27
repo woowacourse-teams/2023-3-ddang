@@ -2,8 +2,9 @@ package com.ddang.ddang.auction.presentation.fixture;
 
 import com.ddang.ddang.auction.application.dto.response.CreateInfoAuctionDto;
 import com.ddang.ddang.auction.application.dto.response.ReadFullDirectRegionDto;
-import com.ddang.ddang.auction.application.dto.response.ReadFullDirectRegionDto.ReadDirectRegionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadFullDirectRegionDto.DirectRegionInfoDto;
 import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
+import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto.AuctionInfoDto;
 import com.ddang.ddang.auction.application.dto.response.ReadSingleAuctionDto;
 import com.ddang.ddang.auction.domain.AuctionStatus;
 import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
@@ -46,8 +47,8 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
     );
     protected ReadChatRoomDto 쪽지방_dto = new ReadChatRoomDto(1L, true);
     protected ReadSingleAuctionDto 경매_조회_dto;
-    protected ReadMultipleAuctionDto.ReadAuctionDto 첫번째_경매_조회_dto;
-    protected ReadMultipleAuctionDto.ReadAuctionDto 두번째_경매_조회_dto;
+    protected AuctionInfoDto 첫번째_경매_조회_dto;
+    protected AuctionInfoDto 두번째_경매_조회_dto;
     protected ReadMultipleAuctionDto 경매_목록_조회_dto;
 
 
@@ -157,9 +158,9 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 LocalDateTime.now(),
                 List.of(
                         new ReadFullDirectRegionDto(
-                                new ReadDirectRegionDto(서울특별시.getId(), 서울특별시.getName()),
-                                new ReadDirectRegionDto(강서구.getId(), 강서구.getName()),
-                                new ReadDirectRegionDto(역삼동.getId(), 역삼동.getName())
+                                new DirectRegionInfoDto(서울특별시.getId(), 서울특별시.getName()),
+                                new DirectRegionInfoDto(강서구.getId(), 강서구.getName()),
+                                new DirectRegionInfoDto(역삼동.getId(), 역삼동.getName())
                         )
                 ),
                 List.of("store-name.png"),
@@ -175,7 +176,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 null
         );
 
-        첫번째_경매_조회_dto = new ReadMultipleAuctionDto.ReadAuctionDto(
+        첫번째_경매_조회_dto = new AuctionInfoDto(
                 1L,
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -187,9 +188,9 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 LocalDateTime.now(),
                 List.of(
                         new ReadFullDirectRegionDto(
-                                new ReadDirectRegionDto(서울특별시.getId(), 서울특별시.getName()),
-                                new ReadDirectRegionDto(강서구.getId(), 강서구.getName()),
-                                new ReadDirectRegionDto(역삼동.getId(), 역삼동.getName())
+                                new DirectRegionInfoDto(서울특별시.getId(), 서울특별시.getName()),
+                                new DirectRegionInfoDto(강서구.getId(), 강서구.getName()),
+                                new DirectRegionInfoDto(역삼동.getId(), 역삼동.getName())
                         )
                 ),
                 "store-name.png",
@@ -205,7 +206,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 null
         );
 
-        두번째_경매_조회_dto = new ReadMultipleAuctionDto.ReadAuctionDto(
+        두번째_경매_조회_dto = new AuctionInfoDto(
                 2L,
                 "경매 상품 1",
                 "이것은 경매 상품 1 입니다.",
@@ -217,9 +218,9 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 LocalDateTime.now(),
                 List.of(
                         new ReadFullDirectRegionDto(
-                                new ReadDirectRegionDto(서울특별시.getId(), 서울특별시.getName()),
-                                new ReadDirectRegionDto(강서구.getId(), 강서구.getName()),
-                                new ReadDirectRegionDto(역삼동.getId(), 역삼동.getName())
+                                new DirectRegionInfoDto(서울특별시.getId(), 서울특별시.getName()),
+                                new DirectRegionInfoDto(강서구.getId(), 강서구.getName()),
+                                new DirectRegionInfoDto(역삼동.getId(), 역삼동.getName())
                         )
                 ),
                 "store-name.png",
