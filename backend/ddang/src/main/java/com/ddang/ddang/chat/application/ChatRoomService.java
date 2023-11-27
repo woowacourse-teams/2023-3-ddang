@@ -10,7 +10,7 @@ import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
+import com.ddang.ddang.chat.application.exception.ForbiddenChattingUserException;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.dto.MultipleChatRoomInfoDto;
 import com.ddang.ddang.chat.domain.repository.MultipleChatRoomRepository;
@@ -75,7 +75,7 @@ public class ChatRoomService {
 
     private void checkUserCanParticipate(final User findUser, final Auction findAuction) {
         if (isNotSellerAndNotWinner(findUser, findAuction)) {
-            throw new InvalidUserToChat("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
+            throw new ForbiddenChattingUserException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다.");
         }
     }
 
@@ -104,7 +104,7 @@ public class ChatRoomService {
 
     private void checkAccessible(final User findUser, final ChatRoom chatRoom) {
         if (!chatRoom.isParticipant(findUser)) {
-            throw new InvalidUserToChat("해당 채팅방에 접근할 권한이 없습니다.");
+            throw new ForbiddenChattingUserException("해당 채팅방에 접근할 권한이 없습니다.");
         }
     }
 

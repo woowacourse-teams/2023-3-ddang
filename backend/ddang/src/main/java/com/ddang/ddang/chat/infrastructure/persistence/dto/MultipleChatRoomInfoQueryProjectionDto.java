@@ -15,7 +15,7 @@ public record MultipleChatRoomInfoQueryProjectionDto(
     public MultipleChatRoomInfoQueryProjectionDto {
     }
 
-    public MultipleChatRoomInfoDto toSortedDto() {
+    public MultipleChatRoomInfoDto toDomainDto() {
         return new MultipleChatRoomInfoDto(
                 this.chatRoom,
                 this.message,

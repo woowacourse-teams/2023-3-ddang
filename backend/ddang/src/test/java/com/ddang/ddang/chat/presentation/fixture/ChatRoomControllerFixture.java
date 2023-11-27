@@ -3,11 +3,11 @@ package com.ddang.ddang.chat.presentation.fixture;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMessageDto;
-import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadChatRoomAuctionInfoDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadSimpleAuctionInfoDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadLastMessageDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadPartnerInfoDto;
 import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
-import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto.ReadSimpleAuctionInfoDto;
+import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto.ReadDetailAuctionInfoDto;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
@@ -18,8 +18,8 @@ import java.time.LocalDateTime;
 public class ChatRoomControllerFixture extends CommonControllerSliceTest {
 
     private Long 탈퇴한_사용자_아이디 = 5L;
-    private ReadChatRoomAuctionInfoDto 조회용_경매1 = new ReadChatRoomAuctionInfoDto(1L, "경매1", 10_000, "store-name.png");
-    private ReadChatRoomAuctionInfoDto 조회용_경매2 = new ReadChatRoomAuctionInfoDto(2L, "경매2", 20_000, "store-name.png");
+    private ReadSimpleAuctionInfoDto 조회용_경매1 = new ReadSimpleAuctionInfoDto(1L, "경매1", 10_000, "store-name.png");
+    private ReadSimpleAuctionInfoDto 조회용_경매2 = new ReadSimpleAuctionInfoDto(2L, "경매2", 20_000, "store-name.png");
 
     protected PrivateClaims 사용자_ID_클레임 = new PrivateClaims(1L);
     protected ReadMultipleChatRoomDto 조회용_채팅방1 = new ReadMultipleChatRoomDto(
@@ -42,7 +42,7 @@ public class ChatRoomControllerFixture extends CommonControllerSliceTest {
     protected ReadMessageDto 조회용_메시지 = new ReadMessageDto(1L, LocalDateTime.now(), 1L, 1L, 1L, "메시지내용");
     protected ReadSingleChatRoomDto 조회용_참가중인_채팅방 = new ReadSingleChatRoomDto(
             1L,
-            new ReadSimpleAuctionInfoDto(1L, "경매1", 10_000, "store-name.png"),
+            new ReadDetailAuctionInfoDto(1L, "경매1", 10_000, "store-name.png"),
             new ReadSingleChatRoomDto.ReadPartnerInfoDto(1L, "판매자", "store-name.png", 5.0d, false),
             true);
     protected CreateChatRoomRequest 채팅방_생성_요청 = new CreateChatRoomRequest(1L);

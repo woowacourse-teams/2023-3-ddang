@@ -33,7 +33,7 @@ import com.ddang.ddang.authentication.configuration.AuthenticationStore;
 import com.ddang.ddang.chat.application.dto.request.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.request.CreateMessageDto;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
+import com.ddang.ddang.chat.application.exception.ForbiddenChattingUserException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
@@ -137,7 +137,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
                        .content(objectMapper.writeValueAsString(유효하지_않은_발신자의_메시지_생성_요청))
                        .contentType(MediaType.APPLICATION_JSON))
                .andExpectAll(
-                       status().isNotFound(),
+                       status().isBadRequest(),
                        jsonPath("$.message").exists()
                );
     }
@@ -335,7 +335,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     void 지정한_아이디에_해당하는_채팅방_조회시_요청한_사용자_채팅방의_참여자가_아니라면_404를_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(new InvalidUserToChat("해당 채팅방에 접근할 권한이 없습니다."));
+        given(chatRoomService.readByChatRoomId(anyLong(), anyLong())).willThrow(new ForbiddenChattingUserException("해당 채팅방에 접근할 권한이 없습니다."));
 
         // when & then
         mockMvc.perform(get("/chattings/{chatRoomId}", 채팅방_아이디)
@@ -453,7 +453,7 @@ class ChatRoomControllerTest extends ChatRoomControllerFixture {
     void 채팅방_생성을_요청한_사용자가_경매의_판매자_또는_최종_낙찰자가_아니라면_403을_반환한다() throws Exception {
         // given
         given(tokenDecoder.decode(eq(TokenType.ACCESS), anyString())).willReturn(Optional.of(사용자_ID_클레임));
-        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new InvalidUserToChat("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다."));
+        given(chatRoomService.create(anyLong(), any(CreateChatRoomDto.class))).willThrow(new ForbiddenChattingUserException("경매의 판매자 또는 최종 낙찰자만 채팅이 가능합니다."));
 
         // when & then
         mockMvc.perform(post("/chattings")

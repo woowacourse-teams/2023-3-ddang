@@ -1,7 +1,14 @@
-package com.ddang.ddang.chat.application;
+package com.ddang.ddang.chat.application.event.listener;
 
-import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
+import static org.mockito.Mockito.verify;
+
+import com.ddang.ddang.chat.application.LastReadMessageLogService;
 import com.ddang.ddang.chat.application.fixture.LastReadMessageLogEventListenerFixture;
+import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -10,12 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.event.ApplicationEvents;
 import org.springframework.test.context.event.RecordApplicationEvents;
-
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.BDDMockito.willThrow;
-import static org.mockito.Mockito.verify;
 
 @IsolateDatabase
 @RecordApplicationEvents

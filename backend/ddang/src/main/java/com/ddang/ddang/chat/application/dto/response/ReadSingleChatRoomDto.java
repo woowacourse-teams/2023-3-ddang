@@ -6,7 +6,7 @@ import com.ddang.ddang.user.domain.User;
 
 public record ReadSingleChatRoomDto(
         Long id,
-        ReadSimpleAuctionInfoDto auctionDto,
+        ReadDetailAuctionInfoDto auctionDto,
         ReadPartnerInfoDto partnerDto,
         boolean isChatAvailable
 ) {
@@ -19,21 +19,21 @@ public record ReadSingleChatRoomDto(
 
         return new ReadSingleChatRoomDto(
                 chatRoom.getId(),
-                ReadSimpleAuctionInfoDto.from(chatRoom.getAuction()),
+                ReadDetailAuctionInfoDto.from(chatRoom.getAuction()),
                 ReadPartnerInfoDto.from(partner),
                 chatRoom.isChatAvailablePartner(partner)
         );
     }
 
-    public record ReadSimpleAuctionInfoDto(
+    public record ReadDetailAuctionInfoDto(
             Long id,
             String title,
             Integer lastBidPrice,
             String thumbnailImageStoreName
     ) {
 
-        private static ReadSimpleAuctionInfoDto from(final Auction auction) {
-            return new ReadSimpleAuctionInfoDto(
+        private static ReadDetailAuctionInfoDto from(final Auction auction) {
+            return new ReadDetailAuctionInfoDto(
                     auction.getId(),
                     auction.getTitle(),
                     auction.findLastBid().map(lastBid -> lastBid.getPrice().getValue()).orElse(null),

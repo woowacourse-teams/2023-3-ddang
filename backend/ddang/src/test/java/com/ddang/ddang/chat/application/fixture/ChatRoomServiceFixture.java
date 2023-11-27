@@ -13,7 +13,7 @@ import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository
 import com.ddang.ddang.chat.application.dto.request.CreateChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadChatRoomDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto;
-import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadChatRoomAuctionInfoDto;
+import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadSimpleAuctionInfoDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadLastMessageDto;
 import com.ddang.ddang.chat.application.dto.response.ReadMultipleChatRoomDto.ReadPartnerInfoDto;
 import com.ddang.ddang.chat.application.dto.response.ReadSingleChatRoomDto;
@@ -280,7 +280,7 @@ public class ChatRoomServiceFixture {
         채팅방_없고_참여_불가능 = new ReadChatRoomDto(null, false);
         엔초_채팅_목록의_제이미_엔초_채팅방_정보 = new ReadMultipleChatRoomDto(
                 제이미_엔초_채팅방.getId(),
-                new ReadChatRoomAuctionInfoDto(판매자_제이미_구매자_엔초_경매.getId(), 판매자_제이미_구매자_엔초_경매.getTitle(), 판매자_제이미_구매자_엔초_경매.getLastBid().getPrice().getValue(), 판매자_제이미_구매자_엔초_경매.getThumbnailImageStoreName()),
+                new ReadSimpleAuctionInfoDto(판매자_제이미_구매자_엔초_경매.getId(), 판매자_제이미_구매자_엔초_경매.getTitle(), 판매자_제이미_구매자_엔초_경매.getLastBid().getPrice().getValue(), 판매자_제이미_구매자_엔초_경매.getThumbnailImageStoreName()),
                 new ReadPartnerInfoDto(제이미.getId(), 제이미.getName(), 제이미.getProfileImageStoreName(), 제이미.getReliability().getValue(), 제이미.isDeleted()),
                 new ReadLastMessageDto(제이미가_엔초에게_2시에_보낸_쪽지.getCreatedTime(), 제이미가_엔초에게_2시에_보낸_쪽지.getContent()),
                 1L,
@@ -288,7 +288,7 @@ public class ChatRoomServiceFixture {
         );
         엔초_채팅_목록의_엔초_지토_채팅방_정보 = new ReadMultipleChatRoomDto(
                 엔초_지토_채팅방.getId(),
-                new ReadChatRoomAuctionInfoDto(판매자_엔초_구매자_지토_경매.getId(), 판매자_엔초_구매자_지토_경매.getTitle(), 판매자_엔초_구매자_지토_경매.getLastBid().getPrice().getValue(), 판매자_엔초_구매자_지토_경매.getThumbnailImageStoreName()),
+                new ReadSimpleAuctionInfoDto(판매자_엔초_구매자_지토_경매.getId(), 판매자_엔초_구매자_지토_경매.getTitle(), 판매자_엔초_구매자_지토_경매.getLastBid().getPrice().getValue(), 판매자_엔초_구매자_지토_경매.getThumbnailImageStoreName()),
                 new ReadPartnerInfoDto(지토.getId(), 지토.getName(), 지토.getProfileImageStoreName(), 지토.getReliability().getValue(), 지토.isDeleted()),
                 new ReadLastMessageDto(엔초가_지토에게_1시에_보낸_쪽지.getCreatedTime(), 엔초가_지토에게_1시에_보낸_쪽지.getContent()),
                 1L,

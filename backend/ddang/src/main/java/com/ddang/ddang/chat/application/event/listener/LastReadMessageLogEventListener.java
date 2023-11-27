@@ -1,5 +1,6 @@
-package com.ddang.ddang.chat.application;
+package com.ddang.ddang.chat.application.event.listener;
 
+import com.ddang.ddang.chat.application.LastReadMessageLogService;
 import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.infrastructure.exception.ReadMessageLogNotFoundException;

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public record ReadMultipleChatRoomDto(
         Long chatRoomId,
-        ReadChatRoomAuctionInfoDto auctionDto,
+        ReadSimpleAuctionInfoDto auctionDto,
         ReadPartnerInfoDto partnerDto,
         ReadLastMessageDto lastMessageDto,
         long unreadMessageCount,
@@ -27,7 +27,7 @@ public record ReadMultipleChatRoomDto(
 
         return new ReadMultipleChatRoomDto(
                 chatRoom.getId(),
-                ReadChatRoomAuctionInfoDto.from(chatRoom.getAuction()),
+                ReadSimpleAuctionInfoDto.from(chatRoom.getAuction()),
                 ReadPartnerInfoDto.from(partner),
                 new ReadLastMessageDto(lastMessage.getCreatedTime(), lastMessage.getContent()),
                 unreadMessages,
@@ -35,15 +35,15 @@ public record ReadMultipleChatRoomDto(
         );
     }
 
-    public record ReadChatRoomAuctionInfoDto(
+    public record ReadSimpleAuctionInfoDto(
             Long id,
             String title,
             Integer lastBidPrice,
             String thumbnailImageStoreName
     ) {
 
-        private static ReadChatRoomAuctionInfoDto from(final Auction auction) {
-            return new ReadChatRoomAuctionInfoDto(
+        private static ReadSimpleAuctionInfoDto from(final Auction auction) {
+            return new ReadSimpleAuctionInfoDto(
                     auction.getId(),
                     auction.getTitle(),
                     auction.findLastBid().map(lastBid -> lastBid.getPrice().getValue()).orElse(null),

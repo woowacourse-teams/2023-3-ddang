@@ -13,7 +13,7 @@ import com.ddang.ddang.authentication.domain.exception.UnsupportedSocialLoginExc
 import com.ddang.ddang.bid.application.exception.InvalidBidException;
 import com.ddang.ddang.category.infrastructure.exception.CategoryNotFoundException;
 import com.ddang.ddang.chat.application.exception.InvalidAuctionToChatException;
-import com.ddang.ddang.chat.application.exception.InvalidUserToChat;
+import com.ddang.ddang.chat.application.exception.ForbiddenChattingUserException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.exception.UnableToChatException;
 import com.ddang.ddang.chat.infrastructure.exception.ChatRoomNotFoundException;
@@ -227,9 +227,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                              .body(new ExceptionResponse(ex.getMessage()));
     }
 
-    @ExceptionHandler(InvalidUserToChat.class)
+    @ExceptionHandler(ForbiddenChattingUserException.class)
     public ResponseEntity<ExceptionResponse> handleUserNotAccessibleException(
-            final InvalidUserToChat ex
+            final ForbiddenChattingUserException ex
     ) {
         logger.warn(String.format(LOG_MESSAGE_FORMAT, ex.getClass().getSimpleName(), ex.getMessage()));
 

@@ -74,7 +74,7 @@ public class QuerydslMultipleChatRoomInfoRepository {
                                 (MultipleChatRoomInfoQueryProjectionDto unsortedDto) ->
                                         unsortedDto.message().getId()
                         ).reversed()
-                ).map(MultipleChatRoomInfoQueryProjectionDto::toSortedDto)
+                ).map(MultipleChatRoomInfoQueryProjectionDto::toDomainDto)
                            .toList();
     }
 
