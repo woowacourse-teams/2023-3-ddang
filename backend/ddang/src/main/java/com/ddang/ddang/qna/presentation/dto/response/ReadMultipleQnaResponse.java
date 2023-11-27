@@ -4,7 +4,6 @@ import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto;
 import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto;
 import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto.AnswerDto.AnswererInfoDto;
 import com.ddang.ddang.qna.application.dto.response.ReadMultipleQnaDto.QnaInfoDto.QuestionDto.QuestionerInfoDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 

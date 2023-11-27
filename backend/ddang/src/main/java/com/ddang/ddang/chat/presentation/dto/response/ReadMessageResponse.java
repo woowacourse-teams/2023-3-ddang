@@ -1,7 +1,6 @@
 package com.ddang.ddang.chat.presentation.dto.response;
 
 import com.ddang.ddang.chat.application.dto.response.ReadMessageDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 

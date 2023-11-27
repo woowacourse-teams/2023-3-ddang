@@ -1,7 +1,6 @@
 package com.ddang.ddang.report.presentation.dto.response;
 
 import com.ddang.ddang.report.application.dto.response.ReadAnswerReportDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 
