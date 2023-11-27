@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 
 public record ReadMultipleChatRoomResponse(
         Long id,
-        ReadPartnerResponse partner,
-        ReadChatRoomAuctionInfoResponse auction,
-        ReadLastMessageResponse lastMessage,
+        PartnerResponse partner,
+        SimpleAuctionInfoResponse auction,
+        LastMessageInfoResponse lastMessage,
         Long unreadMessageCount,
         boolean isChatAvailable
 ) {
@@ -20,18 +20,18 @@ public record ReadMultipleChatRoomResponse(
     ) {
         return new ReadMultipleChatRoomResponse(
                 dto.chatRoomId(),
-                ReadPartnerResponse.of(dto, profileImageRelativeUrl),
-                ReadChatRoomAuctionInfoResponse.of(dto, auctionImageRelativeUrl),
-                new ReadLastMessageResponse(dto.lastMessageDto().createAd(), dto.lastMessageDto().content()),
+                PartnerResponse.of(dto, profileImageRelativeUrl),
+                SimpleAuctionInfoResponse.of(dto, auctionImageRelativeUrl),
+                new LastMessageInfoResponse(dto.lastMessageDto().createdTime(), dto.lastMessageDto().content()),
                 dto.unreadMessageCount(),
                 dto.isChatAvailable()
         );
     }
 
-    public record ReadPartnerResponse(Long id, String name, String profileImage) {
+    public record PartnerResponse(Long id, String name, String profileImage) {
 
-        private static ReadPartnerResponse of(final ReadMultipleChatRoomDto dto, final String imageRelativeUrl) {
-            return new ReadPartnerResponse(
+        public static PartnerResponse of(final ReadMultipleChatRoomDto dto, final String imageRelativeUrl) {
+            return new PartnerResponse(
                     dto.partnerDto().id(),
                     dto.partnerDto().name(),
                     imageRelativeUrl + dto.partnerDto().profileImageStoreName()
@@ -39,10 +39,10 @@ public record ReadMultipleChatRoomResponse(
         }
     }
 
-    public record ReadChatRoomAuctionInfoResponse(Long id, String title, String image, int price) {
+    public record SimpleAuctionInfoResponse(Long id, String title, String image, int price) {
 
-        private static ReadChatRoomAuctionInfoResponse of(final ReadMultipleChatRoomDto dto, final String imageRelativeUrl) {
-            return new ReadChatRoomAuctionInfoResponse(
+        private static SimpleAuctionInfoResponse of(final ReadMultipleChatRoomDto dto, final String imageRelativeUrl) {
+            return new SimpleAuctionInfoResponse(
                     dto.auctionDto().id(),
                     dto.auctionDto().title(),
                     imageRelativeUrl + dto.auctionDto().thumbnailImageStoreName(),
@@ -51,7 +51,7 @@ public record ReadMultipleChatRoomResponse(
         }
     }
 
-    public record ReadLastMessageResponse(
+    public record LastMessageInfoResponse(
             @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
             LocalDateTime createdTime,
 

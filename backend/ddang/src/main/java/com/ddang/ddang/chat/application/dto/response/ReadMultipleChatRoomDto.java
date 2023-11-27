@@ -9,41 +9,38 @@ import java.time.LocalDateTime;
 
 public record ReadMultipleChatRoomDto(
         Long chatRoomId,
-        ReadSimpleAuctionInfoDto auctionDto,
-        ReadPartnerInfoDto partnerDto,
-        ReadLastMessageDto lastMessageDto,
+        SimpleAuctionInfoDto auctionDto,
+        PartnerInfoDto partnerDto,
+        MessageInfoDto lastMessageDto,
         long unreadMessageCount,
         boolean isChatAvailable
 ) {
 
-    public static ReadMultipleChatRoomDto of(
-            final User findUser,
-            final MultipleChatRoomInfoDto multipleChatRoomInfoDto
-    ) {
-        final ChatRoom chatRoom = multipleChatRoomInfoDto.chatRoom();
+    public static ReadMultipleChatRoomDto of(final User findUser, final MultipleChatRoomInfoDto dto) {
+        final ChatRoom chatRoom = dto.chatRoom();
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
-        final Message lastMessage = multipleChatRoomInfoDto.message();
-        final Long unreadMessages = multipleChatRoomInfoDto.unreadMessageCount();
+        final Message lastMessage = dto.message();
+        final Long unreadMessages = dto.unreadMessageCount();
 
         return new ReadMultipleChatRoomDto(
                 chatRoom.getId(),
-                ReadSimpleAuctionInfoDto.from(chatRoom.getAuction()),
-                ReadPartnerInfoDto.from(partner),
-                new ReadLastMessageDto(lastMessage.getCreatedTime(), lastMessage.getContent()),
+                SimpleAuctionInfoDto.from(chatRoom.getAuction()),
+                PartnerInfoDto.from(partner),
+                new MessageInfoDto(lastMessage.getCreatedTime(), lastMessage.getContent()),
                 unreadMessages,
                 chatRoom.isChatAvailablePartner(partner)
         );
     }
 
-    public record ReadSimpleAuctionInfoDto(
+    public record SimpleAuctionInfoDto(
             Long id,
             String title,
             Integer lastBidPrice,
             String thumbnailImageStoreName
     ) {
 
-        private static ReadSimpleAuctionInfoDto from(final Auction auction) {
-            return new ReadSimpleAuctionInfoDto(
+        public static SimpleAuctionInfoDto from(final Auction auction) {
+            return new SimpleAuctionInfoDto(
                     auction.getId(),
                     auction.getTitle(),
                     auction.findLastBid().map(lastBid -> lastBid.getPrice().getValue()).orElse(null),
@@ -52,7 +49,7 @@ public record ReadMultipleChatRoomDto(
         }
     }
 
-    public record ReadPartnerInfoDto(
+    public record PartnerInfoDto(
             Long id,
             String name,
             String profileImageStoreName,
@@ -60,8 +57,8 @@ public record ReadMultipleChatRoomDto(
             boolean isDeleted
     ) {
 
-        private static ReadPartnerInfoDto from(final User user) {
-            return new ReadPartnerInfoDto(
+        public static PartnerInfoDto from(final User user) {
+            return new PartnerInfoDto(
                     user.getId(),
                     user.findName(),
                     user.getProfileImageStoreName(),
@@ -71,6 +68,6 @@ public record ReadMultipleChatRoomDto(
         }
     }
 
-    public record ReadLastMessageDto(LocalDateTime createAd, String content) {
+    public record MessageInfoDto(LocalDateTime createdTime, String content) {
     }
 }

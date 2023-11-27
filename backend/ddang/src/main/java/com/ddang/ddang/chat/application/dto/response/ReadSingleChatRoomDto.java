@@ -6,34 +6,31 @@ import com.ddang.ddang.user.domain.User;
 
 public record ReadSingleChatRoomDto(
         Long id,
-        ReadDetailAuctionInfoDto auctionDto,
-        ReadPartnerInfoDto partnerDto,
+        DetailAuctionInfoDto auctionDto,
+        PartnerInfoDto partnerDto,
         boolean isChatAvailable
 ) {
 
-    public static ReadSingleChatRoomDto of(
-            final User findUser,
-            final ChatRoom chatRoom
-    ) {
+    public static ReadSingleChatRoomDto of(final User findUser, final ChatRoom chatRoom) {
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
 
         return new ReadSingleChatRoomDto(
                 chatRoom.getId(),
-                ReadDetailAuctionInfoDto.from(chatRoom.getAuction()),
-                ReadPartnerInfoDto.from(partner),
+                DetailAuctionInfoDto.from(chatRoom.getAuction()),
+                PartnerInfoDto.from(partner),
                 chatRoom.isChatAvailablePartner(partner)
         );
     }
 
-    public record ReadDetailAuctionInfoDto(
+    public record DetailAuctionInfoDto(
             Long id,
             String title,
             Integer lastBidPrice,
             String thumbnailImageStoreName
     ) {
 
-        private static ReadDetailAuctionInfoDto from(final Auction auction) {
-            return new ReadDetailAuctionInfoDto(
+        public static DetailAuctionInfoDto from(final Auction auction) {
+            return new DetailAuctionInfoDto(
                     auction.getId(),
                     auction.getTitle(),
                     auction.findLastBid().map(lastBid -> lastBid.getPrice().getValue()).orElse(null),
@@ -42,7 +39,7 @@ public record ReadSingleChatRoomDto(
         }
     }
 
-    public record ReadPartnerInfoDto(
+    public record PartnerInfoDto(
             Long id,
             String name,
             String profileImageStoreName,
@@ -50,8 +47,8 @@ public record ReadSingleChatRoomDto(
             boolean isDeleted
     ) {
 
-        private static ReadPartnerInfoDto from(final User user) {
-            return new ReadPartnerInfoDto(
+        public static PartnerInfoDto from(final User user) {
+            return new PartnerInfoDto(
                     user.getId(),
                     user.findName(),
                     user.getProfileImageStoreName(),
