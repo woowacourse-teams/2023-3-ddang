@@ -1,7 +1,6 @@
 package com.ddang.ddang.notification.application;
 
 import com.ddang.ddang.auction.domain.Auction;
-import com.ddang.ddang.bid.application.event.dto.NotificationPreviousBidDto;
 import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.Message;
@@ -27,7 +26,6 @@ public class NotificationEventListener {
     private static final String MESSAGE_NOTIFICATION_REDIRECT_URI = "/chattings";
     private static final String AUCTION_DETAIL_URI = "/auctions";
     private static final String BID_NOTIFICATION_MESSAGE_FORMAT = "상위 입찰자가 나타났습니다. 구매를 원하신다면 더 높은 가격을 제시해 주세요.";
-    private static final int FIRST_IMAGE_INDEX = 0;
 
     private final NotificationService notificationService;
 
@@ -53,15 +51,14 @@ public class NotificationEventListener {
     @TransactionalEventListener
     public void sendBidNotification(final BidNotificationEvent bidNotificationEvent) {
         try {
-            final NotificationPreviousBidDto notificationPreviousBidDto = bidNotificationEvent.notificationPreviousBidDto();
-            final Auction auction = notificationPreviousBidDto.auction();
+            final Auction auction = bidNotificationEvent.auction();
             final CreateNotificationDto createNotificationDto = new CreateNotificationDto(
                     NotificationType.BID,
-                    notificationPreviousBidDto.previousBidderId(),
+                    bidNotificationEvent.previousBidderId(),
                     auction.getTitle(),
                     BID_NOTIFICATION_MESSAGE_FORMAT,
                     calculateRedirectUrl(AUCTION_DETAIL_URI, auction.getId()),
-                    notificationPreviousBidDto.auctionImageAbsoluteUrl() + auction.getThumbnailImageStoreName()
+                    bidNotificationEvent.auctionImageAbsoluteUrl() + auction.getThumbnailImageStoreName()
             );
             notificationService.send(createNotificationDto);
         } catch (final FirebaseMessagingException ex) {
