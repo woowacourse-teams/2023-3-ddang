@@ -4,22 +4,22 @@ import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto;
 import com.ddang.ddang.auction.application.dto.response.ReadMultipleAuctionDto.AuctionInfoDto;
 import java.util.List;
 
-public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean isLast) {
+public record ReadAuctionsResponse(List<AuctionInfoResponse> auctions, boolean isLast) {
 
     public static ReadAuctionsResponse of(
             final ReadMultipleAuctionDto readMultipleAuctionDto,
             final String imageRelativeUrl
     ) {
-        final List<ReadAuctionResponse> readAuctionResponses =
+        final List<AuctionInfoResponse> auctionInfoRespons =
                 readMultipleAuctionDto.auctionInfoDtos()
                                       .stream()
-                                      .map(dto -> ReadAuctionResponse.of(dto, imageRelativeUrl))
+                                      .map(dto -> AuctionInfoResponse.of(dto, imageRelativeUrl))
                                       .toList();
 
-        return new ReadAuctionsResponse(readAuctionResponses, readMultipleAuctionDto.isLast());
+        return new ReadAuctionsResponse(auctionInfoRespons, readMultipleAuctionDto.isLast());
     }
 
-    public record ReadAuctionResponse(
+    public record AuctionInfoResponse(
             Long id,
             String title,
             String image,
@@ -28,8 +28,8 @@ public record ReadAuctionsResponse(List<ReadAuctionResponse> auctions, boolean i
             int auctioneerCount
     ) {
 
-        public static ReadAuctionResponse of(final AuctionInfoDto dto, final String imageRelativeUrl) {
-            return new ReadAuctionResponse(
+        public static AuctionInfoResponse of(final AuctionInfoDto dto, final String imageRelativeUrl) {
+            return new AuctionInfoResponse(
                     dto.id(),
                     dto.title(),
                     imageRelativeUrl + dto.auctionThumbnailImageStoreName(),
