@@ -10,6 +10,8 @@ public interface UserRepository {
 
     Optional<User> findById(final Long id);
 
+    Optional<User> findByIdWithProfileImage(final Long id);
+
     Optional<User> findByOauthId(final String oauthId);
 
     boolean existsByIdAndDeletedIsTrue(final Long id);

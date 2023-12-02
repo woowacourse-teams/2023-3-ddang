@@ -57,9 +57,9 @@ public record AuctionDetailResponse(
     }
 
     private static List<String> convertImageFullUrls(final ReadAuctionDto dto) {
-        return dto.auctionImageIds()
+        return dto.auctionImageStoreNames()
                   .stream()
-                  .map(id -> ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, id))
+                  .map(imageStoreName -> ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, imageStoreName))
                   .toList();
     }
 

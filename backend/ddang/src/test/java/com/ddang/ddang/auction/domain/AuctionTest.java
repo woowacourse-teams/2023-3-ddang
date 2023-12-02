@@ -1,17 +1,18 @@
 package com.ddang.ddang.auction.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.ddang.ddang.auction.domain.fixture.AuctionFixture;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.user.domain.User;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @SuppressWarnings("NonAsciiCharacters")
@@ -347,6 +348,43 @@ class AuctionTest extends AuctionFixture {
 
         // when
         final Optional<User> actual = auction.findLastBidder();
+
+        // then
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void 마지막_입찰을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("제목")
+                                       .seller(판매자)
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .startPrice(new Price(1_000))
+                                       .bidUnit(new BidUnit(1_000))
+                                       .build();
+        final Bid bid = new Bid(auction, 구매자, 유효한_입찰_금액);
+
+        auction.updateLastBid(bid);
+
+        // when
+        final Optional<Bid> actual = auction.findLastBid();
+
+        // then
+        assertThat(actual).contains(bid);
+    }
+
+    @Test
+    void 마지막_입찰이_없다면_빈_Optional을_반환한다() {
+        // given
+        final Auction auction = Auction.builder()
+                                       .title("제목")
+                                       .seller(판매자)
+                                       .closingTime(LocalDateTime.now().minusDays(3L))
+                                       .build();
+
+        // when
+        final Optional<Bid> actual = auction.findLastBid();
 
         // then
         assertThat(actual).isEmpty();

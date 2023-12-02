@@ -913,6 +913,9 @@ Authorization: Bearer accessToken
 }</code></pre>
 </div>
 </div>
+<div class="paragraph">
+<p>Unresolved directive in docs.adoc - include::/Users/kwon-yejin/GitHub/2023-3-ddang/backend/ddang/build/generated-snippets/authentication-controller-test/ouath2-type과_access-token과_refresh-token을_전달하면_탈퇴한다/path-parameters.adoc[]</p>
+</div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 2. /oauth2/withdrawal/{oauth2Type}</caption>
 <colgroup>
@@ -1006,7 +1009,7 @@ Content-Type: application/json
 
 {
   "name" : "사용자1",
-  "profileImage" : "http://localhost:8080/users/images/1",
+  "profileImage" : "http://localhost:8080/users/images/profile_image.png",
   "reliability" : 4.6
 }</code></pre>
 </div>
@@ -1065,7 +1068,7 @@ Content-Type: application/json
 
 {
   "name" : "updateName",
-  "profileImage" : "http://localhost:8080/users/images/1",
+  "profileImage" : "http://localhost:8080/users/images/profile_image.png",
   "reliability" : 4.6
 }</code></pre>
 </div>
@@ -1525,7 +1528,7 @@ Content-Type: application/json
 {
   "id" : 1,
   "title" : "제목",
-  "image" : "http://localhost:8080/auctions/images/1",
+  "image" : "http://localhost:8080/auctions/images/auction_image.png",
   "auctionPrice" : 1000,
   "status" : "UNBIDDEN",
   "auctioneerCount" : 0
@@ -1643,14 +1646,14 @@ Content-Type: application/json
   "auctions" : [ {
     "id" : 2,
     "title" : "경매 상품 1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "auctionPrice" : 1000,
     "status" : "UNBIDDEN",
     "auctioneerCount" : 2
   }, {
     "id" : 1,
     "title" : "경매 상품 1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "auctionPrice" : 1000,
     "status" : "UNBIDDEN",
     "auctioneerCount" : 2
@@ -1785,14 +1788,14 @@ Content-Type: application/json
   "auctions" : [ {
     "id" : 2,
     "title" : "경매 상품 2",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "auctionPrice" : 1000,
     "status" : "UNBIDDEN",
     "auctioneerCount" : 2
   }, {
     "id" : 1,
     "title" : "경매 상품 1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "auctionPrice" : 1000,
     "status" : "UNBIDDEN",
     "auctioneerCount" : 2
@@ -1927,14 +1930,14 @@ Content-Type: application/json
   "auctions" : [ {
     "id" : 2,
     "title" : "경매 상품 2",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "auctionPrice" : 1000,
     "status" : "UNBIDDEN",
     "auctioneerCount" : 2
   }, {
     "id" : 1,
     "title" : "경매 상품 1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "auctionPrice" : 1000,
     "status" : "UNBIDDEN",
     "auctioneerCount" : 2
@@ -2065,7 +2068,7 @@ Content-Type: application/json
 {
   "auction" : {
     "id" : 1,
-    "images" : [ "http://localhost:8080/auctions/images/1" ],
+    "images" : [ "http://localhost:8080/auctions/images/auction_image.png" ],
     "title" : "경매 상품 1",
     "category" : {
       "main" : "main",
@@ -2087,7 +2090,7 @@ Content-Type: application/json
   },
   "seller" : {
     "id" : 1,
-    "image" : "http://localhost:8080/users/images/1",
+    "image" : "http://localhost:8080/users/images/profile_image.png",
     "nickname" : "판매자",
     "reliability" : 3.5
   },
@@ -2603,7 +2606,7 @@ Content-Type: application/json
       "writer" : {
         "id" : 1,
         "name" : "질문자",
-        "image" : "http://localhost:8080/users/images/1"
+        "image" : "http://localhost:8080/users/images/profile_image1.png"
       },
       "createdTime" : "2023-10-31T16:59:34",
       "content" : "질문1",
@@ -2614,7 +2617,7 @@ Content-Type: application/json
       "writer" : {
         "id" : 2,
         "name" : "판매자",
-        "image" : "http://localhost:8080/users/images/2"
+        "image" : "http://localhost:8080/users/images/profile_image2.png"
       },
       "createdTime" : "2023-10-31T16:59:34",
       "content" : "답변1"
@@ -2625,7 +2628,7 @@ Content-Type: application/json
       "writer" : {
         "id" : 1,
         "name" : "질문자",
-        "image" : "http://localhost:8080/users/images/1"
+        "image" : "http://localhost:8080/users/images/profile_image1.png"
       },
       "createdTime" : "2023-10-31T16:59:34",
       "content" : "질문2",
@@ -2636,7 +2639,7 @@ Content-Type: application/json
       "writer" : {
         "id" : 2,
         "name" : "판매자",
-        "image" : "http://localhost:8080/users/images/2"
+        "image" : "http://localhost:8080/users/images/profile_image2.png"
       },
       "createdTime" : "2023-10-31T16:59:34",
       "content" : "답변1"
@@ -2849,12 +2852,12 @@ Content-Type: application/json
 
 [ {
   "name" : "사용자1",
-  "profileImage" : "http://localhost:8080/users/images/1",
+  "profileImage" : "http://localhost:8080/users/images/profile_image1.png",
   "price" : 10000,
   "bidTime" : "2023-10-31T16:59:40"
 }, {
   "name" : "사용자2",
-  "profileImage" : "http://localhost:8080/users/images/2",
+  "profileImage" : "http://localhost:8080/users/images/profile_image2.png",
   "price" : 12000,
   "bidTime" : "2023-10-31T16:59:40"
 } ]</code></pre>
@@ -3041,12 +3044,12 @@ Content-Type: application/json
   "chatPartner" : {
     "id" : 2,
     "name" : "구매자1",
-    "profileImage" : "http://localhost:8080/users/images/2"
+    "profileImage" : "http://localhost:8080/users/images/profile_image.png"
   },
   "auction" : {
     "id" : 1,
     "title" : "경매1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "price" : 10000
   },
   "lastMessage" : {
@@ -3059,12 +3062,12 @@ Content-Type: application/json
   "chatPartner" : {
     "id" : 3,
     "name" : "구매자2",
-    "profileImage" : "http://localhost:8080/users/images/3"
+    "profileImage" : "http://localhost:8080/users/images/profile_image.png"
   },
   "auction" : {
     "id" : 2,
     "title" : "경매2",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "price" : 20000
   },
   "lastMessage" : {
@@ -3229,12 +3232,12 @@ Content-Type: application/json
   "chatPartner" : {
     "id" : 1,
     "name" : "판매자",
-    "profileImage" : "http://localhost:8080/users/images/1"
+    "profileImage" : "http://localhost:8080/users/images/profile_image.png"
   },
   "auction" : {
     "id" : 1,
     "title" : "경매1",
-    "image" : "http://localhost:8080/auctions/images/1",
+    "image" : "http://localhost:8080/auctions/images/auction_image.png",
     "price" : 10000
   },
   "isChatAvailable" : true
@@ -4570,7 +4573,7 @@ Content-Type: application/json
   "writer" : {
     "id" : 2,
     "name" : "판매자2",
-    "profileImage" : "http://localhost:8080/users/images/2"
+    "profileImage" : "http://localhost:8080/users/images/profile_image2.png"
   },
   "content" : "친절하다.",
   "score" : 5.0,
@@ -4580,7 +4583,7 @@ Content-Type: application/json
   "writer" : {
     "id" : 1,
     "name" : "판매자1",
-    "profileImage" : "http://localhost:8080/users/images/1"
+    "profileImage" : "http://localhost:8080/users/images/profile_image1.png"
   },
   "content" : "친절하다.",
   "score" : 5.0,

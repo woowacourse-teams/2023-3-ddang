@@ -11,7 +11,7 @@ public record ReadUserInAuctionQuestionResponse(Long id, String name, String ima
         return new ReadUserInAuctionQuestionResponse(
                 writerDto.id(),
                 NameProcessor.process(writerDto.isDeleted(), writerDto.name()),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, writerDto.profileImageId())
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, writerDto.profileImageStoreName())
         );
     }
 }

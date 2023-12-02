@@ -16,6 +16,14 @@ public interface JpaUserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(final Long id);
 
     @Query("""
+        SELECT u 
+        FROM User u 
+        LEFT JOIN FETCH u.profileImage
+        WHERE u.deleted = false AND u.id = :id
+    """)
+    Optional<User> findByIdWithProfileImage(final Long id);
+
+    @Query("""
         SELECT u
         FROM User u
         WHERE u.deleted = false AND u.oauthInformation.oauthId = :oauthId

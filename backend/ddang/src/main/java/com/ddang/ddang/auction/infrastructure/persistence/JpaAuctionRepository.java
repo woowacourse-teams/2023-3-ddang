@@ -19,7 +19,8 @@ public interface JpaAuctionRepository extends JpaRepository<Auction, Long> {
         LEFT JOIN FETCH a.lastBid
         JOIN FETCH a.subCategory sc
         JOIN FETCH sc.mainCategory
-        JOIN FETCH a.seller
+        JOIN FETCH a.seller seller
+        LEFT JOIN FETCH seller.profileImage
         WHERE a.deleted = false AND a.id = :id
     """)
     Optional<Auction> findTotalAuctionById(final Long id);

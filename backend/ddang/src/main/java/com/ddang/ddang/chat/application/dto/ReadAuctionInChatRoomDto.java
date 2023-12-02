@@ -2,13 +2,14 @@ package com.ddang.ddang.chat.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.bid.domain.Bid;
+import com.ddang.ddang.image.application.util.ImageStoreNameProcessor;
 import com.ddang.ddang.image.domain.AuctionImage;
 
 public record ReadAuctionInChatRoomDto(
         Long id,
         String title,
         Integer lastBidPrice,
-        Long thumbnailImageId
+        String thumbnailImageStoreName
 ) {
 
     public static ReadAuctionInChatRoomDto of(final Auction auction, final AuctionImage thumbnailImage) {
@@ -16,7 +17,7 @@ public record ReadAuctionInChatRoomDto(
                 auction.getId(),
                 auction.getTitle(),
                 convertPrice(auction.getLastBid()),
-                thumbnailImage.getId()
+                ImageStoreNameProcessor.process(thumbnailImage)
         );
     }
 

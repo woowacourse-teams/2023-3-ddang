@@ -13,8 +13,11 @@ public interface JpaQuestionReportRepository extends JpaRepository<QuestionRepor
     @Query("""
         SELECT qr
         FROM QuestionReport qr
-        JOIN FETCH qr.reporter
-        JOIN FETCH qr.question
+        JOIN FETCH qr.reporter r
+        LEFT JOIN FETCH r.profileImage
+        JOIN FETCH qr.question q
+        JOIN FETCH q.writer w
+        LEFT JOIN FETCH w.profileImage
         ORDER BY qr.id ASC
     """)
     List<QuestionReport> findAll();

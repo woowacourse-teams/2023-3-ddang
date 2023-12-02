@@ -14,10 +14,12 @@ public interface JpaQuestionRepository extends JpaRepository<Question, Long> {
     @Query("""
         SELECT q
         FROM Question q
-        JOIN FETCH q.writer
+        JOIN FETCH q.writer w
+        LEFT JOIN FETCH w.profileImage
         LEFT JOIN FETCH q.answer
         JOIN FETCH q.auction a
-        JOIN FETCH a.seller
+        JOIN FETCH a.seller s
+        JOIN FETCH s.profileImage
         WHERE q.deleted = false AND a.id = :auctionId
     """)
     List<Question> findAllByAuctionId(final Long auctionId);

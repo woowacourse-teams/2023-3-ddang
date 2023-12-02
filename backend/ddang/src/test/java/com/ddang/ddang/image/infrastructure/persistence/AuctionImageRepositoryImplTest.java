@@ -1,7 +1,6 @@
 package com.ddang.ddang.image.infrastructure.persistence;
 
 import com.ddang.ddang.configuration.QuerydslConfiguration;
-import com.ddang.ddang.image.domain.AuctionImage;
 import com.ddang.ddang.image.domain.repository.AuctionImageRepository;
 import com.ddang.ddang.image.infrastructure.persistence.fixture.AuctionImageRepositoryImplFixture;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,11 +27,20 @@ class AuctionImageRepositoryImplTest extends AuctionImageRepositoryImplFixture {
     }
 
     @Test
-    void 경매_이미지를_아이디를_통해_조회한다() {
+    void 경매_이미지_이름에_해당하는_경매_이미지가_존재하면_참을_반환한다() {
         // when
-        final Optional<AuctionImage> actual = auctionImageRepository.findById(경매_이미지.getId());
+        final boolean actual = auctionImageRepository.existsByStoreName(존재하는_경매_이미지_이름);
 
         // then
-        assertThat(actual).contains(경매_이미지);
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void 경매_이미지_이름에_해당하는_경매_이미지가_존재하지_않으면_거짓을_반환한다() {
+        // when
+        final boolean actual = auctionImageRepository.existsByStoreName(존재하지_않는_경매_이미지_이름);
+
+        // then
+        assertThat(actual).isFalse();
     }
 }

@@ -24,6 +24,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByIdWithProfileImage(final Long id) {
+        return jpaUserRepository.findByIdWithProfileImage(id);
+    }
+
+    @Override
     public Optional<User> findByOauthId(final String oauthId) {
         return jpaUserRepository.findByOauthId(oauthId);
     }

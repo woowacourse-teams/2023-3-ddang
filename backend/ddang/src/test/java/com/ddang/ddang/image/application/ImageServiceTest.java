@@ -24,7 +24,7 @@ class ImageServiceTest extends ImageServiceFixture {
     @Test
     void 지정한_아이디에_해당하는_프로필_이미지를_조회한다() throws Exception {
         // when
-        final Resource actual = imageService.readProfileImage(프로필_이미지.getId());
+        final Resource actual = imageService.readProfileImage(프로필_이미지.getImage().getStoreName());
 
         // then
         assertThat(actual.getFilename()).isEqualTo(프로필_이미지_파일명);
@@ -33,7 +33,7 @@ class ImageServiceTest extends ImageServiceFixture {
     @Test
     void 지정한_아이디에_해당하는_프로필_이미지가_없는_경우_null을_반환한다() throws MalformedURLException {
         // when
-        final Resource actual = imageService.readProfileImage(존재하지_않는_프로필_이미지_아이디);
+        final Resource actual = imageService.readProfileImage(존재하지_않는_프로필_이미지_이름);
 
         // then
         assertThat(actual).isNull();
@@ -42,7 +42,7 @@ class ImageServiceTest extends ImageServiceFixture {
     @Test
     void 지정한_아이디에_해당하는_경매_이미지를_조회한다() throws Exception {
         // when
-        final Resource actual = imageService.readAuctionImage(경매_이미지.getId());
+        final Resource actual = imageService.readAuctionImage(경매_이미지.getImage().getStoreName());
 
         // then
         assertThat(actual.getFilename()).isEqualTo(경매_이미지_파일명);
@@ -51,7 +51,7 @@ class ImageServiceTest extends ImageServiceFixture {
     @Test
     void 지정한_아이디에_해당하는_경매_이미지가_없는_경우_null을_반환한다() throws MalformedURLException {
         // when
-        final Resource actual = imageService.readAuctionImage(존재하지_않는_경매_이미지_아이디);
+        final Resource actual = imageService.readAuctionImage(존재하지_않는_경매_이미지_이름);
 
         // then
         assertThat(actual).isNull();

@@ -148,6 +148,7 @@ public class QuerydslAuctionRepository {
                            .join(auction.subCategory, category).fetchJoin()
                            .join(category.mainCategory).fetchJoin()
                            .join(auction.seller).fetchJoin()
+                           .join(auction.seller.profileImage).fetchJoin()
                            .where(auction.id.in(targetIds.toArray(Long[]::new)))
                            .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                            .fetch();

@@ -1,5 +1,6 @@
 package com.ddang.ddang.configuration.fcm;
 
+import com.ddang.ddang.configuration.ProductProfile;
 import com.ddang.ddang.configuration.fcm.exception.FcmNotFoundException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -13,10 +14,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
-import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("!test && !local")
+@ProductProfile
 public class ProdFcmConfiguration {
 
     @Value("${fcm.key.path}")
