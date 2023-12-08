@@ -9,7 +9,7 @@ permissions: write-all
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'backend')
+    if: contains(github.event.pull_request.labels.*.name, 'backend') && !contains(github.event.pull_request.labels.*.name, 'suggestion')
     runs-on: ubuntu-latest
 
     steps:
@@ -112,3 +112,4 @@ jobs:
           SLACK_MESSAGE+='"}}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
+          
