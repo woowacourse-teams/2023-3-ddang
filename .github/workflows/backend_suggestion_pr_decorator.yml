@@ -33,6 +33,7 @@ jobs:
           echo "AUTHOR_NAME=${AUTHOR_NAME}" >> $GITHUB_OUTPUT
       
       - name: slack suggestion notification
+        if: github.event.action != 'synchronize'
         run: |
           SLACK_MESSAGE='{"text":"제안 PR","blocks":[{"type":"section","text":{"type":"mrkdwn","text":">*제안 PR* \n>\n>*PR Author*\n>'
           SLACK_MESSAGE+="${{ steps.author-slack.outputs.AUTHOR_NAME }}"
