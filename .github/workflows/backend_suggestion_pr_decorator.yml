@@ -41,7 +41,7 @@ jobs:
           SLACK_MESSAGE+="> \n>\n>*PR 제목*\n>"
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
           SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"
-          SLACK_MESSAGE+="<@channel>"
+          SLACK_MESSAGE+="<!channel>"
           SLACK_MESSAGE+='"}}]}'
 
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
