@@ -44,7 +44,6 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                                             .select(auctionImage.id.min())
                                             .from(auctionImage)
                                             .where(auctionImage.auction.id.eq(auction.id))
-                                            .groupBy(auctionImage.auction.id)
                             )).fetchJoin()
                             .join(auction.lastBid).fetchJoin()
                             .leftJoin(message).on(message.id.eq(
@@ -52,7 +51,6 @@ public class QuerydslChatRoomAndMessageAndImageRepository {
                                             .select(message.id.max())
                                             .from(message)
                                             .where(message.chatRoom.id.eq(chatRoom.id))
-                                            .groupBy(message.chatRoom.id)
                             )).fetchJoin()
                             .where(isSellerOrWinner(userId))
                             .fetch();
