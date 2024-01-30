@@ -19,6 +19,7 @@ import com.ddangddangddang.data.model.response.ChatMessageIdResponse
 import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
+import com.ddangddangddang.data.model.response.ChatRoomResponse
 import com.ddangddangddang.data.model.response.EachCategoryResponse
 import com.ddangddangddang.data.model.response.ProfileResponse
 import com.ddangddangddang.data.model.response.QnaResponse
@@ -87,7 +88,7 @@ interface AuctionService {
     suspend fun getChatRoomPreviews(): ApiResponse<List<ChatRoomPreviewResponse>>
 
     @GET("/chattings/{chatRoomId}")
-    suspend fun getChatRoomPreview(@Path("chatRoomId") chatRoomId: Long): ApiResponse<ChatRoomPreviewResponse>
+    suspend fun getChatRoom(@Path("chatRoomId") chatRoomId: Long): ApiResponse<ChatRoomResponse>
 
     @GET("/chattings/{chatRoomId}/messages")
     suspend fun getMessages(

@@ -1,10 +1,10 @@
 package com.ddangddangddang.android.model.mapper
 
 import com.ddangddangddang.android.model.MessageRoomDetailModel
-import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
+import com.ddangddangddang.data.model.response.ChatRoomResponse
 
-object MessageRoomDetailModelMapper : Mapper<MessageRoomDetailModel, ChatRoomPreviewResponse> {
-    override fun ChatRoomPreviewResponse.toPresentation(): MessageRoomDetailModel {
+object MessageRoomDetailModelMapper : Mapper<MessageRoomDetailModel, ChatRoomResponse> {
+    override fun ChatRoomResponse.toPresentation(): MessageRoomDetailModel {
         return MessageRoomDetailModel(
             id,
             auction.id,
