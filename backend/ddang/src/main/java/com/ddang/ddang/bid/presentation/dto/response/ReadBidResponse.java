@@ -23,7 +23,7 @@ public record ReadBidResponse(
         final String name = NameProcessor.process(dto.isDeletedUser(), dto.name());
         return new ReadBidResponse(
                 name,
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.profileImageId()),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, dto.profileImageStoreName()),
                 dto.price(),
                 dto.bidTime()
         );

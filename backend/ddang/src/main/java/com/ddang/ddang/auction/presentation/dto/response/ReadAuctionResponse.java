@@ -17,7 +17,7 @@ public record ReadAuctionResponse(
         return new ReadAuctionResponse(
                 dto.id(),
                 dto.title(),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, dto.auctionImageIds().get(0)),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.AUCTION, dto.auctionImageStoreNames().get(0)),
                 processAuctionPrice(dto.startPrice(), dto.lastBidPrice()),
                 dto.auctionStatus().name(),
                 dto.auctioneerCount()

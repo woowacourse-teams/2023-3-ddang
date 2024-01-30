@@ -13,9 +13,11 @@ public interface JpaAuctionReportRepository extends JpaRepository<AuctionReport,
     @Query("""
         SELECT ar
         FROM AuctionReport ar
-        JOIN FETCH ar.reporter
+        JOIN FETCH ar.reporter r
+        LEFT JOIN FETCH r.profileImage
         JOIN FETCH ar.auction a
-        JOIN FETCH a.seller
+        JOIN FETCH a.seller s
+        LEFT JOIN FETCH s.profileImage
         ORDER BY ar.id ASC
     """)
     List<AuctionReport> findAll();

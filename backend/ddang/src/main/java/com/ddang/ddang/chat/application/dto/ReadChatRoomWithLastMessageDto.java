@@ -11,6 +11,7 @@ public record ReadChatRoomWithLastMessageDto(
         ReadAuctionInChatRoomDto auctionDto,
         ReadUserInChatRoomDto partnerDto,
         ReadLastMessageDto lastMessageDto,
+        Long unreadMessageCount,
         boolean isChatAvailable
 ) {
 
@@ -22,12 +23,14 @@ public record ReadChatRoomWithLastMessageDto(
         final User partner = chatRoom.calculateChatPartnerOf(findUser);
         final Message lastMessage = chatRoomAndMessageAndImageDto.message();
         final AuctionImage thumbnailImage = chatRoomAndMessageAndImageDto.thumbnailImage();
+        final Long unreadMessages = chatRoomAndMessageAndImageDto.unreadMessageCount();
 
         return new ReadChatRoomWithLastMessageDto(
                 chatRoom.getId(),
                 ReadAuctionInChatRoomDto.of(chatRoom.getAuction(), thumbnailImage),
                 ReadUserInChatRoomDto.from(partner),
                 ReadLastMessageDto.from(lastMessage),
+                unreadMessages,
                 chatRoom.isChatAvailablePartner(partner)
         );
     }

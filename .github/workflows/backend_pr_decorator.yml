@@ -9,7 +9,7 @@ permissions: write-all
 
 jobs:
   build:
-    if: contains(github.event.pull_request.labels.*.name, 'backend')
+    if: contains(github.event.pull_request.labels.*.name, 'backend') && !contains(github.event.pull_request.labels.*.name, 'suggestion')
     runs-on: ubuntu-latest
 
     steps:
@@ -61,31 +61,6 @@ jobs:
           echo "AUTHOR_NAME=${AUTHOR_NAME}" >> $GITHUB_OUTPUT
           echo "AUTHOR_ID=${AUTHOR_ID}" >> $GITHUB_OUTPUT
 
-      - name: set variables
-        id: variables
-        run: |
-          REVIEWERS_GIT_ID='${{ toJson(github.event.pull_request.requested_reviewers[*].login) }}'
-          reviewers=$(echo "$REVIEWERS_GIT_ID" | jq -r '.[]')
-          
-          REVIEWERS_SLACK_ID=""
-          
-          for reviewer in $reviewers; do
-            echo "Reviewer: $reviewer"
-            if [ "$reviewer" == "apptie" ]; then
-              REVIEWERS_SLACK_ID+="<@${{ secrets.apptie_slack_id }}> "
-            elif [ "$reviewer" == "swonny" ]; then
-              REVIEWERS_SLACK_ID+="<@${{ secrets.swonny_slack_id }}> "
-            elif [ "$reviewer" == "JJ503" ]; then
-              REVIEWERS_SLACK_ID+="<@${{ secrets.JJ503_slack_id }}> "
-            elif [ "$reviewer" == "kwonyj1022" ]; then
-              REVIEWERS_SLACK_ID+="<@${{ secrets.kwonyj1022_slack_id }}> "
-            fi
-          done
-          
-          echo "AUTHOR=${AUTHOR}" >> $GITHUB_OUTPUT
-          echo "REVIEWERS=${REVIEWERS}" >> $GITHUB_OUTPUT
-          echo "REVIEWERS_SLACK_ID=${REVIEWERS_SLACK_ID}" >> $GITHUB_OUTPUT
-
       - name: slack notification
         if: github.event_name == 'pull_request' && github.event.action != 'synchronize'
         run: |
@@ -97,8 +72,7 @@ jobs:
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
           SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":white_check_mark:"
-          SLACK_MESSAGE+="\n>\n>*리뷰어*\n>"
-          SLACK_MESSAGE+="${{ steps.variables.outputs.REVIEWERS_SLACK_ID }}"
+          SLACK_MESSAGE+="\n\n리뷰 요청은 스레드로 직접 멘션해주세요."
           SLACK_MESSAGE+='"}}]}'
 
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}" 
@@ -116,6 +90,7 @@ jobs:
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
           SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":x:"
+          SLACK_MESSAGE+="\n\n리뷰 요청은 문제 해결 후 스레드로 직접 멘션해주세요."
           SLACK_MESSAGE+='"}}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
@@ -133,6 +108,8 @@ jobs:
           SLACK_MESSAGE+="${{ github.event.pull_request.title }}"
           SLACK_MESSAGE+="\n>\n>분석 결과\n>"
           SLACK_MESSAGE+=":black_square_for_stop:"
+          SLACK_MESSAGE+="\n\n리뷰 요청은 문제 해결 후 스레드로 직접 멘션해주세요."
           SLACK_MESSAGE+='"}}]}'
           
           curl -X POST ${{ secrets.SLACK_WEBHOOK }} -d "${SLACK_MESSAGE}"
+          

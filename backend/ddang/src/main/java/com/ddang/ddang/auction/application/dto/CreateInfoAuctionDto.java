@@ -1,11 +1,12 @@
 package com.ddang.ddang.auction.application.dto;
 
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.image.application.util.ImageStoreNameProcessor;
 
 public record CreateInfoAuctionDto(
         Long id,
         String title,
-        Long auctionImageId,
+        String auctionStoreName,
         int startPrice
 ) {
 
@@ -13,7 +14,7 @@ public record CreateInfoAuctionDto(
         return new CreateInfoAuctionDto(
                 auction.getId(),
                 auction.getTitle(),
-                auction.getAuctionImages().get(0).getId(),
+                ImageStoreNameProcessor.process(auction.getAuctionImages().get(0)),
                 auction.getStartPrice().getValue()
         );
     }

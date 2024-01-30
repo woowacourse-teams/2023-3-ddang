@@ -11,7 +11,7 @@ public record ReadUserResponse(String name, String profileImage, Float reliabili
     public static ReadUserResponse from(final ReadUserDto readUserDto) {
         return new ReadUserResponse(
                 NameProcessor.process(readUserDto.isDeleted(), readUserDto.name()),
-                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, readUserDto.profileImageId()),
+                ImageUrlCalculator.calculateBy(ImageRelativeUrl.USER, readUserDto.profileImageStoreName()),
                 ReliabilityProcessor.process(readUserDto.reliability())
         );
     }

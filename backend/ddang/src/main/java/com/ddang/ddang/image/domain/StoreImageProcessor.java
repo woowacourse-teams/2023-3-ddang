@@ -7,7 +7,10 @@ import java.util.List;
 
 public interface StoreImageProcessor {
 
-    StoreImageDto storeImageFile(MultipartFile imageFile);
+    List<String> WHITE_IMAGE_EXTENSION = List.of("jpg", "jpeg", "png");
+    String EXTENSION_FILE_CHARACTER = ".";
 
-    List<StoreImageDto> storeImageFiles(List<MultipartFile> imageFiles);
+    StoreImageDto storeImageFile(final MultipartFile imageFile);
+
+    List<StoreImageDto> storeImageFiles(final List<MultipartFile> imageFiles);
 }

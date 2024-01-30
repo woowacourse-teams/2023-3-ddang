@@ -10,7 +10,7 @@ public interface UserRepository {
 
     Optional<User> findById(final Long id);
 
-    boolean existsById(final Long id);
+    Optional<User> findByIdWithProfileImage(final Long id);
 
     Optional<User> findByOauthId(final String oauthId);
 

@@ -11,11 +11,12 @@ import com.ddang.ddang.auction.presentation.dto.request.CreateAuctionRequest;
 import com.ddang.ddang.authentication.infrastructure.jwt.PrivateClaims;
 import com.ddang.ddang.configuration.CommonControllerSliceTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.time.LocalDateTime;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class AuctionControllerFixture extends CommonControllerSliceTest {
@@ -39,7 +40,7 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
     protected CreateInfoAuctionDto 경매_등록_결과_dto = new CreateInfoAuctionDto(
             1L,
             "제목",
-            1L,
+            "auction_image.png",
             1_000
     );
     protected ReadChatRoomDto 쪽지방_dto = new ReadChatRoomDto(1L, true);
@@ -148,12 +149,12 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 List.of(서울특별시_강서구_역삼동),
-                List.of(1L),
+                List.of("auction_image.png"),
                 2,
                 "main",
                 "sub",
                 1L,
-                1L,
+                "profile_image.png",
                 "판매자",
                 3.5d,
                 false,
@@ -172,12 +173,12 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 List.of(서울특별시_강서구_역삼동),
-                List.of(1L),
+                List.of("auction_image.png"),
                 2,
                 "main",
                 "sub",
                 1L,
-                1L,
+                "profile_image.png",
                 "판매자",
                 3.5d,
                 false,
@@ -196,12 +197,12 @@ public class AuctionControllerFixture extends CommonControllerSliceTest {
                 LocalDateTime.now(),
                 LocalDateTime.now(),
                 List.of(서울특별시_강서구_역삼동),
-                List.of(1L),
+                List.of("auction_image.png"),
                 2,
                 "main",
                 "sub",
                 1L,
-                1L,
+                "profile_image.png",
                 "판매자",
                 3.5d,
                 false,
