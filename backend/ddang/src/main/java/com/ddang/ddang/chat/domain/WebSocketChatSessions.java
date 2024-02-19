@@ -14,9 +14,19 @@ public class WebSocketChatSessions {
     }
 
     public void add(final WebSocketSession session) {
-        final long chatRoomId = Long.parseLong((String) session.getAttributes().get("chatRoomId"));
+        final long chatRoomId = parseChatRoomId(session);
         chatRoomSessions.putIfAbsent(chatRoomId, new WebSocketSessions());
         final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
         webSocketSessions.add(session);
+    }
+
+    private static long parseChatRoomId(final WebSocketSession session) {
+        return Long.parseLong((String) session.getAttributes().get("chatRoomId"));
+    }
+
+    public void remove(final WebSocketSession session) {
+        final long chatRoomId = parseChatRoomId(session);
+        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
+        webSocketSessions.remove(session);
     }
 }
