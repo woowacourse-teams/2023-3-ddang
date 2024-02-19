@@ -17,4 +17,8 @@ public class WebSocketSessions {
     public void add(final WebSocketSession session) {
         sessions.add(session);
     }
+
+    public void remove(final WebSocketSession session) {
+        sessions.remove(session);
+    }
 }
