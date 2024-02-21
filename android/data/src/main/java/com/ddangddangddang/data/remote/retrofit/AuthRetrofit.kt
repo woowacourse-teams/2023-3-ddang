@@ -1,15 +1,16 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.retrofit
 
 import com.ddangddangddang.data.BuildConfig
+import com.ddangddangddang.data.remote.callAdapter.CallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-class AuctionRetrofit {
-
+class AuthRetrofit {
     companion object {
+
         fun createInstance(httpClient: OkHttpClient): Retrofit {
             return Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)

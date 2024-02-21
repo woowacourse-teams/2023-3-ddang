@@ -9,7 +9,7 @@ import com.ddangddangddang.android.model.AuctionHomeModel
 import com.ddangddangddang.android.model.mapper.AuctionHomeModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

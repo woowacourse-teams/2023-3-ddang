@@ -1,7 +1,7 @@
 package com.ddangddangddang.android.di
 
-import com.ddangddangddang.data.remote.AutoRefreshHttpClient
-import com.ddangddangddang.data.remote.DefaultHttpClient
+import com.ddangddangddang.data.remote.client.AutoRefreshHttpClient
+import com.ddangddangddang.data.remote.client.DefaultHttpClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

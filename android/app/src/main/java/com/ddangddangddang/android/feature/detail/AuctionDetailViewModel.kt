@@ -10,7 +10,7 @@ import com.ddangddangddang.android.model.AuctionDetailModel
 import com.ddangddangddang.android.model.mapper.AuctionDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import com.ddangddangddang.data.repository.AuctionRepository
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

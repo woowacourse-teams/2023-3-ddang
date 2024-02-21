@@ -6,7 +6,7 @@ import com.ddangddangddang.data.model.request.KakaoLoginRequest
 import com.ddangddangddang.data.model.response.LoginByKakaoResponse
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.suspendCancellableCoroutine
 import javax.inject.Inject

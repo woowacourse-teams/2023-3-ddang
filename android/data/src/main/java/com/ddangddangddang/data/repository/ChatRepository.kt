@@ -7,7 +7,7 @@ import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
 import com.ddangddangddang.data.model.response.ChatRoomResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 
 interface ChatRepository {
     suspend fun getChatRoomId(getChatRoomIdRequest: GetChatRoomIdRequest): ApiResponse<ChatRoomIdResponse>

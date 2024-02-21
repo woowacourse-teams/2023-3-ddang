@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.interceptor
 
 import android.util.Log
 import okhttp3.logging.HttpLoggingInterceptor

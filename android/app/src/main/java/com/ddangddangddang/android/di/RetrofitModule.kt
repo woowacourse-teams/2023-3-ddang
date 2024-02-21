@@ -1,7 +1,7 @@
 package com.ddangddangddang.android.di
 
-import com.ddangddangddang.data.remote.AuctionRetrofit
-import com.ddangddangddang.data.remote.AuthRetrofit
+import com.ddangddangddang.data.remote.retrofit.AuctionRetrofit
+import com.ddangddangddang.data.remote.retrofit.AuthRetrofit
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

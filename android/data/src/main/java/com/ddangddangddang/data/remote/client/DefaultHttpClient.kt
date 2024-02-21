@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.client
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

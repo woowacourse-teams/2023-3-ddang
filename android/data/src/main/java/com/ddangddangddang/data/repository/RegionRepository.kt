@@ -1,7 +1,7 @@
 package com.ddangddangddang.data.repository
 
 import com.ddangddangddang.data.model.response.RegionDetailResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 
 interface RegionRepository {
     suspend fun getFirstRegions(): ApiResponse<List<RegionDetailResponse>>

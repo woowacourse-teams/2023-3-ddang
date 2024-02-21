@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.callAdapter
 
 import java.io.IOException
 

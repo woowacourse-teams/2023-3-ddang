@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.retrofit
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
 import com.ddangddangddang.data.model.request.ChatMessageRequest
@@ -25,6 +25,7 @@ import com.ddangddangddang.data.model.response.ProfileResponse
 import com.ddangddangddang.data.model.response.QnaResponse
 import com.ddangddangddang.data.model.response.RegionDetailResponse
 import com.ddangddangddang.data.model.response.UserReviewResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.Body

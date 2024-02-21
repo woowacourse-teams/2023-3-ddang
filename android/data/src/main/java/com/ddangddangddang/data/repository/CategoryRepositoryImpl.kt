@@ -2,7 +2,7 @@ package com.ddangddangddang.data.repository
 
 import com.ddangddangddang.data.datasource.CategoryRemoteDataSource
 import com.ddangddangddang.data.model.response.EachCategoryResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import javax.inject.Inject
 
 class CategoryRepositoryImpl @Inject constructor(

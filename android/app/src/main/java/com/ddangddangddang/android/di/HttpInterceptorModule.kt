@@ -1,7 +1,7 @@
 package com.ddangddangddang.android.di
 
-import com.ddangddangddang.data.remote.AutoRefreshInterceptor
-import com.ddangddangddang.data.remote.LoggingInterceptor
+import com.ddangddangddang.data.remote.interceptor.AutoRefreshInterceptor
+import com.ddangddangddang.data.remote.interceptor.LoggingInterceptor
 import com.ddangddangddang.data.repository.AuthRepository
 import dagger.Module
 import dagger.Provides

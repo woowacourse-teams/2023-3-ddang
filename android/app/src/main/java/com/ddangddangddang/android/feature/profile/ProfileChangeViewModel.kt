@@ -11,7 +11,7 @@ import com.ddangddangddang.android.model.ProfileModel
 import com.ddangddangddang.android.util.image.toAdjustImageFile
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ProfileUpdateRequest
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import com.ddangddangddang.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

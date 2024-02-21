@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.callAdapter
 
 import okhttp3.Request
 import okio.IOException

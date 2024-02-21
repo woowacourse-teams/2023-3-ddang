@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.interceptor
 
 import com.ddangddangddang.data.repository.AuthRepository
 import kotlinx.coroutines.runBlocking

@@ -4,7 +4,7 @@ import com.ddangddangddang.data.model.request.KakaoLoginRequest
 import com.ddangddangddang.data.model.response.LoginByKakaoResponse
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 
 interface AuthRepository {
     suspend fun loginByKakao(kakaoLoginRequest: KakaoLoginRequest): ApiResponse<LoginByKakaoResponse>

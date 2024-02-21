@@ -11,7 +11,7 @@ import com.ddangddangddang.android.model.mapper.MessageModelMapper.toPresentatio
 import com.ddangddangddang.android.model.mapper.MessageRoomDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ChatMessageRequest
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

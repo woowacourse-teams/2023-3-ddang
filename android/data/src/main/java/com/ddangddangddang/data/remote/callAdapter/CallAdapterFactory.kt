@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.callAdapter
 
 import retrofit2.Call
 import retrofit2.CallAdapter

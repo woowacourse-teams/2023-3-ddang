@@ -1,8 +1,8 @@
 package com.ddangddangddang.data.datasource
 
 import com.ddangddangddang.data.model.response.RegionDetailResponse
-import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuctionService
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
+import com.ddangddangddang.data.remote.retrofit.AuctionService
 import javax.inject.Inject
 
 class RegionRemoteDataSource @Inject constructor(private val service: AuctionService) {

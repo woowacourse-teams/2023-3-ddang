@@ -8,7 +8,7 @@ import com.ddangddangddang.android.feature.common.ErrorType
 import com.ddangddangddang.android.model.MessageRoomDetailModel
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
 import com.ddangddangddang.data.model.request.ReviewRequest
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import com.ddangddangddang.data.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

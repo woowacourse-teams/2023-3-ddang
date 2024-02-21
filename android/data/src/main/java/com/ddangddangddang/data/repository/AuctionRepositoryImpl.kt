@@ -17,7 +17,7 @@ import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.BidHistoryResponse
 import com.ddangddangddang.data.model.response.QnaResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import java.io.File
 import javax.inject.Inject
 

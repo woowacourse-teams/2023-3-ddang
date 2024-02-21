@@ -1,4 +1,4 @@
-package com.ddangddangddang.data.remote
+package com.ddangddangddang.data.remote.retrofit
 
 import com.ddangddangddang.data.model.request.KakaoLoginRequest
 import com.ddangddangddang.data.model.request.LogoutRequest
@@ -7,6 +7,7 @@ import com.ddangddangddang.data.model.request.WithdrawalRequest
 import com.ddangddangddang.data.model.response.LoginByKakaoResponse
 import com.ddangddangddang.data.model.response.TokenResponse
 import com.ddangddangddang.data.model.response.ValidateTokenResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header

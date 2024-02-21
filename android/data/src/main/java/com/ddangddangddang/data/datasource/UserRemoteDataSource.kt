@@ -4,8 +4,8 @@ import com.ddangddangddang.data.model.request.ProfileUpdateRequest
 import com.ddangddangddang.data.model.request.UpdateDeviceTokenRequest
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.ProfileResponse
-import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuctionService
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
+import com.ddangddangddang.data.remote.retrofit.AuctionService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

@@ -1,6 +1,6 @@
 // package com.ddangddangddang.data
 //
-// import com.ddangddangddang.data.remote.AuctionService
+// import com.ddangddangddang.data.remote.retrofit.AuctionService
 // import com.ddangddangddang.data.repository.AuctionRepository
 // import com.ddangddangddang.data.repository.AuctionRepositoryImpl
 // import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory

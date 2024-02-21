@@ -2,8 +2,8 @@ package com.ddangddangddang.data.datasource
 
 import com.ddangddangddang.data.model.request.ReviewRequest
 import com.ddangddangddang.data.model.response.UserReviewResponse
-import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuctionService
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
+import com.ddangddangddang.data.remote.retrofit.AuctionService
 import javax.inject.Inject
 
 class ReviewRemoteDataSource @Inject constructor(private val service: AuctionService) {

@@ -12,10 +12,10 @@ import com.ddangddangddang.data.model.request.ReportQuestionRequest
 import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
-import com.ddangddangddang.data.model.response.QnaResponse
 import com.ddangddangddang.data.model.response.BidHistoryResponse
-import com.ddangddangddang.data.remote.ApiResponse
-import com.ddangddangddang.data.remote.AuctionService
+import com.ddangddangddang.data.model.response.QnaResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
+import com.ddangddangddang.data.remote.retrofit.AuctionService
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

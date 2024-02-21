@@ -1,7 +1,7 @@
 package com.ddangddangddang.data.repository
 
 import com.ddangddangddang.data.model.response.EachCategoryResponse
-import com.ddangddangddang.data.remote.ApiResponse
+import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 
 interface CategoryRepository {
     suspend fun getMainCategories(): ApiResponse<List<EachCategoryResponse>>
