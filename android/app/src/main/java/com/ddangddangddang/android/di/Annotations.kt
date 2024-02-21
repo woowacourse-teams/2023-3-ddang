@@ -12,6 +12,22 @@ annotation class AuctionRetrofitQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
+annotation class DefaultHttpClientQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AutoRefreshHttpClientQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class HttpLoggingInterceptorQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AutoRefreshInterceptorQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
 annotation class DateFormatter
 
 @Qualifier

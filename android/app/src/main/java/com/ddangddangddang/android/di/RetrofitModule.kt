@@ -2,11 +2,11 @@ package com.ddangddangddang.android.di
 
 import com.ddangddangddang.data.remote.AuctionRetrofit
 import com.ddangddangddang.data.remote.AuthRetrofit
-import com.ddangddangddang.data.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -16,11 +16,12 @@ object RetrofitModule {
     @AuthRetrofitQualifier
     @Singleton
     @Provides
-    fun provideAuthRetrofit(): Retrofit = AuthRetrofit.createInstance()
+    fun provideAuthRetrofit(@DefaultHttpClientQualifier httpClient: OkHttpClient): Retrofit =
+        AuthRetrofit.createInstance(httpClient)
 
     @AuctionRetrofitQualifier
     @Singleton
     @Provides
-    fun provideAuctionRetrofit(authRepository: AuthRepository): Retrofit =
-        AuctionRetrofit.createInstance(authRepository)
+    fun provideAuctionRetrofit(@AutoRefreshHttpClientQualifier httpClient: OkHttpClient): Retrofit =
+        AuctionRetrofit.createInstance(httpClient)
 }
