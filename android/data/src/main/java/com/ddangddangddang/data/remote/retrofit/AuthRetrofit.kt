@@ -1,6 +1,5 @@
 package com.ddangddangddang.data.remote.retrofit
 
-import com.ddangddangddang.data.BuildConfig
 import com.ddangddangddang.data.remote.callAdapter.CallAdapterFactory
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -11,9 +10,9 @@ import retrofit2.Retrofit
 class AuthRetrofit {
     companion object {
 
-        fun createInstance(httpClient: OkHttpClient): Retrofit {
+        fun createInstance(serverURL: String, httpClient: OkHttpClient): Retrofit {
             return Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
+                .baseUrl(serverURL)
                 .client(httpClient)
                 .addCallAdapterFactory(CallAdapterFactory())
                 .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))

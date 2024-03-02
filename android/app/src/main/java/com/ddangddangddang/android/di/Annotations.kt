@@ -12,6 +12,10 @@ annotation class AuctionRetrofitQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
+annotation class ServerURLQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
 annotation class DefaultHttpClientQualifier
 
 @Qualifier

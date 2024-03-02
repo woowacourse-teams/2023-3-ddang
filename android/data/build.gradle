@@ -20,6 +20,7 @@ android {
         consumerProguardFiles "consumer-rules.pro"
 
         buildConfigField "String", "BASE_URL", properties['url.ddangddangddang']
+        buildConfigField "String", "TEST_URL", properties['url.ddangddangddang.test']
     }
 
     buildTypes {
