@@ -1,6 +1,6 @@
-package com.ddang.ddang.chat.configuration;
+package com.ddang.ddang.websocket.configuration;
 
-import com.ddang.ddang.chat.handler.WebSocketChatHandler;
+import com.ddang.ddang.websocket.handler.WebSocketHandler;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -10,17 +10,17 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 public class WebSocketConfiguration implements WebSocketConfigurer {
 
-    private final WebSocketChatHandler handler;
-    private final WebSocketChatInterceptor interceptor;
+    private final WebSocketHandler handler;
+    private final WebSocketInterceptor interceptor;
 
-    public WebSocketConfiguration(final WebSocketChatHandler handler, final WebSocketChatInterceptor interceptor) {
+    public WebSocketConfiguration(final WebSocketHandler handler, final WebSocketInterceptor interceptor) {
         this.handler = handler;
         this.interceptor = interceptor;
     }
 
     @Override
     public void registerWebSocketHandlers(final WebSocketHandlerRegistry registry) {
-        registry.addHandler(handler, "/sub/chattings")
+        registry.addHandler(handler, "/chattings")
                 .addInterceptors(interceptor);
     }
 }
