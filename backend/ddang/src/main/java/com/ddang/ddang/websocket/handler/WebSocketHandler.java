@@ -41,7 +41,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
         final Long groupId = Long.parseLong(String.valueOf(attributes.get("groupId")));
         final CreateMessageDto createMessageDto = CreateMessageDto.of(userId, groupId, request);
 
-        final Long messageId = messageService.create(createMessageDto, null);
+        final String baseUrl = String.valueOf(attributes.get("baseUrl"));
+        final Long messageId = messageService.create(createMessageDto, baseUrl);
         final Map<Long, WebSocketSessions> chatRoomSessions = sessions.getChatRoomSessions();
         final WebSocketSessions webSocketSessions = chatRoomSessions.get(groupId);
         final Set<WebSocketSession> groupSessions = webSocketSessions.getSessions();

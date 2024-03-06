@@ -2,6 +2,7 @@ package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
+import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
@@ -52,8 +53,7 @@ public class MessageService {
 
         final Message persistMessage = messageRepository.save(message);
 
-        // TODO: 2024/03/04 웹소켓 이미지 url 처리 이후 주석 제거
-//        messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
+        messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(persistMessage, profileImageAbsoluteUrl));
 
         return persistMessage.getId();
     }

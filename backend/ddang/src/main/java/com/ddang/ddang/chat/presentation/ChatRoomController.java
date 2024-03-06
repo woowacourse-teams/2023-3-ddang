@@ -86,7 +86,8 @@ public class ChatRoomController {
     ) {
 
         final Long messageId = messageService.create(
-                CreateMessageDto.of(userInfo.userId(), chatRoomId, request), ImageRelativeUrl.USER.calculateAbsoluteUrl()
+                CreateMessageDto.of(userInfo.userId(), chatRoomId, request),
+                ImageRelativeUrl.USER.calculateAbsoluteUrl()
         );
         final CreateMessageResponse response = new CreateMessageResponse(messageId);
 
