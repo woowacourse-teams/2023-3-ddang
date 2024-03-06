@@ -7,7 +7,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-class AuctionRetrofit {
+class RetrofitFactory {
 
     companion object {
         fun createInstance(serverURL: String, httpClient: OkHttpClient): Retrofit {
