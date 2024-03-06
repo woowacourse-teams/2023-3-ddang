@@ -1,7 +1,9 @@
 package com.ddang.ddang.image.presentation.util;
 
+import lombok.Getter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+@Getter
 public enum ImageRelativeUrl {
 
     AUCTION("/auctions/images/"),
@@ -19,9 +21,5 @@ public enum ImageRelativeUrl {
                                                                .toUriString();
 
         return imageBaseUrl + value;
-    }
-
-    public String getValue() {
-        return value;
     }
 }

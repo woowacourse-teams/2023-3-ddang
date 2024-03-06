@@ -20,7 +20,7 @@ public class WebSocketConfiguration implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(final WebSocketHandlerRegistry registry) {
-        registry.addHandler(handler, "/chattings")
+        registry.addHandler(handler, "/chats")
                 .addInterceptors(interceptor);
     }
 }
