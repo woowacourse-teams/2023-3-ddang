@@ -1,6 +1,7 @@
 package com.ddangddangddang.android.di
 
-import com.ddangddangddang.data.BuildConfig
+import com.ddangddangddang.data.remote.retrofit.AuctionService
+import com.ddangddangddang.data.remote.retrofit.AuthService
 import com.ddangddangddang.data.remote.retrofit.RetrofitFactory
 import dagger.Module
 import dagger.Provides
@@ -16,19 +17,28 @@ object RetrofitModule {
     @AuthRetrofitQualifier
     @Singleton
     @Provides
-    fun provideAuthRetrofit(@ServerURLQualifier serverURL: String, @DefaultHttpClientQualifier httpClient: OkHttpClient): Retrofit =
+    fun provideAuthRetrofit(
+        @HttpServerURLQualifier serverURL: String,
+        @DefaultHttpClientQualifier httpClient: OkHttpClient,
+    ): Retrofit =
         RetrofitFactory.createInstance(serverURL, httpClient)
 
     @AuctionRetrofitQualifier
     @Singleton
     @Provides
-    fun provideAuctionRetrofit(@ServerURLQualifier serverURL: String, @AutoRefreshHttpClientQualifier httpClient: OkHttpClient): Retrofit =
+    fun provideAuctionRetrofit(
+        @HttpServerURLQualifier serverURL: String,
+        @AutoRefreshHttpClientQualifier httpClient: OkHttpClient,
+    ): Retrofit =
         RetrofitFactory.createInstance(serverURL, httpClient)
 
-    @ServerURLQualifier
     @Singleton
     @Provides
-    fun provideServerURL(): String {
-        return if (BuildConfig.DEBUG) BuildConfig.TEST_URL else BuildConfig.BASE_URL
-    }
+    fun provideAuthService(@AuthRetrofitQualifier retrofit: Retrofit): AuthService =
+        retrofit.create(AuthService::class.java)
+
+    @Singleton
+    @Provides
+    fun provideAuctionService(@AuctionRetrofitQualifier retrofit: Retrofit): AuctionService =
+        retrofit.create(AuctionService::class.java)
 }

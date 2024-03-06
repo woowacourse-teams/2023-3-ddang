@@ -81,6 +81,11 @@ dependencies {
     // 이미지 처리
     implementation 'com.github.bumptech.glide:glide:4.15.1'
 
+    // Scarlet
+    def scarletVersion = '0.1.12'
+    implementation "com.tinder.scarlet:scarlet:$scarletVersion"
+    implementation "com.tinder.scarlet:lifecycle-android:$scarletVersion"
+
     // 테스트
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

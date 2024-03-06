@@ -12,7 +12,15 @@ annotation class AuctionRetrofitQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class ServerURLQualifier
+annotation class HttpServerURLQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class WSChattingServerURLQualifier
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class ApplicationForegroundLifecycle
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
