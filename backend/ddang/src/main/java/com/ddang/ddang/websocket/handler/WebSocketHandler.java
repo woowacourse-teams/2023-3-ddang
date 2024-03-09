@@ -39,7 +39,8 @@ public class WebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(final WebSocketSession session, final CloseStatus status) {
         final String type = String.valueOf(session.getAttributes().get(TYPE_KEY));
-        final WebSocketHandleTextMessageProvider provider = providerComposite.findProvider(TextMessageType.valueOf(type));
+        final TextMessageType textMessageType = TextMessageType.valueOf(type);
+        final WebSocketHandleTextMessageProvider provider = providerComposite.findProvider(textMessageType);
         provider.remove(session);
     }
 }
