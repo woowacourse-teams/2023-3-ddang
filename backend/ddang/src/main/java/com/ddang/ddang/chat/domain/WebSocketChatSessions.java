@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class WebSocketChatSessions {
 
+    private static final String ATTRIBUTE_KEY = "chatRoomId";
     private final Map<Long, WebSocketSessions> chatRoomSessions;
 
     public WebSocketChatSessions() {
@@ -22,16 +23,13 @@ public class WebSocketChatSessions {
         final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
         if (!webSocketSessions.containsValue(session)) {
             webSocketSessions.add(session);
+            session.getAttributes().put(ATTRIBUTE_KEY, chatRoomId);
         }
     }
 
-//    private static long parseChatRoomId(final WebSocketSession session) {
-//        return Long.parseLong((String) session.getAttributes().get("groupId"));
-//    }
-//
-//    public void remove(final WebSocketSession session) {
-//        final long chatRoomId = parseChatRoomId(session);
-//        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
-//        webSocketSessions.remove(session);
-//    }
+    public void remove(final WebSocketSession session) {
+        final long chatRoomId = Long.parseLong(String.valueOf(session.getAttributes().get(ATTRIBUTE_KEY)));
+        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
+        webSocketSessions.remove(session);
+    }
 }

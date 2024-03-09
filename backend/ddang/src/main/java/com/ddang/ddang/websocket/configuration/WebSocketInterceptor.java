@@ -11,8 +11,6 @@ import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Map;
 
@@ -30,7 +28,6 @@ public class WebSocketInterceptor extends HttpSessionHandshakeInterceptor {
             final Map<String, Object> attributes
     ) throws Exception {
         attributes.put("userId", findUserId(request));
-//        attributes.put("groupId", findGroupId(request));
         attributes.put("baseUrl", ImageRelativeUrl.USER.calculateAbsoluteUrl());
 
         return super.beforeHandshake(request, response, wsHandler, attributes);
@@ -46,12 +43,5 @@ public class WebSocketInterceptor extends HttpSessionHandshakeInterceptor {
         }
 
         return authenticationUserInfo.userId();
-    }
-
-    private String findGroupId(final ServerHttpRequest request) {
-        final UriComponents uriComponents = UriComponentsBuilder.fromUri(request.getURI()).build();
-
-        return uriComponents.getQueryParams()
-                            .getFirst("groupId");
     }
 }
