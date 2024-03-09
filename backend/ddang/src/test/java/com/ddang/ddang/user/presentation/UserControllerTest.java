@@ -1,6 +1,7 @@
 package com.ddang.ddang.user.presentation;
 
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptorService;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
@@ -54,10 +55,12 @@ class UserControllerTest extends UserControllerFixture {
 
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
-                blackListTokenService,
-                authenticationUserService,
-                tokenDecoder,
-                store
+                new AuthenticationInterceptorService(
+                        blackListTokenService,
+                        authenticationUserService,
+                        tokenDecoder,
+                        store
+                )
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 

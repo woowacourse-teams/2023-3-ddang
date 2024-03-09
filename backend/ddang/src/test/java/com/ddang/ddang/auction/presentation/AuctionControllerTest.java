@@ -33,6 +33,7 @@ import com.ddang.ddang.auction.configuration.DescendingSortPageableArgumentResol
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 import com.ddang.ddang.auction.presentation.fixture.AuctionControllerFixture;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptorService;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
@@ -70,10 +71,12 @@ class AuctionControllerTest extends AuctionControllerFixture {
 
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
-                blackListTokenService,
-                authenticationUserService,
-                mockTokenDecoder,
-                store
+                new AuthenticationInterceptorService(
+                        blackListTokenService,
+                        authenticationUserService,
+                        mockTokenDecoder,
+                        store
+                )
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 
