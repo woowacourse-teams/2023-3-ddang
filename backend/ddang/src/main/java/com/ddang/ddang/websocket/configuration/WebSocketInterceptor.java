@@ -30,7 +30,7 @@ public class WebSocketInterceptor extends HttpSessionHandshakeInterceptor {
             final Map<String, Object> attributes
     ) throws Exception {
         attributes.put("userId", findUserId(request));
-        attributes.put("groupId", findGroupId(request));
+//        attributes.put("groupId", findGroupId(request));
         attributes.put("baseUrl", ImageRelativeUrl.USER.calculateAbsoluteUrl());
 
         return super.beforeHandshake(request, response, wsHandler, attributes);

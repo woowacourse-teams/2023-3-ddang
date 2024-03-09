@@ -17,20 +17,21 @@ public class WebSocketChatSessions {
         this.chatRoomSessions = new ConcurrentHashMap<>();
     }
 
-    public void add(final WebSocketSession session) {
-        final long chatRoomId = parseChatRoomId(session);
+    public void add(final WebSocketSession session, final Long chatRoomId) {
         chatRoomSessions.putIfAbsent(chatRoomId, new WebSocketSessions());
         final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
-        webSocketSessions.add(session);
+        if (!webSocketSessions.containsValue(session)) {
+            webSocketSessions.add(session);
+        }
     }
 
-    private static long parseChatRoomId(final WebSocketSession session) {
-        return Long.parseLong((String) session.getAttributes().get("groupId"));
-    }
-
-    public void remove(final WebSocketSession session) {
-        final long chatRoomId = parseChatRoomId(session);
-        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
-        webSocketSessions.remove(session);
-    }
+//    private static long parseChatRoomId(final WebSocketSession session) {
+//        return Long.parseLong((String) session.getAttributes().get("groupId"));
+//    }
+//
+//    public void remove(final WebSocketSession session) {
+//        final long chatRoomId = parseChatRoomId(session);
+//        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
+//        webSocketSessions.remove(session);
+//    }
 }
