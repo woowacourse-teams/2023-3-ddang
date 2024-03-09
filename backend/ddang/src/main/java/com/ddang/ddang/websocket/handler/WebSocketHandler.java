@@ -6,8 +6,11 @@ import com.ddang.ddang.chat.domain.WebSocketChatSessions;
 import com.ddang.ddang.chat.domain.WebSocketSessions;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
+import com.ddang.ddang.websocket.handler.dto.TextMessageDto;
+import com.ddang.ddang.websocket.handler.dto.TextMessageType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
@@ -27,24 +30,28 @@ public class WebSocketHandler extends TextWebSocketHandler {
     private final MessageService messageService;
 
     @Override
-    public void afterConnectionEstablished(final WebSocketSession session) throws Exception {
-        sessions.add(session);
-    }
-
-    @Override
     protected void handleTextMessage(final WebSocketSession session, final TextMessage message) throws Exception {
         // TODO: 2024/03/04 리팩토링 역할 분리 필요
         final String payload = message.getPayload();
-        final CreateMessageRequest request = objectMapper.readValue(payload, CreateMessageRequest.class);
+        final TextMessageDto textMessageDto = objectMapper.readValue(payload, TextMessageDto.class);
+
+        final Map<String, String> data = textMessageDto.data();
+        final CreateMessageRequest request = new CreateMessageRequest(
+                Long.parseLong(data.get("recevierId")),
+                data.get("contents")
+        );
+
+        final long chatRoomId = Long.parseLong(data.get("chatRoomId"));
+        sessions.add(session, chatRoomId);
+
         final Map<String, Object> attributes = session.getAttributes();
         final Long userId = Long.parseLong(String.valueOf(attributes.get("userId")));
-        final Long groupId = Long.parseLong(String.valueOf(attributes.get("groupId")));
-        final CreateMessageDto createMessageDto = CreateMessageDto.of(userId, groupId, request);
+        final CreateMessageDto createMessageDto = CreateMessageDto.of(userId, chatRoomId, request);
 
         final String baseUrl = String.valueOf(attributes.get("baseUrl"));
         final Long messageId = messageService.create(createMessageDto, baseUrl);
         final Map<Long, WebSocketSessions> chatRoomSessions = sessions.getChatRoomSessions();
-        final WebSocketSessions webSocketSessions = chatRoomSessions.get(groupId);
+        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
         final Set<WebSocketSession> groupSessions = webSocketSessions.getSessions();
         for (WebSocketSession currentSession : groupSessions) {
             ReadMessageResponse response;
@@ -60,6 +67,6 @@ public class WebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(final WebSocketSession session, final CloseStatus status) throws Exception {
-        sessions.remove(session);
+//        sessions.remove(session);
     }
 }

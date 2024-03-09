@@ -23,4 +23,12 @@ public class WebSocketSessions {
     public void remove(final WebSocketSession session) {
         sessions.remove(session);
     }
+
+    public boolean containsValue(final WebSocketSession session) {
+        if (sessions.contains(session)) {
+            return true;
+        }
+
+        return false;
+    }
 }
