@@ -25,10 +25,6 @@ public class WebSocketSessions {
     }
 
     public boolean containsValue(final WebSocketSession session) {
-        if (sessions.contains(session)) {
-            return true;
-        }
-
-        return false;
+        return sessions.contains(session);
     }
 }
