@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
@@ -25,6 +26,18 @@ public class WebSocketChatSessions {
             webSocketSessions.add(session);
             session.getAttributes().put(ATTRIBUTE_KEY, chatRoomId);
         }
+    }
+
+    public Set<WebSocketSession> getSessionsByChatRoomId(final Long chatRoomId) {
+        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
+
+        return webSocketSessions.getSessions();
+    }
+
+    public boolean containsByUserId(final Long chatRoomId, final Long userId) {
+        final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
+
+        return webSocketSessions.contains(userId);
     }
 
     public void remove(final WebSocketSession session) {

@@ -14,7 +14,7 @@ public record ReadMessageDto(
         String contents
 ) {
 
-    public static ReadMessageDto from(
+    public static ReadMessageDto of(
             final Message message,
             final ChatRoom chatRoom
     ) {
