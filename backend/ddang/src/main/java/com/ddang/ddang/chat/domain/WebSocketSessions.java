@@ -27,4 +27,9 @@ public class WebSocketSessions {
     public boolean containsValue(final WebSocketSession session) {
         return sessions.contains(session);
     }
+
+    public boolean contains(final Long userId) {
+        return sessions.stream()
+                       .anyMatch(session -> session.getAttributes().get("userId") == userId);
+    }
 }
