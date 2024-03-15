@@ -5,6 +5,7 @@ import com.ddang.ddang.auction.domain.Auction;
 import com.ddang.ddang.auction.domain.dto.AuctionAndImageDto;
 import com.ddang.ddang.auction.domain.repository.AuctionAndImageRepository;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
+import com.ddang.ddang.auction.infrastructure.persistence.JpaAuctionRepository;
 import com.ddang.ddang.bid.application.dto.BidDto;
 import com.ddang.ddang.bid.application.dto.CreateBidDto;
 import com.ddang.ddang.bid.application.dto.ReadBidDto;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -36,23 +38,34 @@ public class BidService {
     private final AuctionAndImageRepository auctionAndImageRepository;
     private final UserRepository userRepository;
     private final BidRepository bidRepository;
+    private final JpaAuctionRepository jpaAuctionRepository;
 
     @Transactional
     public Long create(final CreateBidDto bidDto, final String auctionImageAbsoluteUrl) {
+        System.out.println("createBidDto: " + bidDto);
+
         final User bidder = userRepository.findById(bidDto.userId())
                                           .orElseThrow(() -> new UserNotFoundException("해당 사용자를 찾을 수 없습니다."));
         final AuctionAndImageDto auctionAndImageDto =
-                auctionAndImageRepository.findDtoByAuctionId(bidDto.auctionId())
+                auctionAndImageRepository.findDtoByAuctionIdWithLock(bidDto.auctionId())
                                          .orElseThrow(() -> new AuctionNotFoundException("해당 경매를 찾을 수 없습니다."));
-
         final Auction auction = auctionAndImageDto.auction();
+        final List<Bid> bids = bidRepository.findAllByAuctionId(auction.getId());
+
+        System.out.println("find auction: " + auction);
+        System.out.println("find lastBid: " + auction.getLastBid());
+        System.out.println("find bids: " + bids);
+        if (bids.size() > 0) {
+            System.out.println("find bids auction: " + bids.get(0).getAuction());
+            System.out.println("find bids auction lastibd: " + bids.get(0).getAuction().getLastBid());
+        }
 
         checkInvalidAuction(auction);
         checkInvalidBid(auction, bidder, bidDto);
 
-        auction.findLastBidder()
-               .ifPresent(previousBidder ->
-                       publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder));
+//        auction.findLastBidder()
+//               .ifPresent(previousBidder ->
+//                       publishBidNotificationEvent(auctionImageAbsoluteUrl, auctionAndImageDto, previousBidder));
 
         return saveAndUpdateLastBid(bidDto, auction, bidder).getId();
     }
@@ -134,6 +147,9 @@ public class BidService {
         final Bid saveBid = bidRepository.save(createBid);
 
         auction.updateLastBid(saveBid);
+
+        System.out.println("update auction: " + auction);
+        System.out.println("update auction lastBid: " + auction.getLastBid());
 
         return saveBid;
     }

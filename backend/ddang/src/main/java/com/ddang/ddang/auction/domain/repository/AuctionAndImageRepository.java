@@ -6,4 +6,6 @@ import java.util.Optional;
 public interface AuctionAndImageRepository {
 
     Optional<AuctionAndImageDto> findDtoByAuctionId(final Long auctionId);
+
+    Optional<AuctionAndImageDto> findDtoByAuctionIdWithLock(final Long auctionId);
 }

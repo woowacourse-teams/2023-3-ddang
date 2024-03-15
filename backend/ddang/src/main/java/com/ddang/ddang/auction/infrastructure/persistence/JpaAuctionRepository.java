@@ -1,6 +1,7 @@
 package com.ddang.ddang.auction.infrastructure.persistence;
 
 import com.ddang.ddang.auction.domain.Auction;
+import com.ddang.ddang.bid.domain.Bid;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

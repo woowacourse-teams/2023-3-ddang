@@ -21,6 +21,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -38,6 +39,7 @@ import java.util.Optional;
 @Getter
 @EqualsAndHashCode(callSuper = false, of = {"id"})
 @ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime", "auctioneerCount"})
+//@ToString(of = {"id", "title", "description", "bidUnit", "startPrice", "deleted", "closingTime", "auctioneerCount", "version"})
 public class Auction extends BaseTimeEntity {
 
     private static final boolean DELETED_STATUS = true;
@@ -84,6 +86,9 @@ public class Auction extends BaseTimeEntity {
     private List<AuctionImage> auctionImages = new ArrayList<>();
 
     private int auctioneerCount = 0;
+
+//    @Version
+//    private Integer version;
 
     @Builder
     private Auction(

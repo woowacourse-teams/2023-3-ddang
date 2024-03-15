@@ -5,7 +5,10 @@ import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.auction.presentation.dto.request.ReadAuctionSearchCondition;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+
+import com.ddang.ddang.bid.domain.Bid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -54,6 +57,11 @@ public class AuctionRepositoryImpl implements AuctionRepository {
     @Override
     public Slice<Auction> findAuctionsAllByBidderId(final Long bidderId, final Pageable pageable) {
         return querydslAuctionRepository.findAuctionsAllByBidderId(bidderId, pageable);
+    }
+
+    @Override
+    public List<Auction> findAll() {
+        return jpaAuctionRepository.findAll();
     }
 
     @Override
