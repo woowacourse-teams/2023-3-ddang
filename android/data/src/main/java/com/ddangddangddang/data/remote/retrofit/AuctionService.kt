@@ -1,7 +1,6 @@
 package com.ddangddangddang.data.remote.retrofit
 
 import com.ddangddangddang.data.model.request.AuctionBidRequest
-import com.ddangddangddang.data.model.request.ChatMessageRequest
 import com.ddangddangddang.data.model.request.GetChatRoomIdRequest
 import com.ddangddangddang.data.model.request.RegisterAnswerRequest
 import com.ddangddangddang.data.model.request.RegisterQuestionRequest
@@ -15,7 +14,6 @@ import com.ddangddangddang.data.model.response.AuctionDetailResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewResponse
 import com.ddangddangddang.data.model.response.AuctionPreviewsResponse
 import com.ddangddangddang.data.model.response.BidHistoryResponse
-import com.ddangddangddang.data.model.response.ChatMessageIdResponse
 import com.ddangddangddang.data.model.response.ChatMessageResponse
 import com.ddangddangddang.data.model.response.ChatRoomIdResponse
 import com.ddangddangddang.data.model.response.ChatRoomPreviewResponse
@@ -96,12 +94,6 @@ interface AuctionService {
         @Path("chatRoomId") chatRoomId: Long,
         @Query("lastMessageId") lastMessageId: Long?,
     ): ApiResponse<List<ChatMessageResponse>>
-
-    @POST("/chattings/{chatRoomId}/messages")
-    suspend fun sendMessage(
-        @Path("chatRoomId") chatRoomId: Long,
-        @Body chatMessageRequest: ChatMessageRequest,
-    ): ApiResponse<ChatMessageIdResponse>
 
     @GET("/users")
     suspend fun fetchProfile(): ApiResponse<ProfileResponse>

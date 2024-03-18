@@ -8,6 +8,8 @@ import com.ddangddangddang.data.repository.CategoryRepository
 import com.ddangddangddang.data.repository.CategoryRepositoryImpl
 import com.ddangddangddang.data.repository.ChatRepository
 import com.ddangddangddang.data.repository.ChatRepositoryImpl
+import com.ddangddangddang.data.repository.RealTimeRepository
+import com.ddangddangddang.data.repository.RealTimeRepositoryImpl
 import com.ddangddangddang.data.repository.RegionRepository
 import com.ddangddangddang.data.repository.RegionRepositoryImpl
 import com.ddangddangddang.data.repository.ReviewRepository
@@ -50,4 +52,8 @@ abstract class RepositoryModule {
     @Singleton
     @Binds
     abstract fun bindReviewRepository(reviewRepository: ReviewRepositoryImpl): ReviewRepository
+
+    @Singleton
+    @Binds
+    abstract fun bindRealTimeRepository(realTimeRepository: RealTimeRepositoryImpl): RealTimeRepository
 }

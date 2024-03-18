@@ -21,7 +21,7 @@ android {
 
         buildConfigField "String", "HTTP_BASE_URL", properties['url.ddangddangddang.http']
         buildConfigField "String", "HTTP_TEST_URL", properties['url.ddangddangddang.http.test']
-        buildConfigField "String", "WS_CHATTINGS_BASE_URL", properties['url.ddangddangddang.ws.chattings']
+        buildConfigField "String", "WS_TEST_URL", properties['url.ddangddangddang.ws.test']
     }
 
     buildTypes {
@@ -62,11 +62,11 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.11.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
+    // Scarlet
     def scarletVersion = '0.1.12'
     implementation "com.tinder.scarlet:scarlet:$scarletVersion"
     implementation "com.tinder.scarlet:websocket-okhttp:$scarletVersion"
     implementation "com.tinder.scarlet:lifecycle-android:$scarletVersion"
-    implementation "com.tinder.scarlet:stream-adapter-coroutines:$scarletVersion"
     implementation "com.tinder.scarlet:message-adapter-gson:$scarletVersion"
 
     implementation 'com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0'

@@ -21,6 +21,6 @@ object ServerURLModule {
     @Singleton
     @Provides
     fun provideWSChattingServerURL(): String {
-        return BuildConfig.WS_CHATTINGS_BASE_URL
+        return BuildConfig.WS_TEST_URL
     }
 }

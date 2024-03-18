@@ -1,5 +1,6 @@
 package com.ddangddangddang.android.feature.messageRoom
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,9 +11,10 @@ import com.ddangddangddang.android.model.MessageRoomDetailModel
 import com.ddangddangddang.android.model.mapper.MessageModelMapper.toPresentation
 import com.ddangddangddang.android.model.mapper.MessageRoomDetailModelMapper.toPresentation
 import com.ddangddangddang.android.util.livedata.SingleLiveEvent
-import com.ddangddangddang.data.model.request.ChatMessageRequest
+import com.ddangddangddang.data.model.request.WebSocketRequest
 import com.ddangddangddang.data.remote.callAdapter.ApiResponse
 import com.ddangddangddang.data.repository.ChatRepository
+import com.ddangddangddang.data.repository.RealTimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.concurrent.atomic.AtomicBoolean
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MessageRoomViewModel @Inject constructor(
-    private val repository: ChatRepository,
+    private val chatRepository: ChatRepository,
+    private val realTimeRepository: RealTimeRepository,
 ) : ViewModel() {
     val inputMessage: MutableLiveData<String> = MutableLiveData("")
 
@@ -41,9 +44,30 @@ class MessageRoomViewModel @Inject constructor(
     private val isMessageLoading = AtomicBoolean(false)
     private val isSubmitLoading = AtomicBoolean(false)
 
+    init {
+        observeChatMessage()
+        observeWebSocketEvent()
+    }
+
+    private fun observeChatMessage() {
+        viewModelScope.launch {
+            realTimeRepository.observeChatMessage().collect {
+                addMessages(listOf(it.toPresentation()).toViewItems())
+            }
+        }
+    }
+
+    private fun observeWebSocketEvent() {
+        viewModelScope.launch {
+            realTimeRepository.observeWebSocketEvent().collect {
+                Log.d("WS", it.toString())
+            }
+        }
+    }
+
     fun loadMessageRoom(roomId: Long) {
         viewModelScope.launch {
-            when (val response = repository.getChatRoom(roomId)) {
+            when (val response = chatRepository.getChatRoom(roomId)) {
                 is ApiResponse.Success -> {
                     _messageRoomInfo.value = response.body.toPresentation()
                     loadMessages()
@@ -71,7 +95,7 @@ class MessageRoomViewModel @Inject constructor(
             if (isMessageLoading.getAndSet(true)) return
 
             viewModelScope.launch {
-                when (val response = repository.getMessages(it.roomId, lastMessageId)) {
+                when (val response = chatRepository.getMessages(it.roomId, lastMessageId)) {
                     is ApiResponse.Success -> {
                         addMessages(response.body.map { it.toPresentation() }.toViewItems())
                     }
@@ -126,31 +150,17 @@ class MessageRoomViewModel @Inject constructor(
             if (message.isNullOrEmpty()) return
             if (isSubmitLoading.getAndSet(true)) return
 
-            val request = ChatMessageRequest(it.messagePartnerId, message)
-            viewModelScope.launch {
-                when (val response = repository.sendMessage(it.roomId, request)) {
-                    is ApiResponse.Success -> {
-                        inputMessage.value = ""
-                        loadMessages()
-                    }
+            val request = WebSocketRequest.WebSocketDataRequest.ChatMessageDataRequest(
+                it.roomId,
+                it.messagePartnerId,
+                message,
+            )
 
-                    is ApiResponse.Failure -> {
-                        _event.value =
-                            MessageRoomEvent.FailureEvent.SendMessage(ErrorType.FAILURE(response.error))
-                    }
-
-                    is ApiResponse.NetworkError -> {
-                        _event.value =
-                            MessageRoomEvent.FailureEvent.SendMessage(ErrorType.NETWORK_ERROR)
-                    }
-
-                    is ApiResponse.Unexpected -> {
-                        _event.value =
-                            MessageRoomEvent.FailureEvent.SendMessage(ErrorType.UNEXPECTED)
-                    }
-                }
-                isSubmitLoading.set(false)
+            val response = realTimeRepository.sendMessage(request)
+            if (response) {
+                inputMessage.value = ""
             }
+            isSubmitLoading.set(false)
         }
     }
 

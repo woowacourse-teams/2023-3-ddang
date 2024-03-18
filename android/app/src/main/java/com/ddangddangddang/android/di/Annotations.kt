@@ -20,7 +20,7 @@ annotation class WSChattingServerURLQualifier
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
-annotation class ApplicationForegroundLifecycle
+annotation class ActivityForegroundLifecycle
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
