@@ -48,12 +48,12 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         final ChatMessageDataDto messageData = objectMapper.convertValue(data, ChatMessageDataDto.class);
         sessions.add(session, messageData.chatRoomId());
 
-        final Long senderId = sessionAttribute.userId();
-        final CreateMessageDto createMessageDto = createMessageDto(messageData, senderId);
+        final Long writerId = sessionAttribute.userId();
+        final CreateMessageDto createMessageDto = createMessageDto(messageData, writerId);
         final Message message = messageService.create(createMessageDto);
         sendNotificationIfReceiverNotInSession(message, sessionAttribute);
 
-        return createSendMessages(session, message, senderId);
+        return createSendMessages(session, message, writerId);
     }
 
     private void sendNotificationIfReceiverNotInSession(
@@ -87,13 +87,13 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
     private List<SendMessagesDto> createSendMessages(
             final WebSocketSession session,
             final Message message,
-            final Long senderId
+            final Long writerId
     ) throws JsonProcessingException {
         final Set<WebSocketSession> groupSessions = sessions.getSessionsByChatRoomId(message.getChatRoom().getId());
 
         final List<SendMessagesDto> sendMessagesDtos = new ArrayList<>();
         for (WebSocketSession currentSession : groupSessions) {
-            final TextMessage textMessage = createTextMessage(message, senderId, currentSession);
+            final TextMessage textMessage = createTextMessage(message, writerId, currentSession);
             sendMessagesDtos.add(new SendMessagesDto(session, textMessage));
         }
 
@@ -102,19 +102,19 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
 
     private TextMessage createTextMessage(
             final Message message,
-            final Long senderId,
+            final Long writerId,
             final WebSocketSession session
     ) throws JsonProcessingException {
-        final boolean isMyMessage = isMyMessage(session, senderId);
+        final boolean isMyMessage = isMyMessage(session, writerId);
         final SendMessageDto messageDto = SendMessageDto.of(message, isMyMessage);
 
         return new TextMessage(objectMapper.writeValueAsString(messageDto));
     }
 
-    private boolean isMyMessage(final WebSocketSession session, final Long senderId) {
+    private boolean isMyMessage(final WebSocketSession session, final Long writerId) {
         final long userId = Long.parseLong(String.valueOf(session.getAttributes().get("userId")));
 
-        return senderId.equals(userId);
+        return writerId.equals(userId);
     }
 
     @Override
