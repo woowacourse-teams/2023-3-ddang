@@ -29,7 +29,7 @@ public class WebSocketHandler extends TextWebSocketHandler {
         session.getAttributes().put(TYPE_KEY, textMessageDto.type());
 
         final WebSocketHandleTextMessageProvider provider = providerComposite.findProvider(textMessageDto.type());
-        final List<SendMessagesDto> sendMessagesDtos = provider.handle(session, textMessageDto.data());
+        final List<SendMessagesDto> sendMessagesDtos = provider.handleCreateSendMessage(session, textMessageDto.data());
         for (SendMessagesDto sendMessagesDto : sendMessagesDtos) {
             sendMessagesDto.session()
                            .sendMessage(sendMessagesDto.textMessage());

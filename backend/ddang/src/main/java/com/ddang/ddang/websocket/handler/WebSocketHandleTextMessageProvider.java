@@ -11,7 +11,10 @@ public interface WebSocketHandleTextMessageProvider {
 
     TextMessageType supportTextMessageType();
 
-    List<SendMessagesDto> handle(final WebSocketSession session, final Map<String, String> data) throws Exception;
+    List<SendMessagesDto> handleCreateSendMessage(
+            final WebSocketSession session,
+            final Map<String, String> data
+    ) throws Exception;
 
     void remove(final WebSocketSession session);
 }
