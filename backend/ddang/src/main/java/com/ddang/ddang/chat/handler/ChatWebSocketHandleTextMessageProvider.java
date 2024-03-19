@@ -40,7 +40,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
     }
 
     @Override
-    public List<SendMessagesDto> handle(
+    public List<SendMessagesDto> handleCreateSendMessage(
             final WebSocketSession session,
             final Map<String, String> data
     ) throws Exception {
