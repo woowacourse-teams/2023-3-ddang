@@ -53,7 +53,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         final Message message = messageService.create(createMessageDto);
         sendNotificationIfReceiverNotInSession(message, sessionAttribute);
 
-        return createSendMessages(session, message, writerId);
+        return createSendMessages(message, writerId);
     }
 
     private void sendNotificationIfReceiverNotInSession(
@@ -85,7 +85,6 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
     }
 
     private List<SendMessageDto> createSendMessages(
-            final WebSocketSession session,
             final Message message,
             final Long writerId
     ) throws JsonProcessingException {
@@ -94,7 +93,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         final List<SendMessageDto> sendMessageDtos = new ArrayList<>();
         for (final WebSocketSession currentSession : groupSessions) {
             final TextMessage textMessage = createTextMessage(message, writerId, currentSession);
-            sendMessageDtos.add(new SendMessageDto(session, textMessage));
+            sendMessageDtos.add(new SendMessageDto(currentSession, textMessage));
         }
 
         return sendMessageDtos;
