@@ -24,7 +24,6 @@ import org.springframework.test.context.event.RecordApplicationEvents;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,7 +78,7 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
     @Test
     void 메시지를_전송하면_알림을_전송한다() throws Exception {
         // given
-        given(session.getAttributes()).willReturn(Map.of(사용자_아이디_키, 발신자_겸_판매자.getId(), 이미지_경로_키, 이미지_절대_경로));
+        given(session.getAttributes()).willReturn(세션_attribute_정보);
 
         // when
         chatWebSocketHandleTextMessageProvider.handleCreateSendMessage(session, 메시지_전송_데이터);
@@ -92,7 +91,7 @@ class NotificationEventListenerTest extends NotificationEventListenerFixture {
     @Test
     void 메시지_알림_전송이_실패해도_메시지는_저장된다() throws Exception {
         // given
-        given(session.getAttributes()).willReturn(Map.of(사용자_아이디_키, 발신자_겸_판매자.getId(), 이미지_경로_키, 이미지_절대_경로));
+        given(session.getAttributes()).willReturn(세션_attribute_정보);
         given(firebaseMessaging.send(any())).willThrow(FirebaseMessagingException.class);
 
         // when

@@ -43,7 +43,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
     public List<SendMessageDto> handleCreateSendMessage(
             final WebSocketSession session,
             final Map<String, String> data
-    ) throws Exception {
+    ) throws JsonProcessingException {
         final SessionAttributeDto sessionAttribute = getSessionAttributes(session);
         final ChatMessageDataDto messageData = objectMapper.convertValue(data, ChatMessageDataDto.class);
         sessions.add(session, messageData.chatRoomId());
