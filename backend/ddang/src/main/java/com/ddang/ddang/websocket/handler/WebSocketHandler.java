@@ -1,6 +1,6 @@
 package com.ddang.ddang.websocket.handler;
 
-import com.ddang.ddang.websocket.handler.dto.SendMessagesDto;
+import com.ddang.ddang.websocket.handler.dto.SendMessageDto;
 import com.ddang.ddang.websocket.handler.dto.TextMessageDto;
 import com.ddang.ddang.websocket.handler.dto.TextMessageType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,10 +29,10 @@ public class WebSocketHandler extends TextWebSocketHandler {
         session.getAttributes().put(TYPE_KEY, textMessageDto.type());
 
         final WebSocketHandleTextMessageProvider provider = providerComposite.findProvider(textMessageDto.type());
-        final List<SendMessagesDto> sendMessagesDtos = provider.handleCreateSendMessage(session, textMessageDto.data());
-        for (SendMessagesDto sendMessagesDto : sendMessagesDtos) {
-            sendMessagesDto.session()
-                           .sendMessage(sendMessagesDto.textMessage());
+        final List<SendMessageDto> sendMessageDtos = provider.handleCreateSendMessage(session, textMessageDto.data());
+        for (SendMessageDto sendMessageDto : sendMessageDtos) {
+            sendMessageDto.session()
+                          .sendMessage(sendMessageDto.textMessage());
         }
     }
 

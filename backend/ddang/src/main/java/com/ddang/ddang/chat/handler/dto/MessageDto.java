@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
 
-public record SendMessageDto(
+public record MessageDto(
         Long id,
 
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
@@ -16,8 +16,8 @@ public record SendMessageDto(
         String contents
 ) {
 
-    public static SendMessageDto of(final Message message, final boolean isMyMessage) {
-        return new SendMessageDto(
+    public static MessageDto of(final Message message, final boolean isMyMessage) {
+        return new MessageDto(
                 message.getId(),
                 message.getCreatedTime(),
                 isMyMessage,

@@ -6,10 +6,10 @@ import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.WebSocketChatSessions;
 import com.ddang.ddang.chat.handler.dto.ChatMessageDataDto;
-import com.ddang.ddang.chat.handler.dto.SendMessageDto;
+import com.ddang.ddang.chat.handler.dto.MessageDto;
 import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.websocket.handler.WebSocketHandleTextMessageProvider;
-import com.ddang.ddang.websocket.handler.dto.SendMessagesDto;
+import com.ddang.ddang.websocket.handler.dto.SendMessageDto;
 import com.ddang.ddang.websocket.handler.dto.SessionAttributeDto;
 import com.ddang.ddang.websocket.handler.dto.TextMessageType;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -40,7 +40,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
     }
 
     @Override
-    public List<SendMessagesDto> handleCreateSendMessage(
+    public List<SendMessageDto> handleCreateSendMessage(
             final WebSocketSession session,
             final Map<String, String> data
     ) throws Exception {
@@ -84,20 +84,20 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         return CreateMessageDto.of(userId, messageData.chatRoomId(), request);
     }
 
-    private List<SendMessagesDto> createSendMessages(
+    private List<SendMessageDto> createSendMessages(
             final WebSocketSession session,
             final Message message,
             final Long writerId
     ) throws JsonProcessingException {
         final Set<WebSocketSession> groupSessions = sessions.getSessionsByChatRoomId(message.getChatRoom().getId());
 
-        final List<SendMessagesDto> sendMessagesDtos = new ArrayList<>();
+        final List<SendMessageDto> sendMessageDtos = new ArrayList<>();
         for (WebSocketSession currentSession : groupSessions) {
             final TextMessage textMessage = createTextMessage(message, writerId, currentSession);
-            sendMessagesDtos.add(new SendMessagesDto(session, textMessage));
+            sendMessageDtos.add(new SendMessageDto(session, textMessage));
         }
 
-        return sendMessagesDtos;
+        return sendMessageDtos;
     }
 
     private TextMessage createTextMessage(
@@ -106,7 +106,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
             final WebSocketSession session
     ) throws JsonProcessingException {
         final boolean isMyMessage = isMyMessage(session, writerId);
-        final SendMessageDto messageDto = SendMessageDto.of(message, isMyMessage);
+        final MessageDto messageDto = MessageDto.of(message, isMyMessage);
 
         return new TextMessage(objectMapper.writeValueAsString(messageDto));
     }
