@@ -10,26 +10,24 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class WebSocketSessions {
 
-    private final Set<WebSocketSession> sessions;
+    protected static final String CHAT_ROOM_ID_KEY = "chatRoomId";
+    private static final String USER_ID_KEY = "userId";
 
-    public WebSocketSessions() {
-        this.sessions = Collections.newSetFromMap(new ConcurrentHashMap<>());
-    }
+    private final Set<WebSocketSession> sessions = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
-    public void add(final WebSocketSession session) {
-        sessions.add(session);
-    }
-
-    public void remove(final WebSocketSession session) {
-        sessions.remove(session);
-    }
-
-    public boolean containsValue(final WebSocketSession session) {
-        return sessions.contains(session);
+    public void putIfAbsent(final WebSocketSession session, final Long chatRoomId) {
+        if (!sessions.contains(session)) {
+            session.getAttributes().put(CHAT_ROOM_ID_KEY, chatRoomId);
+            sessions.add(session);
+        }
     }
 
     public boolean contains(final Long userId) {
         return sessions.stream()
-                       .anyMatch(session -> session.getAttributes().get("userId") == userId);
+                       .anyMatch(session -> session.getAttributes().get(USER_ID_KEY) == userId);
+    }
+
+    public void remove(final WebSocketSession session) {
+        sessions.remove(session);
     }
 }
