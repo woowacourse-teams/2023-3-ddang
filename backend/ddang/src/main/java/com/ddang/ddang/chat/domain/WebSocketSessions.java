@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Getter
 public class WebSocketSessions {
 
-    protected static final String ATTRIBUTE_KEY = "chatRoomId";
+    protected static final String CHAT_ROOM_ID_KEY = "chatRoomId";
 
     private final Set<WebSocketSession> sessions;
 
@@ -21,7 +21,7 @@ public class WebSocketSessions {
     public void putIfAbsent(final WebSocketSession session, final Long chatRoomId) {
         if (!sessions.contains(session)) {
             sessions.add(session);
-            session.getAttributes().put(ATTRIBUTE_KEY, chatRoomId);
+            session.getAttributes().put(CHAT_ROOM_ID_KEY, chatRoomId);
         }
     }
 
