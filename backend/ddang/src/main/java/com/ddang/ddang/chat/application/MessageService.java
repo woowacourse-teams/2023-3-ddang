@@ -32,11 +32,6 @@ public class MessageService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
-        return this.create(dto).getId();
-    }
-
-    @Transactional
     public Message create(final CreateMessageDto dto) {
         final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(

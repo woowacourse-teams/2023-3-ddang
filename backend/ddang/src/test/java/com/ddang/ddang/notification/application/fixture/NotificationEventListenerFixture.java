@@ -11,7 +11,6 @@ import com.ddang.ddang.bid.application.event.BidNotificationEvent;
 import com.ddang.ddang.bid.domain.Bid;
 import com.ddang.ddang.bid.domain.BidPrice;
 import com.ddang.ddang.bid.domain.repository.BidRepository;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.Message;
@@ -32,6 +31,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("NonAsciiCharacters")
 public class NotificationEventListenerFixture {
@@ -54,23 +54,26 @@ public class NotificationEventListenerFixture {
     @Autowired
     private JpaMessageRepository messageRepository;
 
-    protected CreateMessageDto 메시지_생성_DTO;
     protected CreateBidDto 입찰_생성_DTO;
     protected MessageNotificationEvent 메시지_알림_이벤트;
     protected BidNotificationEvent 입찰_알림_이벤트;
     protected QuestionNotificationEvent 질문_알림_이벤트;
     protected AnswerNotificationEvent 답변_알림_이벤트;
 
+    protected User 발신자_겸_판매자;
+    protected String 사용자_아이디_키 = "userId";
+    protected String 이미지_경로_키 = "baseUrl";
+    protected Map<String, String> 메시지_전송_데이터;
     protected String 이미지_절대_경로 = "/imageUrl";
 
     @BeforeEach
     void setUpFixture() {
-        final User 발신자_겸_판매자 = User.builder()
-                                   .name("발신자 겸 판매자")
-                                   .profileImage(new ProfileImage("upload.png", "store.png"))
-                                   .reliability(new Reliability(4.7d))
-                                   .oauthId("12345")
-                                   .build();
+        발신자_겸_판매자 = User.builder()
+                        .name("발신자 겸 판매자")
+                        .profileImage(new ProfileImage("upload.png", "store.png"))
+                        .reliability(new Reliability(4.7d))
+                        .oauthId("12345")
+                        .build();
         final User 수신자_겸_기존_입찰자 = User.builder()
                                       .name("수신자 겸 기존 입찰자")
                                       .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -114,7 +117,14 @@ public class NotificationEventListenerFixture {
         chatRoomRepository.save(채팅방);
         bidRepository.save(bid);
 
-        메시지_생성_DTO = new CreateMessageDto(채팅방.getId(), 발신자_겸_판매자.getId(), 수신자_겸_기존_입찰자.getId(), "메시지 내용");
+        메시지_전송_데이터 = Map.of(
+                "chatRoomId",
+                String.valueOf(채팅방.getId()),
+                "receiverId",
+                String.valueOf(수신자_겸_기존_입찰자.getId()),
+                "contents",
+                "메시지 내용"
+        );
         입찰_생성_DTO = new CreateBidDto(경매.getId(), 1000, 새로운_입찰자.getId());
 
         final Message 저장된_메시지 = messageRepository.save(

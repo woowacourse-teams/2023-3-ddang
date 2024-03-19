@@ -5,19 +5,15 @@ import com.ddang.ddang.authentication.domain.dto.AuthenticationUserInfo;
 import com.ddang.ddang.chat.application.ChatRoomService;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateChatRoomDto;
-import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadChatRoomWithLastMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadParticipatingChatRoomDto;
 import com.ddang.ddang.chat.presentation.dto.request.CreateChatRoomRequest;
-import com.ddang.ddang.chat.presentation.dto.request.CreateMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.request.ReadMessageRequest;
 import com.ddang.ddang.chat.presentation.dto.response.CreateChatRoomResponse;
-import com.ddang.ddang.chat.presentation.dto.response.CreateMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadChatRoomWithLastMessageResponse;
 import com.ddang.ddang.chat.presentation.dto.response.ReadMessageResponse;
-import com.ddang.ddang.image.presentation.util.ImageRelativeUrl;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -72,27 +68,13 @@ public class ChatRoomController {
             @AuthenticateUser final AuthenticationUserInfo userInfo,
             @PathVariable final Long chatRoomId
     ) {
-        final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(chatRoomId, userInfo.userId());
+        final ReadParticipatingChatRoomDto chatRoomDto = chatRoomService.readByChatRoomId(
+                chatRoomId,
+                userInfo.userId()
+        );
         final ReadChatRoomResponse response = ReadChatRoomResponse.from(chatRoomDto);
 
         return ResponseEntity.ok(response);
-    }
-
-    @PostMapping("/{chatRoomId}/messages")
-    public ResponseEntity<CreateMessageResponse> createMessage(
-            @AuthenticateUser final AuthenticationUserInfo userInfo,
-            @PathVariable final Long chatRoomId,
-            @RequestBody @Valid final CreateMessageRequest request
-    ) {
-
-        final Long messageId = messageService.create(
-                CreateMessageDto.of(userInfo.userId(), chatRoomId, request),
-                ImageRelativeUrl.USER.calculateAbsoluteUrl()
-        );
-        final CreateMessageResponse response = new CreateMessageResponse(messageId);
-
-        return ResponseEntity.created(URI.create("/chattings/" + chatRoomId))
-                             .body(response);
     }
 
     @GetMapping("/{chatRoomId}/messages")
