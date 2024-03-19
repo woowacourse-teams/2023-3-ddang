@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.ddang.ddang.chat.domain.WebSocketSessions.ATTRIBUTE_KEY;
+import static com.ddang.ddang.chat.domain.WebSocketSessions.CHAT_ROOM_ID_KEY;
 
 @Component
 @Getter
@@ -39,7 +39,7 @@ public class WebSocketChatSessions {
     }
 
     public void remove(final WebSocketSession session) {
-        final long chatRoomId = Long.parseLong(String.valueOf(session.getAttributes().get(ATTRIBUTE_KEY)));
+        final long chatRoomId = Long.parseLong(String.valueOf(session.getAttributes().get(CHAT_ROOM_ID_KEY)));
         final WebSocketSessions webSocketSessions = chatRoomSessions.get(chatRoomId);
         webSocketSessions.remove(session);
     }
