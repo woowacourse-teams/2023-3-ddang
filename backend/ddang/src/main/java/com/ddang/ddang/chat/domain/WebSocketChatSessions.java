@@ -10,15 +10,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.ddang.ddang.chat.domain.WebSocketSessions.CHAT_ROOM_ID_KEY;
 
-@Component
 @Getter
+@Component
 public class WebSocketChatSessions {
 
-    private final Map<Long, WebSocketSessions> chatRoomSessions;
-
-    public WebSocketChatSessions() {
-        this.chatRoomSessions = new ConcurrentHashMap<>();
-    }
+    private final Map<Long, WebSocketSessions> chatRoomSessions = new ConcurrentHashMap<>();
 
     public void add(final WebSocketSession session, final Long chatRoomId) {
         chatRoomSessions.putIfAbsent(chatRoomId, new WebSocketSessions());

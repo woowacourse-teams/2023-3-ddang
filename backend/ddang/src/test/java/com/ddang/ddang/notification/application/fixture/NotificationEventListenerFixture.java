@@ -30,6 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,20 +61,18 @@ public class NotificationEventListenerFixture {
     protected QuestionNotificationEvent 질문_알림_이벤트;
     protected AnswerNotificationEvent 답변_알림_이벤트;
 
-    protected User 발신자_겸_판매자;
-    protected String 사용자_아이디_키 = "userId";
-    protected String 이미지_경로_키 = "baseUrl";
+    protected Map<String, Object> 세션_attribute_정보;
     protected Map<String, String> 메시지_전송_데이터;
     protected String 이미지_절대_경로 = "/imageUrl";
 
     @BeforeEach
     void setUpFixture() {
-        발신자_겸_판매자 = User.builder()
-                        .name("발신자 겸 판매자")
-                        .profileImage(new ProfileImage("upload.png", "store.png"))
-                        .reliability(new Reliability(4.7d))
-                        .oauthId("12345")
-                        .build();
+        final User 발신자_겸_판매자 = User.builder()
+                                   .name("발신자 겸 판매자")
+                                   .profileImage(new ProfileImage("upload.png", "store.png"))
+                                   .reliability(new Reliability(4.7d))
+                                   .oauthId("12345")
+                                   .build();
         final User 수신자_겸_기존_입찰자 = User.builder()
                                       .name("수신자 겸 기존 입찰자")
                                       .profileImage(new ProfileImage("upload.png", "store.png"))
@@ -117,13 +116,14 @@ public class NotificationEventListenerFixture {
         chatRoomRepository.save(채팅방);
         bidRepository.save(bid);
 
+        세션_attribute_정보 = new HashMap<>(Map.of(
+                "userId", 발신자_겸_판매자.getId(),
+                "baseUrl", 이미지_절대_경로
+        ));
         메시지_전송_데이터 = Map.of(
-                "chatRoomId",
-                String.valueOf(채팅방.getId()),
-                "receiverId",
-                String.valueOf(수신자_겸_기존_입찰자.getId()),
-                "contents",
-                "메시지 내용"
+                "chatRoomId", String.valueOf(채팅방.getId()),
+                "receiverId", String.valueOf(수신자_겸_기존_입찰자.getId()),
+                "contents", "메시지 내용"
         );
         입찰_생성_DTO = new CreateBidDto(경매.getId(), 1000, 새로운_입찰자.getId());
 
