@@ -5,9 +5,11 @@ import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
+import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -44,16 +46,22 @@ class MessageServiceTest extends MessageServiceFixture {
     @Test
     void 메시지를_생성한다() {
         // when
-        final Long messageId = messageService.create(메시지_생성_DTO, 이미지_절대_경로);
+        final Message actual = messageService.create(메시지_생성_DTO);
 
         // then
-        assertThat(messageId).isPositive();
+        SoftAssertions.assertSoftly(softAssertions -> {
+            softAssertions.assertThat(actual.getId()).isPositive();
+            softAssertions.assertThat(actual.getChatRoom()).isEqualTo(채팅방);
+            softAssertions.assertThat(actual.getWriter()).isEqualTo(발신자);
+            softAssertions.assertThat(actual.getReceiver()).isEqualTo(수신자);
+            softAssertions.assertThat(actual.getContents()).isEqualTo(메시지_생성_DTO.contents());
+        });
     }
 
     @Test
     void 채팅방이_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> messageService.create(유효하지_않은_채팅방의_메시지_생성_DTO, 이미지_절대_경로))
+        assertThatThrownBy(() -> messageService.create(유효하지_않은_채팅방의_메시지_생성_DTO))
                 .isInstanceOf(ChatRoomNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 채팅방을 찾을 수 없습니다.");
     }
@@ -61,7 +69,7 @@ class MessageServiceTest extends MessageServiceFixture {
     @Test
     void 발신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> messageService.create(유효하지_않은_발신자의_메시지_생성_DTO, 이미지_절대_경로))
+        assertThatThrownBy(() -> messageService.create(유효하지_않은_발신자의_메시지_생성_DTO))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 발신자를 찾을 수 없습니다.");
     }
@@ -69,7 +77,7 @@ class MessageServiceTest extends MessageServiceFixture {
     @Test
     void 수신자가_없는_경우_메시지를_생성하면_예외가_발생한다() {
         // when & then
-        assertThatThrownBy(() -> messageService.create(유효하지_않은_수신자의_메시지_생성_DTO, 이미지_절대_경로))
+        assertThatThrownBy(() -> messageService.create(유효하지_않은_수신자의_메시지_생성_DTO))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("지정한 아이디에 대한 수신자를 찾을 수 없습니다.");
     }
