@@ -92,7 +92,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         final Set<WebSocketSession> groupSessions = sessions.getSessionsByChatRoomId(message.getChatRoom().getId());
 
         final List<SendMessageDto> sendMessageDtos = new ArrayList<>();
-        for (WebSocketSession currentSession : groupSessions) {
+        for (final WebSocketSession currentSession : groupSessions) {
             final TextMessage textMessage = createTextMessage(message, writerId, currentSession);
             sendMessageDtos.add(new SendMessageDto(session, textMessage));
         }
