@@ -2,7 +2,6 @@ package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
-import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
@@ -28,38 +27,21 @@ import java.util.List;
 public class MessageService {
 
     private final ApplicationEventPublisher messageLogEventPublisher;
-    private final ApplicationEventPublisher messageNotificationEventPublisher;
     private final MessageRepository messageRepository;
     private final ChatRoomRepository chatRoomRepository;
     private final UserRepository userRepository;
 
     @Transactional
     public Long create(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
-        final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
-                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
-                                                    ));
-        final Message persistMessage = psersistMessage(dto, chatRoom);
-        messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(
-                persistMessage,
-                profileImageAbsoluteUrl
-        ));
-
-        return persistMessage.getId();
+        return this.create(dto).getId();
     }
 
     @Transactional
-    public ReadMessageDto create(final CreateMessageDto dto) {
+    public Message create(final CreateMessageDto dto) {
         final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
                                                     .orElseThrow(() -> new ChatRoomNotFoundException(
                                                             "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
                                                     ));
-        final Message message = psersistMessage(dto, chatRoom);
-
-        return ReadMessageDto.of(message, chatRoom);
-    }
-
-    private Message psersistMessage(final CreateMessageDto dto, final ChatRoom chatRoom) {
         final User writer = userRepository.findByIdWithProfileImage(dto.writerId())
                                           .orElseThrow(() -> new UserNotFoundException(
                                                   "지정한 아이디에 대한 발신자를 찾을 수 없습니다."
@@ -79,18 +61,6 @@ public class MessageService {
         if (!chatRoom.isChatAvailablePartner(receiver)) {
             throw new UnableToChatException("탈퇴한 사용자에게는 메시지 전송이 불가능합니다.");
         }
-    }
-
-    @Transactional
-    public ReadMessageDto createWithNotification(final CreateMessageDto dto, final String profileImageAbsoluteUrl) {
-        final ChatRoom chatRoom = chatRoomRepository.findById(dto.chatRoomId())
-                                                    .orElseThrow(() -> new ChatRoomNotFoundException(
-                                                            "지정한 아이디에 대한 채팅방을 찾을 수 없습니다."
-                                                    ));
-        final Message message = psersistMessage(dto, chatRoom);
-        messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(message, profileImageAbsoluteUrl));
-
-        return ReadMessageDto.of(message, chatRoom);
     }
 
     public List<ReadMessageDto> readAllByLastMessageId(final ReadMessageRequest request) {

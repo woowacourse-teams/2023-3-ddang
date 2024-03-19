@@ -1,18 +1,13 @@
 package com.ddang.ddang.chat.application;
 
 import com.ddang.ddang.chat.application.dto.ReadMessageDto;
-import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
 import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.application.exception.ChatRoomNotFoundException;
 import com.ddang.ddang.chat.application.exception.MessageNotFoundException;
 import com.ddang.ddang.chat.application.fixture.MessageServiceFixture;
 import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.configuration.IsolateDatabase;
-import com.ddang.ddang.notification.application.NotificationService;
-import com.ddang.ddang.notification.application.dto.CreateNotificationDto;
-import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.user.application.exception.UserNotFoundException;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -26,7 +21,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
 
 @IsolateDatabase
@@ -42,46 +36,18 @@ class MessageServiceTest extends MessageServiceFixture {
     ReadMessageLogRepository readMessageLogRepository;
 
     @MockBean
-    NotificationService notificationService;
-
-    @MockBean
     LastReadMessageLogService lastReadMessageLogService;
 
     @Autowired
     ApplicationEvents events;
 
     @Test
-    void 메시지를_생성한다() throws FirebaseMessagingException {
-        //given
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.SUCCESS);
-
+    void 메시지를_생성한다() {
         // when
         final Long messageId = messageService.create(메시지_생성_DTO, 이미지_절대_경로);
 
         // then
         assertThat(messageId).isPositive();
-    }
-
-    @Test
-    void 메시지를_생성하고_알림을_보낸다() {
-        // when
-        messageService.create(메시지_생성_DTO, 이미지_절대_경로);
-        final long actual = events.stream(MessageNotificationEvent.class).count();
-
-        // then
-        assertThat(actual).isEqualTo(1);
-    }
-
-    @Test
-    void 알림전송에_실패한_경우에도_정상적으로_메시지가_저장된다() throws FirebaseMessagingException {
-        // given
-        given(notificationService.send(any(CreateNotificationDto.class))).willReturn(NotificationStatus.FAIL);
-
-        // when
-        final Long actual = messageService.create(메시지_생성_DTO, 이미지_절대_경로);
-
-        // then
-        assertThat(actual).isPositive();
     }
 
     @Test
@@ -135,7 +101,8 @@ class MessageServiceTest extends MessageServiceFixture {
     @Test
     void 마지막으로_조회된_메시지_이후에_추가된_메시지가_없는_경우_빈_리스트를_반환한다() {
         // when
-        final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(조회할_메시지가_더이상_없는_메시지_조회용_request);
+        final List<ReadMessageDto> readMessageDtos = messageService.readAllByLastMessageId(
+                조회할_메시지가_더이상_없는_메시지_조회용_request);
 
         // then
         assertThat(readMessageDtos).isEmpty();
