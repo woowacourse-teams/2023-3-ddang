@@ -3,6 +3,7 @@ package com.ddang.ddang.chat.handler;
 import com.ddang.ddang.chat.application.MessageService;
 import com.ddang.ddang.chat.application.dto.CreateMessageDto;
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
+import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.domain.Message;
 import com.ddang.ddang.chat.domain.WebSocketChatSessions;
 import com.ddang.ddang.chat.handler.dto.ChatMessageDataDto;
@@ -33,6 +34,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
     private final ObjectMapper objectMapper;
     private final MessageService messageService;
     private final ApplicationEventPublisher messageNotificationEventPublisher;
+    private final ApplicationEventPublisher messageLogEventPublisher;
 
     @Override
     public TextMessageType supportTextMessageType() {
@@ -86,7 +88,8 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
 
     private List<SendMessageDto> createSendMessages(
             final Message message,
-            final Long writerId
+            final Long writerId,
+            final Long chatRoomId
     ) throws JsonProcessingException {
         final Set<WebSocketSession> groupSessions = sessions.getSessionsByChatRoomId(message.getChatRoom().getId());
 
@@ -94,6 +97,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         for (final WebSocketSession currentSession : groupSessions) {
             final TextMessage textMessage = createTextMessage(message, writerId, currentSession);
             sendMessageDtos.add(new SendMessageDto(currentSession, textMessage));
+            updateReadMessageLog(currentSession, chatRoomId, message);
         }
 
         return sendMessageDtos;
@@ -114,6 +118,20 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         final long userId = Long.parseLong(String.valueOf(session.getAttributes().get("userId")));
 
         return writerId.equals(userId);
+    }
+
+    private void updateReadMessageLog(
+            final WebSocketSession currentSession,
+            final Long chatRoomId,
+            final Message message
+    ) {
+        final SessionAttributeDto sessionAttributes = getSessionAttributes(currentSession);
+        final UpdateReadMessageLogEvent updateReadMessageLogEvent = new UpdateReadMessageLogEvent(
+                sessionAttributes.userId(),
+                chatRoomId,
+                message
+        );
+        messageLogEventPublisher.publishEvent(updateReadMessageLogEvent);
     }
 
     @Override

@@ -23,6 +23,7 @@ class WebSocketHandleTextMessageProviderCompositeTest {
                 null,
                 null,
                 null,
+                null,
                 null
         );
         final WebSocketHandleTextMessageProviderComposite composite =
