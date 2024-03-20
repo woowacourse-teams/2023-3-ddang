@@ -6,8 +6,11 @@ import com.ddang.ddang.auction.domain.Price;
 import com.ddang.ddang.auction.domain.repository.AuctionRepository;
 import com.ddang.ddang.category.domain.Category;
 import com.ddang.ddang.category.infrastructure.persistence.JpaCategoryRepository;
+import com.ddang.ddang.chat.application.LastReadMessageLogService;
+import com.ddang.ddang.chat.application.event.CreateReadMessageLogEvent;
 import com.ddang.ddang.chat.domain.ChatRoom;
 import com.ddang.ddang.chat.domain.repository.ChatRoomRepository;
+import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.image.domain.ProfileImage;
 import com.ddang.ddang.user.domain.Reliability;
 import com.ddang.ddang.user.domain.User;
@@ -34,6 +37,12 @@ public class ChatWebSocketHandleTextMessageProviderTestFixture {
     @Autowired
     private ChatRoomRepository chatRoomRepository;
 
+    @Autowired
+    private LastReadMessageLogService lastReadMessageLogService;
+
+    @Autowired
+    private ReadMessageLogRepository readMessageLogRepository;
+
     protected ChatRoom 채팅방;
     protected User 발신자;
     protected User 수신자;
@@ -42,36 +51,39 @@ public class ChatWebSocketHandleTextMessageProviderTestFixture {
     protected Map<String, Object> 수신자_세션_attribute_정보;
     protected Map<String, String> 메시지_전송_데이터;
 
+    protected CreateReadMessageLogEvent 메시지_로그_생성_이벤트;
+
     @BeforeEach
     void setUpFixture() {
+        발신자 = User.builder()
+                .name("발신자")
+                .profileImage(new ProfileImage("upload.png", "store.png"))
+                .reliability(new Reliability(4.7d))
+                .oauthId("12345")
+                .build();
+        수신자 = User.builder()
+                .name("수신자")
+                .profileImage(new ProfileImage("upload.png", "store.png"))
+                .reliability(new Reliability(4.7d))
+                .oauthId("12346")
+                .build();
+        userRepository.save(발신자);
+        userRepository.save(수신자);
+
         final Category 전자기기 = new Category("전자기기");
         final Category 전자기기_하위_노트북 = new Category("노트북");
         전자기기.addSubCategory(전자기기_하위_노트북);
         categoryRepository.save(전자기기);
 
         final Auction 경매 = Auction.builder()
-                                  .title("경매")
-                                  .description("description")
-                                  .bidUnit(new BidUnit(1_000))
-                                  .startPrice(new Price(10_000))
-                                  .closingTime(LocalDateTime.now().plusDays(3L))
-                                  .build();
+                .title("경매")
+                .seller(수신자)
+                .description("description")
+                .bidUnit(new BidUnit(1_000))
+                .startPrice(new Price(10_000))
+                .closingTime(LocalDateTime.now().plusDays(3L))
+                .build();
         auctionRepository.save(경매);
-
-        발신자 = User.builder()
-                  .name("발신자")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
-                  .oauthId("12345")
-                  .build();
-        수신자 = User.builder()
-                  .name("수신자")
-                  .profileImage(new ProfileImage("upload.png", "store.png"))
-                  .reliability(new Reliability(4.7d))
-                  .oauthId("12346")
-                  .build();
-        userRepository.save(발신자);
-        userRepository.save(수신자);
 
         채팅방 = new ChatRoom(경매, 발신자);
 
@@ -84,5 +96,11 @@ public class ChatWebSocketHandleTextMessageProviderTestFixture {
                 "receiverId", String.valueOf(수신자.getId()),
                 "contents", "메시지 내용"
         );
+
+        메시지_로그_생성_이벤트 = new CreateReadMessageLogEvent(채팅방);
+    }
+
+    protected void 메시지_로그를_생성한다() {
+        lastReadMessageLogService.create(메시지_로그_생성_이벤트);
     }
 }
