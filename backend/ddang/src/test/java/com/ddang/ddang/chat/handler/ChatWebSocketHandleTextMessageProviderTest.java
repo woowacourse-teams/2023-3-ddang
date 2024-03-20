@@ -1,7 +1,9 @@
 package com.ddang.ddang.chat.handler;
 
 import com.ddang.ddang.chat.application.event.MessageNotificationEvent;
+import com.ddang.ddang.chat.application.event.UpdateReadMessageLogEvent;
 import com.ddang.ddang.chat.domain.WebSocketChatSessions;
+import com.ddang.ddang.chat.domain.repository.ReadMessageLogRepository;
 import com.ddang.ddang.chat.handler.fixture.ChatWebSocketHandleTextMessageProviderTestFixture;
 import com.ddang.ddang.configuration.IsolateDatabase;
 import com.ddang.ddang.notification.application.NotificationService;
@@ -10,6 +12,7 @@ import com.ddang.ddang.notification.domain.NotificationStatus;
 import com.ddang.ddang.websocket.handler.dto.SendMessageDto;
 import com.ddang.ddang.websocket.handler.dto.TextMessageType;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -26,9 +29,7 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
-import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.BDDMockito.*;
 
 @IsolateDatabase
 @RecordApplicationEvents
@@ -38,6 +39,9 @@ class ChatWebSocketHandleTextMessageProviderTest extends ChatWebSocketHandleText
 
     @Autowired
     ChatWebSocketHandleTextMessageProvider provider;
+
+    @Autowired
+    ReadMessageLogRepository readMessageLogRepository;
 
     @SpyBean
     WebSocketChatSessions sessions;
@@ -53,6 +57,9 @@ class ChatWebSocketHandleTextMessageProviderTest extends ChatWebSocketHandleText
 
     @Autowired
     ApplicationEvents events;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @Test
     void 지원하는_웹소켓_핸들링_타입을_반환한다() {
@@ -77,6 +84,43 @@ class ChatWebSocketHandleTextMessageProviderTest extends ChatWebSocketHandleText
 
         // then
         assertThat(actual).hasSize(2);
+    }
+
+    @Test
+    void 메시지_생성시_수신자가_웹소켓_통신_중이라면_메시지_로그_업데이트_메서드를_호출한다() throws JsonProcessingException {
+        // given
+        메시지_로그를_생성한다();
+
+        given(writerSession.getAttributes()).willReturn(발신자_세션_attribute_정보);
+        given(receiverSession.getAttributes()).willReturn(수신자_세션_attribute_정보);
+        willDoNothing().given(sessions).add(writerSession, 채팅방.getId());
+        willReturn(true).given(sessions).containsByUserId(채팅방.getId(), 수신자.getId());
+        willReturn(Set.of(writerSession, receiverSession)).given(sessions).getSessionsByChatRoomId(채팅방.getId());
+
+        // when
+        provider.handleCreateSendMessage(writerSession, 메시지_전송_데이터);
+        final long actual = events.stream(UpdateReadMessageLogEvent.class).count();
+
+        // then
+        assertThat(actual).isEqualTo(2L);
+    }
+
+    @Test
+    void 메시지_생성시_수신자가_웹소켓_통신중이지_않다면_발신자의_메시지_로그_업데이트_메서드만_호출한다() throws JsonProcessingException {
+        // given
+        메시지_로그를_생성한다();
+
+        given(writerSession.getAttributes()).willReturn(발신자_세션_attribute_정보);
+        willDoNothing().given(sessions).add(writerSession, 채팅방.getId());
+        willReturn(false).given(sessions).containsByUserId(채팅방.getId(), 수신자.getId());
+        willReturn(Set.of(writerSession)).given(sessions).getSessionsByChatRoomId(채팅방.getId());
+
+        // when
+        provider.handleCreateSendMessage(writerSession, 메시지_전송_데이터);
+        final long actual = events.stream(UpdateReadMessageLogEvent.class).count();
+
+        // then
+        assertThat(actual).isEqualTo(1L);
     }
 
     @Test
@@ -112,7 +156,7 @@ class ChatWebSocketHandleTextMessageProviderTest extends ChatWebSocketHandleText
     }
 
     @Test
-    void 메시지_생성시_수신자에게_알림을_보낸기에_실패하더라도_정상적으로_메시지가_전달된다() throws Exception {
+    void 메시지_생성시_수신자에게_알림을_보내기에_실패하더라도_정상적으로_메시지가_전달된다() throws Exception {
         // given
         given(writerSession.getAttributes()).willReturn(발신자_세션_attribute_정보);
         willDoNothing().given(sessions).add(writerSession, 채팅방.getId());
