@@ -76,9 +76,12 @@ public class MessageService {
         );
 
         if (!readMessages.isEmpty()) {
-            final Message lastReadMessage = readMessages.get(readMessages.size() - 1);
-
-            messageLogEventPublisher.publishEvent(new UpdateReadMessageLogEvent(reader, chatRoom, lastReadMessage));
+            final UpdateReadMessageLogEvent updateReadMessageLogEvent = new UpdateReadMessageLogEvent(
+                    reader.getId(),
+                    chatRoom.getId(),
+                    readMessages.get(readMessages.size() - 1)
+            );
+            messageLogEventPublisher.publishEvent(updateReadMessageLogEvent);
         }
 
         return readMessages.stream()
