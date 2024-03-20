@@ -33,9 +33,9 @@ public class LastReadMessageLogService {
 
     @Transactional
     public void update(final UpdateReadMessageLogEvent updateReadMessageLogEvent) {
-        final User reader = updateReadMessageLogEvent.reader();
-        final ChatRoom chatRoom = updateReadMessageLogEvent.chatRoom();
-        final ReadMessageLog messageLog = readMessageLogRepository.findBy(reader.getId(), chatRoom.getId())
+        final Long readerId = updateReadMessageLogEvent.readerId();
+        final Long chatRoomId = updateReadMessageLogEvent.chatRoomId();
+        final ReadMessageLog messageLog = readMessageLogRepository.findBy(readerId, chatRoomId)
                                                                   .orElseThrow(() ->
                                                                           new ReadMessageLogNotFoundException(
                                                                                   "메시지 조회 로그가 존재하지 않습니다."
