@@ -53,20 +53,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         final Message message = messageService.create(createMessageDto);
         sendNotificationIfReceiverNotInSession(message, sessionAttribute);
 
-        return createSendMessages(message, writerId);
-    }
-
-    private void sendNotificationIfReceiverNotInSession(
-            final Message message,
-            final SessionAttributeDto sessionAttribute
-    ) {
-        if (!sessions.containsByUserId(message.getChatRoom().getId(), message.getReceiver().getId())) {
-            final String profileImageAbsoluteUrl = String.valueOf(sessionAttribute.baseUrl());
-            messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(
-                    message,
-                    profileImageAbsoluteUrl
-            ));
-        }
+        return createSendMessages(message, writerId, createMessageDto.chatRoomId());
     }
 
     private SessionAttributeDto getSessionAttributes(final WebSocketSession session) {
@@ -82,6 +69,19 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         );
 
         return CreateMessageDto.of(userId, messageData.chatRoomId(), request);
+    }
+
+    private void sendNotificationIfReceiverNotInSession(
+            final Message message,
+            final SessionAttributeDto sessionAttribute
+    ) {
+        if (!sessions.containsByUserId(message.getChatRoom().getId(), message.getReceiver().getId())) {
+            final String profileImageAbsoluteUrl = String.valueOf(sessionAttribute.baseUrl());
+            messageNotificationEventPublisher.publishEvent(new MessageNotificationEvent(
+                    message,
+                    profileImageAbsoluteUrl
+            ));
+        }
     }
 
     private List<SendMessageDto> createSendMessages(
