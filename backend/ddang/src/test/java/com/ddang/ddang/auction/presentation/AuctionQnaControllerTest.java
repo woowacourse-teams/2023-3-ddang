@@ -3,6 +3,7 @@ package com.ddang.ddang.auction.presentation;
 import com.ddang.ddang.auction.application.exception.AuctionNotFoundException;
 import com.ddang.ddang.auction.presentation.fixture.AuctionQuestionControllerFixture;
 import com.ddang.ddang.authentication.configuration.AuthenticationInterceptor;
+import com.ddang.ddang.authentication.configuration.AuthenticationInterceptorService;
 import com.ddang.ddang.authentication.configuration.AuthenticationPrincipalArgumentResolver;
 import com.ddang.ddang.authentication.domain.TokenDecoder;
 import com.ddang.ddang.authentication.domain.TokenType;
@@ -46,10 +47,12 @@ class AuctionQnaControllerTest extends AuctionQuestionControllerFixture {
 
         final AuthenticationStore store = new AuthenticationStore();
         final AuthenticationInterceptor interceptor = new AuthenticationInterceptor(
-                blackListTokenService,
-                authenticationUserService,
-                tokenDecoder,
-                store
+                new AuthenticationInterceptorService(
+                        blackListTokenService,
+                        authenticationUserService,
+                        tokenDecoder,
+                        store
+                )
         );
         final AuthenticationPrincipalArgumentResolver resolver = new AuthenticationPrincipalArgumentResolver(store);
 

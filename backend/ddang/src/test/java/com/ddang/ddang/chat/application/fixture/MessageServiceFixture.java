@@ -53,11 +53,12 @@ public class MessageServiceFixture {
     protected ReadMessageRequest 유효하지_않은_사용자의_메시지_조회용_request;
     protected ReadMessageRequest 유효하지_않은_채팅방의_메시지_조회용_request;
     protected ReadMessageRequest 존재하지_않는_마지막_메시지_아이디의_메시지_조회용_request;
+    protected ChatRoom 채팅방;
     protected User 발신자;
+    protected User 수신자;
     protected ChatRoom 메시지가_5개인_채팅방;
     protected Message 메시지가_5개인_채팅방_메시지의_마지막_메시지;
 
-    protected String 이미지_절대_경로 = "/imageUrl";
     protected int 메시지_총_개수 = 10;
 
     @BeforeEach
@@ -82,7 +83,7 @@ public class MessageServiceFixture {
                   .reliability(new Reliability(4.7d))
                   .oauthId("12345")
                   .build();
-        final User 수신자 = User.builder()
+        수신자 = User.builder()
                              .name("수신자")
                              .profileImage(new ProfileImage("upload.png", "store.png"))
                              .reliability(new Reliability(4.7d))
@@ -99,7 +100,7 @@ public class MessageServiceFixture {
         userRepository.save(수신자);
         userRepository.save(탈퇴한_사용자);
 
-        final ChatRoom 채팅방 = new ChatRoom(경매, 발신자);
+        채팅방 = new ChatRoom(경매, 발신자);
         final ChatRoom 탈퇴한_사용자와의_채팅방 = new ChatRoom(경매, 탈퇴한_사용자);
         메시지가_5개인_채팅방 = new ChatRoom(경매, 발신자);
 

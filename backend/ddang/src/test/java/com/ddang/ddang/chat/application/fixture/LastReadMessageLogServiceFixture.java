@@ -177,8 +177,8 @@ public class LastReadMessageLogServiceFixture {
         final ReadMessageLog 메시지_로그_업데이트용_로그_구매자 = new ReadMessageLog(메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_입찰자);
         readMessageLogRepository.saveAll(List.of(메시지_로그_업데이트용_로그_판매자, 메시지_로그_업데이트용_로그_구매자));
 
-        메시지_로그_업데이트용_이벤트 = new UpdateReadMessageLogEvent(메시지_로그_업데이트용_발신자_겸_판매자, 메시지_로그_업데이트용_채팅방, 메시지_로그_업데이트용_마지막_조회_메시지);
+        메시지_로그_업데이트용_이벤트 = new UpdateReadMessageLogEvent(메시지_로그_업데이트용_발신자_겸_판매자.getId(), 메시지_로그_업데이트용_채팅방.getId(), 메시지_로그_업데이트용_마지막_조회_메시지.getId());
 
-        유효하지_않는_메시지_조회_로그 = new UpdateReadMessageLogEvent(저장되지_않은_사용자, 저장되지_않은_채팅방, 저장되지_않은_메시지);
+        유효하지_않는_메시지_조회_로그 = new UpdateReadMessageLogEvent(저장되지_않은_사용자.getId(), 저장되지_않은_채팅방.getId(), 저장되지_않은_메시지.getId());
     }
 }

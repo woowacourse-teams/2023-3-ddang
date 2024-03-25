@@ -57,7 +57,7 @@ public class LastReadMessageLogEventListenerFixture {
                                    .contents("메시지")
                                    .build();
 
-        업데이트용_메시지_조회_로그 = new UpdateReadMessageLogEvent(메시지_로그_생성용_발신자_겸_판매자, 메시지_로그_생성용_채팅방, 메시지);
+        업데이트용_메시지_조회_로그 = new UpdateReadMessageLogEvent(메시지_로그_생성용_발신자_겸_판매자.getId(), 메시지_로그_생성용_채팅방.getId(), 메시지.getId());
         생성용_메시지_조회_로그 = new CreateReadMessageLogEvent(메시지_로그_생성용_채팅방);
     }
 }
