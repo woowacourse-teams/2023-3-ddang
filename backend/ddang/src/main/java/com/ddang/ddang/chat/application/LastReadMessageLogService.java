@@ -41,6 +41,6 @@ public class LastReadMessageLogService {
                                                                                   "메시지 조회 로그가 존재하지 않습니다."
                                                                           ));
 
-        messageLog.updateLastReadMessage(updateReadMessageLogEvent.lastReadMessage().getId());
+        messageLog.updateLastReadMessage(updateReadMessageLogEvent.lastReadMessageId());
     }
 }

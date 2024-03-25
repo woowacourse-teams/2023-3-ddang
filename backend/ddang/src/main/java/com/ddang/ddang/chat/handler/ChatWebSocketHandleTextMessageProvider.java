@@ -129,7 +129,7 @@ public class ChatWebSocketHandleTextMessageProvider implements WebSocketHandleTe
         final UpdateReadMessageLogEvent updateReadMessageLogEvent = new UpdateReadMessageLogEvent(
                 sessionAttributes.userId(),
                 chatRoomId,
-                message
+                message.getId()
         );
         messageLogEventPublisher.publishEvent(updateReadMessageLogEvent);
     }

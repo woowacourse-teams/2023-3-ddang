@@ -71,7 +71,7 @@ public class MessageService {
             final UpdateReadMessageLogEvent updateReadMessageLogEvent = new UpdateReadMessageLogEvent(
                     reader.getId(),
                     chatRoom.getId(),
-                    readMessages.get(readMessages.size() - 1)
+                    readMessages.get(readMessages.size() - 1).getId()
             );
             messageLogEventPublisher.publishEvent(updateReadMessageLogEvent);
         }
