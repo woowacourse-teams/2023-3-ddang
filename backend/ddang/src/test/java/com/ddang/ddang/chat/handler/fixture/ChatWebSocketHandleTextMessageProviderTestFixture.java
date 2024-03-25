@@ -40,9 +40,6 @@ public class ChatWebSocketHandleTextMessageProviderTestFixture {
     @Autowired
     private LastReadMessageLogService lastReadMessageLogService;
 
-    @Autowired
-    private ReadMessageLogRepository readMessageLogRepository;
-
     protected ChatRoom 채팅방;
     protected User 발신자;
     protected User 수신자;
